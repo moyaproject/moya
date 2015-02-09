@@ -1,0 +1,24 @@
+<moya xmlns="http://moyaproject.com">
+
+    <mountpoint name="main">
+
+        <url route="/*">
+            <!-- Make every URL require admin permission -->
+            <forbidden if="not permission:'admin'" />
+        </url>
+
+        <url route="/" methods="GET,POST" view="#view.front" name="front" />
+        <url route="/apps/{appname}/modules/{module}/" methods="GET" view="#view.module" name="module" />
+        <url route="/apps/{appname}/modules/{module}/tables/{table}/" methods="GET" view="#view.table" name="admin_table" />
+
+        <url route="/apps/{appname}/select-many/{table}/{field}/" methods="GET" view="#view.table.picker" name="admin_table_picker" />
+        <url route="/apps/{appname}/select-single/{table}/{field}/" methods="GET" view="#view.table.picker.single" name="admin_table_picker_single" />
+
+        <url route="/apps/{appname}/modules/{module}/tables/{table}/new/" view="#view.table.new" name="admin_new_object" />
+        <url route="/apps/{appname}/modules/{module}/tables/{table}/action/" view="#view.table.action" name="admin_table_action"/>
+        <url route="/apps/{appname}/modules/{module}/tables/{table}/edit/{pk}/" view="#view.table.edit" name="admin_table_edit" />
+        <url route="/jsonrpc/" view="#jsonrpc.interface" name="admin_rpc" />
+
+    </mountpoint>
+
+</moya>

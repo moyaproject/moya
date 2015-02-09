@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:admin="http://moyaproject.com/admin"
+      xmlns:bootstrap="http://moyaproject.com/bootstrap"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.base" template="base.html">
+        <include-css path="css/admin.css" />
+        <section name="body"/>
+    </content>
+
+    <content libname="content.navigation.base" extends="#content.base">
+        <get-url name="front" dst="admin_url" />
+        <section name="breadcrumbs" merge="append">
+            <admin:crumb text="Home" url="/" />
+            <admin:crumb text="Admin" url="${admin_url}" />
+        </section>
+        <section name="navigation">
+            <admin:modules />
+        </section>
+    </content>
+
+    <content libname="content.front" extends="#content.navigation.base">
+        <title>${.settings.project_title} Admin</title>
+        <section name="content">
+            <node template="front.html"/>
+        </section>
+    </content>
+
+    <content libname="content.module" extends="#content.navigation.base">
+        <title>${module.params.title}</title>
+        <get-url name="module" dst="module_url" with=".url" />
+        <section name="breadcrumbs">
+            <admin:crumb text="${module.params.title}" url="${module_url}"/>
+        </section>
+    </content>
+
+    <content libname="content.cover" extends="#content.module">
+        <section name="content">
+            <node template="cover.html" let:module="module"/>
+        </section>
+    </content>
+
+    <content libname="content.table" extends="#content.module">
+        <title>${table.params.title} Table</title>
+        <let page_size="int:.request.GET.results or 20" />
+        <let page_no="int:.request.GET.page or 1" />
+        <get-url name="admin_table" dst="table_url" with='.url'/>
+        <section name="breadcrumbs">
+            <admin:crumb text="${table.params.title}" url="${table_url}"/>
+        </section>
+        <section name="body">
+            <admin:render-table table="table" columns="columns"
+                page_size="int:page_size" page_no="page_no"
+                action_url="action_url" back_url="back_url"
+                search="search"/>
+        </section>
+    </content>
+
+    <content libname="content.table.picker" template="pickerbase.html">
+        <title>${table.params.title} Select Many</title>
+
+        <include-css path="css/admin.css" />
+
+        <let page_no="int:.request.GET.page or 1" />
+        <get-url name="admin_table_picker" dst="table_url" with='.url'/>
+
+        <if test=".request.GET.pk and .request.GET.show == 'selected'">
+            <db:get model="#${.request.GET.model}"
+                from="${.request.GET.app}"
+                let:id=".request.GET.pk" dst="object" />
+            <let objects="object[.request.GET.field]" />
+        </if>
+
+        <section name="body">
+            <admin:render-table table="table" columns="columns" template="widgets/pickertable.html"
+                picker="yes"
+                single="no"
+                page_size="10"
+                page_no="page_no"
+                action_url="action_url"
+                back_url="back_url"
+                search="search"
+                options="options"
+                objects="objects or None"/>
+        </section>
+    </content>
+
+    <content libname="content.table.picker.single" template="pickerbase.html">
+        <title>${table.params.title} Select Single</title>
+
+        <include-css path="css/admin.css" />
+
+        <let page_no="int:.request.GET.page or 1" />
+        <get-url name="admin_table_picker" dst="table_url" with='.url'/>
+
+        <if test=".request.GET.pk and .request.GET.show == 'selected'">
+            <db:get model="#${.request.GET.model}"
+                from="${.request.GET.app}"
+                let:id=".request.GET.pk" dst="object" />
+            <let objects="[{'id':object[field]}]" />
+        </if>
+
+        <section name="body">
+            <admin:render-table table="table" columns="columns" template="widgets/pickertable.html"
+                picker="yes"
+                single="yes"
+                page_size="10"
+                page_no="page_no"
+                action_url="action_url"
+                back_url="back_url"
+                search="search"
+                options="options"
+                objects="objects or None"/>
+        </section>
+    </content>
+
+
+    <content libname="content.table.edit" extends="#content.table">
+        <title>Edit ${object.title}</title>
+        <section name="breadcrumbs">
+            <admin:crumb text="Edit ${object}"/>
+        </section>
+        <section name="body" merge="replace" />
+        <section name="content" merge="replace">
+            <w:success if="success">Changes applied</w:success>
+            <render src="form" />
+        </section>
+    </content>
+
+    <content libname="content.table.action" extends="#content.table">
+        <title>Action</title>
+        <section name="breadcrumbs">
+            <admin:crumb text="Delete" />
+        </section>
+        <section name="body" merge="replace" />
+        <section name="content" merge="replace">
+            <if test="not success">
+                <render src="form" />
+            </if>
+            <else>
+                <w:success><bbcode>[b]${len:object_pks}[/b] object(s) were deleted successfully</bbcode></w:success>
+                <w:buttons>
+                    <w:link from="moya.auth" url="${back_url}">Return to table</w:link>
+                </w:buttons>
+            </else>
+        </section>
+    </content>
+
+    <content libname="content.table.new" extends="#content.table">
+        <title>New ${model.title}</title>
+        <section name="breadcrumbs">
+            <admin:crumb text="New" />
+        </section>
+        <section name="body" merge="replace" />
+        <section name="content" merge="replace">
+            <if test="success">
+                <w:success>
+                    <markdown>New object **${obj}** was created successfully.</markdown>
+                </w:success>
+                <w:buttons>
+                    <w:link from="moya.admin" name="admin_new_object" with=".url">Add Another</w:link>
+                    <w:link from="moya.admin" name="admin_table_edit" with=".url" let:pk="obj.id">Edit</w:link>
+                </w:buttons>
+            </if>
+            <else>
+                <render src="form"/>
+            </else>
+        </section>
+    </content>
+
+</moya>

@@ -1,0 +1,21 @@
+<div class="user-header-container clearfix">
+    <img class="blether gravatar" src="http://www.gravatar.com/avatar/${md5:lower:view_user.email}?s=80&amp;d=identicon"/>
+    <div class="user-header-content">
+        <h3>${view_user.username} <small>Blethering since ${localize:view_user.date_joined.date}</small></h3>
+        <p class="text-muted">
+            Followers: <strong>${len:view_user.timeline.followers}</strong>
+            Following: <strong>${len:view_user.timeline.following}</strong>
+        </p>
+        {%- if .user %}
+        {%- if view_user != .user %}
+            {% if following %}
+            <a href="{% url 'unfollow' with username=view_user.username %}" class="btn btn-default">Un-follow ${view_user.username}</a>
+            {% else %}
+            <a href="{% url 'follow' with username=view_user.username %}" class="btn btn-primary">Follow ${view_user.username}</a>
+            {% endif %}
+        {% else %}
+        <i>This is you!</i>
+        {%- endif %}
+        {%- endif %}
+    </div>
+</div>

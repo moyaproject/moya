@@ -1,0 +1,68 @@
+{
+    "name": "parameter",
+    "doc_namespace": "xmlns.http://moyaproject.com/jsonrpc",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "parameter",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_jsonrpc",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "doc": "Defines a parameter in an RPC call.",
+        "namespace": "http://moyaproject.com/jsonrpc",
+        "synopsis": "define an rpc parameter",
+        "tag_name": "parameter",
+        "params": {
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "required": {
+                "default_display": "no",
+                "name": "required",
+                "missing": true,
+                "default": false,
+                "doc": "Required?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "type": {
+                "default_display": "\"anything\"",
+                "name": "type",
+                "missing": true,
+                "default": "anything",
+                "doc": "Parameter type (number, string, bool, list, object, anything)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the parameter",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <rpc:error code=\"100\" if=\"format not in ['short', 'medium', 'long', 'full']\">\n            Format parameter is not correct\n        </rpc:error>\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com/jsonrpc.parameter"
+}

@@ -1,0 +1,69 @@
+{
+    "name": "apply",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "apply",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nApplying a form will copy data from a form (in [c]src[/c]) to an object ([c]dst[/c]).\n\nThe name of the values to copy are specified in the [c]dst[/c] attribute of field attributes.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "apply a form to an object",
+        "tag_name": "apply",
+        "params": {
+            "fields": {
+                "default_display": "",
+                "name": "fields",
+                "missing": true,
+                "default": null,
+                "doc": "fields to apply",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination object",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "src": {
+                "default_display": "\"form\"",
+                "name": "src",
+                "missing": true,
+                "default": "form",
+                "doc": "form",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <forms:apply src=\"form\" dst=\"post\" />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.apply"
+}

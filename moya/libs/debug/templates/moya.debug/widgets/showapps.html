@@ -1,0 +1,36 @@
+<h3>Applications</h3>
+<p>This table shows the applications installed in your project</p>
+<div class="well">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Library Name</th>
+                <th>Library Title</th>
+                <th>Mounted</th>
+            </tr>
+        </head>
+        <tbody>
+            {%- for name, app in sorted:items:.apps %}
+            <tr>
+                <td>${app.name}</td>
+                <td>${app.lib.long_name} <span class="text-muted">v${app.lib.version}</span></td>
+                {%- if app.lib.libinfo.url %}
+                <td><a href="${app.lib.libinfo.url}">${app.lib.libinfo.title or app.lib.long_name}</a></td>
+                {%- else %}
+                <td>${app.lib.libinfo.title or lib.long_name}</td>
+                {%- endif %}
+                {%- if not app.mounts %}
+                <td><em class="text-muted">not mounted</em></td>
+                {%- else %}
+                <td>
+                    {%- for mountpoint, url in app.mounts %}
+                    <a href="${url}">${url}</a>{% if mountpoint != 'main' %} <span class="text-muted">(${mountpoint})</span>{% endif %}{% if not forloop.last %}<br/>{% endif %}
+                    {%- endfor %}
+                </td>
+                {%- endif %}
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+</div>

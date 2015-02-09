@@ -1,0 +1,47 @@
+{
+    "name": "subject",
+    "doc_namespace": "xmlns.http://moyaproject.com/feedback",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "subject",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_feedback",
+        "defined": "/home/will/projects/moya/moya/libs/feedback/logic/tags.xml (line 6)",
+        "doc": "This tag sets a subject that will be used in a select in the feedback form.",
+        "namespace": "http://moyaproject.com/feedback",
+        "synopsis": "set subject option in feedback form",
+        "tag_name": "subject",
+        "params": {
+            "text": {
+                "default_display": null,
+                "name": "text",
+                "missing": true,
+                "default": null,
+                "doc": "Subject option in the feedback form",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/feedback.subject"
+}

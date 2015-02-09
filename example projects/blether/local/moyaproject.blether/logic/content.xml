@@ -1,0 +1,48 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:blether="http://moyaproject.com/tutorial/blether"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.base" template="base.html">
+        <include-css path="css/moyablether.css"/>
+    </content>
+
+    <content libname="content.front" extends="#content.base">
+        <title>Blether</title>
+        <section name="body" if=".user">
+            <render src="form" />
+            <w:paginate src="blethers" dst="blether">
+                <blether:blether blether="blether" />
+            </w:paginate>
+        </section>
+        <section name="body" if="not .user">
+            <node template="blurb.html" />
+        </section>
+    </content>
+
+    <content libname="content.user" extends="#content.base">
+        <title>${user.username}'s Blethers</title>
+        <section name="body">
+            <node template="userheader.html" let:view_user="view_user" let:following="following"/>
+            <w:paginate src="blethers" dst="blether">
+                <blether:blether blether="blether" />
+            </w:paginate>
+        </section>
+    </content>
+
+    <content libname="content.dialog" template="base.html">
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.dialog.follow" extends="#content.dialog">
+        <title>Follow</title>
+    </content>
+
+    <content libname="content.dialog.unfollow" extends="#content.dialog">
+        <title>Un-Follow</title>
+    </content>
+
+</moya>

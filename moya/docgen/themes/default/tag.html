@@ -1,0 +1,108 @@
+{% extends "/columns.html" %}
+
+{% block "title" %}Tag ${tag_name}{% endblock %}
+
+{% block css %}
+    .tag-link-${tag_name}
+    {
+        font-weight:bold;
+    }
+{% endblock %}
+
+{% block "column" %}
+<div class="doctree-panel">
+    {% cache for 10s key [namespace] %}
+    <ul class="tag-index">
+        {%- for tag in index.by_namespace[namespace] %}
+        <li {%- attrib title=tag.synopsis %} class="tag-link tag-link-${tag.tag_name}" data-tagdata='{"name":"${tag.tag_name}"}'>
+            <a name="tag_${tag.tag_name}.html" href="tag_${tag.tag_name}.html">${tag.tag_name}</a>
+        </li>
+        {%- endfor %}
+    </ul>
+    {% endcache %}
+</div>
+{% endblock %}
+
+{% block "content" %}
+
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="../index.html">&larr; Tag Index</a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="${tag_name}"/>
+        <input type="hidden" name="synopsis" value="${synopsis}"/>
+
+        <h2>&lt;${tag_name}&gt;{% if synopsis %} <small>${synopsis}</small>{% end %}</h3>
+        {#
+        <dl class="dl-horizontal well well-small">
+        	<dt>name</dt>
+        	<dd>${tag_name}</dd>
+        	<dt>xml namespace</dt>
+        	<dd><tt>${namespace}</tt></dd>
+            {#
+        	<dt>defined</dt>
+        	<dd>${defined}</dd>
+            #}
+        </dl>
+        #}
+
+        <div class="alert alert-info">
+        This tag is defined in xml namespace <tt>${namespace}</tt>.
+        </div>
+        {%- if doc %}
+        ${html:(doc|.bbcode)}
+        {%- else %}
+        <p><i>This tag is undocumented. Please encourage the author to provide documentation!</i></p>
+        {%- endif %}
+
+        {%- def "param_table" %}
+        {%- if params %}
+        <table class="table table-bordered table-condensed">
+        	<caption>${caption}</caption>
+        	<tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+        	{%- for name, param in sorted:items:params %}
+        	<tr>
+        		<td><code>${param.name}</code></td>
+        		<td>${param.doc}</td>
+        		<td>${param.type}</td>
+        		<td>{% if param.required %}Yes{% else %}No{% endif %}</td>
+                <td>{% if not param.required and param.default_display %}<code>${param.default_display}</code>{% endif %}</td>
+                <td>
+                    {%- if param.choices %}
+                    {%- for choice in sorted:param.choices %}
+                    <code>${choice}</code><br/>
+                    {%- endfor %}
+                    {%- endif %}
+                </td>
+        	</tr>
+        	{%- endfor %}
+        </table>
+        {%- endif %}
+        {%- enddef %}
+
+        {%- if example %}
+        <h4>Example</h4>
+        ${example|.syntax(lang='xml')}
+        {%- endif %}
+
+        {%- call "param_table" with params=params, caption="attributes" %}
+        {%- call "param_table" with params=inherited_params, caption="inherited attributes" %}
+
+    </div>
+
+
+{% endblock %}
+

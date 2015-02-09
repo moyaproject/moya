@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+    <email libname="email.validate_email" xmlns="http://moyaproject.com/email"
+        from="${.app.settings.email_from}"
+        subject="Validate email for your ${project_title} account">
+        <text template="email/validateemail.txt"/>
+    </email>
+
+</moya>

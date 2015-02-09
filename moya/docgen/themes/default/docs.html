@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Moya Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="./assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="http://twitter.github.io/bootstrap/assets/ico/favicon.png">
+    -->
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="http://twitter.github.io/bootstrap/examples/starter-template.html#">Moya Documentation</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="http://twitter.github.io/bootstrap/examples/starter-template.html#">Home</a></li>
+              <li><a href="http://twitter.github.io/bootstrap/examples/starter-template.html#about">About</a></li>
+              <li><a href="http://twitter.github.io/bootstrap/examples/starter-template.html#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row-fluid">
+        <div class="span3">
+
+          <ul class="nav nav-pills nav-stacked">
+            <li title="Execute code conditionally" class="active"><a href="#">if</a></li>
+            <li title="Set variable"><a href="#">let</a></li>
+            <li><a href="#">set</a></li>
+            <li><a href="#">update</a></li>
+            <li><a href="#">if</a></li>
+            <li><a href="#">let</a></li>
+            <li><a href="#">set</a></li>
+            <li><a href="#">update</a></li>
+          </ul>
+
+        </div>
+        <div class="span9">
+          <ul class="breadcrumb">
+            <li><a href="#">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Tags</a> <span class="divider">/</span></li>
+            <li class="active">IF</li>
+
+          </ul>
+
+          <h2>IF
+          <small>Execute code conditionally</small>
+          </h2>
+          <dl class="dl-horizontal well well-small">
+            <dt>xml namespace</dt>
+            <dd>http://moyaproject.com</dd>
+            <dt>defined</dt>
+            <dd>/tags/context.py</dd>
+            <dt>library</dt>
+            <dd><a href="#">Moya</a></dd>
+          </dl>
+          <p>
+            The IF tag executes a block of code conditionally. If the <tt>condition</tt> expression evaluates to <tt>True</tt>,
+            then the contents of the IF tag are execute, otherwise they are skipped.
+          </p>
+          <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+              <th>name</th>
+              <th>purpose</th>
+              <th>type</th>
+              <th>required?</th>
+            </tr>
+            <tr>
+              <td>condition</td>
+              <td>The inner block will be executed if this condition evaluates to True<br/>If <tt>condition</tt> evaluates to False, the block will be skipped.</td>
+              <td>expression</td>
+              <td>yes</td>
+            </tr>
+          </table>
+
+          <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+              <th>name</th>
+              <th>type</th>
+              <th>required?</th>
+            </tr>
+            <tr>
+              <td>if</td>
+              <td>expression</td>
+              <td>no</td>
+            </tr>
+          </table>
+
+          <h4>Example</h4>
+          <pre>&lt;if condition=".debug"&gt;
+    &lt;echo&gt;This only displays in debug&lt;/echo&gt;
+&lt;/if&gt;</pre>
+
+
+
+        </div>
+      </div>
+
+
+    </div> <!-- /container -->
+
+
+</body></html>

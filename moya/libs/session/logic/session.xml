@@ -1,0 +1,52 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db">
+
+    <mountpoint name="main" libname="mountpoint.main">
+        <middleware route="/{*}" methods="GET,POST" macro="middleware.add_session_to_context"/>
+    </mountpoint>
+
+    <model name="Session" libname="Session" xmlns="http://moyaproject.com/db" repr="Session #${id} ${quote:key} expires ${localize:expire_time}">
+        <string name="key" length="40" index="yes" unique="yes"/>
+        <string-map name="data" null="yes" />
+        <datetime name="expire_time" label="Expires" />
+    </model>
+
+    <macro docname="get_session">
+        <!-- Delete expired -->
+        <db:query model="#Session" filter="#Session.expire_time lt .now" action="delete" />
+
+        <!-- Get existing session if there is one -->
+        <if test=".request.cookies.session">
+            <db:get model="#Session" dst="session" let:key=".request.cookies.session" />
+            <if test="session">
+                <db:transaction>
+                    <let session.expire_time=".now + timespan:.app.settings.expire" /> <!-- extend session for an hour -->
+                </db:transaction>
+                <return value="session"/>
+            </if>
+        </if>
+
+        <repeat>
+            <try> <!--create new session object -->
+                <make-token dst="token" size="40"/>
+                <dict dst="data" />
+                <db:create model="#Session" dst="session"
+                    let:key="token" let:expire_time=".now + 1h" let:data="data" />
+            </try>
+            <catch exception="db.*"> <!-- Duplicate key-->
+                <continue/> <!-- once more around the loop -->
+            </catch>
+            <set-cookie name="session" value="${session.key}" overwrite="yes" />
+            <return value="session" />
+        </repeat>
+
+    </macro>
+
+    <macro docname="middleware.add_session_to_context">
+        <call macro="get_session" dst="._session" lazy="yes"/>
+        <link src="._session.data" dst=".session" />
+        <link src="._session.key" dst=".session_key" />
+    </macro>
+
+</moya>

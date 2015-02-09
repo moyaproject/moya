@@ -1,0 +1,24 @@
+<moya xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="slow">
+        <cache-return key="test-${n}">
+            <sleep for="1s"/>
+            <return value="n * n"/>
+        </cache-return>
+    </macro>
+
+    <macro docname="main">
+        <call macro="slow" let:n="2" dst="n" />
+        <echo>${n}</echo>
+
+        <call macro="slow" let:n="3" dst="n" />
+        <echo>${n}</echo>
+
+        <call macro="slow" let:n="2" dst="n" />
+        <echo>${n}</echo>
+
+        <call macro="slow" let:n="3" dst="n" />
+        <echo>${n}</echo>
+    </macro>
+
+</moya>

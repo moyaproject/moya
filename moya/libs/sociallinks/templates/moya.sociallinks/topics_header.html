@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li{% if all %} class="active"{% endif %}><a href="{% url 'front' %}">All</a></li>
+    {%- for t in topics %}
+    <li{% if .urlname=='topic' and topic.slug==t.slug %} class="active"{% endif %}><a href="{% url 'topic' with topic=t.slug %}">${t.title}</a></li>
+    {%- endfor %}
+    <li {% if .urlname=='topics' %}class="active"{% endif %}><a href="{% url 'topics' %}">more&hellip;</a></li>
+</ul>
+<br/>

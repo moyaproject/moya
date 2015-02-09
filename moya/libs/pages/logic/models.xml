@@ -1,0 +1,11 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+    xmlns:forms="http://moyaproject.com/forms">
+
+    <model name="Page" libname="Page" xmlns="http://moyaproject.com/db">
+        <string name="name" length="200" unique="yes"/>
+        <string name="title" length="50" />
+        <text name="markup" null="no" default="" markup="html"/>
+    </model>
+
+</moya>

@@ -1,0 +1,543 @@
+[title Moya Forms]
+
+Forms are an essential part of any web application, as they are the primary way in which a user will interact with your site. Badly designed or implemented forms can have a significant negative impact on the user experience. Enough to put a user off using your site at all -- so it is important to do forms well.
+
+It is possible to build forms [i]from scratch[/i] with Moya, but the Moya Forms library will accelerate designing, rendering, and processing of forms -- without restricting customization.
+
+[h1]Installation[/h1]
+
+The Moya Forms library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.forms"/>
+[/code]
+
+The above line should be in your [tag]server[/tag] declaration.
+
+You can install the library with the following:
+
+[code xml]
+<install name="forms" lib="moya.forms"/>
+[/code]
+
+Note that the library isn't [i]mounted[/i] anywhere, because no views are required to use forms. Installing the library makes a number of custom tags available (which we will cover here).
+
+[aside]If you created your project with [b]moya start project[/b], the forms library will have been pre-installed.[/aside]
+
+[h2]Test Forms[/h2]
+
+The forms library comes with a test view which show the various form controls you can use. These are not intended for production, but if you are interested, you can mount them by adding the following to your [c]server.xml[/c]:
+
+[code xml]
+<mount app="forms" url="/forms/" mountpoint="tests" />
+[/code]
+
+You can now visit [url http://127.0.0.1:8000/forms/tests/]http://127.0.0.1:8000/forms/tests/[/url] to have a look at the test forms.
+
+[h2]Form Namespace[/h2]
+
+Forms tags use the XML [link xml#namespaces]namespace[/link] [c]http://moyaproject.com/forms[/c].
+
+You will probably find it easiest to add [c]xmlns="http://moyaproject.com/forms"[/c] to your [tag forms]form[/tag] declarations, so that you won't need a prefix for every field. For form tags [i]not[/i] inside a [tag forms]forms[/tag] tag, you can add [c]xmlns:forms="http://moyaprojects.com/forms"[/c] to the top level [tag]moya[/tag] tag, to enable the [c]forms[/c] namespace prefix.
+
+[h1]Designing Forms[/h1]
+
+The [tag]form[/tag] tag begins a [i]form definition[/i]. This is where you tell the Moya Forms library what fields should be in your form, how to display the form, and also how to validate the input. Let's have a look at a simple login form:
+
+[code xml]
+<form libname="form.login" legend="Please login" xmlns="http://moyaproject.com/forms">
+    <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
+    <password name="password" label="Password" maxlength="30" required="yes"/>
+    <submit-button text="Login" />
+</form>
+[/code]
+
+This form has the libname [c]"form.login"[/c], which will be required when we come to process / render the form. The prefix of [c]"form."[/c] is a convention which helps to keep forms distinct from other elements. The optional [c]legend[/c] attribute is a human readable text displayed as a header in the form.
+
+The tags inside the [tag]form[/tag] define the contents of the form. The form above has an input box for a username, a password input for the password, and a button to submit the form; but any combination of the supported [link forms#field-tags]fields and controls[/link] possible. The attributes of field tags are used to customize the field and how it is validated. In the input and password fields there is a [c]maxlength[/c] attribute which restricts the number of characters the user may type, and a boolean attribute called [c]required[/c] which can tell Moya that the user must enter [i]something[/i] in order to submit the form.
+
+There are a number of other field tags to create the common fields expected in web forms. See [link forms#field-tags]Field Tags[/link] for details.
+
+[h2]Extending[/h2]
+
+Forms may be [i]extended[/i] so that they inherit the fields from another form. You might want to do this if you have two forms that differ only by the text on the submit button (for example): Here's an example of a defining two forms extending from a common base:
+
+[code xml]
+<form libname="form.post.base">
+    <input name="title" label="Title" required="yes"/>
+    <text name="text" required="yes"/>
+</form>
+
+<form libname="form.post.new" legend="New Post" extends="#form.post.base">
+    <submit-button text="Create"/>
+</form>
+
+<form libname="form.post.edit" legend="Edit Post" extends="#form.post.base">
+    <submit-button text="Edit"/>
+</form>
+[/code]
+
+The first form with libname [c]"form.post.base"[/c] isn't used directly. The following two forms both extend the base form and inherit the [c]title[/c] and [c]text[/c] fields. The forms doing the extending need only add the fields that are not in the base. In this case, they add an appropriate submit button.
+
+[h2]Form Parameters[/h2]
+
+It is important to note that the call to [tag forms]get[/tag] invokes the code inside the [tag forms]form[/tag] much like a macro -- you may even put breakpoints inside a form and step through each field tag a line at a time. You can also pass parameters to the form in order to customize it. For example, an alternative to extending a base form in order to customize the submit button text might be to supply the button text as a parameter. The following code sets the submit button text to the value of a variable called [c]button_text[/c].
+
+[code xml]
+<form libname="form.login" legend="Please login" xmlns="http://moyaproject.com/forms">
+    <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
+    <password name="password" label="Password" maxlength="30" required="yes"/>
+    <submit-button text="${button_text}" />
+</form>
+[/code]
+
+Here's how you would supply the button text when you get the form object:
+
+[code xml]
+<forms:get form="#form.login" dst="form" let:button_text="'Much Login'"/>
+[/code]
+
+Form parameters may be used for more advanced customization, as well as to change text. The following creates a form with a definable number of address fields:
+
+[code xml]
+<form libname="form.address" legend="Enter your address" xmlns="http://moyaproject.com/forms">
+    <moya:for src="1...(lines)" dst="line_no">
+        <input name="address${line_no}" maxlength="50"/>
+    </moya:for>
+    <submit-button text="Submit" />
+</form>
+[/code]
+
+[aside]Note the use of the [b]moya:[/b] prefix on the for tag above. This is because we are in the forms namespace and the [tag]for[/tag] tag is defined in the default namespace. For this to work, you need to add [b]xmlns:moya="http://moyaproject.com"[/b] to the top level tag.[/aside]
+
+This form requires that the form parameter [c]lines[/c] has been passed to it. The [tag]for[/tag] tag repeats the [tag forms]input[/tag] the given number of times, adjusting the [c]name[/c] attribute each time to create fields called [c]address1[/c], [c]address2[/c] etc.
+
+For example, the following retrieves a form object with [i]4[/i] address fields:
+
+[code xml]
+<forms:get form="#form.address" dst="form" let:lines="4"/>
+[/code]
+
+[aside]Extending and form parameters may be used together.[/aside]
+
+[h1]Rendering Forms[/h1]
+
+To work with a form in a view, you first get a form object with the [tag forms]get[/tag] tag. This effectively [i]calls[/i] the [tag]form[/tag] in the same way as a [tag]macro[/tag] or other callable tag. The following example retrieves the login form:
+
+[code xml]
+<view libname="view.login" content="#content.login">
+    <forms:get form="#form.login" dst="form"/>
+</view>
+[/code]
+
+When the above view is called, it gets a form object, and passes it to the content definition [c]#content.login[/c]. Here is that content definition:
+
+[code xml]
+<content libname="content.login" template="login.html">
+    <title>Log In</title>
+    <section name="body">
+        <render src="form"/>
+    </section>
+</content>
+[/code]
+
+When this content is rendered, the call to [tag]{}render[/tag] renders the form object in [c]login.html[/c].
+
+[h2]Form Styles[/h2]
+
+The [tag forms]form[/tag] tag has an attribute, [c]style[/c], which can be used to select one of a styles for the the form markup. The [tag forms]get[/tag] tag also has a [c]style[/c] attribute which will override the [c]style[/c] on the [tag forms]form[/tag] tag.
+
+[aside]Some of the styles assume [url http://getbootstrap.com]twitter bootstrap[/url] markup. Using Bootstrap will help you display nice looking forms with minimal effort, but you aren't required to use Bootstrap if you want to provide your own stylesheets.[/aside]
+
+The following is a list of the builtin styles:
+
+[definitions]
+
+[define basic]
+The [c]basic[/c] style renders the form with basic [url http://getbootstrap.com/css/#forms]bootstrap markup[/url].
+[/define]
+
+[define horizontal]
+The [c]horizontal[/c] style renders the form with a [url http://getbootstrap.com/css/#forms-horizontal]bootstrap horizontal[/url] layout.
+[/define]
+
+[define inline]
+The [c]inline[/c] style renders the form with a [url http://getbootstrap.com/css/#forms-inline]bootstrap inline[/url] layout.
+[/define]
+
+[define paragraphs]
+The [c]paragraphs[/c] style renders the form with a controls in [c]<p>[/c] tags.
+[/define]
+
+[define simple]
+The [c]simple[/c] style renders the form as a sequence of labels and controls.
+[/define]
+
+[define table]
+The [c]table[/c] style renders the form as a table with two columns; the first column contains the label and the second column contains the control.
+[/define]
+
+[/definitions]
+
+[h2]Form Templates[/h2]
+
+Moya uses templates to render forms and controls. These may be customized by overriding the templates in the usual way.
+
+When Moya renders the form, it generates a path from [c]/moya.forms/styles/{style}/form.html[/c], where [c]{style}[/c] is the style specified on the [tag forms]form[/tag] or [tag forms]get[/tag]. For example, if the style was [c]basic[/c], Moya would render the form [c]/moya.forms/styles/basic/form.html[/c].
+
+The form template renders the form html and related markup. It also loops through the fields in the form and renders them. The template paths for fields are generated from [c]/moya.forms/styles/{style}/fields/{fieldname}.html[/c], where [c]{style}[/c] is the form style, and [c]{fieldname}[/c] is the name of the field.
+
+You can see the default templates used by the forms library with the following:
+
+[code]
+$ moya fs templates --tree /moya.forms/
+[/code]
+
+If you override any of the templates, it will change how forms or fields are rendered across your entire application. You may also customize a form or field template individually, with the [c]template[/c] attribute (on the [tag forms]form[/tag] or [link forms#field-reference]field tags[/link]) which takes a path to a template.
+
+[h2]Custom Styles[/h2]
+
+You are not limited to the builtin form styles. If you want to define a new style entirely, you can add the template(s) under the path [c]/moya.forms/styles/{style}[/c] (in templates fs) where [c]{style}[/c] is the name of your custom style.
+
+See any of the existing form templates as a guide how to render a custom form style. You display any of the builtin form templates with the [c]moya fs[/c] command. Here's an example:
+
+[code]
+$ moya fs templates --cat /moya.forms/styles/basic/form.html
+[/code]
+
+[h2]Form Content[/h2]
+
+Moya forms are actually a specialized form of [link content]content[/link]; when you add a field to a form you are also adding associated content information. Because of this, non-form related content tags will also work inside a [tag forms]form[/tag]. You can use this to insert additional widgets, text, and images, for example. Content tags may also contain form field tags, which will be rendered normally, without breaking form functionality.
+
+For example, let's say we want to wrap the username and password fields from the login form in a HTML div with an additional style. We can put the two fields inside a [tag]node[/tag] which references a template:
+
+[code xml]
+<form libname="form.login" legend="Please login" xmlns="http://moyaproject.com/forms">
+    <moya:node template="highlight.html">
+        <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
+        <password name="password" label="Password" maxlength="30" required="yes"/>
+    </moya:node>
+    <submit-button text="Login" />
+</form>
+[/code]
+
+[aside]Note the use of the [b]moya:[/b] prefix on the node tag. This is because the node tag is not in the forms namespace.[/aside]
+
+When the above form is rendered, it will render the template [c]highlight.html[/c]:
+
+[code moyatemplate]
+<div class="highlight">{% children %}</div>
+[/code]
+
+This template wraps it's children with an HTML div which may be styled independently.
+
+[h2]Custom Fields[/h2]
+
+Moya includes a standard array of form inputs (see [link forms#field-reference]Field Reference[/link]), but there may be situations where you want to create entirely custom field tags either to change look and feel or to provide functionality that plain old HTML doesn't support. In these situations you can use the [tag forms]field[/tag] which registers the field with the form system (to enable validation etc.), but doesn't add any content of it's own. You can tell Moya how to render the field by adding the appropriate content tag(s) inside the [tag forms]field[/tag].
+
+For instance, Moya comes with a builtin library to embed a rich text editor (supporting bold / italic / links etc), which may be used in place of text area fields (see [link forms#text-area]text-area[/link]). To use it, add the following lines to your [tag]server[/tag]:
+
+[code xml]
+<import py="moya.libs.wysihtml5" />
+<install name="wysihtml5" lib="moya.wysihtml5" />
+[/code]
+
+[aside]You won't need this step if you created the project with [b]moya start project[/b].[/aside]
+
+Then add the XML namespace declaration [c]xmlns:wysihtml5="http://moyaproject.com/wysihtml5"[/c] to the file containing your form. Now you can replace [tag forms]text-area[/tag] tags with the following:
+
+[code xml]
+<field name="content" label="Rich Content">
+    <wysihtml5:editor/>
+</field>
+[/code]
+
+When the form is rendered it will display the rich editor containing markup from the form data (in [c]form.content[/c]). The user may edit the HTML without ever seeing markup.
+
+This works because when the [tag forms]field[/tag] tag is rendered it inserts a value called [c]field[/c] in to the context. The [c]field[/c] value which contains information about the field -- such as [c]field.name[/c]. The editor widget imports the CSS and JS required to make the editor work, and writes HTML in to an input when the form is submitted. The field may [link forms#field-validation]validated[/link] as if it were one of the standard fields.
+
+[h1]Processing Forms[/h1]
+
+When you get a form object during a POST request, Moya will fill in the field information from the POST data. A form that has been filled in (or [i]bound[/i]) can then be [i]validated[/i].
+
+Validating a form runs any checks on the fields, and generates error messages for fields that fail a check. The error messages are displayed when the form object is rendered, along with styles to highlight errors.
+
+To validate a form, use the [tag forms]validate[/tag] tag, which accepts a single attribute, [c]src[/c], which should be the form object (retrieved with [tag forms]get[/tag]). If the form validates successfully, Moya will execute the code within the [tag forms]validate[/tag] tag. This is where you would put any code to handle a valid form. The following code demonstrates how you might handle a login form:
+
+[code xml]
+<view libname="view.login" content="#content.login">
+    <forms:get form="#form.login" dst="form"/>
+    <forms:validate src="form">
+        <auth:login username="form.data.username" password="form.data.password"/>
+        <redirect-to url="/"/>
+    </forms>
+</view>
+[/code]
+
+When a form validates successfully it will have the value [c]ok[/c] set to [c]True[/c]. A valid form will also contain a dictionary of the data in the [c]data[/c] attribute. We can see that the view above retrieves the username and password from the form with [c]form.data.username[/c] and [c]form.data.password[/c].
+
+If the form doesn't validate (i.e. contains errors) then the form object may be passed to the content and rendered normally. Error messages will be displayed next to the appropriate fields.
+
+[h2]Populating Forms[/h2]
+
+You can pre-populate a form with the [c]src[/c] attribute of [tag forms]get[/tag], which should be a dict or other object with attributes the same names as the form fields. This [i]fills in[/i] the fields of the form. The following shows how we could prepopulate the login forn with an existing username:
+
+[code xml]
+<forms:get form="#form.login" dst="form" src="{'username': 'john'}" />
+[/code]
+
+When this form is rendered, the text of the username field will be populated with [c]'john'[/c].
+
+Note that if a form is being rendered after a POST request it will be populated with data from the POST, which will likely be the result of the user having filled in the form. Data from the POST will take precedence over the data supplied in the [c]src[/c] attribute of [tag {forms}]get[/tag].
+
+[h2]Processing Fields[/h2]
+
+Values set on the form with the [c]src[/c] attribute are converted to text when the template is rendered. Moya will do this automatically, but you may define a custom text representation of a src value by supplying a [c]process[/c] attribute on its field. This attribute should be an expression which takes the value from the [c]src[/c] (simply called [c]value[/c]) and returns a string. For instance, the default behavior would be equivalent to setting [c]process="str:value"[/c] on every field.
+
+One use for processing fields, is to define what happens when a value in the [c]src[/c] object is [c]None[/c], which may occur on a database object with a null field. The default behavior would be to convert the value [c]None[/c] to the string [c]'None'[/c], which is unlikely to be what you want in a form.
+
+For instance, lets say we have a field [c]count[/c] in a database object which could be None, and we would like to show this as [c]0[/c] in a form. We could define a [c]process[/c] attribute on the [tag forms]input[/tag] as follows:
+
+[code xml]
+<forms:input type="number" name="count" src="count" process="isnone:value ? '0' : str:value"/>
+[/code]
+
+Now when you render the form a value of [c]None[/c] for [c]Count[/c] will be converted to the text [c]0[/c].
+
+[h2]Field Validation[/h2]
+
+Most forms will require some kind of validation of the user's input, beyond marking a field as required. This is done with the [tag forms]validate-field[/tag] tag which should be inside the [tag forms]form[/tag] definition.
+
+The [tag forms]validate-field[/tag] tag takes a single attribute, [c]field[/c], which should be the name of the field you want to validate. When the form is validated (with [tag forms]validate[/tag]), Moya calls the code inside any [tag forms]validate-field[/tag] tags, which may report validation errors with [tag forms]fail[/tag]. Here's an example which validates an email field:
+
+[code xml]
+<!-- inside a form -->
+<form:validate-field field="email">
+    <fail if="'@' not in value">
+        Doesn't appear to be an email
+    </fail>
+</form:validate-field>
+[/code]
+
+When the form containing the above code is validated, Moya invokes the [tag forms]validate-field[/tag] tag with a parameter, [c]value[/c], which contains the text entered by the user. If there is no [b]@[/b] symbol in the email field, then the [tag forms]fail[/tag] tag will cause the validation to fail and set an error message on the field. The form will only validate if all [tag forms]validate-field[/tag] run without any fails.
+
+[aside]For more precise validation of email addresses, you could use [link expressions#regular-expressions]regular expressions[/link] or the [link expressions#isemail]email:[/link] modifier.[/aside]
+
+Some types of validation needs to refer to more than a single field. For example, in a user sign-up form it's common to have two email field in order to confirm the user has entered their email correctly (if the fields don't match, the user must have made a typo). In these situations, you can refer to the other fields with the [c]values[/c] dictionary, which is also passed to [tag forms]validate-field[/tag]. Here's an example:
+
+[code xml]
+<validate-field field="email2">
+    <fail if="values.email != value">
+        Email fields do not match
+    </fail>
+</validate-field>
+[/code]
+
+The above code assumes there are two email fields, called [c]email[/c] and [c]email2[/c]. The [tag forms]validate-field[/tag] tag applies to the second email field, and checks that its value (stored in [c]value[/c]) matches what the user entered in the first email input (stored in [c]values.email[/c]). Note that, the expression [c]values.email != values.email2[/c] would work equally well.
+
+[h2]Setting Errors[/h2]
+
+You may set error information on the form outside of the usual validate process with the [tag forms]error[/tag] tag, which takes the form as input, and uses the enclosed text as the error message. The [tag forms]error[/tag] can set an error message that applies to the form (typically displayed above the controls) [i]or[/i] error messages that apply to a particular field, with the [c]field[/c] attribute. For example, the following code would set error text for a login form:
+
+[code xml]
+<forms:error src="form">
+    Much login fail
+</forms:error>
+[/code]
+
+The following sets an error message that applys to the [c]username[/c] field:
+
+[code xml]
+<forms:error src="form" field="username">
+    No such user!
+</forms:error>
+[/code]
+
+[h2]Adapting Form Data[/h2]
+
+The data in a successfully validated form object is stored as text, which may not be convenient if we need it in a different format. We can tell Moya to further process (or [i]adapt[/i] successfully validated data with the [c]adapt[/c] attribute on field tags, which should be an expression which takes the field value (as [c]value[/c]) and returns the adapted value.
+
+[aside]Adapting is the logical reverse of processing the field data. See [link forms#processing-fields]Processing Fields[/link].[/aside]
+
+For example, if we have an input that accepts a number, we may want to convert the value in the form data to an integer (rather than leave it as a string). Here's an example that adapts a field called [c]count[/c] by converting it to an integer.
+
+[code xml]
+<forms:input type="number" name="count" src="count" adapt="int:value" />
+[/code]
+
+You can also adapt form data with the [tag forms]adapt-field[/tag] tag -- if you need to do more work than can fit in to a simple expression. When Moya processes the [c]adapt[/c] attributes it also invokes any code inside [tag forms]adapt-field[/tag] and will replace the field data with the return value (if there is one). As with the [c]adapt[/c] attribute, the field being adapted is available as [c]value[/c]. Additionally, the code in [tag forms]adapt-field[/tag] is also called with a dictionary called [c]values[/c] (plural) which contains all the data from the form.
+
+Here's an example form containing a field called [c]title[/c] and a field called [c]slug[/c]. The field adapter in the form automatically generates the slug field from the title if it is left blank:
+
+[code xml]
+<form libname="form.post" legend="New Post" xmlns="http://moyaproject.com/forms">
+    <input class="input-xxlarge" name="title" label="Post Title" maxlength="60" required="yes"/>
+    <input class="input-xxlarge" name="slug" label="Slug" maxlength="60" required="no"
+        inlinehelp="Leave blank to auto-generate a slug" />
+    <adapt-field field="slug">
+        <moya:return value="slug:values.title" if="not value"/>
+    </adapt-field>
+</form>
+[/code]
+
+[aside]A [i]slug[/i] is human readable text that may be included in a URL.[/aside]
+
+[h2]Applying forms[/h2]
+
+A common use-case for forms is to create or edit database objects, where the names of the fields map to an attribute on a model. For example, lets say we have a Post model that contains the fields, [c]title[/c], [c]slug[/c] and [c]text[/c]. We could design the following form to edit a single Post object:
+
+[code xml]
+<form libname="form.post.edit" xmlns="http://moyaproject.com/forms">
+    <input name="title" maxlength="30" required="yes"/>
+    <input name="slug" maxlength="30" required="yes"/>
+    <text name="text" required="yes" />
+</form>
+[/code]
+
+The following code demonstrates how we might copy data from a successfully validated form to a model object:
+
+[code xml]
+<!-- assumes we have retrieved a 'post' object from the database -->
+<let post.title="form.data.title"
+     post.slug="form.data.slug"
+     post.text="form.data.text" />
+[/code]
+
+The above code is a perfectly valid way of processing a form, but it can get unwieldy if the form has a large number of fields. There may also be a lot of repetition if we have several views to edit different aspects of the model.
+
+To simplify this kind form, we can add a [c]dst[/c] attribute to field elements, which tells Moya how to [i]apply[/i] the form. The [c]dst[/c] attribute should be the name of an attribute on the object which will receive the form data. Here's how we would modify the post form to enable this feature:
+
+[code xml]
+<form libname="form.post.edit" xmlns="http://moyaproject.com/forms">
+    <input name="title" maxlength="30" required="yes" dst="title"/>
+    <input name="slug" maxlength="30" required="yes" dst="slug"/>
+    <text name="text" required="yes" dst="text"/>
+</form>
+[/code]
+
+With the addition of the [c]dst[/c] attributes, we can now [i]apply[/i] the form as follows:
+
+[code xml]
+<forms:apply src="form" dst="post" />
+[/code]
+
+[aside]If you don't specify [b]dst[/b] on field, Moya will used the [b]src[/b] attribute (since forms are often applied to the same type of object that they were populated from).[/aside]
+
+[h1]Field Reference[/h1]
+
+The following is a list of field tags which you can enter in a form.
+
+[h2]check-select[/h2]
+
+A check select fields is simlar to an HTML select control with the [c]multiple[/c] attribute set. Such multiple select controls allow the user to select any number of options by holding down the Alt key. They suffer from a usability point of view in that it is not obvious (without additional text) that you can select multiple options. It is also way to easy to de-select a number of items by forgetting to hold down the Alt key. Moya offers an alternative to a multiple selected with the [tag forms]check-select[/tag] control which renders multiple options as check-boxes -- but otherwise operates in the same way as a select.
+
+[h2]checkbox[/h2]
+
+The [tag forms]checkbox[/tag] tag renders an input with type checkbox, which displays an icon that may be checked or unchecked. You can tell Moya what value a checkbox should set on the form data when selected with the [c]on[/c] attribute.
+
+[h2]hidden-input[/h2]
+
+The [tag forms]hidden-input[/tag] tag renders an input with type [c]hidden[/c]. A [i]hidden[/i] input does not visibly display anything in the form, but can be used to associate information with the form that is sent back to the server when submitted.
+
+[alert]Note that hidden inputs may be validated in the same way as other inputs, but if there are errors when validating the field, they can not be displayed since the input is hidden.[/alert]
+
+[h2]input[/h2]
+
+The [tag forms]input[/tag] tag renders a simple HTML [c]input[/c].
+
+[h2]password[/h2]
+
+The [tag forms]password[/tag] tag renders an HTML input of type [c]password[/c], which will hide what the users has entered with asterisks.
+
+[h2]radio[/h2]
+
+The [tag forms]radio[/tag] rag renders an HTML [i]radio button[/i], which may be selected or not-selected. Radio buttons differ from check-boxes in that only one radio button in a [i]group[/i] may be selected. A group is defined by using the same [c]name[/c] for the [tag forms]radio[/tag] tags in the group. For example, the following code creates three radio buttons:
+
+[tag xml]
+<radio name="option" text="Option 1" on="1"/>
+<radio name="option" text="Option 2" on="2"/>
+<radio name="option" text="Option 3" on="3"/>
+[/tag]
+
+If the user selects a different radio button, the previously selected button will be de-selected. The value [c]option[/c] in the form data will be set to the [c]on[/c] attribute of the selected radio button.
+
+[aside]The [tag forms]radio-group[/tag] tag (see below) may be used to render a more visually distinct group.[/aside]
+
+[h2]radio-group[/h2]
+
+The [tag forms]radio-group[/tag] renders a group of radio buttons in a single field group in the form. Without a [tag forms]radio-group[/tag], each radio button will have it's own label and have the same margin / padding as other fields. Here's an example of a radio group:
+
+[code xml]
+<radio-group name="option" label="Radio Group" required="yes">
+    <radio text="Option 1" on="1"/>
+    <radio text="Option 2" on="2"/>
+    <radio text="Option 3" on="3"/>
+</radio-group>
+[/code]
+
+Note, that when using a radio group, you need only set the [c]name[/c] of the group, the [c]name[/c] attribute of the [tag forms]radio[/tag] tags will be ignored inside a group.
+
+[h2]select[/h2]
+
+The [tag forms]select[/tag] tag renders an HTML select control, which is a list of possible values that my be selected by the user. The values used in a select are set with [tag forms]option[/tag] tags which appear inside the [tag forms]select[/tag]. Here's an example of a select control with three possible values:
+
+[code xml]
+<select name="fruit" label="Pick a fruit">
+    <option value="apples">Apples</option>
+    <option value="oranges">Oranges</option>
+    <option value="pears">Pears</option>
+</select>
+[/code]
+
+The text enclosed in the [tag forms]option[/tag] tag is what is shown to the user. The [c]value[/c] attribute defines the value which will be set on the form data.
+
+[h3]Option Groups[/h3]
+
+Options in a [tag forms]select[/tag] may be organized in to distinct groups to make them easier to search for with the [tag forms]opt-group[/tag] tag. Here's an example:
+
+[code xml]
+<select name="fruit_or_veg" label="Pick something">
+    <opt-group label="Fruit">
+        <option value="apples">Apples</option>
+        <option value="oranges">Oranges</option>
+        <option value="pears">Pears</option>
+    </opt-group>
+    <opt-group label="Vegetable">
+        <option value="carrot">Carrot</option>
+        <option value="potato">Potato</option>
+    </opt-group>
+</select>
+[/code]
+
+The code above defines two opt-groups; one for the fruit and one for vegetables under an appropriate heading.
+
+[aside]Although option groups are a standard feature of HTML, there is surprisingly little consistency amongst browsers in how option groups are displayed.[/aside]
+
+[h2]submit-button[/h2]
+
+The [tag forms]submit-button[/tag] tag renders a button that will submit the form. The [c]text[/c] attribute sets the text to be displayed on the button. This should be something that reflects what will happen when you click the button; 'Edit', 'Create' etc.
+
+Submit buttons can also set a value on the form when they are clicked; if you supply a [c]name[/c] attribute then clicking the button will store the value given in the [c]value[/c] attribute (which may be empty).
+
+[h3]Form Actions[/h3]
+
+If you have more than one submit button, you can enclose them in a [tag forms]submit-button[/tag] tag which will render the buttons horizontally rather than one per row. Here's an example:
+
+[code xml]
+<actions>
+    <button name="action" value="edit" text="Edit Post"/>
+    <button name="action value="cancel> text="Cancel"/>
+</actions>
+[/code]
+
+This will render two submit buttons. The first one will set the value [c]action[/c] to [c]'edit'[/c], the second will set [c]action[/c] to [c]'cancel'[/c]. The buttons will be displayed on a single row, which looks more natural than a button per row.
+
+[aside]This tag is purely visual, and won't change the behavior of the form.[/aside]
+
+[h2]text-area[/h2]
+
+The [tag forms]text-area[/tag] tag renders an HTML textarea, which is a multiple-line text input control. Text areas are better suited for situations where the user is required to enter several lines of text, such as in comments or post content.
+
+[h2]upload[/h2]
+
+The [tag forms]upload[/tag] tag renders a control to upload a file. This is typically rendered by browsers with a button that opens a dialog for the user to select a file to upload.

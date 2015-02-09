@@ -1,0 +1,21 @@
+<moya xmlns:let="http://moyaproject.com/let">
+    <data-tag name="product">
+        <doc>A sushi product</doc>
+        <signature>
+            <attribute name="name" required="yes"/>
+            <attribute name="description" required="no" default=""/>
+        </signature>
+    </data-tag>
+
+    <macro docname="main">
+        <get-data tag="product" dst="products" />
+        <echo obj="products" />
+        <get-data-item tag="product" let:name="'Kappa Maki'" dst="kappa_maki" />
+        <product name="test"/>
+        <echo obj="kappa_maki" />
+    </macro>
+
+    <product name="Maguro Nigiri" description="A lean cut of tuna" />
+    <product name="Kappa Maki" description="Cucumber" />
+
+</moya>

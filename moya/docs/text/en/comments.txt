@@ -1,0 +1,71 @@
+[title Moya Comments]
+
+Moya Comments enable threaded comments to be added to any page. You can get notification emails regarding comments, and replies. User's may unsubscribe from these emails at any point.
+
+[h1]Installation[/h1]
+
+Moya Comments is built in to Moya, and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.comments"/>
+[/code]
+
+You can install Moya Comments with the following:
+
+[code xml]
+<install name="comments" lib="moya.comments" mount="/comments/" />
+[/code]
+
+The mount URL is used for few forms and the inner workings of the comments system, users will be able to make comments on any page.
+
+[h1]Settings[/h1]
+
+[setting]email_from = <EMAIL ADDRESS>[/setting]
+
+This sets the email address that emails regarding notifications will be sent from.
+
+[setting]recaptcha = <yes/no>[/setting]
+
+If [c]yes[/c], Moya Comments will require a CAPTCHA to post anonymously. See [doc recaptcha].
+
+[h1]Comment Widget[/h1]
+
+To enable comments on a page add a [tag comments]comment[/tag] to your content, where you want the comments to appear (typically near the end of the page).
+
+The [tag comments]comments[/tag] widget needs two pieces of information in order to associate comments with the comment [i]topic[/i]; these are [c]topic[/c] and [c]namespace[/c]. The [c]topic[/c] attribute is a string which should be unique to type of topic. Since the comment topic is likely a database object of some kind, a sensible choice would be name of the object type and its primary key. For example [c]post-${post.id}[/c]. The [c]namespace[/c] is a similar string, which can be any format you like, as long as the combination of [c]namespace[/c] and [c]topic[/c] is unique in your website. If your topic is a database object, then a [c]namespace[/c] that includes the application name should be enough to make the combination unique.
+
+You can also supply a [c]url[/c] attribute, which is used to redirect back to the page containing the topic when a comment is posted. It is also stored along with the comments, so you can reference it in the admin view. If you don't supply a [c]url[/c], Moya Comments will use the current url being processed.
+
+Here's an example of how to enable comments:
+
+[code xml]
+<comments:comments namespace="app-${.app.name}" topic="post-${post.id}"/>
+[/code]
+
+Note that the namespace plus topic scheme ensures that even if you change your URL structures, Moya will be able to keep track of the comments on that page.
+
+[h1]Comment Counts[/h1]
+
+Moya Comments also supplies the [tag comments]get-count[/tag] tag to get the number of comments on a particular topic. You would use this if you want to display the number of comments in some kind of summary page. Here's an example:
+
+[code xml]
+<for src="posts" dst="post">
+    <comments:get-count namespace="app-post" topic="post-${post.id}" dst="count"/>
+    <html:h1>${post.title}</html:h1>
+    <html:p>${count} comment(s)</html:p>
+</for>
+[/code]
+
+This would be used in a content definition to add a [c]<h1>[/c] tag for each post, followed by the number of comments on the post.
+
+To avoid doing a database query for every object you want to get the comment counts for, you can use [tag comments]get-counts[/tag] which gets the counts for a group of topics (in a single query). It returns a dictionary that maps the topic on to the number of comments.
+
+The following does the same thing as the preceding example, but uses a single call to [tag comments]get-counts[/tag], rather than multiple [tag comments]get-count[/tag] calls:
+
+[code xml]
+<comments:get-counts namespace="app-post" dst="counts" />
+<for src="posts" dst="post">
+    <html:h1>${post.title}</html:h1>
+    <html:p>${counts['post-' + post.id]} comment(s)</html:p>
+</form>
+[/code]

@@ -1,0 +1,33 @@
+<moya>
+
+    <!-- Fizzbuzz is a simple exercise designed to test that a programmer can really write code -->
+    <!-- http://blog.codinghorror.com/why-cant-programmers-program/-->
+
+    <!-- Easy to understand version -->
+    <macro docname="main">
+        <for src="1..100" dst="number">
+            <switch>
+                <case if="number % 15 == 0"/>
+                <echo>FizzBuzz</echo>
+
+                <case if="number % 3 == 0"/>
+                <echo>Fizz</echo>
+
+                <case if="number % 5 == 0"/>
+                <echo>Buzz</echo>
+
+                <default-case/>
+                <echo>${number}</echo>
+            </switch>
+
+        </for>
+    </macro>
+
+    <!-- Confusing one-liner (but probably faster)-->
+    <macro docname="fizzbuzz2">
+        <for src="1..100" dst="number">
+            <echo>${number % 15 == 0 ? 'FizzBuzz' : (number % 3 == 0 ? 'Fizz' : (number % 5 == 0 ? 'Buzz' : number))}</echo>
+        </for>
+    </macro>
+
+</moya>

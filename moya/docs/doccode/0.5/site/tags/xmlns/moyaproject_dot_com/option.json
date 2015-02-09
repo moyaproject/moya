@@ -1,0 +1,105 @@
+{
+    "name": "option",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "option",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/command.py",
+        "doc": "Defines an [i]option[/i] for a [tag]command[/tag]. Options may be added to the command line when a command is invoked. The following is an example of how an option is used:\n\n    [code]$ moya testapp#cmd.optiontest --hobbit=\"bilbo\"[/code]\n\n    An [tag]option[/tag] tag must appear within a [tag]signature[/tag] tag.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "Add an option to a command",
+        "tag_name": "option",
+        "params": {
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Argument help text",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "nargs": {
+                "default_display": "\"?\"",
+                "name": "nargs",
+                "missing": true,
+                "default": "?",
+                "doc": "Number of arguments",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "action": {
+                "default_display": "",
+                "name": "action",
+                "missing": true,
+                "default": null,
+                "doc": "Action",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "type": {
+                "default_display": "\"string\"",
+                "name": "type",
+                "missing": true,
+                "default": "string",
+                "doc": "Type of argument",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "string",
+                    "integer",
+                    "float"
+                ]
+            },
+            "metavar": {
+                "default_display": "",
+                "name": "metavar",
+                "missing": true,
+                "default": null,
+                "doc": "Argument metavar",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Argument name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <option name=\"hobbit\" metavar=\"HOBBIT NAME\" help=\"Your favorite hobbit\" />\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.option"
+}

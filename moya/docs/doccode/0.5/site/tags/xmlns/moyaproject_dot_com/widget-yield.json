@@ -1,0 +1,47 @@
+{
+    "name": "widget-yield",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "widget-yield",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "Yield to a widget block",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "yield to code block in a widget",
+        "tag_name": "widget-yield",
+        "params": {
+            "obj": {
+                "default_display": "None",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "Data to yield",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.widget-yield"
+}

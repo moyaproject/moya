@@ -1,0 +1,234 @@
+{
+    "name": "submit-button",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "submit-button",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nAdd a submit button to a form.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "add a submit button in a form",
+        "tag_name": "submit-button",
+        "params": {
+            "fieldname": {
+                "default_display": "\"submit-button\"",
+                "name": "fieldname",
+                "missing": true,
+                "default": "submit-button",
+                "doc": "Field name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "clicked": {
+                "default_display": "",
+                "name": "clicked",
+                "missing": true,
+                "default": null,
+                "doc": "Value when button is clicked",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "class": {
+                "default_display": "",
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Extra class(es)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "text": {
+                "default_display": "\"Submit\"",
+                "name": "text",
+                "missing": true,
+                "default": "Submit",
+                "doc": "Text on button",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source object index",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Override style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "required": {
+                "default_display": "",
+                "name": "required",
+                "missing": true,
+                "default": null,
+                "doc": "Is a value required for this field?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Help text",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Field name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "process": {
+                "default_display": "str:value",
+                "name": "process",
+                "missing": true,
+                "default": "str:value",
+                "doc": "Function to process src in to a string",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination object index",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "initial": {
+                "default_display": "None",
+                "name": "initial",
+                "missing": true,
+                "default": null,
+                "doc": "Initial value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Label",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "visible": {
+                "default_display": "yes",
+                "name": "visible",
+                "missing": true,
+                "default": true,
+                "doc": "Visible",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "adapt": {
+                "default_display": "value",
+                "name": "adapt",
+                "missing": true,
+                "default": "value",
+                "doc": "Function to adapt field before applying",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "choices": null
+            },
+            "maxlength": {
+                "default_display": "",
+                "name": "maxlength",
+                "missing": true,
+                "default": null,
+                "doc": "Maximum length",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "inlinehelp": {
+                "default_display": "",
+                "name": "inlinehelp",
+                "missing": true,
+                "default": null,
+                "doc": "Help text",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.submit-button"
+}

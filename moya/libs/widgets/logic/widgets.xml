@@ -1,0 +1,139 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:html="http://moyaproject.com/html">
+
+    <widget name="success" template="success.html" synopsis="success alert">
+        <doc>Renders a success message.</doc>
+    </widget>
+    <widget name="info" template="info.html" synopsis="info alert">
+        <doc>Renders a message.</doc>
+    </widget>
+    <widget name="danger" template="danger.html" synopsis="danger alert">
+        <doc>Renders a danger alert.</doc>
+    </widget>
+    <widget name="warning" template="warning.html" synopsis="warning alert">
+        <doc>Renders a warning message.</doc>
+    </widget>
+    <widget name="error" template="error.html" synopsis="error alert">
+        <doc>Renders an error message.</doc>
+    </widget>
+
+    <widget name="well" template="well.html" synopsis="render a well">
+        <doc>Renders a well (highlighted panel)</doc>
+    </widget>
+    <widget name="small-well" template="small-well.html" synopsis="render a small well">
+        <doc>Renders a well (highlighted panel) with smaller borders</doc>
+    </widget>
+    <widget name="large-well" template="large-well.html" synopsis="render a large well">
+        <doc>Renders a well (highlighted panel) with large borders</doc>
+    </widget>
+
+    <widget name="check" template="check.html" synopsis="render a check">
+        <doc>Renders a check mark.</doc>
+    </widget>
+
+    <widget name="no-wrap" template="no-wrap.html" synopsis="set no wrap on contents">
+        <doc>Disable text wrapping for contents.</doc>
+    </widget>
+
+    <widget name="link" template="link.html" let="params" synopsis="renders a link">
+        <doc>Renders a link.</doc>
+        <signature>
+            <attribute name="name" type="text"/>
+            <attribute name="app" type="text" required="no" default="" />
+            <attribute name="url" required="no" />
+            <attribute name="with" required="no" type="expression"/>
+            <attribute name="class" required="no" />
+            <attribute name="icon" required="no"/>
+        </signature>
+        <dict dst="url_with"/>
+        <update values="params" src="url_with"/>
+        <update values="with" src="url_with" if="with" />
+        <get-url name="${name}" from="${app}" with="url_with" dst="url" if="name and not url"/>
+    </widget>
+
+    <widget name="button-link" template="buttonlink.html" let="params" synopsis="render a link styled as a button">
+        <doc>Renders a link, styled as a button.</doc>
+        <signature>
+            <attribute name="name" type="text" default=""/>
+            <attribute name="app" type="text" required="no" default="" />
+            <attribute name="url" required="no" />
+            <attribute name="with" required="no" type="expression"/>
+            <attribute name="class" required="no" default="btn btn-default"/>
+            <attribute name="icon" required="no"/>
+        </signature>
+        <dict dst="url_with"/>
+        <update values="params" src="url_with"/>
+        <update values="with" src="url_with" if="with" />
+        <get-url name="${name}" from="${app}" with="url_with" dst="url" if="not url"/>
+    </widget>
+
+    <widget name="buttons" template="buttons.html" synopsis="renders enclosed links as buttons">
+    </widget>
+
+    <widget name="url" template="url.html" synopsis="renders a hyperlinked URL">
+        <doc>Renders a URL with a link.</doc>
+        <signature>
+            <attribute name="url" required="no" />
+        </signature>
+    </widget>
+
+    <widget name="dialog" template="dialog.html" synopsis="container for dialog"/>
+    <widget name="dialog-buttons" template="dialogbuttons.html" synopsis="container for dialog buttons"/>
+
+    <macro docname="pagination-widget">
+        <not-found if="'page' in .request.GET and not int:.request.GET.page" />
+        <dict dst="pagination"/>
+        <scope object="pagination">
+            <let pagesize="pagesize"
+                numitems="len:objects"
+                page="int:.request.GET.page or 1"
+                numpages="(numitems + pagesize - 1) // pagesize"/>
+            <let start="(page - 1) * pagesize + 1" />
+            <let end="min:[(start + pagesize - 1), numitems]" />
+            <not-found if="numitems and (page lt 1)"/>
+            <let activepageno="int:page" />
+            <let pages="[1, 2, numpages, numpages - 1, activepageno, activepageno - 1,  activepageno + 1]" />
+            <list dst="pagelinks"/>
+            <for src="sorted:set:pages" dst="pageno" filter="pageno gte 1 and pageno lte numpages">
+                <append value="pageno" src="pagelinks" />
+                <append value="None" src="pagelinks" if="pageno + 1 not in pages and pageno lt numpages"/>
+            </for>
+        </scope>
+    </macro>
+
+    <widget name="paginate" template="widgets/paginator.html" container="no" synopsis="paginate a list of results">
+        <signature>
+            <attribute name="src" type="index">
+                Sequence to paginate.
+            </attribute>
+            <attribute name="dst" default="object">
+                The name to give to each item in the sequence.
+            </attribute>
+            <attribute name="pagesize" type="expression" default="10">
+                Number of items in a page.
+            </attribute>
+            <attribute name="page" type="expression" default=".request.GET.page or 1">
+                Current page to display (default retrieves page from the query string).
+            </attribute>
+            <attribute name="auto" type="boolean" default="yes" required="no">
+                If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.
+            </attribute>
+        </signature>
+        <let objects="src"/>
+        <defer to="pagination-widget"/>
+        <page src="objects" dst="pagination.objects" page="pagination.page" pagesize="pagination.pagesize" />
+        <if test="auto">
+            <for src="pagination.objects" dst="object">
+                <dict dst="yield_obj" let:pagination="pagination"/>
+                <set-item src="yield_obj" index="dst" value="object" />
+                <widget-yield obj="yield_obj" />
+            </for>
+        </if>
+        <else>
+            <widget-yield let:pagination="pagination" />
+        </else>
+    </widget>
+
+</moya>

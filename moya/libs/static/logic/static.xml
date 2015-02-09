@@ -1,0 +1,57 @@
+<moya xmlns="http://moyaproject.com"
+	  xmlns:moya="http://moyaproject.com"
+	  xmlns:let="http://moyaproject.com/let">
+
+	<mountpoint name="main">
+		<url route="{*path}" view="serve" name="serve"/>
+	</mountpoint>
+
+	<view docname="serve">
+		<!-- if the path is not a directory then fall through to serving a file -->
+        <let fsname=".app.settings.fs" />
+		<throw exception="moya.static.nofs" msg="No filesystem called '${fsname}'" if="fsname not in .fs"/>
+		<call macro="servedir" let:path="url.path" let:fsname="fsname"/>
+		<call macro="servefile" let:path="url.path" let:fsname="fsname" />
+	</view>
+
+	<view docname="servedir">
+		<!-- Call our Python macro to get the directory listing -->
+        <let fs=".fs[fsname]"/>
+		<call macro="#get_dirlist" dst="dirlist">
+			<var>fs</var>
+			<var>path</var>
+		</call>
+		<!-- get_dirlist returns None if it is not a directory-->
+		<return if="not dirlist" />
+		<!-- 404 if directory listing is disabled -->
+		<not-found if="not .app.settings.dirlist.bool" />
+		<!-- Redirect to a canonical url ending with / -->
+		<redirect-to url="${.request.path}/" if="not .request.path $= '/'" />
+		<!-- Serve an index file if enabled in settings -->
+		<for dst="indexfile" src=".app.settings.index.list">
+			<serve-file fs="${fsname}" path="${path:path + indexfile}" ifexists="yes" />
+		</for>
+        <!-- Serve the directory listing-->
+		<serve-template template="dirlist.html" withscope="yes" let:app=".app"/>
+	</view>
+
+	<view docname="servefile">
+		<!-- 404 if the path matches hidden wildcards -->
+		<for dst="wildcard" src=".app.settings.hide.list">
+			<not-found if="basename:path fnmatches wildcard" />
+		</for>
+		<!-- Serve file if it exists -->
+		<serve-file fs="${fsname}" path="${path}" ifexists="yes"/>
+		<not-found/>
+	</view>
+
+	<check xmlns="http://moyaproject.com/preflight">
+        <fail if="not strip:.app.settings.fs">
+            A value for 'fs' is required -- check your settings
+        </fail>
+		<fail if="not .fs[.app.settings.fs]">
+			No filesystem called '${.app.settings.fs}' -- check your settings
+		</fail>
+	</check>
+
+</moya>

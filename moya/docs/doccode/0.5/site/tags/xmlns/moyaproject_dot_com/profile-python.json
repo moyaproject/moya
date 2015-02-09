@@ -1,0 +1,73 @@
+{
+    "name": "profile-python",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "profile-python",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/tools.py",
+        "doc": "\nProfile Python code.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "profile python code",
+        "tag_name": "profile-python",
+        "params": {
+            "sort": {
+                "default_display": "\"cumtime\"",
+                "name": "sort",
+                "missing": true,
+                "default": "cumtime",
+                "doc": "column to sort by",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "calls",
+                    "cumulative",
+                    "cumtime",
+                    "file",
+                    "filename",
+                    "module",
+                    "ncalls",
+                    "pcalls",
+                    "line",
+                    "name",
+                    "nfl",
+                    "stdname",
+                    "time",
+                    "tottime"
+                ]
+            },
+            "max": {
+                "default_display": "20",
+                "name": "max",
+                "missing": true,
+                "default": 20,
+                "doc": "number of stats to display",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.profile-python"
+}

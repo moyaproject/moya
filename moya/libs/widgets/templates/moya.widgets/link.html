@@ -1,0 +1,8 @@
+{%- if icon %}
+<a href="${html:url}" {% attrib class=class %}>
+    <i class="glyphicon glyphicon-${icon}"></i>
+    {% children %}
+</a>
+{%- else %}
+<a href="${html:url}" {% attrib class=class %}>{% children %}</a>
+{% endif %}

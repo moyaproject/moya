@@ -1,0 +1,45 @@
+<moya xmlns="http://moyaproject.com">
+
+	<macro libname="setcontext">
+		<int dst=".foo">1</int>
+		<dict dst=".bar" />
+		<str dst=".bar.baz">Hello</str>
+		<float dst=".half">0.5</float>
+		<bool dst=".bool">yes</bool>
+		<true dst=".t"/>
+		<false dst=".f"/>
+		<none dst=".n"/>
+		<list dst=".l"/>
+		<json dst=".j">
+			{
+				"list":[1, 2, 3],
+				"map":{"foo":10, "bar":20}
+			}
+		</json>
+		<list dst=".fruit">
+			<str>apples</str>
+			<str>oranges</str>
+			<str>pears</str>
+		</list>
+	</macro>
+
+	<macro libname="setcontextbyvalue">
+		<int dst=".foo">10</int>
+		<int dst=".bar">${10+5}</int>
+		<int dst=".zero" />
+		<str dst=".empty" />
+		<str dst=".fruit" value="'apple'" />
+		<str dst=".grapes" value="'grape'*3" />
+		<str dst=".nograpes">'grape'*3</str>
+		<float dst=".pi">3.14</float>
+		<bool dst=".check" value="10 gt 2*2"/>
+		<bool dst=".check2" value="10 lt 2*2"/>
+		<var dst=".s">3*3*3</var>
+	</macro>
+
+    <macro docname="main">
+        <call macro="#setcontextbyvalue" />
+        <breakpoint/>
+    </macro>
+
+</moya>

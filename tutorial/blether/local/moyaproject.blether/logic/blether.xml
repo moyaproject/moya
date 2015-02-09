@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:forms="http://moyaproject.com/forms"
+    xmlns:html="http://moyaproject.com/html"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:w="http://moyaproject.com/widgets">
+
+    <mountpoint name="main">
+        <url route="/" view="#view.front" />
+    </mountpoint>
+
+    <view libname="view.front" content="#content.front">
+        <db:query model="#Blether" orderby="-posted_time" dst="blethers" />
+        <if test="permission:'admin'">
+            <forms:get form="#form.new-blether" dst="form"/>
+            <forms:validate src="form">
+                <db:create model="#Blether" let:text="form.data.text" />
+                <redirect-to path="." />
+            </forms:validate>
+        </if>
+    </view>
+
+    <model libname="Blether" xmlns="http://moyaproject.com/db">
+        <datetime name="posted_time" label="Blethered on" null="no" auto="yes"/>
+        <string name="text" length="140"/>
+    </model>
+
+    <form libname="form.new-blether" style="basic" xmlns="http://moyaproject.com/forms">
+        <text-area name="text" maxlength="140" required="yes"/>
+        <submit-button text="Blether!" />
+        <validate-field field="text">
+            <fail if="len:value gt 140">
+                140 characters is enough for anyone!
+            </fail>
+        </validate-field>
+    </form>
+
+    <content libname="content.front">
+        <title>Blether</title>
+        <section name="body">
+            <html:div class="col-md-6 col-md-offset-3">
+                <render src="form" if="permission:'admin'"/>
+                <w:paginate src="blethers" dst="blether">
+                    <node template="blether.html" let:blether="blether"/>
+                </w:paginate>
+            </html:div>
+        </section>
+    </content>
+
+</moya>

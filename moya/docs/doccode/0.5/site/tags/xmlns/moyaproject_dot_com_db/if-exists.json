@@ -1,0 +1,91 @@
+{
+    "name": "if-exists",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "if-exists",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Execute the enclosed block if a object exists in the db.",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "execute a block if an object exists in the database",
+        "tag_name": "if-exists",
+        "params": {
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Filter expression",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "choices": null
+            },
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": null,
+                "doc": "Model",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "modelobj": {
+                "default_display": "None",
+                "name": "modelobj",
+                "missing": true,
+                "default": null,
+                "doc": "Model object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n            <db:if-exists model=\"#Link\" let:topic=\"topic\" let:slug=\"slug\" >\n                <forms:error>Slug exists, please edit the title</forms:error>\n                <break/>\n            </db:if-exists>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.if-exists"
+}

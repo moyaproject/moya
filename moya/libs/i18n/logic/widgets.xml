@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+
+    <widget name="langicon" template="widgets/flag.html">
+        <signature>
+            <attribute name="lang" />
+        </signature>
+    </widget>
+
+    <widget name="langswitch" template="widgets/langswitch.html">
+    	<signature>
+    		<attribute name="languages" type="commalist" required="yes"/>
+    	</signature>
+    </widget>
+
+    <widget name="translate-attribute" template="widgets/translatable_attribute.html">
+        <signature>
+            <attribute name="sometext"/>
+            <attribute name="force_translate"/>
+        </signature>
+    </widget>
+
+</moya>

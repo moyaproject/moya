@@ -1,0 +1,11 @@
+<form action="${form.action or '.'}" {% attrib enctype=form.enctype %} method="post" {% attrib class=['form-horizontal', form.class] %}>
+    <fieldset>
+    {% if form.legend %}<legend>${form.legend}</legend>{% endif %}
+    {%- if form.error %}
+    <div class="alert alert-danger">${form.error}</div>
+    {%- elif form.errors %}
+    <div class="alert alert-danger">There are errors in the form, please check below.</div>
+    {%- endif %}
+    {% render form.content.sections.fields %}
+    </fieldset>
+</form>

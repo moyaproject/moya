@@ -1,0 +1,91 @@
+{
+    "name": "option",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "option",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nDefine an option in a select input.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "an option in a select control",
+        "tag_name": "option",
+        "params": {
+            "renderable": {
+                "default_display": "None",
+                "name": "renderable",
+                "missing": true,
+                "default": null,
+                "doc": "Renderable object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "selected": {
+                "default_display": "no",
+                "name": "selected",
+                "missing": true,
+                "default": false,
+                "doc": "Selected",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "group": {
+                "default_display": "",
+                "name": "group",
+                "missing": true,
+                "default": null,
+                "doc": "Group",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Help text",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <select name=\"fruit\">\n            <option value=\"apples\">Apples</option>\n            <option value=\"oranges\">Oranges</option>\n            <option value=\"pears\">Pears</option>\n        </select>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.option"
+}

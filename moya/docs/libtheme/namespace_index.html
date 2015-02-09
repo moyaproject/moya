@@ -1,0 +1,28 @@
+{% extends "/columns.html" %}
+
+{% block "title" %}Namespaces{% endblock %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+	<li><a href="${relto:.urls.cover.cover}">Home</a> <span class="divider">/</span></li>
+	<li>Namespaces</li>
+</ul>
+
+<h2>Tags</h2>
+
+{% if namespaces %}
+<p>This library contains tags with the following namespaces:</p>
+
+<ul>
+	{%- for ns in namespaces %}
+	<li>
+		<a href="${slug:ns}/index.html">${ns}</a>
+	</li>
+	{%- endfor %}
+</ul>
+{% else %}
+<p>This library doesn't export any additional namespaces</p>
+{% endif %}
+
+{% endblock %}

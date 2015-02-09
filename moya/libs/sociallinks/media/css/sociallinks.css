@@ -1,0 +1,166 @@
+.moya-sociallinks-container
+{
+
+}
+
+.moya-sociallinks-container .moya-sociallinks-link
+{
+
+}
+
+
+.moya-sociallinks-link
+{
+    margin:2px;
+    padding-bottom:12px;
+    clear:both;
+    width:100%;
+}
+
+
+.moya-sociallinks-link .position
+{
+    float:left;
+    font-size:1.2em;
+
+    color:#999;
+    width:30px;
+    margin-top:18px;
+}
+
+
+.moya-sociallinks-link .vote-box
+{
+    display:inline-block;
+    float:left;
+    width:40px;
+    margin-top:1px;
+
+}
+
+.moya-sociallinks-link .link > a
+{
+    font-weight:bold;
+}
+
+.moya-sociallinks-link .link > a:visited
+{
+    color:#933DB3;
+}
+
+.moya-sociallinks-link .vote-box a:hover
+{
+    text-decoration: none !important
+}
+
+.moya-sociallinks-link .vote
+{
+    background-position:-1px 22px;
+    background-image:url(/static/sociallinks-media/images/arrows.png);
+    width:22px;
+    height:18px;
+    cursor:pointer;
+}
+
+.moya-sociallinks-link .vote.up-vote
+{
+
+}
+
+
+.moya-sociallinks-link .vote.up-vote.active
+{
+    background-position:23px 22px;
+}
+
+.moya-sociallinks-link .vote.down-vote
+{
+    background-position:-1px -5px;
+}
+
+.moya-sociallinks-link .vote.down-vote.active
+{
+    background-position:-24px -5px;
+}
+
+.moya-sociallinks-link .score
+{
+    width:40px;
+    height:20px;
+    color:#999;
+    margin:1px -10px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.moya-sociallinks-link .link
+{
+    padding-left:70px;
+}
+
+.moya-sociallinks-link .link a
+{
+    font-size:1.1em;
+}
+
+.moya-sociallinks-link.sticky
+{
+    margin-top:2px;
+    margin-bottom:2px;
+}
+
+.moya-sociallinks-link.sticky .link
+{
+    background-color: #fcf8e3;
+    border-top:1px solid #faebcc;
+    border-bottom:1px solid #faebcc;
+    padding:4px 0px;
+}
+
+.moya-sociallinks-link.sticky .vote-box
+{
+    padding:4px 0px;
+}
+
+.moya-sociallinks-link .attribution
+{
+    color:#999;
+    font-size:.9em;
+}
+
+
+.moya-sociallinks-link .details
+{
+    color:#999;
+    font-size:.9em;
+}
+
+.moya-sociallinks-link .details a
+{
+    font-size:.9em;
+    font-weight:bold;
+    color:#999;
+}
+
+.moya-sociallinks-link .link-text
+{
+    clear:both;
+    margin-top:1em;
+}
+
+.moya-sociallinks-topic
+{
+    margin-bottom:.5em;
+}
+
+.moya-sociallinks-topic .topic-title
+{
+    font-size:1.1em;
+    font-weight:bold;
+}
+
+.moya-sociallinks-topic .topic-description
+{
+    color:#666;
+    font-size:.9em;
+}

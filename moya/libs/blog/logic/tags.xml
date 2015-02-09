@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:db="http://moyaproject.com/db">
+
+    <tag name="get-recent">
+        <signature>
+            <attribute name="count" default="10" type="integer"/>
+        </signature>
+        <db:query model="#Post" dst="posts" orderby="-published_date" let:published="yes"/>
+        <return value="posts" />
+    </tag>
+
+</moya>

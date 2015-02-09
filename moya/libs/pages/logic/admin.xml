@@ -1,0 +1,26 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:auth="http://moyaproject.com/auth"
+      xmlns:admin="http://moyaproject.com/admin"
+      xmlns:html="http://moyaproject.com/html">
+
+    <admin:module xmlns="http://moyaproject.com/admin"
+        slug="moya-pages" title="Pages" description="Editable content pages">
+
+        <link to="#admintable.pages"/>
+
+    </admin:module>
+
+    <table xmlns="http://moyaproject.com/admin" libname="admintable.pages"
+        slug="pages" title="Pages" model="#Page"
+        search="#Page.name==q or #Page.title icontains q" >
+        <column title="Name" link="yes">${object.name}</column>
+        <column title="Title">${object.title}</column>
+        <column title="URL">
+            <moya:get-url name="showpage" let:pagename="object.name" dst="page_url" />
+            <html:a href="${page_url}">${page_url}</html:a>
+        </column>
+    </table>
+
+</moya>

@@ -1,0 +1,47 @@
+{
+    "name": "validate",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "validate",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nValidates a form\n\nIf the form is passes all of the validate tests in the form, the Attribute\n'ok' will be True and the containing logic will be execute.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "validate a form",
+        "tag_name": "validate",
+        "params": {
+            "src": {
+                "default_display": "form",
+                "name": "src",
+                "missing": true,
+                "default": "form",
+                "doc": "Form source",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.validate"
+}

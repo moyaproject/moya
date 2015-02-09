@@ -1,0 +1,49 @@
+
+<form class="form-inline admin-table" role="form" method="GET" action=".">
+    <!-- <input type="hidden" name="back" value="${back_url}"/> -->
+    <div class="panel panel-default">
+        <div class="panel-heading admin-table-header">
+
+            <div class="admin-table-group admin-table-search-bar">
+
+                <div class="admin-table-query ">
+                    <div class="input-group" >
+                        <input name="q" class="input-small form-control" value="${search}" type="search">
+                        <span class="input-group-btn">
+                            {%- if search %}
+                            <a class="btn btn-default reset-search" href="${.request.path}" title="{% trans %}Reset search{% end %}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {%- endif %}
+                            <button type="submit" class="btn btn-default" title="{% trans %}Search{% end %}">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="admin-table-group">
+                <div class="admin-table-search" style="width:50%; float:left; width:160px; margin-right:12px;">
+                    <div class="input-group admin-table-actions">
+                        <select name="action" class="form-control">
+                            <option value="">-- Action --</option>
+                            {% with back_url=urlupdate:(go=None, action=None) %}<option value="delete?${urlencode:(back=back_url)}">Delete</option>{% endwith %}
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default" name="go" value="action" disabled="disabled">Go</button>
+                        </span>
+                    </div>
+                </div>
+                <a href="{% url 'admin_new_object' with appname=.url.appname,module=.url.module,table=.url.table,back=.request.path_qs %}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-star"></span>
+                    New
+                </a>
+            </div>
+
+        </div>
+        {%- render self.children.0 -%}
+    </div>
+    {%- render self.children.1 %}
+</form>

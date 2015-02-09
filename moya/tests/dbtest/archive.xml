@@ -1,0 +1,6 @@
+<moya xmlns="http://moyaproject.com">
+	<server docname="main">
+		<import location="./dbtest/" />
+		<install lib="moya.test.dbtest" name="dbtest" />
+	</server>
+</moya>

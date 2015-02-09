@@ -1,0 +1,82 @@
+<moya xmlns="http://moyaproject.com" xmlns:db="http://moyaproject.com/db">
+
+	<model libname="Post" xmlns="http://moyaproject.com/db" name="Post">
+		<boolean name="active" default="True"/>
+		<string name="title" length="100" />
+		<string name="slug" length="100" />
+		<text name="content" default=""/>
+		<datetime name="publishdate"/>
+		<datetime name="createddate"/>
+	</model>
+
+	<macro libname="testdata">
+		<debug>Creating test data</debug>
+		<db:create dst="post" model="#Post">
+			<str dst="title">Birthday</str>
+			<str dst="slug">birthday</str>
+			<str dst="content">
+				Today was my birthday!
+			</str>
+			<now dst="publishdate" />
+			<now dst="createddate" />
+		</db:create>
+	</macro>
+
+	<macro libname="bulktestdata">
+		<db:deleteall model="#Post" />
+		<db:bulk-create model="#Post">
+			[
+				{
+					"title":"post1",
+					"slug":"post1",
+					"content":"This is post1",
+					"publishdate":[2011, 6, 1],
+					"createddate":[2011, 6, 1]
+				},
+				{
+					"title":"post2",
+					"slug":"post2",
+					"content":"This is post1",
+					"publishdate":[2011, 6, 2],
+					"createddate":[2011, 6, 2]
+				},
+				{
+					"title":"post3",
+					"slug":"post3",
+					"content":"This is post3, on June the third, 2011",
+					"publishdate":[2011, 6, 3],
+					"createddate":[2011, 6, 3]
+				},
+				{
+					"title":"post4",
+					"slug":"post4",
+					"content":"This is post4 on June the fourth",
+					"publishdate":[2011, 6, 4],
+					"createddate":[2011, 6, 4]
+				},
+				{
+					"title":"My Birthday",
+					"slug":"my-birthday",
+					"content":"Today is my birthday, I'm 36!",
+					"publishdate":[2011, 7, 5],
+					"createddate":[2011, 7, 5]
+				},
+				{
+					"title":"a day in july",
+					"slug":"a-day-in-july",
+					"content":"This is a day in July",
+					"publishdate":[2011, 7, 14],
+					"createddate":[2011, 7, 14]
+				},
+				{
+					"title":"New Year's Day",
+					"slug":"new-years-day",
+					"content":"Its 2012!",
+					"publishdate":[2012, 1, 1],
+					"createddate":[2012, 1, 1]
+				}
+
+			]
+		</db:bulk-create>
+	</macro>
+</moya>

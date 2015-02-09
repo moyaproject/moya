@@ -1,0 +1,11 @@
+<moya>
+
+    <macro docname="main">
+
+        <request url="http://google.com" dst="req" />
+        <breakpoint />
+        <echo obj="req"/>
+
+    </macro>
+
+</moya>

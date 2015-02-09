@@ -1,0 +1,33 @@
+<div class="moya-admin-nav-container">
+    <div class="moya-admin-user-bar">
+        <span class="glyphicon glyphicon-home"></span>
+        <a href="{% url 'front' %}">Moya Admin</a>
+    </div>
+    <div class="scroll-container">
+        {%- for menu in menus %}
+        <ul class="moya-admin-nav-module {% if menu.slug == .url.module %} active {% endif %}" name="${menu.slug}">
+            <li {% if menu.slug == .url.module %}class="active"{% endif %}>
+                <div class="module-header">
+                    <i class="glyphicon glyphicon-play expand-button moya-admin-nav-module-link{% if menu.slug == .url.module %} active{% endif %}"></i>
+                    <a href="${menu.url}" title="${menu.description or menu.title}">
+                        <span class="glyphicon glyphicon-cog"></span>
+                        ${menu.title}
+                    </a>
+                </div>
+                {%- if menu.submenu %}
+                <ul class="moya-admin-nav-sub">
+                {%- for item in menu.submenu %}
+                    <li{% if .request.path == item.url %} class="active"{% endif %}>
+                        <a href="${item.url}">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                            ${item.title}
+                        </a>
+                    </li>
+                {%- endfor %}
+                </ul>
+                {%- endif %}
+            </li>
+        </ul>
+        {%- endfor %}
+    </div>
+</div>

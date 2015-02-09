@@ -1,0 +1,35 @@
+{
+    "name": "preflight",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "preflight",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "A pre-flight check is used to detect potential problems, such as missing settings.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "check initial settings",
+        "tag_name": "preflight",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.preflight"
+}

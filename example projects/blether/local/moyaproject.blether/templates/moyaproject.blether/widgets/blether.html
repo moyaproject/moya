@@ -1,0 +1,10 @@
+<div class="blether-container">
+    <a href="{% url "timeline" with username=blether.timeline.user.username %}">
+    <img class="blether gravatar" src="http://www.gravatar.com/avatar/${md5:lower:blether.timeline.user.email}?s=40&amp;d=identicon"/>
+    </a>
+    <div class="blether-body">
+        <span class="blether-author">${blether.timeline.user.username}</span>
+        <span class="blether-time">blethered ${localize:(.now - blether.posted_time)} ago</span>
+        <div class="blether-text">${blether.text}</div>
+    </div>
+</div>

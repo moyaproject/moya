@@ -1,0 +1,58 @@
+{
+    "name": "error",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "error",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 18)",
+        "doc": "Renders an error message.",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "error alert",
+        "tag_name": "error",
+        "params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.error"
+}

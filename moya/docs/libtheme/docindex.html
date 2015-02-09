@@ -1,0 +1,30 @@
+{% def "render_doctree" -%}
+<ul>
+    {%- for node in nodes -%}
+    <li><a href="${url}#${node.slug}">${node.title}</a></li>
+    {% endfor -%}
+</ul>
+{%- enddef %}
+
+<div class="doc-structure">
+    <ol>
+    {%- for doc in index.2 %}
+        <li class="doc-index" type="${index.0}">
+            {%- if index.1 %}
+            {% include index.1 %}
+            {%- else %}
+            {% with url=relto:.urls.doc[slug:doc.name] %}
+            <a href="${url}" {%- if .id == doc.id %}class="active"{% endif %}>
+                <span class="doc-title">${doc.data.title}</span>
+                {#
+                {%- if doc.doctree %}
+                {%- call "render_doctree" with nodes=doc.doctree, url=url %}
+                {%- endif %}
+                #}
+            </a>
+            {%- endwith %}
+            {%- endif %}
+        </li>
+    {%- endfor %}
+    </ol>
+</div>

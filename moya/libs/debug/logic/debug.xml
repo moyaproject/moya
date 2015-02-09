@@ -1,0 +1,94 @@
+<moya xmlns="http://moyaproject.com"
+	  xmlns:html="http://moyaproject.com/html"
+	  xmlns:let="http://moyaproject.com/let"
+	  xmlns:debug="http://moyaproject.com/debug"
+	  xmlns:db="http://moyaproject.com/db"
+	  xmlns:preflight="http://moyaproject.com/preflight">
+
+    <mountpoint name="main">
+    	<url methods="GET" route="/" view="#view.intro" name="intro"/>
+    	<url methods="GET" route="/code/{*path}" view="#view.code" name="showcode" />
+    	<url methods="GET" route="/templates/{*path}" view="#view.templates" name="showtemplate" />
+    	<url methods="GET" route="/element/{elementid}/" view="#view.showelement" name="showelement" />
+    	<url methods="GET" route="/user/" view="#view.user" name="user" />
+    	<url methods="GET" route="/user/{username}/" view="#view.user" name="named_user" />
+    </mountpoint>
+
+
+    <!-- exists purely to check the database -->
+    <model xmlns="http://moyaproject.com/db" name="Check" libname="Check"/>
+
+    <view libname="view.intro" content="#content.intro"/>
+
+	<view libname="view.code" template="code.html">
+		<let-str format="xml"/>
+		<let code=".fs.project[url.path]" path="url.path" />
+		<not-found if="not isstr:code" />
+		<highlight code="code" format="${format}" dst="code"/>
+        <let app=".app" />
+	</view>
+
+	<view libname="view.templates" template="template.html">
+		<let-str format="moyatemplate"/>
+		<let code=".fs.templates[url.path]" path="url.path" format="format" />
+		<not-found if="not isstr:code" />
+		<highlight code="code" format="${format}" dst="code" highlight="int:.request.GET.line"/>
+        <let app=".app" />
+	</view>
+
+	<view libname="view.showelement" template="element.html">
+		<let elementid="url.elementid" />
+		<inspect dst="inspector" />
+		<let element="inspector[url.elementid]" />
+		<not-found if="not element" />
+		<let code="element.1._code" />
+		<let-str format="xml"/>
+		<highlight code="code" format="xml" dst="code" highlight="element.1.source_line"/>
+        <let app=".app" />
+	</view>
+
+	<view libname="view.user" template="user.html">
+		<if test="url.username">
+			<db:get-required model="auth#User" let:username="url.username" dst="user"/>
+		</if>
+		<else>
+			<let user=".user" />
+		</else>
+        <let app=".app" />
+	</view>
+
+	<content libname="content.intro" template="intro.html">
+		<title>Moya Debug</title>
+        <let app=".app" />
+		<section name="body">
+			<debug:showapps/>
+			<debug:showlibs/>
+		</section>
+	</content>
+
+	<preflight:check>
+		<db:check />
+		<!-- <catch exception="db.*">
+			<preflight:fail>
+				Moya was unable to connect to the default database!
+				 * Review your [database] section in settings.ini
+				 * Check you have created the database
+				 * Run 'moya db sync'
+			</preflight:fail>
+		</catch> -->
+        <db:query model="#Check" dst="checks" collect="list"/>
+        <catch exception="db.*">
+            <preflight:fail>
+                +-------------------------------------------------------------+
+                | Moya tables haven't been created in the database            |
+                |  * Have you run 'moya db sync'?                             |
+                +-------------------------------------------------------------+
+            </preflight:fail>
+        </catch>
+	</preflight:check>
+
+	<handle signal="sys.startup">
+		<log>Moya is in debug mode. Relax.</log>
+	</handle>
+
+</moya>

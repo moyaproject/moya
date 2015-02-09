@@ -1,0 +1,127 @@
+{
+    "name": "walk",
+    "doc_namespace": "xmlns.http://moyaproject.com/fs",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "walk",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_fs",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+        "doc": "Get a list of files",
+        "namespace": "http://moyaproject.com/fs",
+        "synopsis": "go through the files in a directory",
+        "tag_name": "walk",
+        "params": {
+            "dirs": {
+                "default_display": "",
+                "name": "dirs",
+                "missing": true,
+                "default": null,
+                "doc": "Filter directories (function should reference 'name' and return a boolean)",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "choices": null
+            },
+            "files": {
+                "default_display": "",
+                "name": "files",
+                "missing": true,
+                "default": null,
+                "doc": "Filter files (function should reference 'name' and return a boolean)",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "choices": null
+            },
+            "search": {
+                "default_display": "\"breadth\"",
+                "name": "search",
+                "missing": true,
+                "default": "breadth",
+                "doc": "Search method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "breadth",
+                    "depth"
+                ]
+            },
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "path": {
+                "default_display": "\"/\"",
+                "name": "path",
+                "missing": true,
+                "default": "/",
+                "doc": "Path to walk",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem object",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/fs.walk"
+}

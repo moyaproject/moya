@@ -1,0 +1,47 @@
+{
+    "name": "elif",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "elif",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Executes the enclosed block if a previous [tag]if[/tag] (or [tag]elif[/tag]) statement is false, and another condition is true.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "an <else> with a condition",
+        "tag_name": "elif",
+        "params": {
+            "test": {
+                "default_display": "None",
+                "name": "test",
+                "missing": true,
+                "default": null,
+                "doc": "Test expression",
+                "required": true,
+                "type": "expression",
+                "metavar": "CONDITION",
+                "choices": null
+            }
+        },
+        "example": "<if test=\"hobbits == 0\">\n    <echo>There are no hobbits</echo>\n</if>\n<elif test=\"hobbits == 1\">\n    <echo>There is one hobbit</echo>\n</elif>\n<else>\n    <echo>There are many hobbits</echo>\n</else>\n",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.elif"
+}

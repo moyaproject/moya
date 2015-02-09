@@ -1,0 +1,51 @@
+{
+    "name": "moyaproject_dot_com_feedback_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/feedback",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "subject",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_feedback",
+                "defined": "/home/will/projects/moya/moya/libs/feedback/logic/tags.xml (line 6)",
+                "doc": "This tag sets a subject that will be used in a select in the feedback form.",
+                "prev_tag": "subject",
+                "namespace": "http://moyaproject.com/feedback",
+                "tag_name": "subject",
+                "synopsis": "set subject option in feedback form",
+                "params": {
+                    "text": {
+                        "default_display": null,
+                        "name": "text",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Subject option in the feedback form",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/feedback",
+        "namespace_doc": "\n        Tags defined in [link feedbac]Moya Feedback[/link].\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/feedback.moyaproject_dot_com_feedback_index"
+}

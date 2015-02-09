@@ -1,0 +1,33 @@
+<moya xmlns="http://moyaproject.com"
+	  xmlns:let="http://moyaproject.com/let"
+	  xmlns:db="http://moyaproject.com/db"
+	  xmlns:preflight="http://moyaproject.com/preflight">
+
+	<preflight:check>
+		<db:query model="#Group" dst="groups"/>
+		<preflight:warning if="not groups">
+			No permission groups defined - run 'moya auth#cmd.init'
+		</preflight:warning>
+		<exit if="not groups"/>
+
+		<db:query columns="#Group.id"
+				  filter="#Permission.name == 'admin'"
+				  dst="admin_groups"/>
+
+		<db:query columns="#User.id"
+				  filter="#Group.id in admin_groups"
+				  dst="admin_memberships"/>
+
+		<preflight:warning if="not admin_memberships">
+			No admin users - run 'moya auth#cmd.adduser USERNAME EMAIL --group administrators'
+		</preflight:warning>
+	</preflight:check>
+
+    <preflight:check>
+
+        <preflight:fail if="app.settings.scheme not in ['bcrypt', 'sha512_crypt', 'pbkdf2_sha512']">
+            setting 'scheme' should be 'bcrypt', 'sha512_crypt', or 'pbkdf2_sha512'
+        </preflight:fail>
+
+    </preflight:check>
+</moya>

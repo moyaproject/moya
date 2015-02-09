@@ -1,0 +1,5 @@
+<p>
+    {%- for style in ["basic", "horizontal", "inline", "simple", "table", "paragraphs"] %}
+    <a href="{% url "tests" with style=style %}">{% if style==.url.style %}<strong>${style}</strong>{% else %}${style}{% endif %}</a>{% if not forloop.last %} |{% end %}
+    {%- endfor %}
+</p>

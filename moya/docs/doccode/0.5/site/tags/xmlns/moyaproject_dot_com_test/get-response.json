@@ -1,0 +1,80 @@
+{
+    "name": "get-response",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-response",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": null,
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "get a test response",
+        "tag_name": "get-response",
+        "params": {
+            "project": {
+                "default_display": "\".project\"",
+                "name": "project",
+                "missing": true,
+                "default": ".project",
+                "doc": "Request object",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "request": {
+                "default_display": "\"request\"",
+                "name": "request",
+                "missing": true,
+                "default": "request",
+                "doc": "request object",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.get-response"
+}

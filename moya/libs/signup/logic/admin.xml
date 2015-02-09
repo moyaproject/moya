@@ -1,0 +1,22 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:moya="http://moyaproject.com"
+        xmlns:let="http://moyaproject.com/let"
+        xmlns:auth="http://moyaproject.com/auth"
+        xmlns:admin="http://moyaproject.com/admin"
+        xmlns:html="http://moyaproject.com/html">
+
+    <module xmlns="http://moyaproject.com/admin"
+        slug="moya-signup" title="Signups" description="Signup Users">
+        <link to="#admintable.validate" title="Email Validators"/>
+    </module>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.validate" slug="validate" title="Email Validators" model="#ValidateEmail" order="created_time" description="Users"
+        search="#ValidateEmail.email == q or #ValidateEmail.token == q">
+        <column title="Token" sort="token" link="yes">${object.token}</column>
+        <column title="User" sort="user">${object.user.username}</column>
+        <column title="Email" sort="email">${object.email}</column>
+        <column title="Created Time" sort="created_time">${localize:object.created_time}</column>
+    </table>
+
+</moya>

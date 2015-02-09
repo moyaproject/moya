@@ -1,0 +1,80 @@
+{% extends "dirlistbase.html" %}
+
+{% block "title" %}Directory listing for ${.request.path}{% endblock %}
+
+{% block "head" %}
+<style type="text/css">
+
+{% include "bootstrap.css" %}
+{% include "dark.css" %}
+
+.well table
+{
+    margin-bottom:0px;
+}
+
+.table td
+{
+  border-top:1px dotted #333 !important;
+}
+
+.table > thead > tr > th
+{
+    border-bottom:none;
+}
+</style>
+{% endblock %}
+
+{% block "content" %}
+<div class="container">
+    <h2>${.request.path_info} <small>directory index</small></h2>
+    {%- if path != '/' %}
+    <p>
+    	<a class="btn btn-link" href="../">&crarr; parent directory</a>
+    </p>
+    {%- endif %}
+
+    {% if .debug %}
+    <pre>${fs[path]}</pre>
+    {% endif %}
+
+    <div class="well">
+        <table class="table table-condensed">
+            <thead>
+            	<tr>
+            		<th>Name</th>
+            		<th>Size</th>
+            		<th>Created</th>
+            		<th>Modified</th>
+            	</tr>
+            </thead>
+            <tbody>
+            	{%- for path, info in dirlist.dirs %}
+            	<tr>
+                    <!-- TODO: path.replace('#', '%23') -->
+            		<td><strong><a href="${path}/" title="directory">${path}</a></strong></td>
+            		<td>&nbsp;</td>
+            		<td>{% if info.created_time %}${localize:info.created_time}{% endif %}</td>
+            		<td>{% if info.modified_time %}${localize:info.modified_time}{% endif %}</td>
+            	</tr>
+            	{%- endfor %}
+            	{%- for path, info in dirlist.files %}
+            	<tr>
+            		<td><a href="${path}" title="file">${path}</a></td>
+            		<td>${filesize:info.size}{% if info.size > 1024 %} <span class="text-muted">(${info.size::','} bytes)</span>{% endif %}</td>
+            		<td>{% if info.created_time %}${localize:info.created_time}{% endif %}</td>
+            		<td>{% if info.modified_time %}${localize:info.modified_time}{% endif %}</td>
+            	</tr>
+            	{%- endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
+    	${len:dirlist.dirs::','} {% if len:dirlist.dirs == 1 %}directory{% else %}directories{% endif %},
+        ${len:dirlist.files::','} {% if len:dirlist.files == 1 %}file{% else %}files{% endif %}
+    </div>
+    <br/>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{
+    "name": "for",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "for",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Execute a block of code for each value in a sequence. This tag [i]iterates[/i] over a sequence, and executes the enclosed block for each value.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "iterate over a sequence",
+        "tag_name": "for",
+        "params": {
+            "filter": {
+                "default_display": "yes",
+                "name": "filter",
+                "missing": true,
+                "default": true,
+                "doc": "If given, then only those values which match this condition will cause the enclosed block to execute.",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source sequence",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination value",
+                "required": true,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <for src=\"['John', 'Scorpius', 'Rygel']\" dst=\"crew_member\" filter=\"crew_member != 'Rygel'\">\n            <echo>${crew_member} is on board!</echo>\n        </for>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.for"
+}

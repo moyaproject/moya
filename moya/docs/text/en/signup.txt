@@ -1,0 +1,42 @@
+[title Moya Signup]
+
+The Moya Signup library handles signing up new users to your site. It creates a typical signup page which allows visitors to create an account. This library is entirely optional, but if you don't use it you will need some other way of adding users to your site.
+
+[h1]Installation[/h1]
+
+Moya Signup is built in to Moya and may be import via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.sessions"/>
+[/code]
+
+You can install it with the following:
+
+[code xml]
+<install name="signup" lib="moya.signup" mount="/signup/"/>
+[/code]
+
+[h1]Views[/h1]
+
+If you have installed Moya Signup in the default location then [c]/signup/[/c] will show the signup form. The URL [c]/signup/validate/[/c] is used to validate a user's email.
+
+[h1]Settings[/h1]
+
+Moya Signup supports the following settings:
+
+
+[setting]terms_and_conditions = <URL PATH>[/setting]
+
+If given, then the signup for will be rendered with a link to a [i]terms and conditions[/i] page. The default for this settings is [c]/terms-and-conditions/[/c].
+
+[setting]validate_email= <yes/no>[/setting]
+
+If this setting is set to [c]yes[/c], Moya Signup will send an email to the user to validate their email address. When a user's email has been validated, the boolean value [c]email_validated[/c] will be set to [c]yes[/c] on their user object.
+
+[setting]min_password_length = <LENGTH>[/setting]
+
+This sets the minimum number of characters on new passwords. The default is [b]5[/b] characters.
+
+[setting]recaptcha = <yes/no>[/setting]
+
+If [c]yes[/c], Moya Signup will require a CAPTCHA to post anonymously. See [doc recaptcha].

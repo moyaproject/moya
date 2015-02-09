@@ -1,0 +1,254 @@
+{
+    "name": "query",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "query",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Query the database. Will return a query set object that may be iterated over by default, unless [c]'collect'[/c] is specified.",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "query the database",
+        "tag_name": "query",
+        "params": {
+            "orderby": {
+                "default_display": "",
+                "name": "orderby",
+                "missing": true,
+                "default": null,
+                "doc": "Order by",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "flat": {
+                "default_display": "no",
+                "name": "flat",
+                "missing": true,
+                "default": false,
+                "doc": "Flatten results in to a list?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Model app",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "reverse": {
+                "default_display": "no",
+                "name": "reverse",
+                "missing": true,
+                "default": false,
+                "doc": "Reverse order?",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": false,
+                "default": null,
+                "doc": "Source query, if further query operations are required",
+                "required": false,
+                "type": "expression",
+                "metavar": "QUERYSET",
+                "choices": null
+            },
+            "distinct": {
+                "default_display": "no",
+                "name": "distinct",
+                "missing": true,
+                "default": false,
+                "doc": "Make query distinct (remove duplicates from results)?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "collectkey": {
+                "default_display": "",
+                "name": "collectkey",
+                "missing": true,
+                "default": null,
+                "doc": "Collect key if collect is True",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "maxresults": {
+                "default_display": "None",
+                "name": "maxresults",
+                "missing": true,
+                "default": null,
+                "doc": "Maximum number of items to return",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Filter expression",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "choices": null
+            },
+            "collect": {
+                "default_display": "",
+                "name": "collect",
+                "missing": true,
+                "default": null,
+                "doc": "Collect results?",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "list",
+                    "set",
+                    "dict",
+                    "dict_sequence"
+                ]
+            },
+            "action": {
+                "default_display": "",
+                "name": "action",
+                "missing": true,
+                "default": null,
+                "doc": "Action to perform on query",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "delete",
+                    "count",
+                    "exists"
+                ]
+            },
+            "join": {
+                "default_display": "",
+                "name": "join",
+                "missing": true,
+                "default": null,
+                "doc": "Join expressions",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": null,
+                "doc": "Model",
+                "required": false,
+                "type": "text",
+                "metavar": "ELEMENTREF",
+                "choices": null
+            },
+            "start": {
+                "default_display": "None",
+                "name": "start",
+                "missing": true,
+                "default": null,
+                "doc": "Start index",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "groupby": {
+                "default_display": "",
+                "name": "groupby",
+                "missing": true,
+                "default": null,
+                "doc": "Group by column(s)",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "columns": {
+                "default_display": "",
+                "name": "columns",
+                "missing": true,
+                "default": null,
+                "doc": "Columns to return, if model is not specified",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <!-- examples taken from Moya apps -->\n\n        <!-- Get a month worth of posts -->\n        <db:query model=\"#Post\" dst=\"posts\" orderby=\"-published_date\"\n            filter=\"#Post.published_date gte start and #Post.published_date lt start.next_month\"/>\n\n        <!-- delete a user session -->\n        <db:query model=\"#Session\" let:session_key=\".request.cookies.authsession\" action=\"delete\"/>\n\n        <!-- get promoted topics in Moya Social Links -->\n        <db:query model=\"#Topic\" filter=\"#Topic.promoted == yes\" orderby=\"#Topic.title\" dst=\"promoted_topics\"/>\n\n    ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.query"
+}

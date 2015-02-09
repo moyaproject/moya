@@ -1,0 +1,56 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:forms="http://moyaproject.com/forms">
+
+    <mountpoint name="main">
+        <url route="/createpage/" methods="GET, POST" view="#view.createpage" name="createpage" />
+        <url route="/{pagename}/edit/" methods="GET,POST" view="#view.editpage" name="editpage" />
+        <url route="/{pagename}/delete/" methods="GET,POST" view="#view.deletepage" name="deletepage" />
+        <url route="/{pagename}/" methods="GET" view="#view.page" name="showpage" />
+    </mountpoint>
+
+    <view libname="view.createpage" content="#content.page" requires="permission:'admin'">
+        <forbidden if="not .permissions.admin" />
+        <forms:get form="#form.newpage" dst="form" />
+        <if-post>
+            <forms:validate src="form">
+                <db:create model="#Page" obj="form.data" dst="page" />
+                <catch exception="db.integrity-error" dst="error">
+                    <forms:error src="form" field="name">A page of this name currently exists, please pick another name</forms:error>
+                </catch>
+                <redirect name="showpage" let:pagename="page.name" if="page"/>
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.editpage" requires="permission:'admin'">
+        <db:get-required model="#Page" let:name="url.pagename" dst="page"/>
+        <forms:get form="#form.editpage" dst="form" src="page" let:page="page"/>
+        <forms:validate-post src="form">
+            <forms:apply src="form" dst="page" />
+            <redirect name="showpage" let:pagename="page.name" />
+        </forms:validate-post>
+        <serve-content content="#content.page" template="base.html" withscope="yes"/>
+    </view>
+
+    <view libname="view.deletepage" requires="permission:'admin'">
+        <db:get-required model="#Page" let:name="url.pagename" dst="page"/>
+        <forms:get form="#form.deletepage" dst="form" withscope="yes"/>
+        <forms:validate-post src="form">
+            <redirect name="showpage" let:pagename="page.name" if="not form.data.delete"/>
+            <db:delete src="page" />
+            <let deleted="page.name" />
+        </forms:validate-post>
+        <serve-content content="#content.deletepage" withscope="yes"/>
+    </view>
+
+    <view libname="view.page" content="#content.page">
+        <db:get model="#Page" let:name="url.pagename" dst="page" />
+        <db:create model="#Page"
+            let:name="lower:url.pagename" let:title="capitalize:url.pagename"
+            dst="page" if="not page and url.pagename in .app.settings.autocreate.list" />
+        <return if="not page"/>
+    </view>
+
+</moya>

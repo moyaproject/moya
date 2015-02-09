@@ -1,0 +1,38 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:moya="http://moyaproject.com"
+        xmlns:let="http://moyaproject.com/let"
+        xmlns:auth="http://moyaproject.com/auth"
+        xmlns:admin="http://moyaproject.com/admin"
+        xmlns:html="http://moyaproject.com/html">
+
+    <module xmlns="http://moyaproject.com/admin"
+        slug="moya-comments" title="Comments" description="Manage users and permissions">
+        <link to="#table.commentobjects" title="Comment Objects" />
+        <link to="#table.comments" title="Comments"/>
+    </module>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="table.commentobjects" slug="commentobjects" title="Comment Objects" model="#CommentObject" description="Comment Objects">
+        <column title="Comment Object" sort="id" link="yes">Comment Object #${object.id}</column>
+        <column title="Namespace" sort="namespace">${object.namespace}</column>
+        <column title="Object" sort="object">${object.object}</column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin" order="-time"
+        libname="table.comments" slug="comments" title="Comments" model="#Comment" description="User Comments">
+        <column title="Comment" sort="id" link="yes">Comment #${object.id}</column>
+        <column title="Page" >
+            <html:a href="${object.commentobject.object_url}#comment${object.id}">${object.commentobject.object_url}</html:a>
+        </column>
+        <column title="Commenter name" sort="commenter_name">${object.user.username or object.commenter_name or ''}</column>
+        <column title="Commenter IP" sort="commenter_ip">${object.commenter_ip or ''}</column>
+        <column title="User" sort="#Comment.user.username">${object.user.username}</column>
+        <column title="Object" sort="#Comment.commentobject.id">${object.commentobject}</column>
+        <column title="Posted" sort="time">${localize:object.time}</column>
+        <column title="Moderated?" sort="moderated">
+            <check ticked="object.moderated" />
+        </column>
+
+    </table>
+
+</moya>

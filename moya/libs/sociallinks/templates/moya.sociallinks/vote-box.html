@@ -1,0 +1,17 @@
+{% if .user %}
+    <div class="vote-box authenticated" data-score="${link.score - (votes[link.id] or 0)}">
+        <div class="vote up-vote{% if votes[link.id] == 1 %} active{% endif %}" data-link="${link.id}" data-vote="1"
+        	title="{% trans %}Vote Up{% end %}"></div>
+        <div class="score">${link.score}</div>
+        <div class="vote down-vote{% if votes[link.id] == -1 %} active{% endif %}" data-link="${link.id}" data-vote="-1"
+        	title="{% trans %}Vote Down{% end %}"></div>
+    </div>
+{% else %}
+    <div class="vote-box">
+        <a href="{% url "login" from "moya.auth" %}?fwd=${.request.path}">
+            <div class="vote up-vote"></div>
+            <div class="score">${link.score}</div>
+            <div class="vote down-vote"></div>
+        </a>
+    </div>
+{% endif %}

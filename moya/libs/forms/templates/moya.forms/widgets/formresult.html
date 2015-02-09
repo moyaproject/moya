@@ -1,0 +1,9 @@
+{%- if form.validated %}
+
+{% inspect form.data %}
+
+{%- if form.ok %}
+    <div class="alert alert-success">Form passed validation</div>
+{%- endif %}
+</br>
+{%- endif %}

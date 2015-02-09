@@ -1,0 +1,109 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms">
+
+    <mountpoint name="main">
+        <url route="/" methods="GET" view="#view.list" name="list"/>
+        <url route="/write/" methods="GET,POST" view="#view.new-post" name="newpost"/>
+        <url route="/edit/{slug:slug}/" methods="GET,POST" view="#view.edit-post" name="editpost" />
+        <url route="/delete/{slug:slug}/" methods="GET" view="#view.delete-post" name="deletepost" />
+        <url route="/delete/{slug:slug}/" methods="POST" view="#view.delete-post.post" />
+        <url route="/post/{slug:slug}/" methods="GET" view="#view.showpost" name="showpost" />
+        <url route="/publish/{posinteger:id}/" methods="GET" view="#view.publish" name="publish" />
+        <url route="/publish/{posinteger:id}/" methods="POST" view="#view.publish.post" />
+        <url route="/hide/{posinteger:id}/" methods="GET,POST" view="#view.hide" name="hide" />
+        <url route="/{posinteger:year}/{posinteger:month}/" methods="GET" view="#view.posts-by-month" />
+    </mountpoint>
+
+    <view libname="view.list" content="#content.recent-posts">
+        <not-found if="exists:.request.GET.page and not int:.request.GET.page" />
+        <let page="int:.request.GET.page or 1" pagesize=".app.settings.page_size.int"/>
+        <db:query model="#Post" dst="posts" orderby="-published_date"/>
+        <db:query model="#Post" src="posts" dst="posts" filter="#Post.published==1" if="not .permissions.admin" />
+    </view>
+
+    <view libname="view.posts-by-month" content="#content.list-posts-by-month">
+        <not-found if="exists:.request.GET.page and not int:.request.GET.page" />
+        <let page="int:.request.GET.page or 1" pagesize=".app.settings.page_size.int"/>
+        <datetime dst="start" year="${url.year}" month="${url.month}"/>
+        <catch exception="datetime.*">
+            <not-found />
+        </catch>
+        <db:query model="#Post" dst="posts" orderby="-published_date"
+            filter="#Post.published_date gte start and #Post.published_date lt start.next_month"/>
+    </view>
+
+    <view libname="view.new-post" content="#content.edit-post" requires=".permissions.admin">
+        <forms:get form="#form.newpost" dst="form"/>
+        <forms:validate src="form">
+            <db:create model="#Post" obj="form.data" dst="post"
+                let:user=".user"
+                let:slug="form.data.slug or slug:form.data.title"
+                let:published_date=".now"
+                let:published="form.data.action == 'publish'"/>
+            <redirect name="list"/>
+        </forms:validate>
+    </view>
+
+    <view libname="view.edit-post" content="#content.edit-post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:slug="url.slug"/>
+        <get-url name="showpost" let:slug="post.slug" dst="cancel_url" />
+        <forms:get form="#form.editpost" src="post" dst="form" let:post="post" let:cancel_url="cancel_url"/>
+        <forms:validate-post src="form">
+            <forms:apply src="form" dst="post"/>
+            <db:commit />
+            <catch exception="db.integrity-error">
+                <forms:error field="slug" src="form">Slug exists, please edit</forms:error>
+                <break/>
+            </catch>
+            <redirect name="showpost" let:slug="post.slug" />
+        </forms:validate-post>
+    </view>
+
+    <view libname="view.delete-post" content="#content.delete-post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:slug="url.slug"/>
+        <forms:get form="#form.deletepost" dst="form" let:post="post" />
+    </view>
+
+    <view libname="view.delete-post.post" content="#content.delete-post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:slug="url.slug"/>
+        <forms:get form="#form.deletepost" dst="form" let:post="post" />
+        <forms:validate src="form">
+            <redirect name="showpost" let:slug="post.slug" if="not form.data.delete" />
+            <db:delete src="post" />
+            <let deleted="post.title" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.showpost" content="#content.post">
+        <db:get-required model="#Post" dst="post" let:slug="url.slug" />
+        <not-found if="not .permissions.admin and not post.published" />
+        <db:query dst="newer_posts" model="#Post" filter="#Post.published_date gt post.published_date" orderby="published_date"/>
+        <let newer="newer_posts.first"/>
+        <db:query dst="older_posts" model="#Post" filter="#Post.published_date lt post.published_date" orderby="-published_date"/>
+        <let older="older_posts.first"/>
+        <let post_url=".request.path" />
+    </view>
+
+    <view libname="view.publish" content="#content.publish-post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:id="url.id" />
+        <forms:get form="#form.publishpost" dst="form" let:post="post" />
+    </view>
+
+    <view libname="view.publish.post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:id="url.id" />
+        <let post.published="yes" if="not .request.POST.cancel"/>
+        <redirect name="showpost" let:slug="post.slug" />
+    </view>
+
+    <view libname="view.hide" content="#content.hide-post" requires=".permissions.admin">
+        <db:get-required model="#Post" dst="post" let:id="url.id" />
+        <forms:get form="#form.hidepost" dst="form" let:post="post" />
+        <if-post>
+            <let post.published="no" if="not .request.POST.cancel"/>
+            <redirect name="showpost" let:slug="post.slug" />
+        </if-post>
+    </view>
+
+</moya>

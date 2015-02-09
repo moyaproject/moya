@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com">
+    <macro docname="slow">
+        <echo>Entered in to slow macro</echo>
+        <sleep for="5s"/>
+        <echo>Leaving slow macro</echo>
+        <return>
+            <str>done</str>
+        </return>
+    </macro>
+    <macro docname="main">
+        <call macro="slow" dst="result" lazy="yes"/>       
+    </macro>
+</moya>

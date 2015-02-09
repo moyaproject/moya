@@ -1,0 +1,187 @@
+{% extends "moya.debug/base.html" %}
+{% block "title" %}404 - Not Found{% endblock %}
+
+{%- def "info" %}
+    {%- if map %}
+    {% if title %}<h3>${title}</h3>{% endif %}
+    <dl class="dl-horizontal">
+        {%- for k, v in sorted:items:map %}
+        <dt>${k}</dt>
+        <dd>${v or html:'&nbsp;'}</dd>
+        {%- endfor %}
+    </dl>
+    {%- endif %}
+{%- enddef %}
+
+{% block "css" append %}
+<style type="text/css">
+
+span.special
+{
+	color: #a47e3c;
+	font-weight:bold;
+}
+span.libname
+{
+	color:#3a87ad;
+	font-weight:bold;
+}
+
+span.elementname
+{
+	color:#468847;
+	font-weight:bold;
+}
+
+span.hash
+{
+
+}
+
+td.targets .line
+{
+    display:inline;
+}
+
+td.targets a
+{
+    color:#c6c6c6;
+}
+.url-data td
+{
+    padding:0px;
+    margin:0px;
+}
+span.url-key
+{
+
+}
+span.url-value
+{
+    color:#468847;
+}
+.muted
+{
+    color:#666;
+}
+
+</style>
+{% endblock %}
+
+{% block "body" %}
+<h1>404 - Not Found</h1>
+<p class="text-error">
+    <strong>${request.path}</strong> was not found on this server
+</p>
+
+<p class="text-information">
+	You are seeing this page because you have <tt>moya.debug</tt> installed.
+	If you set <tt>[project]/debug=no</tt> in your settings, Moya will use your <tt>"404.html"</tt> template.
+</p>
+
+<div class="request-get accordion" id="accordion">
+  <div class="accordion-group well">
+    <div class="accordion-heading">
+      <a onclick="toggle('request-info');return false;" href="#">
+        Request details
+      </a>
+    </div>
+    <div id="request-info" class="accordion-body" style="display:none;">
+        <div class="accordian-inner">
+            <div class="request-get">
+                <dl class="dl-horizontal">
+                    <dt>url</dt><dd>${request.url}</dd>
+                    <dt>method</dt><dd>${request.method}</dd>
+                    <dt>content type</dt><dd>${request.content_type}</dd>
+                </dl>
+                {%- call "info" with map=request.POST, title="POST" %}
+                {%- call "info" with map=.site, title=str:.sys.site %}
+                {%- call "info" with map=request.GET, title="GET" %}
+                {%- call "info" with map=request.headers, title="headers" %}
+                {%- call "info" with map=request.cookies, title="cookies" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Trace</h2>
+{%- if .urltrace %}
+<p>The following route(s) matched the URL:</p>
+<div class="well" style="overflow:auto;">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Target</th>
+                <th>Application</th>
+                <th>URL data</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%- for trace in .urltrace %}
+            <tr>
+                <td class="targets">
+                    <a href="{% url 'showelement' from 'moya.debug' with elementid=trace.target %}" target="_blank">${html:trace.target_html}</a>
+                </td>
+                {%- if trace.app %}
+                <td>${trace.app.name}</td>
+                {%- else %}
+                <td><em>N/A</em></td>
+                {%- endif %}
+                <td>
+                    {%- for k, v in items:trace.route_data if k != 'app' %}
+                    <span class="url-key">${k} =</span>
+                    <span class="url-value">"${v}"</span><br>
+                    {%- endfor %}
+                </td>
+                {%- if trace.response %}
+                <td><span class="text-error"><strong>${trace.response}</strong></span></td>
+                {%- else %}
+                <td><em class="muted">none</em></td>
+                {%- endif %}
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+</div>
+{%- else %}
+<p class="text text-error">The URL did not match any of the routes in the project.</p>
+{%- endif %}
+
+<h2>Routes</h2>
+<p>
+	Moya attempted to match the requested URL with the following route(s):
+</p>
+<p class="text-info">
+	Some routes may be omitted here if they didn't match <tt>.request.method</tt> (i.e. you wont see POST only route(s) for a GET request).
+</p>
+
+<div class="well" style="overflow:auto;max-height:800px;">
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Route</th>
+				<th>Method(s)</th>
+                <th>Application</th>
+				<th>Target(s)</th>
+			</tr>
+        </thead>
+        <tbody>
+			{%- for url, methods, app, targets in renderable:.urls %}
+			<tr>
+				<td>${html:url}</td>
+				<td>${html:methods}</td>
+                <td>${app}</td>
+				<td class="targets">
+                    {%- for target, target_html in targets %}
+                    <a href="{% url 'showelement' from 'moya.debug' with elementid=target %}" target="_blank">
+                        ${html:target_html}
+                    </a><br>
+                    {%- endfor %}
+                </td>
+			</tr>
+			{%- endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

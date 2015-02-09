@@ -1,0 +1,83 @@
+{
+    "name": "recaptcha",
+    "doc_namespace": "xmlns.http://moyaproject.com/recaptcha",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "recaptcha",
+        "lib": "moya.google.recaptcha",
+        "namespace_slug": "moyaproject_dot_com_recaptcha",
+        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/recaptcha",
+        "synopsis": "render a reCAPTCHA widget",
+        "tag_name": "recaptcha",
+        "params": {
+            "sitekey": {
+                "default_display": "",
+                "name": "sitekey",
+                "missing": true,
+                "default": "",
+                "doc": "Optional override of site key from settings",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "theme": {
+                "default_display": "light",
+                "name": "theme",
+                "missing": true,
+                "default": "light",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "light",
+                    "dark"
+                ]
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/recaptcha.recaptcha"
+}

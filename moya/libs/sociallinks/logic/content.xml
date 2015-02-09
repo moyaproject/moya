@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:comments="http://moyaproject.com/comments"
+      xmlns:w="http://moyaproject.com/widgets"
+      xmlns:auth="http://moyaproject.com/auth">
+
+    <content libname="content.base" template="base.html">
+        <include-css path="css/sociallinks.css" />
+        <include-js from="moya.jsonrpc" path="js/jsonrpc.js" />
+        <include-js path="js/sociallinks.js" />
+        <get-url name="jsonrpc" dst="jsonrpc_url" />
+        <section name="js">
+            <js>sociallinks_jsonrpc_url = "${jsonrpc_url}";</js>
+        </section>
+        <section name="admin_links">
+            <get-url from="moya.admin" name="module" let:appname=".app.name" let:module="'moya-sociallinks'" dst="admin_url"/>
+            <w:link url="${admin_url}" icon="edit">Social Links Admin</w:link>
+            <if test="permission:.app.settings.new_topic_permission">
+                <w:link />
+                <get-url name="new_topic" dst="new_topic_url" />
+                <w:link url="${new_topic_url}" let:topic="topic.slug" icon="star">New Topic</w:link>
+            </if>
+        </section>
+    </content>
+
+    <content libname="content.front" template="topic_base.html" extends="#content.base">
+        <title>Social Links</title>
+        <section name="main">
+            <node template="topics_header.html" let:topics="promoted_topics" let:all="yes"/>
+            <w:paginate auto="no" src="links" pagesize=".app.settings.links_per_page.int">
+                <node template="links.html" withscope="yes" let:topic_link="yes" />
+            </w:paginate>
+        </section>
+        <section name="side">
+            <node template="blurb.html" />
+            <node template="new_topic_link.html"
+                if="permission:.app.settings.new_topic_permission"/>
+        </section>
+    </content>
+
+    <content libname="content.topics" template="topic_base.html" extends="#content.base">
+        <title>Topics</title>
+        <section name="main">
+            <node template="topics_header.html" let:topics="promoted_topics" />
+            <w:paginate auto="no" src="topics">
+                <node template="topics_list.html" withscope="yes"/>
+            </w:paginate>
+        </section>
+        <section name="side">
+            <node template="topics_side.html" />
+            <node template="new_topic_link.html"
+                if="permission:.app.settings_new_topic_permission"/>
+        </section>
+    </content>
+
+    <content libname="content.topic" template="topic_base.html" extends="#content.base">
+        <title>${topic.title}</title>
+        <section name="main">
+            <node template="topics_header.html" let:topics="promoted_topics" let:topic="topic"/>
+            <w:paginate auto="no" src="links" pagesize=".app.settings.links_per_page.int">
+                <node template="links.html" withscope="yes"/>
+            </w:paginate>
+        </section>
+        <section name="side">
+            <node template="blurb.html" />
+            <node template="topic_description.html" withscope="yes" />
+        </section>
+        <section name="admin_links" if="permission:'admin'">
+            <get-url name="edit_topic" let:topic="topic.slug" dst="edit_topic_url" />
+            <w:link url="${edit_topic_url}" icon="edit">Edit Topic</w:link>
+        </section>
+    </content>
+
+    <content libname="content.topic.edit" extends="#content.base">
+        <title>Edit ${topic.title}</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.new.topic" extends="#content.base">
+        <title>New Topic</title>
+        <section name="body">
+            <render src="form" />
+        </section>
+    </content>
+
+    <content libname="content.post" extends="#content.base">
+        <title>Post to ${topic.title}</title>
+        <section name="body">
+            <render src="form" />
+        </section>
+    </content>
+
+    <content libname="content.link" extends="#content.base">
+        <title>${link.title}</title>
+        <section name="body">
+            <get-url name="link" let:topic="link.topic.slug" let:link="link.slug" dst="link_url" />
+            <node template="link.html" withscope="yes">
+                <raw if="strip:link.text">${link.text}</raw>
+            </node>
+            <comments:comments namespace="app-${.app.name}.topic-${topic.id}"
+                topic="link-${link.id}" url="${link_url}"/>
+        </section>
+    </content>
+
+    <content libname="content.link.edit" extends="#content.base">
+        <forbidden if=".user != link.user" />
+        <title>Edit ${link.title}</title>
+        <section name="body">
+            <render src="form" let:link="link"/>
+        </section>
+    </content>
+</moya>

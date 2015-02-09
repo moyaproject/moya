@@ -1,0 +1,102 @@
+{
+    "name": "comments",
+    "doc_namespace": "xmlns.http://moyaproject.com/comments",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "comments",
+        "lib": "moya.comments",
+        "namespace_slug": "moyaproject_dot_com_comments",
+        "defined": "/home/will/projects/moya/moya/libs/comments/logic/widgets.xml (line 6)",
+        "doc": "Render comments on a page.",
+        "namespace": "http://moyaproject.com/comments",
+        "synopsis": "enable comments",
+        "tag_name": "comments",
+        "params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": null,
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "markup": {
+                "default_display": "bbcode",
+                "name": "markup",
+                "missing": true,
+                "default": "bbcode",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "namespace": {
+                "default_display": null,
+                "name": "namespace",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "topic": {
+                "default_display": null,
+                "name": "topic",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/comments.comments"
+}

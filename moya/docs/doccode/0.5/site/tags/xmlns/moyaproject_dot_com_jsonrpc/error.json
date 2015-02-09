@@ -1,0 +1,58 @@
+{
+    "name": "error",
+    "doc_namespace": "xmlns.http://moyaproject.com/jsonrpc",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "error",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_jsonrpc",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "doc": "Return an rpc error response.",
+        "namespace": "http://moyaproject.com/jsonrpc",
+        "synopsis": "return an rpc error",
+        "tag_name": "error",
+        "params": {
+            "code": {
+                "default_display": "\"0\"",
+                "name": "code",
+                "missing": true,
+                "default": "0",
+                "doc": "Error code",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "data": {
+                "default_display": "None",
+                "name": "data",
+                "missing": true,
+                "default": null,
+                "doc": "Optional data regarding the error",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/jsonrpc.error"
+}

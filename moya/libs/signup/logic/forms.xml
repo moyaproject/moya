@@ -1,0 +1,72 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:moya="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:w="http://moyaproject.com/widgets"
+    xmlns:html="http://moyaproject.com/html"
+    xmlns:recaptcha="http://moyaproject.com/recaptcha">
+
+    <form libname="form.signup" legend="New User Signup" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input label="First name(s)" class="input-xlarge" name="first_name" type="text" dst="newuser.first_name" required="yes"/>
+        <input label="Last name" class="input-xlarge" name="last_name" type="text" dst="newuser.last_name" initial="''"/>
+        <input label="Email address" class="input-xlarge" name="email" type="text" dst="newuser.email" required="yes" />
+        <input label="Confirm email" class="input-xlarge" name="email2" type="text" required="yes" />
+        <input label="Desired username" help="Must be at least 3 characters" name="username" type="text" dst="newuser.username" required="yes"/>
+        <input label="Password" class="input-xlarge" name="password" type="password" dst="newuser.password" required="yes"/>
+        <input label="Password (again)" class="input-xlarge" name="password2" type="password" dst="newuser.password" required="yes"/>
+
+        <field name="g-recaptcha-response" if=".app.settings.recaptcha.bool">
+            <recaptcha:recaptcha/>
+        </field>
+
+        <moya:if test=".app.settings.terms_and_conditions">
+            <checkbox name="agree" label="Terms and conditions" text="I Agree" required="yes"/>
+            <field>
+                <html:a target="_blank" href="${.app.settings.terms_and_conditions}">Terms and Conditions</html:a>
+            </field>
+        </moya:if>
+        <submit-button text="Create User" />
+
+        <validate-field field="g-recaptcha-response">
+            <recaptcha:verify response="value" dst="human"/>
+            <fail if="not human">
+                CAPTCHA failed. You may be a bot. If you fail the CAPTCHA 3 times, check yourself for a serial number or micro-usb port.
+            </fail>
+        </validate-field>
+
+        <validate-field field="username">
+            <fail if="len:value lt 3">
+                Username should be at least 3 characters
+            </fail>
+            <db:get model="auth#User" let:username="field" dst="user"/>
+            <fail if="user">
+                Username exist, please pick another
+            </fail>
+        </validate-field>
+        <validate-field field="password">
+            <fail if="len:value lt .app.settings.min_password_length.int">
+                Password should be at least ${.app.settings.min_password_length} characters in length
+            </fail>
+        </validate-field>
+        <validate-field field="password2">
+            <fail if="values.password != value">
+                Passwords do not match
+            </fail>
+        </validate-field>
+        <validate-field field="email">
+            <fail if="'@' not in value or '.' not in value">
+                Please enter a valid email address
+            </fail>
+            <db:get model="auth#User" let:email="field" dst="user"/>
+            <fail if="user">
+                A user with this email already has an account, please use another email
+            </fail>
+        </validate-field>
+        <validate-field field="email2">
+            <fail if="values.email != value">
+                Email fields do not match
+            </fail>
+        </validate-field>
+    </form>
+
+</moya>

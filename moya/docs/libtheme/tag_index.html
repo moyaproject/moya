@@ -1,0 +1,26 @@
+{% extends "/columns.html" %}
+
+{% block "title" %}${long_name} namespaces{% end %}
+
+{% block "content" %}
+<ul class="breadcrumb">
+	<li><a href="../../index.html">Home</a> <span class="divider">/</span></li>
+	<li><a href="../index.html">Namespaces</a> <span class="divider">/</span></li>
+	<li>${namespace}</li>
+	<li>${tag_name}</li>
+</ul>
+
+<h3>Namespace <tt>${namespace}</tt></h3>
+<p>
+	The following tags are available in the ${namespace} namespace.
+</p>
+<dl>
+{%- for tag in tags %}
+	<dt>
+		<a href="tag_${slug:tag.tag_name}.html">${tag.tag_name}</a>
+	</dt>
+	<dd>${tag.synopsis or html:"<i>No synopsis</i>"}</dd>
+{%- endfor %}
+</dl>
+
+{% endblock %}

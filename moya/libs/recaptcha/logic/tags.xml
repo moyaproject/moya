@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+    <!-- define your tags here -->
+
+    <tag name="verify" synopsis="verify a recaptcha response">
+        <doc>
+            Verify the response from a re-captcha.
+        </doc>
+        <signature>
+            <attribute name="response" required="yes" type="expression">
+                The response value (g-recaptcha-response from form)
+            </attribute>
+            <attribute name="secretkey" required="no" default="">
+                Optionally override secretkey from settings.
+            </attribute>
+        </signature>
+        <let secretkey=".app.settings.secretkey" if="not secretkey" />
+        <request url="https://www.google.com/recaptcha/api/siteverify"
+            let:secret="secretkey" let:response="response" let:remoteip=".request.remote_addr"
+            dst="response" />
+        <return value="isbool:response.json.success and response.json.success" />
+    </tag>
+
+</moya>

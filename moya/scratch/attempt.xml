@@ -1,0 +1,10 @@
+<moya>
+
+    <macro docname="main">
+        <attempt times="10">
+            <echo>attempt</echo>
+            <throw exception="test"/>
+        </attempt>
+    </macro>
+
+</moya>

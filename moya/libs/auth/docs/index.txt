@@ -1,0 +1,11 @@
+[title Documentation Index]
+Welcome to the Moya Authentication library documentation!
+
+[index]
+    introduction
+    usermodel
+    commands
+    test
+[/index]
+
+Some more text goes here.

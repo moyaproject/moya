@@ -1,0 +1,16 @@
+<moya xmlns="http://moyaproject.com">
+
+    <macro docname="main">
+        <repeat>
+            <input dst="response">Type something </input>
+            <if test="response">
+                <echo>You typed "${response}"</echo>
+                <break/>
+            </if>
+            <else>
+                <echo>No seriously, type something</echo>
+            </else>
+        </repeat>
+    </macro>
+
+</moya>

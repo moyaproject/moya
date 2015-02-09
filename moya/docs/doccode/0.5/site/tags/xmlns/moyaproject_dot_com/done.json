@@ -1,0 +1,35 @@
+{
+    "name": "done",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "done",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Exists the current callable immediately with no return value. Note, this is not equivalent to [tag]return[/tag] which returns [c]None[/c].",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "return from a macro or callable without any data",
+        "tag_name": "done",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.done"
+}

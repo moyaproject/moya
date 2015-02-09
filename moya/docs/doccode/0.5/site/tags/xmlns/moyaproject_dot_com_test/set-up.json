@@ -1,0 +1,35 @@
+{
+    "name": "set-up",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set-up",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "Logic to set up unit tests. Must be inside a <suite>",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "setup code for a test suite",
+        "tag_name": "set-up",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.set-up"
+}

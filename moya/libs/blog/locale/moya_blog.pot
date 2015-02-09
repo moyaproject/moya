@@ -1,0 +1,95 @@
+# 
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2014-01-18T20:40:33.037038+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8Bit\n"
+
+#: logic/forms.xml:68 logic/forms.xml:68
+msgid "Are you sure you wish to hide post '${post.title}'?"
+msgstr ""
+
+#: logic/content.xml:45
+msgid "Edit Post"
+msgstr ""
+
+#: logic/content.xml:55 logic/content.xml:55
+msgid "Post '${deleted}' has been deleted"
+msgstr ""
+
+#: logic/content.xml:65
+msgid "${post.title}"
+msgstr ""
+
+#: logic/content.xml:22 logic/content.xml:22
+msgid "No posts yet!"
+msgstr ""
+
+#: logic/forms.xml:47 logic/forms.xml:47
+msgid "Are you sure you wish to delete post '${post.title}'?"
+msgstr ""
+
+#: logic/content.xml:93
+msgid "Hide post"
+msgstr ""
+
+#: logic/forms.xml:32
+msgid "Slug should only contain letters, numbers and hyphens"
+msgstr ""
+
+#: logic/forms.xml:57 logic/forms.xml:57
+msgid "The URL will be"
+msgstr ""
+
+#: logic/views.xml:58
+msgid "Slug exists, please edit"
+msgstr ""
+
+#: logic/forms.xml:69 logic/forms.xml:69
+msgid "Hidden posts will be visible to admin only"
+msgstr ""
+
+#: logic/content.xml:56 logic/content.xml:56
+msgid "Return to Posts"
+msgstr ""
+
+#: logic/content.xml:52
+msgid "Delete Post"
+msgstr ""
+
+#: logic/forms.xml:58 logic/forms.xml:58
+msgid "${posturl}"
+msgstr ""
+
+#: logic/content.xml:34
+msgid "Recent Posts"
+msgstr ""
+
+#: logic/forms.xml:29
+msgid "Slug exists, please edit"
+msgstr ""
+
+#: logic/content.xml:86
+msgid "Publish post"
+msgstr ""
+
+#: logic/forms.xml:41 logic/forms.xml:41
+msgid "Cancel"
+msgstr ""
+
+#: logic/content.xml:38
+msgid "Posts by Month"
+msgstr ""
+
+#: logic/content.xml:11
+msgid "${app.settings.name}"
+msgstr ""
+
+#: logic/content.xml:40 logic/content.xml:40
+msgid "Posts in ${start % \"MMMM, YYYY\"}"
+msgstr ""
+
+#: logic/forms.xml:56 logic/forms.xml:56
+msgid "Are you sure you wish to publish post '${post.title}'?"
+msgstr ""

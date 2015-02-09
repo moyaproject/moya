@@ -1,0 +1,10 @@
+<moya xmlns="http://moyaproject.com">
+
+    <widget name="faq" ns="http://moyaproject.com/faq" template="widgets/qa.html">
+        <doc>Renders a frequently asked question</doc>
+        <signature>
+        	<attribute name="qa" type="index" />
+        </signature>
+    </widget>
+
+</moya>

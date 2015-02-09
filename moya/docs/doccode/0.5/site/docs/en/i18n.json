@@ -1,0 +1,14 @@
+{
+    "name": "i18n",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Internationalization]\n\nInternationalization is the process of adapting your project to support more than a single region. In addition to translating the text of you project, this also means displaying currency, dates, numbers and time in a regional format.\n",
+        "name": "i18n",
+        "title": "Internationalization"
+    },
+    "id": "doc.i18n"
+}

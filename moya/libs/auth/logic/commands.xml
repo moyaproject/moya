@@ -1,0 +1,432 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:auth="http://moyaproject.com/auth">
+
+
+    <command libname="cmd.test" synopsis="tests">
+
+        <db:query model="#GroupMembership" collect="list" collectkey="group"
+            filter="#GroupMembership.user.username == 'will'" dst="users" />
+
+        <echo obj="list:users" />
+
+    </command>
+
+
+    <macro docname="getuser">
+        <if test="isint:int:name">
+            <db:get model="#User" let:id="int:name" dst="user"/>
+        </if>
+        <elif test="'@' in name">
+            <db:get model="#User" let:email="name" dst="user"/>
+        </elif>
+        <else>
+            <db:get model="#User" let:username="name" dst="user"/>
+        </else>
+        <exit if="not user">User not found</exit>
+        <return value="user" />
+    </macro>
+
+    <command libname="cmd.finduser" synopsis="look up a user">
+        <doc>
+            Look up a user
+        </doc>
+        <signature>
+            <arg name="username" metavar="ID or USERNAME OR EMAIL"
+                help="An ID, username or email to look up" />
+        </signature>
+        <call macro="getuser" let:name="args.username" dst="user" />
+
+        <echo>${user}</echo>
+        <echo obj="user" />
+
+        <for src="user.groups" dst="group">
+            <if test="group.user">
+                <echo>${user.username}'s personal permissions</echo>
+            </if>
+            <else>
+                <echo>${user.username} is in group '${group.name}' (${group.description})</echo>
+            </else>
+            <list dst="permtable"/>
+            <for src="group.permissions" dst="perm">
+                <append value="[perm.name, perm.description]" src="permtable"/>
+            </for>
+            <echo table="permtable" header="permission,description"/>
+        </for>
+
+        <auth:get-permissions user="user" dst="perms" />
+        <echo>${user.username}'s combined permissions are: ${prettylist:perms}</echo>
+
+    </command>
+
+    <command libname="cmd.setpass" synopsis="set a password">
+        <doc>Set a user's password</doc>
+        <signature>
+            <arg name="username" metavar="ID or USERNAME OR EMAIL"
+                help="An ID, username or email to look up" />
+        </signature>
+        <call macro="getuser" let:name="args.username" dst="user" />
+        <input password="yes" dst="password">${user}'s password: </input>
+        <auth:set-password user="user" password="password"/>
+    </command>
+
+    <command libname="cmd.checkpass" synopsis="check a password">
+        <doc>Validate a password</doc>
+        <signature>
+            <arg name="username" metavar="ID or USERNAME OR EMAIL"
+                help="An ID, username or email to look up" />
+        </signature>
+        <call macro="getuser" let:name="args.username" dst="user" />
+        <input password="yes" dst="password">${user}'s password: </input>
+        <auth:check-password user="user" password="password" dst="valid"/>
+        <echo if="valid" style="bold green">OK</echo>
+        <echo if="not valid" style="bold red">FAIL</echo>
+    </command>
+
+    <command libname="cmd.edituser" synopsis="edit a user">
+        <doc>Edit User details</doc>
+        <signature>
+            <arg name="username" metavar="ID or USERNAME OR EMAIL"
+                help="An ID, username or email to look up" />
+            <option name="active" metavar="YES or NO"
+                help="Activate or De-active a user's login" />
+            <option name="valid" metavar="YES or NO"
+                help="Validate a user's email address" />
+            <option name="email" metavar="EMAIL ADDRESS"
+                help="Set a user's email address" />
+            <option name="password" metavar="PASSWORD"
+                help="Set a user's password (will be hashed and salted)" />
+            <option name="logout" action="store_true"
+                help="Force a user to log out" />
+        </signature>
+        <call macro="getuser" let:name="args.username" dst="user" />
+        <if test="args.active">
+            <let active="bool:eval:args.active"/>
+            <let user.active="active" />
+            <echo>Set ${user} active=${active}</echo>
+        </if>
+        <if test="args.valid">
+            <let valid="bool:eval:args.valid"/>
+            <let user.email_validated="valid" />
+            <echo>Set ${user} email_validated=${valid}</echo>
+        </if>
+        <if test="args.email">
+            <let user.email="args.email" />
+            <echo>Set ${user} email="${args.email}"</echo>
+        </if>
+        <if test="args.password">
+            <call macro="#hashpassword" dst="password" let:password="args.password"/>
+            <let user.password="password"/>
+            <echo>Set ${user} password="${password}"</echo>
+        </if>
+        <if test="args.logout">
+            <db:query model="#Session" let:user="user" action="delete" />
+            <echo>Logged out ${user}</echo>
+        </if>
+        <db:commit />
+    </command>
+
+    <command libname="cmd.listusers" synopsis="list users">
+        <signature>
+            <option name="username"/>
+            <option name="email" />
+            <option name="firstname" />
+            <option name="lastname" />
+            <option name="max" type="integer" default="10"/>
+        </signature>
+        <db:query columns="#User.id,#User.username,#User.email,#User.first_name,#User.last_name" dst="users" />
+        <db:query src="users" dst="users" filter="#User.username icontains args.username" if="args.username" />
+        <db:query src="users" dst="users" filter="#User.email icontains args.email" if="args.email" />
+        <db:query src="users" dst="users" filter="#User.first_name icontains args.firstname" if="args.firstname" />
+        <db:query src="users" dst="users" filter="#User.last_name icontains args.lastname" if="args.lastname" />
+        <let count="len:users"/>
+        <slice src="users" stop="args.max" dst="users" if="args.max"/>
+        <echo table="users" header="ID,username,email,first name,last name"/>
+        <echo if="count gt args.max and args.max">Showing first ${args.max} of ${count} users (see --max option)</echo>
+    </command>
+
+    <command libname="cmd.init" synopsis="create default groups/permissions and a superuser">
+        <doc>Run this once to initialize the auth system</doc>
+        <echo>This will create a super user and default groups/permissions.</echo>
+        <echo>You should run this once to initialize.</echo>
+
+        <input dst="username" default="superuser">Username of 'super' user:</input>
+        <input dst="password" password="yes">Super user's password:</input>
+        <input dst="email">Super user's email address:</input>
+
+        <db:get model="#User" let:username="username" dst="user" />
+        <exit if="user">${user} already exists!</exit>
+
+        <call macro="#hashpassword" dst="password" let:password="password"/>
+        <db:transaction>
+            <db:create
+                model="#User"
+                let:username="username"
+                let:password="password"
+                let:email="email"
+                dst="user"/>
+            <db:create model="#Group" let:user="user" dst="personal_group"/>
+            <append value="personal_group" src="user.groups"/>
+        </db:transaction>
+
+        <db:transaction>
+            <db:get-or-create model="#Permission" let:name="'admin'"
+                let:description="'User may perform administration tasks'" />
+            <db:get-or-create model="#Permission" let:name="'super'"
+                let:description="'User may perform all system tasks'" />
+            <db:get-or-create model="#Group" let:name="'administrators'"
+                let:description="'Users with administration privileges'" dst="admin_group"/>
+        </db:transaction>
+        <catch exception="db.integrity-error" />
+
+        <call macro="add_permissions" let:permission="'super'" let:user="user" />
+        <call macro="add_permissions" let:permission="'admin'" let:user="user" />
+        <call macro="add_permissions" let:permission="'admin'" let:group="admin_group" />
+        <append src="user.groups" value="admin_group" />
+
+        <echo>Auth system has been initialized</echo>
+
+    </command>
+
+    <macro docname="add_permissions">
+        <list dst="permissions" if="permission"><var>permission</var></list>
+        <exit if="not (user or group)">User or Group required</exit>
+        <db:transaction>
+            <for dst="permission" src="permissions">
+                <db:get model="#Permission" dst="perm" let:name="permission" />
+                <db:create model="#Permission" dst="perm" if="not perm" let:name="permission"/>
+                <db:get model="#Group" let:user="user" dst="group" if="not group"/>
+                <append value="perm" src="group.permissions" if="perm not in group.permissions"/>
+            </for>
+        </db:transaction>
+    </macro>
+
+    <macro docname="remove_permissions">
+        <for dst="permission" src="permissions">
+            <db:get model="#Permission" dst="perm" let:name="permission" />
+            <continue if="not perm" />
+            <db:get model="#Group" let:user="user" dst="group"/>
+            <remove value="perm" src="group.permissions"/>
+        </for>
+    </macro>
+
+    <command libname="cmd.adduser" synopsis="add a new user to the database">
+        <doc>
+            Create a new user in the database.
+
+            A user may login to your site with a given username and password.
+        </doc>
+        <signature>
+            <arg name="username" help="user's unique username" metavar="USERNAME"/>
+            <arg name="email" help="user's email address" metavar="EMAIL" />
+            <option name="password" help="user's password" metavar="PASSWORD"/>
+            <option name="group" help="add user to group" metavar="GROUP" action="append"/>
+            <option name="firstname" help="user's forename" />
+            <option name="lastname" help="user's surname"  />
+        </signature>
+        <let password="args.password" />
+        <input dst="password" password="yes" if="not password">User's password:</input>
+        <dict
+            let:username="args.username"
+            let:password="password"
+            let:email="args.email"
+            let:first_name="args.firstname"
+            let:last_name="args.lastname"
+            dst="newuser"/>
+        <echo obj="newuser"/>
+        <ask dst="goahead">Create new user?</ask>
+        <exit if="not goahead">Canceled</exit>
+        <db:transaction>
+            <auth:new-user
+                username="args.username"
+                email="args.email"
+                password="password"
+                first_name="args.firstname"
+                last_name="args.lastname"
+                dst="newuser" />
+            <catch exception="moya.auth.*" dst="error">
+                <echo>Unable to create user</echo>
+                <echo style="bold red">${error.msg}</echo>
+                <exit/>
+            </catch>
+            <for src="args.group" dst="group_name" if="args.group">
+                <db:get model="#Group" let:name="group_name" dst="group"/>
+                <exit if="not group">No group called '${group_name}'</exit>
+                <append value="group" src="newuser.groups" />
+            </for>
+        </db:transaction>
+        <echo>Created ${newuser}</echo>
+    </command>
+
+    <command libname="cmd.addperm" synopsis="Associate a permission with a user or group">
+        <signature>
+            <option name="group" help="Group name" metavar="GROUP" />
+            <option name="user" help="Username" metavar="USERNAME"/>
+            <arg name="permissions" help="Permission name" metavar="PERMISSION" nargs="+"/>
+        </signature>
+        <exit if="not (args.user or args.group)">User or Group required</exit>
+        <if test="args.user">
+            <db:get model="#User" dst="user" let:username="args.user"/>
+            <exit if="not user">No user called '${args.user}'</exit>
+        </if>
+        <else>
+            <db:get model="#Group" dst="group" let:name="args.group" />
+            <exit if="not group">No group called '${args.group}'</exit>
+        </else>
+        <call macro="add_permissions" let:group="group" let:user="user" let:permissions="args.permissions" />
+        <echo>Permission(s) ${prettylist:args.permissions} added to ${group or user}</echo>
+    </command>
+
+    <command libname="cmd.newperm" synopsis="Create a new permission">
+        <signature>
+            <arg name="name" help="Permission name" metavar="PERMISSION" />
+            <arg name="description" help="Description of permission" metavar="DESCRIPTION" />
+        </signature>
+        <db:transaction>
+            <db:get-or-create model="#Permission" dst="permission" created="created"
+                let:name="args.name" />
+            <let permission.description="args.description" />
+            <if test="created"><echo>${permission} created</echo></if>
+            <else><echo>${permission} updated</echo></else>
+        </db:transaction>
+    </command>
+
+    <command libname="cmd.removeperm" synopsis="Remove permissions from a user or group">
+        <signature>
+            <option name="group" help="Group" metavar="GROUP"/>s
+            <option name="user" help="Username" metavar="USERNAME"/>
+            <arg name="permissions" help="Permission name" metavar="PERMISSION" nargs="+"/>
+        </signature>
+
+        <exit if="not (args.user or args.group)">User or Group required</exit>
+        <if test="args.user">
+            <db:get model="#User" dst="user" let:username="args.user"/>
+            <db:get model="#Group" let:user="user" dst="group"/>
+        </if>
+        <if test="args.group">
+            <db:get model="#Group" let:name="args.group" dst="group"/>
+        </if>
+        <exit if="not group">Group not found</exit>
+
+        <for src="args.permissions" dst="permission_name">
+            <db:get model="#Permission" dst="permission" let:name="permission_name" />
+            <remove value="permission" src="group.permissions" if="permission"/>
+        </for>
+
+        <echo>Permission(s) ${prettylist:args.permissions} removed from ${group}</echo>
+
+    </command>
+
+    <command libname="cmd.newgroup" synopsis="Add a new group">
+        <signature>
+            <arg name="groups" help="New group name" metavar="GROUP" nargs="+"/>
+        </signature>
+        <for src="args.groups" dst="group_name">
+            <db:transaction>
+                <db:get model="#Group" let:name="group_name" dst="group"/>
+                <db:create model="#Group" let:name="group_name" dst="group" if="not group"/>
+            </db:transaction>
+            <echo>Created ${group}</echo>
+        </for>
+    </command>
+
+    <command libname="cmd.groupadd" synopsis="Add a user to an existing group">
+        <signature>
+            <arg name="user" help="User" metavar="USERNAME" />
+            <arg name="groups" help="Group" metavar="GROUP" nargs="+" />
+        </signature>
+
+        <db:get model="#User" let:username="args.user" dst="user" />
+        <exit if="not user">No user called '${args.user}'</exit>
+
+        <db:transaction>
+            <for src="args.groups" dst="group_name">
+                <db:get model="#Group" let:name="group_name" dst="group"/>
+                <exit if="not group">No group called '${group_name}'</exit>
+                <append value="group" src="user.groups" />
+            </for>
+        </db:transaction>
+
+        <echo>Added ${user} to group(s) ${prettylist:args.groups}</echo>
+    </command>
+
+    <command libname="cmd.groupremove" synopsis="Remove a user from a group">
+        <signature>
+            <arg name="user" help="User" metavar="USERNAME" />
+            <arg name="groups" help="Group" metavar="GROUP" nargs="+" />
+        </signature>
+
+        <db:get model="#User" let:username="args.user" dst="user" />
+        <exit if="not user">No user called '${args.user}'</exit>
+        <db:transaction>
+            <for src="args.groups" dst="group_name">
+                <db:get model="#Group" let:name="group_name" dst="group"/>
+                <exit if="not group">No group called '${group_name}'</exit>
+                <remove value="user" src="group.users" />
+            </for>
+        </db:transaction>
+
+        <echo>Removed ${user} from group(s) ${prettylist:args.groups}</echo>
+    </command>
+
+    <command libname="cmd.listgroups" synopsis="List all permission groups">
+        <db:query model="#Group" dst="groups" let:user="None"/>
+        <for src="groups" dst="group">
+            <echo>${group}</echo>
+            <for src="group.permissions" dst="perm">
+                <echo indent="1">${perm}</echo>
+            </for>
+        </for>
+    </command>
+
+    <command libname="cmd.listperms" synopsis="List permissions">
+        <signature>
+            <option name="group" metavar="GROUP" help="Group name" />
+        </signature>
+        <if test="args.group">
+            <db:get model="#Group" dst="group" let:name="args.group" />
+            <db:query columns="#Permission.name,#Permission.description" dst="perms" orderby="#Permission.name"
+                filter="#Permission.id in group.permissions" />
+        </if>
+        <else>
+            <db:query columns="#Permission.name,#Permission.description" dst="perms" orderby="#Permission.name"/>
+        </else>
+        <echo table="perms" header="name,description"/>
+
+    </command>
+
+    <command libname="cmd.testusers" synopsis="Generate test users">
+        <signature>
+            <option name="count" default="10" metavar="COUNT" help="Number of users to generate"/>
+            <option name="email" metavar="EMAIL" help="email address to use for test users" />
+            <option name="password" metavar="PASSWORD" help="password to use for test users" default="password"/>
+        </signature>
+
+        <ask dst="goahead">Create randomly generated test users?</ask>
+        <exit if="not goahead"/>
+
+        <let forenames="splitlines:data:'forenames.txt'"
+            surnames="splitlines:data:'surnames.txt'" />
+
+        <repeat times="int:args.count">
+            <choose from="forenames" dst="first_name" />
+            <choose from="surnames" dst="last_name" />
+            <let-str username="${lower:first_name}_${lower:last_name}" />
+            <db:transaction>
+                <repeat>
+                    <auth:new-user username="username" first_name="title:first_name" last_name="title:last_name"
+                        email="args.email" password="args.password" />
+                    <catch exception="moya.auth.*">
+                        <continue />
+                    </catch>
+                    <break />
+                </repeat>
+                <echo>Created user ${title:first_name} ${title:last_name} (${username})</echo>
+            </db:transaction>
+        </repeat>
+
+
+    </command>
+
+</moya>

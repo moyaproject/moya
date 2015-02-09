@@ -1,0 +1,28 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="main">
+        <echo>In main</echo>
+        <call macro="test1" dst="ret"/>
+        <echo>Returned ${ret}</echo>
+        <echo>Leaving main</echo>
+    </macro>
+
+    <macro docname="test1">
+        <echo>Now in Test1</echo>
+        <return value="20"/>
+    </macro>
+
+
+    <macro docname="sig">
+        <signature>
+            <argument name="foo" required="yes" check="len:foo gt 5"/>
+            <argument name="bar" required="no"/>
+        </signature>
+    </macro>
+
+    <macro docname="sigtest">
+        <call macro="sig" let:foo="'baa'" />
+    </macro>
+
+</moya>

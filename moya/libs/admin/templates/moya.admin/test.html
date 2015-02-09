@@ -1,0 +1,16 @@
+<h1>{% trans %}Admin Modules{% end %}</h1>
+{%- for module_app, modules in modules_data %}
+<h2>${module.app}</h2>
+
+{%- for module in modules %}
+	<h3>${module.data.title}</h3>
+	<p>${module.data.description}</p>
+	<ul>
+	{%- for item in module.children %}
+		<li>${item.data.title} <br>
+		${item.data.description}</li>
+	{%- endfor %}
+	</ul>
+{%- endfor %}
+
+{%- endfor %}

@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+	<enum>
+		<value label="sam" description="The fat one"/>
+		<value id="5" label="frodo"/>
+		<value label="bilbo"/>
+	</enum>
+
+</moya>

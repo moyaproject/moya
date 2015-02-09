@@ -1,0 +1,113 @@
+{
+    "name": "form",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "form",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nDefines a form.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "begin a form definition",
+        "tag_name": "form",
+        "params": {
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Form style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "class": {
+                "default_display": "",
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Additional CSS class",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "extends": {
+                "default_display": "",
+                "name": "extends",
+                "missing": true,
+                "default": null,
+                "doc": "Extend another form",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Form template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "action": {
+                "default_display": "",
+                "name": "action",
+                "missing": true,
+                "default": null,
+                "doc": "Form action",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "legend": {
+                "default_display": "",
+                "name": "legend",
+                "missing": true,
+                "default": null,
+                "doc": "legend text shown above form",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "enctype": {
+                "default_display": "",
+                "name": "enctype",
+                "missing": true,
+                "default": null,
+                "doc": "Form encoding type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <form libname=\"form.login\" legend=\"Please login\" xmlns=\"http://moyaproject.com/forms\">\n            <input name=\"username\" label=\"Username\" type=\"text\" maxlength=\"30\" required=\"yes\"/>\n            <password name=\"password\" label=\"Password\" maxlength=\"30\" required=\"yes\"/>\n            <submit-button text=\"Login\" />\n        </form>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.form"
+}

@@ -1,0 +1,38 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${long_name} Commands{% endblock %}
+
+{% block "body" %}
+<div class="container">
+
+<h1>Command Index</h1>
+<p>
+Commands defined by ${long_name}
+</p>
+
+{%- if commands %}
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Command</td>
+            <th>Synopsis</th>
+        </tr>
+    </th>
+    <tbody>
+    {%- for cmd in commands %}
+    <tr>
+        <td>
+            <a href="command_${slug:cmd.name}.html">
+                <tt>${cmd.name}</tt>
+            </a>
+        </td>
+        <td>
+            ${cmd.synopsis}
+        </td>
+    </tr>
+    {%- endfor %}
+</table>
+{% endif %}
+
+</div>
+{% endblock %}

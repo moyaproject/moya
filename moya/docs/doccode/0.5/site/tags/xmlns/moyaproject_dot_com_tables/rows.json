@@ -1,0 +1,124 @@
+{
+    "name": "rows",
+    "doc_namespace": "xmlns.http://moyaproject.com/tables",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "rows",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_tables",
+        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "doc": "\nDefines a collection of rows in a [tag tables]table[/tag].\n\nA [tag tables]rows[/tag] tag may contain either [tag tables]row[/tag] tags [i]or[/i] -- if the [c]src[/c] attribute is set -- [tag tables]cell[/tag] tags.\n\nWhen the [c]src[/c] attribute is set, it should be a sequence of values to be iterated over (like [tag]for[/tag]). Each item in the sequence will generate a row containing the enclosed [tag tables]cell[/tag] tags.\n\n",
+        "namespace": "http://moyaproject.com/tables",
+        "synopsis": "a collection of rows in a table",
+        "tag_name": "rows",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Sequence of row data",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Optional CSS style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "\"moya.tables\"",
+                "name": "from",
+                "missing": true,
+                "default": "moya.tables",
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "row_class": {
+                "default_display": "",
+                "name": "row_class",
+                "missing": true,
+                "default": null,
+                "doc": "Extra class for rows",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "row_template": {
+                "default_display": "\"row.html\"",
+                "name": "row_template",
+                "missing": true,
+                "default": "row.html",
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "\"rows.html\"",
+                "name": "template",
+                "missing": true,
+                "default": "rows.html",
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "id": {
+                "default_display": "",
+                "name": "id",
+                "missing": true,
+                "default": null,
+                "doc": "Table ID",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/tables.rows"
+}

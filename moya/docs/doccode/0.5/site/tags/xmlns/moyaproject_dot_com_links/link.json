@@ -1,0 +1,113 @@
+{
+    "name": "link",
+    "doc_namespace": "xmlns.http://moyaproject.com/links",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "link",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_links",
+        "defined": "/home/will/projects/moya/moya/libs/links/logic/tags.xml (line 6)",
+        "doc": "Defines a link. These tags may appear anywhere in the project, and can be extracted with the [tag links]get[/tag] tag.",
+        "namespace": "http://moyaproject.com/links",
+        "synopsis": "define a line",
+        "tag_name": "link",
+        "params": {
+            "from": {
+                "default_display": null,
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Library or Application if looking up URL",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": "",
+                "doc": "Name of the URL to look up",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": "",
+                "doc": "An absolute URL",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "text": {
+                "default_display": null,
+                "name": "text",
+                "missing": true,
+                "default": null,
+                "doc": "Text to go in the URL",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "purpose": {
+                "default_display": "navigation",
+                "name": "purpose",
+                "missing": true,
+                "default": "navigation",
+                "doc": "The purpose of the link",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "query": {
+                "default_display": "{}",
+                "name": "query",
+                "missing": true,
+                "default": "{}",
+                "doc": "Query string data",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "with": {
+                "default_display": "{}",
+                "name": "with",
+                "missing": true,
+                "default": "{}",
+                "doc": "Any route variables",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/links.link"
+}

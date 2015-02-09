@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:links="http://moyaproject.com/links">
+    <!-- Data tags go here -->
+    <links:link text="Home"/>
+    <links:link text="About" url="/about/"/>
+    <links:link text="Blog" url="${.urls.blog}" if=".urls.blog" />
+    <links:link text="Contact" url="/contact/"/>
+    <links:link text="Feedback" url="${.urls.feedback}" if=".urls.feedback" />
+</moya>

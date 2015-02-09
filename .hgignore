@@ -1,0 +1,21 @@
+syntax: glob
+*.orig
+.project
+.pydevproject
+*.pyc
+*.egg
+.*
+*~
+pyparsing.py
+build/*
+dist/*
+__build__/*
+__*__/*
+cachedata/*
+moya.egg-info
+*.db
+*.sqlite
+*.sublime-*
+moya/example/docs/*
+uploads/*
+moya/docs/html/*

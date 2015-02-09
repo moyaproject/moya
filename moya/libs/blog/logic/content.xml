@@ -1,0 +1,98 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:blog="http://moyaproject.com/blog"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:comments="http://moyaproject.com/comments"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.list-posts" template="list.html">
+        <title>${.app.settings.name}</title>
+        <section name="posts">
+            <not-found if="page lt 1" />
+            <map src="posts" value="sub:'post-${id}'" dst="comment_objects" />
+            <comments:get-counts dst="comment_counts" namespace="app-${.app.name}"
+                topics="comment_objects" />
+            <w:paginate src="posts" dst="post" pagesize="pagesize">
+                <blog:post post="post" numcomments="comment_counts[sub:'post-${post.id}']"/>
+            </w:paginate>
+            <html:div if="not posts" class="alert">No posts yet!</html:div>
+        </section>
+        <section name="side">
+            <blog:recent-posts />
+        </section>
+        <section name="admin_links" if=".permissions.admin">
+            <w:link url="${.appurls.newpost}" icon="star">New post</w:link>
+        </section>
+    </content>
+
+    <content libname="content.recent-posts" extends="#content.list-posts">
+        <title>Recent Posts</title>
+    </content>
+
+    <content libname="content.list-posts-by-month" extends="#content.list-posts">
+        <title>Posts by Month</title>
+        <section name="header">
+            <html:h3>Posts in ${start % "MMMM, YYYY"}</html:h3>
+        </section>
+    </content>
+
+    <content libname="content.edit-post" template="base.html">
+        <title>Edit Post</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.delete-post" template="base.html">
+        <title>Delete Post</title>
+        <section name="body">
+            <if test="deleted">
+                <w:success>
+                    <html:p>Post '${deleted}' has been deleted</html:p>
+                </w:success>
+                <w:button-link url="${.appurls.list}">Return to Posts</w:button-link>
+            </if>
+            <else>
+                <render src="form"/>
+            </else>
+        </section>
+    </content>
+
+    <content libname="content.post" template="showpost.html">
+        <title>${post.title}</title>
+        <section name="body">
+            <comments:get-count namespace="app-${.app.name}" topic="post-${post.id}" dst="numcomments"/>
+            <blog:post newer="newer" older="older" post="post" slug="url.slug" linktitle="no" solo="yes" numcomments="numcomments"/>
+            <comments:comments namespace="app-${.app.name}" topic="post-${post.id}" url="${post_url}" />
+        </section>
+        <section name="side">
+            <blog:recent-posts />
+        </section>
+        <section name="admin_links" if=".permissions.admin and post">
+            <let slug="post.slug" />
+            <let id="post.id"/>
+            <w:link name="newpost" app="${.app.name}" icon="star">New Post</w:link>
+            <w:link />
+            <w:link url="${.appurls.publish}" icon="share" if="not post.published">Publish post</w:link>
+            <w:link url="${.appurls.hide}" icon="eye-close" if="post.published">Hide post</w:link>
+            <w:link url="${.appurls.editpost}" icon="edit">Edit post</w:link>
+            <w:link url="${.appurls.deletepost}" icon="remove">Delete post</w:link>
+        </section>
+    </content>
+
+    <content libname="content.publish-post" template="base.html">
+        <title>Publish post</title>
+        <section name="body">
+            <render src="form" />
+        </section>
+    </content>
+
+    <content libname="content.hide-post" template="base.html">
+        <title>Hide post</title>
+        <section name="body">
+            <render src="form" />
+        </section>
+    </content>
+</moya>

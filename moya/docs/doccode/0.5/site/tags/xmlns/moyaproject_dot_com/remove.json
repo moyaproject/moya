@@ -1,0 +1,69 @@
+{
+    "name": "remove",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "remove",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Remove a value from a collection",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "remove a value from a collection",
+        "tag_name": "remove",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": false,
+                "default": null,
+                "doc": "Collection to remove from",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "values": {
+                "default_display": "None",
+                "name": "values",
+                "missing": false,
+                "default": null,
+                "doc": "A sequence of values to remove",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": false,
+                "default": null,
+                "doc": "Value to remove",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <list dst=\"crew\">\n            <str>John</str>\n            <str>Scorpius/str>\n        </list>\n        <remove src=\"crew\" value=\"'Scorpius'\"/>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.remove"
+}

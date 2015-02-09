@@ -1,0 +1,307 @@
+[title Creating a Library]
+
+In Moya, a [i]library[/i], is a bundle of files for handling a particular component of your website. All functionality for handing URLs is contained within a library, whether unique to your project or something you would like to distribute. This chapter covers how to create a new library.
+
+[h1]Starting a Library[/h1]
+
+You can use the [c]moya start library[/c] command to create a library within your project. This will create a fully functioning library which you can use as a starting point.
+
+Here's how you might create a new library called "Sushi Finder":
+
+[code]
+$ moya start library --title "Sushi Finder" -a
+[/code]
+
+Alternatively, you can create the directory and files manually. This chapter will describe the structure and contents of a library.
+
+[h1]Library Contents[/h1]
+
+By convention a library directory should be named after the [i]long name[/i] of the library, so the directory name won't conflict with a library from another organization. An example long name would be [c]acme.shop[/c]. As long as no other organization uses the name [c]acme[/c], there is no risk of creating a library name used by someone else.
+
+[aside]You can [i]reserve[/i] organization names on [url http://packages.moyaproject.com]packages.moyaproject.com[/url].[/aside]
+
+Immediately inside the project directory should be the following files:
+
+[definitions]
+[define __init__.py]Required if you plan to distribute your library as a Python module.[/define]
+[define lib.ini]Required for all libraries, this INI file contains information about the library and the files / directories it contains.[/define]
+[/definitions]
+
+
+A library will contain a number of directories that Moya will read from, depending on the features enabled in [c]lib.ini[/c]. The next section describes the contents of [c]lib.ini[/c].
+
+[h1]Library Settings[/h1]
+
+Like the main project, a library is initialized form an INI file which defines a few settings and tells Moya what files to load. This settings file should be called [c]lib.ini[/c]. This INI file may define the following sections:
+
+[h2][author] Section[/h2]
+
+The author section contains information about the library and author, which is used when distributing the library. Here's an example of an author section:
+
+[code ini]
+[author]
+name = Mr T Author
+email = author@example.org
+organization = Example Inc
+url = http://example.org
+[/code]
+
+[setting]name = <author's name>[/setting]
+
+The name of the author or -- if you prefer -- the organization.
+
+[setting]email = <email address>[/setting]
+
+A contact email the library author. You can leave this blank if you wish.
+
+[setting]organization = <organization name>[/setting]
+
+The author's [i]organization[/i], i.e. the company you work for or some other group you belong to. You can leave this blank if you wish.
+
+[setting]url = <homepage URL>[/setting]
+
+This should be a URL with information regarding the author; which could be an homepage, blog, company website etc. You may leave this blank if you wish.
+
+[h2][lib] Section[/h2]
+
+This section contains information Moya needs to read the library's code. All libraries must contain a [raw][lib][/raw] section. The following is en example of a [raw]lib[/raw] section:
+
+[code ini]
+[lib]
+location = ./logic
+title = Sushi Finder
+url = http://www.example.org
+namespace = http://moyaproject.com/sushifinder
+longname = moyaproject.sushifinder
+version = 0.1.0-dev
+[/code]
+
+[setting]location = <path>[/setting]
+
+This should be a relative path to a directory in the library which contains Moya code. This should be [c]./logic[/c] according to convention, but could be another directory. When Moya [i]imports[/i] the library it will read all the xml files in this directory, and sub-directories.
+
+Note that the names of the xml files are irrelevant as far as Moya is concerned, but should probably reflect what they contain. The [c]moya start library[/c] command will create a few example files, but the names are only a suggestion.
+
+[setting]title = <project title>[/setting]
+
+This is the human readable title of the project. For example, "Sushi Finder".
+
+[setting]url = <library homepage>[/setting]
+
+This setting should be the URL for the library, i.e. documentation. Leave blank if the library has no URL.
+
+[setting]namespace = <xml namespace>[/setting]
+
+This should be an XML namespace which will be used for any tags defined in the library. If your library doesn't define any tags, you may leave this blank.
+
+[setting]name = <library's long name>[/setting]
+
+This should be the library long name (a name used to identify the library in code). A library long name consists of lower-case characters with no spaces, separated by periods ([c].[/c]). The first token should identify the organization, other tokens should identify the library. Library long names should be globally unique, so try and pick a long name that isn't likely to clash with a library from another author.
+
+[setting]version = <library version>[/setting]
+
+Libraries should be tagged with a version number in [url http://semver.org/]Semantic Versioning[/url] format. Essentially this consists of MAJOR.MINOR.PATCH. Start at 0.1.0 for a first pre-release version, then increment PATCH when you make backwards-compatible fixes, increment MINOR when you add new functionality, and increment MAJOR when there is a new version.
+
+A MAJOR value of 0 is for initial development. When you are ready to distribute your library, reset the version to 1.0.0. You can also add -dev to indicate a version in development. It is a good idea to bump your version number immediately after publishing the library and add -dev. Drop the -dev suffix when you publish the next version.
+
+[h2][py] Section[/h2]
+
+Moya can be [i]extended[/i] with Python code that defines new tags and adds functionality.
+
+[setting]location = <path>[/setting]
+
+This setting should be a relative path to a directory containing Python (.py) files. By convention, this should be [c]./py[/c].
+
+[h2][settings] Section[/h2]
+
+This section defines the initial settings for the library. These can be overridden in the project settings once installed. There are no particular requirements for the setting, you may define as many as you need to configure an application with the library. As a guideline though, it is recommended to chose sensible defaults so that a library may be installed with little or no configuration.
+
+[h2][templates] Section[/h2]
+
+This section initializes templates used in the library. This section isn't required if the library doesn't have any templates.
+
+[setting]location = <path to templates>[/setting]
+
+This setting should be a relative path to template files. By convention, this setting should be [c]./templates[/c].
+
+[setting]priority = <integer priority>[/setting]
+
+This setting defines the template directory [i]priority[/i] which is used to resolve conflicting template paths. Moya will select the template with the highest priority. The priority defaults to 0 if this setting isn't present.
+
+The template priority may be overridden when the library is imported (see [tag]import[/tag]).
+
+Generally this setting should be left as the default, as most libraries contain templates for their own use that will not conflict with other libraries. Set it to 10 if the library was designed to replace template in another library.
+
+[h2][media] Section[/h2]
+
+Moya libraries may bundle [i]media[/i] files (images, CSS, Javascript etc.) with the code, which will be served statically. To add media to your library add a named section, called [c]media:[/c] and give it a name to be used as an identifier. Most libraries will only have one media directory, and the convention is to name it simply [c]'media'[/c], so the section will be [c][media:media][/c].
+
+The media section takes one setting, [c]location[/c], which should be a relative path to the directory containing the media. By convention, this will be [c]./media[/c]. For example:
+
+[code ini]
+[media:media]
+location = ./media
+[/code]
+
+When the library is installed, Moya adds media directories to a virtual filesytem called [c]media[/c], under a sub-directory called [c]<application name>-<media name>[/c].
+
+Let's work through an example to illustrate this. Assume we have a library called [c]moya.sushifinder[/c], with a media section as follows:
+
+[code ini]
+[media:media]
+location = ./media
+[/code]
+
+And the library contains the following files (some directories omitted for brevity):
+
+[code]
+moyaproject.sushifinder/
+|-- lib.ini
+|-- logic
+|   |-- views.xml
+|   `-- widgets.xml
+`-- media
+    |-- css
+    |   `-- sushi.css
+    `-- images
+        `-- logo.png
+[/code]
+
+When we install this library with the application name of [c]sushi[/c], Moya adds a directory to the [c]media[/c] filesystem called [c]sushi-media[/c]. If we were to list the contents of the [c]media[/c] filesystem, with [c]moya fs media --tree[/c], we would see something like the following (along with media from other libraries):
+
+[code]
+|-- sushi-media
+|   |-- css
+|   |   `-- sushi.css
+|   `-- images
+|       `-- logo.png
+[/code]
+
+You can serve this media filesystem with the [c]moya.static[/c] library. To use it, add the following to your [tag]server[/tag]:
+
+[code xml]
+<import py="moya.libs.static" />
+[/code]
+
+Then install it with something like the following:
+
+[code xml]
+<install name="media" lib="moya.static" mount="/static/" />
+[/code]
+
+Finally, add the following section to your project settings:
+
+[code ini]
+[settings:media]
+fs = media
+dirlist = yes
+[/code]
+
+Your project should now be serving media from all applications. If you visit the [c]/static/[/c] url, you should see a directory listing of the media files you are serving.
+
+[aside]If you used the [b]moya start project[/b] command to create your initial project, then the media system will have already been set up.[/aside]
+
+See [link library#overriding-media]Overriding Media[/link] for ways of customizing media for a project.
+
+[h2][data] Section[/h2]
+
+This section defines additional data files (json, text etc) that may be read from your project code. Moya combines any directories defined in this section, in to a single filesystem called [c]"data"[/c]. You can see what data files are exposed by Moya with the following command line:
+
+[code]$ moya fs data --tree[/code]
+
+You can read a data file with the [tag]read-data[/tag] tag, which supports a variety of standard formats.
+
+Data follows the same convention as templates; the data files should be within a directory named after the library. This allows a library to over-ride the data files from another library, and is another way of customizing behavior.
+
+[setting]location = <path to data>[/setting]
+
+This setting should be a relative path to a directory containing data files by convention this should be [c]./data[/c]
+
+[setting]priority = <integer priority>[/setting]
+
+The priority is used to resolve which path should be used when there are conflicting paths within data directories. The library with the highest priority is used. This setting may be blank, to use a default priority of 0.
+
+[h2][documentation] Section[/h2]
+
+This section defines documentation for the library. Moya can extract tag documentation automatically for your library, and you can add supplementary documentation in a dialog of bbcode.
+
+[setting]location = <path to documentation>[/setting]
+
+This value should be a relative path to the documentation. By convention, documentation is stored in [c]./docs[/c].
+
+[h2][tests] Section[/h2]
+
+This section defines tests for your library. Tests consists of Moya code that checks the code in your library is working as expected. Well written tests ensure that you can catch bugs early, before they make it in to production.
+
+[setting]location = <path to tests>[/setting]
+
+This setting should be a relative path to the directory containing tests, by convention this is [c]./tests[/c].
+
+[setting]projects = <path to projects directory>[/setting]
+
+This setting should be a relative path to a directory containing projects. Your tests can load these projects on the fly and test that they are generating the expected responses.
+
+[setting]import = <list of imports>[/setting]
+
+This setting should be a list of libraries to import when testing (i.e. dependencies of the library). An entry in this list can be a path, or a Python module if a line is prefixes with [c]py:[/c].
+
+[h2][translations] Section[/h2]
+
+Moya supports internationalization of text in to any language. If you intend to supply text translations for your library, then add this section.
+
+[setting]location = <path to translations>[/setting]
+
+This should be a relative path to the directory containing [i]message catalogs[/i]. By convention, this should be [c]./translations[/c].
+
+[setting]default_language = <language code>[/setting]
+
+This setting defines the language used in the library. Moya needs this information when extracting text. Typically this will be [c]'en'[/c] for English, but could be any language code.
+
+[setting]languages = <comma separated list of language codes>[/setting]
+
+This should be a comma separated list of language codes, for each of the languages the library contains translations for. This language doesn't have to include the default language, which is implied. For example, a value of [c]fr, es[/c] would indicate the library supports French and Spanish in addition to the default language.
+
+[h1]Overriding Media[/h1]
+
+Moya's media system allows you to either [i]replace[/i] individual files in the media directories, or completely swap out a media directory for another -- depending on the level of customization you would like.
+
+[aside]Note that when you [i]replace[/i] media files or directories, no files are copied or removed -- all that changes is Moya's [i]view[/i] of the files.[/aside]
+
+To override individual files, first add the following section to your project settings:
+
+[code ini]
+[media]
+location = ./static
+[/code]
+
+This combines the [c]/static[/c] directory in your project with the files in media, so that any files in this directory take priority over the files stored in library directries. For example, lets say we want to completely replace the image [c]logo.png[/c] in the Sushi Finder library with our own logo. To do this, we can add the custom [c]logo.png[/c] to the project's static directory. So [c]./static[/c] will look something like this:
+
+[code]
+`-- static
+    `-- sushi-media
+        `-- images
+            `-- logo.png
+[/code]
+
+Now when the browser requests [c]/static/sushi-sushimedia/images/logo.png[/c] it will receive the version stored in the project directory, rather than the version in the library.
+
+The second way to customize media is to replace a media directory entirely. This can be done by creating a filesystem called [c]<app name>_<media name>[/c]. In the Sushi Finder application, it would be called [c]sushi_media[/c]. The contents of this filesystem will be used in preference to the media contained in the library.
+
+[aside]Note that the [i]name[/i] of the filesystem contains an underscore (_), and [i]not[/i] a hyphen (-), this is so you can use the filesystem name in an expression [i]without[/i] the hyphen being interpreted as a minus sign. A hyphen is used as the directory name, because hyphens are prefered over underscores in URLs.[/aside]
+
+The following section, when added to project settings, creates a media directory that completely replaces the media from then Sushi Finder library:
+
+[code ini]
+[fs:sushi_media]
+location = ./replace_sushimedia
+[/code]
+
+Now, when you request any file under [c]/static/sushi-sushimedia/[/c] it will look for it in the [c]./replace_sushimedia[/c] directory in the project.
+
+Note that if you use this method you will probably have to replace or copy all the media files the library uses. As a starting point you can copy a library's media with the following:
+
+[code]
+$ moya fs sushi_media --copy ./replace_sushimedia
+[/code]
+
+This copies all the media files from the sushi library to the [c]replace_sushimedia[/c] directory. You can now modify any files you wish to customize.

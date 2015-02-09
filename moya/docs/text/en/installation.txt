@@ -1,0 +1,39 @@
+[title Installing Moya]
+
+Moya is distributed as a Python module.
+
+[h1]Requirements[/h1]
+
+Moya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue for its lifespan -- likely many years yet.
+
+[h1]Install from PyPi[/h1]
+
+Moya is available on PyPi, and may be installed via pip:
+
+[code]
+$ pip install moya
+[/code]
+
+[h1]Install from code[/h1]
+
+If you want the cutting edge code, you can install the latest from github. The Moya repos also contains example projects that you may want to try out.
+
+[h1]Command Line Application[/h1]
+
+After installation you should have the [c]moya[/c] command available on the command line. Enter the following in a terminal to confirm installation was successful and display the version number:
+
+[code]
+$ moya -v
+[/code]
+
+The command app has extensive help; run the following to get help information on the available sub-commands:
+
+[code]
+$ moya -h
+[/code]
+
+You can get help on a sub-command by typing [c]moya[/c] followed by the name of the sub-command and [c]-h[/c]. Here's an example:
+
+[code]
+$ moya runserver -h
+[/code]

@@ -1,0 +1,85 @@
+{
+    "name": "dict",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "dict",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Create a [i]dictionary[/i] object. A dictionary maps [i]keys[/i] on to [i]values[/i]. The keys and values are defined in the enclosing block, or via the [i]let map[/i].",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a dict object",
+        "tag_name": "dict",
+        "params": {
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default object to return if the key isn't in the dict",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "dict",
+                    "list",
+                    "int",
+                    "float"
+                ]
+            },
+            "sequence": {
+                "default_display": "None",
+                "name": "sequence",
+                "missing": true,
+                "default": null,
+                "doc": "Optional sequence of key / value pairs to initialize the dict",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <dict dst=\"species\">\n            <str dst=\"Bibo\">Hobbit</dst>\n            <str dst=\"Gandalph\">Wizard</dst>\n        </dict>\n        <!-- Alternatively -->\n        <dict dst=\"species\" let:Bilbo=\"Hobbit\" let:Gandalph=\"Wizard\" />\n        <echo>Bilbo is a ${species['Bilbo']}</echo>\n\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.dict"
+}

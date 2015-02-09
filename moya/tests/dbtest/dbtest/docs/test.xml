@@ -1,0 +1,63 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let">
+
+	<model name="testmodel1" libname="testmodel1" xmlns="http://moyaproject.com/db">
+		<boolean name="active" default="True" />
+		<string name="title" length="100" />
+		<text name="content" />
+	</model>
+
+	<macro libname="setup">
+		<db:bulk-create model="#testmodel1">
+			[
+				{
+					"pk": 1,
+					"active":false,
+					"title":"Zen 1",
+					"content":"Beautiful is better than ugly."
+				},
+				{
+					"pk": 2,
+					"active":true,
+					"title":"Zen 2",
+					"content":"Explicit is better than implicit."
+				},
+				{
+					"pk": 3,
+					"title":"Zen 3",
+					"content":"Simple is better than complex."
+				},
+				{
+					"pk": 4,
+					"title": "Zen 4",
+					"content": "Complex is better than complicated."
+				},
+				{
+					"pk": 5,
+					"title": "Zen 5",
+					"content": "Flat is better than nested."
+				},
+				{
+					"pk": 6,
+					"title": "Zen 6",
+					"content": "Sparse is better than dense."
+				}
+			]
+		</db:bulk-create>
+	</macro>
+
+	<macro libname="get_by_id">
+		<return>
+			<db:get model="#testmodel1" let:id="id" />
+		</return>
+	</macro>
+
+	<macro libname="get_by_title">
+		<return>
+			<db:get model="#testmodel1" let:title="title" />
+		</return>
+	</macro>
+
+
+</moya>

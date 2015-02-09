@@ -1,0 +1,58 @@
+{
+    "name": "case",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "case",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "A unit test inside a <suite>",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "define a test case",
+        "tag_name": "case",
+        "params": {
+            "slow": {
+                "default_display": "no",
+                "name": "slow",
+                "missing": true,
+                "default": false,
+                "doc": "Is this test slow?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "description": {
+                "default_display": "",
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of test suite",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.case"
+}

@@ -1,0 +1,811 @@
+[title Templates]
+
+A [i]template[/i] is a text file with a special markup that Moya uses to generate output (typically HTML). Templates are combined with data generated from Moya code to produce the page requested by the user.
+
+[h1]Template Filesystem[/h1]
+
+Templates are stored in a directory within each Library (see [doc library#template-section]). When Moya starts up, the template folders for each installed library are combined to creates a single virtual filesystem (called [c]"templates"[/c]). This filesystem is used internally by Moya, but may be used as any other filesystem.
+
+You can see which directories are used in the templates filesystem with the following command line:
+
+[code]
+$ moya fs templates
+[/code]
+
+You can also see a tree view of the templates filesystem with the following:
+
+[code]
+$ moya fs templates --tree
+[/code]
+
+When adding templates to a library it is important to follow the convention of putting them in a directory named after the Library long name. For example, if your library is called [c]moya.blether[/c] then your templates should be stored [c]templates/moya.blether/[/c].
+
+This convention makes it possible for a library to override a template in another library, which can be useful for customizing the look and feel of your web application. For example, in [c]moya.pages[/c] (a builtin library) there is a template called [c]page.html[/c] with the path [c]moya.pages/page.html[/c]. If another library also contains a template with a path of [c]moya.pages/page.html[/c] it will be used in place of the original, [i]if[/i] the library it belongs to has a higher [i]priority[/i] (see below).
+
+When there are two or more conflicting paths in template directories, Moya selects the one with the highest [c]priority[/c] value (defined in the [link library#template-section][raw][template][/raw] section[/link] of lib.ini). If two templates have the same priority, then the library imported last wins.
+
+A project may also define a templates directory in [link project#templates-section]project settings[/link] which is added to the [c]templates[/c] filesystem. This allows you to customize template at a project level.
+
+[h1]Rendering Templates[/h1]
+
+There are a few tags which you may use in Moya code to render a template. One such tag is [tag]render-template[/tag] which renders a template to a string. Let's look at an example of how you might use this tag:
+
+[code xml]
+<render-template template="product.html" dst="html"/>
+[/code]
+
+The above code will read a template from your templates filesystem called [c]"product.html"[/c], it will then [i]render[/i] that template and store the response in a variable called [c]html[/c].
+
+In the preceding example, the value for template is a [i]relative[/i] path (it doesn't start with a forward slash). When Moya is asked to load a template from a relative path, it will look for it in the templates directory for the current application (where [tag]render-template[/tag] was called). So if the above code was called from an application installed from the library [c]moya.sushifinder[/c], Moya will read the template [c]/moya.sushifinder/product.html[/c].
+
+If a template path is [i]absolute[/i] (i.e. starts with a slash), then Moya looks for the template in the root of your templates filesystem. Absolute template paths aren't used as often, because most applications will use only the templates bundled in the library. Templates in the root of the template filesystem are reserved for common site-wide templates.
+
+You can also tell Moya to read a template from [i]another[/i] application with the [c]from[/c] attribute, which expects an application name, or a [i]library[/i] name if you only have one instance of that library installed. For example, here's how you could render a template from the Moya Pages library:
+
+[code xml]
+<render-template template="page.html" from="moya.pages" dst="html" />
+[/code]
+
+This will read the template from [c]/moya.pages/page.html[/c]. You could replaced the template attribute with this path, but using [c]from[/c] attribute is preferred because it is possible for an application to change the directory where its templates are stored, with the [link project#customizing-applications]templates_directory[/link] setting.
+
+You can supply data to templates with the [tag]render-template[/tag] tag in a similar way to compound data types, such as [link moyacode#dictionaries]dictionaries[/link]. The following renders a template called [c]product.html[/c] and supplies a template data value called [c]product[/c], which may be inserted in to the output:
+
+[code xml]
+<render-template template="product.html" dst="html">
+    <str dst="product">Nigiri</str>
+</render-template>
+[/code]
+
+You can also use the LET extension, which can be more compact. The following is equivalent to the previous example:
+
+[code xml]
+<render-template template="product.html" let:product="Nigiri" dst="html"/>
+[/code]
+
+There are other ways of rendering templates, which we will cover in [doc urls].
+
+
+[h1]Template Basics[/h1]
+
+In a template, everything inside [c]{%[/c] and [c]%}[/c] is considered a template [i]tag[/i] and will contain processing instructions that change the output in some way. Some tags are stand-alone, but others may contain blocks of more template code. For example, the [c]{% for %}[/c] tag repeats a block of code for every value in a collection. It will repeat everything up until and [c]{% endfor %}[/c] tag.
+
+Data may be inserted directly within a template with the same substitution syntax used in Moya code. Anything inside [c]${[/c] and [c]}[/c] is considered an expression, and will be replaced with the result of that expression.
+
+Here's an example of a simple block of template code. The following template takes a list of strings called [c]crew[/c] and will generate an HTML unordered list:
+
+[code moyatemplate]
+<ul>
+{% for character in crew %}
+    <li>${title:crew} is on board</li>
+{% endfor %}
+</ul>
+[/code]
+
+The value of [c]crew[/c] may be any collection, such as a simple list, but in a real site it would likely be the results of a query run on the database. Lets use the value of [c]crew[/c] generated from the following Moya code:
+
+[code xml]
+<list dst="crew">
+    <str>john</str>
+    <str>rygel</str>
+    <str>scorpius</str>
+</list>
+[/code]
+
+When the template is rendered with the list above, Moya will generate the following HTML markup:
+
+[code html]
+<ul>
+
+    <li>John is on board</li>
+    <li>Rygel is on board</li>
+    <li>Scorpius is on board</li>
+
+</ul>
+[/code]
+
+[h1]Controlling Whitespace[/h1]
+
+You may have noticed that the example in the example template code produced two extra lines inside the [c]<ul>[/c] html tag. This is because a new line was created for the [c]{% for %}[/c] and [c]{% endfor %}[/c] template tags. The new line characters are still present in the rendered output. We [i]could[/i] format our code in the following way to avoid littering the output HTML with superfluous new lines:
+
+[code moyatemplate]
+<ul>{% for character in crew %}
+    <li>${title:crew} is on board</li>{% endfor %}
+</ul>
+[/code]
+
+The downside is that now our template code is somewhat harder to read. Moya offers an alternative way of removing un-needed whitespace. If you add a hyphen ([c]-[/c]) at the beginning of a tag (i.e. [c]{%-[/c]) then the whitespace up to the start of the tag will be removed. If you add a hyphen at the end of the tag (i.e. [c]-%}[/c]) then the whitespace after the tag will be removed. Here's how you would use this extra syntax with the example template code:
+
+[code moyatemplate]
+<ul>
+{%- for character in crew %}
+    <li>${title:crew} is on board</li>
+{% endfor -%}
+</ul>
+[/code]
+
+This will produce the following output:
+
+[code html]
+<ul>
+    <li>John is on board</li>
+    <li>Rygel is on board</li>
+    <li>Scorpius is on board</li>
+</ul>
+[/code]
+
+[h1]Escaping[/h1]
+
+Moya [i]escapes[/i] variables used in templates by default. In other words, it replaces special characters such has [c]<[/c] [c]>[/c] and [c]&[/c] which might otherwise be interpreted by the browser as HTML.
+
+For example, let's say we have a variable called [c]name[/c], presumably entered by a user at some point. This user has given his name as [c]<h1>Rygel</h1>[/c] in an attempt to have his name styled as a header everywhere it is mentioned. Moya will replace the angular brackets with [c]&gt;[/c] and [c]&lt;[/c] when the value is rendered in a template -- and the user will see literal angular brackets.
+
+There are some occasions where variables contain markup that you [i]do[/i] want to be inserted in to the rendered output. In these situations, you can use the [c]html:[/c] modifier to tell Moya [i]not[/i] to escape the result of an expression. For example:
+
+[code moyatemplate]
+<p>${html:markup}</p>
+[/code]
+
+The above template code will insert the value of [c]markup[/c] directly in to the HTML without modification.
+
+[alert WARNING]Exercise caution when inserting HTML in to your templates like this. It would be a significant security risk if an end user is able to directly influence the markup generated by your templates.[/alert]
+
+
+[h1]Template Inheritance[/h1]
+
+In a typical web page there will be some content that is unique to the page, but a large portion of it will be common to other (possibly all) pages. For instance, a page might have a menu system, columns, footer etc. And there will probably also be a number of common assets like Javascript and CSS. If would be tiresome if we had to construct all this common code for each page we want to render. Moya makes it possible to extract the common elements in a web page so they need only be written once, via [i]template inheritance[/i].
+
+The [link templates#extends]{% extends %}[/link] template tag tells Moya that a template [i]extends[/i] another template. Moya will combine the content in the extended template with the one being rendered. Let's look at an example of a template ([c]product.html[/c]) which extends from a template called [c]base.html[/c]:
+
+[code moyatemplate]
+{% extends "base.html" %}
+{% block "content" %}
+<h1>Order ${title:product} Here</h1>
+{% endblock %}
+[/code]
+
+Note that the above template is obviously incomplete and doesn't contain the HTML required for a working page.
+
+The line [c]{% extends "base.html" %}[/c] tells Moya to combine the contents of [c]product.html[/c] with [c]base.html[/c]. The [link templates#block]{% block %}[/link] tag in [c]product.html[/c] tells Moya that the markup it contains is a [i]block[/i] with the name of [c]content[/c]. The base template also contains a block of the same name, which will be replaced with the new block when the template is rendered.
+
+Here's what [c]base.html[/c] looks like:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>Sushifinder</title>
+    </head>
+    <body>
+        {% block "content" %}
+        <h1>Welcome to Sushifinder!</h1>
+        <p>Order Sushi from your nearest restaurant</p>
+        {% endblock %}
+    </body>
+</html>
+[/code]
+
+It's this base template which contains the standard HTML markup for a complete page. The [link templates#block]{% block %}[/link] tag in [c]base.html[/c] will be replaced with the contents of the similarly named block in [c][c]product.html[/c].
+
+Note, that if [c]product.html[/c] did [i]not[/i] contain a [c]content[/c] block, then the markup in the base template's [c]content[/c] block would not be changed. In this way, a template may selectively override parts of the template it extends.
+
+There is no limit to the number of times a template can be extended. You [i]could[/i] have a [c]base.html[/c] template with a header and footer, and templates for page layout that extend [c]base.html[/c]. If you find that you are cutting and pasting large blocks of markup for new templates, then it is a good indication you should create a new base template to extend from.
+
+[h2]Extending Blocks[/h2]
+
+When Moya extends a template it will replace blocks in the base template with content from the template being rendered. Occasionally, you may want to keep the content in the base template as well as adding new content. The [link templates#block]{% block %}[/link] template tag accepts an extra argument that defines what will happen to the base content; [c]replace[/c] is the default behaviour, but you may also use [c]append[/c] which renders the new markup [i]after[/i] the base markup, or [c]prepend[/c] which puts the new markup [i]before[/i] the base markup. Let's look at an example of this. The following is a block in a base template:
+
+[code moyatemplate]
+<html>
+    <head>
+    {% block "css" %}
+    <link href="/media/css/site.css" rel="stylesheel" />
+    {% endblock %}
+    </head>
+    <body>
+        <!-- content here -->
+    </body>
+</html>
+[/code]
+
+If we were to extend a template with the [c]css[/c] block above, we would loose that stylesheet link (by default). If we want to keep it, we can define our new block as follows:
+
+[code moyatemplate]
+{% extends "base.html" %}
+{% block "css" append %}
+<link href="/media/css/page.css" rel="stylesheel" />
+{% endblock %}
+[/code]
+
+If we were to render the above template, we would get the following output:
+
+[code moyatemplate]
+<html>
+    <head>
+
+    <link href="/media/css/site.css" rel="stylesheel" />
+    <link href="/media/css/page.css" rel="stylesheel" />
+
+    </head>
+    <body>
+        <!-- content here -->
+    </body>
+</html>
+[/code]
+
+As you can see, the rendered template includes the code from the [c]css[/c] block, from both templates.
+
+[h1]Tags[/h1]
+
+All template tags following a similar pattern; the first word  inside the [c]{% %}[/c] syntax is the name of the tag. The name may be followed by zero or more required parameters (text or expressions). Optional parameters are introduced by a single word followed by an expression.
+
+Some template tags enclose a section of template code. These tags must be paired with an end tag which marks the end of the associated template code. For example, every [c]{% for %}[/c] template tag must be paired with an [c]{% endfor %}[/c]. It is also possible to mark the end of the most recently opened tag with [c]{% end %}[/c]. However, it is generally recommended to use the explicit end tag, which is self-documenting and allows the template system to detect errors in your template code. The exception would be if the associated template code is short, perhaps on a single line, and you want it to be more compact.
+
+[h1]Conventions[/h1]
+
+Because a project is assembled from a number of libraries, it is important to provide a way to make all pages look like they belong to the same site regardless of which library rendered them. The following conventions emerged from the design of the built in libraries to do just that. As with all conventions, you should follow them only as long as they make sense for your use case.
+
+[alert NOTE]The following only applies to templates that create an entire page -- and not to widget templates, or other templates that render individual components of a page.[/alert]
+
+Put a template in the library's template directory called [c]base.html[/c] which other templates should ultimately extend. This ensures that there is a base template per library that may be overriden to customize look & feel / branding. So templates in a library should start with the following line (unless they extend another base):
+
+[code moyatemplate]
+{% extend "base.html" %}
+[/code]
+
+Your base template should be empty apart from the following:
+
+[code moyatemplate]
+{% extends "/base.html" %}
+[/code]
+
+This ensures that all templates ultimately extend [c]/base.html[/c] which would contain the markup that should be common to all pages.
+
+[alert REMINDER]relative paths in extends will use a path relative to the library, absolute paths (starting with [b]/[/b]) will be relative to the root of the templates filesystem.[/alert]
+
+If you created a project with the [b]moya start[/b] command, it will have created a [c]/base.html[/c] template as follows:
+
+[code moyatemplate]
+{% extends "/moya.twitter.bootstrap/base.html" %}
+[/code]
+
+This further extends from a template in the [c]moya.twitter.bootstrap[/c] library. This template is a based on one of the example in [url]http://getbootstrap.com/[/url], and creates a simple blank page with a navbar (menu). You can use this as a starting point for your project, or write a base from scratch.
+
+[h1]Tag Reference[/h1]
+
+The following are the tags you can use in Moya Templates:
+
+[h2]{% attrib %}[/h2]
+
+[code]{% attrib [attributes] %}[/code]
+
+Renders a sequence of html attributes from a dict or dict-like collection. For example:
+
+[code moyatemplate]
+<div {% attrib id="body", style="enhance" %}>
+    Test
+</div>
+[/code]
+
+This produces the following output:
+
+[code moyatemplate]
+<div id="body" style="enhance">
+    Test
+</div>
+[/code]
+
+If the values of the dictionary are a list, Moya will render them with a space between each word.
+
+[code moyatemplate]
+<div {% attrib id="message", class=['alert', 'alert-error'] %}>
+    That didn't work
+</div>
+[/code]
+
+This would product the following output:
+
+[code moyatemplate]
+<div id="message" class="alert alert-error">
+    That didn't work
+</div>
+[/code]
+
+If any of the values are missing or [c]None[/c], then the attribute will be omitted entirely. For example, take the following template code:
+
+[code moyatemplate]
+<div {% attrib class=post.extra_class %}>
+    ${html:post.html}
+</div>
+[/code]
+
+if [c]post.extra_class[/c] is [i]not[/i] [c]None[/c], Moya will render a class attribute on the [c]<div>[/c]. If [c]post.extra_class[/c] [i]is[/i] None, then there will be no class attribute in the output.
+
+The preceding example is equivalent to the following:
+
+[code moyatemplate]
+<div {% if not isnone:post.extra_class %}class="${post.extra_class}"{% endif %}>
+    ${html:post.html}
+</div>
+[/code]
+
+[h2]{% block %}[/h2]
+
+[code]{% block <name> [<replace|append|prepend>] %}{% endblock %}[/code]
+
+Creates a [i]named block[/i], which may be extended in a derived template. If a template with a named block extends another template with a similarly named block, then the contents will be combined with the block in the extended template.
+
+For example, lets say we have the following template, named "base.html":
+
+[code moyatemplate]
+<html>
+    <body>
+        {% block "body" %}
+        <p>Content in base.html</p>
+        {% endblock %}
+    </body>
+</html>
+[/code]
+
+And we are rendering the following template, which extends from "base.html":
+
+[code moyatemplate]
+{% extends "base.html" %}
+{% block "body" %}
+<p>This content replaces the block in base.html</p>
+{% endblock %}
+[/code]
+
+If we render the template above, it will render "base.html", but with the "body" block replaced with new code. The output will look like this:
+
+[code html]
+<html>
+    <body>
+        <p>This content replaces the block in base.html</p>
+    </body>
+</html>
+[/code]
+
+The default for a block is to completely replace the contents of the block it has extended. You can also opt to [i]append[/i] the new content to the content in the extended template, or to [i]prepend[/i] it (render it before the content in the extended template). You can select which by specifying one of 'append', 'prepend' or 'replace' (the default) in the block tag.
+
+Here's how we might modify our template to include the content in block and the new content:
+
+[code moyatemplate]
+{% extends "base.html" %}
+{% block "body" append %}
+<p>This content will be appended to the block in base.html</p>
+{% endblock %}
+[/code]
+
+If we render the above template, we will get the following output:
+
+[code html]
+<html>
+    <body>
+        <p>Content in base.html</p>
+        <p>This content will be appended to the block in base.html</p>
+    </body>
+</html>
+[/code]
+
+[h2]{% cache %}[/h2]
+
+[code]{% cache for <timespan> [key <key expression>] [in <cache name>] %}{% endcache %}[/code]
+
+This tag caches the enclosed template code for a period of time. The first time Moya encounter this template tag, it renders the enclosed block and stores the result in a cache, with a key generated from a [i]key expression[/i], which should be either a string or a list of objects that will be converted in to a string. The next time Moya renders the same tag it will replace the block with the markup stored in the cache. For example:
+
+[code moyatemplate]
+{% cache for 1d key [news.id, news.update_time] %}
+<div class="news">${news.text}</div>
+{% endcache %}
+[/code]
+
+This will store the html in the cache for the [c]news[/c] object, so that it doesn't have to render it every time. Note that the key is a combination of [c]news.id[/c] and [c]news.update_time[/c], so a unique copy of the template code will be produced for every combination of these two variables. The value of [c]update_time[/c] is used so that html is re-generated if the news is updated, otherwise it would not change for a full day.
+
+Note that the primary reason for using this tag is to speed up rendering of templates. The simple example given here is likely quicker to render than it would be to look it up in the cache. A better candidate would be if either the template code inside the tag is particularly complex or it uses a slow database query. Good use of caching can reduce the load on the server significantly.
+
+[aside]Optimization may be the [i]primary[/i] reason for using the cache template tag, but it may also be used to generate html that updates on a given schedule.[/aside]
+
+[h2]{% call %}[/h2]
+
+[code]{% call <macro> [with <parameters>] [only] %}[/code]
+
+Call a previously defined template macro with optional parameters. If given, [i]parameters[/i] should be a dict or similar object with parameters to be used as arguments to the template macro.
+
+By default, a template macro has access to all the variables passed in to the template. This is generally useful, but if you specify the 'only' clause then the template macro will only have access to the arguments passed to it. The follow is an example of calling a template macro.
+
+[code moyatemplate]
+{% def greet %}
+<p>Hello, ${name}!</p>
+{% enddef %}
+
+{% call 'greet' with name="Scorpius" %}
+{% call 'greet' with name="Rygel" %}
+[/code]
+
+This will produce the following output:
+
+[code html]
+<p>Hello, Scorpius!</p>
+<p>Hello, Rygel!</p>
+[/code]
+
+[h2]{% children %}[/h2]
+
+[code]{% children [as <target>] [with <template arguments>] [set <options dict>] [unique] %}[/code]
+
+Used in widgets and content, this will render the [i]children[/i] of the content element.
+
+[h2]{% console %}[/h2]
+
+[code]{% console <text or object> %}[/code]
+
+Used for debugging, Moya will write text or an object to the console when rendering a template.
+
+[h2]{% data %}[/h2]
+
+[code]{% data [as <name>] %}{% enddata %}[/code]
+
+This will insert data in to the template context. The context of the tag should be JSON. If the [c]as[/c] clause is specified, then this will be used as the name to store the JSON data. If no [c]as[/c] clause is specified, then the JSON should be an object, and will update the template context with the objects keys / values.
+
+Here's an example of creating a list in the template context called, "crew":
+
+[code moyatemplate]
+{% data as "crew" %}
+[
+    "Rygel",
+    "Scorpius",
+    "Aeryn",
+    "John"
+]
+{% enddata %}
+[/code]
+
+[h2]{% def %}[/h2]
+
+[code]{% def <macro name> %}{% enddef %}[/code]
+
+Defines a [i]template macro[/i], which is re-usable template code that may be invoked with different parameters. Here's an example of a simple template macro:
+
+[code moyatemplate]
+{% def "greet" %}
+<p>Greet, ${name}</p>
+{% enddef %}
+[/code]
+
+Template macros may be invoked with the [link templates#call]{% call %}[/link] tag.
+
+[h2]{% elif %}[/h2]
+
+[code]{% elif <condition> %}[/code]
+
+May be used inside an [c]{% if %}[/c] tag. If the condition of the parent [c]{% if %}[/c] is [i]false[/i], and the condition for this tag is [i]true[/i] then the enclosed template code will be rendered. For example:
+
+[code moyatemplate]
+{% if fuel > 100 %}
+    <p>Taking off!</p>
+{% elif fuel > 0 %}
+    <p>Not enough fuel.</p>
+{% else %}
+    <p>Fuel tank is empty!</p>
+{% endif %}
+[/code]
+
+[h2]{% else %}[/h2]
+
+[code]{% else %}[/code]
+
+May be used inside an [c]{% if %}[/c] tag. If the condition (in the parent [c]if[/c]) is [i]false[/i] then the code inside the [c]{% else %}[/c] will be executed. For example:
+
+[code moyatemplate]
+{% if fuel > 100 %}
+    <p>Taking off!</p>
+{% else %}
+    <p>Not enough fuel.</p>
+{% endif %}
+[/code]
+
+[h2]{% emit %}[/h2]
+
+[code]{% emit <text> %}[/code]
+
+Insert markup directly in to the output without any processing. This is primarily used for outputting markup that looks like a template tag or substitution without processing it. For example:
+
+[code moyatemplate]
+{% emit "<p>${literal}<p>" %}
+[/code]
+
+This would produce the following output:
+
+[code html]
+<p>${literal}<p>
+[/code]
+
+[h2]{% empty %}[/h2]
+
+[code]{% for %}{% empty %}{% endfor %}[/code]
+
+Used in conjuction with a [link templates#for]{% for %}[/link] tag, this template code between an [c]{% empty %}[/c] tag and the [c]{% endfor %}[/c] tag is rendered if there were no values in the for loop (i.e. it was [i]empty[/i]).
+
+[code moyatemplate]
+{% for character in crew %}
+<p>${character} is on board</p>
+{% empty %}
+<p>Nobody is on board!</p>
+{% endfor %}
+[/code]
+
+[h2]{% emptyblock %}[/h2]
+
+[code]{% emptyblock <block name> %}[/code]
+
+Shorthand for a [link templates#block]{% block %}[/link] that has no content.
+
+[code moyatemplate]
+<html>
+    <body>
+        {% emptyblock "body" %}
+    </body>
+</html>
+[/code]
+
+[h2]{% extends %}[/h2]
+
+[code]{% extends <template path> [from <application name>] %}[/code]
+
+Extends the current template from another template. If the path is [i]relative[/i], it is taken to be relative from the template directory associated with the current application. If it is [i]absolute[/i], it is assumed to be from the root of the [link templates#template-filesystem]templates filesystem[/link].
+
+For example, lets say we have the following template in a library called sushifinder.shop:
+
+[code]
+{% extends "shop.html" %}
+[/code]
+
+Because the path above is relative, Moya will extend from the template [c]/sushifinder.shop/shop.html[/c] (in the templates filesystem).
+
+The behavior will be different if we use an absolute path. For example:
+
+[code]
+{% extends "/shop.html" %}
+[/code]
+
+This tells Moya to extend from the template "shop.html" in the root of the templates filesystem.
+
+[aside]It is rare to use absolute paths in the extends tag, because most templates will be in a directory unique to the application. The root directory should be reserved for important site wide templates. For example, most projects will have a "base.html" in the template root which contains the site-wide content.[/aside]
+
+It is also possible to extend from a different application by specifying either the application or library name in the [c]from[/c] clause. For example, here's how to extend from a template in the [c]moya.pages[/c] library.
+
+[code]
+{% extends "page.html" from "moya.pages" %}
+[/code]
+
+This will extend from the template [c]/moya.pages/page.html[/c].
+
+[h2]{% for %}[/h2]
+
+[code]{% for <items list> in <collection> %}{% endfor %}[/code]
+
+Repeat a block of code for every item in a collection. For example, if we have a list defined in Moya code as the following:
+
+[code xml]
+<list dst="crew">
+    <var>['John', 'Human']</var>
+    <var>['Rygel', 'Hynerian']</var>
+    <var>['Aeryn', 'Peacekeeper']</var>
+</list>
+[/code]
+
+We can render each item in the list with the following template code:
+
+[code moyatemplate]
+{% for character, species in crew %}
+<p>${character} is a ${species}</p>
+{% for %}
+[/code]
+
+See also the [link templates#empty]{% empty %}[/link] template tag.
+
+[h2]{% if %}[/h2]
+
+[code]{% if <condition> %}{% endfor %}[/code]
+
+Renders the enclosed block if a condition evaluates to true. For example:
+
+[code moyatemplate]
+{% if fuel > 100 %}
+    <p>Taking off!</p>
+{% endif %}
+[/code]
+
+[h2]{% include %}[/h2]
+
+[code]{% include <template path> [from <application or library>] %}[/code]
+
+Render another template in the current context. The included template has access to all the template variables from the template it was included from. The arguments are the same as the [link templates#extends]{% extends %}[/link] tag.
+
+[h2]{% inspect %}[/h2]
+
+[code]{% inspect <object> %}[/code]
+
+This tag will generate an HTML [c]<pre>[/c] tag containing information about an object. The generated HTML will produce output in the same format as writing the object to the console.
+
+This tag is a debug aid; it can help you visualize the data being rendered by your template. You should probably remove all inspect tags before your application goes in to production.
+
+[h2]{% let %}[/h2]
+
+[code]{% let <dict> %}[/code]
+
+Insert data in to the template context. The first argument should be a dict. Keys and values from this dict are inserted in to the current context, and may be used as any other template variable. Here's an example:
+
+[code moyatemplate]
+{% let foo="bar", baz="egg" %}
+<p>${foo}</p>
+<p>${baz}</p>
+[/code]
+
+[h2]{% markup %}[/h2]
+
+[code]{% markup <markup> [as <output type>] [target <target>] %}[/code]
+
+Render markup, such as bbcode and markdown. The type of the markup should be specified in the [c]as[/c] clause. The target clause should specify what the output should be (default is html). Here's an example:
+
+[code moyatemplate]
+{% markup "[b]Hello, World![/b]" as "bbcode" %}
+[/code]
+
+[h2]{% media %}[/h2]
+
+[code]{% media <media path> [media <media library>] [from <application or library>] %}[/code]
+
+Get a URL to a media file. Here's an example:
+
+[code moyatemplate]
+<img src="{% media 'img/logo.png' from 'moyaproject.sushifinder' %}>
+[/code]
+
+[h2]{% render %}[/h2]
+
+[code]{% render <renderable object> [with <template data>] [to <target format>] [set <render options>] %}[/code]
+
+Render an object.
+
+[h2]{% renderall %}[/h2]
+
+[code]{% renderall <renderable objects> [with <template data>] [to <target format>] [set <render options>] %}[/code]
+
+Render a collection of objects.
+
+[h2]{% singleline %}[/h2]
+
+[code]{% singleline %}{% endsingleline %}[/code]
+
+Removes all new-lines in a block of template code. Here's an example:
+
+[code moyatemplate]
+{% singleline %}
+<p>
+Hello, World!
+</p>
+{% endsingleline %}
+[/code]
+
+This produces the following output:
+
+[code html]
+<p>Hello, World!</p>
+[/code]
+
+[h2]{% summarize %}[/h2]
+
+[code]{% summarize chars NUMCHARS %}[/code]
+
+This tag takes a block of HTML and converts it to text. If the text has less than NUMCHARS it is unchanged. Otherwise, Moya will truncate it at a word boundary and add ellipses.
+
+This is intended for situations where you want to preview the content of a page in some kind of index. In a blog's [i]recent posts[/i] list for example. Here's how it could be used:
+
+[code moyatemplate]
+<h2>${post.title}</h2>
+<p class="summary">
+{% summarize chars 120 %}${html:post.html}{% endsummarize %}
+</p>
+<a href="{% url 'post' with slug=post.slug %}">read more</a>
+[/code]
+
+This would produce output such as the following:
+
+[code moyatemplate]
+<h2>Moya a Huge Success</h2>
+<p class="summary">
+Yesterday, Moya became the most successful web development platform of all time,
+having made PHP obselete [&hellips;]
+</p>
+<a href="/blog/post/moya-huge-sucess/">read more</a>
+[/code]
+
+[h2]{% trans %}[/h2]
+
+[code]{% trans [number <number>] [comment <comment text>] [context] %}[/code]
+
+Marks a block of text as translatable. The text within the trans block can be extracted with the [c]moya extract[/c] command. If translation catalogs exist then the text will be replaced with the text for the given language.
+
+Here's a simple template with translatable text:
+
+[code moyatemplate]
+<p>{% trans comment 'greeting' %}Hello{% endtrans %}</p>
+[/code]
+
+If the translation catalogs exist, then 'Hello' will be replaced with 'Bonjour' or 'Hola' depending on the current locale.
+
+[h2]{% url %}[/h2]
+
+[code]{% url <url name> [with <url parameters>] [from <application or library>] [query <dict for query string>] [base <base url>] %}[/code]
+
+Generate a named url from the project. The url name should be the [c]name[/c] parameter in the [tag]url[/tag] tag. If the url route contains any parameters, they should be supplied in the [c]with[/c] clause. For example, let's say we have a url in our project defined like this:
+
+[code xml]
+<url route="/post/{year}/{month}/{day}/" view="view.post" />
+[/code]
+
+If we want to link to a post in a template, we shouldn't hard-code the URL as the link would break if we mount the library in a different location. It's far better to use the [c]{% url %}[/c] tag which will always generate a valid URL in the project. Here's how we would use it to generate a link to a particular post:
+
+[code moyatemplate]
+<a href="{% url 'post' with year=2014, month=7, day=5 %}">Birthday</a>
+[/code]
+
+By default the url tag generates URLs from the current application (where the template is being rendered from). If the URL is not in the current application, you can specify it with the [c]from[/c] clause. Here's an example:
+
+[code moyatemplate]
+<a href="{% url 'post' with year=2014, month=7, day=5 from 'blog' %}">Birthday</a>
+[/code]
+
+The [c]query[/c] clause should be a dict, and will be used to generate a query string if present. Here's how we can add a query string to the previous example:
+
+[code moyatemplate]
+<a href="{% url 'post' with year=2014, month=7, day=5 from 'blog' query view='list' %}">Birthday</a>
+[/code]
+
+The url tag will generate a URL without a domain and scheme, which is fine if you are linking from within the same site. If you would like to create a [i]fully qualified[/i] URL, you can supply the domain and scheme with the [c]base[/c] clause. Here is an example:
+
+[code moyatemplate]
+<a href="{% url 'post' with year=2014, month=7, day=5 from 'blog' query view='list' base 'http://myblog.org' %}">Birthday</a>
+[/code]
+
+[h2]{% urlencode %}[/h2]
+
+[code]{% urlencode <dict data> %}[/code]
+
+URL encodes a dict or mapping expression. For use in query strings. here's an example:
+
+[code moyatemplate]
+{% urlencode foo='bar', 'baz'='egg' %}
+[/code]
+
+This will produce the following output:
+
+[code html]
+foo=bar&baz=egg
+[/code]
+
+[h2]{% verbatim %}[/h2]
+
+[code]{% verbatim %}{% endverbatim %}[/code]
+
+Suspends all processing of template tags inside the block. Useful for writing about template tags, without Moya attempting to render them. Here's an example:
+
+[code moyatemplate]
+{% verbatim %}
+<p>{% will not be interpreted as a template tag %}</p>
+{% endverbatim %}
+[/code]
+
+[h2]{% with %}[/h2]
+
+[code]{% with <template data> %}[/code]
+
+Creates a temporary scope for template data. The code within the block will have access to the template data in addition to existing template data. Here's an example:
+
+[code moyatemplate]
+{% with character='Rygel' %}
+    <p>${character} is my favorite character!</p>
+{% endwith %}
+[/code]
+
+Note that template data inside a [c]{% with %}[/c] tag [i]shadows[/i] data that already exists. In the above example, if a value called [c]character[/c] already exists in the template context, it will have its original value restored when the with tag ends.

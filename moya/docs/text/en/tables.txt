@@ -1,0 +1,170 @@
+[title Moya Tables]
+
+Moya Tables supplies a system of widgets for rendering tables in content definitions.
+
+[h1]Installation[/h1]
+
+Moya Tables is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.tables" />
+[/code]
+
+You can install this library with the following:
+
+[code xml]
+<install name="tables" lib="moya.tables" />
+[/code]
+
+You won't need to mount Moya Tables, because there are no views. However, there is a test page, which you may mount as follows:
+
+[code xml]
+<mount app="tables" mountpoint="test" mount="/tables/"/>
+[/code]
+
+
+[h1]Namespace[/h1]
+
+Moya Tables uses the namespace [c]http://moyaproject.com/tables[/c].
+
+[h1]Introduction[/h1]
+
+It is entirely possible to generate HTML tables in templates [i]without[/i] using this library. The main advantage of Moya Tables is that table cells may contain arbitrary content, which may be difficult to manage with an HTML tag soup.
+
+[h1]Widgets[/h1]
+
+A [tag tables]table[/tag] defines a table in a content definition. For example:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <!-- table contents go here -->
+</table>
+[/code]
+
+To define the columns in a table, add a [tag tables]columns[/tag] tag inside the [tag tables]table[/tag].
+
+The [tag tables]columns[/tag] tag should contain a number of [tag tables]header[/tag] tags which define a header for each column in the table. For example, the following creates a table with two columns:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <columns>
+        <header>Product</header>
+        <header>Stock</header>
+    </columns>
+</table>
+[/code]
+
+To define the rows for the tables add a [tag tables]rows[/tag] tag containing a [tag tables]row[/tag] tag for each row. The [tag tables]row[/tag] tags should themselves contain a [tag tables]cell[/tag] for each column. A cell may contain simple text, or any other content tags; images, forms, alerts etc. Here's an example:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <columns>
+        <header>Product</header>
+        <header>Stock</header>
+    </columns>
+    <rows>
+        <row>
+            <cell>Salmon Nigiri Bento</cell>
+            <cell>4</cell>
+        </row>
+        <row>
+            <cell>Mixed Sushi Bento</cell>
+            <cell>2</cell>
+        </row>
+    </rows>
+</table>
+[/code]
+
+This will create a table with two rows.
+
+While it is possible to add each row individually, it is more common to generate the rows from a sequence, such as a database query. In this case you can supply a [c]src[/c] attribute to the [tag tables]rows[/tag] tag, which contains the object to iterate over.
+
+Here's an example which generates the rows from a queryset called [c]products[/c]:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <columns>
+        <header>Product</header>
+        <header>Stock</header>
+    </columns>
+    <rows src="products" dst="product">
+        <cell>${product.name}</cell>
+        <cell>${product.stock}</cell>
+    </rows>
+</table>
+[/code]
+
+Note that when you use the [c]src[/c] attribute in this way, Moya inserts the rows automatically -- so you won't need to add [tag tables]row[/tag] tags
+
+[h2]Table Style[/h2]
+
+You can set a CSS style on your [tag tables]table[/tag] with the [c]class[/c] attribute. You will probably want to do this if you are using Bootstrap CSS, which doesn't apply any particular style to a table unless it has the class [c]"table"[/c]. Here's an example:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables" style="table table-striped">
+    <columns>
+        <header>Product</header>
+        <header>Stock</header>
+    </columns>
+    <rows src="products" dst="product">
+        <cell>${product.name}</cell>
+        <cell>${product.stock}</cell>
+    </rows>
+</table>
+[/code]
+
+[h2]Sortable Columns[/h2]
+
+You may generate a clickable header that adds sort information to the query string, with the [tag tables]sort-header[/tag]. Here's an example:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <columns>
+        <sort-header name="product">Product</sort-header>
+        <sort-header name="stock">Stock</sort-header>
+    </columns>
+    <rows src="products" dst="product">
+        <cell>${product.name}</cell>
+        <cell>${product.stock}</cell>
+    </rows>
+</table>
+[/code]
+
+This makes both column headers clickable. If you click the Product header, it will link to the same page, with the query string [c]sort=product&order=asc[/c]. If you click on the header again it will toggle the [c]order[/c] value between [c]asc[/c] and [c]desc[/c] (for [i]ascending[/i] and [i]descending[/i] order).
+
+You will still need to implement sorting in the view that gets the products. The sort and order values can be looked up with [c].request.GET.sort[/c] and [c].request.GET.order[/c].
+
+[h1]Customization[/h1]
+
+You may customize the various components of a table individually with the [c]template[/c] attribute on the tags, [i]or[/i] project-wide by overriding the template in your project.
+
+Table templates are stored in the template filesystem, in the [c]/moya.tables/[/c] directory. You may list them with the following command:
+
+[code xml]
+$ moya fs templates --tree moya.tables
+[/code]
+
+It is also possible to mix table tags with other content tags. For example, if you want to render a template for each row rather than define the cells individually. Here's how you might do that:
+
+[code xml]
+<table xmlns="http://moyaproject.com/tables">
+    <columns>
+        <sort-header name="product">Product</sort-header>
+        <sort-header name="stock">Stock</sort-header>
+    </columns>
+    <rows>
+        <moya:node template="/sushifinder/table/rows.html" let:products="products"/>
+    </rows>
+</table>
+[/code]
+
+The template equivelent of the preceding examples would be something like the following:
+
+[code moyatemplate]
+{% for product in products %}
+<tr>
+    <td>${product.name}</td>
+    <td>${product.stock}</td>
+</tr>
+{% endfor %}
+[/code]

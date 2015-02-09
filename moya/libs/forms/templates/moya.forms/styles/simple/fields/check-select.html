@@ -1,0 +1,13 @@
+{%- for group, choices in field.groups %}
+
+{% if group %}<h4>${group}</h4>{% endif %}
+{%- for choice in choices %}
+<div class="checkbox">
+  <label {%- if choice.help %} title="${choice.help}"{% endif %}>
+    <input type="checkbox" name="${field.name}" value="${choice.value}" {% if choice.value instr field.values %} checked="checked"{% endif %}/>
+    {% render choice.renderable %}
+  </label>
+</div>
+{%- endfor %}
+
+{%- endfor %}

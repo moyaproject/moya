@@ -1,0 +1,49 @@
+[title Moya Bootstrap]
+
+Moya Bootstrap is a media-only library which contains the [url]Twitter Bootstrap[/url] CSS framework.
+
+[alert NOTE]The long name of this library ([b]moya.twitter.bootstrap[/b]) reflects the fact that although it was packaged in Moya, the author is [url http://twitter.com]Twitter[/url].[/alert]
+
+[h1]Installation[/h1]
+
+You may import Moya Twitter Bootstrap with the following:
+
+[code xml]
+<import py="moya.libs.bootstrap" />
+[/code]
+
+And you can install it with:
+
+[code xml]
+<install name="bootstrap" lib="moya.twitter.bootstrap" />
+[/code]
+
+This library has no views, and does not need to be mounted.
+
+[h1]Introduction[/h1]
+
+The Twitter Bootstrap CSS framework is [i]the most popular HTML, CSS and JS framework for developing responsive, mobile first projects on the web[/i].
+
+Moya uses Bootstrap in its built in libraries, since without a CSS framework, your newly created site would be [i]aesthetically challenged[/i]. One advantage of Bootstrap is that it is easy to customize, and there are many drop-in themes available.
+
+[alert NOTE]Moya doesn't [i]require[/i] Bootstrap. It's just used to give you a head start with designing stylesheets.[/alert]
+
+[h1]Media[/h1]
+
+Moya Bootstrap provides a number of media files, which you can list with the following command:
+
+[code]
+$ moya fs media --tree bootstrap-media
+[/code]
+
+The simplest way to include the Bootstrap CSS would be to add it to your base template:
+
+[code moyatemplate]
+<link href="{% media 'css/bootstrap.css' from 'twitter.bootstrap' %}" rel="stylesheet">
+[/code]
+
+If you built a Moya project with [c]moya.start[/c], the CSS will have been included for you in the base template. The following command will display the base template in the terminal:
+
+[code]
+$ moya fs templates --cat moya.twitter.bootstrap/starter.html
+[/code]

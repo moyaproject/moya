@@ -1,0 +1,35 @@
+{
+    "name": "break",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "break",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "This tag will [i]break[/i] a loop such as [tag]while[/tag], [tag]for[/tag]. When Moya encounters this tag, it jumps to the statement after the loop.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "end a loop prematurely",
+        "tag_name": "break",
+        "params": {},
+        "example": "\n\n        <let crew=\"['John', 'Rygel', 'Scorpius', 'Aeryn']\"/>\n        <for src=\"crew\" dst=\"character\">\n            <if test=\"character == 'Scorpius'\">\n                <echo>Taking off before Scorpius gets on board!</eco>\n                <break>\n            </if>\n            <echo>${character} is on board</echo>\n        </for>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.break"
+}

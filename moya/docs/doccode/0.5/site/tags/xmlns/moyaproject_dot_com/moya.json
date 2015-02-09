@@ -1,0 +1,35 @@
+{
+    "name": "moya",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "moya",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "This is the root element for Moya files.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "begin a Moya file",
+        "tag_name": "moya",
+        "params": {
+            "version": {
+                "default_display": "",
+                "name": "version",
+                "missing": true,
+                "default": null,
+                "doc": "version number of this Moya file (currently ignored, if supplied use \"1.0\")",
+                "required": false,
+                "type": "version spec",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <moya xmlns=\"http://moyaproject.com\">\n            <!-- Ready for take off -->\n        </moya>\n\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.moya"
+}

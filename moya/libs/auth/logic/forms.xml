@@ -1,0 +1,50 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:moya="http://moyaproject.com"
+    xmlns:w="http://moyaproject.com/widgets">
+
+    <form libname="form.login" legend="Please Login" style="horizontal" action="${.urls.auth.login}" xmlns="http://moyaproject.com/forms">
+        <hidden-input name="fwd" required="no" initial=".request.GET.fwd" />
+        <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
+        <password name="password" label="Password" maxlength="30" required="yes"/>
+        <submit-button name="login" text="Log In" />
+        <moya:get-url name="forgot_password" dst="forgot_password_url" />
+        <field>
+            <moya:markdown>[I've forgotten my password](${forgot_password_url})</moya:markdown>
+        </field>
+    </form>
+
+    <form libname="form.forgot_password" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input label="Email address" name="email" maxlength="300" required="yes"/>
+        <submit-button name="login" text="Send Password Reset" />
+        <validate-field field="email">
+            <fail if="not isemail:value">Please enter your email address here.</fail>
+        </validate-field>
+    </form>
+
+    <form libname="form.reset_password" legend="Reset Password" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <hidden-input label="Reset Token" name="token" maxlength="50" initial="token" />
+        <password label="New Password" name="password" maxlength="256" required="yes" />
+        <password label="Confirm Password" name="password2" maxlength="256" required="yes" />
+        <submit-button name="reset" text="Reset" />
+        <validate-field field="password">
+            <fail if="len:value lt .app.settings.min_password_length.int">
+                Password should be at least ${.app.settings.min_password_length} characters in length
+            </fail>
+        </validate-field>
+        <validate-field field="password2">
+            <fail if="values.password != value">
+                Passwords do not match
+            </fail>
+        </validate-field>
+    </form>
+
+    <form libname="form.user_edit" legend="User Details" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input label="First name" name="first_name" src="first_name" maxlength="30" />
+        <input label="Last name" name="last_name" src="last_name" maxlength="30" />
+        <select label="Timezone" name="timezone" src="timezone" choices="data:'timezone_choices.json'"/>
+        <submit-button name="update" text="Update" />
+    </form>
+
+</moya>

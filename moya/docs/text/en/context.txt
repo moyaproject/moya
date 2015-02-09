@@ -1,0 +1,36 @@
+[title Context]
+
+In Moya, the [i]context[/i] is a data-structure that holds all the information required to process any given request. There is nothing remarkable about the data contained in the context -- it is actually a combination of dictionaries (key + value collections), lists, numbers, strings and other objects. What may be novel is the way in which any piece of information may be referenced.
+
+[h1]Data Index[/h1]
+
+A data index is a string that references a value in the context. On its simplest level, a data index is just the name of a variable. A data index may also reference a value within a data-structure using a dotted notation. Here are some examples of simple data indices:
+
+[code]
+foo.bar.0
+middle_earth.hobbits.frodo
+url.blog_name
+[/code]
+
+A context may also have a [i]scope[/i], which changes the starting point of the data index. For instance if the current scope was set to [c]middle_earth[/c], then frodo could be referenced using a simpler index:
+
+[code]
+hobbits.frodo
+[/code]
+
+This would also make it impossible to reference any value not inside the [c]middle_earth[/c] scope with a simple index. An alternate form allows an index to ignore the current scope and reference a value from the top (or [i]root[/i]) of the context. This alternate form begins with a period to indicate the top level.
+
+The following is an example of a root data index:
+
+[code]
+.foo.bar.0
+[/code]
+
+[aside]This dotted notation is similar to how file paths works, you can think of a [i]scope[/i] as a current working directory, and a root index as an [i]absolute[/i] path.[/aside]
+
+When serving a web application, Moya puts important information, such as the [c]request[/c] in the root of the context. This makes such values always available, even when working in another scope. For instance [c].request.url[/c] will always return currently requested URL.
+
+[h1]Context magic[/h1]
+
+This data index scheme also allows Moya to accomplish some magic which may be difficult to do elegantly in other languages (including Python). For instance, some values on the context may be [i]lazily[/i] evaluated. Values may appear on the context, but are only calculated when they are first referenced. Moya can also calculate values on the fly. For instance, in a web application, a value [c]clock[/c] exists in the root. This value appears to be constantly updated with the current time, but in reality, Moya returns the latest time whenever [c].clock[/c] is referenced.
+

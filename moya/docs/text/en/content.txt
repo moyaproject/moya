@@ -1,0 +1,606 @@
+[title Content]
+
+We've seen how you can generate content by rendering templates in [doc urls]. It is entirely possible to build a web application using templates alone -- which is how most web frameworks work. The downside of templates is that they can become difficult to maintain as the project grows. Making a seemingly simple change tends to involve editing a number of files, and increases the chance that you will break something on some other page. Moya offers a complimentary system called [i]content[/i] that makes generating HTML in a web application a less [i]brittle[/i] process.
+
+Consider some kind of corporate site, which is the bread and butter for many developers. Your client has asked you to put a news ticker widget on the front page, which pulls news items items from the database. You implement this by adding some parameters to the template which generates the page, and including a  template to generate the widget markup. You also add markup on the main page to pull in the CSS and Javascript that makes it work. Your client is happy for a few weeks, but comes back to request that you show a news ticker on [i]another[/i] page, with news from a different source. So you modify the view for the new page to generate the appropriate parameters, and modify the other template to include the widget markup, JS, and CSS. Even if you were to factor out common elements and follow best-practices, you've still done work twice. And the problem only gets worse if your client wants yet another new ticker elsewhere.
+
+This is one of issues that Moya's content system is intended to solve. With content, you can implement the news ticker with the usual web development technologies. Only now you can add a news ticker to another page with a [i]single[/i] line change that automatically generates the markup and pulls in the JS and CSS needed to make it just work. Leaving you plenty of time to invoice the client and go back to playing Minecraft.
+
+[h1]Defining Content[/h1]
+
+A content definition is a high level description of a page which Moya will use to generate markup. Content consists of a number of independent [i]sections[/i] containing nested elements.
+
+Lets look at an example of a content definition. The following might be used to render an index page, which lists all available sushi products:
+
+[code xml]
+<moya>
+    <content libname="content.product.list" template="product-list.html">
+        <title>Sushi Product Page</title>
+        <section name="body">
+            <for src="products" dst="product">
+                <node template="product.html" let:product="product"/>
+            </for>
+        </section>
+    </content>
+</moya>
+[/code]
+
+The following code will render the content:
+
+[code xml]
+<render-content content="#content.product.list" dst="html">
+    <let products="['nigiri', tuna-roll', 'fugu']"/>
+</render-content>
+[/code]
+
+The code inside [tag]content[/tag] is executable Moya code; when invoked (with [tag]render-content[/tag]) Moya will execute the content line by line and build up an internal description of the page, known as a [i]content object[/i]. This content object may then be rendered with a template to create the HTML that will be served.
+
+[aside]You can watch the content being create in the debugger by displaying the value of [b].content[/b][/aside]
+
+The first tag inside the [tag]content[/tag] tag is [tag]title[/tag], which sets the title to [c]"Sushi Product Page"[/c]. Next there is a [tag]section[/tag] tag which marks a block of [i]renderable[/i] elements. A section defines content for a particular part of a page; such as the body, a column, footer, etc. In our example we have a single section called [c]body[/c] which contains a [tag]for[/tag] loop that calls [tag]node[/tag] for each item in the [c]products[/c] list. The [tag]node[/tag] tag associates data with a template, so the content will contain a reference to a template for each item in [c]products[/c].
+
+When the [tag]content[/tag] tag returns, Moya now has a content object that contains information about all the elements in the page; typically references to templates and associated data. Moya can then render this data structure with the template specified in the [c]template[/c] attribute of [tag]content[/tag].
+
+Lets look at the [c]product-list.html[/c] template which renders the content:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>${title}</title>
+    </head>
+    <body>
+        {% render sections.body %}
+    </body>
+</html>
+[/code]
+
+This template inserts the title of the content (set by the [tag]title[/tag] tag), and renders the [c]body[/c] section from the content.
+
+The [tag]title[/tag] tag is actually a shortcut, equivalent to the following:
+
+[code xml]
+<str dst="title">Sushi Product Page</str>
+[/code]
+
+This works because any data created in the content scope is passed to the template. Moya also passes a dictionary called [c]sections[/c] to the template which contains the renderable elements defined in the sections.
+
+When Moya sees [link templates#render]{% render sections.body %}[/link] in the main template, it renders the [c]body[/c] section, which contains three template nodes; one for each product. The template nodes render the following template ([c]product.html[/c]):
+
+[code moyatemplate]
+<div class="product">
+    <a href="{% url 'product' with product=product %}">Buy ${title:product}</a>
+</div>
+[/code]
+
+The end product will be a string contain HTML, which would look something like the following:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>Sushi Product Page</title>
+    </head>
+    <body>
+        <div class="product">
+            <a href="/sushifinder/product/nigiri/">Nigiri</a>
+        </div>
+        <div class="product">
+            <a href="/sushifinder/product/tuna-roll/">Tuna-rooll</a>
+        </div>
+        <div class="product">
+            <a href="/sushifinder/product/fugu/">Fugu</a>
+        </div>
+    </body>
+</html>
+[/code]
+
+In a real project, the content definition would have more sections and different types of renderable elements. But as requirements grow more complex, the code inside the [tag]content[/tag] stays relatively manageable. Operations such as modifying template parameters, and moving markup from one content area to another are trivially simple, in contrast to a pure template approach.
+
+[alert NOTE]The HTML code shown here is aligned for sake of readability, but may not match the actual rendered code (although the end result will be the same).[/alert]
+
+[h1]Rendering Content[/h1]
+
+The [tag]render-content[/tag] tag is one way of rendering content. It renders content to a string, which you could then return from a view. Because you rarely want to do any more processing once you have a page of HTML, Moya also offers the [tag]serve-content[/tag] tag which renders and serves content in one.
+
+Here's how the previous example could be written to serve the content immediately:
+
+[code xml]
+<serve-content content="#content.product.list">
+    <let products="['nigiri', tuna-roll', 'fugu']"/>
+</serve-content>
+[/code]
+
+You can also specify the content to render from the [c]content[/c] attribute of the [tag]view[/tag] tag. The following view renders content with the value for [c]products[/c] created in the view scope:
+
+[code xml]
+<view libname="view.products" content="#content.product.list">
+    <let products="['nigiri', tuna-roll', 'fugu']"/>
+</view>
+[/code]
+
+Serving views with content in this way follows the same logic regarding returned data as [link urls#template-views]template views[/link]; the following is also valid:
+
+[code xml]
+<view libname="view.products" content="#content.product.list">
+    <return-dict let:products="['nigiri', tuna-roll', 'fugu']" />
+</view>
+[/code]
+
+[h1]Nested Content[/h1]
+
+Content tags may contain other content tags. In fact, it is very common to have several levels of nested content in a typical page. Lets take the preceding example and demonstrate how to render nested content. We are going to move the products [i]inside[/i] a template node which will wrap it with some HTML markup.
+
+For sake of demonstration, we will wrap the list of products in an HTML [c]<div>[/c] tag with a class of [c]product-container[/c]. Here's the new content:
+
+[code xml]
+<moya>
+    <content libname="content.product.list" template="product-list.html">
+        <title>Sushi Product Page</title>
+        <section name="body">
+            <node template="product-container.html">
+                <for src="products" dst="product">
+                    <node template="product.html" let:product="product"/>
+                </for>
+            </node>
+        </section>
+    </content>
+</moya>
+[/code]
+
+The product nodes are now rendered inside another node with a template of [c]product-container.html[/c]. This template has the additional responsibility of rendering its [i]children[/i] as well. Rendering children can be done with the [link templates#children]{% children %}[/link] template tag. Here is the [c]product-container.html[/c] template:
+
+[code moyatemplate]
+<div class="product-container">
+{% children %}
+</div>
+[/code]
+
+Now, when we render the content we will get the following:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>Sushi Product Page</title>
+    </head>
+    <body>
+        <div class="product-container">
+            <div class="product">
+                <a href="/sushifinder/product/nigiri/">Nigiri</a>
+            </div>
+            <div class="product">
+                <a href="/sushifinder/product/tuna-roll/">Tuna-rooll</a>
+            </div>
+            <div class="product">
+                <a href="/sushifinder/product/fugu/">Fugu</a>
+            </div>
+        </div>
+    </body>
+</html>
+[/code]
+
+[h2]Advanced Nesting[/h2]
+
+Occasionally it is useful to have more control over how sections are rendered. If a section is empty (or does not exist) it will evaluate to [c]False[/c]. You can use this in a template to render a section only if it has content. For example, here's how we would modify [c]product-list.html[/c] to only render the body section if it is non-empty:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>${title}</title>
+    </head>
+    <body>
+        {%- if sections.body %}
+        {% render sections.body %}
+        {%- endif %}
+    </body>
+</html>
+[/code]
+
+You may also iterate over the [i]children[/i] in a content section and render them individually. You might want to do this if you want to wrap each child in markup. For example, lets take the [c]product-container.html[/c] template and modify it so we wrap each product individually, rather than all of them:
+
+[code moyatemplate]
+<!-- product-container.html -->
+{% for child in self %}
+<div class="product-container">
+    {% render child %}
+</div>
+{% endfor %}
+[/code]
+
+The above template iterates over a value called [c]self[/c] which is the current content object being rendered (in this case it is the [tag]node[/tag] with [c]template="product-container.html"[/c]). The [link templates#render]{% render %}[/link] template tag renders each of the child nodes inside a [c]<div>[/c]. This change would result in the following output:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>Sushi Product Page</title>
+    </head>
+    <body>
+        <div class="product-container">
+            <div class="product">
+                <a href="/sushifinder/product/nigiri/">Nigiri</a>
+            </div>
+        </div>
+        <div class="product-container">
+            <div class="product">
+                <a href="/sushifinder/product/tuna-roll/">Tuna-rooll</a>
+            </div>
+        </div>
+        <div class="product-container">
+            <div class="product">
+                <a href="/sushifinder/product/fugu/">Fugu</a>
+            </div>
+        </div>
+    </body>
+</html>
+[/code]
+
+[h1]Content HTML tags[/h1]
+
+Tags in a content definition are typically [i]high-level[/i]; they specify [i]what[/i] to render, and leave the [i]how[/i] to a template. Occasionally though, it is useful to be able to specify the markup directly in the content. For instance, if you want to wrap content in a simple [c]<div>[/c] and creating a another template seems overkill.
+
+To insert simple HTML content you can use the [c]http://moyaproject.com/html[/c] namespace. Any tag in that namespace will result in the equivalent tag in the rendered output. For example, lets take our list of sushi products and wrap them in a [c]<div>[/c] with a class of [c]products-column[/c]. Here's how we could do that:
+
+[code xml]
+<moya xmlns:html="http://moyaproject.com/html">
+    <content libname="content.product.list" template="product-list.html">
+        <title>Sushi Product Page</title>
+        <section name="body">
+            <html:div class="products-column">
+                <node template="product-container.html">
+                    <for src="products" dst="product">
+                        <node template="product.html" let:product="product"/>
+                    </for>
+                </node>
+            </html:div>
+        </section>
+    </content>
+</moya>
+[/code]
+
+Note the addition of [c]xmlns:html="http://moyaproject.com/html"[/c] to the root tag which introduces the html [link xml#namespaces]namespace[/link], and the [c]html:[/c] prefix on the [c]<html:div>[/c] tag. When this content is rendered, it will product the following output:
+
+[code moyatemplate]
+<html>
+    <head>
+        <title>Sushi Product Page</title>
+    </head>
+    <body>
+        <div class="products-columm">
+            <div class="product-container">
+                <div class="product">
+                    <a href="/sushifinder/product/nigiri/">Nigiri</a>
+                </div>
+            </div>
+            <div class="product-container">
+                <div class="product">
+                    <a href="/sushifinder/product/tuna-roll/">Tuna-rooll</a>
+                </div>
+            </div>
+            <div class="product-container">
+                <div class="product">
+                    <a href="/sushifinder/product/fugu/">Fugu</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+[/code]
+
+[h1]Extending Content[/h1]
+
+A content definition may [i]extend[/i] another, in much the same way as [link templates]templates[/link] may be extended. When content is extended it inherits any data from the extended content, and sections with the same name are combined. The result may be rendered as normal.
+
+Extending content is most often done when when there are common elements in a page and you don't want to repeat yourself. Lets write a content element for the sushi example that will display special offers on every page in the project. This content element will define a section named [c]body[/c] with a single [tag]node[/tag] that renders [c]specials.html[/c].
+
+[code xml]
+<moya>
+    <content libname="content.base">
+        <section name="body" merge="append">
+            <node template="specials.html"/>
+        </section>
+    </content>
+</moya>
+[/code]
+
+To extend from this content, we need only add an [c]extends[/c] attribute which contains an [link moyacode#element-references]element reference[/link] to the [c]base[/c] content. Here's how we would change the [tag]content[/tag] tag to extend the base template, above:
+
+[code xml]
+<content libname="content.product.list" template="product-list.html" extends="#content.base">
+    <!-- as previous content example -->
+</content>
+[/code]
+
+If we were to render the product list content now, the template [c]specials.html[/c] will be inserted immediately prior to the three products. As will any content that extends from [c]#content.base[/c].
+
+You may have noticed the [c]merge[/c] attribute on the [tag]section[/tag] in the base content. This tells Moya what do if a similarly-named section exists in both content definitions. This attribute may be set to one of the following three values:
+
+[definitions]
+[define replace]Replaces the content from the base section entirely (the default).[/define]
+[define append]Appends new content to the similarly-named section being extended -- which generally results in the markup appearing below the base content markup.[/define]
+[define prepend]Prepends new content to the similarly-named section being extended.[/define]
+[/definitions]
+
+Content may be extended multiple times, just be careful not to extend the same content definition multiple times in a chain, which would result in an error.
+
+If the [c]extends[/c] attribute is [i]not[/i] specified, then Moya will extend from the content specified in the [link project#site-section]base_content[/link] setting in the [c][site][/c] section of your project settings. This is a good way of customizing the look and feel on a per-site basis.
+
+[h1]Widgets[/h1]
+
+A [i]widget[/i] is a form of [link customtags]custom tag[/link] which generates content. At a simple level, a widget may take the place of a [tag]node[/tag] in that it can render a template with data. Widgets may also run executable Moya code and pull in external files such as JS and CSS. This makes widgets very self-contained, in that you can move a widget tag from one page to another and the page will render correctly without any further changes to markup, stylesheets or Javascript.
+
+Let's show how we could use custom widgets in place of node tags in the sushi examples. The following code defines a widget called [c]<product>[/c]:
+
+[code xml]
+<widget name="product" template="widgets/product.html">
+    <signature>
+        <attribute name="product" type="expression" required="yes"/>
+    </signature>
+</widget>
+[/code]
+
+This widget may now be used in place of the the equivalent [tag]node[/tag]. The [c]template[/c] attribute of [tag]widget[/tag] defines the template to use. By convention, widget templates are placed in a subdirectory called [c]widgets[/c] (within the library's template directory). The template itself is the same as the template used previously. Here it is again:
+
+[code moyatemplate]
+<!-- widgets/product.html -->
+<div class="product">
+    <a href="{% url 'product' with product=product %}">Buy ${title:product}</a>
+</div>
+[/code]
+
+And here is how you would use it in a content definition:
+
+[code xml]
+<moya xmlns:sushi="http://moyaproject.com/sushifinder">
+    <content libname="content.product.list" template="product-list.html">
+        <title>Sushi Product Page</title>
+        <section name="body">
+            <node template="product-container.html">
+                <for src="products" dst="product">
+                    <sushi:product product="product" />
+                </for>
+            </node>
+        </section>
+    </content>
+</moya>
+[/code]
+
+Note the addition of the [url xml#namespaces]namespace[/url] declaration in the first tag. The namespace URL should be the value used in the library's [link library#lib-section]lib.ini[/link] file. The inner-most [tag]node[/tag] has been replaced with the widget tag.
+
+[h2]Adding CSS to a widget[/h2]
+
+Using a widget tag here has made the content definition marginally more readable, but we haven't gained much for this example. In a real-life example though, a widget will probably have at least some CSS associated with it. Let's add some CSS to the product widget. The following will create a CSS style that draws a red border around each prouduct:
+
+[aside]Red borders are ugly, this is just for demonstration purposes.[/aside]
+
+[code xml]
+<widget name="product" template="widgets/product.html">
+    <signature>
+        <attribute name="product" type="expression" required="yes"/>
+    </signature>
+    <css>
+    .content
+    {
+    border: 1px solid red;
+    }
+    </css>
+</widget>
+[/code]
+
+When you render the content definition now, the product widget will add the CSS to the a section in the content called [c]"css"[/c]. To ensure that the css is added to our page, we need to render the [c]css[/c] block in the base template. Here's how we would do that:
+
+[code moyatemplate]
+<html>
+    <head>
+        {% render sections.css unique %}
+        <title>${title}</title>
+    </head>
+    <body>
+        {% render sections.body %}
+    </body>
+</html>
+[/code]
+
+Now when you render the content, the following code will be added inside the [c]<head>[/c] markup:
+
+[code moyatemplate]
+<style type="text/css">
+.content
+{
+border: 1px solid red;
+}
+</style>
+[/code]
+
+Note the addition of the keyword [c]unique[/c] in the template tag which renders the [c]css[/c] section. This tells Moya not to render identical content more than once. This is so that if we have ten [c]<product>[/c] tags on a page, we only get a single copy of the style tag.
+
+While it is possible to write CSS in widgets like this, it is generally preferable to link to an external stylesheet, so that you can keep your code modular. To reference an external CSS files use the [tag]include-css[/tag] tag, which takes the path to a CSS file in the [c]path[/c] attribute. For example, we can save the following CSS as [c]css/widgets/products.css[/c] in the library's [link library#media-section]media[/link] directory:
+
+[code html]
+/* css/widgets/product.css */
+.content
+{
+border: 1px solid red;
+}
+[/code]
+
+The widget definition would become:
+
+[code xml]
+<widget name="product" template="widgets/product.html">
+    <signature>
+        <attribute name="product" type="expression" required="yes"/>
+    </signature>
+    <include-css path="css/widgets/product.css" />
+</widget>
+[/code]
+
+The [tag]include-css[/tag] tag adds a dictionary to the content called [c]include[/c] which will contain a list of CSS paths called [c]css[/c]. Here's how you can render the included CSS paths in the base template:
+
+[code moyatemplate]
+<html>
+    <head>
+        {% render include.css %}
+        <title>${title}</title>
+    </head>
+    <body>
+        {% render sections.body %}
+    </body>
+</html>
+[/code]
+
+Moya won't add a CSS path to the list more than once, so the [c]unique[/c] keyword is not required here.
+
+[h2]Adding Javascript to a Widget[/h2]
+
+Associating javascript with a widget is very similar to [link content#adding-css-to-a-widget]adding CSS[/link]; the [tag]js[/tag] tag adds Javascript to the [c]js[/c] section, and [tag]include-js[/tag] references a JS file in the library's media directory.
+
+As with CSS, it is generally better to write external Javascript files and include them with [tag]include-js[/tag]. An exception would be if the main functionality is in an external file but you also want a short snippet of code to initialize an individual widget. To demonstrate one way of doing this, we will look at some code from the Moya Comments library.
+
+The comments widget renders the comments HTML and also invokes some JS. The widget includes the following line:
+
+[code xml]
+<include-js path="js/comments.js" />
+[/code]
+
+This ensures that a script tag will be generated in the page to load [c]comments.js[/c], which contains a [url http://jquery.com/]JQuery[/url] plugin:
+
+Also in the widget is the following code:
+
+[code moyatemplate]
+<let id=".content.id" />
+<js>
+    $(function(){
+        $('#${id}').moyaComments();
+    });
+</js>
+[/code]
+
+The first line sets [c]id[/c] to the value of [c].content.id[/c] which is updated every time a content tag adds some content -- making it an effective unique ID for the current page. The [tag]js[/tag] tag generates a short script that invokes the JQuery plugin for the comments widget being rendered.
+
+The comments template starts with the following line:
+
+[code moyatemplate]
+<div class="moya-comments-container" id="${id}">
+[/code]
+
+Note the reference to [c]id[/c], which is set to the same value that was used in the [tag]js[/tag]. This connects the JQuery widget to the markup it applies to.
+
+[h1]Common Sections[/h1]
+
+We've seen how adding a widget to a content definition requires that associated objects such as JS / CSS must be rendered in the base template. If we want to ensure that a widget renders equally well with different templates -- even when added by third parties -- we need to add a few common sections and render calls to our base templates.
+
+Here's an example of a bear-bones HTML 5 base template with all common sections:
+
+[code moyatemplate]
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- renders content in the "css" section -->
+        {% block "css" %}{% render sections.css %}{% endblock %}
+        <!-- renders CSS paths added with the <include-css> tag -->
+        {% block "includecss" %}{% render include.css %}{% endblock %}
+        <!-- include JS that must go in the head -->
+        {% block "jshead" %}{% render sections.jshead %}{% endblock %}
+        <!-- render other head content -->
+        {% block "head" %}{% render sections.head %}{% endblock %}
+        <!-- set the title -->
+        <title>${title}</title>
+    </head>
+    <body>
+        <!-- render main body section -->
+        {% block "body" %}{% render sections.body %} {% endblock %}
+
+        <!-- generate script tags to from JS paths included with <include-js> -->
+        {% block "includejs" %}{% render include.js %}{% endif %}
+        <!-- render Javascript sections -->
+        {% block "js" %}{% render sections.js unique%}{% endblock %}
+        <!-- JS that must go at the bottom of the page -->
+        {% block "jsfoot" %}{% render sections.jsfoot unique%}{% endblock %}
+    </body>
+</html>
+[/code]
+
+The common sections as as follows:
+
+[h2]"css"[/h2]
+
+This block renders content from the [c]"css"[/c] section, such as html [c]<style>[/c] tags added by the [tag]css[/tag] tag. It is the head of the HTML.
+
+[h2]"includecss"[/h2]
+
+This block renders the list of CSS paths added by the [tag]include-css[/tag] tag.
+
+[h2]"jshead"[/h2]
+
+This block adds Javascript code that must be in the head of the HTML document. Note, that the [tag]js[/tag] tag adds to the [c]"js"[/c] section by default. If you want to add to the [c]"jshead"[/c] section, specify it with the [c]section[/c] attribute. For example:
+
+[code xml]
+<js section="jshead">
+    alert("Ready for take-off!");
+</js>
+[/code]
+
+This would produce the following output in the [c]"jshead"[/c] block:
+
+[code moyatemplate]
+<script type="text/javascript">
+    alert("Ready for take-off!");
+</script>
+[/code]
+
+Which would create an annoying popup when your page loads.
+
+[h2]"head"[/h2]
+
+This block should contain any other markup that should appear in the head of the HTML.
+
+[h2]"body"[/h2]
+
+This block renders the [c]body[/c] section which contains the main visible content. This is often overridden to create several content areas. For example, you could use the following template to divide the body in to separate content areas:
+
+[code moyatemplate]
+<!-- column-base.html -->
+{% extends "base.html" %}
+
+{% block "body" %}
+<div class="container">
+    <div class="content">
+        {% render sections.content %}
+    </div>
+    <div class="column">
+        {% render sections.column %}
+    </div>
+</div>
+<div class="footer">
+    {% render sections.footer %}
+</div>
+{% endblock %}
+[/code]
+
+Because the above template [i]extends[/i] the base, it inherits the base template's blocks. It also adds three new sections that will render content. You can choose what content goes where in the content definition. Here's an example:
+
+[code xml]
+<content libname="content.article" template="column-base.html">
+    <section name="content">
+        <sushi:article article="article" />
+    </section>
+    <section name="column">
+        <sushi:recent-articles />
+    </section>
+    <section name="footer">
+        <text>Copyright 2014 Sushifinder PLC<text>
+    </section>
+</content>
+[/code]
+
+[h2]"includejs"[/h2]
+
+This block renders the list of JS paths added by the [tag]include-js[/tag] tag. It is generally best to place this block at the end of the page, because it can delay page render time if the browser has to wait for external Javascript to load before it can render the page content.
+
+[h2]"js"[/h2]
+
+This block renders JS added to the content with the [tag]js[/tag] tag. It is generally placed at the end of the page to speed up page render times -- but could equally be in the head of the page.
+
+[h2]"jsfoot"[/h2]
+
+This block renders JS that should be included at the end of the page.
+
+[aside]If you are wondering why there are three javascript sections ([c]"js"[/c], [c]"jshead"[/c] and [c]"jsfoot"[/c]) -- it is so that the [c]"js"[/c] section can go whereever the template designer decides, but you still have the option of explicitly putting the Javascript in the head or the foot of the HTML document.

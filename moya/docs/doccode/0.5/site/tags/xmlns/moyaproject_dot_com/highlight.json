@@ -1,0 +1,80 @@
+{
+    "name": "highlight",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "highlight",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/highlight.py",
+        "doc": "This tag is used by the Moya debug library to syntax highlight code (turning it into HTML in the process).",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "syntax highlight code",
+        "tag_name": "highlight",
+        "params": {
+            "highlight": {
+                "default_display": "None",
+                "name": "highlight",
+                "missing": true,
+                "default": null,
+                "doc": "Line numbers to highlight",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination to store exception object",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "code": {
+                "default_display": "",
+                "name": "code",
+                "missing": true,
+                "default": null,
+                "doc": "Code to highlight",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "format": {
+                "default_display": "\"xml\"",
+                "name": "format",
+                "missing": true,
+                "default": "xml",
+                "doc": "Format of code",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.highlight"
+}

@@ -1,0 +1,39 @@
+<div class="moya-admin-datetime-input">
+    <input type="hidden" class="moya-admin-datetime" name="${field.name}" value="${str:field.value}"/>
+
+    <input placeholder="YYYY-MM-DD" class="moya-admin-date form-control" id="${field.id}-date" type="date"
+        value="${field.value.html5_date}">
+
+    <input placeholder="HH:MM:SS" class="moya-admin-time form-control" id="${field.id}-time" type="time"
+        value="${field.value.html5_time}" >
+
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-time"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-datetime-now">
+                    {% trans %}Now{% end %}
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-datetime-settime" data-time="00:00">
+                    {% trans %}Midnight{% end %}
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-datetime-settime" data-time="12:00">
+                    {% trans %}Noon{% end %}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-datetime-clear">
+                    {% trans %}Clear{% end %}
+                </a>
+            <li>
+        </ul>
+    </div>
+</div>

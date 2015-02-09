@@ -1,0 +1,96 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:fs="http://moyaproject.com/fs">
+
+    <mountpoint name="tests">
+        <url route="/tests/">
+            <redirect-to path="./horizontal/"/>
+        </url>
+        <url route="/tests/{style}/" methods="GET,POST" view="#view.tests" name="tests" />
+    </mountpoint>
+
+    <view libname="view.tests" content="#content.formtests">
+        <forms:get form="#form.test1" dst="form" style="${url.style}"/>
+        <if-post>
+            <forms:validate src="form">
+                <fs:set-contents fs="uploads" path="${form.data.file.filename}" contents="form.data.file" />
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <content libname="content.formtests" template="tests.html">
+        <section name="body">
+            <forms:formswitcher/>
+            <forms:formresult form="form" />
+            <render src="form"/>
+        </section>
+    </content>
+
+    <form xmlns="http://moyaproject.com/forms" xmlns:moya="http://moyaproject.com" libname="form.test1" legend="Test all the fields!" action="${.request.path}">
+        <upload placeholder="upload here" name="file" label="Upload something" required="yes"/>
+        <input placeholder="Your username here..." name="text" label="Text field" maxlength="10" required="yes" help="Your username should be at least 3 characters"/>
+        <password placeholder="Your password here..." name="password" label="Password" maxlength="10" required="yes" />
+        <checkbox name="checkbox" label="Terms and conditions" on="I am checked" required="yes" text="I agree"/>
+        <checkbox name="checkbox2" label="Check, or do not check, is no try" on="I am checked" text="Check" initial="'I am checked'" />
+        <radio name="radio" label="Radio" text="Option 1" on="1"/>
+        <radio name="radio" label="Radio" text="Option 2" on="2"/>
+        <radio-group name="radio-group" label="Radio Group" required="yes">
+            <radio text="Option 1" on="1"/>
+            <radio text="Option 2" on="2"/>
+            <radio text="Option 3" on="3"/>
+        </radio-group>
+        <html:div class="alert alert-info">Arbitrary content may be inserted in to the form</html:div>
+        <field label="Static">
+            <html:div class="well">
+                <moya:bbcode>You can also insert [i]static[/i] content, which is rendered in the field context, but doesn't contain any inputs.</moya:bbcode>
+            </html:div>
+        </field>
+        <text-area name="text-area" label="Text area" rows="8" required="yes" />
+        <select name="select" label="Pick something">
+            <option value="">--- Pick a Fruit ---</option>
+            <opt-group label="Fruit">
+                <option value="apples">Apples</option>
+                <option value="oranges">Oranges</option>
+                <option value="pears">Pears</option>
+            </opt-group>
+            <moya:int dst="count">5</moya:int>
+            <moya:while test="count">
+                <option value="${count}" group="Numbers">Number ${count}</option>
+                <moya:dec dst="count" />
+            </moya:while>
+        </select>
+        <select name="multiselect" label="Select several things" multiple="yes" inlinehelp="Ctrl+click to select multiple options">
+            <option value="john">John Crichton</option>
+            <option value="aeryn">Aeryn Sun</option>
+            <option value="bialar">Bialar Crais</option>
+            <option value="chiana">Chiana</option>
+            <option value="ka">Ka D'Argo</option>
+        </select>
+        <check-select name="check-select" label="Check several things" inlinehelp="A more user friendly alternative to a multiselect">
+            <option value="john">John Crichton</option>
+            <option value="aeryn">Aeryn Sun</option>
+            <option value="chiana">Chiana</option>
+            <option value="ka">Ka D'Argo</option>
+            <opt-group label="Villans">
+                <option value="scorpius">Scorpius</option>
+                <option value="bialar">Bialar Crais</option>
+            </opt-group>
+        </check-select>
+        <validate-field field="check-select">
+            <fail if="'scorpius' in value or 'bialar' in value">
+                Don't select a villain!
+            </fail>
+        </validate-field>
+        <validate-field field="text">
+            <fail if="len:value lt 3">Username must be at least 3 characters</fail>
+        </validate-field>
+        <validate-field field="select">
+            <fail if="value not in ['apples', 'oranges', 'pears']">Please select a fruit!</fail>
+        </validate-field>
+        <submit-button name="submit" />
+        <validate-field field="checkbox">
+            <fail if="not value">Please agree to these terms and conditions!</fail>
+        </validate-field>
+    </form>
+</moya>

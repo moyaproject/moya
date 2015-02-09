@@ -1,0 +1,28 @@
+<div class="moya-admin-table-container">
+    <table class="table moya-admin-table table-condensed">
+    	<thead>
+    		<tr>
+                <th>
+                    {%- if not single %}<input type="checkbox" class="moya-admin-table-checkbox check-all" name="checkall"/>{% endif %}
+                </th>
+    		    {%- for column in columns %}
+                {%- if column.params.sort %}
+                <th>
+                    {%- if .request.GET.sort == slug:column.params.title and .request.GET.order %}
+                    <a href="?${qsupdate:(sort=slug:column.params.title, order=(.request.GET.order == "asc" ? "desc" : "asc"))}">${column.params.title}</a>
+                    {%- if .request.GET.order == 'asc' %} &uarr;{% else %} &darr;{% endif %}
+                    {%- else %}
+                    <a href="?${qsupdate:(sort=slug:column.params.title, order='asc')}">${column.params.title}</a>
+                    {%- endif %}
+                </th>
+                {%- else %}
+    			<th>${column.params.title}</th>
+                {%- endif %}
+    		    {%- endfor %}
+    		</tr>
+    	</thead>
+    	<tbody>
+    {% children -%}
+    	</tbody>
+    </table>
+</div>

@@ -1,0 +1,88 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:test="http://moyaproject.com/test">
+
+    <test:suite description="Test tests" group="simple">
+
+        <test:set-up>
+            <echo>output</echo>
+            <echo>Set up tests</echo>
+            <sleep for="100ms" />
+        </test:set-up>
+
+        <test:tear-down>
+            <echo>Tear down tests</echo>
+            <sleep for="100ms" />
+        </test:tear-down>
+
+        <test:case description="test case">
+            <test:request url="/login/" dst="request"/>
+            <!-- <breakpoint /> -->
+            <sleep for="100ms" />
+            <echo>In test case</echo>
+            <test:fail if="1">This test fails</test:fail>
+            <echo>Do not run</echo>
+            <echo>Do not run 2</echo>
+        </test:case>
+
+        <test:case description="this test passes">
+            <sleep for="100ms" />
+            <test:fail if="false">No fail</test:fail>
+            <echo>In test case 2</echo>
+        </test:case>
+
+        <test:case description="this test contains an error">
+            <sleep for="100ms" />
+            <echo>${1/1}</echo>
+        </test:case>
+
+        <test:case description="check exceptions">
+            <sleep for="100ms" />
+            <echo>pre exception</echo>
+            <test:require exception="test.exception.nope">
+                <throw exception="test.exception" />
+            </test:require>
+            <echo>Hello</echo>
+            <test:fail>oh dear</test:fail>
+        </test:case>
+
+    </test:suite>
+
+
+    <test:suite description="more tests" slow="yes">
+        <test:case description="1">
+            <sleep for="200ms"/>
+        </test:case>
+        <test:case description="2">
+            <sleep for="200ms"/>
+        </test:case>
+        <test:case description="3">
+            <sleep for="200ms"/>
+        </test:case>
+        <test:case description="4">
+            <sleep for="200ms"/>
+        </test:case>
+    </test:suite>
+
+    <test:suite description="test project">
+
+
+        <test:set-up>
+            <test:load-project />
+            <test:request url="/" dst="request"/>
+            <test:get-response  />
+            <echo obj=".project" />
+        </test:set-up>
+
+        <!--
+        <test:checkresponse url="/login/" code="400" />
+        <test:request methods="POST" url="/login/" dst="request">
+            <let username="will"/>
+            <let password="password"/>
+        </test:request>
+        <test:get-response request="request" dst="response" />
+    -->
+
+    </test:suite>
+
+</moya>

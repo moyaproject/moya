@@ -1,0 +1,80 @@
+{
+    "name": "new",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "new",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Create a blank image.",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "create a blank image",
+        "tag_name": "new",
+        "params": {
+            "color": {
+                "default_display": "\"#000000\"",
+                "name": "color",
+                "missing": true,
+                "default": "#000000",
+                "doc": "Color",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "mode": {
+                "default_display": "\"RGB\"",
+                "name": "mode",
+                "missing": true,
+                "default": "RGB",
+                "doc": "Mode",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "size": {
+                "default_display": "None",
+                "name": "size",
+                "missing": true,
+                "default": null,
+                "doc": "Size of new image",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.new"
+}

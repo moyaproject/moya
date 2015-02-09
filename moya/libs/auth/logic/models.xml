@@ -1,0 +1,64 @@
+<moya xmlns="http://moyaproject.com" xmlns:moya="http://moyaproject.com">
+
+    <model name="UserBase" libname="UserBase" abstract="yes" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="model/user.html">
+        <string name="username" label="Username" length="30" unique="yes" blank="no" index="yes" />
+        <boolean name="active" label="Login is enabled?" default="yes" />
+        <string name="first_name" label="First Name" length="30" default="" />
+        <string name="last_name" label="Last Name" length="30" default="" />
+        <string name="email" label="Email address" length="300" null="yes" />
+        <boolean name="email_validated" label="Email validated?" default="no" />
+        <string name="password" label="Password" length="256" null="yes"/>
+        <timezone name="timezone" label="Timezone" length="50" null="yes" blank="yes" />
+        <datetime name="previous_login" label="Date of earlier login" null="yes" blank="yes" />
+        <datetime name="last_login" label="Date of last login" null="yes" blank="yes" />
+        <datetime name="date_joined" label="Date user was created" auto="yes" blank="yes"/>
+        <text name="notes" label="Notes" null="yes" blank="yes" />
+        <many-to-many name="groups" label="Group memberships" model="#Group" through="#GroupMembership"
+            backref="users" backpicker="#admintable.users"
+            search="#User.username icontains q"
+            options="#Group.user == None or #Group.user == object" orderby="username" />
+    </model>
+
+	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="model/user.html"/>
+
+	<model name="GroupMembership" libname="GroupMembership" xmlns="http://moyaproject.com/db" repr="${user} in ${group}">
+		<foreign-key model="#User" name="user" null="no"/>
+		<foreign-key model="#Group" name="group" null="no"/>
+	</model>
+
+	<model name="PermissionMembership" libname="PermissionMembership" xmlns="http://moyaproject.com/db" repr="${permission} in ${group}">
+		<foreign-key model="#Permission" name="permission" null="no"/>
+		<foreign-key model="#Group" name="group" null="no"/>
+	</model>
+
+	<model name="Session" libname="Session" xmlns="http://moyaproject.com/db" repr="Session #${id} ${session_key}">
+		<foreign-key model="#User" name="user" null="no" blank="no" label="User"/>
+		<string name="session_key" length="40" index="yes" label="Session key"/>
+		<datetime name="expire_date" label="Expires"/>
+	</model>
+
+    <model name="Permission" libname="Permission" xmlns="http://moyaproject.com/db" repr="Permission '${name}'" template="model/permission.html">
+        <string name="name" null="no" blank="no" length="30" unique="yes"/>
+        <text name="description" null="no" default=""/>
+    </model>
+
+    <model name="Group" libname="Group" xmlns="http://moyaproject.com/db"
+        repr="Group ${user ? '(personal group) ' + prettylist:collect:[permissions, 'name'] : name}"
+        template="model/group.html">
+    	<unique-together>
+	    	<foreign-key name="user" model="#User" null="yes" blank="yes" help="" picker="#admintable.users"/>
+	    	<string name="name" length="30" null="yes"/>
+    	</unique-together>
+    	<text name="description" null="no" default=""/>
+    	<many-to-many model="#Permission" through="#PermissionMembership" name="permissions"/>
+    </model>
+
+    <model libname="ResetPassword" xmlns="http://moyaproject.com/db">
+        <unique-together>
+            <foreign-key name="user" model="#User" null="no"/>
+            <token name="token" size="20" length="50" null="no" blank="no" />
+        </unique-together>
+        <datetime name="created_time" auto="yes" null="no"/>
+    </model>
+
+</moya>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+    <!-- define your tags here -->
+
+    <data-tag name="link" synopsis="define a line">
+    	<doc>
+            Defines a link. These tags may appear anywhere in the project, and can be extracted with the [tag links]get[/tag] tag.
+        </doc>
+    	<signature>
+    		<attribute name="purpose" default="navigation">The purpose of the link</attribute>
+    		<attribute name="url" default="">An absolute URL</attribute>
+    		<attribute name="text" required="yes">Text to go in the URL</attribute>
+    		<attribute name="name" required="no" default="">Name of the URL to look up</attribute>
+            <attribute name="from" required="no">Library or Application if looking up URL</attribute>
+            <attribute name="with" required="no" type="expression" default="{}">Any route variables</attribute>
+            <attribute name="query" required="no" type="expression" default="{}">Query string data</attribute>
+    	</signature>
+    </data-tag>
+
+    <tag name="get" synopsis="get advertised links">
+    	<doc>
+            Gathers links from [tag links]link[/tag] tags.
+        </doc>
+    	<signature>
+    		<attribute name="purpose" default="navigation">Gather tags with the 'purpose' attribute set to this value</attribute>
+    	</signature>
+
+    	<get-data tag="link" ns="http://moyaproject.com/links" dst="links_data" />
+        <let linkpurpose="purpose" />
+
+        <return>
+            <map-dict src="links_data" dst="links" filter="linkpurpose==purpose">
+                <get-url name="${name}" from="${from}" with="with" base="${base}" query="query" dst="url" if="name"/>
+                <let url="url" if="url" />
+                <let text="text" />
+            </map-dict>
+        </return>
+
+    </tag>
+</moya>

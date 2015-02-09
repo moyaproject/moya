@@ -1,0 +1,16 @@
+Dear ${subscription.name},
+
+A reply was posted on a comment you are watching.
+
+${comment.user.username or comment.commenter_name} said...
+
+"${comment.text}"
+
+${.site.url}${comment.commentobject.object_url}#comment${comment.id}
+
+Click here to unsubscribe:
+
+${.site.url}{% url "unsubscribe" with uid=subscription.uid %}
+
+--
+Moya Comments

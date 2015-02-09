@@ -1,0 +1,55 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:moya="http://moyaproject.com">
+
+    <model name="CommentObject" libname="CommentObject" xmlns="http://moyaproject.com/db"
+        repr="CommentObject ${object_url} (${namespace}.${object})" title="Comment Object">
+        <unique-together>
+            <string label="Object Namespace" name="namespace" length="100" />
+            <string label="Object ID" name="object" length="100" />
+        </unique-together>
+        <string label="Object URL" name="object_url" length="300" />
+        <integer label="Comment count" name="count" default="0" null="no"/>
+        <boolean label="Hidden?" name="hide" default="no" null="no"/>
+        <boolean label="Allow new comments?" name="allow_new" default="yes" null="no"/>
+        <integer name="updates" default="0" null="no" blank="yes" />
+        <string name="markup" label="Markup to use in comments" default="bbcode" choices="[['text', 'Text'], ['bbcode', 'BBCode'], ['html', 'HTML']]" null="no" length="20" />
+    </model>
+
+    <model name="Comment" libname="Comment" xmlns="http://moyaproject.com/db"
+            repr="Comment #${id} by ${user.username or commenter_name or 'anon'} on ${commentobject.object_url}">
+
+        <foreign-key label="Comment object" name="commentobject" model="#CommentObject" null="no" />
+        <foreign-key label="Parent" name="parent" model="#Comment" null="yes" blank="yes"/>
+
+        <string label="Comment Format" name="format" length="20" default="text" />
+        <text label="Comment Text" name="text" default="" />
+
+        <boolean label="Comment is moderated?" name="moderated" default="True" null="no"/>
+        <integer label="Comment Level" name="level" null="no" default="0" />
+        <datetime label="Commented posted time" name="time" auto="yes" />
+
+        <foreign-key label="Commenter user account" name="user" model="auth#User" null="yes" orderby="username"/>
+        <string label="Commenter Name" name="commenter_name" length="50" null="yes" />
+        <string label="Commenter Email" name="commenter_email" length="300" null="yes" />
+        <string label="Commenter URL" name="commenter_url" length="300" null="yes" />
+        <string label="Commenter IP" name="commenter_ip" length="39" null="yes" />
+    </model>
+
+    <model name="Subscription" libname="Subscription" xmlns="http://moyaproject.com/db">
+        <unique-together>
+            <foreign-key name="comment" model="#Comment" null="no" />
+            <string name="name" length="50" null="no" />
+        </unique-together>
+        <string name="uid" length="16"/>
+        <string name="email" length="300" null="no"/>
+     </model>
+
+    <model name="ObjectSubscription" libname="ObjectSubscription" xmlns="http://moyaproject.com/db" title="Object Subscription">
+        <unique-together>
+            <foreign-key name="user" model="auth#User" null="yes" />
+            <foreign-key name="commentobject" model="#CommentObject" null="yes" />
+        </unique-together>
+    </model>
+
+
+</moya>

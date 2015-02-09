@@ -1,0 +1,102 @@
+{
+    "name": "generate",
+    "doc_namespace": "xmlns.http://moyaproject.com/thumbnail",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "generate",
+        "lib": "moya.thumbnail",
+        "namespace_slug": "moyaproject_dot_com_thumbnail",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 61)",
+        "doc": "Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].",
+        "namespace": "http://moyaproject.com/thumbnail",
+        "synopsis": "generate thumbnails",
+        "tag_name": "generate",
+        "params": {
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "thumbnails": {
+                "default_display": null,
+                "name": "thumbnails",
+                "missing": true,
+                "default": null,
+                "doc": "A reference to the thumbnail tag",
+                "required": true,
+                "type": "element",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "path": {
+                "default_display": null,
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path to the image to the original image",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "overwrite": {
+                "default_display": "yes",
+                "name": "overwrite",
+                "missing": true,
+                "default": "yes",
+                "doc": "Should existing thumbnails be overwritten?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/thumbnail.generate"
+}

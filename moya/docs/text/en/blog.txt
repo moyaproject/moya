@@ -1,0 +1,40 @@
+[title Moya Blog]
+
+Moya Blog is a simple blogging application, which is also very useful for implementing a [i]site news[/i] features.
+
+[h1]Installation[/h1]
+
+The Moya Blog library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.forms"/>
+[/code]
+
+The library may be installed as follows:
+
+[code xml]
+<install name="blog" lib="moya.blog" mount="/blog/"/>
+[/code]
+
+This mounts the blog on [c]/blog/[/c]. Depending on what you will be using it for, you may want to mount it on [c]/news/[/c] -- whatever is appropriate.
+
+[h1]Namespace[/h1]
+
+Moya Blog uses the XML namespace [c]http://moyaproject.com/blog[/c].
+
+[h1]Settings[/h1]
+
+Moya Blog supports the following settings:
+
+[setting]name = <blog name>[/setting]
+
+This sets the name of the blog, which is displayed in the title bar. The default is [c]Moya Blog[/c], which you will likely want to change.
+
+[setting]page_size = <number of items>[/setting]
+
+This sets the number of items shown in index pages. The default is [c]10[/c].
+
+[h1]Widgets[/h1]
+
+You may find the [tag blog]summary[/tag] widget useful in other parts of your site. It renders a summary of the most recent blogs posts. You could display this in a side-bar on the front page, for example.
+

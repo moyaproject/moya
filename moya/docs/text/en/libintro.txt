@@ -1,0 +1,27 @@
+[title Introduction]
+
+Moya comes with a number of libraries to get you started. They were chosen quite carefully to fit the needs of most sites. They vary from the essential ([link auth]Moya Auth[/link]), to the convenient ([link pages]Moya Pages[/link]), to the trivial ([link feedback]Moya Feedback[/link]), but all are designed for use in production.
+
+The build in libraries are not [i]special[/i] in any way. They could be swapped out and replaced with libraries written by yourself or someone else. The development of the built in libraries has driven the development of Moya itself and the variety of functionality has ensured that Moya can handle your site's requirements.
+
+[aside]If you have downloaded the Moya source code, you might find it interesting to dissect how each library works.[/aside]
+
+The only difference between a built in library and a library not bundled with Moya, is that built in libraries are imported via their Python path. You will install most other libraries by copying the contents to your project directory, and importing them with a path local to the project. Thus negating the [i]dependency hell[/i] you might experience with libraries installed site-wide. The exception would be for Python libraries that want to bundle a module that provides a Moya interface -- which may be too simple to warrant a separate package.
+
+The collection of built in Libraries will likely grow with the Moya project, but isn't intended to offer everything you could possibly need from a web application. In particular, libraries that generate content are intended to be broadly useful and production worthy, but it is expected that there will eventually be third party options that are more feature-rich.
+
+[h1]What Libraries do I have Installed?[/h1]
+
+When it comes to managing libraries, the [c]moya[/c] command is your friend. Run the following in a project directory to list the libraries in your project:
+
+[code]
+$ moya libs
+[/code]
+
+And if you want to review the apps, you can do the following:
+
+[code]
+$ moya apps
+[/code]
+
+You can also see a table of libraries / applications in use by your project if you have [link debug]Moya Debug[/link] installed -- run the development server and visit [url http://127.0.0.1:8000/debug/]/debug/[/url].

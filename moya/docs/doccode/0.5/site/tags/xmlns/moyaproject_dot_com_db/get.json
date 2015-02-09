@@ -1,0 +1,124 @@
+{
+    "name": "get",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Get an object from the database.",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "get an object in the database.",
+        "tag_name": "get",
+        "params": {
+            "orderby": {
+                "default_display": "",
+                "name": "orderby",
+                "missing": true,
+                "default": null,
+                "doc": "Order by",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database to use",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Filter expression",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": null,
+                "doc": "Model element reference",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "modelobj": {
+                "default_display": "None",
+                "name": "modelobj",
+                "missing": true,
+                "default": null,
+                "doc": "Model object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n            <db:getrequired model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.get"
+}

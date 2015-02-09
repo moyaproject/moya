@@ -1,0 +1,80 @@
+{
+    "name": "slice",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "slice",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Slice a sequence of values (extract a range of indexed values).",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "get a 'slice' of a collection",
+        "tag_name": "slice",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Value to slice",
+                "required": true,
+                "type": "reference",
+                "metavar": "ELEMENTREF",
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination for slice",
+                "required": true,
+                "type": "reference",
+                "metavar": "ELEMENTREF",
+                "choices": null
+            },
+            "stop": {
+                "default_display": "None",
+                "name": "stop",
+                "missing": true,
+                "default": null,
+                "doc": "End point",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "start": {
+                "default_display": "None",
+                "name": "start",
+                "missing": true,
+                "default": null,
+                "doc": "Start point",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <slice src=\"hobbits\" start=\"1\" stop=\"3\" dst=\"slice_of_hobbits\"/>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.slice"
+}

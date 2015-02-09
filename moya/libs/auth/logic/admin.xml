@@ -1,0 +1,91 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:moya="http://moyaproject.com"
+        xmlns:let="http://moyaproject.com/let"
+        xmlns:auth="http://moyaproject.com/auth"
+        xmlns:admin="http://moyaproject.com/admin"
+        xmlns:html="http://moyaproject.com/html"
+        xmlns:w="http://moyaproject.com/widgets">
+
+    <module xmlns="http://moyaproject.com/admin" content="#content.admin"
+        slug="moya-auth" title="Users" description="Manage users and permissions">
+        <link to="#admintable.users" title="Users"/>
+        <link to="#admintable.groups" title="Groups" />
+        <link to="#admintable.personal_groups" title="Personal Groups" />
+        <link to="#admintable.permissions" title="Permissions" />
+        <link to="#admintable.sessions" title="Sessions" />
+        <link to="#admintable.passwordresets" title="Password Resets"/>
+    </module>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.users" slug="users" title="Users" model="#User" order="username" description="Users"
+        search="#User.username == q or #User.first_name icontains q or #User.last_name icontains q or #User.email == q">
+        <column title="ID" sort="id">${object.id}</column>
+        <column title="Username" sort="username" link="yes">${object.username}</column>
+        <column title="Active?" sort="active">
+            <check ticked="object.active" />
+        </column>
+        <column title="First name" sort="first_name">${object.first_name}</column>
+        <column title="Last name" sort="last_name">${object.last_name}</column>
+        <column title="Email" sort="email"><html:a href="mailto:${object.email}" if="object.email">${object.email}</html:a></column>
+        <column title="Date joined" sort="date_joined">
+            <w:no-wrap><moya:template markup="bbcode">{% if object.date_joined %}${localize:object.date_joined.date}{% else %}[i]Never[/i]{% endif %}</moya:template></w:no-wrap>
+        </column>
+        <column title="last login" sort="last_login">
+            <w:no-wrap><moya:template markup="bbcode">{% if object.last_login %}${localize:object.last_login}{% else %}[i]Never[/i]{% endif %}</moya:template></w:no-wrap>
+        </column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        filter="#Group.user == None"
+        libname="admintable.groups" slug="groups" title="Groups" model="#Group" description="Permission Groups">
+        <column title="Name" link="yes" sort="name">${object.name}</column>
+        <column title="Description" sort="description">${object.description}</column>
+        <column title="Permissions">
+            <moya:for src="object.permissions" dst="perm">
+                <html:div>
+                    <moya:render src="perm"/>
+                </html:div>
+            </moya:for>
+        </column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        filter="#Group.user != None"
+        search="#Group.user.username == q or #Group.user.first_name == q or #Group.user.last_name == q"
+        libname="admintable.personal_groups" slug="personal-groups" title="Personal Groups" model="#Group" description="Personal Permission Groups">
+        <column title="User" link="yes" sort="#Group.user.username"><moya:render src="object.user"/></column>
+        <column title="Permissions">
+            <moya:for src="object.permissions" dst="perm">
+                <html:div>
+                    <moya:render src="perm"/>
+                </html:div>
+            </moya:for>
+        </column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.permissions" slug="permissions" title="Permissions" model="#Permission">
+        <column title="Name" link="yes" sort="name">${object.name}</column>
+        <column title="Description" sort="description">${object.description}</column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.sessions" slug="sessions" title="Sessions" model="#Session">
+        <column title="User" link="yes" sort="#Session.user.username"><moya:render src="object.user"/></column>
+        <column title="Key" sort="session_key">${object.session_key}</column>
+        <column title="Expires" sort="expire_date">${localize:object.expire_date}</column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.passwordresets" slug="password-resets" title="Password Resets" model="#ResetPassword">
+        <column title="User" link="yes" sort="#ResetPassword.user.username"><moya:render src="object.user"/></column>
+        <column title="Token" sort="token">${object.token}</column>
+        <column title="Created Time" sort="created_time">${localize:object.created_time}</column>
+    </table>
+
+    <content libname="content.admin" extends="moya.admin#content.cover">
+
+    </content>
+
+
+</moya>

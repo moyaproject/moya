@@ -1,0 +1,64 @@
+<moya xmlns="http://moyaproject.com" xmlns:db="http://moyaproject.com/db" xmlns:let="http://moyaproject.com/let">
+
+<mountpoint name="main">
+
+	<url route="/*">
+		<debug>Blog Preprocessor called!</debug>
+	</url>
+
+	<url name="article" route="/{year}/{month}/{day}/{slug}/" methods="GET" view="viewpost">
+		<debug>url main: ${url.year}, ${url.month}, ${url.day}, ${url.slug}</debug>
+	</url>
+
+	<url name="front" route="/" methods="GET">
+		<debug>Front...</debug>
+		<return><str>Front</str></return>
+	</url>
+</mountpoint>
+
+<view docname="viewpost">
+	<debug>In viewpost</debug>
+	<db:get dst="post" model="#Post" let:slug="${url.slug}"/>
+
+	<db:query dst="posts" model="#Post">
+		<!-- <db:equals field="slug" value="${url.slug}" /> -->
+	</db:query>
+	<debug>${posts}</debug>
+	<var dst="post">posts.0</var>
+
+	<debug>${post}</debug>
+	<serve-template template="post.html" withscope="yes"/>
+</view>
+
+<view docname="listall">
+	<db:filter dst="posts" model="#Post">
+	</db:filter>
+</view>
+
+<macro libname="calltest">
+	<debug>Call succesful!</debug>
+	<debug>args: ${args}</debug>
+	<debug>${.call}</debug>
+	<return>
+		<dict>
+			<str dst="foo">bar</str>
+			<str dst="fruit">apple</str>
+		</dict>
+	</return>
+</macro>
+
+<!--
+<macro libname="showapp">
+	<debug>App is ${app}</debug>
+</macro>
+
+<macro libname="blogmacro">
+	<debug>Called blogmacro in blog lib</debug>
+</macro>
+
+<macro libname="blogmacro2">
+	<debug>Called blogmacro2 with app: ${debug:app}</debug>
+</macro>
+-->
+
+</moya>

@@ -1,0 +1,1060 @@
+{
+    "name": "moyaproject_dot_com_widgets_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "button-link",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 56)",
+                "doc": "Renders a link, styled as a button.",
+                "prev_tag": "well",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "button-link",
+                "next_tag": "buttons",
+                "synopsis": "render a link styled as a button",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "url": {
+                        "default_display": null,
+                        "name": "url",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "app": {
+                        "default_display": "",
+                        "name": "app",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "with": {
+                        "default_display": null,
+                        "name": "with",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "btn btn-default",
+                        "name": "class",
+                        "missing": true,
+                        "default": "btn btn-default",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "icon": {
+                        "default_display": null,
+                        "name": "icon",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "buttons",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 72)",
+                "doc": "",
+                "prev_tag": "button-link",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "buttons",
+                "next_tag": "check",
+                "synopsis": "renders enclosed links as buttons",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "check",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 32)",
+                "doc": "Renders a check mark.",
+                "prev_tag": "buttons",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "check",
+                "next_tag": "danger",
+                "synopsis": "render a check",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "danger",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 12)",
+                "doc": "Renders a danger alert.",
+                "prev_tag": "check",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "danger",
+                "next_tag": "dialog",
+                "synopsis": "danger alert",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "dialog",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 82)",
+                "doc": "",
+                "prev_tag": "danger",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "dialog",
+                "next_tag": "dialog-buttons",
+                "synopsis": "container for dialog",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "dialog-buttons",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 83)",
+                "doc": "",
+                "prev_tag": "dialog",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "dialog-buttons",
+                "next_tag": "error",
+                "synopsis": "container for dialog buttons",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "error",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 18)",
+                "doc": "Renders an error message.",
+                "prev_tag": "dialog-buttons",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "error",
+                "next_tag": "info",
+                "synopsis": "error alert",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "info",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 9)",
+                "doc": "Renders a message.",
+                "prev_tag": "error",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "info",
+                "next_tag": "large-well",
+                "synopsis": "info alert",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "large-well",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 28)",
+                "doc": "Renders a well (highlighted panel) with large borders",
+                "prev_tag": "info",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "large-well",
+                "next_tag": "link",
+                "synopsis": "render a large well",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "link",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 40)",
+                "doc": "Renders a link.",
+                "prev_tag": "large-well",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "link",
+                "next_tag": "no-wrap",
+                "synopsis": "renders a link",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": null,
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "url": {
+                        "default_display": null,
+                        "name": "url",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "app": {
+                        "default_display": "",
+                        "name": "app",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "with": {
+                        "default_display": null,
+                        "name": "with",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": null,
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "icon": {
+                        "default_display": null,
+                        "name": "icon",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "no-wrap",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 36)",
+                "doc": "Disable text wrapping for contents.",
+                "prev_tag": "link",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "no-wrap",
+                "next_tag": "paginate",
+                "synopsis": "set no wrap on contents",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "paginate",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 106)",
+                "doc": "",
+                "prev_tag": "no-wrap",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "paginate",
+                "next_tag": "small-well",
+                "synopsis": "paginate a list of results",
+                "params": {
+                    "src": {
+                        "default_display": null,
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Sequence to paginate.",
+                        "required": false,
+                        "type": "index",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "pagesize": {
+                        "default_display": "10",
+                        "name": "pagesize",
+                        "missing": true,
+                        "default": "10",
+                        "doc": "Number of items in a page.",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "auto": {
+                        "default_display": "yes",
+                        "name": "auto",
+                        "missing": true,
+                        "default": "yes",
+                        "doc": "If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "object",
+                        "name": "dst",
+                        "missing": true,
+                        "default": "object",
+                        "doc": "The name to give to each item in the sequence.",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "page": {
+                        "default_display": ".request.GET.page or 1",
+                        "name": "page",
+                        "missing": true,
+                        "default": ".request.GET.page or 1",
+                        "doc": "Current page to display (default retrieves page from the query string).",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "small-well",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 25)",
+                "doc": "Renders a well (highlighted panel) with smaller borders",
+                "prev_tag": "paginate",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "small-well",
+                "next_tag": "success",
+                "synopsis": "render a small well",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "success",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 6)",
+                "doc": "Renders a success message.",
+                "prev_tag": "small-well",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "success",
+                "next_tag": "url",
+                "synopsis": "success alert",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "url",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 75)",
+                "doc": "Renders a URL with a link.",
+                "prev_tag": "success",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "url",
+                "next_tag": "warning",
+                "synopsis": "renders a hyperlinked URL",
+                "params": {
+                    "url": {
+                        "default_display": null,
+                        "name": "url",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "warning",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 15)",
+                "doc": "Renders a warning message.",
+                "prev_tag": "url",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "warning",
+                "next_tag": "well",
+                "synopsis": "warning alert",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "well",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 22)",
+                "doc": "Renders a well (highlighted panel)",
+                "prev_tag": "warning",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "well",
+                "synopsis": "render a well",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/widgets",
+        "namespace_doc": "\n        Widgets defined in [link widgets]Moya Widgets[/link].\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.moyaproject_dot_com_widgets_index"
+}

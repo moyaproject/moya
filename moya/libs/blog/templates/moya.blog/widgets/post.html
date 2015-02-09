@@ -1,0 +1,27 @@
+<div class="post">
+    {% if solo %}<h1>{% else %}<h2>{% endif %}
+    {%- if linktitle %}
+    <a href="{% url "showpost" with slug=post.slug %}">${post.title}</a>
+    {%- else %}
+    ${post.title}
+    {%- endif %}
+    <small>${localize:post.published_date}
+    {% if not post.published %}<span class="label text-sm label-warning">Un-published</span>{% endif %}</small>
+    {% if solo %}</h1>{% else %}</h2>{% endif %}
+    ${html:post.content}
+    <div class="post-info">
+    {%- if numcomments %}
+    <a class="comment-count" href="{% url "showpost" with slug=post.slug %}#comments">{% if numcomments == 1 %}1 comment{% else %}${numcomments} comments{% endif %}</a>
+    {%- endif %}
+    </div>
+</div>
+{%- if older or newer %}
+<ul class="pager">
+    {%- if older %}
+    <li class="previous"><a href="{% url "showpost" with slug=older.slug %}">&larr; ${older.title}</a></li>
+    {%- endif %}
+    {%- if newer %}
+    <li class="next"><a href="{% url "showpost" with slug=newer.slug %}">${newer.title} &rarr;</a></li>
+    {%- endif %}
+</ul>
+{% endif %}

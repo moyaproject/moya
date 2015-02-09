@@ -1,0 +1,42 @@
+[title Moya Pages]
+
+Moya Pages is a very simple content management system that creates user editable pages. Pages may have a title, and rich text content.
+
+[h1]Installation[/h1]
+
+Moya Pages is built in to Moya and may be imported as follows:
+
+[code xml]
+<import py="moya.libs.pages" />
+[/code]
+
+Moya Pages is typically mounted on [c]/[/c] as follows:
+
+[code xml]
+<install name="pages" lib="moya.pages" mount="/" />
+[/code]
+
+[h1]Introduction[/h1]
+
+Moya Pages is used to create a simple page of content consisting of a title and rich text. A [i]slug[/i] under the mount point identifies the page in the database. If there is no such page in the database, Moya will continue to process other application URLs.
+
+This library is typically used to create standard pages such as [c]/about/[/c] and [c]/contact/[/c].
+
+[h1]Settings[/h1]
+
+The following is a list of the settings in Moya Pages:
+
+[setting]autocreate = <LIST OF PAGES>[/setting]
+
+This setting should be a list of page slugs which should be auto-created when you visit the associate url. The default auto-created pages are as follows:
+
+[code ini]
+autocreate = about
+             contact
+             terms-and-conditions
+             privacy-policy
+[/code]
+
+[setting]comments = <yes/no>[/setting]
+
+Set to [c]yes[/c] to enable comments on pages, or [c]no[/c] to disable them.

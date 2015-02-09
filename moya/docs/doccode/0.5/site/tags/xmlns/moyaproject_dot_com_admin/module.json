@@ -1,0 +1,80 @@
+{
+    "name": "module",
+    "doc_namespace": "xmlns.http://moyaproject.com/admin",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "module",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_admin",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 6)",
+        "doc": "Define a top level admin module",
+        "namespace": "http://moyaproject.com/admin",
+        "synopsis": "define a module in the admin interface",
+        "tag_name": "module",
+        "params": {
+            "content": {
+                "default_display": null,
+                "name": "content",
+                "missing": true,
+                "default": null,
+                "doc": "Content to use as the main page",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "choices": null
+            },
+            "title": {
+                "default_display": null,
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "Title used in Modules panel",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "description": {
+                "default_display": null,
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "Description of the module",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "slug": {
+                "default_display": null,
+                "name": "slug",
+                "missing": true,
+                "default": null,
+                "doc": "Identifier used in URLs",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/admin.module"
+}

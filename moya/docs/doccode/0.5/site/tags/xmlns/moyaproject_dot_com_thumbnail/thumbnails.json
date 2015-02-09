@@ -1,0 +1,35 @@
+{
+    "name": "thumbnails",
+    "doc_namespace": "xmlns.http://moyaproject.com/thumbnail",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "thumbnails",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_thumbnail",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 7)",
+        "doc": "Define a collection of thumbnail processors.\n\n            This tag should contain one or more [tag thumbnail]processor[/tag] tags.",
+        "namespace": "http://moyaproject.com/thumbnail",
+        "synopsis": "a container for thumbnail processors",
+        "tag_name": "thumbnails",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/thumbnail.thumbnails"
+}

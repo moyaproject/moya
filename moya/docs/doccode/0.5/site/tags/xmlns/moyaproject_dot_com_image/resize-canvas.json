@@ -1,0 +1,80 @@
+{
+    "name": "resize-canvas",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "resize-canvas",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Resize the image canvas.",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "resize the image canvas",
+        "tag_name": "resize-canvas",
+        "params": {
+            "color": {
+                "default_display": "\"#000000\"",
+                "name": "color",
+                "missing": true,
+                "default": "#000000",
+                "doc": "Background color",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "width": {
+                "default_display": "",
+                "name": "width",
+                "missing": true,
+                "default": null,
+                "doc": "New width",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            },
+            "image": {
+                "default_display": "image",
+                "name": "image",
+                "missing": true,
+                "default": "image",
+                "doc": "Image to show",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "height": {
+                "default_display": "",
+                "name": "height",
+                "missing": true,
+                "default": null,
+                "doc": "New height",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.resize-canvas"
+}

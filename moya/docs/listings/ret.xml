@@ -1,0 +1,16 @@
+<moya>
+
+<macro docname="greet">
+    <return>
+        <str>Hello, ${name}!</str>
+    </return>
+</macro>
+
+<macro docname="main">
+    <call macro="greet" dst="greeting">
+       <str dst="name">Will</str>
+    </call>
+    <echo>${greeting}</echo>
+</macro>
+
+</moya>

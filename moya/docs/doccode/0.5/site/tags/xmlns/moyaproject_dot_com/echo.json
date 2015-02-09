@@ -1,0 +1,91 @@
+{
+    "name": "echo",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "echo",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Write text to the console. This is typically used in commands or for debugging. Bear in mind that in a production environment there is no console.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "write text to the console",
+        "tag_name": "echo",
+        "params": {
+            "header": {
+                "default_display": "",
+                "name": "header",
+                "missing": true,
+                "default": null,
+                "doc": "A list of headers for the table (if given)",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "style": {
+                "default_display": "\"bold cyan\"",
+                "name": "style",
+                "missing": true,
+                "default": "bold cyan",
+                "doc": "Console style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "indent": {
+                "default_display": "0",
+                "name": "indent",
+                "missing": true,
+                "default": 0,
+                "doc": "Number of indents",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "obj": {
+                "default_display": "None",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "If given, then the value of this expression will be written to the console",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "table": {
+                "default_display": "None",
+                "name": "table",
+                "missing": true,
+                "default": null,
+                "doc": "A table to display. If given this value should be a list of lists.",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "<echo>Hello, World</echo>",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.echo"
+}

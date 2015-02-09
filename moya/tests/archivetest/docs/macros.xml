@@ -1,0 +1,70 @@
+<moya xmlns="http://moyaproject.com">
+
+	<macro docname="double">
+		<return>
+			<int>${args.0*2}</int>
+		</return>
+	</macro>
+
+	<macro libname="quadruple">
+		<return>
+			<call macro="double">
+				<int value="args.0 * 2"/>
+			</call>
+		</return>
+	</macro>
+
+	<macro libname="macrotest1">
+		<return>
+			<call macro="double">
+				<int>2</int>
+			</call>
+		</return>
+	</macro>
+
+	<macro libname="macroreturnlist">
+		<return>
+			<list>
+				<int>1</int>
+				<int>2</int>
+				<int>3</int>
+			</list>
+		</return>
+	</macro>
+
+	<macro libname="testscope1">
+		<int dst="a">1</int>
+		<return>
+			<dict>
+				<int dst="b">${a+1}</int>
+			</dict>
+		</return>
+	</macro>
+
+	<macro libname="nested">
+        <echo obj="args" />
+		<return>
+			<call macro="double">
+				<int value="args.0"/>
+			</call>
+		</return>
+	</macro>
+
+    <!--
+	<macro libname="callabletest1">
+		<return>
+			<call src="obj.method1"/>
+		</return>
+	</macro>
+
+	<macro libname="callabletest2">
+		<return>
+			<call src="obj.method2" >
+				<int>17</int>
+				<int>3</int>
+			</call>
+		</return>
+	</macro>
+-->
+
+</moya>

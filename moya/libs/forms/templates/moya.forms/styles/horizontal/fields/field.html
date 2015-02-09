@@ -1,0 +1,7 @@
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {%- include "styles/horizontal/label.html" %}
+    <div class="col-sm-10">
+    {% children with field=field %}
+    {%- include "common/helperror.html" %}
+    </div>
+</div>

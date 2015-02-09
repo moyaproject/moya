@@ -1,0 +1,58 @@
+{
+    "name": "serve-json",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "serve-json",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "Serve an object encoded as JSON",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "serve an object as JSON",
+        "tag_name": "serve-json",
+        "params": {
+            "obj": {
+                "default_display": "",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "Objecty to __moyajson__",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            },
+            "indent": {
+                "default_display": "",
+                "name": "indent",
+                "missing": true,
+                "default": 4,
+                "doc": "Indent to make JSON more readable",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.serve-json"
+}

@@ -1,0 +1,113 @@
+{
+    "name": "get-children",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-children",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/elements.py",
+        "doc": "Get the children of an element.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "get an elements children",
+        "tag_name": "get-children",
+        "params": {
+            "tag": {
+                "default_display": "",
+                "name": "tag",
+                "missing": true,
+                "default": null,
+                "doc": "Element type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "ns": {
+                "default_display": "",
+                "name": "ns",
+                "missing": true,
+                "default": null,
+                "doc": "XML namespace",
+                "required": false,
+                "type": "namespace",
+                "metavar": null,
+                "choices": null
+            },
+            "data": {
+                "default_display": "no",
+                "name": "data",
+                "missing": true,
+                "default": false,
+                "doc": "Data only",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "element_ref": {
+                "default_display": "",
+                "name": "element_ref",
+                "missing": true,
+                "default": null,
+                "doc": "Element Reference",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "element": {
+                "default_display": "None",
+                "name": "element",
+                "missing": true,
+                "default": null,
+                "doc": "Element",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.get-children"
+}

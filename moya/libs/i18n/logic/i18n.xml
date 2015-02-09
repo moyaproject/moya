@@ -1,0 +1,35 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:i18n="http://moyaproject.com/i18n">
+
+    <mountpoint name="tests">
+    	<url route="/" name="default_lang" mount="#mountpoint.tests" let:lang="'en'"/>
+    	<url route="/{lang}/" name="langs" mount="#mountpoint.tests"/>
+    </mountpoint>
+
+    <mountpoint libname="mountpoint.tests">
+    	<url route="/" view="front" name="lang_front"/>
+    </mountpoint>
+
+    <view docname="front" content="#content.front"/>
+
+    <content libname="content.front">
+        <set-language language="${.url.lang}" />
+        <set-locale locale="${.url.lang}" />
+    	<title>Internationalization Tests</title>
+    	<section name="body">
+            <html:h1>Internationalization Tests</html:h1>
+            <node template="front.html"/>
+            <html:h2>
+                Welcome
+                <i18n:langicon lang="${.url.lang}" />
+            </html:h2>
+            <i18n:translate-attribute
+                _sometext="I like cats"
+                _force_translate="I don't like dogs"/>
+    	</section>
+
+    </content>
+
+</moya>

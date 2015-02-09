@@ -1,0 +1,42 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <form xmlns="http://moyaproject.com/forms" libname="form.faqbase" legend="Frequently Asked Question" style="horizontal">
+        <input class="input-block-level" name="question" label="Question" maxlength="60" src="question" dst="question" required="yes"/>
+        <field name="answer" label="Answer" src="answer" dst="answer">
+            <wysihtml5:editor/>
+         </field>
+    </form>
+
+    <form xmlns="http://moyaproject.com/forms" extends="#form.faqbase" libname="form.createfaq" legend="Create Question">
+        <submit-button name="submit" text="Add Question"/>
+        <validate-field field="question">
+            <fail if="not slug:value">
+                Question must not be empty or only punctuation
+            </fail>
+            <db:get model="#Question" let:slug="slug:value" dst="faq" />
+            <fail if="faq">
+                Question exists in FAQ
+            </fail>
+        </validate-field>
+    </form>
+    <form xmlns="http://moyaproject.com/forms" extends="#form.faqbase" libname="form.editfaq" legend="Edit Question" >
+        <submit-button class="btn-primary" name="submit" text="Update"/>
+    </form>
+
+    <form libname="form.deletefaq" legend="Delete Question" xmlns="http://moyaproject.com/forms">
+        <w:dialog>
+            <moya:markdown>Are you sure you wish to delete question *${faq.question}*?</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+</moya>

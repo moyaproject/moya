@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block "title" %}${title}{% end %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% media 'css/bootstrap.css' %}" rel="stylesheet">
+
+    <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
+    <link rel="icon" href="{% media 'favicon.png' from 'moya.favicon' %}">
+
+    <style>
+      .moya-admin-menu
+      {
+        position:fixed;
+        float:left;
+        left:8px;
+        margin-right:16px;
+        z-index:10000;
+        margin-top:10px;
+      }
+      .moya-admin-menu:hover
+      {
+        opacity:1;
+      }
+    </style>
+
+    {% block "includecss" %}{% render include.css %}{% end %}
+    {% block "css" %}{% render sections.css %}{% end %}
+    {% block "jshead" %}{% render sections.jshead %}{% end %}
+    {% block "head" %}{% render sections.head %}{% end %}
+  </head>
+
+  <body>
+    <!-- Generated ${.now.utc}-->
+    <div class="navbar navbar-default" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            {%- if .permissions.admin %}
+            <div class="btn-group moya-admin-menu">
+              <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#" title="Admin menu">
+                <i class="glyphicon glyphicon-wrench"></i>
+            </button>
+              <ul class="dropdown-menu">
+                {%- for renderable in sections.admin_links %}
+                {%- if renderable.url -%}
+                <li>{% render renderable %}</li>
+                {%- else %}
+                <li class="divider"/>
+                {%- endif %}
+                {%- endfor %}
+                {%- if sections.admin_links %}
+                <li class="divider"/>
+                {%- endif %}
+                <li><a href="{% url 'front' from 'moya.admin' %}">Moya Admin</a></li>
+              </ul>
+            </div>
+            {%- endif %}
+            {% block "brand" %}
+            <a class="navbar-brand" href="/" title="${.settings.project_title}">${.settings.project_title}</a>
+            {% endblock %}
+
+        </div>
+        <div class="collapse navbar-collapse">
+            {%- block "nav" %}
+                {%- if sections.nav %}
+                {% render sections.nav %}
+                {%- else %}
+                <ul class="nav navbar-nav">
+                    {%- for link in navlinks %}
+                    <li{% if .request.path == link.url or (link.url != '/' and .request.path ^= link.url) %} class="active"{% endif %}><a href="${link.url}">${link.text}</a></li>
+                    {%- endfor %}
+                </ul>
+                {%- endif %}
+            {%- endblock %}
+            {%- if ._dbsessions %}
+            <p class="navbar-text pull-right">
+                {%- if .user %}
+                <span class="glyphicon glyphicon-user"></span>
+                <a href="{% url 'user_edit' from 'moya.auth' %}" class="navbar-link">${.user.username}</a>&nbsp;
+                <span class="glyphicon glyphicon-log-out"></span>
+                <a href="${.urls.auth.logout}?fwd=${.request.path}" class="navbar-link">Logout</a>
+                {%- else %}
+                {% if 'moya.signup' in .libs %}
+                <a href="{% url 'signup' from 'moya.signup' %}" class="navbar-link">Create Account</a>
+                {% endif %}
+                or
+                <a href="${.urls.auth.login}?fwd=${.request.path}" class="navbar-link">Log in</a>
+                {%- endif %}
+            </p>
+            {%- endif %}
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+    {%- block "body" %}
+    {% render sections.body %}
+    {%- end %}
+    </div>
+
+    {% emptyblock "footer" %}
+
+    <script src="{% media 'js/jquery.js' %}"></script>
+    <script src="{% media 'js/bootstrap.js' %}"></script>
+
+    {% block "includejs" %}{% render include.js %}{% endblock %}
+    {% block "js" %}{% render sections.js unique %}{% endblock %}
+    {% block "jsfoot" %}{% render sections.jsfoot unique%}{% endblock %}
+
+</body></html>

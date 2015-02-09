@@ -1,0 +1,18 @@
+<moya xmlns="http://moyaproject.com">
+
+    <macro libname="test_render_content">
+        <return>
+            <render>
+                <markup>[b]bold[/b]</markup>
+            </render>
+        </return>
+    </macro>
+
+    <macro libname="test_render_content_2">
+        <render dst=".html">
+            <markup>[i]emphasize[/i]</markup>
+        </render>
+    </macro>
+
+
+</moya>

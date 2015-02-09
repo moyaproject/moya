@@ -1,0 +1,90 @@
+{% extends "/columns.html" %}
+
+
+{% block "title" %}Tags{% endblock %}
+
+{% block "css" %}
+.namespace
+{
+    color:#777;
+    font-family:monospace;
+    font-size:.9em;
+}
+{% endblock %}
+
+{% block "column" %}
+<div class="doctree-panel">
+    <ul>
+        <li><a href="#namespaces">Namespaces</a></li>
+        <li><a href="#tags">All Tags</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block "content" %}
+<div class="container">
+    <h1>Tag Index</h1>
+    <p>
+        This is a reference to tags in Moya. Some are always available, others may depend on a library import.
+    </p>
+
+    <a name="namespaces"></a>
+    <h2>Namespaces</h2>
+    <p>
+        The following is a list of the XML namespaces used by Moya tags:
+    </p>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>XML namespace</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%- for namespace, description in namespaces %}
+            <tr>
+                <td>
+                    <span class="namespace">
+                        <a href="${slug:namespace}/index.html">${namespace}</a>
+                    </span>
+                </td>
+                <td>
+                    ${html:(description|.bbcode)}
+                </td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+
+    <a name="tags"></a>
+    <h2>All Tags</h2>
+    <p>
+        The following is a list of all tags used by Moya:
+    </p>
+
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Tag</th>
+                <th>XML namespace</th>
+                <th>Synopsis</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%- for tag in tags %}
+            <tr>
+                <td>
+                    <a href="${slug:tag.namespace}/tag_${tag.tag_name}.html">&lt;${tag.tag_name}&gt;</a>
+                </td>
+                <td>
+                    <span class="namespace">
+                        <a href="${slug:tag.namespace}/index.html">${tag.namespace}</a>
+                    </span>
+                </td>
+                <td>${tag.synopsis or ''}</td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

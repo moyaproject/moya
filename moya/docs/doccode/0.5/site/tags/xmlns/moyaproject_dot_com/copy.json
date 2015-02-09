@@ -1,0 +1,58 @@
+{
+    "name": "copy",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "copy",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Copy a variable from one location to another",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "copy a value",
+        "tag_name": "copy",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <str dst=\"foo\">Kirk</str>\n        <copy src=\"foo\" dst=\"bar\" />\n        <echo>${bar}</echo>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.copy"
+}

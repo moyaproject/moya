@@ -1,0 +1,11 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:bootstrap="http://moyaproject.com/bootstrap">
+
+      <!--
+    <bootstrap:navitem nav="top" text="Home" url="/" />
+    <bootstrap:navitem nav="top" text="About" url="/about/" />
+    <bootstrap:navitem nav="top" text="Contact" url="/contact/" />
+    <bootstrap:navitem nav="top" text="Feedback" url="${.urls.feedback.feedback}" />
+-->
+
+</moya>

@@ -1,0 +1,35 @@
+<moya xmlns="http://moyaproject.com">
+
+    <macro docname="bad">
+        <!-- <breakpoint/> -->
+        <if test="count">
+            <throw exception="test" msg="Test error happened!">
+                <str dst="foo">bar</str>
+            </throw>
+        </if>
+    </macro>
+
+    <macro docname="main">
+        <call macro="run"/>
+    </macro>
+
+    <macro docname="run">
+        <breakpoint/>
+        <try>
+            <call macro="bad">
+                <int dst="count">2</int>
+            </call>
+        </try>
+        <catch type="zombie apocolypse">
+            <echo>Shoot them in the head!</echo>
+        </catch>
+        <catch type="test" dst="error">
+            <echo>Caught error ${error}</echo>
+            <echo src="error"/>
+        </catch>
+
+        <echo>Leaving Main</echo>
+
+    </macro>
+
+</moya>

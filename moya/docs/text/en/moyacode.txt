@@ -1,0 +1,949 @@
+[title Moya Code]
+
+Moya code is executable code stored in XML documents within your project, and is responsible for all aspects of building a dynamic website; from querying the database to processing forms. An entire web site may be developed using nothing more than Moya code.
+
+[h1]Testing Moya Code[/h1]
+
+Moya code typically executes in the context of a project, but it can also be used stand-alone. This is useful for testing. If you would like to follow along with the code in this chapter you can use the following document template to run code:
+
+[code xml]
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+    <macro docname="main">
+        <echo>Hello, World!</echo>
+    </macro>
+</moya>
+[/code]
+
+To run this code save it as [c]example.xml[/c], then enter the following from the command line:
+
+[code]
+$ moya run example.xml
+[/code]
+
+The above code should display the text [c]Hello, World![/c] to the console.
+
+The first tag, [tag]moya[/tag], is required for all Moya code files. This tag introduces two XML namespaces; [c]http://moyaproject.com[/c] is the namespaces containing builtin tags (required for virtually all logic files). The [c]http://moyaproject.com/let[/c] namespaces enables the [c]let[/c] extension (explained later), which isn't strictly required, but very commonly used.
+
+The second tag, [tag]macro[/tag], creates a [i]macro[/i] (a starting point for executable code), with the [i]docname[/i] of [c]'main'[/c]. In Moya a [c]docname[/c] is a unique name that can be applied to identify tags in a document. The name, [c]"main"[/c], is the default macro executed with the run command. You can also execute other macros within a document with the [c]-e[/c] switch.
+
+The third tag, [tag]echo[/tag], writes enclosed text to the console (terminal). It's this tag which prints out the text [c]Hello, World![/c].
+
+To run snippets of code from this document, replace the [c]<echo>[/c] tag with the code you have cut and pasted.
+
+You can set [i]parameters[/i] to the main macro from the command line with the [c]--let[/c] switch. For example, [c]--let foo=bar[/c] would set a parameter called [c]foo[/c] to the value [c]"bar"[/c]. Let's add a few lines to the above code to use a command line parameter:
+
+[code xml]
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+    <macro docname="main">
+        <echo>Hello, ${name}!</echo>
+    </macro>
+</moya>
+[/code]
+
+Run the above code with the following command line:
+
+[code]
+$ moya run example.xml --let name="Moya Fan"
+[/code]
+
+You should see a more personalized greeting on the command line.
+
+[h2]Using the Debugger[/h2]
+
+Moya contains a built-in debugger for Moya code, which you can use to step through Moya code line by line and inspect data. You can drop in to the debugger with the [c]run[/c] sub-command, by using the [c]--breakpoint[/c] switch. For example:
+
+[code]
+$ moya run example.xml --breakpoint
+[/code]
+
+This will open the file [c]"example.xml"[/c] and drop straight in to the debugger. You should see a snippet of code to indicate where Moya is currently executing and a command prompt. If you enter an expression at this point, Moya will evaluate it and print the results. You can also enter one of a number of commands to step through the code and view information about the execution process. Type [c]help[/c] in the debugger for a list of these commands.
+
+An alternative way of entering the debugger is to use the [tag]breakpoint[/tag] tag. If you run the code (without the [c]--breakpoint[/c] switch), then Moya will drop in to the debugger when it reaches a [tag]breakpoint[/tag] tag.
+
+Try it with the following code:
+
+[code xml]
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+    <macro docname="main">
+        <input dst="name">What is your name?</input>
+        <breakpoint/>
+        <if test="name=='Rygel'">
+            <echo>Sorry, we don't serve Hynerians here</echo>
+        </if>
+    </macro>
+</moya>
+[/code]
+
+You should find that Moya drops in to the debugger immediately after you have entered text. You can see the contents of the variable [c]name[/c] simply by entering it on the command line.
+
+[h2]Dynamic Help[/h2]
+
+The Moya command line app also includes access to a dynamically generate help system, which can display information on any tag. The same information is available online, but this may save you a little time. Here's how to look up the help for the [tag]if[/tag] tag:
+
+[code]
+$ moya help if
+[/code]
+
+You can also look up a tag defined in a different XML namespaces, by specifiying the namespace URL within curly braces. For example:
+
+[code]
+$ moya help {http://moyaproject.com/db}query
+[/code]
+
+If you don't include the full namespaces URL, Moya assumes it to start with [c]http://moyaproject.com/[/c], so the following is equivalent to the above command line:
+
+[code]
+$ moya help {db}query
+[/code]
+
+You can also access the dynamic help from the debugger via the [c]help[/c] command, which works just like the command line (but without typing [c]moya[/c]).
+
+[h1]Statements[/h1]
+
+A [i]statement[/i] in Moya code consists of a single tag, which is in essence a function call. When Moya encounters a tag, it executes the associated functionality, using the tag attributes as parameters to the function call.
+
+Lets look at one of the simplest such tags in Moya, the [tag]echo[/tag] tag, which writes any text contained within the opening and closing tag to the console:
+
+[code xml]
+<echo>Hello, World!</echo>
+[/code]
+
+[h1]Expressions[/h1]
+
+Moya can perform calculations on numbers, text, and other data with an expression syntax that is somewhat similar to other programming languages, such as Python, C and Javascript. All the familiar operators, such as + - * / will work as you might expect. For example [c]1 + 1[/c] evaluates to [c]2[/c]. There are also extensions to simple expression evaluation for data types and operations commonly used in web development. This often makes Moya expressions more concise and readable than expressions in other languages.
+
+Here are some expressions taken from builting Moya libraries:
+
+[code]
+not (value ^= 'http://' or value ^='https://')
+score not in [-1,0,1]
+slug:form.data.title
+permission:.app.settings.new_topic_permission
+basename:path fnmatches wildcard
+path:dirname:path / thumbnail_directory / basename:path
+[/code]
+
+Expressions will be covered in detail in the [link expressions]next chapter[/link], but lets introduce some of the basic concepts.
+
+[h2]Numbers[/h2]
+
+Moya can work with numbers, and the usual [link expressions#arithmetic-operators]arithmetic[/link] operators:
+
+[code]
+5 + (3 * 2)
+radius * 2 * 3.1426
+[/code]
+
+[h2]Strings[/h2]
+
+Strings (text) are defined between either single ([c]'[/c]) or double ([c]"[/c]) quotes. When given in a tag attribute, you will probably have to stick to single quotes, since double quotes have a special meaning in XML. Here are some expressions using [link expressions#strings]strings[/link]:
+
+[code]
+"where there is a will"
+'Hello, ' + name + '!'
+[/code]
+
+[h2]Operators[/h2]
+
+An [link expressions#operators]operator[/link] combines two values. For example, the [c]==[/c] operator checks for equality. Here is an example of some Moya code that uses the equality operator:
+
+[code xml]
+<if test="species=='Hynerian'">
+    <echo>Sorry, we don't serve your kind here.</echo>
+</if>
+[/code]
+
+[h2]Modifiers[/h2]
+
+A [i]modifier[/i] takes a value and transforms it in some way. The following is an example of [link expressions#modifiers]modifiers[/link] in expressions:
+
+[code]
+"Hello " + title:name + '!'
+[/code]
+
+In the above code, the [link expressions#title]title:[/link] modifier modifies the string in [c]name[/c] so that it begins with a capital letter.
+
+[h1]Expression Substitution[/h1]
+
+Expressions may appear within text defined inside a tag, or an attribute that expects text, by wrapping it in [c]${[/c] and [c]}[/c]. For example, the following code asks the user for their name then outputs their name and a greeting to the console:
+
+[code xml]
+<input dst="name">What is your name?</input>
+<echo>Hello, ${title:name}!</echo>
+[/code]
+
+In the above snippet, Moya evaluates the expression [c]title:name[/c] and replaces the text with the result of that expression. So if you enter the name [c]john[/c], the echo statement will write [c]Hello, John![/c] to the console.
+
+[h1]Data Statements[/h1]
+
+Moya has a variety of ways to create [i]data[/i], such as numbers and strings, as well as [i]data structures[/i], which are collections of data. Values created in this way may be used in expressions and anywhere Moya expects a value.
+
+Moya has a number of [i]data setter[/i] tags which create data. Such tags have two optional attributes; [c]dst[/c] which contains the [i]destination[/i] name for the value, and [c]value[/c] which should an expression. If the [c]value[/c] attribute is missing, then the text of the tag is used to create the value.
+
+For example, the following two lines have the same effect; they both assign the value of [c]"Rygel"[/c] to a variable called [c]crew[/c]:
+
+[code xml]
+<str dst="crew">Rygel</str>
+[/code]
+[code xml]
+<str dst="crew" value="'Rygel'" />
+[/code]
+
+You are free to use whichever form is more convenient, but generally [c]value[/c] is best used when you want to set the value to the result of some calculation, and the tag text is best used for constants. An exception would be if you want to use expression substitution in the text, which can be convenient for constructing messages for the user. For example, here is a string definition that would be more verbose as an expression:
+
+[code xml]
+<str dst="manifest">There are ${len:count} members in the crew. Their names are ${commaspacelist:crew}.</str>
+[/code]
+
+If you don't include either [c]value[/c], or any tag text, then the value will be set to the default. In the case of strings, this will be an empty strings, for numbers it will be [c]0[/c]. The following creates an empty string:
+
+[code xml]
+<str dst="empty"/>
+[/code]
+
+[h1]Simple data Types[/h1]
+
+A [i]simple[/i] data type is one that does not contain other values. The following lists Moya's simple data types:
+
+[h2]Strings[/h2]
+
+A string is a sequence of characters, commonly used to store text.
+
+Defining strings is done with the [tag]str[/tag] tag. Here's some examples of creating strings:
+
+[code xml]
+<str dst="example1">in order to create an apple pie from scratch, you must first create the universe.</str>
+<str dst="example2" value="'Hello ' + title:title + '!'"/>
+<str dst="example3">
+    Mult-
+    line
+    string
+</str>
+[/code]
+
+[h2]Integers[/h2]
+
+An [i]integer[/i] is a whole number. It may be positive or negative, but may not contain a decimal point. Here are some examples of creating integers:
+
+[code xml]
+<int dst="zero"/>  <!-- sets a value of 0 -->
+<int dst="one_million">1000000</int>
+<int dst="seconds_in_a_minute" value="60 * 60" />
+[/code]
+
+[h2]Floats[/h2]
+
+A [i]floating point[/i] number is a number with a decimal point. Here are some examples of creating floats:
+
+[code xml]
+<float dst="zero">  <!-- sets a value of 0.0 -->
+<float dst="pi_approximation">3.1427</float>
+<float dst="one_third" value="1/3"/>
+[/code]
+
+[h2]Booleans[/h2]
+
+You can create a [i]boolean[/i] (a value which indicates True or False) with the [tag]bool[/tag] tag which assigned a value of True if the tag text is [c]True[/c] or [c]yes[/c], otherwise False. Here's an example:
+
+[code xml]
+<bool dst="alive">yes</bool>
+[/code]
+
+There are also shortcuts for boolean values, the [tag]true[/tag] creates a boolean True, whereas the [tag]false[/tag] tag creates a boolean False. Here's an example of these shortcuts in action:
+
+[code xml]
+<true dst="alive"/>
+<false dst="false"/>
+[/code]
+
+[h2]Expression results[/h2]
+
+The [tag]var[/tag] tags assigns the result of an expression to a variable. If tag text is given, it is evaluated as an expression. If it is not given, then the [c]value[/c] attribute should contain an expression. Here's an example:
+
+[code xml]
+<float dst="pi">3.1427</float>
+<floar dst="radius">12</float>
+<var dst="circumpherence">2 * pi * radius</var>
+[/code]
+
+[h1]Compound Data Types[/h1]
+
+A compound data type (also referred to as a [i]collection[/i]) contains other data types -- which could be strings and floats, but also other collections. Such collections may be deeply nested, i.e. may contain collections that contain collections etc.
+
+Collections tags are typically assembled from other enclosed data setters, i.e. any data defined inside the collection tag is added to the collection. The following code creates a list (explained below) of three strings:
+
+[code xml]
+<list dst="crew">
+    <str>Rygel</str>
+    <str>John Crichton</str>
+    <str>Aeryn Sun</str>
+</list>
+[/code]
+
+You can refer to an [i]element[/i] (single value) of a collection with a data index. For example:
+
+[code xml]
+<echo>${crew.1} is human</echo>
+[/code]
+
+Collections may also be [i]iterated[/i] over with the [tag]for[/tag] tag (or anything else that expects a sequence). Here is an example of using [tag]for[/tag] to iterate over [c]crew[/c]:
+
+[code xml]
+<for src="crew" dst="character">
+    <echo>${crew} is on board!</echo>
+</for>
+[/code]
+
+[h2]Lists[/h2]
+
+A [i]list[/i] is a sequence of other values. To create a list use the [tag]list[/tag] tag. Here is an example of list creation:
+
+[code xml]
+<list dst="complex">
+    <str>apples</str>
+    <list>
+        <int>1</int>
+        <int>100</int>
+    <list>
+</list>
+[/code]
+
+You can create an empty list just by closing the tag:
+
+[code xml]
+<list dst="empty"/>  <!-- empty list -->
+[/code]
+
+You can also create a [link expressions#lists]list[/link] in an expression. For example:
+
+[code xml]
+<let crew="['Rygel', 'John Crichton', 'Aeryn Sun']"/>
+[/code]
+
+[h3]Iterating Over a List[/h3]
+
+You can iterate over a list with the [tag]for[/tag] which extracts a value at a time. Here's an example:
+
+[code xml]
+<for src="crew" dst="character">
+    <echo>${character} is on board!</echo>
+</for>
+[/code]
+
+[h3]Appending Items to a List[/h3]
+
+You can add an item to the end of a list with the [tag]append[/tag] tag. Here's an example:
+
+[code xml]
+<let prime="[1,3,5]"/>
+<append src="prime" value="7"/>
+[/code]
+
+[h3]Removing Items From a list[/h3]
+
+You can remove an item from a list with the [tag]remove[/tag] tag.
+
+[code xml]
+<let crew="['Rygel', 'John Crichton', 'Aeryn Sun']"/>
+<remove src="crew" value="'Rygel'" />
+[/code]
+
+[h2]Dictionary[/h2]
+
+A [i]dictionary[/i] stores values with an associated [i]key[/i]. Here's how you can create a dictionary:
+
+[code xml]
+<dict dst="crew">
+    <str dst="rygel">Hynerian</str>
+    <str dst="john">Human</str>
+    <str dst="aeryn">Peacekeeper</str>
+</dict>
+[/code]
+
+The [c]dst[/c] attribute of the data setters are used as the keys in the dictionary. You can retrieve a value in a dictionary by using its key in a data index. Here's an example of how you might look up a species, given a name ([c]rygel[/c] in this case):
+
+[code xml]
+<echo>Rygel is a ${crew.rygel}.</echo>
+[/code]
+
+Iterating over a dictionary, returns its keys. For example:
+
+[code xml]
+<for src="crew" dst="character">
+    <echo>${title:crew} is on board!</echo>
+</for>
+[/code]
+
+You can iterate over the values or items (pairs of key plus value) by using the [c]values:[/c] or [c]items:[/c] modifiers (see next chapter for the details). Here's an example:
+
+[code xml]
+<for src="items:crew" dst="character,species">
+    <echo>${title:crew} is a ${title:species}.</echo>
+</for>
+[/code]
+
+You may also create a [link expressions#dictionaries]dictionary[/link] in an expression. Here's an example:
+
+[code xml]
+<let crew="rygel='Hynerian', john='Human', aeryn='Peacekeeper'" />
+[/code]
+
+[h2]JSON[/h2]
+
+JSON is [i]Javascript Object Notation[/i], which is a subset of the Javascript language, used for storing data in text form. It is versatile enough that many languages include support for it.
+
+In Moya, the [tag]json[/tag] tag can parse data in JSON format. Here's an example of using JSON in Moya code:
+
+[code xml]
+<json dst="ships">
+{
+    "moya": {
+        "crew": ["Rygel", "Aeryn", "john"]
+    }
+}
+</json>
+[/code]
+
+JSON is a good way of storing structure data, and is generally more efficient that the equivalent nested tags.
+
+[h2]LET Statement[/h2]
+
+The [tag]let[/tag] tag is a versatile way of assigning the result of expressions to a variable. Simply set an attribute to an expression.
+
+Lets look at an example of assigning a single value:
+
+[code xml]
+<str dst="name">John</str>
+<let greeting="'Hello, ' + name"/>
+[/code]
+
+Here, the variable [c]greeting[/c] is assigned the value of expression [c]'Hello, ' + name[/c].
+
+Multiple variables may be set with [tag]let[/tag]. The only restriction (a requirement of XML) is that a variable appear only once in a tag. Here's an example of assigning multiple variables:
+
+[code xml]
+<let x="10" y="x*x" z="x+y" />
+[/code]
+
+Variables are assigned in the order that they appear in the tag. You'll notice that in the above example, the expressions for [c]y[/c] and [c]z[/c] depend on the expression preceding it.
+
+[h1]LET Extension[/h1]
+
+Moya provides an additional way to set data on some compound data statements, and a variety of other tags, via the [i]Let extension[/i]. To enable this extension, all you need to do is add the [c]http://moyaproject.com/let[/c] namespace to your xml. The root level tag, [tag]moya[/tag] is the best place for this.
+
+[code xml]
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let">
+    <!-- Let extension now available -->
+</moya>
+[/code]
+
+Once the namespace has been added, you can now assign the result of an expression to a value in a tag. Here's an example of using the let extension to create the values in a dictionary:
+
+[code xml]
+<dict dst="crew" let:rygel="'Hynerian'" let:john="'human'" let:aeryn="'peacekeeper'" />
+[/code]
+
+The above code is equivalent to the following:
+
+[code xml]
+<dict dst="crew">
+    <str dst="rygel">Hynerian</str>
+    <str dst="john">Human</str>
+    <str dst="aeryn">Peacekeeper</str>
+</dict>
+[/code]
+
+The let extension can be used in a number of other (non data) tags, where additional data is required. Notably the [tag]call[/tag] which uses let attributes to create parameters. Here's an example:
+
+[code xml]
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+    <macro docname="greet">
+        <echo>Hello, ${name}!</echo>
+    </macro>
+    <macro docname="main">
+        <call macro="greet" let:name="'World'"/>
+    </macro>
+</moya>
+[/code]
+
+[h1]Conditional Statements[/h1]
+
+Every statement in Moya may be run conditionally via the optional [c]if[/c] attribute, which takes an expression. If the expression is false then the statement will [i]not[/i] be executed.
+
+Here's a few examples of the [c]if[/c] attribute in action:
+
+[code xml]
+<forbidden if="not permission:'admin'" />
+[/code]
+[code xml]
+<exit if="not user">Not found</exit>
+[/code]
+[code xml]
+<fail if="len:value lt 3">
+    Username should be at least 3 characters
+</fail>
+[/code]
+
+[h1]Compound Statements[/h1]
+
+Some statements (known as [i]compound[/i] statements) may contain [i]blocks[/i] in the form of further statements enclosed within the opening and closing tag. Such blocks may be executed conditionally, or repeatedly. This is the main mechanism which Moya uses to implement constructs found in most programming languages, such as conditions and loops.
+
+Let's take a look at one such construct, the [tag]repeat[/tag] tag, which executes the enclosed block a specific number of times. For example:
+
+[code xml]
+<repeat times="10">
+    <echo>Hello, World!</echo>
+</repeat>
+[/code]
+
+If you run the above code, it will print the hello world text a total of 10 times.
+
+[h2]IF Statment[/h2]
+
+The [tag]if[/tag] tag runs a block if a condition is true. It works much like the [c]if[/c] attribute, but may apply to more than one line. [tag]if[/tag] takes a single parameter, [c]test[/c], which should be the expression to evaluate. Here's an example:
+
+[code xml]
+<if test="coffee">
+    <echo>Drink coffee</echo>
+    <echo>Mmm, coffee</echo>
+</if>
+[/code]
+
+[h2]ELSE Statement[/h2]
+
+The [tag]else[/tag] tag compliments [tag]if[/tag] by running it's code block if a previous [c]if[/c] evaluated its condition to false. Here's an example:
+
+[code xml]
+<if test="coffee">
+    <echo>Drink coffee</echo>
+</if>
+<else>
+    <echo>Buy more coffee</echo>
+</else>
+[/code]
+
+[h2]ELIF Statement[/h2]
+
+The [tag]elif[/tag] tag is much like [tag]else[/tag], but accepts another condition. You may use any number of chained [tag]elif[/tag] tags, which may finish with a final [tag]else[/tag]. Here's an example:
+
+[code xml]
+<if test="coffee">
+    <echo>Drink coffee</echo>
+</if>
+<elif test="tea">
+    <echo>Drink tea</echo>
+</elif>
+<else>
+    <echo>Buy more coffee</echo>
+</else>
+[/code]
+
+[h2]REPEAT Statement[/h2]
+
+The [tag]repeat[/tag] tag executes a block a given number of times, specified by the [c]times[/c] attribute (an expression). Here's an example of [tag]repeat[/tag]:
+
+[code xml]
+<repeat times="3">
+    <echo>Knock</echo>
+</repeat>
+[/code]
+
+This will display [c]"Knock"[/c] 3 times.
+
+If you omit the [c]times[/c] attribute then the enclosed block will execute indefinitely. It is generally not useful to do this, as your code will never exit, so is best used in conjunction with [tag]break[/tag].
+
+[h2]WHILE Statement[/h2]
+
+The [tag]while[/tag] statement repeatedly executes a block while a condition is true. Once the condition because false, the enclosed block is skipped and Moya executes the code after the [tag]while[/tag]. Here's an example:
+
+[code xml]
+<int dst="coffee" value="10"/>
+<while test="coffee">
+    <echo>Drink coffee</echo>
+    <dec dst="coffee"/> <!-- subtract 1 from variable coffee -->
+</while>
+[/code]
+
+The above code will display [c]"Drink coffee"[/c] 10 times. On each pass through the loop, the variable [c]coffee[/c] is reduced by 1. After 10 times, it reaches the value of 0, which evaluates to false, and Moya exits the [tag]while[/tag] loop.
+
+[alert]Be careful with the [tag]while[/tag] statement. If your condition never becomes false, Moya will repeatedly execute the block and never exit. If you ever get stuck in one of these [i]infinite loops[/i], you can press Ctrl+C to stop Moya in its tracks.[/alert]
+
+[h2]FOR Statement[/h2]
+
+The [tag]for[/tag] tag executes its block for each item in a sequence. The [tag]if[/tag] tag takes two parameters; [c]src[/c] (an expression) is the sequence you want to [i]iterate[/i] over, and [c]dst[/c]. which is the name of the value that will hold the item each time the block is execute.
+
+Here's an example that iterates through a list of strings:
+
+[code xml]
+<list dst="crew">
+    <str>Ka D'Argo</str>
+    <str>Aeryn Sun<str>
+    <str>Rygel</str>
+    <str>John Chrichton</str>
+</list>
+<for src="crew" dst="character">
+    <echo>${character} is on board!</echo>
+</for>
+[/code]
+
+An optional parameter, [c]filter[/c], may contain an expression that will skip an iteration if it evaluates to false. Here's an example of [tag]if[/tag] with the [c]filter[/c] attribute:
+
+[code xml]
+<for src="crew" dst="character" filter="character != 'Rygel'">
+    <echo>${character} is on board!</echo>
+</for>
+[/code]
+
+The above code is equivalent to the following:
+
+[code xml]
+<for src="crew" dst="character">
+    <if test="character != 'Rygel">
+        <echo>${character} is on board!</echo>
+    </if>
+</for>
+[/code]
+
+[h2]BREAK Statement[/h2]
+
+The [tag]break[/tag] tag exits a loop ([tag]while[/tag], [tag]for[/tag], [tag]repeat[/tag] etc.) prematurely. Here's an example of using [tag]break[/tag] inside an [tag]if[/tag] tag:
+
+[code xml]
+<for src="crew" dst="character">
+    <echo>${character} is on board!</echo>
+    <if test="character=='Rygel'">
+        <break/>
+    </if>
+</for>
+[/code]
+
+The above code will execute the block inside [tag]for[/tag] until a condition becomes true. When the [tag]break[/tag] tag executes, it ignores any code still inside the loop and jumps to the point immediately after the loop.
+
+[aside]The listing above could be written more concisely by using the [c]if[/c] attribute of the [tag]break[/tag] tag.[/aside]
+
+[h2]CONTINUE Statement[/h2]
+
+The [tag]continue[/tag] tag compliments [tag]break[/tag] in that it works with loops, but rather than leave the loop entirely, it move directly to the next iteration (i.e. skips the rest of the block).
+
+Here's an example of [tag]continue[/tag] in action:
+
+[code xml]
+<for src="crew" dst="character">
+    <if test="character=='Rygel'">
+        <continue/>
+    </if>
+    <echo>${character} is on board!</echo>
+</for>
+[/code]
+
+[h1]Macros[/h1]
+
+A macro is a block of code that may be [i]called[/i] from elsewhere in your code. When the code in the macro has been executed, Moya will return to the original point it was called from. We've seen macros in use when calling Moya code from the command line, but you can also call other macros in the process.
+
+[aside]The term 'macro' is used in Moya for historical reasons, other language would call these 'functions'.[/aside]
+
+Let's define a simple [tag]macro[/tag]:
+
+[code xml]
+<macro docname="greet">
+    <echo>Hello, ${name}!<echo>
+</macro>
+[/code]
+
+We can call this macro with the [tag]call[/tag] tag, which takes a [c]macro[/c] attribute containing the name of the macro. Here's how we might call the above macro:
+
+[code xml]
+<call macro="greet">
+    <str dst="name">John Crichton</str>
+</call>
+[/code]
+
+This call could also use the [c]let[/c] extension to be a little more concise. The following will have the same effect:
+
+[code xml]
+<call macro="greet" let:name="John Crichton" />
+[/code]
+
+Whatever method you use, Moya jumps from the [tag]call[/tag] tag to the body of the [c]macro[/c], passing in an [i]argument[/i] called [c]name[/c]. Arguments used in a call, and any data defined inside the [c]macro[/c] are [i]local[/i] variables -- they won't exist when the call returns.
+
+You can use macros to [i]return[/i] data, with the [tag]return[/tag] tag. Let's modify the [c]greet[/c] macro to return a greeting, rather than echo it to the console:
+
+[code xml]
+<macro docname="greet">
+    <return>
+        <str>Hello, ${name}!<str>
+    </return>
+</macro>
+[/code]
+
+If we call the code above, nothing will be printed to the console. Instead, the function returns a string, which may be stored by the caller if it sets the [c]dst[/c] attribute on the [tag]call[/tag]. Let's see that in action:
+
+[code xml]
+<macro docname="main">
+    <call macro="greet" dst="greeting">
+       <str dst="name">Will</str>
+    </call>
+    <echo>Macro returned: ${greeting}</echo>
+</macro>
+[/code]
+
+In the above code, the call has [c]dst[/c] set to [c]"greeting"[/c], which is where the result of the macro call will be stored. It is [tag]echo[/tag] in the main macro, prints that to the console.
+
+An alternative way of returning a value is to use the [c]value[/c] attribute of [tag]return[/tag]. Here's how we might use this to return the text in the [c]greet[/c] macro:
+
+[code xml]
+<macro docname="greet">
+    <str dst="greeting">Hello, ${name}!</str>
+    <return value="greeting"/>
+</macro>
+[/code]
+
+[h2]Macro Arguments[/h2]
+
+By default, you may call a macro with any [i]arguments[/i]. It is also possible to specify exactly what arguments the macro requires with a [tag]signature[/tag] tag. The advantage of specifying the arguments for a macro is that Moya is able to detect any mistakes in the type or number of parameters.
+
+The [tag]signature[/tag] should contain a list of [tag]argument[/tag] tags. Here's how we would modify the [c]greet[/c] example to specify the single argument it requires:
+
+[code xml]
+<macro docname="greet">
+    <signature>
+        <argument name="name" required="yes"/>
+    </signature>
+    <return>
+        <str>Hello, ${name}!<str>
+    </return>
+</macro>
+[/code]
+
+The addition of the [tag]signature[/tag] tells Moya that the macro accepts one required argument, called [i]name[/i]. If you don't call it with a value for name, Moya will raise an [link moyacode#exceptions]exception[/link].
+
+ [tag]argument[/tag] tags have an optional [c]check[/c] parameter, which should be an expression. If given, and the expression is [i]false[/i], Moya will raise an [link moyacode#exceptions]exception[/link]. This is used for detecting errors that may otherwise go unnoticed. The following version of [c]greet[/c] checks that the value of [c]name[/c] has at least one character:
+
+[code xml]
+<macro docname="greet">
+    <signature>
+        <argument name="name" required="yes" check="len:name gt 1"/>
+    </signature>
+    <return>
+        <str>Hello, ${name}!<str>
+    </return>
+</macro>
+[/code]
+
+[h2]Lazy Calls[/h2]
+
+Moya can call macros [i]lazily[/i], which means that the call returns immediately, but the code is only executed when the return value is used. This is occasionally a very useful thing to do. For instance, the Moya authentication library uses this feature to get the current user. If your code never references the 'user', then Moya can avoid doing a database query.
+
+Let's start with the following code to demonstrate lazy calls:
+
+[code xml]
+<moya xmlns="http://moyaproject.com">
+    <macro docname="slow">
+        <echo>Entered in to slow macro</echo>
+        <sleep for="5s"/>   <!-- do nothing for 5 seconds -->
+        <echo>Leaving slow macro</echo>
+        <return>
+            <str>done</str>
+        </return>
+    </macro>
+    <macro docname="main">
+        <call macro="slow" dst="result"/>
+    </macro>
+</moya>
+[/code]
+
+Save the above code as [c]lazy.xml[/c] and call it with the following:
+
+[code]
+$ moya run lazy.xml --breakpoint
+[/code]
+
+If you then step through the code (hit [c]s[/c]), you should see Moya jump from the [tag]call[/tag] to the other macro and execute it. Nothing out of the ordinary. But lets look at what happens if the call is done lazily. Replace the call with the following:
+
+[code xml]
+<call macro="slow" dst="result" lazy="yes"/>
+[/code]
+
+Now when you run [c]lazy.xml[/c], nothing appears to happen. This is because we haven't attempted to use the return value. Insert the following line after the [c]call[/c]:
+
+[code xml]
+<echo>${result}</echo>
+[/code]
+
+Now if you run [c]lazy.xml[/c], you should find that as soon as you try to use the value of [c]result[/c], the macro is actually called. The macro will be called if you do anything with [c]result[/c], such as using it in an expression or looking up an attribute.
+
+[aside]Lazy calls are only executed once for each return value, i.e. if you use [c]result[/c] a second time, it won't call the macro again.[/aside]
+
+[h1]Element References[/h1]
+
+The preceding section on [url moyacode#macros]Macros[/url] introduced the [c]docname[/c] attribute. All elements (instances of a tag) in Moya have an associated [i]docname[/i] set with the [c]docname[/c] attribute. An element's docname should be unique to the XML file it is defined in (it's an error to use the same docname for more than one tag). The purpose of a docname is to reference another element; we've seen it used when calling a macro. Moya knows which [tag]macro[/tag] to call by matching the value of [c]macro[/c] to an element with that docname.
+
+[aside]If you don't set a docname for an element, Moya will generate one automatically and use it internally[/aside]
+
+There is a second type of name common to all elements, called a [i]libname[/i]. A libname is similar to a docname, but must be unique to the [i]library[/i] and is used to reference an element that may be in an different XML file within the library. When you use a libname to reference an element, it should be preceded with a [c]#[/c], otherwise Moya would interpret it as a docname. Here's an example of using a libname to call a macro:
+
+[code xml]
+<macro libname="greet">
+    <echo>Hello, ${name}!</echo>
+</macro>
+<macro docname="main">
+    <call macro="#greet" name="World" />
+</macro>
+[/code]
+
+In the above example, [tag]call[/tag] has a [c]macro[/c] attribute of [c]#greet[/c] which references the macro with libname [c]greet[/c]. Because we're using a libname rather than a docname, the [c]greet[/c] macro could be in [i]any[/i] XML file contained within the same library.
+
+Occasionally it is also necessary to reference an element in another library entirely. In these cases, you specify the application name before the [c]#[/c] symbol, so that the element reference would be [c]<application name>#<libname>[/c]. Let's look at an example of using an element reference with an application name. Consider a fictitious macro in a library called [c]moyaproject.sushifinder[/c], and installed as an application called [c]sushi[/c]:
+
+[code xml]
+<macro libname="order">
+    <echo>Ordering product ${product}</echo>
+</macro>
+[/code]
+
+If we wanted to call the above macro from another application, we could do so with the following code:
+
+[code xml]
+<call macro="sushi#order" let:product="nigiri" />
+[/code]
+
+It is also possible to use the library name in place of the application name. This works as long as the library is installed exactly once. Here's how we would use the library name to call the [c]order[/c] macro:
+
+[code xml]
+<call macro="moya.sushifinder#order" product="nigiri" />
+[/code]
+
+Generally speaking it is preferable to use libnames over docnames, so that you aren't tied to a single XML file.
+
+[h1]Exceptions[/h1]
+
+In some situations, Moya is unable to do what is asked of it, or a condition occurs that makes it unable to continue normally. In these cases Moya uses [i]exceptions[/i] to report the problem, which allows you to write code that can recover from such conditions.
+
+Let's see what happens when an exception occurs. The following code attempts to divide by zero, which Moya (and most languages) can't do:
+
+[code xml]
+<moya xmlns="http://moyaproject.com">
+    <macro docname="main">
+       <let infinity="1/0"/>
+    </macro>
+</moya>
+[/code]
+
+if you run the above code from the command line, you will see a message in the console, that looks something like this:
+
+[code]
+math.division-error: Can't divide by zero in '1/0'
+[/code]
+
+In this message, [c]math.division-error[/c] is the exception name, the text that follows is a description of the problem. The reason that the message appears in the console is that the exception was [i]unhandled[/i], meaning there was nothing in the code to detect and respond to that exception. Moya stopped running code at the point the error occurred and generated the error message.
+
+If this occurred when running a web application, the user will see a 500 (error) page, or an error report if in debug mode. If we don't want this to happen, we must first [i]catch[/i] the exception.
+
+[h2]Catching Exceptions[/h2]
+
+We can catch an exception from the previous statement with the [tag]catch[/tag] tag. Here's how we might catch the [c]"math.divisionerror"[/c] exception:
+
+[code xml]
+<let infinity="1/0"/>
+<catch>
+   <echo>Can't divide by zero!</echo>
+</catch>
+[/code]
+
+Here the code doesn't exit when we divide by zero. The code inside the [tag]catch[/tag] statement is executed, and we get a message telling us we can't divide by zero.
+
+A [tag]catch[/tag] without any attributes will catch [i]all[/i] exceptions that could occur. It is rarely a good idea to do this, because it might mask unrelated errors. We can catch a specific error with the [c]exception[/c] attribute. Let's modify the previous sample to only catch [c]"math.division-error"[/c]:
+
+[code xml]
+<let infinity="1/0"/>
+<catch exception="math.division-error">  <!-- catch the one exception -->
+   <echo>Can't divide by zero!</echo>
+</catch>
+[/code]
+
+It is possible to catch a range of errors with a single [tag]catch[/tag] by using an exception [i]wildcard[/i]. For example, [c]math.*[/c] will match all mathematical exceptions. Other exceptions are organized in to hierarchies so you can catch specific classes of exception.
+
+[aside]An exception wildcard of [c]"*"[/c] is equivalent to a [tag]catch[/tag] without an [c]exception[/c] attribute.
+
+[h2]Naming Exceptions[/h2]
+
+Exceptions follow a naming convention. There are a number of exceptions that Moya itself may throw; these contain a single period ([c]math.division-error[/c] is one example). Code in a library may also throw exceptions (See user defined exceptions below); these consist of the library [i]long name[/i], further broken down with more periods.
+
+[aside]It is possible to name your exceptions anything you want, but following this convention will ensure that your project can work with other libraries.[/aside]
+
+For example, the Moya User library can throw an exception called [c]moya.auth.password-fail[/c] if the password is not correct. This naming convention allows us to catch any exceptions from the moya.auth library. For example:
+
+[code xml]
+<catch exception="moya.auth.*">
+    <echo>Not logged in!</echo>
+</catch>
+[/code]
+
+When you write your own libraries, you should follow this same convention. See below for an explanation of working with your own exceptions.
+
+[h2]TRY Statement[/h2]
+
+The [tag]catch[/tag] tag, catches exceptions from the previous statement. Sometimes it is necessary to catch exceptions that may occur in a block of statements. We can do this with [tag]try[/tag] which simply executes a block. Here's how we could catch all [c]math.division-error[/c] exceptions in a block of code:
+
+[code xml]
+<try>
+    <echo>Attempting to divide by zero...</echo>
+    <let infinity="1/0"/>
+    <echo>We will never get here</echo>
+</try>
+<catch exception="math.division-error">  <!-- catch the one exception -->
+    <echo>Can't divide by zero!</echo>
+</catch>
+[/code]
+
+The code in a [tag]try[/tag] block is rarely as simple as this. The actual exception may occur in a macro you have called in your [tag]try[/tag] block, or even more deeply nested. As long as the execution started inside the [tag]try[/tag], you will be able to catch any exceptions.
+
+[h2]Throwing Exceptions[/h2]
+
+Up to this point we have been catching exceptions thrown by Moya itself. It is also possible to throw your own exceptions to handle conditions that may otherwise be difficult to report. Throwing an exception is done with the [tag]throw[/tag] tag, which takes a single attribute, [c]exception[/c], containing the name of the exception you want to throw.
+
+Here's an example of how to throw an exception:
+
+[code xml]
+<try>
+    <throw exception="bobs.widgets.error"/>
+    <echo>Will never get here</echo>
+</try>
+<catch exception="bobs.widgets.*">
+    <echo>Sorry, Can't do that with Bob's widgets</echo>
+</catch>
+[/code]
+
+In the above code, Moya executes the [tag]throw[/tag] statement, which creates the exception. It is immediately caught by the [tag]catch[/tag] statement underneath the [tag]try[/tag]. Of course, in real code, exceptions would be thrown if some real-world condition is detected. The name of the exception follows the naming guidelines of beginning with the name of your library, here the library would be the fictitious [c]bobs.widgets[/c] library.
+
+When you throw an exception, you can also attach a message with the [c]msg[/c] attribute. This text is displayed if the exception is unhandled. Here's how to attach a message to the exception above:
+
+[code xml]
+<throw exception="bobs.widgets.error" msg="Out of Stock"/>
+[/code]
+
+It is good practice to add a [c]msg[/c]; it can help diagnose problems.
+
+[aside]For the above exception, it may be a good idea to name it [c]bobs.widgets.out-of-stock[/c], or similar, so that it may be treated differently from other errors.[/aside]
+
+[h2]Exception Information[/h2]
+
+Exceptions may have additional data associated with them, presumably containing information that may help the code that catches the exception decide how to respond. You can attach such data to exceptions with the [c]let[/c] extension. Here's an example:
+
+[code xml]
+<throw exception="bobs.widgets.error" msg="Out of Stock" let:item="deluxe"/>
+[/code]
+
+The above code associates a string named [c]item[/c] with the exception being thrown. The [tag]catch[/tag] statement may retrieve this information via its [c]dst[/c] attribute. Inside the [tag]catch[/tag], the value referenced by [c]dst[/c], will contain an [i]exception object[/i]. Exception objects have 3 attributes; [c]msg[/c], [c]type[/c] and [c]info[/c]. The [c]type[/c] attribute contains the exception type (e.g. [c]bobs.widgets.error[/c]); [c]msg[/c] contains a short description of the exception; and [c]info[/c] is a dictionary with the attached information.
+
+Here's how you might respond to data in an exception:
+
+[code xml]
+<throw exception="bobs.widgets.error" msg="Out of Stock" let:item="deluxe"/>
+<catch exception="bobs.widgets.*" dst="error">
+    <echo>Message is: ${error.msg}</echo>
+    <echo>Exception type is: ${error.type}</echo>
+    <echo>Item is: ${error.info.item}</echo>
+</catch>
+[/code]

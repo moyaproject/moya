@@ -1,0 +1,52 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.1\n"
+"POT-Creation-Date: 2014-03-26 11:51+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8Bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. <title/>
+#: ../logic/i18n.xml:24 ../logic/i18n.xml:22
+msgid "Internationalization Tests"
+msgstr ""
+
+#. attribute 'sometext' of <translate_attribute/>
+#: ../logic/i18n.xml:32
+msgid "I like cats"
+msgstr ""
+
+#: ../templates/moya.i18n/front.html:26
+msgctxt "month name"
+msgid "May"
+msgstr ""
+
+#. greeting
+#: ../templates/moya.i18n/front.html:9
+msgid "Hello!"
+msgstr ""
+
+#. plural test
+#: ../templates/moya.i18n/front.html:12
+msgid "There is ${count} ${name}"
+msgid_plural "There are ${count} ${name}s"
+msgstr[0] ""
+msgstr[1] ""
+
+#. <text/>
+#: ../logic/i18n.xml:26
+msgid "Welcome"
+msgstr ""
+
+#: ../templates/moya.i18n/front.html:29
+msgctxt "to indicate possibility"
+msgid "May"
+msgstr ""
+
+#. attribute 'force_translate' of <translate_attribute/>
+#: ../logic/i18n.xml:32
+msgid "I don't like dogs"
+msgstr ""

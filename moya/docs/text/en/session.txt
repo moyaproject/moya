@@ -1,0 +1,60 @@
+[title Moya Sessions]
+
+The Moya Sessions library manages [i]sessions[/i]. A session is persistent data associated with a single browser session, and may be used for storing data across requests.
+
+[h1]Installation[/h1]
+
+The Moya Sessions library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.sessions"/>
+[/code]
+
+The session library should be installed and mounted on [c]/[/c] as follows:
+
+[code xml]
+<install name="session" lib="moya.session" mount="/"/>
+[/code]
+
+[h1]Using Sessions[/h1]
+
+Session information is stored in a dictionary called [c].session[/c]. You may populate this with any data you wish to stored. At the end of a successful request, this data will be written to the database. Here's an example of how you might implement a shopping cart:
+
+[code xml]
+<dict dst=".session.cart" if="'cart' not in .session">
+    <list dst="cart"/>
+</dict>
+[/code]
+
+This code creates a list called [c]cart[/c] in [c].session[/c] where we can store the products a user clicks on. To add a product we can simply append to [c].session.cart[/c]. Here's an example:
+
+[code xml]
+<append src=".session.cart" value="'Asahi beer'"/>
+[/code]
+
+When the user visits the checkout page, you can then list all the products in their shopping cart.
+
+[alert]Note that sessions are independent of users. In a checkout page, you might need to ask a user to log in before paying. Moya will use the same session information when the users has logged in.[/alert]
+
+[h1]Session Keys[/h1]
+
+The session is identified by setting a randomly generated cookie. You can inspect this value in the context with [c].session_key[/c].
+
+The session key may be used when caching to ensure that something is cached for user's session. This is useful if you have some content related to the user which is slow to generate, but won't change during a browser session. Here's how you might user that in a template:
+
+[code moyatemplate]
+{% cache key=.session_key %}
+    <!-- calculate something expensive for the user -->
+{% endcache %}
+[/code]
+
+[h1]Session Settings[/h1]
+
+There is currently one setting for the Session library; [c]expire[/c] should be a timespan which indicates how long the session should persist before it expires. If the user makes no requests in this time, the session will be reset to an empty dictionary.
+
+The default value for [c]expire[/c] is [c]1h[/c] which will cause the session to expires after 1 hour. Here's what you would add to your settings to raise this to 24 hours:
+
+[code]
+[settings:session]
+expire = 24h
+[/code]

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block "title" %}${user}{% end %}
+
+{% block "body" %}
+{% if user %}
+<h2>${user.username} <small>account details</small></h2>
+
+<dl class="dl-horizontal">
+    <dt>Username</dt>
+    <dd>${user.username}</dd>
+    <dt>ID</dt>
+    <dd>#${user.id}</dd>
+    <dt>First name</dt>
+    <dd>{%- if user.first_name %}${user.first_name}{% else %}<i>blank</i>{% endif %}</dd>
+    <dt>Last name</dt>
+    <dd>{% if user.last_name %}${user.last_name}{% else %}<i>blank</i>{% endif %}</dd>
+    <dt>Email</dt>
+    <dd><a href="mailto:${user.email}">${user.email}</a></dd>
+</dl>
+
+{%- if not user.active %}
+<div class="alert alert-info">${user.username}'s login is currently disabled</div>
+{%- endif %}
+
+{%- for group in user.groups %}
+{%- if group.user %}
+<h3>${user.username}'s personal permissions</h3>
+{%- else %}
+<h3>${user.username} is a member of group '${group.name}'</h3>
+{%- endif %}
+<p>${group.description}</p>
+<div class="well">
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Permission</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for perm in group.permissions %}
+			<tr>
+				<td>${perm.name}</td>
+				<td>${perm.description}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{%- endfor %}
+
+{%- else %}
+<h2>No user logged in</h2>
+
+{%- endif %}
+{% endblock %}

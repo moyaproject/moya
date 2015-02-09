@@ -1,0 +1,23 @@
+.moya-console
+{
+	font-family:"Lucida Console", Monaco, monospace;
+	white-space:pre;
+	font-size:11px;
+	color:#111;
+	background-color:#f2f2f2;
+	border:1px solid #d8d8d8;
+	padding:8px;
+	border-radius:5px;
+}
+
+.moya-console .console-bold { font-weight:bold; }
+.moya-console .console-underline { text-decoration:underline;}
+.moya-console .console-dim {opacity: .7;}
+.moya-console .console-foreground-black { color:black; }
+.moya-console .console-foreground-red { color:red; }
+.moya-console .console-foreground-green { color:lawngreen; }
+.moya-console .console-foreground-yellow { color:yellow; }
+.moya-console .console-foreground-blue { color:blue; }
+.moya-console .console-foreground-magenta { color:pink; }
+.moya-console .console-foreground-cyan { color:acqua; }
+.moya-console .console-foreground-white { color:white; }

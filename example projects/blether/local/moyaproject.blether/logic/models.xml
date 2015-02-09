@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com">
+
+    <model libname="Timeline" xmlns="http://moyaproject.com/db">
+        <one-to-one name="user" model="moya.auth#User" null="no" backref="timeline"/>
+        <relationship name="blethers" model="#Blether" orderby="-posted_time"/>
+        <many-to-many name="following" model="#Timeline" backref="followers"/>
+    </model>
+
+    <model libname="Blether" xmlns="http://moyaproject.com/db">
+        <foreign-key name="timeline" model="#Timeline" null="no"/>
+        <datetime name="posted_time" label="Blethered on" null="no" auto="yes"/>
+        <string name="text" length="140"/>
+    </model>
+
+</moya>

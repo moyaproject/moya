@@ -1,0 +1,124 @@
+{
+    "name": "attribute",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "attribute",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "Defines an attribute in a [tag]tag[/tag], [tag]data-tag[/tag] or [tag]widget[/tag].",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define an attribute in a custom tag",
+        "tag_name": "attribute",
+        "params": {
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the attribute",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "missing": {
+                "default_display": "yes",
+                "name": "missing",
+                "missing": true,
+                "default": true,
+                "doc": "Are missing values allowed?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "required": {
+                "default_display": "no",
+                "name": "required",
+                "missing": true,
+                "default": false,
+                "doc": "Required",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "choices": {
+                "default_display": "",
+                "name": "choices",
+                "missing": true,
+                "default": null,
+                "doc": "Valid values for this attribute",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "type": {
+                "default_display": "",
+                "name": "type",
+                "missing": true,
+                "default": null,
+                "doc": "Type of the attribute",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "constant",
+                    "text",
+                    "bytes",
+                    "raw",
+                    "number",
+                    "integer",
+                    "index",
+                    "reference",
+                    "element",
+                    "elementref",
+                    "expression",
+                    "function",
+                    "application",
+                    "dbexpression",
+                    "boolean",
+                    "dict",
+                    "timespan",
+                    "commalist",
+                    "namespace",
+                    "template",
+                    "version",
+                    "httpstatus"
+                ]
+            },
+            "metavar": {
+                "default_display": "",
+                "name": "metavar",
+                "missing": true,
+                "default": null,
+                "doc": "Metavar (identifier used in documentation)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <datatag name=\"module\">\n            <doc>Define a top level admin module</doc>\n            <signature>\n                <attribute name=\"slug\" required=\"yes\" />\n                <attribute name=\"title\" required=\"yes\" />\n                <attribute name=\"description\" required=\"yes\" />\n                <attribute name=\"content\" type=\"elementref\" required=\"no\" />\n            </signature>\n        </datatag>\n\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.attribute"
+}

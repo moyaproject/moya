@@ -1,0 +1,67 @@
+[title Moya Documentation]
+
+Welcome to the Moya Documentation.
+
+[h2]Chapters[/h2]
+
+[index]
+    introduction
+    installation
+    overview
+    start
+    moyacode
+    expressions
+    customtags
+    project
+    server
+    library
+    templates
+    urls
+    content
+    db
+    email
+    i18n
+    commands
+    images
+    signals
+    logging
+    preflight
+    deploy
+[/index]
+
+[h2]Libraries[/h2]
+
+[index libraries]
+    libintro
+    auth
+    admin
+    blog
+    bootstrap
+    comments
+    debug
+    faq
+    favicon
+    feedback
+    forms
+    jsonrpc
+    links
+    pages
+    recaptcha
+    session
+    signup
+    static
+    tables
+    thumbnail
+    widgets
+    wysihtml5
+[/index]
+
+[h2]Appendices[/h2]
+
+[index appendix A]
+    xml
+    codes
+    moyarc
+    namespaces
+    recipes
+[/index]

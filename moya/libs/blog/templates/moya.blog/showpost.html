@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block "body" %}
+<div>
+    {%- if .user and not post.published %}
+    <div class="alert alert-info">
+        <div style="display:inline-block;width:100%;line-height:2em;">
+            <a class="btn btn-sm btn-primary pull-right" href="{% url "publish" with id=post.id %}"><i class="icon-share"></i> Publish</a>
+            <strong>Not published!</strong>
+            This post is currently only visible to admin
+        </div>
+    </div>
+    {%- endif %}
+    <div class="col-lg-9">
+        <a href="{% url "list" %}">&crarr; All posts</a>
+        {% render sections.body %}
+    </div>
+    <div class="col-lg-3">
+        {% render sections.side %}
+    </div>
+</div>
+{% endblock %}

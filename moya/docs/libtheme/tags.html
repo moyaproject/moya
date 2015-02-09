@@ -1,0 +1,35 @@
+{% extends "/base.html" %}
+
+
+{% block "title" %}Tags{% endblock %}
+
+
+{% block "body" %}
+<div class="container">
+    <h1>Tags Index</h1>
+    <p>Tags defined in ${long_name}</p>
+    {%- if tags %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tag</th>
+                <th>XML namespace</th>
+                <th>Synopsis</th>
+            </tr>
+        <thead>
+        <tbody>
+            {%- for tag in tags %}
+            <tr>
+                <td>
+                    <a href="${slug:tag.namespace}/tag_${tag.tag_name}.html">&lt;${tag.tag_name}&gt;</a>
+                </td>
+                <td>${tag.namespace}</td>
+                <td>${tag.synopsis}</td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

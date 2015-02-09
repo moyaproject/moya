@@ -1,0 +1,208 @@
+{
+    "name": "moyaproject_dot_com_thumbnail_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/thumbnail",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "generate",
+                "lib": "moya.thumbnail",
+                "namespace_slug": "moyaproject_dot_com_thumbnail",
+                "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 61)",
+                "doc": "Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].",
+                "prev_tag": "thumbnails",
+                "namespace": "http://moyaproject.com/thumbnail",
+                "tag_name": "generate",
+                "next_tag": "processor",
+                "synopsis": "generate thumbnails",
+                "params": {
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "thumbnails": {
+                        "default_display": null,
+                        "name": "thumbnails",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A reference to the thumbnail tag",
+                        "required": true,
+                        "type": "element",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "path": {
+                        "default_display": null,
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path to the image to the original image",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "overwrite": {
+                        "default_display": "yes",
+                        "name": "overwrite",
+                        "missing": true,
+                        "default": "yes",
+                        "doc": "Should existing thumbnails be overwritten?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "processor",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_thumbnail",
+                "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 15)",
+                "doc": "A thumbnail processor.\n\nDefines how an image should be processed to produce another image. When [tag thumbnail]generate[/tag] runs,\nit calls the each processor in a [tag thumbnail]thumbnails[/tag] with an image object called [c]image[/c].\nThe code inside the processor transforms that image. The new image is then written as the thumbnail. Here's an example:\n\n[code xml]\n<tn:thumbnails libname=\"sushifinder#thumbnails.products\">\n    <tn:processor name=\"small\">\n        <image:resize-to-fit width=\"80\" height=\"80\" />\n    </tn:processor>\n</tn:thumbnails>\n[/code]",
+                "prev_tag": "generate",
+                "namespace": "http://moyaproject.com/thumbnail",
+                "tag_name": "processor",
+                "next_tag": "thumbnails",
+                "synopsis": "define a thumbnail processor",
+                "params": {
+                    "quality (if using jpeg)": {
+                        "default_display": "80",
+                        "name": "quality (if using jpeg)",
+                        "missing": true,
+                        "default": "80",
+                        "doc": "The quality of jpeg thumbnails (max 100)",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "version": {
+                        "default_display": "1",
+                        "name": "version",
+                        "missing": true,
+                        "default": "1",
+                        "doc": "A version number of the processor",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": null,
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "An identifier used in the thumbnail generation",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "format": {
+                        "default_display": "jpeg",
+                        "name": "format",
+                        "missing": true,
+                        "default": "jpeg",
+                        "doc": "Image format for the thumbnail",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": [
+                            "jpeg",
+                            "png"
+                        ]
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "thumbnails",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_thumbnail",
+                "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 7)",
+                "doc": "Define a collection of thumbnail processors.\n\n            This tag should contain one or more [tag thumbnail]processor[/tag] tags.",
+                "prev_tag": "processor",
+                "namespace": "http://moyaproject.com/thumbnail",
+                "tag_name": "thumbnails",
+                "synopsis": "a container for thumbnail processors",
+                "params": {},
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/thumbnail",
+        "namespace_doc": "\n        Tags defined in the [link thumbnail]Moya Thumbnail[/link] library.\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/thumbnail.moyaproject_dot_com_thumbnail_index"
+}

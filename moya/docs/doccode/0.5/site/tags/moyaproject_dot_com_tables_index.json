@@ -1,0 +1,560 @@
+{
+    "name": "moyaproject_dot_com_tables_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/tables",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "cell",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nA container for a single cell in a [tag tables]table[/tag].\n\n",
+                "prev_tag": "table",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "cell",
+                "next_tag": "columns",
+                "synopsis": "a cell in a table",
+                "params": {
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"cell.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "cell.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "columns",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nDefines the columns in a [tag tables]table[/tag].\n\n",
+                "prev_tag": "cell",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "columns",
+                "next_tag": "header",
+                "synopsis": "define the columns in a table",
+                "params": {
+                    "headers": {
+                        "default_display": "",
+                        "name": "headers",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Headers",
+                        "required": false,
+                        "type": "comma list",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"columns.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "columns.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "header",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nDefines a single column header in a [tag tables]table[/tag].\n\n",
+                "prev_tag": "columns",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "header",
+                "next_tag": "row",
+                "synopsis": "define a column header in a table",
+                "params": {
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"header.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "header.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "row",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nDefine a row in a [tag tables]table[/tag].\n\n",
+                "prev_tag": "header",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "row",
+                "next_tag": "rows",
+                "synopsis": "define a row in a table",
+                "params": {
+                    "style": {
+                        "default_display": "",
+                        "name": "style",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Option CSS style",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"row.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "row.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "id": {
+                        "default_display": "",
+                        "name": "id",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Table ID",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "rows",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nDefines a collection of rows in a [tag tables]table[/tag].\n\nA [tag tables]rows[/tag] tag may contain either [tag tables]row[/tag] tags [i]or[/i] -- if the [c]src[/c] attribute is set -- [tag tables]cell[/tag] tags.\n\nWhen the [c]src[/c] attribute is set, it should be a sequence of values to be iterated over (like [tag]for[/tag]). Each item in the sequence will generate a row containing the enclosed [tag tables]cell[/tag] tags.\n\n",
+                "prev_tag": "row",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "rows",
+                "next_tag": "sort-header",
+                "synopsis": "a collection of rows in a table",
+                "params": {
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Sequence of row data",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "style": {
+                        "default_display": "",
+                        "name": "style",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Optional CSS style",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "row_class": {
+                        "default_display": "",
+                        "name": "row_class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class for rows",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "row_template": {
+                        "default_display": "\"row.html\"",
+                        "name": "row_template",
+                        "missing": true,
+                        "default": "row.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"rows.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "rows.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "id": {
+                        "default_display": "",
+                        "name": "id",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Table ID",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "sort-header",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nDefine a sortable header column in a [tag tables]table[/tag].\n\n",
+                "prev_tag": "rows",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "sort-header",
+                "next_tag": "table",
+                "synopsis": "define a sortable header column in a table",
+                "params": {
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"sortheader.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "sortheader.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Name to be set in query string",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "table",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_tables",
+                "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+                "doc": "\nBegins a table content definition. Must be inside a [tag]content[/tag] tag.\n\n",
+                "prev_tag": "sort-header",
+                "namespace": "http://moyaproject.com/tables",
+                "tag_name": "table",
+                "synopsis": "add a table to content",
+                "params": {
+                    "style": {
+                        "default_display": "",
+                        "name": "style",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Option CSS style",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "\"moya.tables\"",
+                        "name": "from",
+                        "missing": true,
+                        "default": "moya.tables",
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "id": {
+                        "default_display": "",
+                        "name": "id",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Table ID",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "caption": {
+                        "default_display": "",
+                        "name": "caption",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Table caption",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "\"table.html\"",
+                        "name": "template",
+                        "missing": true,
+                        "default": "table.html",
+                        "doc": "Template",
+                        "required": false,
+                        "type": "template path",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <table class=\"table table-striped\" xmlns=\"http://moyaproject.com/tables\" caption=\"An example table\">\n            <columns>\n                <header>Product</header>\n                <header>Stock</header>\n            </columns>\n            <rows src=\"products\" dst=\"product\">\n                <cell>${product.name}</cell>\n                <cell>${product.stock}</cell>\n            </rows>\n        </table>\n        ",
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/tables",
+        "namespace_doc": "\n        Tags used to create [link tables]table[/link] content.\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/tables.moyaproject_dot_com_tables_index"
+}

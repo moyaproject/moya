@@ -1,0 +1,47 @@
+{
+    "name": "transaction",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "transaction",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nExecutes the enclosed block in a single transaction.\n\nIf the block executes successfully, the changes will be committed. If an exception is thrown, the changes will be rolled back.\n\nNote that databases related exceptions in the enclosed black won't be thrown until the end of the transaction.\n\nIn the case of nested transactions (a transaction inside a transactions), only the outer-most transaction will actually commit the changes. For more granular control over transactions, the [tag db]atomic[/tag] tag is preferred.\n\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "commit changes to the database",
+        "tag_name": "transaction",
+        "params": {
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.transaction"
+}

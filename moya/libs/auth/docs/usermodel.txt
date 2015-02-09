@@ -1,0 +1,125 @@
+[section Customization]
+[title Customizing User Models]
+
+This contains [i]information[/i] about User Models...
+
+[alert TEST]Be careful with custom user models[/alert]
+
+In id faucibus quam. Nam porta tristique enim eget pharetra. Vivamus eget vestibulum nisi, mattis commodo tortor. Pellentesque auctor, urna interdum auctor ullamcorper, augue risus convallis nibh, a auctor est risus nec enim. Sed ultrices pretium massa sed sagittis. Aenean sagittis libero diam, ac placerat orci tempor at. Cras et felis eget risus facilisis lobortis sit amet ut turpis. Duis vulputate malesuada nisi vel mollis. Pellentesque rutrum lobortis egestas. Pellentesque interdum risus felis, vel ultricies neque dictum in. Aenean sit amet velit aliquam sapien sagittis fringilla. Pellentesque condimentum erat nec nunc cursus, sed ullamcorper neque elementum. Vivamus sed lobortis justo. Sed rhoncus et elit quis elementum.
+
+[aside This is an aside]Don't forget you can use asides too![/aside]
+
+
+[h1]The first section[/h1]
+
+Donec eget neque eu tellus volutpat ornare. Sed non hendrerit ante. Nam scelerisque pulvinar urna a pretium. Aliquam pharetra leo id est suscipit, quis rutrum felis tristique. Suspendisse at nibh quis quam egestas facilisis sit amet et lacus. Fusce viverra neque non massa mattis, eget auctor neque commodo. Praesent est elit, dapibus eu sapien ac, commodo facilisis turpis. Nulla scelerisque risus vitae elit imperdiet molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi in tortor cursus, aliquet augue ut, varius ante.
+
+[code xml]
+    <model xmlns="http://moyaproject.com/db" name="Post" libname="Post" repr="${slug}">
+        <foreign-key model="auth#User" name="owner" null="yes" />
+        <string name="title" length="100" null="no" />
+        <string name="slug" length="100" null="no" unique="yes" />
+        <boolean name="published" default="no" />
+        <date-time name="published_date" null="yes" />
+        <text name="content" null="no" default="" />
+    </model>
+[/code]
+
+[h2] A sub-section[/h2]
+Donec eget neque eu tellus volutpat ornare. Sed non hendrerit ante. Nam scelerisque pulvinar urna a pretium. Aliquam pharetra leo id est suscipit, quis rutrum felis tristique. Suspendisse at nibh quis quam egestas facilisis sit amet et lacus. Fusce viverra neque non massa mattis, eget auctor neque commodo. Praesent est elit, dapibus eu sapien ac, commodo facilisis turpis. Nulla scelerisque risus vitae elit imperdiet molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi in tortor cursus, aliquet augue ut, varius ante.
+
+[h3]A sub sub section[/h3]
+
+Here is some code...
+
+[code python]
+    def run(self):
+        args = self.args
+        try:
+            application = WSGIApplication(self.location,
+                                          args.settings,
+                                          args.server)
+            archive = application.archive
+        except ValueError:
+            archive = Archive()
+            # Not in a project directory
+            # Only built in tags will be available
+
+        console = self.console
+        if args.html is not None:
+            from moya.console import Console
+            console = Console(html=True)
+
+        from moya.elements.help import help
+        console.div()
+        if not help(archive, console, args.tag):
+            return -1
+
+        if args.html is not None:
+            from moya import consolehtml
+            html = console.get_text()
+            html = consolehtml.render_console_html(html)
+
+            with open(args.html, 'wb') as f:
+                f.write(html.encode('utf-8'))
+[/code]
+
+[h2]Another sub section[/h2]
+Donec eget neque eu tellus volutpat ornare. Sed non hendrerit ante. Nam scelerisque pulvinar urna a pretium. Aliquam pharetra leo id est suscipit, quis rutrum felis tristique. Suspendisse at nibh quis quam egestas facilisis sit amet et lacus. Fusce viverra neque non massa mattis, eget auctor neque commodo. Praesent est elit, dapibus eu sapien ac, commodo facilisis turpis. Nulla scelerisque risus vitae elit imperdiet molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi in tortor cursus, aliquet augue ut, varius ante.
+
+[code moyatemplate]
+{% extends "/base.html" %}
+{% block "body" %}
+<div class="container">
+    <div class="row-fluid">
+        <div class="span3 ${class}">
+{% block column %}
+{% include "snippets/docspanel.html" %}
+{% endblock %}
+        </div>
+        <div class="span9">
+{% block "content" %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+[/code]
+
+Donec eget neque eu tellus volutpat ornare. Sed non hendrerit ante. Nam scelerisque pulvinar urna a pretium. Aliquam pharetra leo id est suscipit, quis rutrum felis tristique. Suspendisse at nibh quis quam egestas facilisis sit amet et lacus. Fusce viverra neque non massa mattis, eget auctor neque commodo. Praesent est elit, dapibus eu sapien ac, commodo facilisis turpis. Nulla scelerisque risus vitae elit imperdiet molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi in tortor cursus, aliquet augue ut, varius ante.
+
+[code ini]
+[author]
+name = Moya Dev Team
+email = admin@moyaproject.com
+organization = Moya Project
+url = http://moyaproject.com
+
+[lib]
+location = ./logic
+title = admin
+url = http://moyaproject.com
+namespace = http://moyaproject.com/admin
+longname = moya.admin
+version = 0.0.1
+
+# This is a comment = asdasd
+
+[settings]
+
+[templates]
+location = ./templates
+key = multi
+ line
+  value
+
+[documentation]
+location = ./docs
+
+[media:media]
+location = ./media
+
+[translations]
+location = ./translations
+default_language = en
+languages =
+[/code]

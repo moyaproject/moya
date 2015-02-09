@@ -1,0 +1,64 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:admin="http://moyaproject.com/admin"
+      xmlns:w="http://moyaproject.com/widgets"
+      xmlns:html="http://moyaproject.com/html">
+
+    <content libname="content.base" template="base.html" />
+
+    <content libname="content.login" extends="#content.base">
+        <title>Log In</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.user_edit" extends="#content.base">
+        <title>Edit User Details</title>
+        <section name="body">
+            <w:success if="success">Details updated successfully</w:success>
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.forgot_password" extends="#content.base">
+        <title>Forgotten Password</title>
+        <section name="body">
+            <if test="not reset_password">
+                <w:info if="not form.errors">
+                    <markdown>Enter your email address below and we will email you a link to reset your password</markdown>
+                </w:info>
+                <render src="form"/>
+            </if>
+            <w:success if="reset_password">
+                <markdown>
+We have sent an email to **${reset_password.user.email}** with instructions how to reset your password.
+
+If you don't receive this email within a few minutes, please check your *spam* folder.
+                </markdown>
+            </w:success>
+        </section>
+    </content>
+
+    <content libname="content.reset_password" extends="#content.base">
+        <title>Reset Password</title>
+        <section name="body">
+            <w:danger if="badtoken">
+                <markdown>
+**Reset token not found**!
+
+The link may have been used, or has expired. You can request a new password reset [here](${forgot_password_url}).
+                </markdown>
+            </w:danger>
+            <render src="form" if="not success and not badtoken"/>
+            <w:success if="success">
+                <markdown>
+**Your password has been reset!**
+
+You may now [log in](${login_url}) with your new password.
+                </markdown>
+            </w:success>
+        </section>
+    </content>
+
+</moya>

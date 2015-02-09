@@ -1,0 +1,6 @@
+<moya xmlns="http://moyaproject.com">
+    <server docname="main">
+        <import py="moya.libs.static" />
+        <install name="static" lib="moya.static" mount="/" />
+    </server>
+</moya>

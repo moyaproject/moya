@@ -1,0 +1,14 @@
+Dear ${subscription.user.username},
+
+A comment was posted to ${.site.url}${subscription.commentobject.object_url}#comment${comment.id}
+
+${comment.user.username or comment.commenter_name} said...
+
+"${comment.text}"
+
+Don't want any more of these emails? Click this link to unsubscribe:
+
+${.site.url}{% url "subscription" with comment_object_id=commentobject.id %}?action=unsubscribe
+
+--
+Moya Comments (http://moyaproject.com/comments)

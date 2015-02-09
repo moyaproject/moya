@@ -1,0 +1,5 @@
+{%- if column.params.link and edit_url %}
+<td><a href="${edit_url}">{% children %}</a></td>
+{%- else %}
+<td>{% children %}</td>
+{%- endif %}

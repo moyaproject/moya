@@ -1,0 +1,69 @@
+{
+    "name": "html",
+    "doc_namespace": "xmlns.http://moyaproject.com/email",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "html",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_email",
+        "defined": "/home/will/projects/moya/moya/tags/email.py",
+        "doc": "Add an HTML template to an email.",
+        "namespace": "http://moyaproject.com/email",
+        "synopsis": "add HTML to an email",
+        "tag_name": "html",
+        "params": {
+            "content": {
+                "default_display": "",
+                "name": "content",
+                "missing": true,
+                "default": null,
+                "doc": "Content Element",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "From email",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template path",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/email.html"
+}

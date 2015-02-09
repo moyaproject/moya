@@ -1,0 +1,18 @@
+<moya xmlns="http://moyaproject.com"
+	  xmlns:links="http://moyaproject.com/links"
+	  xmlns:feedback="http://moyaproject.com/feedback">
+
+	<feedback:subject text="General Feedback" />
+	<feedback:subject text="Privacy Concern" />
+	<feedback:subject text="Report Abuse" />
+	<feedback:subject text="Technical Issue" />
+
+    <links:link text="Home"/>
+    <links:link text="About" url="/about/"/>
+    <links:link text="Blog" url="${.urls.blog}" if=".urls.blog" />
+    <links:link text="Contact" url="/contact/"/>
+    <links:link text="Feedback" url="${.urls.feedback}" if=".urls.feedback"/>
+    <links:link text="FAQ" url="${.urls.faq}" />
+    <links:link text="Social Links" url="${.urls.sociallinks}" />
+
+</moya>

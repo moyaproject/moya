@@ -1,0 +1,35 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:moya="http://moyaproject.com"
+    xmlns:w="http://moyaproject.com/widgets">
+
+    <form libname="form.new-blether" style="basic" xmlns="http://moyaproject.com/forms">
+        <text-area name="text" maxlength="140" required="yes"/>
+        <submit-button text="Blether!" />
+        <validate-field field="text">
+            <fail if="len:value gt 140">
+                140 characters is enough for anyone!
+            </fail>
+        </validate-field>
+    </form>
+
+    <form libname="form.follow" legend="Follow" xmlns="http://moyaproject.com/forms">
+        <w:dialog>
+            <moya:markdown>Please confirm you would like to follow **${user.username}**</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="follow" text="Follow" clicked="follow" />
+                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+    <form libname="form.unfollow" legend="Un-Follow" xmlns="http://moyaproject.com/forms">
+        <w:dialog>
+            <moya:markdown>Please confirm you would like to *un-follow* **${user.username}**</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="unfollow" text="Un-Follow" clicked="unfollow" />
+                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+</moya>

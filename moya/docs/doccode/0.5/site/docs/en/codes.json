@@ -1,0 +1,20 @@
+{
+    "name": "codes",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Status Codes]\n\nThe following is a list of [url http://en.wikipedia.org/wiki/List_of_HTTP_status_codes]HTTP status codes[/url]. The text and numeric code are interchangeable where Moya expects a status code. Using the text label is preferable as it is self documenting.\n\nIf the response code isn't listed here, you may still use the numeric code.\n\n[aside]It is unlikely that you will need more than a handful of these status codes in a project.[/aside]\n\n[h1]HTTP Status Codes[/h1]\n\n[code python]\n# Informational 1xx\ncontinue = 100\nswitching_protocols = 101\n\n# Successful 2xxx\nok = 200\ncreated = 201\naccepted = 202\nnon_authorative_information = 203\nno_content = 204\nreset_content = 205\npartial_content = 206\n\n# Redirection 3xxx\nmultiple_choices = 300\nmoved_permanently = 301\nfound = 302\nsee_other = 303\nnot_modified = 304\nuse_proxy = 305\ntemporary_redirect = 307\npermanent_redirect = 308\n\n# Client Error 4xx\nbad_request = 400\nunauthorized = 401\npayment_required = 402\nforbidden = 403\nnot_found = 404\nmethod_not_allowed = 405\nnot_acceptable = 406\nproxy_authentication_requred = 407\nrequest_timeout = 408\nconflict = 409\ngone = 410\nlength_required = 411\nprecondition_failed = 412\nrequest_entity_too_large = 413\nrequest_uri_too_long = 414\nunsupported_media_type = 415\nrequest_range_not_satisfiable = 416\nexpectation_failed = 417\nim_a_teapot = 418\n\n# Server Error 5xx\ninternal_error = 500\nno_implemented = 501\nbad_gateway = 502\nservice_unavailable = 503\ngateway_timeout = 504\nhttp_version_not_supported = 505\n[/code]",
+        "name": "codes",
+        "docmap": [
+            [
+                1,
+                "HTTP Status Codes"
+            ]
+        ],
+        "title": "Status Codes"
+    },
+    "id": "doc.codes"
+}

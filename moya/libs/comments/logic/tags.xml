@@ -1,0 +1,43 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db">
+
+    <tag name="get-counts" synopsis="get comment counts">
+        <doc>Get comment counts</doc>
+        <signature>
+            <attribute name="namespace" required="yes">
+                A comment namespace
+            </attribute>
+            <attribute name="topics" type="expression" default="None">
+                A sequence of object IDs
+            </attribute>
+        </signature>
+        <if test="topics is not None">
+            <db:query columns="#CommentObject.object,#CommentObject.count" dst="comment_counts"
+                filter="#CommentObject.object in topics and #CommentObject.namespace == namespace"
+                collect="dict_sequence"/>
+        </if>
+        <else>
+            <db:query columns="#CommentObject.object,#CommentObject.count" dst="comment_counts"
+                filter="#CommentObject.namespace == namespace"
+                collect="dict_sequence"/>
+        </else>
+        <return value="comment_counts" />
+    </tag>
+
+    <tag name="get-count" synopsis="get number of comments">
+        <doc>Get comment count for a single topic.</doc>
+        <signature>
+            <attribute name="namespace" required="yes">
+                A comment namespace
+            </attribute>
+            <attribute name="topic" required="yes">
+                An object id
+            </attribute>
+        </signature>
+        <db:get model="#CommentObject" dst="comment_object"
+            let:object="topic" let:namespace="namespace" />
+        <return value="comment_object.count or 0" />
+    </tag>
+
+</moya>

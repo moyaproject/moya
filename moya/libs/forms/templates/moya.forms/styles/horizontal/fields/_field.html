@@ -1,0 +1,7 @@
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {%- include "styles/horizontal/label.html" %}
+    <div class="col-sm-10">
+    {% render field set style="simple", template=field.template %}
+    {%- include "common/helperror.html" from "moya.forms" %}
+	</div>
+</div>

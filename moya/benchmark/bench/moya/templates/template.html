@@ -1,0 +1,27 @@
+{% extends "/templates/base.html" %}
+{% def "greeting" %}Hello, ${name}!{% enddef %}
+
+{% block content %}
+  <head>
+    <title>${title}</title>
+  </head>
+
+  <body>
+    {%- block header %}{% endblock %}
+
+    <div>{% call "greeting" with name=user %}</div>
+    <div>{% call "greeting" with name="me" %}</div>
+    <div>{% call "greeting" with name="world" %}</div>
+
+    <h2>Loop</h2>
+    {%- if items %}
+      <ul>
+        {%- for item in items %}
+          <li{% if forloop.last %} class="last"{% endif %}>${item}</li>
+        {%- endfor %}
+      </ul>
+    {%- endif %}
+
+    {%- block footer %}{% endblock %}
+  </body>
+{% endblock %}

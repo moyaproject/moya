@@ -1,0 +1,47 @@
+{
+    "name": "while",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "while",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Repeat a block of code while a condition is true, or a [tag]break[/tag] tag is reached.\n\n    [alert Note]Be careful not to create an [i]infinite[/i] loop with this tag.[/alert]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "repeat a block while a condition is true",
+        "tag_name": "while",
+        "params": {
+            "test": {
+                "default_display": "None",
+                "name": "test",
+                "missing": true,
+                "default": null,
+                "doc": "Condition",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n\n        <let i=\"5\"/>\n        <while test=\"i gt 0\">\n            <echo>${i}</echo>\n            <let i=\"i-1\"/>\n        </while>\n\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.while"
+}

@@ -1,0 +1,28 @@
+{
+    "name": "moyarc",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title MoyaRC]\n\nThe [c]moya[/c] command line tools loads the file [c].moyarc[/c] from your home directory. It can be used to configure defaults and behaviour for subcommands.\n\n[h1]Sections[/h1]\n\nThe following is a list of sections in [c].moyarc[/c]:\n\n[h2][author][/h2]\n\nThis section is primary used by the [c]moya start[/c] command which use these values, if not supplied.\n\n[setting]name = <YOUR NAME>[/setting]\n\nThe name of the library author.\n\n[setting]url = <URL>[/setting]\n\nThe author's URL (e.g. a blog or homepage)\n\n[setting]organization = <ORGANIZATION NAME>[/setting]\n\nThe name of the author's organization. If you don't have a particular organization, you can enter your own name here.\n\n[setting]email = <YOUR EMAIL ADDRESS>[/setting]\n\nThe author's email address.\n\n[h2][defaults][/h2]\n\nContains default values for the command line.\n\n[setting]ini = <SETTINGS FILENAME>[/setting]\n\nThe INI file to read when running subcommands. The default is to read [c]settings.ini[/c] if this value is not supplied.\n\nOn a production server, you might want to set the following:\n\n[code ini]\n[defaults]\nini = production.ini\n[/code]\n\nThis will load production settings by default.\n\nA common pattern with Moya is to have a file called [c]local.ini[/c] which contains settings local to the server (such as db settings). These would [i]not[/i] be checked in to source control. You can tell Moya to load [c]local.ini[/c] if it exits, or [c]production.ini[/c] if it doesn't, by specifying both filenames as follows:\n\n[code ini]\n[defaults]\nini = local.ini\n    production.ini\n[/code]\n\nYou can set as many filenames as you wish--Moya will try each one in turn.",
+        "name": "moyarc",
+        "docmap": [
+            [
+                1,
+                "Sections"
+            ],
+            [
+                2,
+                "[author]"
+            ],
+            [
+                2,
+                "[defaults]"
+            ]
+        ],
+        "title": "MoyaRC"
+    },
+    "id": "doc.moyarc"
+}

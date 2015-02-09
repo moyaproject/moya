@@ -1,0 +1,35 @@
+{
+    "name": "breakpoint",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "breakpoint",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "Stops the execute of Moya code and drops in to the debugger.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "drop in to the debugger",
+        "tag_name": "breakpoint",
+        "params": {},
+        "example": "\n\n        <!-- drop in to the debugger -->\n        <breakpoint/>\n\n        <for src=\"-100..100\" dst=\"count\">\n            <!-- Conditional breakpoint with 'if' attribute -->\n            <breakpoint if=\"count==0\"/>\n            <!-- This throws an exception when count is 0 -->\n            <echo>${1/count}<echo>\n        </for>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.breakpoint"
+}

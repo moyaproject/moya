@@ -1,0 +1,102 @@
+{
+    "name": "table",
+    "doc_namespace": "xmlns.http://moyaproject.com/tables",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "table",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_tables",
+        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "doc": "\nBegins a table content definition. Must be inside a [tag]content[/tag] tag.\n\n",
+        "namespace": "http://moyaproject.com/tables",
+        "synopsis": "add a table to content",
+        "tag_name": "table",
+        "params": {
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Option CSS style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "\"moya.tables\"",
+                "name": "from",
+                "missing": true,
+                "default": "moya.tables",
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "id": {
+                "default_display": "",
+                "name": "id",
+                "missing": true,
+                "default": null,
+                "doc": "Table ID",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "caption": {
+                "default_display": "",
+                "name": "caption",
+                "missing": true,
+                "default": null,
+                "doc": "Table caption",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "\"table.html\"",
+                "name": "template",
+                "missing": true,
+                "default": "table.html",
+                "doc": "Template",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "choices": null
+            },
+            "class": {
+                "default_display": "",
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Extra class",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <table class=\"table table-striped\" xmlns=\"http://moyaproject.com/tables\" caption=\"An example table\">\n            <columns>\n                <header>Product</header>\n                <header>Stock</header>\n            </columns>\n            <rows src=\"products\" dst=\"product\">\n                <cell>${product.name}</cell>\n                <cell>${product.stock}</cell>\n            </rows>\n        </table>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/tables.table"
+}

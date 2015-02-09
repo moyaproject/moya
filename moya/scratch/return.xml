@@ -1,0 +1,11 @@
+<moya xmlns:let="http://moyaproject.com/let">
+
+	<macro docname="test">
+		<return-dict let:product="'nigiri'"/>
+	</macro>
+
+	<macro docname="main">
+		<call macro="test" dst="result"/>
+		<echo obj="result"/>
+	</macro>
+</moya>

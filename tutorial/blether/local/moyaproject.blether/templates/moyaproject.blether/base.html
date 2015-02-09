@@ -1,0 +1,15 @@
+{% extends "/base.html" %}
+
+{% block "title" %}Blether{% endblock %}
+
+{% block "body" %}
+<div class="col-md-6 col-md-offset-3">
+    {% render form %}
+    {% for blether in blethers %}
+    <div class="alert alert-info">
+        <div class="text-muted text-right">posted ${localize:blether.posted_time}</div>
+        <p>${blether.text}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

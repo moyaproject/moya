@@ -1,0 +1,9 @@
+{% singleline %}
+{% if fruits %}I like {% endif %}
+{% for fruit in fruits if fruit != "carrot" %}
+${fruit}
+{% if not forloop.last %}, {% endif %}
+{% empty %}
+I don't like fruit
+{% endfor %}
+{% endsingleline %}

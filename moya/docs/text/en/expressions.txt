@@ -1,0 +1,869 @@
+[title Expressions]
+
+Expression in Moya are similar in many ways to expressions in other languages, with extensions for web related tasks. They are designed to be powerful, without compromising on readability.
+
+[h1]Testing Expressions[/h1]
+
+Perhaps the easiest way to test Moya expressions is to enter them in to the debugger. If you launch a Moya code file (any valid file will do) with [c]moya run[/c] and the [c]--breakpoint[/c] switch, Moya will drop straight in to the debugger. If you type an expression in to the command line, Moya will evaluate the expression and show you the result.
+
+You can also create data types (see below) with the [c]let[/c] command in the debugger. This assigns the result of an expression to a variable, which you can then use in further expressions. Here's an example debugger session:
+
+[code]
+moya moya.run#debug.1 > let test = "moya"
+moya moya.run#debug.1 > "Hello, " + title:test + "!"
+[/code]
+
+[h1]Data Indices[/h1]
+
+Some data types contain other values, which may be used independently in expressions. We can refer to these values with a [i]data index[/i], which is a sequence of names, separated by a period ([c].[/c]). For instance, if we have a list of values called [c]crew[/c], we can refer to the first value with [c]crew.0[/c] (Moya starts counting from 0), and [c]crew.1[/c] to refer to the second value.
+
+Moya stores all variables in the [i]context[/i] which a single data structure containing all information for a request. Most variables you work with will be in a [i]local scope[/i] (a view of part of the context). For example, when calling a macro, Moya stores the local variables in a new scope.
+
+A data index may also refer to the top (or [i]root[/i]) of the context, even when you are working in a local scope. To refer to such root values, prefix the index with a single period.
+
+One such value stored in the root of the context, is [c]request[/c], which contains information regarding the current request being handled. Because it is in the root, it is always available, and may be referred with the data index [c].request[/c] (note the leading period).
+
+[aside]There are other root values which you can rely on. These are covered in later chapters.[/aside]
+
+Here are some examples of data indices:
+
+[code]
+color.r
+.now.epoch
+.request.POST.back_url
+[/code]
+
+[h1]Missing Values[/h1]
+
+If a data index refers to a value that doesn't exist Moya returns a value of a special type called [c]Missing[/c]. Let's use the following data index as an example:
+
+[code]
+ships.moya.crew.peacekeepers
+[/code]
+
+If the object refered to by the data index [c]ships.moya.crew[/c] doesn't contain a key called [c]peacekeepers[/c], then a value of [c]Missing[/c] is returned. This is true if [i]any[/i] of the components of the index don't exist. For example, if [c]ships[/c] doesn't exist then the entire index will return [c]Missing[/c]. Similarly if there is no key called [c]moya[/c] in [c]ships[/c], then [c]Missing[/c] will be returned.
+
+A missing value is always considered False, has no keys, and results in an empty string if you use it in a template. It is also considered an empty sequence if you try to iterate over it. These properties keep code simple. For example, the following code is valid, even with a missing data index:
+
+[code xml]
+<if test="not ships.moya.crew.peacekeepers">
+    <echo>No Peacekeepers on board!</echo>
+</if>
+[/code]
+
+There may be some situations where it is not enough to treat a missing index as false. In these situation you may use the [c]missing:[/c] modifier (modifiers explained below).
+
+[code xml]
+<if test="missing:ships.moya.crew">
+    <echo>No crew on Moya!</echo>
+</if>
+[/code]
+
+[alert NOTE]Although missing data indices are useful, it does mean that Moya can't distinguish between a missing value and one with a spelling error. So if an index is inexplicably missing, check for typos![/alert]
+
+[h1]Data Types[/h1]
+
+Moya can work with various kinds of [i]data[/i] such as numbers and text. These may be created by Moya, but you can also create them within an expression. When values are directly entered in to an expression, they are known as [i]literals[/i]. For instances [c]5[/c] is a number literal.
+
+Moya supports the following data types:
+
+[h2]Numbers[/h2]
+
+Literal numbers may be positive or negative, and may contain digits after the decimal point. Defining numbers is very simple, here are some examples:
+
+[code]
+-23
+0
+3.14
+1000000000
+[/code]
+
+[h2]Strings[/h2]
+
+Strings contain text, and are defined by enclosing the text in a quote marks (either single ([c]'[/c]) or double ([c]"[/c])).
+
+If you want to write a string which contains a quote character, you must [i]escape[/i] the quote, so that Moya knows not to treat it as the end of the string. You can do this by preceding the quote with a backslash. An alternative to escaping is [i]tripple[/i] quoting; you can enclose your string in three quotes (of the same type), and Moya will know not to end the string at the single quote.
+
+[aside]Note that for expressions in an XML attribute, you can use [i]single[/i] quotes to avoid confusing the parser. It's also possible to replace the double quotes with [c]&quot;[/c] -- but this can make an expression hard to read![/aside]
+
+The following are some examples of string definitions:
+
+[code]
+"Hello, World!"
+'Where there is a Will, there is a way'
+""
+'Ka D\'Argo'
+'''Ka D'Argo'''
+[/code]
+
+[h2]Constants[/h2]
+
+There are a few values that always available and have a specific meaning.
+
+[definitions]
+
+[define True]
+Indicates truth (see Booleans below).
+[/define]
+
+[define yes]
+Alias for True
+[/define]
+
+[define False]
+Indicates falseness (see Booleans below).
+[/define]
+
+[define no]
+An alias for False.
+[/define]
+
+[define None]
+A special value that indicates 'nothing here'.
+[/define]
+
+[/definitions]
+
+[h2]Booleans[/h2]
+
+A [i]boolean[/i] is a value which indicates true or false. Boolean values are used when making decisions, in an [tag]if[/tag] tag for example.
+
+The constants, [c]True[/c] and [c]False[/c], are used for this. Moya also allows the use of [c]yes[/c] and [c]no[/c], which are equivalent. For example, these values indicate true:
+
+[code xml]
+True
+yes
+[/code]
+
+And these values indicate false:
+
+[code xml]
+False
+no
+[/code]
+
+Other values can also be interpreted as true or false by Moya. The number [c]0[/c] is considered false, as is an empty string, or an empty collection (e.g. a list with nothing in it). All other values are considered true.
+
+If you use one of these values in an expression where Moya expects a boolean, then the result of the expression will be interpreted according to the above rules. You can also used the [c]bool:[/c] modifier to convert a value in to a boolean.
+
+Here's are some examples of converting a value in to its boolean interpretation:
+
+[code xml]
+<echo>${bool:0}</echo>  <!-- False -->
+<echo>${bool:''}</echo>  <!-- False -->
+<echo>${bool:3}</echo>  <!-- True -->
+<list dst="my_list"/>
+<echo>${bool:my_list}</echo>  <!-- False -->
+<list dst="my_list_2">
+    <int>5</int>
+</list>
+<echo>${bool:my_list_2}</echo>  <!-- True -->
+[/code]
+
+[h2]Lists[/h2]
+
+A [i]list[/i] is a sequence of other Moya values. A list consists of a values separated by a colon and enclosed in square brackets ([c][][/c]). Here are some examples of lists:
+
+[code]
+['A','B','C']
+["apples","oranges","pears"]
+[2,3,5,7,11,13,19]
+[]
+[/code]
+
+Lists are indexed by their position in the list. Where the first item is at index 0, and the second is index 1 etc. The following is an example of using an index with a list:
+
+[code xml]
+<var dst="crew">["John", "Ka D'Argo", "Aeryn"]</var>
+<echo>First crew member is ${crew.0}</echo>
+<echo>Second is ${crew.1}</echo>
+[/code]
+
+[h2]Dictionaries[/h2]
+
+A dictionary contains named values. Basically, a dictionary associates a values with a [i]keys[/i] (usually a string) so that you can look up the value from the original key. You can define a dictionary with the [c]=[/c] operator. For example [c]foo="bar"[/c] creates a dictionary with a single value [c]foo[/c]. To create a dictionary with multiple keys, separate them with commas. Here is an example of an expression that creates a dictionary:
+
+[code]
+rygel="hynerian", john="human", aeryn="peace keeper"
+[/code]
+
+The keys in the dictionary are used as the index when looking up a value. The following example shows how to look up species for [c]john[/c]:
+
+[code xml]
+<var dst="crew">rygel="hynerian", john="human", aeryn="peace keeper"</var>
+<echo>John is a ${crew.john}</echo>
+[/code]
+
+Moya also supports an alternative syntax for dictionaries that may be more familiar if you have experience with other languages. This syntax consists of a number of key / value pairs separated by a colon and enclosed in curly brackets. Here's the same dictionary in this alternate syntax:
+
+[code]
+{"rygel":"hyerian", "john":"human", "aeytn":"peace keeper"}
+[/code]
+
+You can create empty dictionary with the following:
+
+[code]
+{}
+[/code]
+
+Note that the alternate syntax can define dictionaries where the keys aren't strings.
+
+[h2]Ranges[/h2]
+
+A [i]range[/i] represents a sequence of values between a start and end point. Ranges are defined with either the [c]..[/c] operator (2 periods) which defines an [i]inclusive[/i] range, or the [c]...[/c] operator (three periods) which defines an [i]exclusive[/i] range. For examples, the expression [c]1..3[/c] would create an inclusive range between 1 and 3, containing the values 1, 2, and 3. Whereas [c]1...3[/c] would crate an exclusive range from 1 to 3, but not including the end point, and would contain the values 1, and 2.
+
+Loops may go forward or backwards; [c]3..1[/c] is the reverse of [c]1..3[/c]. Ranges also work with letters, and will produce a sequence from one character to another. For example, [c]'A'..'Z'[/c] would contain all 26 letters of the alphabet.
+
+[aside]Range objects don't store the intermediate values, just the start and end points, i.e. [c]1..1000000[/c] will only store 2 values, not a million.[/aside]
+
+Probably the main use for range objects is in loops. Here's an example of using range object to count down from 10 to 1:
+
+[code xml]
+<for src="10..1" dst="count">
+    <echo>${count} seconds remaining</echo>
+    <sleep for="1s"/>
+</for>
+[/code]
+
+[h2]Regular Expressions[/h2]
+
+A [i]regular expression[/i] is a sequence of characters used to match patterns in strings. Regular expressions can be a little cryptic, but they are very useful when working with string data. See the [url http://en.wikipedia.org/wiki/Regular_expression]article on Wikipedia[/url] for an introduction.
+
+Regular expressions are defined in Moya by entering them between two slashes. Here is an example of a regular expression that matches an email address:
+
+[code]
+/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
+[/code]
+
+You can use the [c]matches[/c] operator with regular expressions to do the matching. The left hand side should be the string you want to match. Here's how you would use it with the regular expression above:
+
+[code]
+'john@example.org' matches /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
+[/code]
+
+The result of this expression would be True, because the string looks like an email address.
+
+[code]
+'not an email' matches /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
+[/code]
+
+The result of this expression would be False, because the strings does not look like an email address.
+
+[h2]Timespans[/h2]
+
+Timespans represent a period of time. They are used in a variety of places in Moya development, and can represent a period of milliseconds to a period of centuries. A timespan consists of a number followed by a symbol that indicates the unit. The unit may either be [c]ms[/c] for milliseconds, [c]s[/c] for seconds, [c]m[/c] for minutes, [c]h[/c] for hours and [c]d[/c] for days (exactly 24 hours).
+
+[aside]You may have noticed there is no unit for months and years. This is because a month may vary in length, ditto with a year (changes on a leap years).[/aside]
+
+Here are some examples of timespans:
+
+[code]
+250ms
+1s
+60m
+4h
+7d
+365d
+[/code]
+
+Timespans work with the arithmetic operator, and may be [i]mixed[/i] (i.e. timespans of different units). Here are some examples of arithmetic operators on timestamps:
+
+[code]
+3m + 10s
+7d / 24h
+60s - 1h
+[/code]
+
+Timestamps have a number of useful attributes. The attributes [c]milliseconds[/c], [c]seconds[/c], [c]minutes[/c], [c]hours[/c], and [c]days[/c] all return a number. The attribute, [c]text[/c], returns a human readable description of the timespan period. For example, if [c]t[/c] contains the result of [c]24h - 1s[/c] (24 hours minus one second), then [c]t.text[/c] would produce the following:
+
+[code]
+23 hours, 59 minutes, 59 seconds
+[/code]
+
+[h1]Operators[/h1]
+
+An operator is something that acts on data in an expression. Most operators take two values and combine them in some way. For instance, [c]+[/c] and [c]-[/c] are operators which combine values to produce a new value. The two values used by an operator are often referred to as the [i]left hand side[/i] and [i]right hand side[/i] of the operator, depending on their relative position. For example, in the expression [c]a + b[/c], [c]a[/c] would be the left hand side, and [c]b[/c] the right hand side.
+
+Moya supports the following operators:
+
+[h2]Arithmetic Operators[/h2]
+The standard arithmetic operators work with numbers (and many other data types).
+
+[h3]add[/h3]
+The add operator ([c]+[/c]) adds two values together.
+
+When used with numbers, this operator produced a number result, but it can also be used with strings. Adding two strings together produces a new string that is a combination of both. The following is an example of adding strings together:
+
+[code xml]
+'Hello, ' + "World!"
+[/code]
+
+Adding strings together is known as string [i]concatenation[/i].
+
+[h3]Subtract[/h3]
+
+The subtract operator ([c]-[/c]) subtracts one values from another.
+
+[h3]Multiply[/h3]
+
+The multiple operator ([c]*[/c]) multiplies one value by another.
+
+[h3]Divide[/h3]
+
+The divide operator ([c]/[/c]) divides one value by another.
+
+[h3]Modulus[/h3]
+
+The [i]modulus[/i] operator ([c]%[/c]) calculates the [i]remainder[/i] in a divide operation. For example [c]5 % 2[/c] is [c]1[/c], because [c]2[/c] goes in to [c]5[/c], [c]2[/c] times, with a remainder of [c]1[/c].
+
+[h3]Integer Division[/h3]
+
+The integer division operator ([c]//[/c]) is like divide, but rounds down the answer. For example [c]5 // 2[/c] is [c]2[/c].
+
+[h3]Unary Minus Operator[/h3]
+
+The unary minus operator ([c]-[/c]) makes the right hand side negative (as this is a [i]unary[/i] operator, there is no left hand side). For example if a variable [c]count[/c] has the value [c]3[/c], then the result of [c]-count[/c] is the value [c]-3[/c].
+
+[h2]Logic Operators[/h2]
+
+Logic operators combine boolean expressions. They are most often used when making decisions in [c]if[/c] tags.
+
+[h3]AND operator[/h3]
+
+Check if the left hand side of the operator [c]and[/c] the right hand side are both true. The following truth table shows how [c]and[/c] combines boolean values:
+
+[code]
+False and False (False)
+False and True (False)
+True and False (False)
+True and True (True)
+[/code]
+
+Here's an example of [c]and[/c] used in an expression:
+
+[code xml]
+<echo if="crew and fuel">Take off!</echo>
+[/code]
+
+[h3]OR operator[/h3]
+
+Check if either the left hand side [i]or[/i] the right hand side values are true. Here's the corresponding truth table:
+
+[code]
+False or False (False)
+True or False (True)
+False or True (True)
+True or True (True)
+[/code]
+
+[h3]NOT operator[/h3]
+
+The [i]not[/i] operator operates on a single value, and logically reverses it (so a true value becomes false, and vice versa).
+
+[code]
+not True (False)
+not False (True)
+[/code]
+
+Here's an example in an expression:
+
+[code xml]
+<echo if="not crew">Can't take off without crew</echo>
+[/code]
+
+[h2]Comparision Operators[/h2]
+
+A comparision operator compares two values.
+
+[h3]Equality[/h3]
+
+The equality operator ([c]==[/c]) checks that two values are the same. If the values are the same, it will return True, otherwise False. Here's an example:
+
+[code xml]
+<str dst="name">Rygel</str>
+<echo>${name == 'Rygel'}</echo> <!-- True -->
+[/code]
+
+[h3]Inequality[/h3]
+
+The [i]inequality[/i] operator, [c]!=[/c], is the inverse of the equality operator. It return True if the two values are [i]not[/i] the same.
+
+[code xml]
+<str dst="name">Rygel</str>
+<echo>${name != 'John'}</echo> <!-- True -->
+[/code]
+
+[h3]Greater Than[/h3]
+
+The greater than operator ([c]>[/c] or [c]gt[/c]) checks if the left hand side is greater than the right hand side. The reason there are two aliases for this operator, is that the [c]>[/c] symbol has special meaning in XML, so you may use [c]gt[/c] for expressions in XML attributes.
+
+[h3]Greater Than or Equal to[/h3]
+
+The [c]>=[/c] or [c]gte[/c] operator checks if the left hand side is greater than or equal to the right hand side.
+
+[h3]Less Than[/h3]
+
+The [c]<[/c] or [c]lt[/c] operator checks if the left hand side is less than the right hand side.
+
+[h3]Less Than or Equal To[/h3]
+
+The [c]<=[/c] or [c]lte[/c] operator checks if the left hand side is less than or equal to the right hand side.
+
+[h2]IN Operator[/h2]
+
+The [i]in[/i] checks if a value is contained within a sequence, or strings. For example [c]'e' in 'abcdef'[/c] would return True, but [c]'z' in 'abcdef'[/c] would result in False.
+
+Here are some examples of [c]in[/c] that result in True:
+
+[code]
+'World' in 'Hello, World!'
+5 in [1,2,3,4,5,6,7]
+5 in 1..10
+'foo' in foo='bar'
+[/code]
+
+Here are some examples of [c]in[/c] that result in False:
+
+[code]
+'Mars' in 'Hello, World!'
+88 in [1,2,3,4,5,6,7]
+20 in 1..10
+'baz' in foo='bar'
+[/code]
+
+[h2]NOT IN Operator[/h2]
+
+The [c]not in[/c] operator is the logical reverse of the [c]in[/c] operator. It returns True if the left hand side does [i]not[/i] appear in the right hand side.
+
+[h2]Index Operator[/h2]
+
+The [i]index[/i] operator looks up a key in a collection, such as a [i]dict[/i] or [i]list[/i].
+
+Here's an example of the index operator:
+
+[code xml]
+<let species="rygel='hynerian', john='human', aeryn='peace keeper'/>
+<ask dst="crew">Enter a crew member</ask>
+<echo>${crew} is a ${species[crew]}</echo>
+[/code]
+
+[h2]Format Operator[/h2]
+
+The format operator ([c]::[/c]) converts the left hand side to a string, and [i]formats[/i] it according the format specification in the right hand side. The format specification is the same as the [url https://docs.python.org/2/library/string.html#formatspec]format specification used in Python[/url].
+
+Here's an example of the format operator which formats a floating point number so that it has commas to separate the thousands, and two places after the decimal point:
+
+[code xml]
+<let n="12300232.2325"/>
+<echo>${count::',.2f'}</echo>
+[/code]
+
+[h2]Modifiers[/h2]
+
+A [i]modifier[/i] in an expression consists of a name followed by a colon, for example [c]title:[/c] is an modifier. Modifiers processes the value on the right hand side of the expression and returns a result..
+
+Note, that modifiers have a low precedence in expressions, which means they will operate on the value immediately to the right. For instance [c]upper:'hello ' + 'world'[/c], returns [c]"HELLO world"[/c] and [i]not[/i] [c]HELLO WORLD[/c]. If you would like the modifier to apply to the result of an expression, you may enclose the expression in parenthesis, i.e. [c]upper:('hello ' + 'world')[/c].
+
+See [link expressions#modifier-reference]Modifier Reference[/link] for a list of available modifiers.
+
+[h2]Filters[/h2]
+
+Closely related to modifiers are [i]filters[/i], which take a value and transform it in some way. Filters use the pipe symbol ([c]|[/c]) and work from left to right, so [c]data|my_filter[/c] would process [c]data[/c] with a filter called [c]myfilter[/c]. Filters may be [i]chained[/i] so the result of the previous filter is filtered by the next. For example [c]data|my_filter|my_other_filter[/c] would filter data first with [c]my_filter[/c] [i]then[/i] by [c]moya_other_filter[/c].
+
+The difference between modifiers and filters is that filters are defined in library code and not built in. You may define a filter with the [tag]filter[/tag] tag. Here's an example of a filter that repeats text three times.
+
+[code xml]
+<filter name="repeat3">
+    <return-str>${str:value * 3}</return-str>
+</filter>
+[/code]
+
+A filter is essentially a macro which will be called with a parameter called [c]value[/c] which is the left hand side of the filter expression. The return value is used as the result of the filter.
+
+Filters are stored in the application object, so [c].app.filters[/c] will contain all the filters for the current app. Here's how you could use the [c]repeat3[/c] filter:
+
+[code xml]
+<echo>${"beetlejuice "|.app.filters.repeat3}</echo>
+[/code]
+
+Although this works perfectly well, referencing filters in this way is a little verbose. Moya offers an alternative way of referencing filters. If you replace the filter object (right hand side) with a string, Moya will look up that filter in the current application. Here's an example:
+
+[code xml]
+<echo>${"beetlejuice"|"repeat3"}</echo>
+[/code]
+
+It is also possible to look up a filter in another application, by appending [c]from APP[/c], where [c]APP[/c] is the name of the application containing the filter. For example, lets say we want to use the [c]repeat3[/c] filter in a template not in the same application as the filter. We could use something like the following:
+
+[code moyatemplate]
+<h1>${"beetlejuice"|"repeat3 from my_app"}</h1>
+[/code]
+
+It is also possible to use a library (long) name in place of the application name. This works as long as the library has been installed just once, otherwise Moya will not be able to detect which application to use. If a library has been desgined to be installed just once -- and many are -- then the long name can be used, otherwise stick to the app name.
+
+[alert NOTE]Specifying the app or library is only required if you are using a filter from a different application.[/alert]
+
+[h3]Filter Parameters[/h3]
+
+Filters may be associated with additional parameters. For instance, let's make a more flexible version of our example filter that can repeat text by an arbitrary number. Here's the new filter:
+
+[code xml]
+<filter name="repeat">
+    <return-str>${str:value * count}</return-str>
+</filter>
+[/code]
+
+This filter references a value called [c]count[/c], which we can supply in the filter expression as follows:
+
+[code xml]
+<echo>${"beetlejuice"|"repeat"(count=5)}</echo>
+[/code]
+
+Here, an additional parameter list is added to the right hand side (i.e. the filter object or filter string reference), that sets [c]count[/c] to [c]5[/c]. This value is passed to the [c]filter[/c] tag along with [c]value[/c]. This will result in the [c]repeat[/c] filter, repeating our text [c]5[/c] times.
+
+[h3]Simple Filters[/h3]
+
+Filters may be as complex as necessary -- you could, for example, lookup object from the database and do some processing. Although if a filter is simple enough to fit in to a single expression, you can supply the [c]expression[/c] attribute to [tag]filter[/tag] which will be used in preference to the inner code. For instance, our example filter, could be written more concisely as the following:
+
+[code xml]
+<filter name="repeat" expression="str:value * count" />
+[/code]
+
+[h1]Modifier Reference[/h1]
+
+The following is a list of the modifiers supported by Moya:
+
+[h2]abs[/h2]
+
+Returns the [i]absolute[/i] value of a number (makes it positive). For example, [c]abs:-5[/c] is [c]5[/c].
+
+[h2]all[/h2]
+
+Returns True if all the values in a sequence would be considered True if used in a condition.
+
+[h2]any[/h2]
+
+Return True if any of the values in a sequence would be considered True.
+
+[h2]basename[/h2]
+
+Returns the [i]basename[/i] of a path. The basename is the very last component, e.g. [c]basename:'foo/bar/baz'[/c] returns [c]'baz'[/c]
+
+[h2]bool[/h2]
+
+Converts a value to a boolean. Various values are considered False, for example the number 0, empty strings, and empty collections. Most other values will return True. For example [c]bool:[][/c] would return False, [c]bool:1[/c] would return True.
+
+[h2]capitalize[/h2]
+
+Capitalizes the first letter of a string. For example [c]capitalize:'hello'[/c] returns 'Hello'.
+
+[h2]ceil[/h2]
+
+Returns the ceiling of a number (first integer that is greater than or equal to the number). For example, [c]ceil:2.7[/c] returns [c]3.0[/c].
+
+[h2]collect[/h2]
+
+Extracts an indexed item from a sequence, and returns a list of values. This collection should be a applied to a sequence of 2 values, the first contains the sequence to collect, and the second contains the key to look up.
+
+[code xml]
+<json dst="crew_ids">
+    [
+        {"id": 1, name:"Aeryn"},
+        {"id": 7, name:"John"},
+        {"id": 99, name:"Scorpius"}
+    ]
+</json>
+<let crew_ids="collect:[crew, 'id']"/> <!-- creates list [1, 7, 99] -->
+[/code]
+
+[h2]commalist[/h2]
+
+Returns a string containing values in a sequence separated by commas. For example [c]commalist:[1,5,7][/c] returns [c]'1,5,7'[/c].
+
+[h2]commaspacelist[/h2]
+
+Returns a string containing values in a sequence separated by a comma and space. For example [c]commaspacelist:[1,5,7][/c] returns [c]'1, 5, 7'[/c].
+
+[h2]commasplit[/h2]
+
+Splits a string by commas, for example [c]commasplit:"1,2,3"[/c] returns [c]['1', '2', '3'][/c].
+
+[h2]date[/h2]
+
+Create a date object from a date in iso8601 format. For example, [c]date:'1974-07-05'[/c].
+
+[h2]datetime[/h2]
+
+Create a [i]datetime[/i] object from a date & time in iso8601 format. For example, [c]datetime:'1974-07-05T15:45:00'[/c].
+
+[h2]debug[/h2]
+
+Returns a debug description of the right hand side. This may contain helpful information. For example, [c]debug:datetime:'19740705T154500'[/c].
+
+[h2]dirname[/h2]
+
+Returns the directory name of a path. Can be considered there inverse of [c]basename:[/c]. For example [c]dirname:'foo/bar/baz'[/c] returns [c]foo/bar[/c].
+
+[h2]enum[/h2]
+
+Retrieve an enumeration object from its libid. For example, [c]enum:'moya.sociallinks#enum.jsonrpc.errors'[/c].
+
+[h2]enumerate[/h2]
+
+Creates an [i]enumerator[/i] object that when iterated over returns the 0-based index and the value. For example:
+
+[code xml]
+<for src="enumerate:['John', 'Rygel', 'Scorpius']" dst="index, name">
+    <echo>${index + 1}. ${name}</echo>
+</for>
+[/code]
+
+[h2]enumerate1[/h2]
+
+Like [c]enumerate:[/c] but starts counting from 1, which is more natural for your average human. For example:
+
+[code xml]
+<for src="enumerate1:['John', 'Rygel', 'Scorpius']" dst="index, name">
+    <echo>${index}. ${name}</echo>
+</for>
+[/code]
+
+[h2]exists[/h2]
+
+Return True if a value is [i]not[/i] missing. For example, [c]exists:.requests[/c] would be True in a project, but [c]exists:.santa.clause.and.the.tooth.fairy[/c] would likely return False.
+
+[h2]ext[/h2]
+
+Gets the extension from a path. For example, [c]ext:'foo/bar.html'[/c] would return [c]"html"[/c].
+
+[h2]filesize[/h2]
+
+Converts a file size (in bytes), rounded to the most appropriate unit. For example [c]filesize:1024[/c] returns [c]1.0kB[/c], and [c]filesize:32859558[/c] returns 31.3MB.
+
+[h2]first[/h2]
+
+Returns the first item in a sequence, or [c]None[/c] if the sequence is empty.
+
+[h2]flat[/h2]
+
+Attempts to [i]flatten[/i] a sequence containing other sequences. For example, [c]flat:[1,2,3,[4,5,6]][/c] returns [c][1,2,3,4,5,6][/c].
+
+[h2]float[/h2]
+
+Converts a string containing a number in to a number, for example [c]float:'3.1427'[/c] returns a floating point number of [c]3.1427[/c].
+
+[h2]floor[/h2]
+
+Returns the [c]floor[/c] of a number (the greatest integer that is equal to or less than a number). For example, [c]float:3.1427[/c] returns [c]3.0[/c].
+
+[h2]html[/h2]
+
+Used mainly in templates, this marks text as being valid HTML, so Moya will know not to escape any tags. For example, [c]html:'<h1>Header</h1>'[/c].
+
+[h2]int[/h2]
+
+This converts a string to an integer. For example, [c]int:'100'[/c] returns [c]100[/c].
+
+[h2]isbool[/h2]
+
+Returns True if the right hand side is a boolean (i.e. True or False). For example, [c]bool:False[/c] returns True (because False is a boolean), but [c]bool:"True"[/c] would return False, because the right hand side is a string.
+
+[h2]isemail[/h2]
+
+Check if the right hand side is a valid email address. For example:
+
+[code xml]
+<if test="not isemail:email">
+    <echo>You didn't enter a valid email address!
+</if>
+[/code]
+
+[h2]isfloat[/h2]
+
+Returns True if the right hand side is a floating point number.
+
+[h2]isint[/h2]
+
+Returns True if the right hand side is an integer.
+
+[h2]isnumber[/h2]
+
+Returns True if the right hand side is a number (either an integer or a floating point number).
+
+[h2]isstr[/h2]
+
+Returns True if the right hand side is a string.
+
+[h2]items[/h2]
+
+Returns the [i]items[/i] of a sequence. Used with a dictionary it will return a sequence of the keys and values. Used with a sequence (e.g. a list), it will return a list of the index and the value. For example [c]items:['John','Rygel','Scoprpius'][/c] returns [c][[0, 'John'], [1, 'Rygel'], [2, 'Scorpius']][/c].
+
+[h2]keys[/h2]
+
+Returns the [i]keys[/i] from a dictionary, or if the right hand side is a sequence it will return the indexes.
+
+[h2]last[/h2]
+
+Returns the last item in a sequence, or None if the sequence is empty. For example, [c]last:(1,5,99)[/c] returns [c]99[/c].
+
+[h2]len[/h2]
+
+Return the count of the number of elements in a collection.
+
+[h2]list[/h2]
+
+Converts the right hand side in to a list.
+
+[h2]localize[/h2]
+
+Returns a text representation of an object, suitable for the current [i]locale[/i]. Mainly used for dates and times, which have different formats depending on your location. For example, in a request, [c]localize:.now[/c] create a string containing the data and time in a localized format.
+
+[h2]log10[/h2]
+
+Returns the base 10 logarithm of a number.
+
+[h2]lower[/h2]
+
+Converts a string to lower case.
+
+[h2]lstrip[/h2]
+
+Strips whitespace (spaces, tabs etc) from the left of a string.
+
+[h2]map[/h2]
+
+Converts an object in to a dictionary. The right hand side should be a sequence of keys and values.
+
+[h2]max[/h2]
+
+Returns the largest value in a sequence of numbers. For example, [c]max:[1,99,-6][/c] returns [c]99[/c].
+
+[h2]md5[/h2]
+
+Returns the [url http://en.wikipedia.org/wiki/MD5]md5[/url] hash of an object.
+
+[h2]min[/h2]
+
+Returns the lowest value in a sequence of numbers. For example, [c]min:[1,99,-6][/c] returns [c]-6[/c].
+
+[h2]missing[/h2]
+
+Returns True if the right hand side is a [i]missing[/i] object (does not exist in the context). For example, [c]missing:.lord.lucan[/c] would likely return True (assuming you haven't create a value called [c]lord.lucan[/c]).
+
+[h2]path[/h2]
+
+Converts a string in to a [i]path[/i] object. Path objects have some syntactic sugar to construct paths. You can use [c]/[/c] as a path join operator on paths, which makes sure there is only a single forward slash between path components. You can also use [c]../[/c] to go back one directory. For example, [c]path:uploads_directory / 'images' / filename[/c].
+
+[h2]permission[/h2]
+
+Checks the current user for a permission. For example, [c]permission:'admin'[/c] checks if the current use has admin permission.
+
+[h2]prettylist[/h2]
+
+Converts a sequence in to a string representation, where each element in the sequence is enclosed with quotes and separated by a command and a space. For example, [c]prettylist:[1,2,3][/c] returns [c]"'1', '2', '3'"[/c].
+
+[h2]relto[/h2]
+
+Converts an absolute path in to a path relative path relative to the current request. For example, [c]relto:'/foo/bar/index.html'[/c] would return [c]'../bar/index.html'[/c], if the current request is for [c]'/foo/index.html'[/c].
+
+[h2]renderable[/h2]
+
+Returns an object that may be more easily rendered. Although rarely necessary, this modifier is typically used in templates to convert an object to a form that is easier to work with. If you apply [c]renderable:[/c] to an value without an additional renderable interface, then the same value is returned, i.e. the modifier has no effect.
+
+[h2]reversed[/h2]
+
+Reverses the order of a sequence. For example, [c]reversed:[1,2,3][/c] returns [c](3, 2, 1)[/c].
+
+[h2]round[/h2]
+
+Rounds a value to the nearest integer. If you supply a sequence of two values, then the first is the number you want to round and the second is the number of decimal places. For example, [c]round:0.777[/c] returns [c]1.0[/c], and [c]round:[0.777, 2][/c] equals [c]0.78[/c].
+
+[h2]rstrip[/h2]
+
+Removes whitespace (spaces, tabs etc.) from the tail end of a string. For example, [c]rstrip:'Hello   '[/c] return [c]'Hello'[/c].
+
+[h2]seqlast[/h2]
+
+Takes a sequence and returns a list containing a flag and each value from the sequence. The flag is set to True if the value is the last in the sequence. For example, [c]seqlast:['John', 'Rygel', 'Scorpius'][/c] returns [c][[False, 'John'], [False, 'Rygel'], [True, 'Scorpius']][/c].
+
+[h2]set[/h2]
+
+Create a [i]set[/i] from a sequence. A set is a collection where each item appears only once.
+
+[h2]slug[/h2]
+
+Creates a [i]slug[/i] from a string. A slug is a version of the string which is suitable for use in a URL. Slugifying text will remove any characters that may not be used in a URL, convert runs of whitespace to a single hyphen, and make the result lower case. For example, [c]slug:"This may be used in a URL!"[/c] returns [c]'this-may-be-used-in-a-url'[/c].
+
+[h2]sorted[/h2]
+
+Returns a sorted version of a sequence. For example, [c]sort:[99, 1, 20][/c] returns [c][1, 20, 99][/c]. Works with sequences of other types, including strings.
+
+[h2]str[/h2]
+
+Converts the right hand side to a string. For example, [c]str:3.14[/c] returns [c]"3.14"[/c].
+
+[h2]strip[/h2]
+
+Strips whitespace from the start and end of a string. For example, [c]strip:"  hello   "[/c] returns [c]"hello"[/c].
+
+[h2]sub[/h2]
+
+Performs expression substitution on a string. For example, [c]sub:'Hello, ${name}'[/c] would return [c]'Hello, John'[/c] if the variable [c]name[/c] was [c]"John"[/c].
+
+[h2]swapcase[/h2]
+
+Swaps the case of a string. i.e. upper case becomes lower case and vice verse. For example, [c]swapcase:'Hello'[/c] returns [c]'hELLO'[/c].
+
+[h2]time[/h2]
+
+Returns a time object from a string in iso8601 format. For example, [c]time:'23:59:59'[/c].
+
+[h2]title[/h2]
+
+Capitalizes the first letter of every word in a string. For example, [c]title:'hello world'[/c] return s [c]"Hello World"[/c].
+
+[h2]unique[/h2]
+
+Modifies a sequence so that each element appears exactly once. For example, [c]unqiue:['john', 'rygel', 'scorpius', 'rygel', 'john'][/c] would return [c]['john', 'rygel', 'scorpius'][/c].
+
+[h2]upper[/h2]
+
+Converts a string to upper case, for example [c]upper:'hello'[/c] returns [c]'HELLO'[/c].
+
+[h2]url[/h2]
+
+Parses a URL in a string and returns a URL object. For example, [c]url:'http://example.org/foo/bar/'[/c]. URL objects are interchangeable with strings, but have a number of useful properties and may use the [c]/[/c] operator to join paths.
+
+[h2]urldecode[/h2]
+
+This modifier decodes query string data in to a dictionary of lists. Lists are used because in a query string a key may appear more than once. For example, [c]urldecode:'crew=Rygel&crew=John&crew=Scorpius'[/c] returns [c]{'crew':['Rygel', 'John', 'Scorpius']}[/c].
+
+[h2]urlencode[/h2]
+
+Encodes a dictionary of lists in to a query string suitable for use in a URL. For example, [c]urlencode:(crew=['Rygel', 'John', 'Scorpius'])[/c] returns [c]urldecode:'crew=Rygel&crew=John&crew=Scorpius'[/c].
+
+[h2]urlupdate[/h2]
+
+Combines the current query string (from [c].request.query_string[/c]) with new data and returns the an encoded query string.  For example, [c]urlupdate:(ship='Moya')[/c] would return a query string with [c]ship[/c] set to [c]'Moya'[/c]. You can also [i]remove[/i] a value from the current query string by setting it to [c]None[/c]. For example, [c]urlupdate:(crew=None)[/c] would return a new query string with no value for [c]crew[/c].
+
+[h2]validfloat[/h2]
+
+Return True if a string could be parsed as a floating point number. For example, [c]validfloat:'3.14'[/c] would return True, but [c]validfloat:'pie'[/c] would return False.
+
+[h2]validint[/h2]
+
+Return True is a string could be parsed a valid integer. For example, [c]validint:'1000000'[/c] is True, but [c]validint:'one million'[/c] would return False.
+
+[h2]values[/h2]
+
+Returns the values in a collection (e.g. list or dictionary). For example, [c]values:{'foo':'bar', 'baz':'egg'}[/c] would return [c]['bar', 'egg'][/c].
+
+[h2]zip[/h2]
+
+This modifier combines two or more sequences in to one. For example, [c]zip:[[1, 2, 3], ['a', 'b', 'c']][/c] returns [c][[1, 'a'], [2, 'b'], [3, 'c']][/c]. This is useful in for loops, where you want to an item from each sequence on each iteration. For example:
+
+[code xml]
+<for src="zip:[[1, 2, 3], ['a', 'b', 'c']]" dst="number, letter">
+    <echo>(${number}) ${letter}</echo>
+</for>
+[/code]
+

@@ -1,0 +1,658 @@
+{
+    "name": "moyaproject_dot_com_image_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "copy",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Create an copy of [c]image[/c] in [c]dst[/c].",
+                "prev_tag": "write",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "copy",
+                "next_tag": "crop",
+                "synopsis": "create a copy of an image",
+                "params": {
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to copy",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "crop",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Crop an image to a given area.",
+                "prev_tag": "copy",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "crop",
+                "next_tag": "new",
+                "synopsis": "crop an image",
+                "params": {
+                    "box": {
+                        "default_display": "None",
+                        "name": "box",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Crop size (either [width, height] or [x, y, width, height])",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to show",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "new",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Create a blank image.",
+                "prev_tag": "crop",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "new",
+                "next_tag": "read",
+                "synopsis": "create a blank image",
+                "params": {
+                    "color": {
+                        "default_display": "\"#000000\"",
+                        "name": "color",
+                        "missing": true,
+                        "default": "#000000",
+                        "doc": "Color",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "mode": {
+                        "default_display": "\"RGB\"",
+                        "name": "mode",
+                        "missing": true,
+                        "default": "RGB",
+                        "doc": "Mode",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "size": {
+                        "default_display": "None",
+                        "name": "size",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Size of new image",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "read",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Read an image",
+                "prev_tag": "new",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "read",
+                "next_tag": "resize",
+                "synopsis": "read an image from disk",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "FS name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "FS",
+                        "required": false,
+                        "type": "index",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "resize",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Resize an image to new dimensions.",
+                "prev_tag": "read",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "resize",
+                "next_tag": "resize-canvas",
+                "synopsis": "resize an image",
+                "params": {
+                    "resample": {
+                        "default_display": "\"antialias\"",
+                        "name": "resample",
+                        "missing": true,
+                        "default": "antialias",
+                        "doc": "Method for resampling",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": [
+                            "nearest",
+                            "bilinear",
+                            "bicubic",
+                            "antialias"
+                        ]
+                    },
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to show",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "width": {
+                        "default_display": "",
+                        "name": "width",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New width",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "height": {
+                        "default_display": "",
+                        "name": "height",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New height",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "resize-canvas",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Resize the image canvas.",
+                "prev_tag": "resize",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "resize-canvas",
+                "next_tag": "resize-to-fit",
+                "synopsis": "resize the image canvas",
+                "params": {
+                    "color": {
+                        "default_display": "\"#000000\"",
+                        "name": "color",
+                        "missing": true,
+                        "default": "#000000",
+                        "doc": "Background color",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "width": {
+                        "default_display": "",
+                        "name": "width",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New width",
+                        "required": true,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to show",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "height": {
+                        "default_display": "",
+                        "name": "height",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New height",
+                        "required": true,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "resize-to-fit",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Resize image to fit within the given dimensions (maintains aspect ratio).",
+                "prev_tag": "resize-canvas",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "resize-to-fit",
+                "next_tag": "show",
+                "synopsis": "resize an image to fit within new dimensions",
+                "params": {
+                    "resample": {
+                        "default_display": "\"antialias\"",
+                        "name": "resample",
+                        "missing": true,
+                        "default": "antialias",
+                        "doc": "Method for resampling",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": [
+                            "bilinear",
+                            "nearest",
+                            "bicubic",
+                            "antialias"
+                        ]
+                    },
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to show",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "width": {
+                        "default_display": "",
+                        "name": "width",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New width",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "height": {
+                        "default_display": "",
+                        "name": "height",
+                        "missing": true,
+                        "default": null,
+                        "doc": "New height",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "show",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Show an image (for debugging purposes). Imagemagick is required for this operation.",
+                "prev_tag": "resize-to-fit",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "show",
+                "next_tag": "square",
+                "synopsis": "show an image",
+                "params": {
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to show",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "square",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Square crop an image.",
+                "prev_tag": "show",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "square",
+                "next_tag": "write",
+                "synopsis": "square crop an image",
+                "params": {
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to crop",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "write",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_image",
+                "defined": "/home/will/projects/moya/moya/tags/image.py",
+                "doc": "Write an image",
+                "prev_tag": "square",
+                "namespace": "http://moyaproject.com/image",
+                "tag_name": "write",
+                "synopsis": "write an image to disk",
+                "params": {
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "FS name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "format": {
+                        "default_display": "",
+                        "name": "format",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Image format",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": [
+                            "jpeg",
+                            "png",
+                            "gif"
+                        ]
+                    },
+                    "image": {
+                        "default_display": "image",
+                        "name": "image",
+                        "missing": true,
+                        "default": "image",
+                        "doc": "Image to write",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "filename": {
+                        "default_display": "",
+                        "name": "filename",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Image filename",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dirpath": {
+                        "default_display": "\"/\"",
+                        "name": "dirpath",
+                        "missing": true,
+                        "default": "/",
+                        "doc": "Directory to write image",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "FS",
+                        "required": false,
+                        "type": "index",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/image",
+        "namespace_doc": "\n        Tags for working with [link images]images[/link].\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/image.moyaproject_dot_com_image_index"
+}

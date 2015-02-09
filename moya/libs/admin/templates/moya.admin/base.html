@@ -1,0 +1,75 @@
+{% extends "wide.html" %}
+
+{% block "jshead" append %}
+<script src="{% media 'js/moya-admin.js' %}"></script>
+{% endblock %}
+
+{% block "js" append %}
+<script>
+$(function(){
+
+    $('li.active ul.moya-admin-nav-sub').slideDown();
+    /*$('.moya-admin-nav-module.active .moya-admin-nav-module-link').addClass('active');*/
+    $('.moya-admin-nav-module-link').click(function(){
+        var $link = $(this);
+        if($link.hasClass('expanded') || $link.hasClass('active'))
+        {
+            $link.removeClass('expanded').removeClass('active');
+            $link.addClass('contracted')
+            $(this).parent().siblings('ul.moya-admin-nav-sub').slideUp('fast');
+        }
+        else
+        {
+            $link.addClass('expanded');
+            $link.removeClass('contracted');
+            $(this).parent().siblings('ul.moya-admin-nav-sub').slideDown('fast');
+        }
+        return false;
+    });
+
+});
+
+</script>
+{% endblock %}
+
+{% block "body" %}
+<div class="moya-admin-container">
+    <div class="moya-admin-navigation-column">
+        {% render sections.navigation %}
+    </div>
+    <div class="moya-admin-content-column">
+        {% if sections.breadcrumbs %}
+        <div class="banner">
+
+            <div class="user">
+                <div class="hidden-xs">
+                    {# <img class="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:.user.email}?s=24&amp;d=identicon" alt="gravatar"/> #}
+                    Logged in as <strong>${.user.username}</strong>
+                    <a class="user-link moya-admin-logout" href="{% url 'logout' from 'moya.auth' %}">Log Out</a>
+                </div>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".moya-admin-navigation-header">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="moya-admin-navigation-header collapse">
+            {% render sections.navigation %}
+            </div>
+
+            <ol class="breadcrumb">
+            {% for crumb in sections.breadcrumbs %}{% render crumb with last=forloop.last %}{% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+        {% if sections.content %}
+        <div class="content">
+            {% render sections.content %}
+        </div>
+        {% else %}
+        {% render sections.body %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

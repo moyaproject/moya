@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<moya xmlns="http://moyaproject.com">
+	<macro docname="main">
+		<range dst="count" stop="10"/>
+		<for src="count" dst="n">
+			<debug>Loop start ${n}</debug>
+			<break if="n==3"/>
+			<debug>Loop end ${n}</debug>
+		</for>
+		<debug>Leaving loop</debug>
+		<return>
+			<int value="n"/>
+		</return>
+	</macro>
+</moya>

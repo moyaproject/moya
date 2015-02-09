@@ -1,0 +1,62 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:auth="http://moyaproject.com/auth"
+      xmlns:email="http://moyaproject.com/email">
+
+    <mountpoint>
+        <url route="/" methods="GET,POST" view="#view.signup" name="signup" />
+        <url route="/validate/" methods="GET" view="#view.validate_email" name="validate_email" />
+    </mountpoint>
+
+    <view libname="view.signup" content="#content.signup">
+        <forms:get form="#form.signup" dst="form" />
+        <if-post>
+            <forms:validate src="form">
+                <auth:new-user username="form.data.username"
+                    email="form.data.email"
+                    first_name="form.data.first_name"
+                    last_name="form.data.last_name"
+                    password="form.data.password"
+                    dst="user" />
+                <catch exception="moya.auth.*">
+                    <let fail="yes" />
+                    <done/>
+                </catch>
+                <if test=".app.settings.validate_email">
+                    <attempt times="3" catch="db.*">
+                        <db:create model="#ValidateEmail" dst="validate_email"
+                            let:user="user" let:email="user.email"  />
+                    </attempt>
+                    <email:send email="#email.validate_email"
+                        to="${user.email}"
+                        let:name="user.first_name"
+                        let:token="validate_email.token"
+                        let:project_title=".settings.project_title"
+                        let:site_url=".request.host_url" />
+                </if>
+                <let success="yes" />
+                <fire signal="moya.signup.new-user" let:user="user"/>
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.validate_email" content="#content.validate">
+        <db:query model="#ValidateEmail" dst="validate"
+            filter="#ValidateEmail.token == .request.GET.token" />
+
+        <if test="validate">
+            <int dst="success"/>
+            <for src="validate" dst="valid" filter="valid.email == valid.user.email">
+                <let valid.user.email_validated="yes" />
+                <db:delete src="valid" />
+                <inc dst="success"/>
+                <fire signal="moya.signup.email-validated" let:user="valid.user"/>
+                <break/>
+            </for>
+        </if>
+
+    </view>
+
+</moya>

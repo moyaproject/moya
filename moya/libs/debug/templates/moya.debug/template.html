@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block "title" %}${path}{% endblock %}
+
+{% block "body" %}
+<h2>Template: ${path}</h2>
+
+<pre style="overflow-x:hidden;"><div class="code format-${format}">${html:code}</div></pre>
+
+{% endblock %}

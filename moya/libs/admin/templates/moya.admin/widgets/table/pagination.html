@@ -1,0 +1,36 @@
+<div class="pagination-panel">
+
+    {%- with pagination %}
+    {%- if numpages > 1 %}
+    <ul class="pagination">
+        {%- if activepageno == 1 %}
+        <li class="disabled"><a title="Previous">&larr;</a></li>
+        {%- else %}
+        <li><a href="?${qsupdate:page=activepageno - 1, id=None, checkall=None}" title="Previous page">&larr;</a></li>
+        {%- endif %}
+        {%- for pageno in pagelinks %}
+        <li{% if pageno==activepageno %} class="active"{% endif %}{% if not pageno%} class="disabled"{% endif %}>
+            {%- if not pageno -%}
+            <a>&hellip;</a>
+            {%- else -%}
+            <a href="?${qsupdate:page=pageno, id=None, checkall=None}">${pageno}</a>
+            {%- endif -%}
+        </li>
+        {%- endfor %}
+        {%- if activepageno == numpages %}
+        <li class="disabled" title="Next"><a>&rarr;</a></li>
+        {%- else %}
+        <li><a href="?${qsupdate:page=activepageno + 1, id=None, checkall=None}" title="Next page">&rarr;</a></li>
+        {%- endif %}
+    </ul>
+    {%- endif %}
+    {%- endwith %}
+
+    <span class="pagination-summary">
+    {%- if pagination.numitems %}
+    Displaying results ${pagination.start} to ${pagination.end} of ${pagination.numitems}
+    {%- else %}
+    No results
+    {% endif -%}
+    </span>
+</div>

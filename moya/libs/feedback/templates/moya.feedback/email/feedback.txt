@@ -1,0 +1,10 @@
+Feedback sent from ${.request.path_url}
+
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+--
+Moya Feedback

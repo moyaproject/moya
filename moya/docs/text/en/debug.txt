@@ -1,0 +1,55 @@
+[title Moya Debug]
+
+Moya Debug is a built in library that enables some debug only features. The primary feature is the error page that renders a Moya Traceback and error information.
+
+[h1]Installation[/h1]
+
+Moya Debug is a built in library, and may be installed via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.debug" if=".debug" priority="100"/>
+[/code]
+
+The [c]if=".debug"[/c] test ensures that Moya Debug is only imported when debug mode is enabled. Debug mode is enabled in settings as follows:
+
+[code ini]
+[project]
+debug = yes
+[/code]
+
+Your [c]production.ini[/c] will set [c]debug[/c] to [c]no[/c] to disable Moya Debug in a production environment.
+
+The [c]priority="100"[/c] attribute ensures that templates in Moya Debug have the highest priority -- in order to override any error handlers you have created.
+
+You may install the library with the following line:
+
+[code xml]
+<install name="debug" lib="moya.debug" mount="/debug/" if=".debug" />
+[/code]
+
+This mounts the debug views on [c]/debug/[/c] (if the server is running in debug mode).
+
+
+[h1]Error Handlers[/h1]
+
+Moya Debug supplies handlers for 404 (not found) and 500 (internal error) pages by overriding the [c]404.html[/c] and [c]500.html[/c] templates respectively.
+
+[h2]Not Found[/h2]
+
+The Not Found page will display information about the request, and the URL routes Moya ran through to attempt to generate a response. There are two possible scenarios that generate a 404 page; either there was no route matching the URL, or a route was found but your code intentionally returned a Not Found response. The Trace panel on the debug 404 page will tell you which was the case.
+
+[h2]Internal Error[/h2]
+
+The Internal Error page will display information about the request, plus snapshot of the code being executed when the error occurred -- which may be Moya code or template.
+
+[h1]User Views[/h1]
+
+The url [c]/debug/user/[/c] whil show you information about the currently logged in user, including groups and permissions. You can also view the same information on other users by visiting [c]/debug/user/<USERNAME/[/c].
+
+[h1]Code Introspection[/h1]
+
+Moya Debug can display the code for any element -- with syntax highlighting. Clicking a element reference in the 404 page will link to the debug view that displays code. For example, [c]/debug/element/moya.pages%23view.page/[/c].
+
+[aside]The [c]%23[/c] in the URL above is how browsers escape the # character.[/aside]
+
+Moya Debug can also display templates from the template filesystem. For example [c]/debug/templates/500.html[/c] would show you the template Moya Debug uses to render the Internal Error page.

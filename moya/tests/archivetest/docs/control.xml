@@ -1,0 +1,24 @@
+<moya xmlns="http://moyaproject.com">
+
+
+	<macro libname="ifelse">
+
+		<str dst="fruit">bad fruit</str>
+		<if test="n==1">
+			<let-str fruit="apple" />
+		</if>
+		<elif test="n==2">
+			<let-str fruit="orange"/>
+		</elif>
+		<elif test="n==3">
+			<let-str fruit="pear"/>
+		</elif>
+		<else>
+			<let-str fruit="not a fruit"/>
+		</else>
+		<return value="fruit" />
+
+	</macro>
+
+
+</moya>

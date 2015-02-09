@@ -1,0 +1,43 @@
+.blether-container {
+    clear:both;
+    margin-bottom:16px;
+    min-height:40px;
+    padding-bottom:1em;
+    border-bottom:1px solid #ddd;
+}
+img.blether.gravatar {
+    width:40px;
+    height:40px;
+    border-radius:100%;
+    float:left;
+    border:1px solid #bbb;
+    padding:1px;
+}
+.blether-container .blether-body {
+    margin-left:56px;
+    color:#333;
+    padding-top:2px;
+}
+.blether-container .blether-text {
+    white-space:pre-wrap;
+}
+.blether-container .blether-author {
+    font-weight:bold;
+}
+.blether-container .blether-time {
+    color:#999;
+    margin-left:8px;
+    font-size:.8;
+}
+.user-header-container img.blether.gravatar {
+    width:80px;
+    height:80px;
+    margin-right:16px;
+    margin-top:16px;
+}
+.user-header-container {
+    margin-bottom:32px;
+}
+.user-header-container .user-header-content {
+    margin-left:90px;
+}

@@ -1,0 +1,143 @@
+[title Moya Thumbnail]
+
+Moya Thumbnail is a solution for generate [i]thumbnails[/i] (smaller versions of a image). Although it could be used for a variety of image processing purposes.
+
+[aside]You may want to familiarize yourself with Moya's [link images]image processing tags[/link] before you read the rest of this chapter.[/aside]
+
+[h1]Installation[/h1]
+
+Moya Thumbnail is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.thumbnail" />
+[/code]
+
+It can then be installed with the following:
+
+[code xml]
+<install name="thumbnail" lib="moya.thumbnail"/>
+[/code]
+
+No views are required for this library, but there is a test view which processes upload images in to thumbnails. You can mount this with the following:
+
+[code xml]
+<mount app="thumbnail" mountpoint="tests" url="/thumbtest/" />
+[/code]
+
+[h1]Namespace[/h1]
+
+Tags in this library use the namespace [c]http://moyaproject.com/thumbnail[/c]. The test view and the examples here use the prefix [c]tn[/c] for brevity.
+
+[h1]Settings[/h1]
+
+Moya Thumbnail supports the following settings:
+
+[setting]fs = <FS NAME>[/setting]
+
+This sets the filesystem where the images and generated thumbnails should be stored. By default this is [c]uploads[/c] which should be a writable filesytem.
+
+[setting]app_serve = uploads[/setting]
+
+This should be the application which serves the thumbnail filesystem. It is used to retrieve a named url called [c]serve[/c]. This will typically be an instance of [c]moya.static[/c], installed as follows:
+
+[code xml]
+<!-- in your server.xml -->
+<install name="uploads" lib="moya.static" mount="/uploads/" />
+[/code]
+
+And the follow settings in your [c]basesettings.ini[/c]:
+
+[code ini]
+[settings:uploads]
+fs = uploads
+[/code]
+
+[setting]thumb_dir = <NAME OF THUMBNAIL DIRECTOR>[/setting]
+
+This should be the name to use for the directory containing the thumbnails. Moya Thumbnail creates a directory of this name to hold the thumbnails. The default is [c]thumbnails[/c].
+
+[h1]Generate Thumbnails[/h1]
+
+The purpose of Moya Thumbnail is to process an image in to different versions; so that you have flexibility on how the image is displayed. For example, you might have a small 80x80 pixel version to go in a table, or a larger 640x480 version to embed in an article, etc.
+
+To create image processors, define a [tag thumbnail]thumbnails[/tag] which is a container for the various image formats you wish to supply. Inside [tag thumbnail]thumbnails[/tag] should be a [tag thumbnail]processor[/tag] tag for each format. Here's an example:
+
+[code xml]
+<tn:thumbnails libname="thumbnails.tests">
+
+    <tn:processor name="small">
+        <image:resize-to-fit width="80" height="80" />
+    </tn:processor>
+
+</tn:thumbnails>
+[/code]
+
+The code above defines a single thumbnail processor called [c]small[/c]. Moya calls the code inside the [tag thumbnail]processor[/tag] with the value [c]image[/c] containing the image to be processed. The [tag image]resize-to-fit[/tag] tag resized the image.
+
+Note, that if you don't specify the image to process, the [tag image]resize-to-fit[/tag] tag (and other image tags) will use a value called [c]image[/c] from the local scope -- which is why we don't need to specify it above.
+
+To generate the thumbnails, use the [tag thumbnail]generate[/tag] tag, which takes the element reference of the [tag thumbnail]thumbnails[/tag] you which to use, and the path of the image file. Here's an example:
+
+[code xml]
+<tn:generate thumbnails="#thumbnails.tests" test="profile.jpg"/>
+[/code]
+
+When the above code runs, it will create a sub-directory  (called [c]thumbnails[/c] by default) used to store the thumbnails. The filename of the thumbnail is generate from the [c]name[/c] and [c]version[/c] attribute of the [tag thumbnail]processor[/tag]. The version number is so that a new image can be generated if you update the processor. Simply increment the version number when you make a change to the processor.
+
+[h2]Processing Uploads[/h2]
+
+The most common use of the Moya Thumbnail library is to process images uploaded by the user. The thumbnails can be generates in the same view that generates the form. Here's an example
+
+[code xml]
+<!-- a form containing a file upload field -->
+<form xmlns="http://moyaproject.com/forms" docname="form.upload" style="horizontal"
+    legend="Thumbnail Test">
+    <upload name="upload_image" label="Image" required="yes"/>
+    <submit-button name="submit"/>
+</form>
+
+<!-- the view to handle the form -->
+<view docname="view.upload" content="content.upload">
+    <forms:get form="form.upload" dst="form" />
+    <forms:validate src="form">
+        <let filename="form.data.upload_image.filename" />
+        <fs:set-contents fs="uploads" path="${filename}" contents="form.data.upload_image" />
+        <tn:generate thumbnails="#thumbnails.tests" path="${filename}" />
+        <let success="yes" />
+    </forms:validate>
+</view>
+[/code]
+
+When the form validates successfully, the upload field will be stored in [c]form.data.upload_image[/c]. File fields have two parameters; [c]filename[/c] contains the filename from the user's computer (minus the path), and [c]file[/c] is a file object, which may be copied to a filesystem (see [tag fs]set-contents[/tag]).
+
+Once the file has been copied to the [c]uploads[/c] filesystem, the [tag thumbnail]generate[/tag] tag can create the thumbnails.
+
+[h2]Managing Filenames[/h2]
+
+Note that Moya Thumbnail doesn't manage image filenames for you. You will need to come up with a scheme to ensure that your image filenames are unique, or risk overwriting a previous upload. Probably the simplest way to do this would be to incorporate the primary key of a database object in to the filename or path. For example the image for a profile with a primary key of 5 would be [c]profile.5.jpg[/c].
+
+[h1]Generate Command[/h1]
+
+Moya Thumbnail supplies a command to generate new thumbnails in a filesystem. This might be necessary if you have updated / added thumbnail formats and you want to generate the thumbnails for previously uploaded images.
+
+The following command will generate new thumbnails for all [tag thumbnail]thumbnails[/tag] tags.
+
+[code]
+$ moya moya.thumbnail#cmd.generate
+[/code]
+
+You may also specify one or more [tag thumbnail]thumbnails[/tag] tags on the command line to only generate thumbnails for those tags. For example:
+
+[code]
+$ moya moya.thumbnail#cmd.generate sushifinder#thumbnails.products
+[/code]
+
+[h1]Thumbnails in Templates[/h1]
+
+To display a thumbnail in a template, use the [c]thumbnail_url[/c] filter, which takes the filename of the image and returns its url. Here's an example:
+
+[code moyatemplate]
+<img src="${'profile.jpg' | "thumbnail_url from moya.thumbnail"(processor=small)}">
+[/code]
+
+The [c]thumbnail[/c] filter takes the name of the processor as a parameter, and will return a URL for that thumbnail.

@@ -1,0 +1,22 @@
+<form action="${form.action or '.'}" {% attrib enctype=form.enctype %} {% attrib class=form.class %} method="post">
+    {% if form.legend %}<legend>${form.legend}</legend>{% endif %}
+    {%- if form.error %}
+    <div class="alert alert-danger">${form.error}</div>
+    {%- elif form.errors %}
+    <div class="alert alert-danger">There are errors in the form, please check below.</div>
+    {%- endif %}
+
+    {%- for field in form.content.sections.fields %}
+    {%- if field.visible %}
+        <div class="form-group{% if field.errors %} has-error{% endif %}">
+            {%- if field.label %}
+            <label for="${field.id}">${field.label}</label>
+            {%- endif %}
+            {%- render field set style="simple" %}
+            {%- include "common/helperror.html" from "moya.forms" %}
+        </div>
+    {%- else %}
+        {%- render field set style="simple" %}
+    {%- endif %}
+    {%- endfor %}
+</form>

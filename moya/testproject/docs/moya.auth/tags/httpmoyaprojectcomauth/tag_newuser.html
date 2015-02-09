@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Tag newuser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="../../../assets/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../../../assets/css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+
+    <div id="main-nav" class="navbar navbar-default navbar-static-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Authentication</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Home</a>
+                    </li>
+                    <li >
+                        <a href="../../docs/index.html">Documentation</a>
+                    </li>
+                    <li class="active">
+                        <a href="../tags.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../commands/index.html">Commands</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+
+<div class="container">
+    <div class="row-fluid">
+        <div class="span3">
+
+<ul class="nav nav-pills nav-stacked">
+    <li title="query user permissions" >
+        <a href="tag_getpermissions.html">getpermissions</a>
+    </li>
+    <li title="get current user details" >
+        <a href="tag_getuser.html">getuser</a>
+    </li>
+    <li title="log in a user" >
+        <a href="tag_login.html">login</a>
+    </li>
+    <li title="log out a user" >
+        <a href="tag_logout.html">logout</a>
+    </li>
+    <li title="create a new user" class="active">
+        <a href="tag_newuser.html">newuser</a>
+    </li>
+</ul>
+
+        </div>
+        <div class="span9">
+
+
+<ul class="breadcrumb">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../tags/tags.html">Tags</a></li>
+    <li>newuser</li>
+</ul>
+
+<h2>newuser <small>create a new user</small></h3>
+<dl class="dl-horizontal well well-small">
+    <dt>name</dt>
+    <dd>newuser</dd>
+    <dt>xml namespace</dt>
+    <dd>http://moyaproject.com/auth</dd>
+    <dt>defined</dt>
+    <dd>/home/will/projects/moya/moya/applications/auth/logic/tags.xml (line 87)</dd>
+</dl>
+<p>Create a user</p>
+<table class="table table-bordered table-condensed">
+    <caption>attributes</caption>
+    <tr>
+        <th>name</th>
+        <th>purpose</th>
+        <th>type</th>
+        <th>required?</th>
+    </tr>
+    <tr>
+        <td>dst</td>
+        <td>Destination</td>
+        <td>Reference</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>email</td>
+        <td></td>
+        <td>expression</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td>first_name</td>
+        <td></td>
+        <td>expression</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>last_name</td>
+        <td></td>
+        <td>expression</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>lazy</td>
+        <td>Enable lazy evaluation</td>
+        <td>boolean</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>password</td>
+        <td></td>
+        <td>expression</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>username</td>
+        <td></td>
+        <td>expression</td>
+        <td>Yes</td>
+    </tr>
+</table>
+<table class="table table-bordered table-condensed">
+    <caption>inherited attributes</caption>
+    <tr>
+        <th>name</th>
+        <th>purpose</th>
+        <th>type</th>
+        <th>required?</th>
+    </tr>
+    <tr>
+        <td>if</td>
+        <td>Conditional expression</td>
+        <td>expression</td>
+        <td>No</td>
+    </tr>
+</table>
+
+
+        </div>
+    </div>
+</div>
+
+
+    <script src="../../../assets/js/jquery.js"></script>
+    <script src="../../../assets/js/bootstrap.js"></script>
+
+</body>
+
+</html>

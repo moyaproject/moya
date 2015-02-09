@@ -1,0 +1,5 @@
+<div class="radio">
+    <label>
+        <input id="${field.id}" name="${field.name}" type="radio" {% if str:field.value == field.on %}checked="checked"{% endif %} value="${field.on}" {% if field.required %}required{% endif %}/> ${field.text}
+    </label>
+</div>

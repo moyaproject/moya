@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block "body" %}
+<h2>Moya Debug <small>project details</small></h2>
+{%- if .user %}
+<p>You are currently logged in as <a href="{% url "user" with username=.user.username %}">${.user.username}</a></p>
+{%- else %}
+<p>You are <em>not</em> currently logged in</p>
+{% endif %}
+
+<h3>${.sys.site}</h3>
+<p>Site data (stored in <strong>.site</strong>)</p>
+<div class="well">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Site Setting</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%- for k, v in sorted:items:.site %}
+            <tr>
+                <td>${k}</td>
+                <td>${v}</td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% render sections.body %}
+{% endblock %}

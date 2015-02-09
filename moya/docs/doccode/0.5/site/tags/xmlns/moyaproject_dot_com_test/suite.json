@@ -1,0 +1,69 @@
+{
+    "name": "suite",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "suite",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "A suite of unit tests",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "define a suite of test cases",
+        "tag_name": "suite",
+        "params": {
+            "slow": {
+                "default_display": "no",
+                "name": "slow",
+                "missing": true,
+                "default": false,
+                "doc": "Are these tests slow to run?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "group": {
+                "default_display": "",
+                "name": "group",
+                "missing": true,
+                "default": null,
+                "doc": "Test group",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "description": {
+                "default_display": "",
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of test suite",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.suite"
+}

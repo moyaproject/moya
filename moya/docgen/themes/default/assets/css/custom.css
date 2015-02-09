@@ -1,0 +1,373 @@
+aside
+{
+	display:block;
+    border-color:#5bc0de;
+    border-left:6px solid #bce8f1;
+    margin:20px 0;
+    margin:0px;
+    padding:20px;
+    margin:0px 0px 16px 0px;
+    color:#31708f;
+    background-color:#d9edf7;
+    width:auto;
+}
+
+aside h4
+{
+    color: #5bc0de;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight:normal;
+}
+
+
+
+pre.moya-console
+{
+    font-family:"Lucida Console", Monaco, monospace;
+    /*font-size:12px;*/
+    line-height:1.3em;
+    background-color:#fff;
+    color:#002b36;
+    border:0px;
+    /*border:1px solid #f0f0f0;*/
+    /*line-height:1.5em;*/
+    border-radius:0px;
+    white-space:nowrap;
+    overflow-x:auto;
+
+    padding-left:8px;
+    /*box-shadow:0px 0px 32px #ccc;*/
+    /*margin:16px 0px;*/
+    font-size:13px;
+    line-height:1.5em;
+    /*padding:8px;*/
+    border-left:4px solid #eee8d5;
+    padding:4px 0px 4px 24px;
+    /*max-height:274px;*/
+
+}
+
+.alert > strong
+{
+    margin-right:.5em;
+}
+
+
+.moya-console .console-bold { font-weight: bold; }
+.moya-console .console-italic { font-style: italic; }
+.moya-console .console-underline { text-decoration: underline; }
+.moya-console .console-dim {
+    opacity:.5;
+    font-weight:normal !important;
+}
+
+.moya-console .console-bold.console-foreground-yellow { color: #b58900; }
+.moya-console .console-bold.console-foreground-magenta { color: #d33682; }
+.moya-console .console-bold.console-foreground-green { color: #859900; }
+.moya-console .console-bold.console-foreground-blue { color: #268bd2; }
+.moya-console .console-bold.console-foreground-cyan { color: #2aa198 }
+.moya-console .console-bold.console-foreground-red { color: #dc322f; }
+.moya-console .console-bold.console-foreground-black { color: #002b36 }
+.moya-console .console-bold.console-foreground-white { color: #93a1a1 }
+.moya-console .console-foreground-yellow { color: #b58900; }
+.moya-console .console-foreground-magenta { color: #d33682; }
+.moya-console .console-foreground-green { color: #859900 }
+.moya-console .console-foreground-blue { color: #268bd2; }
+.moya-console .console-foreground-cyan { color: #2aa198 }
+.moya-console .console-foreground-red { color: #dc322f; }
+.moya-console .console-foreground-black { color: #002b36 }
+.moya-console .console-foreground-white { color: #93a1a1 }
+.moya-console .console-background-yellow { background-color: #b58900; }
+.moya-console .console-background-magenta { background-color: #d33682; }
+.moya-console .console-background-green { background-color: #859900; }
+.moya-console .console-background-blue { background-color: #268bd2; }
+.moya-console .console-background-cyan { background-color: #2aa198 }
+.moya-console .console-background-red { background-color: #dc322f; }
+.moya-console .console-background-black { background-color: #002b36 }
+.moya-console .console-background-white { background-color: #fdf6e3 }
+
+pre.format- {}
+
+
+.format-xml .comment { color:#586e75; font-style:italic;}
+.format-xml .tag { color:#cb4b16;}
+.format-xml .tag.tagcontent.attrib { color:#268bd2; font-weight:bold;}
+.format-xml .string { color:#268bd2; }
+.format-xml .xmlns { font-weight:bold;}
+.format-xml .tagname, .format-xml .endtagname {color:#cb4b16;font-weight:bold; font-style:italic;}
+.format-xml .tag.tagcontent { color:#b58900; font-style:normal; font-weight:bold;}
+.format-xml .braced {font-weight:bold !important;}
+.format-xml .cdata {color:#777 !important; font-style:normal; font-weight:bold;}
+
+
+.format-xml .sub
+{
+    color:#d33682 !important;
+    background-color:#eee8d5;
+    font-weight:bold;
+}
+
+.format-python {}
+
+.format-python .call { color:#DE935F; }
+.format-python .operator { color:#81A2BE}
+.format-python .keyword { color:#B294BB; font-weight:bold; }
+.format-python .builtin { color:#F0C674; }
+.format-python .string { color:#B5BD68 !important; font-weight:normal !important; font-style:normal !important;}
+.format-python .comment { color:#969896 !important; }
+.format-python .self { font-style:italic; color:#C66;}
+.format-python .number { color:#DE935F; }
+.format-python .brace { color:#EEE; }
+.format-python .decorator {color:#C66;}
+.format-python .constant { color:#DE935F; font-style:italic;}
+.format-python .def {color:#F0C674; font-weight:bold;}
+
+.format-moyatemplate .comment { color:#969896; font-style:italic;}
+.format-moyatemplate .tag { color:#CC6666; font-style:italic; font-weight:bold;}
+.format-moyatemplate .tag.tagcontent.attrib { color:#268bd2; font-weight:bold;}
+.format-moyatemplate .string { color:#B5BD68; }
+.format-moyatemplate .xmlns {font-style:italic; color:#CC6666; font-weight:bold;}
+.format-moyatemplate .tagname, .format-moyatemplate .endtagname {color:#dc322f;font-weight:bold;}
+.format-moyatemplate .tag.tagcontent { color:#b58900; font-style:normal; font-weight:bold;}
+
+
+.format-html .comment { color:#969896; font-style:italic; }
+.format-html .tag { color:#CC6666; font-style:italic; font-weight:bold;}
+.format-html .tag.tagcontent.attrib { color:#F0C674; }
+.format-html .string { color:#B5BD68; }
+.format-html .xmlns {font-style:italic; color:#CC6666; font-weight:bold;}
+
+.format-moyatemplate .templatetag
+{
+    color:#d33682 !important;
+    font-weight:bold !important;
+    background-color:#eee8d5;
+}
+
+.format-moyatemplate .sub
+{
+    background-color:#eee8d5;
+    color:#d33682 !important;
+    font-weight:bold !important;
+}
+
+.format-ini .section
+{
+    font-weight:bold;
+    color:#002b36 !important;
+    color:#333 !important;
+}
+
+.format-ini .section.sectionname
+{
+    font-weight:italic;
+}
+
+
+.format-ini .key
+{
+    color:#dc322f;
+}
+
+.format-ini .value
+{
+    color:#268bd2;
+}
+
+.format-ini .comment
+{
+    color:#586e75;
+    font-style:italic;
+}
+
+ol>li>a
+{
+    /* font-weight:bold; */
+}
+
+.doc-structure ul
+{
+    padding-left:2em;
+}
+
+.lib-details
+{
+    margin-bottom:0px;
+}
+
+h1 a,h2 a,h3 a,h4 a
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+a span.anchor
+{
+    color:#aaa;
+    visibility:hidden;
+    font-size:.7em;
+}
+
+h1:hover span.anchor,h2:hover span.anchor,h3:hover span.anchor,h4:hover span.anchor
+{
+    visibility:visible;
+}
+
+.doctree-panel
+{
+
+}
+
+.doctree-panel ul
+{
+    list-style-type:none;
+}
+
+.doctree-panel ul
+{
+    padding-left:1em;
+}
+
+.doctree-panel > ul
+{
+    margin-bottom:0px;
+    padding:8px;
+    background-color:#f8f8f8;
+    border:1px solid #e8e8e8;
+    box-shadow:4px 4px 8px #eee;
+}
+
+.doctree-panel > ul > li
+{
+    margin-left:1em;
+    /*font-weight:bold;*/
+}
+
+h2
+{
+    clear:left;
+}
+
+p a.tag
+{
+    font-weight:bold;
+    color:#CC6666;
+}
+
+p a.tag:hover
+{
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+p tt
+{
+    /*
+    font-weight:bold;
+    color:#444;
+    padding:1px 2px;
+    */
+    font-family:monospace;
+}
+
+aside tt, .alert tt
+{
+    font-weight:bold;
+    font-family:monospace;
+}
+
+
+.setting
+{
+    font-style:italic;
+    color:#dc322f;
+}
+.setting .value
+{
+    color:#268bd2;
+}
+
+li.active-selection
+{
+    font-weight:bold;
+    background-color:#f3f3f3;
+    border-radius:5px;
+}
+
+.tag-list
+{
+/*width:166px;*/
+overflow:auto;
+max-height:420px;
+}
+
+ul.tag-index li.active a
+{
+    font-weight:bold;
+}
+
+.window
+{
+    width:100%;
+    height:100%;
+    border:1px solid red;
+    position:fixed;
+    left:0x;
+    top:0px;
+}
+
+
+.doc-structure .doc-title
+{
+    /*font-size:1.5em;*/
+}
+
+li.doc-index
+{
+    /*margin-top:16px;*/
+}
+
+.container  .credit {
+    margin: 20px 0;
+}
+
+
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+}
+#footer {
+    background-color: #f2f2f2;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+#footer {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}

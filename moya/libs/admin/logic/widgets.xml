@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:admin="http://moyaproject.com/admin"
+      xmlns:w="http://moyaproject.com/widgets"
+      xmlns:html="http://moyaproject.com/html">
+    <!-- define your widgets here -->
+
+    <widget name="modules" template="widgets/modules.html" undocumented="yes">
+        <cache-return key="${.app}.${.session_key}.2" for="1h">
+        	<get-data-elements tag="module" dst="modules_data" byapp="yes"/>
+            <list dst="menus" />
+            <for src="modules_data" dst="appmodule">
+                <let module_app="appmodule.0" modules="appmodule.1" />
+                <for src="modules" dst="module">
+                    <dict dst="menu">
+                        <get-url name="module" let:module="module.data.slug" let:appname="module_app.name" dst="url"/>
+                        <let title="module.data.title" description="module.data.description"
+                            app="module_app.name" slug="module.data.slug"/>
+                        <list dst="submenu" />
+                    </dict>
+                    <for src="module.children" dst="link">
+                        <get-element from="${module_app.name}" name="${link.data.to}" dst="link_element" />
+                        <get-url name="admin_table" dst="url"
+                            let:module="module.data.slug" let:appname="module_app.name" let:table="link_element.data.slug" />
+                        <let data="link_element.data" data.url="url" data.module="module.data.slug"/>
+                        <append src="menu.submenu" value="data" />
+                    </for>
+                    <append value="menu" src="menus"/>
+                </for>
+            </for>
+            <return-dict let:menus="menus"/>
+        </cache-return>
+    </widget>
+
+
+    <widget name="foreign-key-select" undocumented="yes" template="widgets/foreign_key_select.html">
+        <signature>
+            <attribute name="object" type="expression"/>
+        </signature>
+    </widget>
+
+    <tag name="render-table" undocumented="yes">
+        <doc>Render an Admin table</doc>
+        <signature>
+            <attribute name="table" type="expression" required="yes" />
+            <attribute name="columns" type="expression" required="yes"/>
+            <attribute name="page_size" type="expression" required="yes" />
+            <attribute name="page_no" type="expression" required="yes" />
+            <attribute name="action_url" type="expression" required="yes" />
+            <attribute name="back_url" type="expression" required="no" />
+            <attribute name="search" type="expression" required="no" />
+            <attribute name="template" type="template" required="no" default="widgets/table.html" />
+            <attribute name="picker" type="boolean" required="no" default="no" />
+            <attribute name="options" type="expression" required="no" />
+            <attribute name="selected" type="boolean" default="no" />
+            <attribute name="objects" type="expression" required="no" default="None"/>
+            <attribute name="single" type="boolean" default="no"/>
+        </signature>
+
+        <not-found if="not isint:page_no or page_no lt 1" />
+
+        <if test="not isnone:objects">
+            <db:get-column model="${table.params.model}" from="${table.app.name}" name="id" dst="id_column" />
+            <let objectids="collectids:objects" />
+            <db:query model="${table.params.model}" from="${table.app.name}" filter="id_column in objectids" dst="objects"/>
+            <db:query src="objects" dst="objects" filter="${table.params.filter or ''}" orderby="${table.params.order or ''}"/>
+        </if>
+        <else>
+            <db:query from="${table.app.name}" model="${table.params.model}"  dst="objects"
+                orderby="${table.params.order or ''}"/>
+            <db:query src="objects" filter="${table.params.filter}" from="${table.app.name}" dst="objects" if="table.params.filter"/>
+        </else>
+        <db:query src="objects" filter="${options}" dst="objects" if="options" />
+
+        <if test="search and table.params.search">
+            <let q="search" />
+            <db:query src="objects" dst="objects" from="${table.app.name}"
+                filter="${table.params.search}"/>
+        </if>
+
+        <for src="columns" dst="column" filter="slug:column.params.title == .request.GET.sort" if=".request.GET.sort">
+            <db:query from="${table.app.name}" src="objects" dst="objects" orderby="${column.params.sort or ''}" reverse=".request.GET.order == 'desc'"/>
+            <break />
+        </for>
+        <let start="(page_no - 1) * page_size" />
+        <slice src="objects" dst="render_objects" start="start" stop="start + page_size" />
+        <let ids="set:.request.multi.GET.id" />
+
+        <let row_template="single ? 'widgets/table/singlerow.html' : 'widgets/table/row.html'"/>
+
+        <node template="${template}" let:action_url="action_url" let:back_url="back_url" let:search="search" let:single="single" let:ids="ids">
+            <node template="widgets/table-body.html" let:columns="columns" let:single="single">
+                <for src="render_objects" dst="object" if="render_objects">
+                    <get-url name="admin_table_edit" with=".url" let:pk="object.id" dst="edit_url" if="not picker" />
+                    <node template="${row_template}" let:pk="object.id" let:checked="str:object.id in ids">
+                        <for src="columns" dst="column">
+                            <node template="widgets/table/cell.html" let:column="column" let:edit_url="edit_url">
+                                <call-element element="column" let:object="object" />
+                            </node>
+                        </for>
+                    </node>
+                </for>
+            </node>
+            <w:paginate src="objects" pagesize="page_size" page="page" template="widgets/table/pagination.html"/>
+        </node>
+
+    </tag>
+
+    <widget name="column" template="widgets/table/column.html" synopsis="define a column in an admin view">
+        <doc>Define a column in a database view"</doc>
+    	<signature>
+    		<attribute name="title"/>
+            <attribute name="sort" />
+            <attribute name="link" type="expression" default="no" />
+    	</signature>
+    </widget>
+
+    <widget name="breadcrumbs" template="widgets/breadcrumbs.html" undocumented="yes">
+        <signature>
+            <attribute name="title"/>
+            <attribute name="module" type="expression" default="None"/>
+            <attribute name="appname" />
+        </signature>
+    </widget>
+
+    <widget name="crumb" template="widgets/crumb.html" undocumented="yes">
+        <signature>
+            <attribute name="text"/>
+            <attribute name="url"/>
+        </signature>
+    </widget>
+
+    <widget name="check" template="widgets/check.html" undocumented="yes">
+        <signature>
+            <attribute name="ticked" type="boolean" />
+        </signature>
+    </widget>
+
+    <widget name="relationship" template="widgets/relationship.html" undocumented="yes">
+        <signature>
+            <attribute name="related" type="expression"/>
+        </signature>
+    </widget>
+
+    <widget name="picker" template="widgets/picker.html" undocumented="yes">
+        <signature>
+            <attribute name="url" required="yes" type="expression"/>
+            <attribute name="id" required="yes" type="expression"/>
+            <attribute name="selected" required="yes" type="expression" />
+            <attribute name="fieldname" required="yes" type="expression" />
+            <attribute name="value" required="no" type="expression" />
+        </signature>
+    </widget>
+
+    <widget name="picker-single" template="widgets/picker_single.html" undocumented="yes">
+        <signature>
+            <attribute name="url" required="yes" type="expression"/>
+            <attribute name="id" required="yes" type="expression"/>
+            <attribute name="selected" required="yes" type="expression" />
+            <attribute name="fieldname" required="yes" type="expression" />
+            <attribute name="value" required="no" type="expression" />
+        </signature>
+    </widget>
+
+</moya>

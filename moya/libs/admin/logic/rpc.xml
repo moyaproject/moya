@@ -1,0 +1,70 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:rpc="http://moyaproject.com/jsonrpc"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db">
+
+    <!-- Here's an example JSONRPC interface to get you started. -->
+
+    <!-- Use an enumeration so you can refer to error codes by a label -->
+    <enum libname="enum.jsonrpc.errors">
+        <value id="1" label="name_too_long">
+            This error occurs when you enter a name of more than 10 characters.
+        </value>
+        <value label="table_not_found">
+            Unknown table
+        </value>
+    </enum>
+
+    <!-- This object creates a view that exposes methods via JSON RPC -->
+    <rpc:interface libname="jsonrpc.interface" errors="#enum.jsonrpc.errors">
+
+        <!-- An example of a simple remote method -->
+        <rpc:method name="greet" description="Renders a greeting">
+            <doc>This method will greet you, using the name of your choice</doc>
+            <rpc:parameter name="who" type="string" default="World" required="no">
+                This parameter should be the name of the person you wish to greet. If not given, the name will default to "World"
+            </rpc:parameter>
+            <rpc:error code="name_too_long" if="len:who gt 10" data="errortext='What were you thinking?',foo='bar'">
+                'who' should be ten characters or less, not '${who}'
+            </rpc:error>
+            <return>
+                <str>Hello, ${who}!</str>
+            </return>
+        </rpc:method>
+
+        <rpc:method name="search" description="perform a search" call="#rpc.search">
+            <doc>
+                Search related objects
+            </doc>
+            <rpc:parameter name="appname" type="string">application</rpc:parameter>
+            <rpc:parameter name="module" type="string">module name</rpc:parameter>
+            <rpc:parameter name="table" type="string">table name</rpc:parameter>
+            <rpc:parameter name="field" type="string">field name</rpc:parameter>
+
+        </rpc:method>
+
+        <rpc:method name="test_membership" description="test related field for membership" call="#rpc.test_membership">
+            <rpc:parameter name="appname" type="string">application</rpc:parameter>
+            <rpc:parameter name="module" type="string">module name</rpc:parameter>
+            <rpc:parameter name="table" type="string">table name</rpc:parameter>
+            <rpc:parameter name="field" type="string">field name</rpc:parameter>
+        </rpc:method>
+
+    </rpc:interface>
+
+    <macro libname="rpc.search">
+        <try>
+            <call macro="#get_module" dst="module" let:appname="appname" let:module="module"/>
+            <call macro="#get_table" dst="table" let:appname="appname" let:table="table"/>
+        </try>
+        <catch>
+            <rpc:error code="table_not_found"/>
+        </catch>
+        <db:inspect model="${table.params.model}" from="${appname}" dst="model" />
+        <breakpoint/>
+        <echo>${module}</echo>
+        <echo>${table}</echo>
+    </macro>
+
+</moya>
+

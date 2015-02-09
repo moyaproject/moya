@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style type="text/css">
+.jsonrpc-result
+{
+    display:none;
+    overflow:auto;
+}
+h5.group-name
+{
+    text-transform: uppercase;
+    font-variant: small-caps;
+    font-weight:bold;
+    color:#aaa;
+    font-size:.9em;
+}
+</style>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript" src="{% media 'js/jsonrpc.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+    $('form[name=jsonrpc]').submit(function(){
+        $('.jsonrpc-result').fadeTo(0, .25);
+        var json = $(this).find('textarea[name=json]').val();
+        var options = {
+            data:json,
+            dataType:"text",
+            processData:false,
+            type:"POST",
+            success:function(remote){
+                $('.jsonrpc-result').fadeTo(0, 1.0);
+                if (!remote)
+                {
+                    $('.jsonrpc-result').html("<i>empty response</i>").show();
+                }
+                else
+                {
+                    $('.jsonrpc-result').text(remote).show();
+                }
+            }
+        };
+        $.ajax('.', options);
+        return false;
+    });
+    rpc = new JSONRPC('${.request.path}',
+    {
+        complete: function() {
+            //alert("complete");
+        }
+    });
+
+});
+</script>
+{% endblock %}
+
+
+{% block "body" %}
+<h2>JSONRPC</h2>
+<p>
+    This URL implements the <a href="http://www.jsonrpc.org/specification">JSON-RPC 2.0 Specification</a>.
+</p>
+<p>
+    To call one of the methods below, send a POST request to this URL containing JSON formatted according to the specification.
+</p>
+<ul>
+    <li>Parameters passed by-position are <i>not</i> supported by this sever</li>
+    <li>Notifications <i>are</i> supported</li>
+    <li>Batch calls <i>are</i> supported</li>
+</ul>
+<h3>Test Call</h3>
+<p>Enter JSON below and click Send to call a RPC method</p>
+
+<form name="jsonrpc" action="." method="POST">
+    <div class="form-group">
+        <textarea name="json" style="height:150px;" class="form-control input-block-level">{
+    "jsonrpc": "2.0",
+    "method": "greet",
+    "params": {"who": "World"},
+    "id": 1
+}</textarea>
+    </div>
+    <div class="form-group">
+        <input name="submit-jsonrpc" type="submit" value="Send" class="btn btn-primary"/>
+    </div>
+</form>
+
+<pre class="jsonrpc-result"></pre>
+
+<a href="methods"></a>
+
+<h2 name="top">Method Documentation</h2>
+<hr/>
+
+<div class="row">
+    <div class="col-md-3">
+        <h4>Methods</h4>
+        {%- for group, methods in interface.methods_by_group %}
+        {%- if group %}
+        <h5 class="group-name">${group}</h5>
+        {%- endif %}
+        <ul class="list-group">
+            {%- for method in methods %}
+            <li class="list-group-item">
+                <a href="#${method.name}">${method.name}</a>
+                {%- if method.description %}
+                <br/><i>${method.description}</i>
+                {%- endif %}
+            </li>
+            {%- endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-9">
+
+    {%- if interface.errors %}
+    <a href="errors"></a>
+    <h3>Error Codes</h3>
+
+    <table class="table table-condensed">
+        <head>
+            <th>code</th>
+            <th>label</th>
+            <th>meaning</th>
+        </head>
+        <body>
+            {%- for value in interface.errors %}
+            <tr>
+                <td>${value.id}</td>
+                <td>${value.label}</td>
+                <td>${value.description}</td>
+            </tr>
+            {%- endfor %}
+        </body>
+    </table>
+    {%- endif %}
+
+    {%- for group, methods in interface.methods_by_group %}
+    {%- for method in methods %}
+    <hr/>
+    <div class="method">
+        <a name="${method.name}"></a>
+        <h3>${method.name}{% if method.description %} <small>${method.description}</small>{% endif %}</h3>
+        {% markup method.doc as 'markdown' %}
+
+        {%- if method.params %}
+        <table class="table table-condensed table-bordered table-striped">
+            <caption>Parameters</caption>
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>description</th>
+                    <th>type</th>
+                    <th>required?</th>
+                    <th>default</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%- for attribute in method.params %}
+                <tr>
+                    <td><tt>${attribute.name}</tt></td>
+                    <td>${attribute.doc}</td>
+                    <td>${attribute.type}</td>
+                    <td>${attribute.required ? "Yes" : "No"}</td>
+                    <td><tt>${attribute.default or ''}</tt></td>
+                </tr>
+                {%- endfor %}
+            </tbody>
+        </table>
+        {% else %}
+
+        <p><em>No parameters</em></p>
+        {% endif %}
+        <p style="text-align:right;">
+            <a href="#top">Top</a>
+        </p>
+    </div>
+    {%- endfor %}
+    {%- endfor %}
+
+</div>
+
+<footer>
+    <p class="text-muted">${.libs['moya.jsonrpc']['long_name']} ${.libs['moya.jsonrpc']['version']}</p>
+</footer>
+{% endblock %}

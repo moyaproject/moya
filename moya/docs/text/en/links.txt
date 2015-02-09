@@ -1,0 +1,124 @@
+[title Moya Links]
+
+Moya Links provides a way for libraries to advertise hyper-links for a particular purpose. This is typically used to add links to a menu or sub-menu of some kind.
+
+[h1]Installation[/h1]
+
+Moya Links is built in to Moya and may be imported with the following:
+
+[code xml]
+<import py="moya.libs.links" />
+[/code]
+
+The following will install Moya Links:
+
+[code xml]
+<install name="links" lib="moya.links" />
+[/code]
+
+There is no need to mount this library, as there are no views, just custom tags.
+
+[h1]Namespace[/h1]
+
+Moya Links uses the namespace [c]http://moyaproject.com/links[/c]. Link tags in this document are assumed to have the XML prefix [c]links:[/c] declared.
+
+[h1]Introduction[/h1]
+
+The [c]moya start[/c] command uses the Moya Links library to define which links are displayed on the top [i]navbar[/i] (menu at the top of the page); it writes following file in your site application ([c]site/logic/data.xml[/c]):
+
+[code xml]
+<moya xmlns="http://moyaproject.com"
+      xmlns:links="http://moyaproject.com/links">
+
+    <links:link text="About" from="pages" name="showpage" with="{'pagename': 'about'}"
+        if=".apps.pages"/>
+    <links:link text="Blog" from="blog" name="list"
+        if=".apps.blog" />
+    <links:link text="Contact" from="pages" name="showpage" with="{'pagename': 'contact'}"
+        if=".apps.pages"/>
+    <links:link text="Feedback" from="feedback" name="feedback"
+        if=".apps.feedback" />
+    <links:link text="Debug" from="debug" name="intro"
+        if=".apps.debug and .debug" />
+    <links:link text="API" from="site" name="jsonrpc"
+        if=".apps.jsonrpc" />
+
+</moya>
+[/code]
+
+The above file sets the navbar links, but [i]only[/i] if the relevant application is installed. Otherwise there would be broken links -- and you wouldn't have a very good impression of Moya.
+
+The start command also writes the following file ([c]site/logic/content.xml[/c]):
+
+[code xml]
+<moya xmlns="http://moyaproject.com"
+      xmlns:links="http://moyaproject.com/links">
+
+    <content libname="content.base">
+        <links:get dst="navlinks" />
+    </content>
+
+</moya>
+[/code]
+
+This contains the base [link content]content[/link] definition which is inherited by all [tag]content[/tag] tags in your project. The call to [tag links]get[/tag] retrieves a value called [c]navlinks[/c] which contains a list of links, which is ultimately used to render the navbar in your base template.
+
+See the rest of the document for the details on using the links tags.
+
+[h1]Tags[/h1]
+
+Moya Links supplies two tags; [tag links]link[/tag] which defines links, and [tag links]get[/tag] which retrieves a list of those links.
+
+[h2]Link Tag[/h2]
+
+The [tag links]link[/tag] defines a link to a page installed in your project. The following example defines two links; to the login page and about page:
+
+[code xml]
+<links:link from="moya.auth" name="login" text="Login to Sushi Finder" />
+<links:link from="sushifinder.shop" name="cart" text="Shopping Cart" />
+[/code]
+
+You can also add the URL explicitly, which might be necessary if you want a link to an external page. For example:
+
+[code xml]
+<link:link url="http://moyaproject.com" text="Moya"/>
+[/code]
+
+Link tags also have a [c]purpose[/c] attribute which allows you to categorize links. You may have a category for a main menu / sub-menu / footer links etc. The following example defines links for typical footer:
+
+[code xml]
+<links:link purpose="footer" from="moya.pages" name="about" text="About" />
+<links:link purpose="footer" from="moya.pages" name="contact" text="Contact" />
+<links:link purpose="footer" from="moya.pages" name="terms-and-conditions" text="Terms and Conditions" />
+[/code]
+
+[h2]Get Tag[/h2]
+
+The [tag links]get[/tag] tag can retrieve a collection of links.
+
+[code xml]
+<links:get dst="links" />
+[/code]
+
+This will retrieve the link tags and extract a list of dictionaries containing the following information:
+
+[definitions]
+[define url]The URL for the link.[/define]
+[define text]Text associated with the link.[/define]
+[/definitions]
+
+You could use the links list in a template such as the following:
+
+[code moyatemplate]
+<div class="menu">
+{% for link in links %}
+    <a href="${link.url}">${link.text}</a>
+{% endfor %}
+</div>
+[/code]
+
+You can set a [c]purpose[/c] attribute on [tag links]get[/tag] which gathers only [tag links]link[/tag] tags with the same value for [c]purpose[/c]. For example, the following would get the footer tags defined previously:
+
+[code xml]
+<links:get dst="footer_links" purpose="footer"/>
+[/code]

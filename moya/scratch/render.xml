@@ -1,0 +1,26 @@
+<moya xmlns="http://moyaproject.com">
+
+    <content docname="testcontent" template="test.html">
+        <title>Welcoming ${name}</title>
+        <str dst="name">${name}</str>
+
+        <section name="body">
+            <text>Welcome, ${name}! This is a test of Moya content renderable</text>
+        </section>
+
+        <text name="footer">(c) 2012 Will McGugan</text>
+
+    </content>
+
+
+
+    <macro docname="main">
+
+        <render content="testcontent" dst="page">
+            <str dst="name">Will</str>
+        </render>
+        <echo obj="page"/>
+
+    </macro>
+
+</moya>

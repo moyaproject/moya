@@ -1,0 +1,20 @@
+<moya>
+
+    <macro docname="get_data">
+        <return>
+            <list dst="list">
+                <int>1</int>
+                <int>2</int>
+            </list>
+        </return>
+    </macro>
+
+    <macro docname="main">
+
+    	<call macro="get_data" dst="list"/>
+
+    	<echo obj="list"/>
+    </macro>
+
+
+</moya>

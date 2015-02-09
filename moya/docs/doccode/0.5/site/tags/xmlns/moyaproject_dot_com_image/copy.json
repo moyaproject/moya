@@ -1,0 +1,58 @@
+{
+    "name": "copy",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "copy",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Create an copy of [c]image[/c] in [c]dst[/c].",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "create a copy of an image",
+        "tag_name": "copy",
+        "params": {
+            "image": {
+                "default_display": "image",
+                "name": "image",
+                "missing": true,
+                "default": "image",
+                "doc": "Image to copy",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.copy"
+}

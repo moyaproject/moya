@@ -1,0 +1,36 @@
+{
+    "name": "recaptcha",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Google Recaptcha]\n\n [url https://www.google.com/recaptcha/intro/index.html]Google reCAPTCHA[/url] is a service from Google that prevents bots (automated systems) from accessing your web application. Mosts bots are malicious in nature, and attempt to [i]spam[/i] your site with links to products, or to test for potential exploits.\n\n [aside]CAPTCHA stands for Completely Automated Public Turing test to tell Computer and Human Apart.[/aside]\n\n[h1]Installation[/h1]\n\nMoya Google Recaptcha is built in to Moya and may be imported from its Python path as follows:\n\n[code xml]\n<import py=\"moya.libs.recaptcha\" />\n[/code]\n\nAnd installed as follows:\n\n[code xml]\n<install name=\"recaptcha\" lib=\"moya.google.recaptcha\" />\n[/code]\n\nThis library's long name is [c]moya.google.recaptcha[/c] to reflect the fact that it is packaged by Moya, but the author is [url http://google.com]Google[/url].\n\n[h1]Namespace[/h1]\n\nThe XML namespace for this library is [c]http://moyaproject.com/recaptcha[/c]. The XML prefix is assumed to be [c]recaptcha:[/c] for the the examples in this document.\n\n[h1]Introduction[/h1]\n\nTo use reCAPTCHA, you will need two keys; a [i]site[/i] key which identifies the URL your web application will run on, and a [i]secret[/i] key which is used when checking the user's response. You can get both keys by [url https://www.google.com/recaptcha/intro/index.html]signing up[/url].\n\n[h1]Settings[/h1]\n\nThis library has the following settings:\n\n[setting]sitekey = <SITEKEY>[/setting]\n\nThis should be your site key.\n\n[setting]secretkey = <SECRETKEY>[/setting]\n\nThis should be your secret key.\n\n[h1]Usage[/h1]\n\nThis library supplies a tag called [tag recaptcha]recaptcha[/tag] which should be embedded in a [tag forms]form[/tag] as follows:\n\n[code xml]\n<field name=\"g-recaptcha-response\">\n    <recaptcha:recaptcha/>\n</field>\n[/code]\n\nWhen the user fills in the CAPTCHA, it writes a reCAPTCHA response value called [c]g-recaptcha-response[/c] to the form (this name can not be changed). You can then check reCAPTCHA response with [tag recaptcha]verify[/tag], which will return [c]True[/c] if the user is likely a human. This may done directly in the form with the following:\n\n[code xml]\n<validate-field field=\"g-recaptcha-response\">\n    <recaptcha:verify response=\"value\" dst=\"human\"/>\n    <fail if=\"not human\">\n        CAPTCHA failed. You may be a bot.\n    </fail>\n</validate-field>\n[/code]\n",
+        "name": "recaptcha",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Namespace"
+            ],
+            [
+                1,
+                "Introduction"
+            ],
+            [
+                1,
+                "Settings"
+            ],
+            [
+                1,
+                "Usage"
+            ]
+        ],
+        "title": "Moya Google Recaptcha"
+    },
+    "id": "doc.recaptcha"
+}

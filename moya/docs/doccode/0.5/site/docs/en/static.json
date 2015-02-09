@@ -1,0 +1,28 @@
+{
+    "name": "static",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Static]\n\nMoya Static serves files from any filesystem in the project, and can generate index pages.\n\n[h1]Installation[/h1]\n\nMoya Static is built in to Moya and may be imported via its Python path as follows:\n\n[code xml]\n<import py=\"moya.libs.static\"/>\n[/code]\n\nThe above line should be in your [tag]server[/tag] declaration.\n\nYou can install the library with the following:\n\n[code xml]\n<install name=\"media\" lib=\"moya.static\" mount=\"/static/\"/>\n[/code]\n\n[aside]If you created your project with [b]moya start project[/b], the Moya Static will have been pre-installed.[/aside]\n\n[h1]Settings[/h1]\n\n[setting]dirlist = <yes/no>[/setting]\n\nIf set to [c]yes[/c] then Moya Static will render index pages containing a directory listing. It is useful to have this enabled during development so you can see exactly what files are being served, but you may want to disable this on a production site.\n\n[setting]fs = <FILESYSTEM>[/setting]\n\nSet this to one of the [link project#filesystems]filesystems[/link] you would like to serve files from.\n\n[setting]hide = <WILDCARD LIST>[/setting]\n\nThis should be a list of [i]wildcards[/i] that should [i]not[/i] be served. You might want to hide temporary / configuration files for example.\n\nHere's how you would hide files with a filename that begin with a dot (hidden files in linux) and files ending with a tilde (~), which are often used as temporary files:\n\n[code ini]\nhide = .*\n    *~\n[/code]\n\n[setting]index = <INDEX FILES>[/setting]\n\nThis setting applies to index pages only, i.e. URLs ending with a forward slash. If any of the specified files are present, then Moya will serve them as HTML. If used, this setting is typically set to the following, to emulate the classic behavior of web servers:\n\n[code ini]\nindex = index.htm\n    index.html\n[/code]\n\n[h1]Moya Serve Command[/h1]\n\nThe [c]moya serve[/c] command uses Moya Static to serve the contents of a directory (without the need to create a project). For instance, the following command will serve the files in the current directory (and subdirectories):\n\n[code]\n$ moya serve .\n[/code]\n\nIf you run this, you can visit [c]http://127.0.0.1:8000[/c] to view the directory contents.\n\nYou may set the [i]host[/i] and [i]port[/i] for the web server from the command line. The following will display the details in the terminal:\n\n[code]\n$ moya serve -h\n[/code]\n\n[alert NOTE]This comand is useful to serve files in a pinch, but isn't intended for production.[/alert]\n",
+        "name": "static",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Settings"
+            ],
+            [
+                1,
+                "Moya Serve Command"
+            ]
+        ],
+        "title": "Moya Static"
+    },
+    "id": "doc.static"
+}

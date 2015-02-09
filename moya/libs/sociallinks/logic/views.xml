@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:comments="http://moyaproject.com/comments"
+      xmlns:auth="http://moyaproject.com/auth">
+
+    <macro libname="macro.topics_context">
+        <db:query model="#Link" dst="links" orderby="#Link.hotness" reverse="yes" />
+        <call macro="#macro.get_votes" let:links="links" dst="votes"/>
+        <list dst="comment_counts_list"/>
+        <for src="links" dst="link">
+            <comments:get-count namespace="app-${.app.name}.topic-${link.topic.id}"
+                topic="link-${link.id}" dst="count" />
+            <append src="comment_counts_list"
+                value="['link-' + str:link.id,count]" />
+        </for>
+        <dict dst="comment_counts" sequence="comment_counts_list" />
+    </macro>
+
+    <view libname="view.front" content="#content.front">
+        <db:query model="#Topic" filter="#Topic.promoted == yes" orderby="#Topic.title" dst="promoted_topics"/>
+        <map src="promoted_topics" dst="topic_ids" value="id" />
+        <db:query model="#Link"  dst="links"
+            filter="#Link.topic.id in topic_ids"
+            orderby="#Link.hotness" reverse="yes"/>
+        <call macro="#macro.get_votes" let:links="links" dst="votes"/>
+
+        <map src="links" dst="comment_objects" value="sub:'link-${id}'" />
+        <let-str comment_namespace="app-${.app.name}." />
+        <db:query columns="#CommentObject.object,#CommentObject.count"
+            from="moya.comments"
+            filter="#CommentObject.namespace ^= comment_namespace and #CommentObject.object in comment_objects"
+            dst="comment_counts"
+            collect="dict_sequence"/>
+    </view>
+
+    <view libname="view.topics" content="#content.topics">
+        <db:query model="#Topic" filter="#Topic.promoted == yes" orderby="#Topic.title" dst="promoted_topics"/>
+        <db:query model="#Topic" orderby="#Topic.title" dst="topics" />
+    </view>
+
+    <view libname="view.topics.new" content="#content.new.topic" requires="permission:.app.settings.new_topic_permission">
+        <forms:get form="#form.new.topic" dst="form" />
+        <forms:validate src="form" if=".request.POST">
+            <let slug="form.data.slug"/>
+            <db:create model="#Topic" obj="form.data" dst="topic" let:user=".user" />
+            <catch exception="db.*">
+                <forms:error>Unable to create Topic</forms:error>
+                <break/>
+            </catch>
+            <redirect name="topic" let:topic="topic.slug" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.topic.edit" content="#content.topic.edit">
+        <db:get-required model="#Topic" let:slug="url.topic" dst="topic"/>
+        <forbidden if="not (.user == topic.user or permission:'admin')" />
+        <forms:get form="#form.topic.edit" let:topic="topic" dst="form" src="topic"/>
+        <forms:validate src="form" if=".request.POST">
+            <forms:apply src="form" dst="topic" />
+            <redirect name="topic" let:topic="topic.slug" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.topic" content="#content.topic">
+        <db:get-required model="#Topic" let:slug="url.topic" dst="topic"/>
+        <db:query model="#Link" let:topic="topic" dst="links"
+            orderby="#Link.sticky,#Link.hotness" reverse="yes"/>
+        <db:query model="#Link" filter="#Link.topic==topic and #Link.sticky==yes" action="count" dst="sticky_count" />
+        <call macro="#macro.get_votes" let:links="links" dst="votes"/>
+        <comments:get-counts namespace="app-${.app.name}.topic-${topic.id}" dst="comment_counts" />
+        <db:query model="#Topic" filter="#Topic.promoted == yes" orderby="#Topic.title" dst="promoted_topics"/>
+    </view>
+
+    <view libname="view.post" content="#content.post" requires="permission:.app.settings.post_link_permission">
+        <db:get-required model="#Topic" let:slug="url.topic" dst="topic"/>
+        <forms:get form="#form.post.link" dst="form" let:topic="topic"/>
+
+        <forms:validate src="form" if=".request.POST">
+            <let slug="slug:form.data.title"/>
+            <db:if-exists model="#Link" let:topic="topic" let:slug="slug" >
+                <forms:error>Slug exists, please edit the title</forms:error>
+                <break/>
+            </db:if-exists>
+            <db:create model="#Link" obj="form.data" dst="link"
+                let:user=".user" let:time=".now.epoch" let:topic="topic" let:slug="slug" let:score="1"/>
+            <db:create model="#Vote" let:user=".user" let:link="link" let:score="1" />
+            <call macro="#macro.calculate_hotness" let:link="link" />
+            <redirect name="link" let:topic="topic.slug" let:link="link.slug"/>
+        </forms:validate>
+    </view>
+
+    <view libname="view.link" content="#content.link">
+        <db:get-required model="#Topic" let:slug="url.topic" dst="topic"/>
+        <db:get-required model="#Link" let:topic="topic" let:slug="url.link" dst="link"/>
+        <if test=".user">
+            <list dst="links">
+                <var>link</var>
+            </list>
+            <call macro="#macro.get_votes" let:links="links" dst="votes"/>
+        </if>
+    </view>
+
+    <view libname="view.link.edit" content="#content.link.edit">
+        <db:get-required model="#Topic" let:slug="url.topic" dst="topic"/>
+        <db:get-required model="#Link" let:topic="topic" let:slug="url.link" dst="link"/>
+
+        <forbidden if="not (.user == link.user or permission:'admin')" />
+
+        <forms:get form="#form.link.edit" let:link="link" src="link" dst="form" />
+        <forms:validate src="form" if=".request.POST">
+            <forms:apply src="form" dst="link"/>
+            <redirect name="link" let:topic="topic.slug" let:link="link.slug" />
+        </forms:validate>
+    </view>
+
+</moya>

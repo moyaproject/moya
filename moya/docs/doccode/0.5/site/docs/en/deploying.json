@@ -1,0 +1,13 @@
+{
+    "name": "deploying",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "",
+        "name": "deploying"
+    },
+    "id": "doc.deploying"
+}

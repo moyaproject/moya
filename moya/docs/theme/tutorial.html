@@ -1,0 +1,31 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${title}{% endblock %}
+
+{% block "body" %}
+<div class="container">
+
+{% def "render_doctree" -%}
+<ul>
+    {% for node in nodes %}
+    <li><a href="${url}#${slug:node.slug}">${node.title}</a>
+    {%- if node.children %}{% call "render_doctree" with nodes=node.children, url=url %}{% endif -%}
+    </li>
+    {% endfor %}
+</ul>
+{%- enddef %}
+
+    <div class="row">
+        <div class="col-md-9">
+            <h1>${title}</h1>
+            ${html:(body|.bbcode)}
+        </div>
+        {% if .doc.doctree %}
+        <div class="doctree-panel col-md-3">
+        {% call "render_doctree" with nodes=.doc.doctree %}
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

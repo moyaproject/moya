@@ -1,0 +1,113 @@
+{
+    "name": "response",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "response",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "Create a response object",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a response object",
+        "tag_name": "response",
+        "params": {
+            "body": {
+                "default_display": "None",
+                "name": "body",
+                "missing": true,
+                "default": null,
+                "doc": "Response body",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "headers": {
+                "default_display": "None",
+                "name": "headers",
+                "missing": true,
+                "default": null,
+                "doc": "Headers",
+                "required": false,
+                "type": "dict expression",
+                "metavar": null,
+                "choices": null
+            },
+            "charset": {
+                "default_display": "\"utf-8\"",
+                "name": "charset",
+                "missing": true,
+                "default": "utf-8",
+                "doc": "Character set",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "status": {
+                "default_display": "",
+                "name": "status",
+                "missing": true,
+                "default": 200,
+                "doc": "Status code",
+                "required": false,
+                "type": "http status code",
+                "metavar": null,
+                "choices": null
+            },
+            "content_type": {
+                "default_display": "\"text/html; charset=UTF-8\"",
+                "name": "content_type",
+                "missing": true,
+                "default": "text/html; charset=UTF-8",
+                "doc": "Content Type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.response"
+}

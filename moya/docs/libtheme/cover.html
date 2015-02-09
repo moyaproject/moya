@@ -1,0 +1,52 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${long_name}{% endblock %}
+
+{% block "body" %}
+<div class="container">
+
+	<h1>${lib.title or long_name}</h1>
+	<p>
+        <strong>${long_name}</strong> is a library for <a href="http://moyaproject.com">Moya web development framework</a>
+    </p>
+
+	<h2>Documentation</h2>
+	{{{INDEX main}}}
+	{%- if .docs['tags.index'] %}
+
+	{% with index=.docs['tags.index'] %}
+    {% if index.data.tags %}
+    <h2>Tags</h2>
+    <p>${lib.title} defines the following tags:</p>
+	<ul>
+	{%- for tag in index.data.tags %}
+		<li>
+			<a href="tags/${slug:tag.namespace}/tag_${slug:tag.tag_name}.html">&lt;${tag.tag_name}&gt;</a>
+		</li>
+	{%- endfor %}
+	</ul>
+    {% endif %}
+	{% endwith %}
+	{%- endif %}
+
+    {% with index=.docs['command_index.index'] %}
+    {% if index.data.commands %}
+    <h2>Commands</h2>
+    <p>${lib.title} defines the following command line tools:</p>
+    <ul>
+    {%- for cmd in index.data.commands %}
+        <li>
+            <a href="${relto:.urls.command[cmd.name]}">
+            <tt>${cmd.name}</tt>
+            </a>
+        </li>
+    {% endfor %}
+    <ul>
+    {% endif %}
+    {% endwith %}
+
+</div>
+
+
+
+{% endblock %}

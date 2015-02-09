@@ -1,0 +1,144 @@
+[title Moya Widgets]
+
+Moya Widgets is a libarary of [link content#widgets]widgets[/link] for common user interface elements. Using this widgets library is a good way of establishing a common look and feel across your libraries, and is used by many of the built in libraries.
+
+[alert NOTE]Widgets must go inside [link content]content[/link] tags.[/alert]
+
+[h1]Installation[/h1]
+
+Moya Widgets is built in to Moya and may be installed as follows:
+
+[code xml]
+<import py="moya.libs.widgets" />
+[/code]
+
+Moya Widgets does not need to be installed, to make the tags available for use. Althouge, there is a test page which you may want to have a look at. You can mount the test with the following:
+
+[code xml]
+<install name="widgets" lib="moya.widgets" mount="/widgets/" mountpoint="tests" />
+[/code]
+
+[h1]Namespace[/h1]
+
+Moya Widgets uses the namespace [c]http://moyaproject.com/widgets[/c]. For brevity, the namespace prefix is typically set to [c]w:[/c].
+
+[h1]Introduction[/h1]
+
+This widgets library is a repository for common user interface elements, such as alerts, links, dialogs etc. and more advanced widgets such as pagination. They use markup targeted at [url http://getbootstrap.com/]Twitter Bootstrap[/url], but can be customized if you are not using Bootstrap.
+
+[h1]Alerts[/h1]
+
+Alerts are simple container widgets with no parameters. The create a color coded panel containing a text message. Here's an example:
+
+[code xml]
+<w:success>Everything went according to plan!</w:success>
+[/code]
+
+The following is a list of available alert widgets:
+
+[definitions]
+[define <success>]The operation completed successfully.[/define]
+[define <info>]Some additional information for the user.[/define]
+[define <warning>]Inform the user of potentially destructive consequences.[/define]
+[define <danger>]Alert the user that their action didn't succeed.[/define]
+[define <error>]Alert the user of an error.[/define]
+[/definitions]
+
+[h1]Wells[/h1]
+
+Wells are a simple container that draws attention to their contents. The following is a list of the available wells:
+
+[definitions]
+[define <well>]The default well.[/define]
+[define <small-well>]A well with less padding.[/define]
+[define <large-well>]A well with more padding.[/define]
+[/definitions]
+
+[h1]Check[/h1]
+
+Displays a green check (tick). Here's an example:
+
+[code xml]
+<w:check if="product.stock gt 0">
+[/code]
+
+[h1]No Wrap[/h1]
+
+Disables wrapping of text for its children. Essentially this wraps content in a div with the css property [c]white-space[/c] set to [c]nowrap[/c]. This widget is particularly useful in tables. Here's an example:
+
+[code xml]
+<w:no-wrap>This text won't be wrapped, even if the table is quite small.</w:no-wrap>
+[/code]
+
+[h1]Links[/h1]
+
+The [tag widgets]link[/tag] tag creates a link to a url on the site. This widget wraps a [c]<a>[/c] tag around content with a generated url, optional class, and icon. The following link widgets are available:
+
+[definitions]
+[define <link>]Renders a simple link, see [tag widgets]link[/tag].[/define]
+[define <button-link>]Renders a link styled as a button, see [tag widgets]button-link[/tag].[/define]
+[/definitions]
+
+[h1]Buttons[/h1]
+
+The [tag widgets]buttons[/tag] tag renders [tag widgets]links[/tag] tags as buttons. Here's an example take from the Moya Admin library:
+
+[code xml]
+<w:buttons>
+    <w:link from="moya.admin" name="admin_new_object" with=".url">Add Another</w:link>
+    <w:link from="moya.admin" name="admin_table_edit" with=".url" let:pk="obj.id">Edit</w:link>
+</w:buttons>
+[/code]
+
+[h1]URL[/h1]
+
+The [tag widgets]url[/tag] tag renders a hyperlinked URL. For instance if you want to display a URL such as [c]http://moyaproject.com[/c], and you also want it to link to the same URLS. Here's how you could do that in a content definition:
+
+[code xml]
+<w:url url="http://moyaproject.com"/>
+[/code]
+
+This would generate the following markup:
+
+[code moyatemplate]
+<a href="http://moyaproject.com">http://moyaproject.com</a>
+[/code]
+
+[h1]Dialogs[/h1]
+
+The [tag widgets]dialog[/tag] tag defines a dialog, used to render a container with a message and buttons.
+
+[alert NOTE]There is currently no particular style associated with a dialog. It exists to to allow for future customization.[/alert]
+
+Dialogs may contain a [tag widgets]dialog-buttons[/tag] tag which is a container for buttons.
+
+The following is an example of a dialog, take from the Moya Blog library:
+
+[code xml]
+<form libname="form.deletepost" legend="Delete Post" xmlns="http://moyaproject.com/forms">
+    <w:dialog>
+        <moya:markdown>Are you sure you wish to delete post *${post.title}*?</moya:markdown>
+        <w:dialog-buttons>
+            <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+            <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+        </w:dialog-buttons>
+    </w:dialog>
+</form>
+[/code]
+
+[h1]Paginate[/h1]
+
+The [tag widgets]paginate[/tag] tag [i]paginates[/i] a list of items, such as results from a database query, in to smaller pages and render a navigation control with numbered pages and forward / backward links.
+
+The widget handles large queries quite elegantly. It will show the first few page numbers, the last few page numbers, and page numbers surrounding the current page. Other page numbers are replace with ellipsis so as not to render too many buttons. For example, if you are on page 16 of 100 pages you will see something like [c] [prev] [1] [2] ... [15] [16] [17] ... [99] [100] [next] [/c].
+
+Here's an example taken from the Moya Blog library:
+
+[code xml]
+<w:paginate src="posts" dst="post">
+    <blog:post post="post"/>
+</w:paginate>
+[/code]
+
+The [c]src[/c] attribute should be the query results, in this case a query set of post objects from the db. The [tag widgets]paginate[/tag] iterates over each item, storing the current item in a value specified in [c]dst[/c], and rendering it with the enclosed content tags. That is literally all that is required to enable pagination.
+

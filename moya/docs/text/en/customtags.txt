@@ -1,0 +1,151 @@
+[title Custom Tags]
+
+Moya allows you to create [i]custom tags[/i], which may be used in the same way as the tags built in to Moya. Custom tags will help you catch errors and make your code more self-documenting.
+
+[aside]This features is known as [i]meta-programming[/i] in other languages, as you are essentially adding language features to Moya itself.[/aside]
+
+[h1]Callable Tags[/h1]
+
+The first type of custom tag we will look at is the [i]callable[/i] tag which -- in many cases -- can replace a [link moyacode#macro]macro[/link]. First lets create a macro that we will replace with the custom tag. The following code calculates the first 20 [url http://en.wikipedia.org/wiki/Fibonacci_number]Fibonacci numbers[/url]:
+
+[code xml]
+<!-- fib.xml -->
+<moya xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="fib">
+        <let fib="[0, 1]"/>
+        <repeat times="count - 2">
+            <append value="fib[-1] + fib[-2]" src="fib" />
+        </repeat>
+        <return value="fib" />
+    </macro>
+
+    <macro docname="main">
+        <call macro="fib" dst="fib_list" let:count="20"/>
+        <echo obj="fib_list" />
+    </macro>
+
+</moya>
+[/code]
+
+This code should be somewhat familiar. If you save this code as [c]fib.xml[/c], you can run it in the debugger with the following command:
+
+[code]
+$ moya run fib.xml --breakpoint
+[/code]
+
+If you step through this code you will see the main macro call fib, which returns a list and displays it in the terminal.
+
+The following code will have the same output, but replaces the [tag]macro[/tag] with a custom tag called [c]fib[/c]:
+
+[code xml]
+<!-- fib2.xml -->
+<moya xmlns:let="http://moyaproject.com/let">
+
+    <tag name="fib">
+        <doc>Calculate the Fibonacci sequence</doc>
+        <signature>
+            <attribute name="count" type="integer" />
+        </signature>
+        <let fib="[0, 1]"/>
+        <repeat times="count - 2">
+            <append value="fib[-1] + fib[-2]" src="fib" />
+        </repeat>
+        <return value="fib" />
+    </tag>
+
+    <macro docname="main">
+        <fib count="20" dst="fib_list" />
+        <echo obj="fib_list" />
+    </macro>
+
+</moya>
+[/code]
+
+The [tag]tag[/tag] tag creates the custom tag, it contains a [tag]signature[/tag] tag which tells Moya we are going to define the tag's attributes (known as the the tag's [i]signature[/i]). In the example, the signature consists of a single [tag]attribute[/tag] tag which defines an attribute called [c]name[/c] with a [c]type[/c] of [c]integer[/c]. The [i]type[/i] of an attribute tells Moya how the attribute should be processed. Moya will raise a helpful error, if the attribute isn't in the correct format (if you enter text for a integer attribute, for example).
+
+The rest of the code inside the [tag]tag[/tag] is the same as the macro. Tags may also return a value which will be stored in the location specified by [c]dst[/c]. The [c]dst[/c] attribute is added to tag's signature automatically.
+
+[h2]Setting the Application[/h2]
+
+When you call a tag in a project, Moya needs to know which application contains the tag. If there is only one application installed for the library that defines the tag then Moya can detect the application automatically. Otherwise, you will need to specify the [c]from[/c] attribute in the calling tag.
+
+For example, let's say we have a library called [c]sushifinder.shop[/c] installed as application [c]sushifinder[/c]. It defines a tag called [c]get-specials[/c] which gets a list of products on special. We might call it like this:
+
+[code xml]
+<sushi:get-specials dst="specials"/>
+[/code]
+
+This is fine as long as [c]sushifinder.shop[/c] was installed just once. If we have installed it twice, we would need to specify the application when we call the tag. Here's an example:
+
+[code xml]
+<sushi:get-specials dst="specials" from="sushifinder"/>
+[/code]
+
+[aside]In practice, specifying the application doesn't happen very often. Most libraries are designed to be installed once.[/aside]
+
+[h1]Data Tags[/h1]
+
+Moya can create [i]data tags[/i] which are a way of specifying structured data that may be difficult to express in the form of settings. A data tag may appear anywhere in your project (including in other libraries), and may be queried with [tag]get-data[/tag]. Let's look at en example:
+
+[code xml]
+<!-- datatag.xml -->
+<moya>
+    <data-tag name="product">
+        <doc>A sushi product</doc>
+        <signature>
+            <attribute name="name" required="yes"/>
+            <attribute name="description" required="no" default=""/>
+        </signature>
+    </data-tag>
+
+    <product name="Maguro Nigiri" description="A lean cut of tuna" />
+    <product name="Kappa Maki" description="Cucumber" />
+
+    <macro docname="main">
+        <get-data tag="product" dst="products" />
+        <echo obj="products" />
+    </macro>
+
+</moya>
+[/code]
+
+You can run the above code with the following:
+
+[code]
+$ moya run datatag.xml
+[/code]
+
+When you run this code, it will display a list containing two dictionaries which Moya has created from the (custom) [c]<product>[/c] tags.
+
+The main [tag]macro[/tag] calls [tag]get-data[/tag] which returns a list of the tag data extracted from the attributes of the two [c]<product>[/c] tags.
+
+You can also retrieve data from a single data tag with [tag]get-data-item[/tag], which matches a single data tag based on the LET parameters you supply to it. Here's how you would use [tag]get-data-item[/tag] to get the data from the [c]product[/c] tag with a name of [c]"Kappa Maki"[/c]:
+
+[code xml]
+<get-data-item tag="product" let:name="'Kappa Maki'" dst="kappa_maki" />
+<echo obj="kappa_maki" />
+[/code]
+
+[alert NOTE]Data tags do not contain executable code--Moya will ignore any data tags in a macro.[/alert]
+
+[h2]Conditional Data Tags[/h2]
+
+Although data tags aren't executable, they do have an [c]if[/c] attribute. This condition is checked when you get the data. If a data tag contains in [c]if[/c] attribute which evaluates to False, the tag is omitted from the data. Here's an example:
+
+[code xml]
+    <product name="Maguro Nigiri" description="A lean cut of tuna" if=".settings.tuna-in-stock.bool"/>
+    <product name="Kappa Maki" description="Cucumber" />
+[/code]
+
+A call to [tag]get-data[/tag] now may return one item or two, depending on the value of [c]tuna-in-stock[/c] in the settings.
+
+[h1]Tag Namespaces[/h1]
+
+When creating custom tags in a project, they are defined in the XML [link xml#namespaces]namespace[/link] specified in the library's [link library#lib-section]lib.ini[/link]. Alternatively you can specify the namespace for the tag with the [c]ns[/c] attribute of [tag]tag[/tag]. Moya doesn't place any restrictions on the namespace you use, but it is advisable to use a namespace from a domain you own. If you don't have a domain name, then you can use the following:
+
+[code]
+http://ns.moyaproject.com/<organization>/<library name>/
+[/code]
+
+Replace [c]<organization>[/c] with the name of your orginization (or your own name) and [c]<library name>[/c] with the [i]long name[/i] of your library.

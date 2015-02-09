@@ -1,0 +1,179 @@
+{
+    "name": "uuid",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "uuid",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nCreate a UUID field (http://en.wikipedia.org/wiki/Universally_unique_identifier).\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "create a UUID in the database",
+        "tag_name": "uuid",
+        "params": {
+            "length": {
+                "default_display": "36",
+                "name": "length",
+                "missing": true,
+                "default": 36,
+                "doc": "Maximum length of UUID (should be >= 36)",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            },
+            "version": {
+                "default_display": "\"1\"",
+                "name": "version",
+                "missing": true,
+                "default": "1",
+                "doc": "Type of UUID",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ]
+            },
+            "namespace": {
+                "default_display": "\"dns\"",
+                "name": "namespace",
+                "missing": true,
+                "default": "dns",
+                "doc": "Namespace (if using variant 3 or 5)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "dns",
+                    "url",
+                    "oid",
+                    "x500"
+                ]
+            }
+        },
+        "example": "\n        <uuid name=\"uuid\" version=\"3\" namespace=\"dns\" name=\"moyaproject.com\" />\n        ",
+        "inherited_params": {
+            "index": {
+                "default_display": "no",
+                "name": "index",
+                "missing": true,
+                "default": false,
+                "doc": "Create index",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "unique": {
+                "default_display": "no",
+                "name": "unique",
+                "missing": true,
+                "default": false,
+                "doc": "Impose unique constraint",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "null": {
+                "default_display": "no",
+                "name": "null",
+                "missing": true,
+                "default": false,
+                "doc": "Allow null?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Additional help text for use in object forms",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "primary": {
+                "default_display": "",
+                "name": "primary",
+                "missing": true,
+                "default": null,
+                "doc": "Use as primary key",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of field purpose",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "blank": {
+                "default_display": "yes",
+                "name": "blank",
+                "missing": true,
+                "default": true,
+                "doc": "Allow blank?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "formfield": {
+                "default_display": "",
+                "name": "formfield",
+                "missing": true,
+                "default": null,
+                "doc": "Macro to create a form field, used in admin",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the element",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.uuid"
+}

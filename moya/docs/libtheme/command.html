@@ -1,0 +1,65 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${name}{% endblock %}
+
+{% block "body" %}
+
+<div class="container">
+
+<ul class="breadcrumb">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="index.html">Commands</a></li>
+    <li>${name}</li>
+</ul>
+
+<h1>${name}<small> ${synopsis}</small></h1>
+
+${html:(doc|.bbcode)}
+
+<pre class="moya-console">$ moya ${long_name}#${name} {% for arg in signature.arguments %}${arg.metavar} {% endfor %}</pre>
+
+{% if signature.arguments %}
+<table class="table table-condensed table-bordered">
+    <caption>Positional Arguments</caption>
+    <thead>
+        <tr>
+            <th>Argument</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for arg in signature.arguments %}
+        <tr>
+            <td><tt>${arg.metavar}</tt></td>
+            <td>${arg.help}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if signature.alloptions %}
+<table class="table table-condensed table-bordered">
+    <caption>Optional Arugments</caption>
+    <thead>
+        <tr>
+            <th>Argument</th>
+            <th>Description</th>
+            <th>Default</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for opt in signature.alloptions %}
+        <tr>
+            <td><tt>--${opt.name}{% if opt.metavar %} ${opt.metavar}{% endif %}</tt></td>
+            <td>${opt.help}</td>
+            <td>{% if opt.default %}${opt.default}{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
+
+{% endblock %}

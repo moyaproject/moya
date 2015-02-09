@@ -1,0 +1,35 @@
+{
+    "name": "debug",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "debug",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Executes a block only if Moya is in debug mode. You can enable debug mode the setting 'debug' under the project section. This tag is equivalent to the following:\n\n[code xml]\n<if test=\".debug\">\n    <echo>Moya is in debug mode. Relax.</echo>\n</if>\n[/code]\n\n[alert]Be careful to not do anything inside this tag that your project may depend on. It will not execute in a production environment![/alert]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "execute debug code",
+        "tag_name": "debug",
+        "params": {},
+        "example": "\n        <debug>\n            <echo>Moya is in debug mode. Relax.</echo>\n        </debug>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.debug"
+}

@@ -1,0 +1,47 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:faq="http://moyaproject.com/faq"
+        xmlns:html="http://moyaproject.com/html"
+        xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.faqlist" template="faqs.html">
+        <title>Frequently Asked Questions</title>
+        <section name="body">
+            <for src="faqs" dst="qa">
+                <faq:faq qa="qa" />
+            </for>
+        </section>
+        <section name="admin_links" if=".permissions.admin">
+            <w:link url="${.appurls.createfaq}" icon="star">New question</w:link>
+        </section>
+    </content>
+
+    <content libname="content.createfaq" template="base.html">
+        <title>New Question</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.deletefaq" template="base.html">
+        <title>Delete Question</title>
+        <section name="body">
+            <if test="deleted">
+                <w:success>Question '${deleted}' has been deleted</w:success>
+                <html:p>
+                    <html:a href="${.appurls.faqs}">Return to Frequently Asked Questions</html:a>
+                </html:p>
+            </if>
+            <else>
+                <render src="form"/>
+            </else>
+        </section>
+    </content>
+
+    <content libname="content.editfaq" template="base.html">
+        <title>Edit Question</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+</moya>

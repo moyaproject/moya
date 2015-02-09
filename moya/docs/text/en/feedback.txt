@@ -1,0 +1,42 @@
+[title Moya Feedback]
+
+Moya Feedback creates a page to manage a [i]feedback[/i] form. The user may enter their name, email addresses, subject and message; which Moya Feedback will send to an email address configured in settings.
+
+[h1]Introduction[/h1]
+
+A feedback form is a long standing convention for allowing your visitors to contact you, [i]without[/i] using your email address directly. It is a good idea to have a feedback form on most sites.
+
+[h1]Settings[/h1]
+
+The following settings are supported by Moya Feedback:
+
+[setting]subject_prefix = <prefix>[/setting]
+
+This sets text that will prefix the subject entered by the users. The default is [c][feedback][/c], so if the user sends a feedback mail regarding the site it could have a subject like [c][feedback] site problems[/c].
+
+[setting]email_to = <email address>[/setting]
+
+This is the email address where feedback should be sent.
+
+[setting]email_from = <email address>[/setting]
+
+This is the from email that should be used in feedback emails. Note that, Moya Feedback puts the user's email address in the [c]reply-to[/c] header, so you may respond to the user's feedback by hitting Reply on your email client.
+
+[h1]Defining Subjects[/h1]
+
+The feedback form contains a select control with the possible subjects to use in the email. The default subjects are as follows:
+
+[code]
+General Feedback
+Report Abuse
+Technical Issue
+[/code]
+
+You can change the subjects with a data tag called [tag feedback]subject[/tag]. Simply add one or more of these tags to replace the subject list in the form. Here's an example:
+
+[code xml]
+<feedback:subject text="General Feedback" />
+<feedback:subject text="Compliments to the Chef" />
+<feedback:subject text="Where is my order?" />
+<feedback:subject text="I have been hospitalized by eating your fugu-shimi" />
+[/code]

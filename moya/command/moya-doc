@@ -1,0 +1,4 @@
+#!/usr/bin/python
+from moya.command.moyadoc import MoyaDoc
+import sys
+sys.exit(MoyaDoc().run())

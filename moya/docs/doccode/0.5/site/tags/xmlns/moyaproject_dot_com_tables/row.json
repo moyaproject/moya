@@ -1,0 +1,91 @@
+{
+    "name": "row",
+    "doc_namespace": "xmlns.http://moyaproject.com/tables",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "row",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_tables",
+        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "doc": "\nDefine a row in a [tag tables]table[/tag].\n\n",
+        "namespace": "http://moyaproject.com/tables",
+        "synopsis": "define a row in a table",
+        "tag_name": "row",
+        "params": {
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Option CSS style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "\"moya.tables\"",
+                "name": "from",
+                "missing": true,
+                "default": "moya.tables",
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "class": {
+                "default_display": "",
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Extra class",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "\"row.html\"",
+                "name": "template",
+                "missing": true,
+                "default": "row.html",
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "id": {
+                "default_display": "",
+                "name": "id",
+                "missing": true,
+                "default": null,
+                "doc": "Table ID",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/tables.row"
+}

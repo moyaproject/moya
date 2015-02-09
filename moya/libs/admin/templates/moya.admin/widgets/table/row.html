@@ -1,0 +1,5 @@
+<tr class="data-row row-${pk}{% if checked %} warning{% endif %}" data-id="${pk}">
+    <td><input type="checkbox" class="moya-admin-table-checkbox check-row" name="id" value="${pk}"{% if checked %} checked{% endif %}/></td>
+{% children -%}
+</tr>
+

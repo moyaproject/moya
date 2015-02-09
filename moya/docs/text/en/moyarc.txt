@@ -1,0 +1,54 @@
+[title MoyaRC]
+
+The [c]moya[/c] command line tools loads the file [c].moyarc[/c] from your home directory. It can be used to configure defaults and behaviour for subcommands.
+
+[h1]Sections[/h1]
+
+The following is a list of sections in [c].moyarc[/c]:
+
+[h2][author][/h2]
+
+This section is primary used by the [c]moya start[/c] command which use these values, if not supplied.
+
+[setting]name = <YOUR NAME>[/setting]
+
+The name of the library author.
+
+[setting]url = <URL>[/setting]
+
+The author's URL (e.g. a blog or homepage)
+
+[setting]organization = <ORGANIZATION NAME>[/setting]
+
+The name of the author's organization. If you don't have a particular organization, you can enter your own name here.
+
+[setting]email = <YOUR EMAIL ADDRESS>[/setting]
+
+The author's email address.
+
+[h2][defaults][/h2]
+
+Contains default values for the command line.
+
+[setting]ini = <SETTINGS FILENAME>[/setting]
+
+The INI file to read when running subcommands. The default is to read [c]settings.ini[/c] if this value is not supplied.
+
+On a production server, you might want to set the following:
+
+[code ini]
+[defaults]
+ini = production.ini
+[/code]
+
+This will load production settings by default.
+
+A common pattern with Moya is to have a file called [c]local.ini[/c] which contains settings local to the server (such as db settings). These would [i]not[/i] be checked in to source control. You can tell Moya to load [c]local.ini[/c] if it exits, or [c]production.ini[/c] if it doesn't, by specifying both filenames as follows:
+
+[code ini]
+[defaults]
+ini = local.ini
+    production.ini
+[/code]
+
+You can set as many filenames as you wish--Moya will try each one in turn.

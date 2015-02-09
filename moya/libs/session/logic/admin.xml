@@ -1,0 +1,18 @@
+<moya xmlns="http://moyaproject.com">
+
+    <module xmlns="http://moyaproject.com/admin" slug="sessions" title="Browser Sessions" description="Logged in sessions">
+        <link to="#admintable.sessions" title="Sessions"/>
+    </module>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.sessions"
+        slug="sessions"
+        title="Sessions"
+        model="#Session"
+        description="User sessions">
+        <column title="Key" sort="key" link="yes">${object.key}</column>
+        <column title="Data" sort="data">${json:object.data}</column>
+        <column title="Expires" sort="expire_time">${localize:object.expire_time}</column>
+    </table>
+
+</moya>

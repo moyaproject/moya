@@ -1,0 +1,80 @@
+{
+    "name": "get",
+    "doc_namespace": "xmlns.http://moyaproject.com/links",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get",
+        "lib": "moya.links",
+        "namespace_slug": "moyaproject_dot_com_links",
+        "defined": "/home/will/projects/moya/moya/libs/links/logic/tags.xml (line 21)",
+        "doc": "Gathers links from [tag links]link[/tag] tags.",
+        "namespace": "http://moyaproject.com/links",
+        "synopsis": "get advertised links",
+        "tag_name": "get",
+        "params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "purpose": {
+                "default_display": "navigation",
+                "name": "purpose",
+                "missing": true,
+                "default": "navigation",
+                "doc": "Gather tags with the 'purpose' attribute set to this value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/links.get"
+}

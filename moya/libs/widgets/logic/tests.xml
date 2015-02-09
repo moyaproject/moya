@@ -1,0 +1,52 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:auth="http://moyaproject.com/auth"
+      xmlns:widgets="http://moyaproject.com/widgets"
+      xmlns:html="http://moyaproject.com/html">
+
+    <mountpoint name="tests" libname="mountpoint.main">
+        <url route="/tests/" view="#view.tests" />
+    </mountpoint>
+
+    <view libname="view.tests" content="#content.tests">
+
+    </view>
+
+    <content libname="content.tests">
+        <title>Tests</title>
+        <section name="body">
+
+            <widgets:success>This is a success message</widgets:success>
+            <widgets:danger>This is a danger message</widgets:danger>
+            <widgets:info>This is an info message</widgets:info>
+            <widgets:warning>This is a warning message</widgets:warning>
+            <widgets:error>An error</widgets:error>
+
+            <widgets:info>
+                <bbcode>[b]note[/b] May contain other content</bbcode>
+            </widgets:info>
+
+            <widgets:link from="moya.auth" name="login">Login</widgets:link>
+
+            <widgets:success>
+                <markdown>Success Message</markdown>
+                <widgets:buttons>
+                    <widgets:link from="moya.auth" name="login">Button1</widgets:link>
+                    <widgets:link from="moya.auth" name="login">Button2</widgets:link>
+                </widgets:buttons>
+            </widgets:success>
+
+            <widgets:dialog>
+                <markdown>A dialog</markdown>
+                <widgets:dialog-buttons>
+                    <widgets:link from="moya.auth" name="login">Button1</widgets:link>
+                    <widgets:link from="moya.auth" name="login">Button2</widgets:link>
+                </widgets:dialog-buttons>
+            </widgets:dialog>
+
+        </section>
+    </content>
+
+</moya>

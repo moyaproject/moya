@@ -1,0 +1,5 @@
+{%- if field.label %}
+    <label class="col-sm-2 control-label" for="${field.id}">${field.label}{% if field.required %} *{% endif %}</label>
+{%- else %}
+    <div class="col-sm-2"></div>
+{%- endif %}

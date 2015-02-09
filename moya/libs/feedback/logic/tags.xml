@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+    <!-- define your tags here -->
+
+    <data-tag name="subject" synopsis="set subject option in feedback form">
+    	<doc>
+            This tag sets a subject that will be used in a select in the feedback form.
+        </doc>
+    	<signature>
+    		<attribute name="text" required="yes">
+                Subject option in the feedback form
+            </attribute>
+    	</signature>
+    </data-tag>
+
+</moya>

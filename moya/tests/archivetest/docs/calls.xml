@@ -1,0 +1,29 @@
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="call">
+        <echo>CALLING</echo>
+        <var dst=".called">True</var>
+        <return>
+            <int>123</int>
+        </return>
+    </macro>
+
+    <macro libname="test_moya_call_no_lazy">
+        <call macro="call" dst=".result" />
+    </macro>
+
+    <macro libname="test_moya_call_lazy">
+        <call macro="call" dst=".result" lazy="yes" />
+    </macro>
+
+    <!--
+    <macro libname="test_call_no_lazy">
+        <call src="callable" dst=".result" let:a="a" let:b="b"/>
+    </macro>
+
+    <macro libname="test_call_lazy">
+        <call src="callable" dst=".result" lazy="yes" let:a="a" let:b="b"/>
+    </macro>
+-->
+
+</moya>

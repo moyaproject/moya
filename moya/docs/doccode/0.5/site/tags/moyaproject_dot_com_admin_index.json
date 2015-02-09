@@ -1,0 +1,333 @@
+{
+    "name": "moyaproject_dot_com_admin_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/admin",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "column",
+                "lib": "moya.admin",
+                "namespace_slug": "moyaproject_dot_com_admin",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 111)",
+                "doc": "Define a column in a database view\"",
+                "prev_tag": "table",
+                "namespace": "http://moyaproject.com/admin",
+                "tag_name": "column",
+                "next_tag": "link",
+                "synopsis": "define a column in an admin view",
+                "params": {
+                    "sort": {
+                        "default_display": null,
+                        "name": "sort",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "link": {
+                        "default_display": "no",
+                        "name": "link",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": null,
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "link",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_admin",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 16)",
+                "doc": "A link to admin content (must go inside a module tag)",
+                "prev_tag": "column",
+                "namespace": "http://moyaproject.com/admin",
+                "tag_name": "link",
+                "next_tag": "module",
+                "synopsis": "link to admin content",
+                "params": {
+                    "to": {
+                        "default_display": null,
+                        "name": "to",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": null,
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "module",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_admin",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 6)",
+                "doc": "Define a top level admin module",
+                "prev_tag": "link",
+                "namespace": "http://moyaproject.com/admin",
+                "tag_name": "module",
+                "next_tag": "table",
+                "synopsis": "define a module in the admin interface",
+                "params": {
+                    "content": {
+                        "default_display": null,
+                        "name": "content",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Content to use as the main page",
+                        "required": false,
+                        "type": "element reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": null,
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Title used in Modules panel",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": null,
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Description of the module",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "slug": {
+                        "default_display": null,
+                        "name": "slug",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Identifier used in URLs",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "table",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_admin",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 24)",
+                "doc": "An admin table",
+                "prev_tag": "module",
+                "namespace": "http://moyaproject.com/admin",
+                "tag_name": "table",
+                "synopsis": "define a table view in the admin interface",
+                "params": {
+                    "search": {
+                        "default_display": null,
+                        "name": "search",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": null,
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": null,
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "order": {
+                        "default_display": null,
+                        "name": "order",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "filter": {
+                        "default_display": null,
+                        "name": "filter",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "widgets/table.html",
+                        "name": "template",
+                        "missing": true,
+                        "default": "widgets/table.html",
+                        "doc": "",
+                        "required": false,
+                        "type": "template path",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "model": {
+                        "default_display": "",
+                        "name": "model",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "slug": {
+                        "default_display": null,
+                        "name": "slug",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/admin",
+        "namespace_doc": "\n        Tags defined in the [link admin]Moya Admin[/link] library.\n\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/admin.moyaproject_dot_com_admin_index"
+}

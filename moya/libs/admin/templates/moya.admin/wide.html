@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block "title" %}${title}{% end %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le styles -->
+    <link href="{% media 'css/bootstrap.css' from 'moya.twitter.bootstrap' %}" rel="stylesheet">
+    <!-- <link href="${.urls.media}bootstrap.media/css/bootstrap-responsive.css" rel="stylesheet"> -->
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <script src="{% media 'js/jquery.js' from 'moya.twitter.bootstrap' %}"></script>
+    <script src="{% media 'js/bootstrap.js' from 'moya.twitter.bootstrap' %}"></script>
+
+    {% block "includecss" %}{% render include.css %}{% end %}
+    {% block "css" %}{% render sections.css %}{% end %}
+    {% block "jshead" %}{% render sections.jshead %}{% end %}
+    {% block "head" %}{% render sections.head %}{% end %}
+
+  </head>
+
+  <body>
+
+    {% block "body" %}
+    {% render sections.body %}
+    {% end %}
+    {% block "footer" %}{% end %}
+
+
+    {%- block "includejs" %}{% render include.js %}{% endblock %}
+    {%- block "js" %}{% render sections.js %}{% endblock %}
+
+  </body>
+</html>

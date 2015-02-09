@@ -1,0 +1,12 @@
+<moya xmlns="http://moyaproject.com">
+
+    <model xmlns="http://moyaproject.com/db" name="Post" libname="Post" repr="${slug}">
+        <foreign-key model="auth#User" name="owner" null="yes" />
+        <string name="title" length="100" null="no" />
+        <string name="slug" length="100" null="no" unique="yes" />
+        <boolean name="published" default="no" />
+        <datetime name="published_date" null="yes" />
+        <text name="content" null="no" default="" />
+    </model>
+
+</moya>

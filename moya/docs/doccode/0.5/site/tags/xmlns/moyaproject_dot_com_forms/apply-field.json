@@ -1,0 +1,47 @@
+{
+    "name": "apply-field",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "apply-field",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nApply a form field.\n\nInvoked by [tag forms]apply[/tag].\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "apply a form field",
+        "tag_name": "apply-field",
+        "params": {
+            "field": {
+                "default_display": "",
+                "name": "field",
+                "missing": true,
+                "default": null,
+                "doc": "Field name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.apply-field"
+}

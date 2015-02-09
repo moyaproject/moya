@@ -1,0 +1,35 @@
+{
+    "name": "fail",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "fail",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "Note a failed test",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "fail a test case",
+        "tag_name": "fail",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.fail"
+}

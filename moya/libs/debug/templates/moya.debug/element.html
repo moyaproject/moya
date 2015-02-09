@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block "css" append %}
+<style type="text/css">
+dt
+{
+	color: #DE935F;
+}
+</style>
+{% endblock %}
+
+{% block "title" %}${elementid}{% end %}
+
+{% block "body" %}
+<h2>${elementid} <small>document element</small></h2>
+
+<dl class="dl-horizontal">
+    <dt>location</dt>
+    <dd><a href="#line${element.1.source_line}">${element.1._location}, line ${element.1.source_line}</a></dd>
+    <dt>library</dt>
+    <dd>${element.1.lib}</dd>
+    {%- if element.0 %}
+    <dt>application</dt>
+    <dd>${element.0}</dd>
+    {%- endif %}
+    <dt>tag name</dt>
+    <dd>{${element.1.xmlns}} <strong>${element.1._tag_name}</strong></dd>
+    <dt>tag defined</dt>
+    <dd>${element.1._definition}</dd>
+</dl>
+
+<h4 class="text-info">Element appears here</h4>
+<pre style="overflow-x:hidden;"><div class="code format-${format}">${html:code}</div></pre>
+
+{% endblock %}

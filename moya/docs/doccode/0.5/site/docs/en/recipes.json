@@ -1,0 +1,20 @@
+{
+    "name": "recipes",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Recipies]\n\nThe following is a number of interesting / useful solutions to problems, or [i]recipes[/i], written in Moya code.\n\n[h1]Get the price of Bitcoin[/h1]\n\nThe following one liner will retrieve the current price of Bitcoin (in USD) from [url https://www.bitstamp.net]https://www.bitstamp.net[/url]:\n\n[code xml]\n<echo>${(fromjson:get:\"https://www.bitstamp.net/api/ticker/\")['ask']}</echo>\n[/code]\n\nHow does this work? Well, the URL [url https://www.bitstamp.net/api/ticker/]https://www.bitstamp.net/api/ticker/[/url] contains a JSON object with the current Bitcoin prices. The [link expressions#get]get:[/link] modifier reads that request from the internet, and the [link expressions#fromjson]fromjson:[/link] modifier converts the text in to a dictionary with a number of values. Finally the index operator [c]['ask'][/c] looks up the value of [c]'ask'[/c] which is the current asking price.\n\n[alert NOTE]This recipe depends on the the bitstamp api. We can't guarantee that will still be working, but we would be surprised if isn't.[/alert]",
+        "name": "recipes",
+        "docmap": [
+            [
+                1,
+                "Get the price of Bitcoin"
+            ]
+        ],
+        "title": "Recipies"
+    },
+    "id": "doc.recipes"
+}

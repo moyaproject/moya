@@ -1,0 +1,69 @@
+{
+    "name": "timer",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "timer",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/tools.py",
+        "doc": "\nTime a block of code, and log the elapsed time. The log will display two time values; the first is the wall time, the second is [i]processor time[/i]. Processor time is more useful for profiling, as it doesn't include the time spent waiting on IO.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "time a block of code",
+        "tag_name": "timer",
+        "params": {
+            "msg": {
+                "default_display": "\"elapsed\"",
+                "name": "msg",
+                "missing": true,
+                "default": "elapsed",
+                "doc": "msg",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "console": {
+                "default_display": "no",
+                "name": "console",
+                "missing": true,
+                "default": false,
+                "doc": "Display to console?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "ms": {
+                "default_display": "no",
+                "name": "ms",
+                "missing": true,
+                "default": false,
+                "doc": "Display milliseconds",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.timer"
+}

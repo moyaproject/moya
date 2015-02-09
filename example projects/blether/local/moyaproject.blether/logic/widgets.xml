@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+    <!-- define your widgets here -->
+
+    <widget name="blether" template="widgets/blether.html">
+        <signature>
+            <attribute name="blether" type="expression" />
+        </signature>
+        <include-css path="css/moyablether.css"/>
+    </widget>
+
+</moya>

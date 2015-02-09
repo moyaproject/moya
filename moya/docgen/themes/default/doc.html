@@ -1,0 +1,43 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${title}{% endblock %}
+
+{% block "body" %}
+<div class="container">
+
+{% if .id != "doc.index" %}
+<ul class="breadcrumb">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="index.html">Documentation</a></li>
+    <li>${title}</li>
+</ul>
+{% endif %}
+
+{% def "pager" %}
+{% if .id != "doc.index" %}
+<div class="doc-nav">
+    <ul class="pager">
+        {%- if .nav.prev %}
+        <li class="previous">
+            <a href="${relto:.urls.doc[slug:.nav.prev.doc.name]}">&larr; ${.nav.prev.index}. ${.nav.prev.doc.data.title}</a>
+        </li>
+        {% elif .id != 'doc.index' %}
+        <li class="previous">
+            <a href="${relto:.urls.doc.index}">&larr; Index</a>
+        </li>
+        {%- endif %}
+        {%- if .nav.next %}
+        <li class="next">
+            <a href="${relto:.urls.doc[slug:.nav.next.doc.name]}">${.nav.next.index}. ${.nav.next.doc.data.title} &rarr;</a>
+        </li>
+        {%- endif %}
+    </ul>
+</div>
+{% endif %}
+{% enddef %}
+{% call "pager" %}
+<h1>${title}</h1>
+${html:(body|.bbcode)}
+{% call "pager" %}
+</div>
+{% endblock %}

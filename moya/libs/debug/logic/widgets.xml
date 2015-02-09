@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+	  xmlns:let="http://moyaproject.com/let">
+
+	<widget name="showlibs" template="widgets/showlibs.html" />
+	<widget name="showapps" template="widgets/showapps.html" />
+
+</moya>

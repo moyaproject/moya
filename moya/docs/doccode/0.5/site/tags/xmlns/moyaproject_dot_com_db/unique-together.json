@@ -1,0 +1,47 @@
+{
+    "name": "unique-together",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "unique-together",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": null,
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "require combinations of fields to be unique",
+        "tag_name": "unique-together",
+        "params": {
+            "fields": {
+                "default_display": "",
+                "name": "fields",
+                "missing": true,
+                "default": null,
+                "doc": "Fields",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.unique-together"
+}

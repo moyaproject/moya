@@ -1,0 +1,65 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms">
+
+    <mountpoint name="main" libname="mountpoint.main">
+        <url route="/" methods="GET" view="#view.faqs" name="faqs"/>
+        <url route="/create/" methods="GET" view="#view.createfaq" name="createfaq"/>
+        <url route="/create/" methods="POST" view="#view.createfaq.post"/>
+        <url route="/delete/{slug}/" methods="GET" view="#view.deletefaq" name="deletefaq" />
+        <url route="/delete/{slug}/" methods="POST" view="#view.deletefaq.post" />
+        <url route="/editfaq/{slug}/" methods="GET,POST" name="editfaq" view="#view.editfaq"/>
+    </mountpoint>
+
+    <view libname="view.faqs" content="#content.faqlist">
+        <db:query model="#Question" orderby="question" dst="faqs"/>
+    </view>
+
+    <view libname="view.createfaq" content="#content.createfaq" requires="permission:'admin'">
+        <forms:get form="#form.createfaq" dst="form"/>
+    </view>
+
+    <view libname="view.createfaq.post" content="#content.createfaq" requires="permission:'admin'">
+        <forms:get form="#form.createfaq" dst="form"/>
+        <forms:validate src="form" >
+            <db:create model="#Question" obj="form.data" dst="faq">
+                <let slug="slug:form.data.question" />
+            </db:create>
+            <redirect name="faqs" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.deletefaq" content="#content.deletefaq" requires="permission:'admin'">
+        <db:get-required model="#Question" let:slug="url.slug" dst="faq"/>
+        <forms:get form="#form.deletefaq" dst="form" withscope="yes"/>
+    </view>
+
+    <view libname="view.deletefaq.post" content="#content.deletefaq" requires="permission:'admin'">
+        <db:get-required model="#Question" let:slug="url.slug" dst="faq"/>
+        <forms:get form="#form.deletefaq" dst="form" withscope="yes"/>
+        <forms:validate src="form"/>
+        <if test="form.ok">
+            <if test="form.data.delete">
+                <db:delete src="faq"/>
+                <let deleted="faq.question" />
+            </if>
+            <else>
+                <redirect name="faqs" />
+            </else>
+        </if>
+    </view>
+
+    <view libname="view.editfaq" content="#content.editfaq" requires="permission:'admin'">
+        <db:get-required model="#Question" let:slug="url.slug" dst="faq"/>
+        <forms:get form="#form.editfaq" dst="form" src="faq" withscope="yes"/>
+        <if-post>
+            <forms:validate src="form"/>
+            <if test="form.ok">
+                <forms:apply src="form" dst="faq" />
+                <redirect name="faqs" />
+            </if>
+        </if-post>
+    </view>
+
+</moya>

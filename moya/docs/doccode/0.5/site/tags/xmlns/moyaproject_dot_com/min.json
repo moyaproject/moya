@@ -1,0 +1,80 @@
+{
+    "name": "min",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "min",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Get the minimum value in a sequence.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "get the minimum value in a sequence",
+        "tag_name": "min",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source sequence",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "key": {
+                "default_display": "",
+                "name": "key",
+                "missing": false,
+                "default": null,
+                "doc": "Key",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.min"
+}

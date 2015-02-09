@@ -1,0 +1,160 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.1\n"
+"POT-Creation-Date: 2014-03-23 22:09+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8Bit\n"
+"Language: en\n"
+
+#. <fail/>
+#: ../logic/forms.xml:21
+msgid "Username should be at least 3 characters"
+msgstr ""
+
+#. <markdown/>
+#: ../logic/admin.xml:61
+msgid ""
+"**Hello** _world_\n"
+"\n"
+"Header\n"
+"======\n"
+"\n"
+"> This is a quote\n"
+"\n"
+"- This\n"
+"- Is\n"
+"- A\n"
+"- List\n"
+"\n"
+"I recommend against `<blink>` tag"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:54
+msgid "Please agree to the terms and conditions to continue"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:23
+msgid "${object.username}"
+msgstr ""
+
+#. <text/>
+#: ../logic/content.xml:14
+msgid "New user created, you may now login."
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:44
+msgid ""
+"A user with this email already has an account, please use another email"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:30
+msgid "Passwords should be at least 5 characters"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:44
+msgid "${object.name}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:24
+msgid "${object.first_name}"
+msgstr ""
+
+#. <error/>
+#: ../logic/auth.xml:45
+msgid "No user with those credentials"
+msgstr ""
+
+#. <bbcode/>
+#: ../logic/admin.xml:57
+msgid ""
+"Welcome to [b]moya.auth[/b] Admin\n"
+"\n"
+"            Test"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:49
+msgid "Email fields do not match"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:26
+msgid "${object.email}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:31 ../logic/admin.xml:31
+msgid ""
+"{% if object.last_login %}${localize:object.last_login}{% else "
+"%}[i]Never[/i]{% endif %}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:45
+msgid "${object.description}"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:40
+msgid "Please enter a valid email address"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:51
+msgid "${object.session_key}"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:25
+msgid "Username exist, please pick another"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:28 ../logic/admin.xml:28
+msgid ""
+"{% if object.date_joined %}${localize:object.date_joined}{% else "
+"%}[i]Never[/i]{% endif %}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:25
+msgid "${object.last_name}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:39
+msgid "${object.description}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:52
+msgid "${localize:object.expire_date}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:50
+msgid "${object.user.username}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:19
+msgid "${object.id}"
+msgstr ""
+
+#. <text/>
+#: ../logic/admin.xml:38
+msgid "${object.name}"
+msgstr ""
+
+#. <fail/>
+#: ../logic/forms.xml:35
+msgid "Passwords do not match"
+msgstr ""

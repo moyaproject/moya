@@ -1,0 +1,35 @@
+{
+    "name": "with",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "with",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Merge values with the current scope in the enclosed block. The values in the let map will persist only in the enclosed block.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a new data scope",
+        "tag_name": "with",
+        "params": {},
+        "example": "\n<with let:hobbit=\"Sam\">\n    <echo>${hobbit} is my favorite hobbit.\n</with>\n<!-- 'hobbit' will no longer exist at this point -->\n<echo if=\"missing:hobbit\">Where is the hobbit?</echo>\n\n",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.with"
+}

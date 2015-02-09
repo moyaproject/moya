@@ -1,0 +1,23 @@
+{
+    "name": "doc",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "doc",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "\nWrite documentation for a widget or custom tag.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "document a tag",
+        "tag_name": "doc",
+        "params": {},
+        "example": "\n        <widget name=\"post\" template=\"post.html\">\n            <doc>Renders a single post</doc>\n            <!-- widget code -->\n        </widget>\n\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.doc"
+}

@@ -1,0 +1,16 @@
+<div class="faq-question" id="${slug:qa.question}">
+<h4>
+    ${qa.question}?
+    {%- if .user %}
+    <div class="btn-group">
+	    <div class="btn-toolbar">
+	        <a href="{% url "editfaq" with slug=qa.slug %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+	        <a href="{% url "deletefaq" with slug=qa.slug %}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+	    </div>
+	</div>
+    {%- endif %}
+</h4>
+
+${html:qa.answer}
+<p><a href="#top">Top</a></p>
+</div>

@@ -1,0 +1,10 @@
+<moya xmlns="http://moyaproject.com">
+
+    <mountpoint name="main">
+        <url route="/" view="#view.front" name="front" />
+        <url route="/timeline/{username}/" view="#view.timeline" name="timeline" />
+        <url route="/follow/{username}/" view="#view.follow" name="follow" />
+        <url route="/unfollow/{username}/" view="#view.unfollow" name="unfollow" />
+    </mountpoint>
+
+</moya>

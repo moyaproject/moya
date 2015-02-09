@@ -1,0 +1,58 @@
+{
+    "name": "content",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "content",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nBegin a [link content]content[/link] definition.\n\nContent is a high level description of a page.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define content",
+        "tag_name": "content",
+        "params": {
+            "extends": {
+                "default_display": "",
+                "name": "extends",
+                "missing": true,
+                "default": null,
+                "doc": "Extend content element",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template name",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <content libname=\"content.crew.manifest\">\n            <title>Crew Manifest</title>\n            <section name=\"content\">\n                <for src=\"crew\" dst=\"character\">\n                    <moya:crew character=\"character\"/>\n                </form>\n            </section>\n            <section name=\"footer\">\n                <markdown>Brought to you by **Moya**.</markdown>\n            </section>\n        </content>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.content"
+}

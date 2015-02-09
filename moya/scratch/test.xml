@@ -1,0 +1,15 @@
+<moya xmlns="http://moyaproject.com">
+
+<macro docname="t"><echo>Hello</echo></macro>
+
+	<macro docname="main">
+		<echo>Text</echo>
+ 		<let s="'hello'"/>
+		<call macro="t" />
+		<range start="5" stop="10" dst="r" />
+		<for src="r" dst="no">
+			<echo>${no}</echo>
+		</for>
+	</macro>
+
+</moya>

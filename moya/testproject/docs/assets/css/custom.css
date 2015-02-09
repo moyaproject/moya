@@ -1,0 +1,290 @@
+aside
+{
+	display:block;
+    background-color:#f4f8fa;
+    border-color:#5bc0de;
+    border-left:3px solid #5bc0de;
+    margin:20px 0;
+    padding:20px;
+}
+
+aside h4
+{
+    color: #5bc0de;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight:normal;
+}
+
+pre.moya-console {
+    font-family:"Lucida Console", Monaco, monospace;
+    /*font-size:12px;*/
+    line-height:1.3em;
+    background-color:#222;
+    color:#fff;
+    border:0px;
+    /*line-height:1.5em;*/
+    border-radius:0px;
+    white-space:nowrap;
+    overflow-x:auto;
+}
+
+.moya-console .console-bold
+{
+    font-weight: bold;
+}
+
+.moya-console .console-italic
+{
+    font-style: italic;
+}
+
+.moya-console .console-underline
+{
+    text-decoration: underline;
+}
+
+.moya-console .console-dim
+{
+    opacity:.5;
+    font-weight:normal !important;
+}
+
+
+.moya-console .console-bold.console-foreground-yellow
+{
+    color: #fce94f;
+}
+
+.moya-console .console-bold.console-foreground-magenta
+{
+    color: #ad7fa8;
+}
+
+.moya-console .console-bold.console-foreground-green
+{
+    color: #8ae234;
+}
+
+.moya-console .console-bold.console-foreground-blue
+{
+    color: #729fcf;
+}
+
+.moya-console .console-bold.console-foreground-cyan
+{
+    color: #34e2e2
+}
+
+.moya-console .console-bold.console-foreground-red
+{
+    color: #ef2929;
+}
+
+.moya-console .console-bold.console-foreground-black
+{
+    color: #555753
+}
+
+.moya-console .console-bold.console-foreground-white
+{
+    color: #eeeeec
+}
+
+
+.moya-console .console-foreground-yellow
+{
+    color: #c4a000;
+}
+
+.moya-console .console-foreground-magenta
+{
+    color: #75507b;
+}
+
+.moya-console .console-foreground-green
+{
+    color: #4e9a06;
+}
+
+.moya-console .console-foreground-blue
+{
+    color: #3465a4;
+}
+
+.moya-console .console-foreground-cyan
+{
+    color: #06989a
+}
+
+.moya-console .console-foreground-red
+{
+    color: #cc0000;
+}
+
+.moya-console .console-foreground-black
+{
+    color: #000000
+}
+
+.moya-console .console-foreground-white
+{
+    color: #d3d7cf
+}
+
+
+
+.moya-console .console-background-yellow
+{
+    background-color: #fce94f;
+}
+
+.moya-console .console-background-magenta
+{
+    background-color: #ad7fa8;
+}
+
+.moya-console .console-background-green
+{
+    background-color: #8ae234;
+}
+
+.moya-console .console-background-blue
+{
+    background-color: #729fcf;
+}
+
+.moya-console .console-background-cyan
+{
+    background-color: #34e2e2
+}
+
+.moya-console .console-background-red
+{
+    background-color: #ef2929;
+}
+
+.moya-console .console-background-black
+{
+    background-color: #555753
+}
+
+.moya-console .console-background-white
+{
+    background-color: #eeeeec
+}
+
+
+
+.format-xml .comment { color:#969896; }
+.format-xml .tag { color:#CC6666; font-weight:bold;}
+.format-xml .tag.tagcontent.attrib { color:#F0C674; }
+.format-xml .string { color:#B5BD68; }
+.format-xml .xmlns {color:#CC6666; font-weight:bold;}
+.format-xml .tagname, .format-xml .endtagname {color:#CC6666;font-weight:bold;}
+.format-xml .tag.tagcontent { color:#DE935F; font-style:normal; font-weight:normal;}
+.format-xml .braced {font-weight:bold !important;}
+
+.format-xml .sub
+{
+    color:#B294BB !important;
+    font-weight:bold;
+}
+
+.format-python
+{
+}
+
+.format-python .call { color:#DE935F; }
+.format-python .operator { color:#81A2BE}
+.format-python .keyword { color:#B294BB; font-weight:bold; }
+.format-python .builtin { color:#F0C674; }
+.format-python .string { color:#B5BD68 !important; font-weight:normal !important; font-style:normal !important;}
+.format-python .comment { color:#969896 !important; }
+.format-python .self { font-style:italic; color:#C66;}
+.format-python .number { color:#DE935F; }
+.format-python .brace { color:#EEE; }
+.format-python .decorator {color:#C66;}
+.format-python .constant { color:#DE935F; font-style:italic;}
+.format-python .def {color:#F0C674; font-weight:bold;}
+
+.format-moyatemplate .comment { color:#969896; }
+.format-moyatemplate .tag { color:#CC6666; font-style:italic; font-weight:bold;}
+.format-moyatemplate .tag.tagcontent.attrib { color:#F0C674; }
+.format-moyatemplate .string { color:#B5BD68; }
+.format-moyatemplate .xmlns {font-style:italic; color:#CC6666; font-weight:bold;}
+.format-moyatemplate .tagname, .format-moyatemplate .endtagname {color:#CC6666;font-weight:bold;}
+.format-moyatemplate .tag.tagcontent { color:#DE935F; font-style:normal; font-weight:normal;}
+
+.format-moyatemplate .templatetag
+{
+    color:#B294BB !important;
+    font-weight:bold !important;
+}
+
+.format-moyatemplate .sub
+{
+    color:#D1BFD6 !important;
+    font-weight:bold !important;
+}
+
+.format-ini .section
+{
+    /*font-weight:bold;*/
+    color:#eee !important;
+}
+
+.format-ini .key
+{
+    color:#DE935F;
+}
+
+.format-ini .value
+{
+    color:#F0C674;
+}
+
+.format-ini .comment
+{
+    color:#999;
+    font-style:italic;
+}
+
+ol>li>a
+{
+    /* font-weight:bold; */
+}
+
+.doc-structure ul
+{
+    padding-left:2em;
+}
+
+.lib-details
+{
+    margin-bottom:0px;
+}
+
+h1 a,h2 a,h3 a,h4 a
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+a span.anchor
+{
+    color:#aaa;
+    visibility:hidden;
+    font-size:.7em;
+}
+
+h1:hover span.anchor,h2:hover span.anchor,h3:hover span.anchor,h4:hover span.anchor
+{
+    visibility:visible;
+}

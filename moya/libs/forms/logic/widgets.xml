@@ -1,0 +1,18 @@
+<moya xmlns="http://moyaproject.com">
+
+    <widget name="formresult" ns="http://moyaproject.com/forms" template="widgets/formresult.html" undocumented="yes">
+        <doc>
+            This renders a form result, for debugging
+        </doc>
+        <signature>
+            <attribute name="form" type="index" />
+        </signature>
+    </widget>
+
+    <widget name="formswitcher" ns="http://moyaproject.com/forms" template="widgets/formswitcher.html" undocumented="yes">
+        <doc>
+            Renders links to the form tests
+        </doc>
+    </widget>
+
+</moya>

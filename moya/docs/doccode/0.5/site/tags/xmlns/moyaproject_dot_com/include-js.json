@@ -1,0 +1,90 @@
+{
+    "name": "include-js",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "include-js",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nLike [tag]include-css[/tag], but inserts a link to a JS file.\n\nThe JS files may be inserted in to the template as follows:\n\n[code moyatemplate]\n{% render include.js %}\n[/code]\n\nThis is equivalent to the following:\n\n[code moyatemplate]\n{%- for include in include.js %}\n<script type=\"text/javascript\" href=\"${include.path}\"/>\n{%- endfor %}\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "include a JS file in content",
+        "tag_name": "include-js",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "External URL",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "media": {
+                "default_display": "\"media\"",
+                "name": "media",
+                "missing": true,
+                "default": "media",
+                "doc": "Media name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path to CSS",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "type": {
+                "default_display": "\"css\"",
+                "name": "type",
+                "missing": true,
+                "default": "css",
+                "doc": "Type of link",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.include-js"
+}

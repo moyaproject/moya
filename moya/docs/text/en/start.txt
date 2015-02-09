@@ -1,0 +1,171 @@
+[title Starting a Project]
+
+Before we dive in to the details of building a web application with Moya, it is worth creating an example project to have a look it. This is especially true if you are the 'show me the code' type of developer (as the author is).
+
+[h1]Start Project Command[/h1]
+
+The Moya command line application contains a command line [i]wizard[/i] that can build a project framework for us. If you run [c]moya start project[/c] without any additional arguments, it will ask you for information regarding your project and what applications you want to enable (auth, feedback, blog etc). For the purposes of this demonstration we are going to enter the title on the command line and accept all defaults (with the [c]-a[/c] switch).
+
+Enter the following from the command line to build the test project:
+
+[code]
+$ moya start project --title "Intended For Humans" -a
+[/code]
+
+Moya will ask you for a few details, then if all goes well you should see confirmation that the project files were written. If you now navigate to the newly created [c]intendedforhumans/[/c] directory, you can begin working with the project.
+
+[h2]MoyaRC[/h2]
+If you don't want to have to re-enter basic information in the wizard every time you use it, you can create a configuration file containing these defaults. This file should be called [c].moyarc[/c] and should be in your home directory. If you are on linux, you can create this file with [c]nano ~/.moyarc[/c]. Here is an example of a moyarc file:
+
+[code ini]
+[author]
+name = John Crichton
+email = john@moya.org
+organization = Moya Project
+url = http://example.org
+[/code]
+
+See [doc moyarc] for more information.
+
+[h1]Initializing a New Project[/h1]
+
+Moya now has all the information it needs to run a database driven web application, but before it can run successfully we first need to initialize the database. The first step we need is to create tables in the database. Navigate to the project directory ([c]intendedforhumans/[/c]) and enter the following at the command line:
+
+[code]
+$ moya db sync
+[/code]
+
+The above command will create the tables for the project in the database. You should see a confirmation for each application that was [i]synced[/i] with the database.
+
+The tables now exist in the database, but no information is stored there. The authorization library (users and permissions) first needs to store some objects in the database, such as a user account for yourself. We can do this by invoking a command in the auth library, as follows:
+
+[code]
+$ moya auth#cmd.init
+[/code]
+
+This will ask you to create a super user account -- you can accept the default username of 'superuser' or enter a more personalized username. Moya will then ask you for a password. On a production site, you would of course use a secure password here. Since this is just a test, feel free to enter 'password' or something memorable. Finally, Moya will ask you for an email address. Enter your email address, or a fake one.
+
+At this point everything should be set up to run your application. When developing, use the following command to run the server:
+
+[code]
+$ moya runserver
+[/code]
+
+This will read the files from your project and run the server. You should see a stream of log information followed by confirmation that the server is running. You can now visit [url http://127.0.0.1:8000]http://127.0.0.1:8000[/url] to view your web application. Feel free to look around.
+
+The site should be empty, but fully functional. If you want to add content, click the 'Login' link on the top right, and log in with your superuser account. You can now edit pages / post blogs etc and view the Admin site from the Admin dropdown (top left).
+
+[aside]Visit [url http://127.0.0.1:8000/debug/]http://127.0.0.1:8000/debug/[/url] for some details regarding running applications.[/aside]
+
+[h1]Project Contents[/h1]
+
+Let's look at the files and directories that the wizard has created. You should find a [c]readme.txt[/c] in most directories containing a brief description of the directory contents.
+
+In the top level directory you should see a file called simply [c]moya[/c]. This file tells Moya that this directory contains a project. The command line application will look for this file when running the development server, or other commands that require a project. If Moya doesn't find the [c]moya[/c] file in the current directory, it will look for it in the parent directories. This means that [c]moya runserver[/c] will work even if you are in a sub-directory.
+
+Also in the top directory are some [c]ini[/c] files. These will be explained in detail in later chapters, but feel free to have a look at these -- they are in a simple text format.
+
+If you have run the project, you should also see a directory called [c]__moyacache__[/c] which contains temporary files when running, and [c]basic.sqlite[/c] which is your database. You may configure both in settings.
+
+[aside]You won't find a great deal of executable code in a fresh project. This is because the project uses a number of builtin libraries that come with the Moya distribution. If you want to look through the code for these libraries, you can find them on your Python path, but it is probably easiest to download the source from Github.[/aside]
+
+In your top level directory, you should also find the following sub-directories:
+
+[definitions]
+
+[define /external/]
+Contains [i]libraries[/i] which are [i]external[/i], i.e. authored by third parties.
+[/define]
+
+[define /local/]
+Contains [i]libraries[/i] which are [i]local[/i] to the project, i.e. authored by yourself or organization.
+[/define]
+
+[define /logic/]
+Contains executable Moya code to initialize the server. By default there is a single file, [c]server.xml[/c], containing a server definition. It is this server that runs when you do [c]moya runserver[/c].
+[/define]
+
+[define /site/]
+Contains a library that handles site specific functionality. In other words, it is code that you wouldn't want to re-use in another web site.
+[/define]
+
+[define /static/]
+A directory for static media (css, images, js etc) to be used by your application. It is merged in a virtual filesystem with other static files in installed libraries. If your development server is running, visit [url http://127.0.0.1:8000/static/]http://127.0.0.1:8000/static/[/url] to see what files are being served.
+[/define]
+
+[define /templates/]
+Contains templates (text files with a special markup to generate html), that are specific to the project. Libraries also have their own templates, but templates in this directory can override templates defined in other libraries. This way you can customize HTML content defined in a library.
+[/define]
+
+[/definitions]
+
+[h1]Creating a New Library[/h1]
+
+All new functionality you write will be done in a [i]library[/i] of some sort. If you want to add content specific a single site, then you could work with the library in [c]/site/[/c], but generally you will want to create a library for each distinct feature set in your site.
+
+The [c]moya start[/c] command can create libraries, in much the same way as projects. To do this you will need to be in your project directory. let's add a new library to our test project. We'll pretend we are going to start a new app that locates the finest sushi in your area. Enter the following from the command line:
+
+[code]
+$ moya start library --title "Sushi Finder"
+[/code]
+
+This will ask you about some basic author information (see section on [link start#moyarc]MoyaRC[/link] if you don't like repeating yourself).
+
+[aside]The information the wizard requires may be changed later by modifying an INI file, so don't worry about mistakes.[/aside]
+
+The wizard will ask you for a 'long name' to give to the library. A long name consists of two or more identifiers separated by dots. The first identifier should be your organization. The second identifier should be the name of your project. You can add further identifiers if you want more fine-grained categorization.
+
+After the long name, the wizard will ask you for a URL for the library. This URL should be a link to documentation, or some information regarding the library. You may leave this field blank if you aren't going to distribute your library.
+
+The next thing the wizard will ask for is an [i]XML namespace[/i], which should be a fully qualified (including http://) URL. This URL doesn't have to exist; the only requirement is that it should be unique to you. Using a domain you own is the best way to ensure that this is the case. If you don't have a domain, you are welcome to use a URL in this format:
+
+[code]
+http://ns.moyaproject.com/<organization>/<library name>/
+[/code]
+
+Moya will then ask you if you want to [i]mount[/i] the library. Mounting a library allows it to generate responses to requests. Select [c]y[/c] for this, and accept the default of [c]sushifinder[/c] for the mount location.
+
+The final piece of information Moya will ask you for is a name for your application (an application in Moya terminology is a mounted library). This should be relatively short, lower case, and contain no periods. Enter a value of [c]sushi[/c] for this.
+
+If all goes well, Moya will generate a skeleton library in the [c]/local/[/c] directory. It will also modify [c]server.xml[/c] so the new libray will be loaded.
+
+If you now run the development server ([c]moya runserver[/c]), you should see a few references to the new library in the logs. And if you visit [url http://127.0.0.1:8000/sushifinder/]http://127.0.0.1:8000/sushifinder/[/url] in the browser, you will see the new application in action.
+
+The new application doesn't do anything particularly interesting, but does contain most of the elements you might use in a more functional project. Feel free to examine the auto-generated code and tweak it.
+
+[h1]Library Contents[/h1]
+
+Let's look at the directory structure of the new library we just created. Navigate to the library, which you will find in [c]/local/[/c] (inside the project directory).
+
+At the top level you will find a [c]__init__.py[/c] file. This is necessary if you would like to distribute your library as a Python module. Also at the top level is a file called [c]lib.ini[/c]. This contains information regarding the library, and the locations of additional files.
+
+There is probably no good reason to change the defaults, so most libraries will contain the following directories.
+
+[definitions]
+
+[define /locale/]
+This directory will contain translation catalogs, which contain the text of your project in various languages. If you don't intend to make your library available in other languages, you may delete this directory.
+[/define]
+
+[define /logic/]
+Contains the executable code for your library, in the form of a number of XML documents that handle URLs, views, database models, forms etc. Most of the work on a library will go in to creating and
+editing of the files in here.
+[/define]
+
+[define /media/]
+If your library distributes any static media (images, css, Javascript etc), they will go in here.
+[/define]
+
+[define /templates/]
+This directory will contain the templates your library uses.
+[/define]
+
+[/definitions]
+
+[h1]Summary[/h1]
+
+A [i]project[/i] consists of a number of directories where the top level is denoted by a filed called [c]moya[/c]. This file lets the [c]moya[/c] command line application know the location of the root of the project.
+
+All functionality for generating and serving content is contained within [i]libraries[/i] which have a globally unique name (or [i]long name[/i]) consisting of two or more identifiers separated by dots. There are three directories for libraries in a typical project; [c]/local/[/c] contains libraries authored by yourself, [c]/external/[/c] contains third party libraries, and [c]/site/[/c] contains a library to customize the site.
+
+When a library is installed, it is given a short identifier which contains no spaces or periods. Once installed, a library is known as an [i]application[/i]. There may be more than once application installed for any given library.

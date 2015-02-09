@@ -1,0 +1,97 @@
+{
+    "name": "index",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "indices": {
+            "libraries": [
+                "1",
+                null,
+                [
+                    "libintro",
+                    "auth",
+                    "admin",
+                    "blog",
+                    "bootstrap",
+                    "comments",
+                    "debug",
+                    "faq",
+                    "favicon",
+                    "feedback",
+                    "forms",
+                    "jsonrpc",
+                    "links",
+                    "pages",
+                    "recaptcha",
+                    "session",
+                    "signup",
+                    "static",
+                    "tables",
+                    "thumbnail",
+                    "widgets",
+                    "wysihtml5"
+                ]
+            ],
+            "appendix": [
+                "A",
+                null,
+                [
+                    "xml",
+                    "codes",
+                    "moyarc",
+                    "namespaces",
+                    "recipes"
+                ]
+            ],
+            "main": [
+                "1",
+                null,
+                [
+                    "introduction",
+                    "installation",
+                    "overview",
+                    "start",
+                    "moyacode",
+                    "expressions",
+                    "customtags",
+                    "project",
+                    "server",
+                    "library",
+                    "templates",
+                    "urls",
+                    "content",
+                    "db",
+                    "email",
+                    "i18n",
+                    "commands",
+                    "images",
+                    "signals",
+                    "logging",
+                    "preflight",
+                    "deploy"
+                ]
+            ]
+        },
+        "body": "[title Moya Documentation]\n\nWelcome to the Moya Documentation.\n\n[h2]Chapters[/h2]\n\n[index]\n    introduction\n    installation\n    overview\n    start\n    moyacode\n    expressions\n    customtags\n    project\n    server\n    library\n    templates\n    urls\n    content\n    db\n    email\n    i18n\n    commands\n    images\n    signals\n    logging\n    preflight\n    deploy\n[/index]\n\n[h2]Libraries[/h2]\n\n[index libraries]\n    libintro\n    auth\n    admin\n    blog\n    bootstrap\n    comments\n    debug\n    faq\n    favicon\n    feedback\n    forms\n    jsonrpc\n    links\n    pages\n    recaptcha\n    session\n    signup\n    static\n    tables\n    thumbnail\n    widgets\n    wysihtml5\n[/index]\n\n[h2]Appendices[/h2]\n\n[index appendix A]\n    xml\n    codes\n    moyarc\n    namespaces\n    recipes\n[/index]\n",
+        "name": "index",
+        "docmap": [
+            [
+                2,
+                "Chapters"
+            ],
+            [
+                2,
+                "Libraries"
+            ],
+            [
+                2,
+                "Appendices"
+            ]
+        ],
+        "title": "Moya Documentation"
+    },
+    "id": "doc.index"
+}

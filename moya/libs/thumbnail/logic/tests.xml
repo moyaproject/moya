@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:tn="http://moyaproject.com/thumbnail"
+    xmlns:image="http://moyaproject.com/image"
+    xmlns:html="http://moyaproject.com/html"
+    xmlns:forms="http://moyaproject.com/forms"
+    xmlns:fs="http://moyaproject.com/fs"
+    xmlns:w="http://moyaproject.com/widgets">
+
+    <mountpoint name="tests">
+        <url route="thumbs/{*path}" view="view.thumbs" />
+        <url route="/" methods="GET,POST" view="view.upload" />
+    </mountpoint>
+
+
+    <tn:thumbnails libname="thumbnails.tests">
+
+        <tn:processor name="small" version="1">
+            <image:resize-to-fit width="80" height="60"/>
+        </tn:processor>
+
+        <tn:processor name="square" version="2">
+            <image:square/>
+            <image:resize-to-fit width="100" height="100"/>
+        </tn:processor>
+
+        <tn:processor name="width200">
+            <image:resize-to-fit width="200"/>
+        </tn:processor>
+
+        <tn:processor name="fitsquare">
+            <image:resize-to-fit width="300" height="300"/>
+            <image:resize-canvas width="300" height="300" color="#00ff00"/>
+        </tn:processor>
+
+        <tn:processor name="fit">
+            <image:resize-to-fit width="90" height="300"/>
+        </tn:processor>
+
+    </tn:thumbnails>
+
+    <form xmlns="http://moyaproject.com/forms" docname="form.upload" style="horizontal" legend="Thumbnail Test">
+        <upload name="file" label="Image" required="yes"/>
+        <submit-button name="submit"/>
+    </form>
+
+    <content docname="content.upload" template="tests/uploadimage.html">
+        <title>Upload a test image</title>
+        <section name="body">
+            <w:success if="success">Image was uploaded</w:success>
+            <render src="form" />
+        </section>
+    </content>
+
+    <view docname="view.upload" content="content.upload">
+        <forms:get form="form.upload" dst="form" />
+        <if-post>
+            <forms:validate src="form">
+                <let filename="form.data.file.filename" />
+                <fs:set-contents fs="uploads" path="${filename}" contents="form.data.file" />
+                <tn:generate thumbnails="#thumbnails.tests" path="${filename}" />
+                <let success="yes" />
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view docname="view.thumbs">
+
+    </view>
+
+</moya>

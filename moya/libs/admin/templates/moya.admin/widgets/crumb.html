@@ -1,0 +1,5 @@
+{%- if url and not last %}
+<li><a href="${url}">${text}</a></li>
+{%- else %}
+<li class="active">${text}</li><!-- ${url} -->
+{%- endif %}

@@ -1,0 +1,132 @@
+[title Creating a Server]
+
+Once Moya has read the initial settings file, it runs the Moya Code file specified in the [c]startup[/c] setting in the [c][project][/c] section. This file (typically called [c]server.xml[/c]) contains one or more [tag]server[/tag] tags which are responsible for [i]importing[/i] libraries and installing [i]applications[/i].
+
+By default, Moya runs the [tag]server[/tag] tag which has its [c]docname[/c] attribute set to [c]main[/c]. Most projects will only define this single server, but it is possible to have multiple servers defined. You can run an alternative [tag]server[/tag] by specifying it on the command line. For example, the following would run a server with a docname of [c]"alternative"[/c]:
+
+[code]
+$ moya runserver --server alternative
+[/code]
+
+[h1]Server Definition[/h1]
+
+Let's look at a server definition. The following is taken from a project created with [c]moya start[/c]:
+
+[code xml]
+<moya xmlns="http://moyaproject.com">
+
+    <!-- Initialize a server -->
+    <server docname="main">
+
+        <log>Starting up!</log>
+
+        <!-- Import libraries for use in your project -->
+        <import py="moya.libs.debug" if=".debug"/>
+        <import py="moya.libs.auth" />
+        <import py="moya.libs.session" />
+        <import py="moya.libs.admin" />
+        <import py="moya.libs.static" />
+        <import py="moya.libs.favicon" />
+        <import py="moya.libs.welcome" />
+        <import py="moya.libs.links" />
+        <import py="moya.libs.bootstrap" />
+        <import py="moya.libs.forms" />
+        <import py="moya.libs.widgets" />
+        <import py="moya.libs.comments" />
+        <import py="moya.libs.pages" />
+        <import py="moya.libs.blog" />
+        <import py="moya.libs.feedback" />
+        <import py="moya.libs.jsonrpc" />
+        <import py="moya.libs.wysihtml5" />
+
+        <!-- The 'site' library, for non reusable content -->
+        <import location="./site" priority="10" />
+        <install name="site" lib="site.intended-for-humans" mount="/" />
+
+        <!-- Install applications (instances of a library) -->
+        <install name="forms" lib="moya.forms" />
+        <install name="auth" lib="moya.auth" mount="/" />
+        <install name="session" lib="moya.session" mount="/" />
+        <install name="admin" lib="moya.admin" mount="/admin/" />
+        <install name="media" lib="moya.static" mount="/static/" />
+        <install name="debug" lib="moya.debug" mount="/debug/" if=".debug"/>
+        <install name="bootstrap" lib="moya.twitter.bootstrap" />
+        <install name="welcome" lib="moya.welcome" mount="/" />
+        <install name="links" lib="moya.links" />
+        <install name="favicon" lib="moya.favicon" mount="/" />
+        <install name="comments" lib="moya.comments" mount="/comments/" />
+        <install name="pages" lib="moya.pages" mount="/" />
+        <install name="blog" lib="moya.blog" mount="/blog/" />
+        <install name="feedback" lib="moya.feedback" mount="/feedback/" />
+        <install name="jsonrpc" lib="moya.jsonrpc" mount="/jsonrpc/" />
+        <install name="wysihtml5" lib="moya.wysihtml5" />
+
+    </server>
+
+</moya>
+[/code]
+
+A server definition is executable Moya code. Moya runs each tag, line by line. If you have logging enable you should see the effect of each of these statements in the logs.
+
+You can also step through the startup process in the debugger with the following:
+
+[code xml]
+$ moya runserver --breakpoint-startup
+[/code]
+
+[h1]Importing Libraries[/h1]
+
+The first line in the above server definition is a [tag]log[/tag] tag which simply writes some text to the logs. Not strictly necessary, but this may be helpful if you have more than one server. What follows are a number of [tag]import[/tag] tags, which load the code associated with each library that will be used in the project. A library must be imported before it can serve content. Let's look at the first [tag]import[/tag] tag:
+
+[code xml]
+<import py="moya.libs.debug" if=".debug"/>
+[/code]
+
+This loads the library in Python module [c]moya.libs.debug[/c], which is a Moya built in library that provides error pages and other helpful content for development. There is also an [c]if[/c] attribute which tests the value of [c].debug[/c] -- so [c]moya.debug[/c] is only imported if Moya is in debug mode (set in settings).
+
+The [c]py[/c] attribute is required only if the library is distributed as a Python module. Moya's built in libraries are distributed in this way, but more typically libraries are simply stored in the project source. By convention, the location for libraries is [c]local/[/c] for libraries you have built yourself, and [c]external/[/c] for other libraries. To load libraries from the project directory, use the [c]location[/c] attribute, rather than [c]py[/c]. Here's an example:
+
+[code xml]
+<import location="./local/sushifinder.shop"/>
+[/code]
+
+An [tag]import[/tag] tag may also contain a [c]priority[/c] attribute, which should be an integer value. It is possible to override tags in one library from another (in order to customize content). You might want to add a field to a form defined in an external library, for example. The [c]priority[/c] attribute is used to determine which tag is used -- the library with highest priority wins. This feature is used in the server definition above to import the [i]site[/i] library, with the following line:
+
+[code xml]
+<import location="./site" priority="10" />
+[/code]
+
+Here the site library is imported from [c]./site[/c] and assigned a priority of [c]10[/c]. The default priority is [c]0[/c], so the site library can override tags from all other libraries.
+
+The [i]site[/i] library should contain non-reusable content and is generally used to customize the look and feel of a web-site. By convention, it is stored in the [c]/site[/c]. Moya doesn't require a site library; so if you find you don't have any use for it, you may delete it from the project.
+
+Once a library is been imported, it may be [i]installed[/i]. Installing allows you the library code to respond to URLs and generate responses. To install a library you need to refer to it by its [i]long name[/i], which is a period separated list of tokens. The first token identifies the author or organization, subsequent tokens are used to create a simple namespace to identify the library. Generally though, long names will be in the form of [c]<organization>.<name of library>[/c]. For example, [c]moya.auth[/c] is the Moya authorization library.
+
+[h1]Installing Libraries[/h1]
+
+The [tag]install[/tag] tag installs libraries. It requires an attribute, [c]lib[/c], containing the long name of the library, and and attribute called [c]name[/c], which should be a name to identify the application (installed library). An application name should be short and descriptive, and contain no periods. It may be refereed to as a [i]short name[/i].
+
+[aside]Remember that libraries may be installed more than once as different applications, each with independent settings.[/aside]
+
+Immediately following on from the site library import is the following line:
+
+[code xml]
+<install name="site" lib="site.intended-for-humans" mount="/" />
+[/code]
+
+This installs the library [c]site.intended-for-humans[/c] as an application called [c]site[/c]. There is also an additional attribute, [c]mount[/c], which takes a URL segment where the application will be [i]mounted[/i]. In this case, the application is mounted on [c]/[/c] which means that it can handle all URLs in the project. Other applications will be mounted in different locations. For example the library [c]moya.admin[/c] is mounted on [c]/admin/[/c] -- so the admin site may accessed from [c]/admin/[/c].
+
+Note that if an application doesn't produce a response for the requested URL, Moya will check the next mounted application until a response can be generated.
+
+[h1]Mounting Applications[/h1]
+
+The [c]mount[/c] attribute in the [tag]install[/tag] tag is a convenient shortcut which is adequate for most libraries, but applications may also be mounted with the [tag]mount[/tag] tag. It is possible for libraries to contain multiple [i]mountpoints[/i], which handle a number of related URLs. These can be mounted individually in different locations; so you can decide to access them from different top level urls, or even pick and choose which mountpoints you want to enable.
+
+The [tag]mount[/tag] tag takes three required attributes; [c]app[/c] is the name for the new application, [c]mountpoint[/c] is the name of the mountpoint you want to mount, and [c]url[/c] is the url segment where you want to mount the application. For example, we could have installed and mounted the site application with the following:
+
+[code xml]
+<install name="site" lib="site.intended-for-humans" />
+<mount app="site" url="/" mountpoint="main" />
+[/code]
+
+Most libraries will contain a single mountpoint with a name of [c]"main"[/c], which is also the default value for [c]mountpoint[/c] in the [tag]mount[/tag] tag; so you can omit the [c]mountpoint[/c] attribute in most cases.

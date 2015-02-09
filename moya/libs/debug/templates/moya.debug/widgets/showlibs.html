@@ -1,0 +1,34 @@
+<h3>Libraries</h3>
+<p>This table shows the libraries that are imported in your project</p>
+<div class="well">
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Namespace</th>
+				<th>Priority</th>
+				<th>Author</th>
+			</tr>
+		</thead>
+		<tbody>
+			{%- for name, lib in sorted:items:.libs %}
+			<tr>
+				<td>${name} <span class="text-muted">v${lib.version}</span></td>
+				{%- if lib.libinfo.url %}
+				<td><a href="${lib.libinfo.url}">${lib.libinfo.title or lib.long_name}</a></td>
+				{%- else %}
+				<td>${lib.libinfo.title or lib.long_name}</td>
+				{%- endif %}
+				{%- if lib.namespace %}
+				<td>${lib.namespace}</td>
+				{%- else %}
+				<td><em class="muted">left blank</em></td>
+				{%- endif %}
+				<td>${lib.priority}</td>
+				<td><a href="${lib.author.url}">${lib.author.name}</a></td>
+			</tr>
+			{%- endfor %}
+		</tbody>
+	</table>
+</div>

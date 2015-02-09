@@ -1,0 +1,39 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let">
+
+    <widget name="comments" template="widgets/comments.html" synopsis="enable comments">
+        <doc>Render comments on a page.</doc>
+        <signature>
+            <attribute name="namespace" required="yes"/>
+            <attribute name="topic" required="yes"/>
+            <attribute name="url" required="no" />
+            <attribute name="markup" required="no" default="bbcode" />
+        </signature>
+
+        <include-css path="css/comments.css" />
+        <include-js path="js/comments.js" />
+        <call macro="#get_comment_object" dst="commentobject"
+            let:object="topic"
+            let:markup="markup"
+            let:namespace="namespace"
+            let:object_url="url or .request.path"/>
+        <dict default="list" dst="commentgraph"/>
+        <db:query model="#Comment" dst="comments"
+            filter="#Comment.commentobject == commentobject"
+            collect="dict" collectkey="id" if="commentobject"/>
+        <for src="values:comments" dst="comment">
+            <append src="commentgraph[comment.parent.id or 'root']" value="comment" />
+        </for>
+        <let id=".content.id" />
+        <db:get model="#ObjectSubscription" dst="subscribed" if=".user"
+            let:user=".user" let:commentobject="commentobject" />
+        <js>
+            $(function(){
+                $('#${id}').moyaComments();
+            });
+        </js>
+    </widget>
+
+</moya>

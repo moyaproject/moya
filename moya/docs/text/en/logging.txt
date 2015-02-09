@@ -1,0 +1,178 @@
+[title Logging]
+
+A Moya web application can generate a number of log messages, useful for monitoring what your site is doing and diagnosing errors. Moya's logging system is highly configurable and allows you to set which log messages you see and where they are written.
+
+[h1]Introduction[/h1]
+
+Moya borrows its logging system from Python's [url https://docs.python.org/2/library/logging.html]logging[/url] library and has much the same capabilities.
+
+Log messages are [i]emited[/i] from various [i]loggers[/i]. A logger has a name which identifies the source of the log messages. Moya uses the name [c]moya[/c] for its log messages. Loggers are further categorized with a dot. The following lists the loggers used by Moya:
+
+[definitions]
+
+[define moya.app.APP]
+Logs messages written by applications; APP is replaced with the name of the application. For example [c]moya.app.auth[/c] would be the name used for log messages written by the application named "auth".
+[/define]
+
+[define moya.cache]
+Log messages written by the cache system when cache debug is enabled.
+[/define]
+
+[define moya.email]
+Log messages written regarding the sending of emails.
+[/define]
+
+[define moya.jsonrpc]
+Log messages regarding remote procedure calls.
+[/define]
+
+[define moya.request]
+Logs information about each request.
+[/define]
+
+[define moya.runtime]
+Logs information about events that occur during normal operation.
+[/define]
+
+[define moya.signal]
+Log messages regarding signals.
+[/define]
+
+[define moya.startup]
+Messages regarding the startup process, such as the importing and installing of libraries.
+[/define]
+
+[/definitions]
+
+Each log messages has a log [i]level[/i], which defines the [i]severity[/i] of the log message. Log messages may be filtered based on the log level, so you only see the type of message you are interested in. The log levels are as follows:
+
+[definitions]
+
+[define debug]
+Information to help you track down errors, which you probably don't want in production.
+[/define]
+
+[define info]
+General information about normal operation of the server.
+[/define]
+
+[define warning]
+A [i]potential[/i] problem was detected.
+[/define]
+
+[define error]
+The server was unable to perform as requested.
+[/define]
+
+[define fatal]
+A serious issue with potential data loss was detected.
+[/define]
+
+[/definitions]
+
+[h1]Log Tags[/h1]
+
+You can write log messages of your own with the [tag]log[/tag] tag. The message goes in the enclosed text. Here's an example:
+
+[code xml]
+<log>Your log messages goes here</log>
+[/code]
+
+You may set the logging level with the [c]level[/c] attribute. For example:
+
+[code xml]
+<log level="debug">1s and 0s</log>
+<log level="info">Thought you might want to know</log>
+<log level="error">I've made a terrible mistake</log>
+[/code]
+
+For each of the logging levels there is a log tag that write logs just that level. For instance, [tag]log-debug[/tag] writes a debug log and [tag]log-warn[/tag] writes a warning log. These level specific log tags are identical to [tag]log[/tag] in all other respects.
+
+[h1]Configuration[/h1]
+
+The logging system may be configured via an INI file, which allows you to set which messages are to be filtered, and where they should will be written (e.g. to the console or to a file).
+
+The development server uses logging configuration taken from a file called [c]logging.ini[/c] which is set up to write all message to the console. In production, Moya uses the file [c]prodlogging.ini[/c] which shows only messages with level [b]info[/b] or higher.
+
+You can change which logging configuration file is used in the development server with the [c]--logging[/c] switch. This is useful for checking your production logging settings. For example:
+
+[code]
+$ moya --logging prodlogging.ini runserver
+[/code]
+
+The logging configuration file used in production is set in the WSGI file (see [doc deploy]). The default [c]prodlogging.ini[/c] writes log messages with a level of INFO or higher to [url http://en.wikipedia.org/wiki/Syslog]syslog[/url]. Note that the syslog configuration assumes the defaults for most Linux Distros, if you are running on OSX or Windows, you will need enable the configuration for your platform which will be commented out in [c]prodlogging.ini[/c].
+
+Moya's logging INI format is similar to the [url https://docs.python.org/2/library/logging.config.html#configuration-file-format]configuration format[/url] used by Python's logging module, but is more consistent with Moya's other INI files  (and somewhat less prone to errors).
+
+[h2]Loggers[/h2]
+
+You can configure a logger with a named section as follows:
+
+[code ini]
+[logger:moya]
+level = DEBUG
+[/code]
+
+This sets a level of DEBUG on the [c]moya[/c] logger, which ensures that all log messages are written.
+
+Note that when a log message is written, the logging system looks for all handlers in the hierarchy defined with the dotted notation. For example if the [c]moya.app.auth[/c] logger emits a message, it will be written to [c]moya.app.auth[/c], [c]moya.app[/c], [c]moya[/c], and finally a special logger called [c]root[/c]. If you don't want this behavior, you can set [c]propagate=no[/c] on the logger, to stop writing to the loggers further up the chain.
+
+[alert]If you find your log messages are being written twice, it is likely because they are being propagated up the hierarchy. You will probably want to disable propagation on most specific handler (most dots).[/alert]
+
+[h2]Formatters[/h2]
+
+A formatter sets how a log message is formatted. Here's the default formatter that writes the log message along with the date and level:
+
+[code ini]
+[formatter:simple]
+format = %(asctime)s:%(name)s:%(levelname)s: %(message)s
+datefmt = [%d/%b/%Y %H:%M:%S]
+[/code]
+
+[h2]Handlers[/h2]
+
+A handler sets the destination for logging messages (file, console, syslog etc). See the [url https://docs.python.org/2/library/logging.config.html#configuration-file-format]Python documentation[/url] for the full details on creating formatters. Otherwise, here are the default handlers used by Moya:
+
+[code ini]
+
+# Writes syntax highlighted log messages to the terminal
+[handler:moyaconsole]
+class = moya.logtools.MoyaConsoleHandler
+formatter = simple
+args = (sys.stdout,)
+
+# Writes simple text to the terminal
+[handler:stdout]
+class = StreamHandler
+formatter = simple
+args = (sys.stdout,)
+
+# Writes to a syslog server
+[handler:syslog]
+class = logging.handlers.SysLogHandler
+args = ('/dev/log',)
+
+[/code]
+
+You can set which handler a logger should use with the [c]handler[/c] key. For example:
+
+[code ini]
+[logger:moya]
+level = DEBUG
+handler = moyaconsole
+[/code]
+
+[alert]Note that without a handler of some kind a logger will not be able to write log messages.[/alert]
+
+[h1]Other Loggers[/h1]
+
+Other loggers not under the [c]moya[/c] namespace may be configured with Moya's logging configuration. The [c]sqlalchemy[/c] logger is of particular interest, as it can log all the SQL queries going to the database. If you add the following to your logging ini, you will see SQL related information in the terminal:
+
+[code ini]
+[logger:sqlalchemy.engine]
+handlers = moyaconsole
+propagate = no
+level = INFO
+[/code]
+
+You can set the [c]level[/c] to DEBUG to display more details, although the messages there are less useful than the SQL. Set [c]level[/c] to WARN to disable sqlalchemy logs.

@@ -1,0 +1,8 @@
+{%- if field.errors %}
+    <span class="help-block error">${field.errors.0}</span>
+{%- elif field.inlinehelp %}
+    <span class="help-block">${field.inlinehelp}</span>
+{%- endif %}
+{%- if field.help and not field.errors %}
+    <span class="help-block">${field.help}</span>
+{%- endif %}

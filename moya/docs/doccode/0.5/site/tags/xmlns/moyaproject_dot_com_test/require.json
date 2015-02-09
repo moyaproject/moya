@@ -1,0 +1,47 @@
+{
+    "name": "require",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "require",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "Check code throws an exception",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "require an exception to be thrown in a test case",
+        "tag_name": "require",
+        "params": {
+            "exception": {
+                "default_display": "\"*\"",
+                "name": "exception",
+                "missing": true,
+                "default": "*",
+                "doc": "Type of exception to catch",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.require"
+}

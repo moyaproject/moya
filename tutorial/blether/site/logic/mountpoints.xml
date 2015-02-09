@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+    <!-- Libraries will typically define a mountpoint to add URLs -->
+    <mountpoint name="main">
+        <!-- The view for your JSON Remote Procedure Call interface -->
+        <url route="/jsonrpc/" methods="GET,POST" view='#jsonrpc.interface' name="jsonrpc" />
+    </mountpoint>
+
+</moya>

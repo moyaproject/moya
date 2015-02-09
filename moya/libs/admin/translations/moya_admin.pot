@@ -1,0 +1,77 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.1\n"
+"POT-Creation-Date: 2014-01-18 21:05+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8Bit\n"
+"Language: en\n"
+
+#: ../templates/moya.admin/datetimeinput.html:16
+msgid "Midnight"
+msgstr ""
+
+#: ../templates/moya.admin/datetimeinput.html:19
+msgid "Noon"
+msgstr ""
+
+#: ../logic/content.xml:81 ../logic/content.xml:81
+msgid "Return to table"
+msgstr ""
+
+#: ../logic/content.xml:62 ../logic/content.xml:62
+msgid "Changes applied"
+msgstr ""
+
+#: ../logic/content.xml:80 ../logic/content.xml:80
+msgid "[b]${len:object_pks}[/b] object(s) were deleted successfully"
+msgstr ""
+
+#: ../templates/moya.admin/datetimeinput.html:24
+msgid "Clear"
+msgstr ""
+
+#: ../logic/content.xml:28 ../logic/content.xml:28
+msgid "Content here"
+msgstr ""
+
+#: ../logic/content.xml:41
+msgid "${table.params.title} Table"
+msgstr ""
+
+#: ../logic/forms.xml:10 ../logic/forms.xml:10
+msgid "Are you sure you want to delete the following objects?"
+msgstr ""
+
+#: ../templates/moya.admin/datetimeinput.html:13
+msgid "Now"
+msgstr ""
+
+#: ../logic/forms.xml:72
+msgid "Please enter a valid date"
+msgstr ""
+
+#: ../logic/content.xml:33
+msgid "${module.params.title}"
+msgstr ""
+
+#: ../templates/moya.admin/test.html:1
+msgid "Admin Modules"
+msgstr ""
+
+#: ../logic/content.xml:26
+msgid "${.settings.project_name} Admin"
+msgstr ""
+
+#: ../logic/content.xml:57
+msgid "Edit ${object}"
+msgstr ""
+
+#: ../logic/content.xml:70
+msgid "Action"
+msgstr ""
+
+#: ../logic/forms.xml:18 ../logic/forms.xml:18
+msgid "Cancel"
+msgstr ""

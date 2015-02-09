@@ -1,0 +1,47 @@
+{
+    "name": "adapt-field",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "adapt-field",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": null,
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "adapt a field in a form",
+        "tag_name": "adapt-field",
+        "params": {
+            "field": {
+                "default_display": "",
+                "name": "field",
+                "missing": true,
+                "default": null,
+                "doc": "Field name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.adapt-field"
+}

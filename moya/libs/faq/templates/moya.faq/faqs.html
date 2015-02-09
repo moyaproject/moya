@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block "css" %}
+<style type="text/css">
+.faq-question .btn-group
+{
+    visibility:hidden;
+}
+.faq-question:hover .btn-group
+{
+    visibility:visible;
+}
+</style>
+{% endblock %}
+
+{% block "body" %}
+
+{% if len:faqs %}
+<h2 id="top">Frequently Asked Questions</h2>
+<p>Please select a question, below</p>
+<hr/>
+<ul>
+    {%- for faq in faqs %}
+    <li><a href="#${slug:faq.question}">${faq.question}?</a></li>
+    {%- endfor %}
+</ul>
+<hr/>
+{% render sections.body %}
+{% else %}
+<h2>Frequently Asked Questions</h2>
+<div class="alert alert-info">
+	Nothing to see here
+	{% if .permissions.admin %}<br/><br/><strong>Admin:</strong> You may want to add some FAQs using the Admin menu{% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

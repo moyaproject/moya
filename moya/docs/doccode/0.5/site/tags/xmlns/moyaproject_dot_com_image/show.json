@@ -1,0 +1,47 @@
+{
+    "name": "show",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "show",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Show an image (for debugging purposes). Imagemagick is required for this operation.",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "show an image",
+        "tag_name": "show",
+        "params": {
+            "image": {
+                "default_display": "image",
+                "name": "image",
+                "missing": true,
+                "default": "image",
+                "doc": "Image to show",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.show"
+}

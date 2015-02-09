@@ -1,0 +1,60 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:image="http://moyaproject.com/image"
+      xmlns:fs="http://moyaproject.com/fs"
+      xmlns:tn="http://moyaproject.com/thumbnail">
+
+
+    <!--
+    <command libname="cmd.test" synopsis="test images">
+        <timer msg="image process" ms="yes">
+            <image:read fs="static" path="images/moya.jpg"/>
+            <image:crop box="[0,0,50,50]" />
+            <image:resize-canvas width="300" height="200" color="#00ff00" />
+            <image:square />
+            <image:write fs="static" filename="thumb.jpg" let:quality="90"/>
+        </timer>
+        <echo obj="image"/>
+        <echo>${image}</echo>
+
+    </command>
+-->
+
+    <command libname="cmd.generate" synopsis="Generate thumbnails for images">
+        <doc>
+            Generate thumbnails for all images in a filesystem.
+        </doc>
+        <signature>
+            <arg name="thumbnails" help="Thumbail tag to process" metavar="ELEMENT>" nargs="*"/>
+            <option name="overwrite" help="overwrite existing thumbnails" action="store_true" />
+        </signature>
+        <let thumb_dir=".app.settings.thumb_dir" />
+        <if test="not thumbnails">
+            <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
+            <map src="thumbnail_elements" value="element_ref" dst="thumbnails" />
+        </if>
+        <let types="['jpg','.jpeg','png']" />
+
+        <list dst="failed" />
+        <fs:walk fs="uploads" dst="files"
+            dirs="name != thumb_dir"
+            files="lower:ext:name in types" />
+        <for src="thumbnails" dst="thumbnail">
+            <echo>Writing thumbnails for ${thumbnail}</echo>
+            <progress src="files" dst="path" msg="generating ${basename:path}">
+                <tn:generate thumbnails="${thumbnail}" path="${path}" overwrite="args.overwrite"/>
+                <catch exception="moya.image.*" dst="error">
+                    <append src="failed" value="[path, error.msg]"/>
+                </catch>
+            </progress>
+        </for>
+        <if test="failed">
+            <echo>Failed to read the following files:</echo>
+            <echo table="failed" header="path,error" />
+        </if>
+
+    </command>
+
+
+</moya>
+

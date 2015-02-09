@@ -1,0 +1,105 @@
+{
+    "name": "middleware",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "middleware",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Add middleware to a mountpoint",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add middleware to a mountpoint",
+        "tag_name": "middleware",
+        "params": {
+            "methods": {
+                "default_display": "*",
+                "name": "methods",
+                "missing": true,
+                "default": "*",
+                "doc": "A list of comma separated HTTP methods",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "macro": {
+                "default_display": "",
+                "name": "macro",
+                "missing": true,
+                "default": null,
+                "doc": "Macro to call",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "route": {
+                "default_display": "",
+                "name": "route",
+                "missing": true,
+                "default": null,
+                "doc": "Route",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "An optional name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "mountpoint": {
+                "default_display": "",
+                "name": "mountpoint",
+                "missing": true,
+                "default": null,
+                "doc": "Mount point",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "stage": {
+                "default_display": "\"request\"",
+                "name": "stage",
+                "missing": true,
+                "default": "request",
+                "doc": "Stage in request handling",
+                "required": false,
+                "type": "text",
+                "metavar": "STAGE",
+                "choices": [
+                    "request",
+                    "response"
+                ]
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.middleware"
+}

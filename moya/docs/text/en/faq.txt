@@ -1,0 +1,23 @@
+[title Moya FAQ]
+
+Moya FAQ creatse a Frequently Asked Questions page that may be edited by admin.
+
+[h1]Installation[/h1]
+
+THe Moya FAQ library is built in to Moya and may be imported via its Python pass as follows:
+
+[code xml]
+<import py="moya.libs.faq" />
+[/code]
+
+You can install it as follows:
+
+[code xml]
+<install name="faq" lib="moya.faq" mount="/faq/" />
+[/code]
+
+[h1]Introduction[/h1]
+
+FAQs are fairly ubiquitous, and allow you to present useful information in a questions and answer format. You don't even need to wait until a questions has been asked to add it to the FAQ.
+
+Moya FAQ renders a single-page FAQ. The questions are displayed in a list at the top of the page, with links to the answers. The answers have named anchors so you may send link to individual quesions.

@@ -1,0 +1,5 @@
+{%- if field.label %}
+<label class="control-label" for="${field.id}">
+    ${field.label}{% if field.required %} *{% endif %}
+</label>
+{%- endif %}

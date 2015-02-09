@@ -1,0 +1,132 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:auth="http://moyaproject.com/auth"
+      xmlns:email="http://moyaproject.com/email">
+
+	<mountpoint name="main" libname="mountpoint.main">
+        <url route="/login/" methods="GET, POST" view="#view.login.post" name="login"/>
+		<url route="/logout/" methods="GET" view="#view.logout" name="logout"/>
+        <url route="/edit/" methods="GET, POST" view="#view.user_edit" name="user_edit" />
+        <url route="/forgot-password/" methods="GET,POST" view="#view.forgot_password" name="forgot_password" />
+        <url route="/reset/{token}/" methods="GET, POST" view="#view.reset_password" name="reset_password" />
+	</mountpoint>
+
+    <mountpoint name="middleware">
+        <middleware route="/{*}" methods="GET,POST" macro="middleware.add_user_to_context" />
+        <!-- <middleware route="/*" methods="GET,POST" macro="middleware.response_middleware" stage="response" /> -->
+        <url route="/{*}" handler="forbidden">
+            <redirect name="login" query="fwd=.request.path" />
+        </url>
+    </mountpoint>
+
+    <macro docname="middleware.response_middleware">
+    </macro>
+
+    <handle signal="db.pre-create" sender="#User">
+        <fire signal="moya.auth.new-user" let:user="signal.data.object" />
+    </handle>
+
+    <macro docname="get_permissions">
+        <return>
+            <auth:get-permissions user=".user"/>
+        </return>
+    </macro>
+
+    <macro docname="middleware.add_user_to_context">
+        <auth:get-user dst=".user" lazy="yes" />
+        <call macro="get_permissions" dst=".permissions" lazy="yes" />
+    </macro>
+
+	<view libname="view.login" content="#content.login">
+        <forms:get form="#form.login" dst="form"/>
+	</view>
+
+    <view libname="view.login.post" content="#content.login">
+        <forms:get form="#form.login" dst="form" />
+        <if-post>
+            <forms:validate src="form">
+                <try>
+                    <auth:login username="form.data.username" password="form.data.password"/>
+                    <redirect-to url="${form.data.fwd or '/'}" />
+                </try>
+                <catch exception="moya.auth.no-user,moya.auth.password-fail">
+                    <forms:error src="form">No user with those credentials</forms:error>
+                </catch>
+                <catch exception="moya.auth.forbidden.*">
+                    <forms:error src="form">Sorry, you can't log in at this time</forms:error>
+                </catch>
+                <catch exception="moya.auth.*">
+                    <forms:error src="form">The server was unable to log you in at this time. Please try again later.</forms:error>
+                </catch>
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.logout">
+        <auth:logout/>
+        <redirect-to url="${.request.GET.fwd or '/'}" />
+    </view>
+
+    <view libname="view.user_edit" content="#content.user_edit">
+        <forbidden if="not .user"/>
+        <forms:get form="#form.user_edit" dst="form" src=".user"/>
+        <if-post>
+            <forms:validate src="form">
+                <forms:apply src="form" dst=".user" />
+                <let success="yes" />
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.forgot_password" content="#content.forgot_password">
+        <forms:get form="#form.forgot_password" dst="form"/>
+        <if-post>
+            <forms:validate src="form">
+                <db:get model="#User" let:email="form.data.email" dst="user" />
+                <if test="not user">
+                    <forms:error src="form">No user with that email address</forms:error>
+                    <done/>
+                </if>
+                <attempt times="10">
+                    <db:create model="#ResetPassword" let:user="user" dst="reset_password" />
+                </attempt>
+                <email:send email="#email.password_reset"
+                    to="${reset_password.user.email}"
+                    let:name="user.first_name or user.username"
+                    let:token="reset_password.token"
+                    let:project_title=".settings.project_title"
+                    let:site_url=".request.host_url" />
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.reset_password" content="#content.reset_password">
+        <forms:get form="#form.reset_password" dst="form"
+            let:token="url.token"/>
+
+        <get-url name="login" dst="login_url" />
+        <get-url name="forgot_password" dst="forgot_password_url" />
+
+        <db:get model="#ResetPassword" let:token="url.token" dst="reset_password"/>
+        <let badtoken="not bool:reset_password" />
+
+        <if-post>
+            <forms:validate src="form">
+                <db:get model="#ResetPassword" let:token="form.data.token" dst="reset_password"/>
+                <if test="not reset_password">
+                    <forms:error src="form">Reset token not found. Have you already used this link?</forms:error>
+                </if>
+                <else>
+                    <auth:set-password user="reset_password.user" password="form.data.password" />
+                    <let success="yes" />
+                    <db:delete src="reset_password" />
+                </else>
+            </forms:validate>
+        </if-post>
+
+    </view>
+
+</moya>
+

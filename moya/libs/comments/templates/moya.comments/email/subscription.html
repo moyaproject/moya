@@ -1,0 +1,13 @@
+<p>Dear ${subscription.user.username},</p>
+
+<p>A comment was posted to <a href="${.site.url}${subscription.commentobject.object_url}#comment${comment.id}">${subscription.commentobject.object_url}</a></p>
+
+<p>${comment.user.username or comment.commenter_name} said...</p>
+<pre>"${comment.text}"</pre>
+<p>
+	Don't want any more of these emails?
+	<a href="${.site.url}{% url "subscription" with comment_object_id=commentobject.id %}?action=unsubscribe">Unsubscribe here</a>.
+</p>
+
+<p>--</p>
+<p><a href="http://moyaproject.com">Moya Comments</a></p>

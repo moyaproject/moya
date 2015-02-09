@@ -1,0 +1,39 @@
+[title Moya WYSIHTML5]
+
+Moya WYSIHTML5 (What You See Is HTML 5) is a wrapper for [url http://xing.github.io/wysihtml5/]wysihtml5[/url], an open source rich text edtor By Xing.
+
+[h1]Installation[/h1]
+
+This is a built in library may be imported from its Python path, as follows:
+
+[code xml]
+<import py="moya.libs.wysihtml5" />
+[/code]
+
+And installed as follows:
+
+[code xml]
+<install name="wysihtml5" lib="moya.wysihtml5" />
+[/code]
+
+This library doesn't haven any views, and does not need to be mounted.
+
+[h1]Usage[/h1]
+
+This library supplies a single widget, [tag wysihtml5]editor[/tag] which may be used to replace a textarea in a form with a rich editor that supports bold / italic / links / image etc.
+
+The easiest way to use this widget is to use it in a form as follows:
+
+[code xml]
+<field name="content" label="Page Content">
+    <wysihtml5:editor/>
+</field>
+[/code]
+
+This will insert a rich text editor in your form, that writes HTML to a field named [c]content[/c]. The field may be treated as any other when the form is validated, it will contain HTML markup when the form is submitted. Essentially, the above code is equivelent to the following when it comes to processing forms:
+
+[code xml]
+<textarea name="content" label="Page Content"/>
+[/code]
+
+See [tag wysihtml5]editor[/tag] for how to configure the editor.

@@ -1,0 +1,53 @@
+{
+    "name": "log-fatal",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "log-fatal",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "See [tag]log[/tag]",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "write information to the log",
+        "tag_name": "log-fatal",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "level": {
+                "default_display": "",
+                "name": "level",
+                "missing": true,
+                "default": null,
+                "doc": "Logging level",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "info",
+                    "warn",
+                    "warning",
+                    "error",
+                    "debug",
+                    "fatal"
+                ]
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.log-fatal"
+}

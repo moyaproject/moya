@@ -1,0 +1,34 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:moya="http://moyaproject.com"
+        xmlns:let="http://moyaproject.com/let"
+        xmlns:auth="http://moyaproject.com/auth"
+        xmlns:admin="http://moyaproject.com/admin"
+        xmlns:html="http://moyaproject.com/html">
+
+    <module xmlns="http://moyaproject.com/admin"
+        title="Blethers" slug="moya-blether" description="Manage Blethers">
+        <link to="#admintable.blethers" title="Blethers"/>
+        <link to="#admintable.blether_users" title="Blether Users" />
+    </module>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.blethers"
+        slug="blethers"
+        title="Blethers"
+        model="#Blether"
+        search="#Blether.text contains q">
+        <column title="ID" sort="id" link="yes">${object}</column>
+        <column title="user" sort="user">${object.user.username}</column>
+        <column title="Text" sort="text">${object.text}</column>
+        <column title="Blethered On" sort="posted_time">${localize:object.posted_time}</column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.blether_users"
+        slug="blether-timelines"
+        title="Blether Timelines"
+        model="#Timeline">
+        <column title="User" sort="user" link="yes">${object.user}</column>
+    </table>
+
+</moya>

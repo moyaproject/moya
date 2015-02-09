@@ -1,0 +1,153 @@
+{
+    "name": "request-post",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "request-post",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/request.py",
+        "doc": "\nMake a POST request (see [tag]request[/tag]).\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "make a post request",
+        "tag_name": "request-post",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "username": {
+                "default_display": "",
+                "name": "username",
+                "missing": true,
+                "default": null,
+                "doc": "Username for basic auth",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "URL to request",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "headers": {
+                "default_display": "None",
+                "name": "headers",
+                "missing": true,
+                "default": null,
+                "doc": "Additional headers",
+                "required": false,
+                "type": "dict expression",
+                "metavar": null,
+                "choices": null
+            },
+            "params": {
+                "default_display": "None",
+                "name": "params",
+                "missing": true,
+                "default": null,
+                "doc": "Request parameters",
+                "required": false,
+                "type": "dict expression",
+                "metavar": null,
+                "choices": null
+            },
+            "timeout": {
+                "default_display": "",
+                "name": "timeout",
+                "missing": true,
+                "default": null,
+                "doc": "Timeout in seconds",
+                "required": false,
+                "type": "number",
+                "metavar": null,
+                "choices": null
+            },
+            "password": {
+                "default_display": "",
+                "name": "password",
+                "missing": true,
+                "default": null,
+                "doc": "Password for basic auth",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "data": {
+                "default_display": "None",
+                "name": "data",
+                "missing": true,
+                "default": null,
+                "doc": "Data to be form encoded",
+                "required": false,
+                "type": "dict expression",
+                "metavar": null,
+                "choices": null
+            },
+            "method": {
+                "default_display": "",
+                "name": "method",
+                "missing": true,
+                "default": null,
+                "doc": "Method to use",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "get",
+                    "post",
+                    "delete",
+                    "put",
+                    "trace",
+                    "head",
+                    "options"
+                ]
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.request-post"
+}

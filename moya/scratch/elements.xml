@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com">
+
+    <macro docname="main">
+        <int value="5" />
+        <int value="10" />
+        <breakpoint />
+        <get-element name="main" dst="main" />
+        <get-elementsbytype type="int" dst="ints"/>
+        <breakpoint />
+
+    </macro>
+
+</moya>

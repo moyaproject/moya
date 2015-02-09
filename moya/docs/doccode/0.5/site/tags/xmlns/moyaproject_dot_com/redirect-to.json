@@ -1,0 +1,91 @@
+{
+    "name": "redirect-to",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "redirect-to",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "Redirect to new location.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "redirect to a new location",
+        "tag_name": "redirect-to",
+        "params": {
+            "fragment": {
+                "default_display": "",
+                "name": "fragment",
+                "missing": true,
+                "default": null,
+                "doc": "Fragment component in url",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "New path portion of the url, may be relative",
+                "required": false,
+                "type": "text",
+                "metavar": "PATH",
+                "choices": null
+            },
+            "code": {
+                "default_display": "",
+                "name": "code",
+                "missing": true,
+                "default": 303,
+                "doc": "HTTP response code (use 301 for permanent redirect)",
+                "required": false,
+                "type": "http status code",
+                "metavar": "HTTPCODE",
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "Destination URL",
+                "required": false,
+                "type": "text",
+                "metavar": "URL",
+                "choices": null
+            },
+            "query": {
+                "default_display": "None",
+                "name": "query",
+                "missing": true,
+                "default": null,
+                "doc": "Mapping expression to use as a query string",
+                "required": false,
+                "type": "expression",
+                "metavar": "EXPRESSION",
+                "choices": null
+            }
+        },
+        "example": "\n    <redirect-to url=\"http://www.moyaproject.com\" />\n    <redirect-to path=\"../newuser?result=success\" />\n    ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.redirect-to"
+}

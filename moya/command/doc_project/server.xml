@@ -1,0 +1,19 @@
+<moya xmlns="http://moyaproject.com">
+    <!-- Import dynamic tags we want to document -->
+    <server docname="main">
+        <import py="moya.libs.auth" />
+        <import py="moya.libs.admin" />
+        <import py="moya.libs.forms" />
+        <import py="moya.libs.jsonrpc" />
+        <import py="moya.libs.wysihtml5" />
+        <import py="moya.libs.widgets" />
+        <import py="moya.libs.thumbnail" />
+        <import py="moya.libs.feedback" />
+        <import py="moya.libs.blog" />
+        <import py="moya.libs.comments" />
+        <import py="moya.libs.bootstrap" />
+        <import py="moya.libs.tables" />
+        <import py="moya.libs.links" />"
+        <import py="moya.libs.recaptcha" />"
+    </server>
+</moya>

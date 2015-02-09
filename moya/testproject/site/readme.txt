@@ -1,0 +1,1 @@
+This is the 'site' library. It should contain code/data that is specific to the project (i.e. anything that you are unlikely to reuse).

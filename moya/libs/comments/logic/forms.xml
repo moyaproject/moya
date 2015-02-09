@@ -1,0 +1,99 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:recaptcha="http://moyaproject.com/recaptcha">
+
+    <form libname="form.comment" xmlns="http://moyaproject.com/forms">
+        <hidden-input name="namespace" />
+        <hidden-input name="object" />
+        <hidden-input name="parentid" />
+        <hidden-input name="object_url" />
+        <hidden-input name="text" />
+        <hidden-input name="subscribe" />
+        <validate-field field="text">
+            <fail if="not strip:value">
+                Comment must not be empty
+            </fail>
+        </validate-field>
+    </form>
+
+    <form action="." libname="form.anoncomment" legend="Your details" style="horizontal" xmlns="http://moyaproject.com/forms">
+
+        <hidden-input name="namespace" />
+        <hidden-input name="object" />
+        <hidden-input name="object_url" />
+        <hidden-input name="format" />
+        <hidden-input name="text" />
+        <hidden-input name="parentid" />
+
+        <input name="commenter_name"
+            initial=".request.cookies.commenter_name" label="Your name" maxlength="50" class="input-xxlarge" required="yes"/>
+        <input name="commenter_email"
+            initial=".request.cookies.commenter_email" label="Email" maxlength="300" class="input-xxlarge" placeholder="Your email address (not shown publicly)" />
+        <input name="commenter_url"
+            initial=".request.cookies.commenter_url" label="URL" maxlength="300" class="input-xxlarge" placeholder="Optional homepage"/>
+
+        <field name="g-recaptcha-response" if=".app.settings.recaptcha.bool">
+            <recaptcha:recaptcha/>
+        </field>
+
+        <actions>
+            <submit-button text="Post Comment" class="btn-primary"/>
+        </actions>
+
+        <field name="Options">
+            <checkbox style="basic" name="subscribe"
+                text="Email me about replies"/>
+            <checkbox style="basic" name="save"
+                initial="'on'" text="Save details (so you won't need to re-enter them to comment again)"/>
+        </field>
+
+        <adapt-field field="commenter_name">
+            <moya:return value="strip:value"/>
+        </adapt-field>
+
+        <validate-field field="g-recaptcha-response">
+            <recaptcha:verify response="value" dst="human"/>
+            <fail if="not human">
+                CAPTCHA failed. You may be a bot. If you fail the CAPTCHA 3 times, check yourself for a serial number or micro-usb port.
+            </fail>
+        </validate-field>
+
+        <validate-field field="commenter_name">
+            <fail if="not strip:value">Please enter your name</fail>
+        </validate-field>
+        <validate-field field="email">
+            <fail if="value and ('@' not in value or '.' not in value)">
+                Please enter a valid email address
+            </fail>
+        </validate-field>
+        <validate-field field="url">
+            <fail if="value and not (value ^= 'http://' or value ^= 'https://')">
+                URL must start with http:// or https://
+            </fail>
+        </validate-field>
+    </form>
+
+    <form action="." libname="form.confirm" legend="${title}" style="simple"
+            xmlns="http://moyaproject.com/forms">
+        <hidden-input name="comment_id" initial="comment_id" />
+        <hidden-input name="action" initial="action" />
+        <hidden-input name="url" initial="url" />
+
+        <html:p><moya:render src="message"/></html:p>
+        <submit-button class="btn-primary" name="confirmed" text="${button}" clicked="delete" />
+        <submit-button name="cancel" text="Cancel" clicked="cancel" />
+    </form>
+
+    <form action="." libname="form.unsubscribe" legend="Unsubscribe" style="simple"
+        xmlns="http://moyaproject.com/forms">
+        <html:p>Are you sure you want to unsubscribe ${subscription.email} from this comment thread?</html:p>
+        <checkbox name="all" text="Unsubscribe from all comment threads" />
+        <actions>
+            <submit-button text="Unsubscribe" class="btn btn-primary" />
+        </actions>
+    </form>
+
+</moya>

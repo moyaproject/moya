@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+    <model name="Question" libname="Question"  xmlns="http://moyaproject.com/db">
+        <string name="slug" length="100" unique="yes"/>
+        <string name="question" length="100" />
+        <text name="answer" default='' />
+    </model>
+
+</moya>

@@ -1,0 +1,13 @@
+{%- for group, choices in field.groups %}
+{%- if group %}
+{%- endif %}
+    {%- for value, text in choices %}
+    <div class="radio">
+        <label>
+            <input type="radio" name="${field.name}" value="${value}" {% if value instr field.values %} checked="checked"{% endif %}/> ${text}
+        </label>
+    </div>
+    {%- endfor %}
+{%- if group %}
+{%- endif %}
+{%- endfor %}

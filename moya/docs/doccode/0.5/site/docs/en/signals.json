@@ -1,0 +1,52 @@
+{
+    "name": "signals",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Signals]\n\nSignals in Moya are a way for your project code to respond to various events that may occur during the processing of a request, or at other points during the lifetime of the server. For example, you may want to run some code when server starts up, or when an object is written to the database.\n\n[h1]Writing Handlers[/h1]\n\nSignals are identified by a string in dotted notation. For example, [c]sys.startup[/c], is a signal for the server starting up. You may write code that [i]handles[/i] a signal with the [tag]handle[/tag] tag. Here's an example of handling the [c]sys.startup[/c] signal:\n\n[code xml]\n<handle signal=\"sys.startup\">\n    <echo>Moya is starting up. To infinity, and beyond!</echo>\n</handle>\n[/code]\n\nIf you add the above code to your project (it can go anywhere), Moya will display text in the console when you run the server. Naturally, in a real project a signal handler would so something more useful.\n\nThe [c]signal[/c] attribute of [tag]handle[/tag] may also accept [i]wildcards[/i] -- an asterisk is used to indicate that it will match anything with the same prefix. For example, if you were to set [c]signal[/c] to [c]sys.*[/c], the handler would be invoked for any signal in the [c]sys[/c] namespace.\n\n[h2]Senders[/h2]\n\nSome signals have an associated [c]sender[/c], which is the library name of an element from which the signal is sent. For example, database related signals set the sender to the model name. You can whose to handle signals from a given sender with the [c]sender[/c] attribute of [tag]handle[/tag]. For example, the following handler will be invoked for every database signal sent from the User model:\n\n[code xml]\n<handle signal=\"db.*\" sender=\"moya.auth#User\">\n    <echo>DB signal handled</echo>\n</handle>\n[/code]\n\n[h2]Signal Object[/h2]\n\nWhen a handler is invoked, Moya passes in a [c]signal[/c] object with information regarding the signal. It contains three keys; [c]name[/c] is the name of the signal, [c]sender[/c] is the sender, and [c]data[/c] is a dictionary containing extra information regarding the signal.\n\nThe contents of a signal's [c]data[/c] dictionary vary according to the signal. For example, database related signals contain a value called [c]object[/c], which is the database object associated with the signal. Here's an example of a signal handler used in the Auth library:\n\n[code xml]\n<handle signal=\"db.before-update\" from=\"moya.auth#User\">\n    <!-- Hash password automatically -->\n    <let user=\"signal.data.object\" />\n    <call macro=\"#hashpassword\" if=\"'$' not in user.password\"\n        dst=\"user.password\" let:password=\"user.password\"/>\n</handle>\n[/code]\n\nThis handler is invoked just prior to writing a User object to the database. The handler [i]hashes[/i] the password, so as not to store it in plain text. If we didn't use a handler here, we would have to cut and paste a line of code to every point where the User model is saves -- which would be prone to errors.\n\n[h1]Custom Signals[/h1]\n\nSome signals are sent by Moya itself, but you may also write code that sends, or [i]fires[/i] custom signals. This allows you to respond to events without cluttering up your code. The [tag]fire[/tag] tag is used to fire a custom signal. You can set the name of the signal to fire with the [c]signal[/c] attribute, and the sender with the [c]sender[/c] attribute. Additional data (which will be stored in [c]signal.data[/c]) is set via the [link moya-code#let-extension]let map[/link]. Here's an firing a signal:\n\n[code xml]\n<fire signal=\"moyaproject.sushifinder.out-of-stock\" let:item=\"Tuna Roll\" />\n[/code]\n\nThe following would catch the above signal:\n\n[code xml]\n<handle signal=\"moyaproject.sushifinder.out-of-stock\">\n    <echo>We need to order more ${signal.data.item}s!</echo>\n</handle>\n[/code]\n\n[h2]Naming Convention[/h2]\n\nSignal names with a single dot, such as [c]db.before-update[/c], [c]sys.startup[/c], are reserved by Moya. Custom signals should be named with the prefix of the library they are being sent from, e.g. [c]moyaproject.sushifinder.out-of-stock[/c].\n\nIf signals fall in to broad catagories, it is a good idea to name your signals to reflect that. For example, you could have [c]moyaproject.sushifinder.stock.out-of-stock[/c] and [c]moyaproject.sushifinder.stock.low-stock[/c] etc. A single handler may be written to respond to all stock related signals (with a [c]signal[/c] attribute of [c]moyaproject.sushihandler.stock.*[/c]).\n\n[h1]Debugging[/h1]\n\nMoya intentionally ignores all exceptions that occur within signal handlers. Otherwise, you could never be sure that code you write won't break due to a bug in a signal handler (possibly written by a third party).\n\n[aside]It is generally considered a bad idea to ignore errors in programming, but Moya takes a pragmatic approach with signals. It is preferable to have the signal handler silently fail than to break the User Interface or potentially lose data.[/aside]\n\nIf a traceback does happen within a signal handler, Moya will write a message to the logs. Moya will also display a trace in the console if debug mode is enabled. You can also step through code in signal handlers and insert [tag]breakpoint[/tag] tags as normal.\n\nIf you enable [c]log_signals[/c] in [link project#project-section]Project Settings[/link], Moya will write a message to the log every time it sends a signal. You could also replicate this with a [i]catch all[/i] signal handler, such as the following:\n\n[code xml]\n<handler signal=\"*\">\n    <echo>Signal ${signal.name} detected</echo>\n    <echo>Sent by ${signal.sender or 'nobody'}</echo>\n    <echo>Signal data:</echo>\n    <echo obj=\"signal.data\"/>\n</handler>\n[/code]\n\n[h1]Built-in Signals[/h1]\n\nThe following signals are built-in to Moya.\n\n[h2]System[/h2]\n\nSystem signals are sent at various points in the life-time of the server. System signals begin with the prefix [c]sys[/c].\n\n[definitions]\n[define \"sys.startup\"]\nSent when the server is starting up.\n[/define]\n[/definitions]\n\n[h2]Request[/h2]\n\nA number of signals are sent at several points during the request process. Request signals begin with the [c]request[/c] prefix.\n\n[definitions]\n[define \"request.pre-dispatch\"]\nThis signal is sent immediately prior to processing a request. Signal data contains no values.\n[/define]\n\n[define \"request.post-dispatch\"]\nThis signal is sent immediately after processing a request, but before the result of that request (which may be content or another renderable) has been rendered in to html. The result is stored in the signal data, as [c]result[/c].\n[/define]\n\n[define \"request.response\"]\nThis signal is sent once a valid response object has been created. It is this response which will be ultimately sent to the user. The response object is stored in the signal data as [c]response[/c].\n[/define]\n\n[define \"request.end\"]\nThis signal is send at the very end of the request process, [i]after[/i] the response has been sent. The signal data contains the [c]response[/c] object.\n\nNote, that since the response has been sent when the [c]request.end[/c] signal is fired, modifying the response will have no effect.\n[/define]\n\n[/definitions]\n",
+        "name": "signals",
+        "docmap": [
+            [
+                1,
+                "Writing Handlers"
+            ],
+            [
+                2,
+                "Senders"
+            ],
+            [
+                2,
+                "Signal Object"
+            ],
+            [
+                1,
+                "Custom Signals"
+            ],
+            [
+                2,
+                "Naming Convention"
+            ],
+            [
+                1,
+                "Debugging"
+            ],
+            [
+                1,
+                "Built-in Signals"
+            ],
+            [
+                2,
+                "System"
+            ],
+            [
+                2,
+                "Request"
+            ]
+        ],
+        "title": "Signals"
+    },
+    "id": "doc.signals"
+}

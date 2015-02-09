@@ -1,0 +1,40 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:pages="http://moyaproject.com/pages"
+      xmlns:comments="http://moyaproject.com/comments"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.page" template="page.html">
+        <let title="page.title" />
+
+        <include-css path="css/content.css" from="moya.wysihtml5"/>
+        <section name="body">
+            <render src="form" if="form"/>
+            <pages:content page="page" if="page"/>
+            <if test=".app.settings.comments" if="not form">
+                <comments:comments namespace="app-${.app.name}" topic="page-${page.id}" url="${post_url}"/>
+            </if>
+        </section>
+
+        <section name="admin_links" if=".permissions.admin and page">
+            <let pagename="page.name"/>
+            <w:link url="${.appurls.editpage}" icon="edit">Edit page</w:link>
+            <w:link url="${.appurls.deletepage}" icon="remove">Delete page</w:link>
+            <w:link url="${.appurls.createpage}" icon="star">New page</w:link>
+        </section>
+    </content>
+
+    <content libname="content.deletepage" template="base.html">
+        <section name="body">
+            <if test="deleted">
+                <w:success>Page '${deleted}' was deleted successfully</w:success>
+            </if>
+            <else>
+                <render src="form"/>
+            </else>
+        </section>
+    </content>
+
+</moya>

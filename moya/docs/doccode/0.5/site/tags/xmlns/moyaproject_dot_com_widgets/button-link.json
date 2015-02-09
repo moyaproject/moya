@@ -1,0 +1,124 @@
+{
+    "name": "button-link",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "button-link",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 56)",
+        "doc": "Renders a link, styled as a button.",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "render a link styled as a button",
+        "tag_name": "button-link",
+        "params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": "",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": null,
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "app": {
+                "default_display": "",
+                "name": "app",
+                "missing": true,
+                "default": "",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "with": {
+                "default_display": null,
+                "name": "with",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "class": {
+                "default_display": "btn btn-default",
+                "name": "class",
+                "missing": true,
+                "default": "btn btn-default",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "icon": {
+                "default_display": null,
+                "name": "icon",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.button-link"
+}

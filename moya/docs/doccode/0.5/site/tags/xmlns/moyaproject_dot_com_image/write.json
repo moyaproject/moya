@@ -1,0 +1,106 @@
+{
+    "name": "write",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "write",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Write an image",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "write an image to disk",
+        "tag_name": "write",
+        "params": {
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "FS name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "format": {
+                "default_display": "",
+                "name": "format",
+                "missing": true,
+                "default": null,
+                "doc": "Image format",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": [
+                    "jpeg",
+                    "png",
+                    "gif"
+                ]
+            },
+            "image": {
+                "default_display": "image",
+                "name": "image",
+                "missing": true,
+                "default": "image",
+                "doc": "Image to write",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "filename": {
+                "default_display": "",
+                "name": "filename",
+                "missing": true,
+                "default": null,
+                "doc": "Image filename",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "dirpath": {
+                "default_display": "\"/\"",
+                "name": "dirpath",
+                "missing": true,
+                "default": "/",
+                "doc": "Directory to write image",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "FS",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.write"
+}

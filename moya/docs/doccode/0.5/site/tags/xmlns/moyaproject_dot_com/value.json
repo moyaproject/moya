@@ -1,0 +1,68 @@
+{
+    "name": "value",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "value",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "Defines a single value in an enumeration object. Should be contained within an [tag]enum[/tag].",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "a value in an enumeration",
+        "tag_name": "value",
+        "params": {
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Enumeration label",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "group": {
+                "default_display": "\"\"",
+                "name": "group",
+                "missing": true,
+                "default": "",
+                "doc": "Group name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "description": {
+                "default_display": "\"\"",
+                "name": "description",
+                "missing": true,
+                "default": "",
+                "doc": "Description of enumeration value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "id": {
+                "default_display": "",
+                "name": "id",
+                "missing": true,
+                "default": null,
+                "doc": "Enumeration ID",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.value"
+}

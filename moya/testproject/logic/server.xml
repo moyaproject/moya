@@ -1,0 +1,73 @@
+<moya xmlns="http://moyaproject.com">
+
+	<server docname="main">
+
+
+        <import py="moya.libs.debug" if=".debug" priority="100"/>
+
+        <!-- <import py="moya.libs.bootstrap-wysihtml5" /> -->
+
+		<import py="moya.libs.auth" />
+        <import py="moya.libs.session" />
+		<import py="moya.libs.static" />
+		<import py="moya.libs.favicon" />
+		<import py="moya.libs.welcome" />
+        <import py="moya.libs.bootstrap" />
+        <import py="moya.libs.forms" />
+        <import py="moya.libs.shorturl" />
+        <import py="moya.libs.pages" />
+        <import py="moya.libs.faq" />
+        <import py="moya.libs.blog" />
+        <import py="moya.libs.comments" />
+        <import py="moya.libs.feedback" />
+        <import py="moya.libs.jsonrpc" />
+        <import py="moya.libs.tables" />
+        <import py="moya.libs.admin" />
+        <import py="moya.libs.wysihtml5" />
+        <import py="moya.libs.links" />
+        <import py="moya.libs.sociallinks" />
+        <import py="moya.libs.widgets" />
+        <import py="moya.libs.i18n" />
+        <import py="moya.libs.thumbnail" />
+        <import py="moya.libs.signup" />
+        <import py="moya.libs.recaptcha" />
+
+        <install name="wysihtml5" lib="moya.wysihtml5" />
+        <install name="admin" lib="moya.admin" mount="/admin/" />
+        <install name="debug" lib="moya.debug" mount="/debug/" if=".debug" />
+        <install name="auth" lib="moya.auth" mount="/auth/" />
+        <mount app="auth" mountpoint="middleware" url="/" />
+        <install name="session" lib="moya.session" mount="/" />
+        <install name="bootstrap" lib="moya.twitter.bootstrap" />
+        <install name="media" lib="moya.static" mount="/static/" />
+        <install name="templates" lib="moya.static" mount="/templates/" />
+    	<install name="welcome" lib="moya.welcome" mount="/" />
+    	<install name="favicon" lib="moya.favicon" mount="/" />
+        <install name="shorturl" lib="moya.shorturl" mount="/shorturl/" />
+        <install name="pages" lib="moya.pages" mount="/" />
+    	<install name="home" lib="moya.static" mount="/home/" />
+        <install name="forms" lib="moya.forms" mount="/forms/" mountpoint="tests"/>
+        <install name="faq" lib="moya.faq" mount="/faq/" />
+        <install name="blog" lib="moya.blog" mount="/blog/" />
+        <install name="comments" lib="moya.comments" mount="/comments/" />
+        <install name="feedback" lib="moya.feedback" mount="/feedback/" />
+        <install name="jsonrpc" lib="moya.jsonrpc" />
+        <install name="tables" lib="moya.tables" mount="/tables/" mountpoint="tests" />
+        <install name="links" lib="moya.links" />
+        <install name="sociallinks" lib="moya.sociallinks" mount="/sociallinks/"/>
+        <install name="widgets" lib="moya.widgets" mount="/widgets/" mountpoint="tests" />
+        <install name="i18n" lib="moya.i18n" mount="/i18n/" mountpoint="tests" />
+        <install name="uploads" lib="moya.static" mount="/uploads/" />
+        <install name="recaptcha" lib="moya.google.recaptcha" />
+
+        <install name="signup" lib="moya.signup" />
+        <mount app="signup" url="/signup/" name="signup" />
+
+        <import location="./site" priority="10" />
+        <install name="site" lib="moya.site" mount="/" />
+
+        <install name="thumbnail" lib="moya.thumbnail"/>
+        <mount app="thumbnail" mountpoint="tests" url="/thumbtest/" />
+
+	</server>
+</moya>

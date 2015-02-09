@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:image="http://moyaproject.com/image"
+    xmlns:tn="http://moyaproject.com/thumbnail">
+
+    <data-tag name="thumbnails" synopsis="a container for thumbnail processors">
+        <doc>
+            Define a collection of thumbnail processors.
+
+            This tag should contain one or more [tag thumbnail]processor[/tag] tags.
+        </doc>
+    </data-tag>
+
+    <data-tag name="processor" synopsis="define a thumbnail processor">
+        <doc><![CDATA[
+
+A thumbnail processor.
+
+Defines how an image should be processed to produce another image. When [tag thumbnail]generate[/tag] runs,
+it calls the each processor in a [tag thumbnail]thumbnails[/tag] with an image object called [c]image[/c].
+The code inside the processor transforms that image. The new image is then written as the thumbnail. Here's an example:
+
+[code xml]
+<tn:thumbnails libname="sushifinder#thumbnails.products">
+    <tn:processor name="small">
+        <image:resize-to-fit width="80" height="80" />
+    </tn:processor>
+</tn:thumbnails>
+[/code]
+
+            ]]></doc>
+        <signature>
+            <attribute name="name" required="yes">
+                An identifier used in the thumbnail generation
+            </attribute>
+            <attribute name="version" type="integer" required="no" default="1">
+                A version number of the processor
+            </attribute>
+            <attribute name="format" default="jpeg" choices="jpeg,png">
+                Image format for the thumbnail
+            </attribute>
+            <attribute name="quality (if using jpeg)" default="80" type="expression" required="no">
+                The quality of jpeg thumbnails (max 100)
+            </attribute>
+        </signature>
+    </data-tag>
+
+    <filter name="thumbnail_url">
+        <get-data-item
+            tag="processor" ns="http://moyaproject.com/thumbnail"
+            dst="p"
+            let:name="processor"/>
+        <str dst="filename">${processor}.${p.version}.${p.format}</str>
+        <str dst="path">${dirname:value}/${.app.settings.thumb_dir}/${basename:value}/${filename}</str>
+        <return>
+            <get-url name="serve" from="${.app.settings.app_serve}" let:path="path"/>
+        </return>
+    </filter>
+
+    <tag name="generate" synopsis="generate thumbnails">
+        <doc><![CDATA[
+
+Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].
+
+        ]]></doc>
+        <signature>
+            <attribute name="thumbnails" required="yes" type="element">
+                A reference to the thumbnail tag
+            </attribute>
+            <attribute name="path" required="yes">
+                Path to the image to the original image
+            </attribute>
+            <attribute name="overwrite" required="no" default="yes" type="boolean">
+                Should existing thumbnails be overwritten?
+            </attribute>
+        </signature>
+
+        <let settings="thumbnails.app.settings"
+            fsname="settings.fs"
+            thumbnail_directory="settings.thumb_dir" />
+
+        <let fs=".fs[fsname]" />
+        <let original_image="None" />
+
+        <!-- loop through all the processor -->
+        <for-children element="thumbnails" tag="processor" dst="processor">
+            <!-- build a new path for the thumbs -->
+            <!-- the thumbnail paths can be derived from the original -->
+            <let thumb_dir="path:dirname:path / thumbnail_directory / basename:path" />
+            <str dst="thumb_filename">${processor.params.name}.${processor.params.version}.${processor.params.format}</str>
+
+            <!-- Option to skip existing thumbnails -->
+            <if test="not overwrite">
+                <let thumb_path="path:thumb_dir / thumb_filename" />
+                <continue if="thumb_path in fs" />
+            </if>
+
+            <!-- lazy load of the image -->
+            <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
+
+            <!-- make a copy -->
+            <image:copy image="original_image" />
+            <!-- call the processor to modify the image in place -->
+            <call macro="${processor.element_ref}" let:image="image" />
+            <!-- write the thumbnail -->
+            <image:write fsobj="fs" dirpath="${thumb_dir}"
+                filename="${thumb_filename}"
+                let:quality="processor.params.quality"/>
+        </for-children>
+
+    </tag>
+
+</moya>

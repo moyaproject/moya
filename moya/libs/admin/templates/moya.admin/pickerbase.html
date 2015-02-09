@@ -1,0 +1,89 @@
+<!doctype html>
+<html style="background-color:transparent;">
+    <head>
+    <link href="{% media 'css/bootstrap.css' from 'moya.twitter.bootstrap' %}" rel="stylesheet">
+    {% block "includecss" %}{% render include.css %}{% end %}
+    {% block "css" %}{% render sections.css %}{% end %}
+    <style>
+
+    .moya-admin-content-column
+    {
+        width:100%;
+        margin:0px;
+        padding:0px;
+    }
+
+    .admin-table-picker .admin-table-header
+    {
+        width:100%;
+        position:fixed;
+        border-radius:0px;
+        height:52px;
+        top:0px;
+    }
+
+    .admin-table-picker .pagination-panel
+    {
+        position:fixed;
+        height:50px;
+        bottom:0px;
+        width:100%;
+        border-top:1px solid #ddd;
+    }
+
+    .admin-table-picker .pagination
+    {
+        margin:7px;
+    }
+
+    .admin-table-picker .pagination-panel .pagination-summary
+    {
+        vertical-align:top;
+    }
+
+    .moya-admin-table-container
+    {
+        padding-top:56px;
+        padding-bottom:14px;
+    }
+
+    .admin-table-picker thead tr
+    {
+        background-color:#fff;
+    }
+
+
+    .admin-table-picker .panel
+    {
+        border:none;
+    }
+
+    .admin-table-picker  .pagination-panel
+    {
+        border-bottom:none;
+    }
+
+    .admin-table-picker .moya-admin-table
+    {
+        padding-right:16px;
+    }
+
+
+    </style>
+    </head>
+    <body style="background-color:transparent;" data-field="${field}">
+        <div class="container-fluid moya-admin-content-column">
+            {%- block "body" %}
+            {% render sections.body %}
+            {%- end %}
+        </div>
+
+        <script src="{% media 'js/jquery.js' from 'moya.twitter.bootstrap' %}"></script>
+        <script src="{% media 'js/bootstrap.js' from 'moya.twitter.bootstrap' %}"></script>
+        <script src="{% media 'js/moya-admin.js' %}"></script>
+
+        {% block "includejs" %}{% render include.js %}{% endblock %}
+        {% block "js" %}{% render sections.js unique %}{% endblock %}
+    </body>
+
+</html>

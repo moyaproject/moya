@@ -1,0 +1,69 @@
+{
+    "name": "update",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "update",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nUpdate a query set with database expressions. Not to be confused with [tag]{}update[/tag] in the default namespace.\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "update fields in a query",
+        "tag_name": "update",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Queryset",
+                "required": true,
+                "type": "index",
+                "metavar": "QUERYSET",
+                "choices": null
+            }
+        },
+        "example": "\n        <db:query model=\"#Vote\" filter=\"#Vote.topic=='moya'\" dst=\"votes\"/>\n        <db:update src=\"votes\" let:topic=\"#Vote.score + 1\" />\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.update"
+}

@@ -1,0 +1,39 @@
+[title Preflight Checks]
+
+Moya can alert you to potential problems in the project via [i]preflight checks[/i]. These checks are code in a library which Moya can run for each application.
+
+[h1]Running Preflight Checks[/h1]
+
+If enabled in [link project#project-section]project settings[/link], Moya will run preflight checks prior to running the server. Any information from the preflight checks will be displayed in the console. You can also run preflight checks independently with the following command:
+
+[code]
+$ moya preflight
+[/code]
+
+This will run all the preflight checks and display a table with a summary of the checks together with any error information.
+
+[h1]Writing Preflight Checks[/h1]
+
+Preflight checks use the namespace [c]http://moyaproject.com/preflight[/c], which you will probably want to add to the root [tag]moya[/tag] node. It is probably a good idea to gather all preflight checks in to a single file named [c]preflight.xml[/c].
+
+When the preflight check process is run, Moya invokes the code in [tag]{preflight}check[/tag] tags within the library. A preflight check should call one of three tags depending on the result of the check; [tag]{preflight}pass[/tag] reports a pass (i.e. no problem detected), [tag]{preflight}warning[/tag] reports a [i]potential[/i] issue, and [tag]{preflight}fail[/tag] reports a more serious problem (one which could result in broken links or data loss).
+
+The following is an example of a preflight check that checks an application setting called [c]discount[/c] is greater than or equal to 0:
+
+[code xml]
+<moya xmlns:preflight="http://moyaproject.com/preflight">
+    <preflight:check>
+        <preflight:fail if=".app.settings.discount.int gte 0">
+            Discount percentage should be greater than or equal to zero!
+        </preflight:fail>
+    </preflight:check>
+<moya>
+[/code]
+
+The text in [tag]{preflight}fail[/tag] is used as the message in the logs, or table when ran from the command line.
+
+If an unhandled exception occurs in a preflight check, it will be logged or reported in the preflight results.
+
+[h1]Check Guidelines[/h1]
+
+Checks should be written to be quick, since they will run when starting the server in development mode. Most often they will validate initial settings or confirm that required objects in the database have been created. You can use all of the tags that you might use in a view, but bear in mind that there will be no [c].request[/c] value in the context since since preflight checks run prior to serving any requests.

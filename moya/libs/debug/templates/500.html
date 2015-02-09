@@ -1,0 +1,90 @@
+{% extends "/moya.debug/base.html" %}
+
+{% block "title" %}${trace.error_type} ${trace.method} ${trace.url} {% endblock %}
+
+{% block "comments" %}
+<!--
+{% inspect trace %}
+-->
+{% endblock %}
+
+{% block "body" %}
+
+{%- def "info" %}
+    {%- if map %}
+    {% if title or subtitle %}<h3><small>${title} ${subtitle}</small></h3>{% endif %}
+    <dl class="dl-horizontal">
+        {%- for k, v in sorted:items:map %}
+        <dt>${k}</dt>
+        <dd>${v or html:'&nbsp;'}</dd>
+        {%- endfor %}
+    </dl>
+    {%- endif %}
+{%- enddef %}
+
+{% if trace.moya_exception_type %}
+<h2>${trace.moya_exception_type} <small>unhandled logic exception</small></h2>
+{% else %}
+<h2>${trace.error_type}</h2>
+{% endif %}
+
+{% if trace.msg %}
+<p class="lead text-error">{% markup trace.msg as 'text' %}</p>
+{% endif %}
+
+{% let console_error = trace.console_error %}
+{% if console_error %}
+<pre class="moya-console">${html:console_error}</pre>
+{% endif %}
+
+{% if trace.diagnosis %}
+<div class="alert alert-info">
+    {% markup trace.diagnosis as "markdown" %}
+</div>
+{% endif %}
+
+<p>
+    <a onclick="toggle('request-details');return false;" href="#">
+        Request details
+    </a>
+</p>
+
+<div class="request-get well" style="display:none;" id="request-details">
+    <div id="request-info" class="accordion-body">
+        <div class="accordian-inner">
+            <div class="request-get">
+                <dl class="dl-horizontal">
+                    <dt>url</dt><dd>${request.url}</dd>
+                    <dt>method</dt><dd>${request.method}</dd>
+                    <dt>content type</dt><dd>${request.content_type}</dd>
+                </dl>
+                {%- call "info" with map=request.POST, title="POST" %}
+                {%- call "info" with map=.site, subtitle= str:.sys.site %}
+                {%- call "info" with map=request.GET, title="GET" %}
+                {%- call "info" with map=request.headers, title="headers" %}
+                {%- call "info" with map=request.cookies, title="cookies" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if trace.stack %}
+<p class="text-info">Moya trace (most recent call first):</p>
+{% endif %}
+
+{%- for frame in reversed:trace.stack %}
+<p class="frame">
+    {%- if frame.libid %}
+        <a href="{% url "showelement" from "moya.debug" with elementid=frame.libid %}?line=${frame.lineno}#line${frame.lineno}">${frame.location}</a>
+    {%- else %}
+        {%- if frame.format == 'moyatemplate' %}
+        <a href="{% url "showtemplate" from "moya.debug" with path=frame.raw_location %}?line=${frame.lineno}#line${frame.lineno}">${frame.location}</a>
+        {%- else %}
+        ${frame.location}
+        {%- endif %}
+    {%- endif %}
+    <pre style="overflow-x:hidden;"><div class="code format-${frame.format}">{% render html:frame.snippet %}</div></pre>
+</p>
+{%- endfor %}
+
+{% endblock %}

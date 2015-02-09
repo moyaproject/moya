@@ -1,0 +1,26 @@
+<moya xmlns="http://moyaproject.com"
+        xmlns:moya="http://moyaproject.com"
+        xmlns:let="http://moyaproject.com/let"
+        xmlns:admin="http://moyaproject.com/admin"
+        xmlns:w="http://moyaproject.com/widgets">
+
+    <module xmlns="http://moyaproject.com/admin"
+        slug="moya-shorturl" title="Short URLs" description="Shrink those URLs">
+        <link to="#admintable.links" title="Links"/>
+    </module>
+
+    <table libname="admintable.links" xmlns="http://moyaproject.com/admin" title="Links" slug="links"
+        model="#ShortURL"
+        search="#ShortURL.url contains q">
+        <column title="ID" link="yes" sort="id">${object}</column>
+        <column title="Short URL" sort="id">
+            <moya:get-url name="redirect" let:urlkey="object.id | 'encode_id'" dst="url" />
+            <w:url url="${.request.host_url}${url}" />
+        </column>
+        <column title="Visits" sort="visitcount">${object.visitcount}</column>
+        <column title="URL" sort="url">
+            <w:url url="${object.url}"/>
+        </column>
+    </table>
+
+</moya>

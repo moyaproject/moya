@@ -1,0 +1,41 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let">
+
+    <widget name="post" template="widgets/post.html" undocumented="yes">
+        <doc>Render a blog post</doc>
+        <signature>
+            <attribute name="post" type="index" />
+            <attribute name="slug" type="index" />
+            <attribute name="linktitle" type="boolean" default="yes" />
+            <attribute name="solo" type="boolean" default="no" />
+            <attribute name="newer" type="index" default="None"/>
+            <attribute name="older" type="index" default="None"/>
+            <attribute name="numcomments" type="expression" default="0" />
+        </signature>
+        <include-css path="css/blog.css" />
+        <db:get-required model="#Post" dst="post" let:slug="slug" let:published="yes" if="not post" />
+    </widget>
+
+    <widget name="recent-posts" template="widgets/recent_posts.html" synopsis="displays a list of recent blog posts" undocumented="yes">
+        <doc>A list of recent posts</doc>
+        <signature>
+            <attribute name="count" type="integer" default="10" />
+        </signature>
+        <db:query model="#Post" dst="posts" orderby="-published_date" />
+        <db:query src="posts" dst="posts" let:published="yes" if="not .permissions.admin"/>
+        <let-str title="Recent posts" />
+    </widget>
+
+    <widget name="summary" template="widgets/summary.html" synopsis="a summary of recent posts">
+        <doc>
+            Renders a list of most recent summarized blogs posts with links.
+        </doc>
+        <signature>
+            <attribute name="count" type="integer" default="10" />
+        </signature>
+        <db:query model="#Post" dst="posts" let:published="yes" orderby="-published_date" maxresults="count"/>
+    </widget>
+
+</moya>

@@ -1,0 +1,5 @@
+<moya xmlns="http://moyaproject.com">
+    <macro docname="main">
+       <let infinity="1/0"/>
+    </macro>
+</moya>

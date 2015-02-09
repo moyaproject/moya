@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com">
+
+    <model name="validate_email" libname="ValidateEmail" xmlns="http://moyaproject.com/db"
+        repr="ValidateEmail '${token}' for '${user.username}'" title="Email Vaildator">
+        <unique-together>
+            <foreign-key name="user" model="auth#User" null="no" blank="no" />
+            <string name="email" label="Email address" length="300" null="yes" />
+            <token name="token" size="20" length="50" null="no" blank="no" />
+        </unique-together>
+        <datetime name="created_time" label="Created Time" auto="yes" blank="no"/>
+    </model>
+
+</moya>

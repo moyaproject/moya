@@ -1,0 +1,47 @@
+{
+    "name": "opt-group",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "opt-group",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nAdd an optgroup (heading for options) to a select.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "add an optgroup to a select",
+        "tag_name": "opt-group",
+        "params": {
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Label",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.opt-group"
+}

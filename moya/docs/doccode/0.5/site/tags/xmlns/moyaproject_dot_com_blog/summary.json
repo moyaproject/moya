@@ -1,0 +1,69 @@
+{
+    "name": "summary",
+    "doc_namespace": "xmlns.http://moyaproject.com/blog",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "summary",
+        "lib": "moya.blog",
+        "namespace_slug": "moyaproject_dot_com_blog",
+        "defined": "/home/will/projects/moya/moya/libs/blog/logic/widgets.xml (line 31)",
+        "doc": "Renders a list of most recent summarized blogs posts with links.",
+        "namespace": "http://moyaproject.com/blog",
+        "synopsis": "a summary of recent posts",
+        "tag_name": "summary",
+        "params": {
+            "count": {
+                "default_display": "10",
+                "name": "count",
+                "missing": true,
+                "default": "10",
+                "doc": "",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/blog.summary"
+}

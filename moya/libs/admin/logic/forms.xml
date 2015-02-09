@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+	xmlns:moya="http://moyaproject.com"
+	xmlns:html="http://moyaproject.com/html"
+	xmlns:let="http://moyaproject.com/let"
+	xmlns:forms="http://moyaproject.com/forms"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:w="http://moyaproject.com/widgets"
+    xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+    xmlns:admin="http://moyaproject.com/admin">
+
+	<form libname="form.delete" legend="Delete Objects" style="basic" xmlns="http://moyaproject.com/forms">
+        <moya:if test="not object_pks">
+            <w:info>No objects to delete!</w:info>
+            <actions>
+                <html:a class="btn btn-info" href="${back_url}">Back</html:a>
+            </actions>
+        </moya:if>
+        <moya:else>
+    		<html:p>
+    			Are you sure you want to delete the following objects?
+    		</html:p>
+    		<hidden-input name="object_pks" initial="commalist:object_pks" />
+    		<hidden-input name="back_url" initial="back_url" />
+    		<moya:node template="objectlist.html" let:objects="objects"/>
+    		<actions>
+    			<submit-button class="btn-primary" name="delete" text="Delete" />
+    			<html:a class="btn btn-info" href="${html:back_url}">Cancel</html:a>
+    		</actions>
+        </moya:else>
+	</form>
+
+    <macro docname="adapt_null">
+        <forms:adapt-field field="${column.name}">
+            <return value="column.null ? None : ''" if="not value" />
+            <return value="value" />
+        </forms:adapt-field>
+    </macro>
+
+	<forms:form libname="form.object" legend="Edit ${object}" style="horizontal">
+		<for src="model.columns" dst="column">
+
+            <switch>
+
+                <case if="column.type in ['string', 'timezone']" />
+                <if test="list:column.choices">
+                    <forms:select label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+                    initial="object[column.dbname]">
+                        <forms:option value=""> --- not set --- </forms:option>
+                        <forms:add-choices choices="column.choices"/>
+                    </forms:select>
+                    <forms:validate-field field="${column.name}">
+                        <forms:fail if="not value and not column.blank">
+                            Please select an option
+                        </forms:fail>
+                    </forms:validate-field>
+                </if>
+                <else>
+				    <forms:input label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+				        initial="str:object[column.name]" maxlength="${column.length}"
+                        required="not column.blank"/>
+                </else>
+                <defer to="adapt_null" />
+
+
+                <case if="column.type=='string-map'"/>
+                <forms:text-area label="${str:column.label or title:column.name}"
+                                name="${column.name}"
+                                help="${str:column.help}"
+                                required="not column.blank"
+                                initial="json:object[column.name]"/>
+                <forms:validate-field field="${column.name}">
+                    <json src="value" dst="obj" />
+                    <catch exception="json.*" dst="error">
+                        <forms:fail>${error.msg}</forms:fail>
+                    </catch>
+                </forms:validate-field>
+                <forms:adapt-field field="${column.name}">
+                    <return value="fromjson:value"/>
+                </forms:adapt-field>
+
+
+                <case if="column.type=='text'"/>
+                <if test="column.formfield">
+                    <defer to="${column.formfield}" from="${model.app.name}"/>
+                </if>
+                <else>
+                    <if test="column.markup == 'html'">
+                      <forms:field name="${column.name}"
+                            label="${column.label or title:column.name}"
+                             required="not column.blank"
+                             initial="str:object[column.name]"
+                             maxlength="${column.length}">
+                            <wysihtml5:editor/>
+                        </forms:field>
+                    </if>
+                    <else>
+                        <forms:text-area label="${str:column.label or title:column.name}"
+                            name="${column.name}"
+                            help="${str:column.help}"
+                            required="not column.blank"
+                            initial="str:object[column.name]"
+                            maxlength="${column.length}"/>
+                    </else>
+                </else>
+                <defer to="adapt_null" />
+
+
+                <case if="column.type=='integer'"/>
+                <forms:input label="${str:column.label or title:column.name}"
+                    name="${column.name}"
+                    help="${str:column.help}"
+                    type="number"
+                    initial="str:object[column.name]"
+                    adapt="int:value"
+                    required="not column.blank"/>
+                <forms:validate-field field="${column.name}">
+                    <forms:fail if="not column.blank and not validint:value">
+                        Must be an integer
+                    </forms:fail>
+                </forms:validate-field>
+                <forms:adapt-field field="${column.name}">
+                    <return value="int:value" if="value" />
+                    <return value="column.null ? None : column.default" />
+                </forms:adapt-field>
+
+
+                <case if="column.type=='float'"/>
+                <forms:input label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}" type="number"
+                    initial="str:object[column.name]"
+                    adapt="float:value"
+                    required="not column.blank" />
+                <forms:validate-field field="${column.name}">
+                    <forms:fail if="not validfloat:value">
+                        Must be a number
+                    </forms:fail>
+                </forms:validate-field>
+                <forms:adapt-field field="${column.name}">
+                    <return value="column.null ? None : ''" if="not strip:value" />
+                    <return value="float:value" />
+                </forms:adapt-field>
+
+			    <case if="column.type=='boolean'"/>
+				<forms:checkbox label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+					initial="object[column.name] ? 'on' : 'off'" adapt="value == 'on'" on="on"
+                    required="not column.blank"/>
+
+
+			    <case if="column.type=='datetime'"/>
+				<forms:input template="/moya.admin/datetimeinput.html"
+                    class="datetime" label="${str:column.label or title:column.name}" name="${column.name}"
+                    help="${str:column.help}" initial="object[column.name]['isoformat']"
+                    adapt="datetime:value"
+                    required="not column.blank"/>
+                <forms:validate-field field="${column.name}">
+                    <forms:fail if="not value and not column.blank">
+                        Please select an option
+                    </forms:fail>
+                    <forms:fail if="value and not datetime:value">
+                        Please enter a valid date
+                    </forms:fail>
+                </forms:validate-field>
+
+
+                <case if="column.type=='date'"/>
+                <forms:input template="/moya.admin/dateinput.html"
+                    class="date" label="${str:column.label or title:column.name}" name="${column.name}"
+                    help="${str:column.help}" initial="object[column.name]['isoformat']"
+                    adapt="datetime:value"
+                    required="not column.blank"/>
+
+
+                <case if="column.type in ['foreign-key', 'one-to-one']"/>
+
+                <if test="column.picker">
+
+                    <get-element name="${column.picker}" from="${model.app.name}" dst="picker_table"/>
+                    <let selected="[object[column.name]['id']]"/>
+
+                    <forms:field label="${str:column.label or title:column.name}" name="${column.dbname}"
+                        help="${str:column.help}"
+                        adapt="fromjson:value">
+
+                        <get-url name="admin_table_picker_single" dst="picker_url"
+                            let:appname="model.app.name" let:table="picker_table.params.slug"
+                            let:field="field.name"
+                            query="{'model':model.name,
+                                    'pk': object.id,
+                                    'field':field.name,
+                                    'app':model.app.name,
+                                    'options':column.options or ''}"/>
+
+                        <admin:foreign-key-select object="object[column.name]">
+                            <admin:picker-single url="picker_url" id="field.id" selected="selected" fieldname="field.name" value="object[field.name]"/>
+                        </admin:foreign-key-select>
+
+                    </forms:field>
+
+                    <forms:apply-field field="${column.name}">
+                        <if test="value.added">
+                            <var dst="object[column.dbname]" value="value.added.0"/>
+                        </if>
+                        <else>
+                            <var dst="object[column.dbname]" value="None"/>
+                        </else>
+                    </forms:apply-field>
+
+                </if>
+                <else>
+
+                    <db:new-query model="column.ref_model" from="${column.ref_model.app.name}" dst="related" />
+                    <db:query src="related" filter="${column.options}" dst="related" if="column.options"
+                        from="${column.ref_model.app.name}"/>
+                    <db:query src="related" dst="related" orderby="${column.orderby}" if="column.orderby" />
+                    <forms:select label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+                        initial="object[column.dbname]" required="not column.blank">
+                        <forms:option value=""> --- not set --- </forms:option>
+                        <for src="related" dst="obj">
+                            <forms:option value="${ obj.id }">${obj}</forms:option>
+                        </for>
+                    </forms:select>
+                    <forms:validate-field field="${column.name}">
+                        <forms:fail if="not value and not column.blank">
+                            Please select an option
+                        </forms:fail>
+                    </forms:validate-field>
+                    <forms:adapt-field field="${column.name}">
+                        <return value="None" if="value==''" />
+                        <db:get modelobj="column.ref_model.element" from="${column.ref_model.app.name}" let:id="value" dst="object" />
+                        <return value="object"/>
+                    </forms:adapt-field>
+
+                </else>
+
+            </switch>
+
+		</for>
+
+        <for src="model.relationships" dst="relationship">
+
+            <if test="relationship.picker">
+
+                <get-element name="${relationship.picker}" from="${model.app.name}" dst="picker_table"/>
+
+                <let related="object[relationship.name]"/>
+
+                <db:get-column modelobj="relationship.ref_model" name="id" dst="relationship_id" />
+                <db:new-query model="relationship.ref_model" dst="selected"/>
+                <db:query src="selected" filter="relationship_id in related" columns="relationship_id" dst="selected" flat="yes" collect="list"/>
+
+                <forms:field label="${str:relationship.label or title:relationship.name}"
+                    name="${relationship.name}" help="${str:relationship.help}"
+                    adapt="fromjson:value">
+
+                    <get-url name="admin_table_picker" dst="picker_url"
+                        let:appname="model.app.name" let:table="picker_table.params.slug"
+                        let:field="field.name"
+                        query="{'model':model.name,
+                                'pk': object.id,
+                                'field':field.name,
+                                'app':model.app.name,
+                                'options':relationship.options or ''}"/>
+                    <admin:picker url="picker_url" id="field.id" selected="selected" fieldname="field.name"/>
+                </forms:field>
+
+                <forms:apply-field field="${relationship.name}">
+                    <db:get-column modelobj="relationship.ref_model" name="id" dst="relationship_id" />
+                    <if test="value.added">
+                        <db:new-query model="relationship.ref_model" dst="add_objects"/>
+                        <db:query src="add_objects" filter="relationship_id in value.added" dst="add_objects" />
+                        <append values="add_objects" src="object[field.name]" />
+                    </if>
+
+                    <if test="value.removed">
+                        <db:new-query model="relationship.ref_model" dst="remove_objects"/>
+                        <db:query src="remove_objects" filter="relationship_id in value.removed" dst="remove_objects" />
+                        <remove values="remove_objects" src="object[field.name]" />
+                    </if>
+
+                </forms:apply-field>
+            </if>
+            <else>
+                <db:new-query model="relationship.ref_model" from="${relationship.ref_model.app.name}" dst="related" />
+                <db:query src="related" filter="${relationship.options}" dst="related" if="relationship.options"
+                    from="${relationship.ref_model.app.name}" />
+
+                <db:query src="related" dst="related" orderby="${column.orderby}" if="column.orderby" />
+
+                <let options="collectids:object[relationship.name]"/>
+
+                <forms:check-select label="${str:relationship.label or title:relationship.name}"
+                    name="${relationship.name}" help="${str:relationship.help}"
+                    initial="options" dst="${relationship.name}">
+                    <for src="related" dst="obj">
+                        <forms:option value="${obj.id}" help="${obj.description}" selected="obj.id in options" renderable="obj"/>
+                    </for>
+                </forms:check-select>
+
+                <forms:adapt-field field="${relationship.name}">
+                    <db:get-column modelobj="relationship.ref_model.element" from="${relationship.ref_model.app.name}" name="id" dst="id_col" />
+                    <db:new-query model="relationship.ref_model.element" from="${relationship.ref_model.app.name}" dst="objects"/>
+                    <db:query src="objects" filter="id_col in value" dst="objects" collect="list"/>
+                    <return value="objects"/>
+                </forms:adapt-field>
+
+            </else>
+
+        </for>
+
+	</forms:form>
+
+    <forms:form libname="form.edit" legend="Edit ${object}" style="horizontal" extends="#form.object" class="moya-admin-form">
+        <forms:actions>
+            <forms:submit-button text="Save changes" />
+            <w:button-link url=".">Reset</w:button-link>
+        </forms:actions>
+    </forms:form>
+
+    <forms:form libname="form.new" legend="New ${model.title}" extends="#form.object">
+        <forms:actions>
+            <forms:submit-button text="Create" />
+        </forms:actions>
+    </forms:form>
+
+</moya>

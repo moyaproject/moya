@@ -1,0 +1,51 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:bootstrap="http://moyaproject.com/bootstrap"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <content libname="content.pending.error" template="base.html">
+        <title>Pending Comment Error</title>
+        <section name="body">
+            <w:error>
+                <markdown>
+                    **No pending comment was found**
+
+                    Please try again.
+                </markdown>
+            </w:error>
+        </section>
+    </content>
+
+    <content libname="content.confirmation" template="base.html">
+        <title>Are you sure?</title>
+        <section name="body">
+            <render src="form"/>
+        </section>
+    </content>
+
+    <content libname="content.unsubscribe" template="base.html">
+    	<title>Unsubscribe</title>
+    	<section name="body">
+    		<if test="success">
+    			<w:success>
+    				You have been unsubscribed!
+    			</w:success>
+    		</if>
+    		<else>
+				<render src="form" if="subscription"/>
+				<w:warning if="not subscription">
+                    <bbcode>[b]Subscription not found[/b]
+
+                        Have you already unsubscribed?</bbcode>
+				</w:warning>
+			</else>
+    	</section>
+    </content>
+
+    <content libname="content.objectsubscription" template="base.html">
+        <title>Manage Subscription</title>
+        <section name="body">
+            <render src="form" />
+        </section>
+    </content>
+</moya>

@@ -1,0 +1,28 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:rpc="http://moyaproject.com/jsonrpc"
+      xmlns:let="http://moyaproject.com/let">
+
+    <!-- This object creates a view that exposes methods via JSON RPC -->
+    <rpc:interface libname="jsonrpc.interface">
+
+        <!-- An example of a simple remote method -->
+        <rpc:method name="greet" description="Renders a greeting" call="#method.greet">
+            <doc>This method will greet you, using the name of your choice</doc>
+            <rpc:parameter name="who" type="string" default="World" required="no">
+                This parameter should be the name of the person you wish to greet. If not given, the name will default to "World"
+            </rpc:parameter>
+            <rpc:error code="1" if="len:who gt 10" data="errortext='What were you thinking?',foo='bar'">
+                'who' should be ten characters or less, not '${who}'
+            </rpc:error>
+        </rpc:method>
+
+    </rpc:interface>
+
+    <macro libname="method.greet">
+        <return>
+            <str>Hello, ${who}!</str>
+        </return>
+    </macro>
+
+</moya>
+

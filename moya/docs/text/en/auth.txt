@@ -1,0 +1,347 @@
+[title Moya Auth (users and permissions)]
+
+The Moya Auth library provides the ability for users to [i]log in[/i] to your web application, and manages what they can do (or see) when they are there. Most sites will require some kind of system of users, even if it is a single [i]admin[/i] user who may make changes to the site.
+
+[h1]Installation[/h1]
+
+The Moya Auth library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.forms" />
+[/code]
+
+You can install the library with the following:
+
+[code xml]
+<install name="auth" lib="moya.auth" mount="/auth/"/>
+<mount app="auth" mountpoint="middleware" url="/"/>
+[/code]
+
+This will mount [link auth#views]Auth views[/link] and middleware which does the work of managing permissions.
+
+[aside]If you created your project with [b]moya start project[/b], then Moya Auth will have been installed automatically.[/aside]
+
+[h1]Init Command[/h1]
+
+The Auth library has a command to create the default user and some other required object in the database. To run it, enter the following at the command line:
+
+[code]
+$ moya moya.auth#cmd.init
+[/code]
+
+The command prompt will ask you for the credentials (username and password) and email address of the [i]super user[/i]. A super user is the first user created and will have the ability to perform any administration tasks.
+
+[alert]If you run this on a production server, be sure to use a strong password[/alert]
+
+[h1]Views[/h1]
+
+When mounted, the Auth library supplies a few views to allow visitors to login / logout and do other user account tasks, such as reseting their password.
+
+This section lists the available views by their URL name. You can use the URL name to retrieve the actual URL with something like the following:
+
+[code xml]
+<get-url from="moya.auth" name="login" dst="url" />
+[/code]
+
+Or in template...
+
+[code moyatemplate]
+<a href="{% url 'login' from 'moya.auth' %}">Login</a>
+[/code]
+
+[alert]The URLs given here assume the Auth library was mounted on [b]/auth/[/b].[/alert]
+
+[h2]login[/h2]
+
+[c]/auth/login/[/c]
+
+Displays a form with username and password form. If the login was successful, the user is forwarded to either [c]/[/c] or a path defined in the query value called [c]fwd[/c]. For example, [c]/auth/login/?fwd=/dashboard/[/c].
+
+[h2]logout[/h2]
+
+[c]/auth/logout[/c]
+
+Logs the user out and forwards them to [c]/[/c] or a path given in a query value called [c]fwd[/c].
+
+[h2]user_edit[/h2]
+
+[c]/auth/edit/[/c]
+
+A form to allow a user to edit basic details; their first / last name and timezone.
+
+[h2]forgot_password[/h2]
+
+[c]/auth/forgot-password/[/c]
+
+Displays a form requesting the user's email address. If the email is recognized then Moya Auth will send the user a password reset email which contains a link. Clicking the link in the email will let them enter a new password.
+
+A link to this page is displayed in the login view.
+
+[h2]reset_password[/h2]
+
+[c]/auth/reset/{token}/[/c]
+
+This is the view to handle password resets.
+
+[h1]User Model[/h1]
+
+When a user logs in, Moya looks up a user object from the database and stores it in the context as [c].user[/c]. If no user has logged in, the value of [c].user[/c] will be missing -- which allows you to write code such as this:
+
+[code xml]
+<if test=".user">
+    <echo>User is logged in </echo>
+</if>
+[/code]
+
+Or the equivalent in template:
+
+[code moyatemplate]
+{% if .user %}
+<h1>Welcome, ${.user.username}!</h1>
+{% endif %}
+[/code]
+
+[aside]The [b].user[/b] value in the context is actually calculated [i]lazily[/i], so that Moya won't query the database if you never reference [b].user[/b].[/aside]
+
+[definitions]
+
+[define username]
+This is the user's [i]identity[/i] in the site. It will be a maximum of 30 characters with no spaces.
+[/define]
+
+[define first_name]
+The user's first name (forename).
+[/define]
+
+[define last_name]
+The user's last name (surname).
+[/define]
+
+[define email]
+The user's email address.
+[/define]
+
+[define mail_validated]
+A boolean which indicates if the user's email has been [i]validated[/i].
+[/define]
+
+[define password]
+A [i]hash[/i] of the user's password. Moya follows the best practice of not storing the password has a hash rather than plain-text.
+[/define]
+
+[define timezone]
+The user's [i]timezone[/i]. If set, Moya can use this information to display times and dates in the user's timezone.
+[/define]
+
+[define last_login]
+The time of the user's most recent login. This will be the start of the current session if the user is logged in.
+[/define]
+
+[define previous_login]
+The time the user logged in prior to the most recent login. Use this value in preference to [c]last_login[/c] when working out what has changed since the user's last logged in.
+[/define]
+
+[define notes]
+A text field for admin to store notes regarding a user.
+[/define]
+
+[define groups]
+A many to many of the [link auth#groups]groups[/link] a user belongs to. Including the user's personal group.
+[/define]
+
+[/definitions]
+
+[h1]Permissions and Groups[/h1]
+
+Moya Auth supports a flexible permissions system that you can user to manage different types of users and define what they can do or see.
+
+[aside]Many sites will only require two types of users; administrators and [i]everyone else[/i].[/aside]
+
+[h2]Permissions[/h2]
+
+A [i]permission[/i] is a label associated with a particular capability on the site. The default permissions (created with the [link auth#init_command]Init Command[/link]) are [c]'admin'[/c] which gives you access to the admin site, and [c]'superuser'[/c] which identifies you as the owner of the site.
+
+When a user is logged in, Moya stores the user's permissions in the context as a dict called [c].permissions[/c], which maps the permission label to a permission object (consisting of it's [c]name[/c] and [c]description[/c]). For example, if a user has the [c]admin[/c] permission, then [c].permission.admin[/c] would contain the following:
+
+[code]
+{
+    'name': 'admin',
+    'description': 'User may perform administration tasks'
+}
+[/code]
+
+You can use the permissions object to test if a user has a particular permission as follows:
+
+[code xml]
+<if test=".permissions.admin">
+    <echo>The user is an Administrator!</echo>
+    <echo>${.permissions.admin.description}</echo>
+</if>
+[/code]
+
+Alternatively, there is a modifier, [c]permission:[/c] which checks the [c].permissions[/c] value. Here's the equivalent check to the above code, written with the modifier:
+
+[code xml]
+<if test="permission:'admin'">
+    <echo>The user is an Administrator!</echo>
+</if>
+[/code]
+
+The [c]permission:[/c] modifier also accept a list of permissions, and will return [c]True[/c] only if the user has [i]all[/i] of them.
+
+[code xml]
+<if test="permission:['admin', 'superuser']">
+    <echo>User is an administrator and a superuser</echo>
+</if>
+[/code]
+
+The modifier has the advantage that it is easier to define the permissions check in a setting. You might want to do this in a library if you don't want to hard-code the required permissions. Here's an example:
+
+[code xml]
+<if test="not permission:.settings.post_permssions.list">
+    <echo>Sorry, you are not permitted to post!</echo>
+</if>
+[/code]
+
+[h2]View Permissions[/h2]
+
+You may want to restrict a URL to a users with a particular permission (for example, admin users). One way of doing this is to apply a permission check to the [tag]forbidden[/tag] tag which generates a [b]403 Forbidden[/b] response. The Moya Auth library handles this special response by forwarding the user to the login page.
+
+Here's how you might do a permission check in a view:
+
+[code xml]
+<forbidden if="not permission:'admin'"/>
+[/code]
+
+Because this is such a common pattern, the [tag]view[/tag] has a [c]requires[/c] attribute which will have the same effect. Here's how you would do the same permission check with the [c]requires[/c] attribute:
+
+[code xml]
+<view libname="view.admin" requires="permission:'admin'">
+    <!-- admin only view -->
+</view>
+[/code]
+
+[h2]URL Permissions[/h2]
+
+It's often a requirement to have many views restricted to users with a particular permission, often under a single top level URL. It would be somewhat tedious to add a permissions check to all the views, and the consequences of a missing check could potentially be serious. In these situations you might want to add a [tag]url[/tag] to apply a permissions check.
+
+Here's how you would check for admin permissions for [i]any[/i] URL under [c]/admin-only/[/c]:
+
+[code xml]
+<url route="/admin-only/*">
+    <forbidden if="not permission:'admin'" />
+</url>
+[/code]
+
+[h2]Groups[/h2]
+
+Permissions are associated with [i]groups[/i] which may contain any number of users. Users in a group acquire all the permissions of that group. For example, there is a default group called [c]'administrators'[/c] which gives users the [c]'admin'[/c] permission, i.e. if you are in the [c]'administrators'[/c] group you will have the [c]'admin'[/c] permission.
+
+The user object has a many to many of groups the user belongs to. Here's how you could list the groups for the logged in user:
+
+[code xml]
+<for src=".user.groups" dst="group">
+    <echo>User belongs to ${group}</echo>
+</form>
+[/code]
+
+You will rarely need to look at a users groups directly, as the [link auth#permissions]permissions[/link] will already have been determined.
+
+[h2]Personal Groups[/h2]
+
+Permissions are not strictly speaking associated with a user, but users can have a [i]personal group[/i] which is a special group unique to them. Adding a permission to this group will apply to that user and that user only. You can use this to tailor individual permissions for a user where there is no appropriate group to put them in.
+
+[h2]Default Groups and Permissions[/h2]
+
+The [link auth#init-command]init command[/link] creates a small number of default groups and permission. These are the minimum requirements for most sites.
+
+The init command creates a single group called [c]administrators[/c] which supplies a permission called [c]admin[/c]. Users with the [c]admin[/c] permission may log in to the admin site. The [c]admin[/c] permission also enables the editing of site content in some applications, e.g. editing pages, blog posts, FAQs etc.
+
+The first user created is a member of the [c]administrator[/c] group, and also has a permission called [c]super[/c] assigned to their [i]personal[/i] group. You should use the [c]super[/c] permission to guard any potentially destructive operations that you wouldn't want to risk an administrator doing by accident.
+
+[h2]Managing Groups & Permissions[/h2]
+
+Generally speaking, groups and permissions are relatively [i]static[/i] in that once created you will rarely need to change them -- probably only when you roll out features to your site. Creating groups and permissions can be done with either the [link auth#auth-commands]auth command[/link] or via the admin site.
+
+Adding a user to a group can be done with the [tag auth]add-user-to-group[/tag] tag, which takes a user object and the group to add to. For example, the following adds a user with username [c]'john'[/c] to the administrators group.
+
+[code xml]
+<db:get model="#User" let:username="john" dst="john"/>
+<db:add-user-to-group let:user="john" let:group="administrators" />
+[/code]
+
+To add a permission to a group (or a users's personal group) you can use [tag auth]add-permission[/tag] which takes either a user or group, and a permission name. For example, here is how you make a user a [i]superuser[/i] user by adding the [c]super[/c] permission to their personal group:
+
+[code xml]
+<db:get model="#User" let:username="john" dst="john"/>
+<db:add-permission user="john" permission="super" />
+[/code]
+
+[aside]If everyone is [i]super[/i], nobody is.[/aside]
+
+
+[h1]Creating Users[/h1]
+
+You can create a new user manually with [tag auth]new-user[/tag]. Here's an example:
+
+[code xml]
+<auth:new-user username="john"
+    email="john@moya.com"
+    first_name="John"
+    last_name="Crichton"
+    password="aeryn1234"
+    dst="john"/>
+[/code]
+
+This will create a new user with username [c]john[/c]. If that username is taken, Moya will raise a [c]moya.auth.duplicate-user[/c] exception.
+
+Note that the password will be hashed automatically.
+
+[h1]Logging In a User[/h1]
+
+You can login a user for the current session with [tag auth]login[/tag] which takes a username and password. If the username exists and the password matches, then the user object will be returned (and stored in [c].user[/c]). Here's an example:
+
+[code xml]
+<auth:login username="'john'" password="'aeryn1234'" dst="user" />
+[/code]
+
+A few exception may be thrown by [tag auth]login[/tag] if the login was unsuccessful; the exception [c]"moya.auth.no-user"[/c] indicates the username was incorrect, [c]"moya.auth.password-fail"[/c] indicates the password was incorrect, and [c]"moya.auth.not-active"[/c] indicates the login was disabled.
+
+[h1]Logging Out a User[/h1]
+
+The [tag auth]logout[/tag] will logout a given user, or the currently logged in user. For example, the following will log out the current user:
+
+[code xml]
+<auth:logout/>
+[/code]
+
+
+[h1]Setting / Checking Passwords[/h1]
+
+The [tag auth]set-password[/tag] can set (and hash) a password for the given user. Here's an example:
+
+[code xml]
+<auth:set-password user="john" password="'ayom74'" />
+[/code]
+
+You can [i]check[/i] a password with the [tag auth]check-password[/tag] tag. Here's an example:
+
+[code xml]
+<auth:check-password user="john" password="'ayom74'" dst="passed" />
+<if test="passed">
+    <echo>Password is correct!</echo>
+</if>
+<else>
+    <echo>Password failed!</echo>
+</else>
+[/code]
+
+[h1]Auth Commands[/h1]
+
+Moya Auth has a number of commands you can invoke from the command line, including commands to create / edit permissions, groups and users.
+
+Enter the following from a project directory to view all the commands available:
+
+[code]
+$ moya auth#
+[/code]

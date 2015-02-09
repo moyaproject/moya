@@ -1,0 +1,23 @@
+<moya xmlns:let="http://moyaproject.com/let">
+	<tag name="test">
+		<echo>Hello</echo>
+		<yield/>
+		<echo>!</echo>
+	</tag>
+	<tag name="repeat3">
+		<repeat times="3">
+			<yield let:bar="'egg'"/>
+		</repeat>
+	</tag>
+	<macro docname="main">
+		<echo>test</echo>
+		<let-str foo="baz" />
+		<test>
+			<echo>Will</echo>
+		</test>
+		<repeat3>
+			<echo>${foo} - ${bar}</echo>
+		</repeat3>
+	</macro>
+</moya>
+

@@ -1,0 +1,6 @@
+<table{% attrib class=table.class, id=(table.id or self.id) %}>
+{%- if table.caption -%}
+<caption>${table.caption}</caption>
+{% endif %}
+{%- children -%}
+</table>

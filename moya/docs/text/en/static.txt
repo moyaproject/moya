@@ -1,0 +1,69 @@
+[title Moya Static]
+
+Moya Static serves files from any filesystem in the project, and can generate index pages.
+
+[h1]Installation[/h1]
+
+Moya Static is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.static"/>
+[/code]
+
+The above line should be in your [tag]server[/tag] declaration.
+
+You can install the library with the following:
+
+[code xml]
+<install name="media" lib="moya.static" mount="/static/"/>
+[/code]
+
+[aside]If you created your project with [b]moya start project[/b], the Moya Static will have been pre-installed.[/aside]
+
+[h1]Settings[/h1]
+
+[setting]dirlist = <yes/no>[/setting]
+
+If set to [c]yes[/c] then Moya Static will render index pages containing a directory listing. It is useful to have this enabled during development so you can see exactly what files are being served, but you may want to disable this on a production site.
+
+[setting]fs = <FILESYSTEM>[/setting]
+
+Set this to one of the [link project#filesystems]filesystems[/link] you would like to serve files from.
+
+[setting]hide = <WILDCARD LIST>[/setting]
+
+This should be a list of [i]wildcards[/i] that should [i]not[/i] be served. You might want to hide temporary / configuration files for example.
+
+Here's how you would hide files with a filename that begin with a dot (hidden files in linux) and files ending with a tilde (~), which are often used as temporary files:
+
+[code ini]
+hide = .*
+    *~
+[/code]
+
+[setting]index = <INDEX FILES>[/setting]
+
+This setting applies to index pages only, i.e. URLs ending with a forward slash. If any of the specified files are present, then Moya will serve them as HTML. If used, this setting is typically set to the following, to emulate the classic behavior of web servers:
+
+[code ini]
+index = index.htm
+    index.html
+[/code]
+
+[h1]Moya Serve Command[/h1]
+
+The [c]moya serve[/c] command uses Moya Static to serve the contents of a directory (without the need to create a project). For instance, the following command will serve the files in the current directory (and subdirectories):
+
+[code]
+$ moya serve .
+[/code]
+
+If you run this, you can visit [c]http://127.0.0.1:8000[/c] to view the directory contents.
+
+You may set the [i]host[/i] and [i]port[/i] for the web server from the command line. The following will display the details in the terminal:
+
+[code]
+$ moya serve -h
+[/code]
+
+[alert NOTE]This comand is useful to serve files in a pinch, but isn't intended for production.[/alert]

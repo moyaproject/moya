@@ -1,0 +1,9 @@
+<thead>
+	<tr>
+	{%- for header in headers -%}
+	<th>${header}</th>
+	{%- empty -%}
+	{%- children -%}
+	{%- endfor -%}
+	</tr>
+</thead>

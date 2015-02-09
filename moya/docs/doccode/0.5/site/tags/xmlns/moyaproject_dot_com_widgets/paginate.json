@@ -1,0 +1,113 @@
+{
+    "name": "paginate",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "paginate",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 106)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "paginate a list of results",
+        "tag_name": "paginate",
+        "params": {
+            "src": {
+                "default_display": null,
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Sequence to paginate.",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "pagesize": {
+                "default_display": "10",
+                "name": "pagesize",
+                "missing": true,
+                "default": "10",
+                "doc": "Number of items in a page.",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "auto": {
+                "default_display": "yes",
+                "name": "auto",
+                "missing": true,
+                "default": "yes",
+                "doc": "If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "object",
+                "name": "dst",
+                "missing": true,
+                "default": "object",
+                "doc": "The name to give to each item in the sequence.",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "page": {
+                "default_display": ".request.GET.page or 1",
+                "name": "page",
+                "missing": true,
+                "default": ".request.GET.page or 1",
+                "doc": "Current page to display (default retrieves page from the query string).",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.paginate"
+}

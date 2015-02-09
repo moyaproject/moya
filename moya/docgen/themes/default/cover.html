@@ -1,0 +1,74 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${long_name}{% endblock %}
+
+{% block "body" %}
+<div class="container">
+
+    <div class="info well well-sm">
+        <dl class="dl-horizontal lib-details">
+            {% if lib.url %}
+            <dt>URL</dt>
+            <dd><a href="${lib.url}">${lib.url}</a></dd>
+            {% endif %}
+
+            <dt>Long Name</dt>
+            <dd>${long_name}</dd>
+
+            <dt>Author Name</dt>
+            <dd>${author.name}</dd>
+            {% if author.url %}
+            <dt>Author URL</dt>
+            <dd><a href="${lib.url}">${author.url}</a></dd>
+            {% endif %}
+            <dt>Organization</dt>
+            <dd>${author.organization}</dd>
+        </dl>
+    </div>
+
+	<h1>${lib.title or long_name}</h1>
+	<p>
+        <strong>${long_name}</strong> is a library for <a href="http://moyaproject.com">Moya web development framework</a>
+    </p>
+
+	<h2>Documentation</h2>
+	{{{INDEX main}}}
+	{%- if .docs['tags.index'] %}
+
+	{% with index=.docs['tags.index'] %}
+    {% if index.data.tags %}
+    <h2>Tags</h2>
+    <p>${lib.title} defines the following tags:</p>
+	<ul>
+	{%- for tag in index.data.tags %}
+		<li>
+			<a href="tags/${slug:tag.namespace}/tag_${slug:tag.tag_name}.html">&lt;${tag.tag_name}&gt;</a>
+		</li>
+	{%- endfor %}
+	</ul>
+    {% endif %}
+	{% endwith %}
+	{%- endif %}
+
+    {% with index=.docs['command_index.index'] %}
+    {% if index.data.commands %}
+    <h2>Commands</h2>
+    <p>${lib.title} defines the following command line tools:</p>
+    <ul>
+    {%- for cmd in index.data.commands %}
+        <li>
+            ${.urls.command[cmd.name]}
+            <a href="${relto:.urls.command[cmd.name]}">
+            <tt>${cmd.name}</tt>
+            </a>
+        </li>
+    {% endfor %}
+    <ul>
+    {% endif %}
+    {% endwith %}
+
+</div>
+
+
+
+{% endblock %}

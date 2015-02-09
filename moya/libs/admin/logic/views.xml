@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms">
+
+    <view libname="view.front" content="#content.front">
+
+    </view>
+
+    <macro libname="get_module">
+        <find-element tag="module" let:slug="module or .url.module" dst="module" from="${appname or .url.appname}"/>
+        <not-found if="not module" />
+        <return-dict let:params="module.params" />
+    </macro>
+
+    <macro libname="get_table">
+        <find-element tag="table"
+            let:slug="table or .url.table" from="${appname or .url.appname}" dst="table" />
+        <not-found if="not table"/>
+        <return value="table" />
+    </macro>
+
+    <view libname="view.table" content="#content.table">
+        <let ids="set:.request.multi.GET.id" />
+        <call macro="#get_module" dst="module" />
+        <call macro="#get_table" dst="table" />
+        <get-children element="table" dst="columns" tag="column"/>
+        <let search=".request.GET.q" />
+        <!-- <let back_url=".request.path_qs" if=".request.method=='GET'" /> -->
+
+        <if test=".request.GET.go=='action'">
+            <let action="url:.request.GET.action"/>
+            <let action_params="copy:action.query"/>
+            <let action_params.id=".request.multi.GET.id" />
+            <let action_params.back="urlupdate:[action_params.back.0, id=ids]" />
+            <get-url name="admin_table_action" with="url" dst="action_url" query="action_params"/>
+            <redirect-to url="${action_url}" />
+        </if>
+
+    </view>
+
+
+    <view libname="view.table.picker" content="#content.table.picker">
+        <let ids="set:.request.multi.GET.id" />
+        <call macro="#get_table" dst="table" />
+        <get-children element="table" dst="columns" tag="column"/>
+        <let options=".request.GET.options or ''"/>
+        <let selected="object[.request.GET.field]"/>
+        <let search=".request.GET.q" />
+        <let field=".url.field"/>
+    </view>
+
+
+    <view libname="view.table.picker.single" content="#content.table.picker.single">
+        <let ids="set:.request.multi.GET.id" />
+        <call macro="#get_table" dst="table" />
+        <get-children element="table" dst="columns" tag="column"/>
+        <let options=".request.GET.options or ''"/>
+        <let selected="object[.request.GET.field]"/>
+        <let search=".request.GET.q" />
+        <let field=".url.field"/>
+    </view>
+
+
+    <view libname="view.module" content="#content.cover">
+        <call macro="#get_module" dst="module" />
+        <serve-content withscope="yes" content="${module.params.content}"
+            from="${.url.appname}" if="module.params.content"/>
+    </view>
+
+    <view libname="view.table.edit" content="#content.table.edit">
+        <call macro="#get_module" dst="module" />
+        <call macro="#get_table" dst="table" />
+        <db:get-required model="${table.params.model}" from="${.url.appname}" let:id="url.pk" dst="object" />
+        <db:inspect model="${table.params.model}" from="${.url.appname}" dst="model" />
+        <forms:get form="#form.edit" let:model="model" let:object="object" dst="form" />
+        <if-post>
+            <forms:validate src="form">
+                <forms:apply src="form" dst="object" />
+                <db:commit/>
+                <!-- Get the form again, because a signal could have modified the object -->
+                <forms:get form="#form.edit" let:model="model" let:object="object" dst="form" bind="None" />
+                <true dst="success" />
+            </forms:validate>
+        </if-post>
+    </view>
+
+    <view libname="view.table.action" content="#content.table.action">
+        <call macro="#get_module" dst="module" />
+        <call macro="#get_table" dst="table" />
+
+        <db:get-column model="${table.params.model}"
+            name="id" from="${.url.appname}" dst="id_column" />
+
+        <if-post>
+            <let object_pks="commasplit:.request.POST.object_pks" />
+            <db:query from="${.url.appname}" model="${table.params.model}" dst="objects"
+                filter="id_column in object_pks"/>
+            <let back_url=".request.POST.back_url" />
+        </if-post>
+        <else>
+            <let ids="list:.request.multi.GET.id" />
+            <db:query from="${.url.appname}" model="${table.params.model}" dst="objects"
+                filter="id_column in ids"/>
+            <map src="objects" dst="object_pks" value="id" />
+            <let back_url=".request.GET.back" />
+            <get-url name="admin_table" with=".url" dst="back_url" if="not back_url"/>
+        </else>
+
+        <forms:get form="#form.delete" dst="form"
+            let:objects="objects" let:object_pks="object_pks" let:back_url="back_url"/>
+
+        <forms:validate src="form" if=".request.POST">
+            <db:delete src="objects" />
+            <true dst="success" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.table.action.post">
+    </view>
+
+    <view libname="view.table.new" content="#content.table.new">
+        <call macro="#get_module" dst="module" />
+        <call macro="#get_table" dst="table" />
+        <db:inspect model="${table.params.model}" from="${.url.appname}" dst="model" />
+        <forms:get form="#form.new" dst="form" let:model="model" let:object="None"/>
+        <if-post>
+            <forms:validate src="form">
+                <db:transaction>
+                    <db:create model="${table.params.model}" from="${.url.appname}" obj="form.data" dst="obj"/>
+                </db:transaction>
+                <catch exception="db.*" dst="exc">
+                    <forms:error>Can't create object: ${exc.msg}</forms:error>
+                </catch>
+                <else>
+                    <let success="yes"/>
+                </else>
+            </forms:validate>
+        </if-post>
+    </view>
+
+</moya>

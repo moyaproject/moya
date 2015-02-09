@@ -1,0 +1,9 @@
+<moya>
+<macro docname="main">
+<input dst="name">What is your name?</input>
+<breakpoint/>
+<if test="name=='Rygel'">
+    <echo>Sorry, we don't serve Hynerians here</echo>
+</if>
+</macro>
+</moya>

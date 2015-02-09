@@ -1,0 +1,21 @@
+<uigen xmlns="http://moyaproject.com">
+
+<macro libname="debug">
+		
+	<debug>Debug:</debug>
+	<debug>${.libs}</debug>
+	<debug>${.apps}</debug>
+	
+	<call macro="debug2"/>
+	<call macro="uigen.example.blog#blogmacro" />
+	<call macro="siteblog##blogmacro2" />
+</macro>
+
+
+<macro docname="debug2">	
+	<debug>Doc calls work!</debug>
+	<debug>${debug:app}</debug>	
+</macro>
+
+
+</uigen>

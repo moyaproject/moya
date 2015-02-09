@@ -1,0 +1,135 @@
+{
+    "name": "get",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nGet a form object.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "get a form",
+        "tag_name": "get",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source object to fill in fields",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "style": {
+                "default_display": "",
+                "name": "style",
+                "missing": true,
+                "default": null,
+                "doc": "Override form style",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "form": {
+                "default_display": "",
+                "name": "form",
+                "missing": true,
+                "default": null,
+                "doc": "Form reference",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "bind": {
+                "default_display": ".request.method == 'POST' ? .request.multi.POST : None",
+                "name": "bind",
+                "missing": true,
+                "default": ".request.method == 'POST' ? .request.multi.POST : None",
+                "doc": "Object to bind to",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination to store form",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override form template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "blank": {
+                "default_display": "no",
+                "name": "blank",
+                "missing": true,
+                "default": false,
+                "doc": "Blank form?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "action": {
+                "default_display": "",
+                "name": "action",
+                "missing": true,
+                "default": null,
+                "doc": "Form action",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "withscope": {
+                "default_display": "no",
+                "name": "withscope",
+                "missing": true,
+                "default": false,
+                "doc": "Use current scope?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <forms:get form=\"#form.login\" dst=\"form\" />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.get"
+}

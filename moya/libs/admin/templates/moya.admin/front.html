@@ -1,0 +1,15 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>Moya Admin</h1>
+        <p>
+            Make changes to your site here
+        </p>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <p>Welcome <strong>${.user.username}</strong>!</p>
+    {% if .user.previous_login %}
+    <p>You last logged in ${localize:(.now - .user.previous_login)} ago.</p>
+    {% endif %}
+</div>

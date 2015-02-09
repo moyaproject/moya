@@ -1,0 +1,60 @@
+<moya xmlns="http://moyaproject.com"
+     xmlns:forms="http://moyaproject.com/forms">
+
+    <form libname="form.login" xmlns="http://moyaproject.com/forms">
+        <field name="username" type="text" maxlength="30" required="yes" src="username" />
+        <field name="password" type="password" maxlength="30" required="yes" src="password" />
+        <validate-field field="username">
+            <fail if="len:username lt 3">
+                Username should be 3 characters in length, or more.
+            </fail>
+        </validate-field>
+        <validate-field field="password">
+            <fail if="len:password lt 3">
+                Password should be 3 characters or more.
+            </fail>
+        </validate-field>
+
+    </form>
+
+
+    <form libname="form.signup" xmlns="http://moyaproject.com/forms">
+        <field name="first_name" type="text" dst="newuser.first_name" required="yes"/>
+        <field name="last_name" type="text" dst="newuser.last_name" required="yes"/>
+        <field name="username" type="text" dst="newuser.username" required="yes"/>
+        <field name="password" type="text" dst="newuser.password" required="yes"/>
+        <validate-field field="password">
+            <fail if="len:field lt 5">
+                <text lang="en">Passwords should be at least 5 characters</text>
+            </fail>
+        </validate-field>
+    </form>
+
+
+    <macro docname="main">
+
+        <repeat>
+
+            <dict dst="post">
+                <input dst="username">Username: </input>
+                <input dst="password">Password: </input>
+            </dict>
+
+            <forms:get form="#form.login" dst="f" bind="post" />
+            <forms:validate src="f" />
+            <if test="f.ok">
+                <dict dst="user" />
+                <forms:apply src="f" dst="user"/>
+                <echo>Logged in user</echo>
+                <echo obj="user"/>
+                <break/>
+            </if>
+            <else>
+                <echo>Form did not validate</echo>
+                <echo src="f.errors"/>
+            </else>
+        </repeat>
+
+    </macro>
+
+</moya>

@@ -1,0 +1,69 @@
+{
+    "name": "columns",
+    "doc_namespace": "xmlns.http://moyaproject.com/tables",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "columns",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_tables",
+        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "doc": "\nDefines the columns in a [tag tables]table[/tag].\n\n",
+        "namespace": "http://moyaproject.com/tables",
+        "synopsis": "define the columns in a table",
+        "tag_name": "columns",
+        "params": {
+            "headers": {
+                "default_display": "",
+                "name": "headers",
+                "missing": true,
+                "default": null,
+                "doc": "Headers",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "\"moya.tables\"",
+                "name": "from",
+                "missing": true,
+                "default": "moya.tables",
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "\"columns.html\"",
+                "name": "template",
+                "missing": true,
+                "default": "columns.html",
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/tables.columns"
+}

@@ -1,0 +1,26 @@
+
+<div class="moya-admin-date-input">
+    <input type="hidden" class="moya-admin-datetime" name="${field.name}" value="${str:field.value}"/>
+
+    <input placeholder="YYYY-MM-DD" class="moya-admin-date form-control" id="${field.id}-date" type="date"
+        value="${field.value.html5_date}">
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-time"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-date-now">
+                    {% trans %}Now{% end %}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="javascript:void(0)" class="moya-admin-date-clear">
+                    {% trans %}Clear{% end %}
+                </a>
+            <li>
+        </ul>
+    </div>
+</div>

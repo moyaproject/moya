@@ -1,0 +1,54 @@
+{% extends "/base.html" %}
+
+{% block "title" %}${title}{% endblock %}
+
+{% def "render_doctree" -%}
+<ul>
+    {% for node in nodes %}
+    <li><a href="${url}#${slug:node.slug}">${node.title}</a>
+    {%- if node.children and level lt 2 %}{% call "render_doctree" with nodes=node.children, url=url, level=level+1 %}{% endif -%}
+    </li>
+    {% endfor %}
+</ul>
+{%- enddef %}
+
+{% def "pager" %}
+{% if .id != "doc.index" %}
+<div class="doc-nav">
+    <ul class="pager">
+        {%- if .nav.prev %}
+        <li class="previous">
+            <a href="${relto:.urls.doc[slug:.nav.prev.doc.name]}">&larr; ${.nav.prev.index}. ${.nav.prev.doc.data.title}</a>
+        </li>
+        {% elif .id != 'doc.index' %}
+        <li class="previous">
+            <a href="${relto:.urls.doc.index}">&larr; Index</a>
+        </li>
+        {%- endif %}
+        {%- if .nav.next %}
+        <li class="next">
+            <a href="${relto:.urls.doc[slug:.nav.next.doc.name]}">${.nav.next.index}. ${.nav.next.doc.data.title} &rarr;</a>
+        </li>
+        {%- endif %}
+    </ul>
+</div>
+{% endif %}
+{% enddef %}
+
+{% block "body" %}
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            {% call "pager" %}
+            <h1>${title}</h1>
+            ${html:(body|.bbcode(path=.data.source))}
+            {% call "pager" %}
+        </div>
+        {% if .doc.doctree %}
+        <div class="doctree-panel col-md-3">
+        {% call "render_doctree" with nodes=.doc.doctree, level=1 %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

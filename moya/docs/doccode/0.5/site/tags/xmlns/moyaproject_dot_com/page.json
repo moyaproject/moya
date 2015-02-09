@@ -1,0 +1,80 @@
+{
+    "name": "page",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "page",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Chop a sequence in to a [i]page[/i].\n\n    This breaks up a sequence in to a page, based on a page size and index. Useful for paginating search results.\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "get a page of results",
+        "tag_name": "page",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Value to slice",
+                "required": true,
+                "type": "reference",
+                "metavar": "ELEMENTREF",
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination for slice",
+                "required": true,
+                "type": "reference",
+                "metavar": "ELEMENTREF",
+                "choices": null
+            },
+            "page": {
+                "default_display": ".request.GET.page or 1",
+                "name": "page",
+                "missing": true,
+                "default": ".request.GET.page or 1",
+                "doc": "Page",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "pagesize": {
+                "default_display": "10",
+                "name": "pagesize",
+                "missing": true,
+                "default": 10,
+                "doc": "Page size",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <page src=\"results\" page=\"2\" pagesize=\"10\" />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.page"
+}

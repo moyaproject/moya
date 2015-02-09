@@ -1,0 +1,8 @@
+<moya xmlns="http://moyaproject.com">
+    <macro docname="main">
+       <let infinity="1/0"/>
+       <catch>
+           <echo>Can't divide by zero!</echo>
+       </catch>
+    </macro>
+</moya>

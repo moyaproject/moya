@@ -1,0 +1,70 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:tbl="http://moyaproject.com/tables"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:moya="http://moyaproject.com">
+
+    <mountpoint name="tests">
+        <url route="/" view="#view.tests" />
+    </mountpoint>
+
+    <content libname="content.tests">
+
+        <json dst="products">
+            [
+                {"name": "Maki Sushi Bento", "stock": 20},
+                {"name": "Veggie Sushi Bento", "stock": 5},
+                {"name": "Salmon Nigiri Bento", "stock": 7},
+                {"name": "Mixed Sushi Bento", "stock": 12}
+            ]
+        </json>
+
+        <section name="body">
+            <html:h3>Table Tests</html:h3>
+
+            <table class="table table-striped" xmlns="http://moyaproject.com/tables" caption="An example table">
+                <columns>
+                    <header>Product</header>
+                    <header>Stock</header>
+                </columns>
+                <rows src="products" dst="product">
+                    <cell>${product.name}</cell>
+                    <cell>${product.stock}</cell>
+                </rows>
+            </table>
+
+            <table class="table table-striped" xmlns="http://moyaproject.com/tables" caption="With sortable columns">
+                <columns>
+                    <sort-header name="product">Product</sort-header>
+                    <sort-header name="stock">Stock</sort-header>
+                </columns>
+                <rows src="products" dst="product">
+                    <cell>${product.name}</cell>
+                    <cell>${product.stock}</cell>
+                </rows>
+            </table>
+
+            <table class="table table-striped"  xmlns="http://moyaproject.com/tables">
+                <columns>
+                    <header>Product</header>
+                    <header>Stock</header>
+                </columns>
+                <rows>
+                    <row>
+                        <cell>Test</cell>
+                        <cell>1</cell>
+                    </row>
+                    <row>
+                        <cell>Test</cell>
+                        <cell>2</cell>
+                    </row>
+                </rows>
+            </table>
+
+        </section>
+    </content>
+
+    <view libname="view.tests" content="#content.tests">
+
+    </view>
+
+</moya>

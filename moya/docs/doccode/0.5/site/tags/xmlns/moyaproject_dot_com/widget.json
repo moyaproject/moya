@@ -1,0 +1,101 @@
+{
+    "name": "widget",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "widget",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "Create a widget",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a re-uasable widget",
+        "tag_name": "widget",
+        "params": {
+            "container": {
+                "default_display": "yes",
+                "name": "container",
+                "missing": true,
+                "default": true,
+                "doc": "Is this widget a container?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Tag name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "undocumented": {
+                "default_display": "no",
+                "name": "undocumented",
+                "missing": true,
+                "default": false,
+                "doc": "Set to yes to disabled documentation for this tag",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "synopsis": {
+                "default_display": "",
+                "name": "synopsis",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of the widget",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "let": {
+                "default_display": "",
+                "name": "let",
+                "missing": true,
+                "default": null,
+                "doc": "Let destination",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "choices": null
+            },
+            "ns": {
+                "default_display": "",
+                "name": "ns",
+                "missing": true,
+                "default": null,
+                "doc": "XML Namespace",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.widget"
+}

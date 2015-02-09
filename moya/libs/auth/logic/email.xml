@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+    <email libname="email.password_reset" xmlns="http://moyaproject.com/email"
+        from="${.app.settings.email_from}"
+        subject="${project_title} password reset">
+        <text template="email/password_reset.txt" />
+    </email>
+
+</moya>

@@ -1,0 +1,3 @@
+[title Introduction]
+
+Moya Comments is a general solution for adding comments to a page.

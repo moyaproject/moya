@@ -1,0 +1,48 @@
+<moya xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="fib">
+        <let fib="[0, 1]"/>
+        <repeat times="count - 2">
+            <append value="fib[-1] + fib[-2]" src="fib" />
+        </repeat>
+        <return value="fib" />
+    </macro>
+
+    <tag name="fib">
+        <signature>
+            <attribute name="count" type="integer" />
+        </signature>
+        <let fib="[0, 1]"/>
+        <repeat times="count - 2">
+            <append value="fib[-1] + fib[-2]" src="fib" />
+        </repeat>
+        <return value="fib" />
+    </tag>
+
+    <tag name="rfib">
+        <signature>
+            <attribute name="n" type="expression" default="0"/>
+        </signature>
+
+        <return if="n gt 1">
+            <sum>
+                <rfib n="n-1"/>
+                <rfib n="n-2"/>
+            </sum>
+        </return>
+        <return value="n" />
+    </tag>
+
+    <macro docname="main">
+
+        <fib count="20" src="fib_list" />
+        <echo obj="fib_list" />
+
+
+        <rfib n="19" dst="f" />
+        <echo>${f}</echo>
+
+    </macro>
+
+
+</moya>

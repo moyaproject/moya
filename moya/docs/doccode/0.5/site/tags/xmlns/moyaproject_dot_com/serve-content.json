@@ -1,0 +1,80 @@
+{
+    "name": "serve-content",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "serve-content",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "Render content and immediately serve it. Note that this tag will stop processing any more logic code.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "render and serve content",
+        "tag_name": "serve-content",
+        "params": {
+            "content": {
+                "default_display": "",
+                "name": "content",
+                "missing": true,
+                "default": null,
+                "doc": "Reference to renderable content",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "withscope": {
+                "default_display": "no",
+                "name": "withscope",
+                "missing": true,
+                "default": false,
+                "doc": "Use current scope?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <serve-content content=\"#content.front\" let:date=\".now\"/>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.serve-content"
+}

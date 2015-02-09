@@ -1,0 +1,279 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:w="http://moyaproject.com/widgets"
+      xmlns:email="http://moyaproject.com/email">
+
+    <mountpoint name="main">
+        <url route="/new/" methods="GET" view="#view.newcomment" name="newcomment"/>
+        <url route="/new/" methods="POST" view="#view.newcomment.post" />
+        <url route="/anon/" methods="GET" view="#view.anoncomment" name="anoncomment" />
+        <url route="/anon/" methods="POST" view="#view.anoncomment.post" />
+        <url route="/pending/" methods="GET" view="#view.pendingcomment" name="pendingcomment" />
+        <url route="/action/" methods="GET" view="#view.commentaction.get" name="commentaction" />
+        <url route="/action/" methods="POST" view="#view.commentaction.post"  />
+        <url route="/unsubscribe/{uid}/" methods="GET,POST" view="#view.unsubscribe" name="unsubscribe" />
+        <url route="/subscription/{comment_object_id}/" methods="GET,POST" view="#view.subscription" name="subscription" />
+    </mountpoint>
+
+    <content libname="content.anoncomment" template="base.html">
+        <title>New Comment</title>
+        <section name="body">
+            <html:div class="alert alert-warning">
+                <markdown>**Please enter the following details to post your comment**
+
+If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.pendingcomment}) to post with your saved details.
+</markdown>
+            </html:div>
+            <render src="form" />
+        </section>
+    </content>
+
+    <view libname="view.newcomment">
+        <forms:get form="#form.anoncomment" dst="form"/>
+        <serve-content content="#content.anoncomment" let:form="form"/>
+    </view>
+
+    <macro libname="create_comment">
+        <db:get-required model="#CommentObject"
+            let:object="object"
+            let:namespace="namespace"
+            dst="commentobject" />
+
+        <redirect-to path="${commentobject.object_url}" if="commentobject.hide or not commentobject.allow_new" />
+        <db:get model="#Comment" dst="parent" if="parentid" let:id="parentid" />
+        <db:transaction>
+            <db:create model="#Comment" dst="comment"
+                let:commenter_ip=".request.client_addr"
+                let:parent="parent or None"
+                let:commentobject="commentobject"
+                let:level="parent ? parent.level + 1 : 0" />
+            <let commentobject.count="commentobject.count+1"
+                commentobject.updates="commentobject.updates+1" />
+        </db:transaction>
+        <return value="comment" />
+    </macro>
+
+    <macro libname="check_subscriptions">
+        <!-- Sends any subscription related emails -->
+        <if test="not comment.parent">
+            <db:query model="#ObjectSubscription" dst="subscriptions"
+                filter="#ObjectSubscription.commentobject==comment.commentobject" distinct="yes" />
+            <for src="subscriptions" dst="sub" filter="sub.user != .user">
+                <log level="debug">Sending email to user ${sub.user}</log>
+                <email:send email="#email.subscription"
+                           to="${sub.user.email}"
+                           let:commentobject="comment.commentobject"
+                           let:subscription="sub"
+                           let:comment="comment"
+                           dst="email" fail_silently="False"/>
+            </for>
+        </if>
+        <else>
+            <db:query model="#Subscription" dst="subscriptions"
+                filter="#Subscription.comment==comment.parent" distinct="yes" />
+            <for src="subscriptions" dst="sub">
+                <log level="debug">Send email to ${sub.email}</log>
+                <email:send email="#email.commentsubscription"
+                           to="${sub.email}"
+                           let:subscription="sub"
+                           let:comment="comment" dst="email" />
+            </for>
+        </else>
+    </macro>
+
+    <macro libname="subscribe">
+        <log level="debug">subscribing to ${comment}</log>
+        <make-token dst="token" size="16"/>
+        <db:create model="#Subscription" dst="subscription" if="email and comment and '@' in email"
+            let:email="email" let:name="name" let:comment="comment" let:uid="token"/>
+        <catch exception="db.integrity-error">
+            <log level="debug">already subscribed</log>
+            <return/>
+        </catch>
+        <log level="debug">${email} subscribed to ${comment}</log>
+    </macro>
+
+    <view libname="view.newcomment.post">
+        <if test="not .user">
+            <dict dst=".session.pendingcomment" />
+            <update src=".session.pendingcomment" values=".request.POST" />
+            <redirect name="anoncomment" />
+        </if>
+        <forms:get form="#form.comment" dst="form"/>
+        <forms:validate-post src="form">
+            <call macro="#create_comment" dst="comment"
+                let:parentid="form.data.parentid"
+                let:object="form.data.object"
+                let:namespace="form.data.namespace"
+                let:object_url="form.data.object_url"/>
+
+            <let comment.user=".user"
+                 comment.moderated="yes"
+                 comment.text="form.data.text"
+                 comment.format="comment.commentobject.markup"/>
+            <db:commit/>
+
+            <call macro="#subscribe" if="form.data.subscribe"
+                let:email=".user.email or comment.commenter_email"
+                let:comment="comment"
+                let:name=".user.first_name or .user.username or comment.commenter_name" />
+
+
+            <call macro="#check_subscriptions" let:comment="comment" />
+            <redirect-to url="${form.data.object_url}" fragment="comment${comment.id}"/>
+        </forms:validate-post>
+    </view>
+
+    <view libname="view.anoncomment">
+        <forms:get form="#form.anoncomment" dst="form"/>
+        <update src="form" values=".session.pendingcomment" />
+        <serve-content content="#content.anoncomment" let:form="form"/>
+    </view>
+
+    <view libname="view.anoncomment.post">
+        <forms:get form="#form.anoncomment" dst="form"/>
+        <forms:validate-post src="form">
+            <if test="form.data.save">
+                <set-cookie name="commenter_name" maxage="30d" value="${form.data.commenter_name}"/>
+                <set-cookie name="commenter_url" maxage="30d" value="${form.data.commenter_url}"/>
+                <set-cookie name="commenter_email" maxage="30d" value="${form.data.commenter_email}"/>
+            </if>
+            <call macro="#create_comment" dst="comment"
+                let:parentid="form.data.parentid"
+                let:object="form.data.object"
+                let:namespace="form.data.namespace"
+                let:object_url="form.data.object_url"/>
+            <let comment.text="form.data.text"
+                 comment.format="comment.commentobject.markup"
+                 comment.commenter_name="form.data.commenter_name"
+                 comment.commenter_url="form.data.commenter_url"
+                 comment.commenter_email="form.data.commenter_email"/>
+            <db:commit />
+            <call macro="#check_subscriptions" let:comment="comment" />
+
+            <call macro="#subscribe" if="form.data.subscribe"
+                let:email="comment.commenter_email"
+                let:comment="comment"
+                let:name="comment.commenter_name"/>
+
+            <redirect-to url="${.session.pendingcomment.object_url}" fragment="comment${comment.id}" />
+        </forms:validate-post>
+        <serve-content content="#content.anoncomment" let:form="form"/>
+    </view>
+
+    <view libname="view.pendingcomment" content="#content.pending.error">
+        <not-found if="not .user"/>
+        <forms:get form="#form.comment" dst="form" bind=".session.pendingcomment"/>
+        <forms:validate src="form">
+            <call macro="#create_comment" dst="comment"
+                let:parentid="form.data.parentid"
+                let:object="form.data.object"
+                let:namespace="form.data.namespace"
+                let:object_url="form.data.object_url"
+                let:subscribe="form.data.subscribe" />
+
+            <let comment.text="form.data.text"
+                 comment.format="fcomment.commentobject.markup"
+                 comment.user=".user"/>
+
+            <db:commit />
+            <call macro="#check_subscriptions" let:comment="comment" />
+
+            <let url=".session.pendingcomment.object_url" />
+            <none dst=".session.pendingcomment" />
+            <redirect-to url="${url}" fragment="comment${comment.id}" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.commentaction.get" content="#content.confirmation">
+        <db:get-required model="#CommentObject" dst="comment"
+            let:namespace=".request.GET.namespace"
+            let:object=".request.GET.object" />
+        <let action=".request.GET.action" />
+        <let url=".request.GET.url or comment.object_url" />
+        <if test="action=='disable'">
+            <render dst="message"><bbcode>Disable comments for [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Disable</str>
+        </if>
+        <if test="action=='enable'">
+            <render dst="message"><bbcode>Enable comments for [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Enable</str>
+        </if>
+        <if test="action=='hide'">
+            <render dst="message"><bbcode>Hide comments for [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Hide</str>
+        </if>
+        <if test="action=='show'">
+            <render dst="message"><bbcode>Show comments for [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Show</str>
+        </if>
+        <forms:get form="#form.confirm" dst="form"
+            let:message="message" let:button="button" let:comment_id="comment.id" let:action="action" let:url="url"/>
+    </view>
+
+    <view libname="view.commentaction.post">
+        <db:get-required model="#CommentObject" dst="commentobject"
+            let:id=".request.POST.comment_id" />
+        <let url=".request.POST.url"/>
+        <redirect-to path="${url}" if=".request.POST.cancel" />
+        <let action=".request.POST.action" />
+
+        <db:transaction>
+            <let commentobject.allow_new="False" if="action=='disable'"/>
+            <let commentobject.allow_new="True" if="action=='enable'"/>
+            <let commentobject.hide="False" if="action=='show'"/>
+            <let commentobject.hide="True" if="action=='hide'"/>
+            <let commentobject.updates="commentobject.updates+1" />
+        </db:transaction>
+        <redirect-to path="${url}#comments" />
+    </view>
+
+    <view libname="view.unsubscribe" content="#content.unsubscribe">
+        <db:get model="#Subscription" let:uid="url.uid" dst="subscription" />
+        <forms:get form="#form.unsubscribe" dst="form" let:subscription="subscription"/>
+        <forms:validate src="form" if=".request.method == 'POST'">
+            <if test="form.data.all">
+                <db:query model="#Subscription" let:email="subscription.email" dst="subs" />
+            </if>
+            <else>
+                <db:query model="#Subscription" let:uid="subscription.uid" dst="subs" />
+            </else>
+            <db:delete src="subs" />
+            <let success="True" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.subscription" content="#content.objectsubscription" requires=".user">
+        <db:get model="#CommentObject" let:id="url.comment_object_id" dst="comment_object"/>
+        <let action=".request.GET.action" />
+        <let url="comment_object.object_url or .request.GET.url" />
+
+        <if test="action=='subscribe'">
+            <render dst="message"><bbcode>Subscribe to comments on [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Subscribe</str>
+        </if>
+        <if test="action=='unsubscribe'">
+            <render dst="message"><bbcode>Unsubscribe from comments on [b]${url}[/b]?</bbcode></render>
+            <str dst="button">Unsubscribe</str>
+        </if>
+        <forms:get form="#form.confirm" dst="form" src="page"
+            let:message="message" let:button="button" let:action="action" let:url="url"/>
+
+        <forms:validate src="form" if=".request.method == 'POST'">
+            <redirect-to path="${form.data.url or url}" if="form.data.cancel" />
+            <let action="form.data.action" url="form.data.url or url" />
+            <if test="action=='subscribe'">
+                <db:create model="#ObjectSubscription" let:user=".user" let:commentobject="comment_object"/>
+                <catch/>
+            </if>
+            <else>
+                <db:query  model="#ObjectSubscription" let:user=".user" let:commentobject="comment_object" action="delete" />
+            </else>
+            <redirect-to path="${url}" />
+        </forms:validate>
+    </view>
+
+</moya>

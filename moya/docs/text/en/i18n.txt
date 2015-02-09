@@ -1,0 +1,3 @@
+[title Internationalization]
+
+Internationalization is the process of adapting your project to support more than a single region. In addition to translating the text of you project, this also means displaying currency, dates, numbers and time in a regional format.

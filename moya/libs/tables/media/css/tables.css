@@ -1,0 +1,21 @@
+.moya-tables-sortable a
+{
+    text-decoration:normal;
+    color:inherit;
+}
+
+.moya-tables-sortable a:hover
+{
+    color:#428bca;
+    text-decoration:none;
+}
+
+.moya-tables-sortable.sort-active.sort-asc a::after
+{
+    content: ' ↑';
+}
+
+.moya-tables-sortable.sort-active.sort-desc a::after
+{
+    content: ' ↓';
+}

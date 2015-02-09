@@ -1,0 +1,49 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <form libname="form.page" legend="Page" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input class="input-xxlarge" name="name" label="Name" maxlength="50" placeholder="Unique name" src="name" dst="name" required="yes"/>
+        <input class="input-xxlarge" name="title" label="Page Title" maxlength="60" src="title" dst="title" required="yes"/>
+        <field name="markup" label="Page Content" src="markup" dst="markup">
+            <wysihtml5:editor/>
+        </field>
+        <validate-field field="name">
+            <fail if="name == 'createpage'">
+                This is a reserved name, please pick another name
+            </fail>
+        </validate-field>
+    </form>
+
+    <form extends="#form.page" libname="form.newpage" legend="New Page" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <submit-button class="btn-primary" name="submit" text="Create Page"/>
+        <validate-field field="name">
+            <db:get model="#Page" let:name="value" dst="page" />
+            <fail if="page">
+                This page exists, please pick another name
+            </fail>
+        </validate-field>
+    </form>
+
+    <form extends="#form.page" libname="form.editpage" legend="Edit Page" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <actions>
+            <submit-button class="btn-primary" name="submit" text="Update"/>
+            <moya:let pagename="page.name" />
+            <html:a class="btn btn-link" href="${.appurls.showpage}">Cancel</html:a>
+        </actions>
+    </form>
+
+    <form libname="form.deletepage" legend="Delete Page" xmlns="http://moyaproject.com/forms">
+        <w:dialog>
+            <moya:markdown>Are you sure you wish to delete page *${page.name}*?</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button text="Cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+</moya>

@@ -1,0 +1,91 @@
+{
+    "name": "verify",
+    "doc_namespace": "xmlns.http://moyaproject.com/recaptcha",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "verify",
+        "lib": "moya.google.recaptcha",
+        "namespace_slug": "moyaproject_dot_com_recaptcha",
+        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
+        "doc": "Verify the response from a re-captcha.",
+        "namespace": "http://moyaproject.com/recaptcha",
+        "synopsis": "verify a recaptcha response",
+        "tag_name": "verify",
+        "params": {
+            "secretkey": {
+                "default_display": "",
+                "name": "secretkey",
+                "missing": true,
+                "default": "",
+                "doc": "Optionally override secretkey from settings.",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "response": {
+                "default_display": null,
+                "name": "response",
+                "missing": true,
+                "default": null,
+                "doc": "The response value (g-recaptcha-response from form)",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/recaptcha.verify"
+}

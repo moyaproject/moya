@@ -1,0 +1,605 @@
+html, body
+{
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    margin:0px;
+    padding:0px;
+    margin:auto;
+    height:100%;
+}
+
+
+#footer
+{
+    color:#aaa;
+    margin-top:-60px;
+    clear:both;
+}
+
+.moya-admin-container
+{
+    min-height:100%;
+    height:100%;
+}
+
+.moya-admin-navigation-column
+{
+    box-shadow:inset -5px 0px 10px #111;
+    height:100%;
+    background-color:#3a3633;
+}
+
+.moya-admin-nav-container
+{
+    /*background-color: #3A3633;*/
+    min-height:100%;
+
+}
+
+.moya-admin-nav-container ul
+{
+	list-style-type:none;
+	padding:0px;
+    margin-bottom:0px;
+}
+
+
+.moya-admin-nav-container ul li
+{
+    line-height:28px;
+    /* font-size:10pt; */
+
+}
+
+.moya-admin-nav-container a
+{
+
+    color:#fff;
+
+    text-decoration:none;
+
+    /*text-shadow: 0 1px 0 #fff;*/
+
+    color:#ccc
+}
+
+.moya-admin-nav-container .module-header
+{
+    display:block;
+}
+
+.moya-admin-nav-container ul li a
+{
+	display:inline-block;
+    padding:2px 2px;
+}
+
+ul.moya-admin-nav-sub li a
+{
+    padding-left:32px;
+}
+
+ul .moya-admin-nav-module-link.active
+{
+     transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    -webkit-transform:rotate(90deg);
+
+}
+
+.moya-admin-nav-module-link.contracted
+{
+    transform:rotate(0deg);
+    -ms-transform:rotate(0deg);
+    -webkit-transform:rotate(0deg);
+
+    animation:spin-up .2s linear;
+    -webkit-animation:spin-up .2s linear;
+}
+
+.moya-admin-nav-module-link.expanded
+{
+
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    -webkit-transform:rotate(90deg);
+
+
+    animation:spin-down .2s linear;
+    -webkit-animation:spin-down .2s linear;
+}
+
+@keyframes spin-down {
+    0%{
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(90deg);
+    }
+}
+
+@-webkit-keyframes spin-down {
+    0%{
+        -webkit-transform:rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(90deg);
+    }
+}
+
+@keyframes spin-up {
+    0%{
+        transform:rotate(90deg);
+    }
+    100% {
+        transform:rotate(0deg);
+    }
+}
+
+@-webkit-keyframes spin-up {
+    0%{
+        -webkit-transform:rotate(90deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+
+.moya-admin-nav-container .moya-admin-nav-module-link
+{
+    padding:6px;
+    cursor:pointer;
+}
+
+.moya-admin-nav-container .moya-admin-nav-module-link:hover
+{
+    color:white !important;
+}
+
+.moya-admin-user-bar
+{
+    height:48px;
+    /*background-color:#524C48;*/
+    /*box-shadow:inset -2px 0px 10px #111;*/
+    color:#ccc;
+    line-height:48px;
+    padding-left:36px;
+}
+
+.moya-admin-user-bar img.gravatar
+{
+    border-radius:100%;
+    padding:5px;
+}
+
+.moya-admin-nav-container ul > li > a
+{
+    border-left:4px solid transparent;
+}
+
+.moya-admin-nav-container a:hover
+{
+    color:white;
+}
+
+.moya-admin-nav-container ul > li .module-header
+{
+    border-left:4px solid transparent;
+}
+
+.moya-admin-nav-container ul > li .module-header:hover
+{
+    /* border-left:4px solid #666; */
+}
+
+.moya-admin-nav-container ul > li > a:hover
+{
+	/* background-color:#e9e9e9; */
+    /* border-left:4px solid #666; */
+}
+
+
+ul.moya-admin-nav-sub li a
+{
+    color:#999;
+    /*padding-left:32px;*/
+}
+
+ul.moya-admin-nav-modules
+{
+	margin-bottom:0px;
+	border-radius:8px;
+
+}
+
+.moya-admin-nav-container .scroll-container
+{
+
+}
+
+ul.moya-admin-nav-module > li > a
+{
+
+
+}
+
+ul.moya-admin-nav-module .expand-button
+{
+    color:#999;
+    display:inline-block;
+}
+
+ul.moya-admin-nav-sub
+{
+    display:none;
+}
+
+.moya-admin-nav-module .active ul.moya-admin-nav-sub
+{
+    display:block;
+}
+
+.moya-admin-nav-module .active ul.moya-admin-nav-sub li
+{
+
+}
+
+ul.moya-admin-nav-sub li
+{
+}
+
+ul.moya-admin-nav-sub li.active
+{
+
+}
+
+ul.moya-admin-nav-module li.active .module-header a
+{
+    color:#fff !important;
+}
+
+ul.moya-admin-nav-sub li.active a
+{
+    color:#fff;
+
+    font-weight:bold;
+
+}
+
+li.active a.moya-admin-nav-module-link
+{
+    border-left:4px solid #F0C674;
+
+}
+
+.moya-admin-navigation-column
+{
+    position:fixed;
+    /* font-size:.9em; */
+    width:220px;
+    float:left;
+    overflow:auto;
+
+}
+
+.moya-admin-content-column
+{
+
+    margin-left:220px;
+
+    min-height:100%;
+    background-color:#fff;
+}
+
+.moya-admin-container
+{
+    /*position:absolute;*/
+    top:0;
+    bottom:0;
+
+}
+
+table.moya-admin-table .moya-admin-table-checkbox
+{
+    margin:2px 8px;
+}
+
+
+table.moya-admin-table th
+{
+    white-space:nowrap;
+}
+
+
+table.moya-admin-table th a
+{
+    color:#333;
+}
+
+table.moya-admin-table th a:hover
+{
+    color:#428bca;
+}
+
+.moya-admin-datetime-group
+{
+    display:inline;
+}
+
+.moya-admin-datetime-input
+{
+}
+
+.moya-admin-datetime-input .btn-group, .moya-admin-date-input .btn-group
+{
+    vertical-align:top;
+}
+
+.moya-admin-datetime-input input
+{
+    width:auto;
+    display:inline-block;
+}
+
+.moya-admin-date-input input
+{
+    width:auto;
+    display:inline-block;
+}
+
+.moya-admin-content-column .banner
+{
+    background-color:#474544;
+    border-radius:0px;
+    line-height:32px;
+    margin-bottom:0px;
+
+    color:#fff;
+    min-height:48px;
+}
+
+.moya-admin-content-column .banner .user-link
+{
+    margin-left:2em;
+}
+
+.moya-admin-content-column .user
+{
+    float:right;
+    color:#fff;
+    line-height:48px;
+    min-height:48px;
+    padding-right:0px;
+}
+
+.moya-admin-content-column .user img.gravatar
+{
+    border-radius:100%;
+    padding-right:4px;
+}
+
+.moya-admin-content-column ol.breadcrumb
+{
+    background-color:transparent;
+    display:inline-block;
+    border-radius:0px;
+    margin-bottom:0px;
+}
+
+.moya-admin-content-column .banner a
+{
+    color:rgb(200,200,200);
+}
+
+
+.moya-admin-content-column .banner a:hover
+{
+    color:#fff;
+    text-decoration:none;
+}
+
+.moya-admin-content-column .banner li.active
+{
+    color:#fff;
+}
+
+.moya-admin-content-column .panel
+{
+    border-radius:0px;
+}
+
+.moya-admin-content-column .content
+{
+    background-color:#fff;
+    background-color:#f9f9f9;
+    border-bottom:1px solid #f0f0f0;
+    padding:16px;
+}
+
+.moya-admin-content-column .pagination-panel
+{
+    background-color:#f5f5f5;
+    padding: 0px;
+    margin: 0px;
+    border-bottom:1px solid #ddd;
+    line-height:34px;
+    vertical-align:top;
+
+}
+
+
+.moya-admin-content-column .pagination-panel .pagination-summary
+{
+    display:inline-block;
+    vertical-align:middle;
+    color:#666;
+    margin:6px;
+    padding-left:2px;
+    /*margin-left:1em;*/
+}
+
+.moya-admin-content-column .admin-table .panel
+{
+    margin-bottom:0px;
+}
+
+.moya-admin-content-column .admin-table .pagination
+{
+    margin:0px;
+    margin-right:1em;
+    margin:6px;
+    vertical-align:middle;
+}
+
+@media all and (max-width:767px)
+{
+    .moya-admin-navigation-column
+    {
+        display:none;
+    }
+    .moya-admin-content-column
+    {
+        margin-left:0px;
+    }
+    .pagination-summary
+    {
+        display:none !important;
+    }
+    .moya-admin-content-column .pagination-panel {
+        border-top:1px solid #ddd;
+        width:100%;
+        position:fixed;
+        bottom:0px;
+    }
+}
+
+@media all and (min-width:768px)
+{
+
+    .moya-admin-navigation-header
+    {
+        display:none !important;
+    }
+}
+
+.navbar-toggle
+{
+    margin-bottom:0px;
+}
+
+.admin-table-header
+{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding:0px;
+    padding-top:8px;
+}
+
+.admin-table-picker .admin-table-header
+{
+    flex-wrap: nowrap;
+}
+
+.navbar-toggle .icon-bar
+{
+    background-color: white;
+    opacity: .7;
+}
+
+.navbar-toggle
+{
+    margin-right:0px;
+}
+
+.moya-admin-logout
+{
+    padding-right:24px;
+}
+
+.moya-admin-table-container
+{
+    overflow:auto;
+}
+
+.admin-table-group
+{
+    display:inline-block;
+    padding:8px;
+    /*margin:8px;*/
+    vertical-align:top;
+    white-space: nowrap;
+    flex-grow:1;
+    flex-basis:auto;
+    margin-top:-8px;
+}
+
+.admin-table-group.admin-table-search-bar
+{
+    flex-basis:12em;
+    flex-grow:1;
+}
+
+.admin-table-search-bar .input-group
+{
+
+}
+
+.moya-admin-picker
+{
+    width:100%;
+    height:34em;
+    border:none;
+    border:1px solid #ddd;
+    position:relative;
+    left:0px;
+    top:0px;
+}
+
+.admin-picker-container
+{
+    position:relative;
+}
+
+.admin-picker-shade
+{
+    z-index:10;
+    width:100%;
+    height:34em;
+    position:absolute;
+    top:0px;
+    left:0px;
+    background-color:#f9f9f9;
+    opacity:.5;
+    visibility:hidden;
+}
+
+.picker-control .picker-null
+{
+    display:none;
+}
+
+.picker-control .picker-object
+{
+    display:inline;
+}
+
+.picker-control.null-object .picker-null
+{
+    display:inline;
+}
+
+.picker-control.null-object .picker-object
+{
+    display:none;
+}
+
+.picker-control .picker-clear
+{
+    display:inline;
+}
+
+.picker-control.null-object .picker-clear
+{
+    display:inline;
+}

@@ -1,0 +1,91 @@
+{
+    "name": "add-user-to-group",
+    "doc_namespace": "xmlns.http://moyaproject.com/auth",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "add-user-to-group",
+        "lib": "moya.auth",
+        "namespace_slug": "moyaproject_dot_com_auth",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 172)",
+        "doc": "Add a user to a group",
+        "namespace": "http://moyaproject.com/auth",
+        "synopsis": "add a user to a group",
+        "tag_name": "add-user-to-group",
+        "params": {
+            "group": {
+                "default_display": null,
+                "name": "group",
+                "missing": true,
+                "default": null,
+                "doc": "The name of a group",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "user": {
+                "default_display": null,
+                "name": "user",
+                "missing": true,
+                "default": null,
+                "doc": "A user object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/auth.add-user-to-group"
+}

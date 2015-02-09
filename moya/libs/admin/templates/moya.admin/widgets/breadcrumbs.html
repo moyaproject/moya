@@ -1,0 +1,8 @@
+
+<ol class="breadcrumb">
+    <li><a href="{% url "front" %}">Admin</a></li>
+    {%- if module %}
+    <li><a href="{% url "module" set module=module.slug, appname=appname %}">${module.title}</a></li>
+    {%- endif %}
+    <li class="active">${title}</li>
+</ol>

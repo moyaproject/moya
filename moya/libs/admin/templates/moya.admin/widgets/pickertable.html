@@ -1,0 +1,48 @@
+
+<form class="form-inline admin-table-picker {% if single %}picker-single{% else %}picker-many{% endif %}" role="form" method="GET" action=".">
+    <!-- <input type="hidden" name="back" value="${back_url}"/> -->
+    <input type="hidden" name="field" value="${.request.GET.field}"/>
+    <input type="hidden" name="model" value="${.request.GET.model}"/>
+    <input type="hidden" name="app" value="${.request.GET.app}"/>
+    <input type="hidden" name="pk" value="${.request.GET.pk}"/>
+
+    <div class="panel panel-default">
+        <div class="panel-heading admin-table-header">
+
+            <div class="admin-table-group" style="flex-grow:0;">
+                <div class="admin-table-search" style="float:left; margin-right:12px; margin-top:6px;">
+                    <div class="input-group">
+                        <label class="radio-inline" onclick="load_page('${urlupdate:(show='all',page=None)}');return false;">
+                            <input type="radio" name="show" value="all" {% if .request.GET.show!='selected' %}checked{% endif %}> All
+                        </label>
+                        <label class="radio-inline" onclick="load_page('${urlupdate:(show='selected',page=None)}');return false;">
+                            <input type="radio" name="show" value="selected" {% if .request.GET.show=='selected' %}checked{% endif %}> Selected
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-table-group admin-table-search-bar">
+                <div class="admin-table-query ">
+                    <div class="input-group">
+                        <input name="q" class="input-small form-control" value="${search}" type="search">
+                        <span class="input-group-btn">
+                            {%- if search %}
+                            <a class="btn btn-default reset-search" href="${urlupdate:(q=None)}" title="{% trans %}Reset search{% end %}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {%- endif %}
+                            <button type="submit" class="btn btn-default" title="{% trans %}Search{% end %}">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {%- render self.children.0 -%}
+    </div>
+    {%- render self.children.1 %}
+</form>

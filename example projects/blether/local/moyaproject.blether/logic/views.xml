@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms">
+
+    <view libname="view.front" content="#content.front">
+        <done if="not .user"/>
+        <forms:get form="#form.new-blether" dst="form"/>
+        <forms:validate src="form">
+            <db:create model="#Blether" let:text="form.data.text" let:timeline=".user.timeline" />
+            <forms:get form="#form.new-blether" dst="form" blank="yes"/>
+        </forms:validate>
+        <db:query model="#Blether" dst="blethers" orderby="-posted_time"
+            filter="#Blether.timeline.id in .user.timeline.following or #Blether.timeline == .user.timeline" />
+    </view>
+
+    <view libname="view.timeline" content="#content.user">
+        <db:get-required model="moya.auth#User" let:username="url.username" dst="view_user"/>
+        <db:query model="#Blether" let:timeline="view_user.timeline" dst="blethers" orderby="-posted_time"/>
+        <let following="view_user.timeline in .user.timeline.following"/>
+    </view>
+
+    <view libname="view.follow" content="#content.dialog.follow">
+        <db:get-required model="moya.auth#User" let:username="url.username" dst="follow_user"/>
+        <forms:get form="#form.follow" dst="form" let:user="follow_user" />
+        <forms:validate src="form">
+            <append value="follow_user.timeline" src=".user.timeline.following" if="form.data.follow"/>
+            <redirect name="timeline" let:username="follow_user.username" />
+        </forms:validate>
+    </view>
+
+    <view libname="view.unfollow" content="#content.dialog.unfollow">
+        <db:get-required model="moya.auth#User" let:username="url.username" dst="unfollow_user"/>
+        <forms:get form="#form.unfollow" dst="form" let:user="unfollow_user" />
+        <forms:validate src="form">
+            <remove value="unfollow_user.timeline" src=".user.timeline.following" if="form.data.unfollow"/>
+            <redirect name="timeline" let:username="unfollow_user.username" />
+        </forms:validate>
+    </view>
+
+</moya>

@@ -1,0 +1,12 @@
+<moya xmlns="http://moyaproject.com">
+
+    <macro docname="main">
+
+        <let foo="'bar'" fruit="'apples'" sum="1+2" />
+        <echo obj="foo" />
+        <echo obj="fruit" />
+        <echo obj="sum" />
+
+    </macro>
+
+</moya>

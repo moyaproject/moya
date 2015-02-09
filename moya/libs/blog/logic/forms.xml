@@ -1,0 +1,80 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
+      xmlns:w="http://moyaproject.com/widgets">
+
+    <form libname="form.post" legend="Post" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input class="input-xxlarge" name="title" label="Post Title" maxlength="60" required="yes"/>
+        <input class="input-xxlarge" name="slug" label="Slug" maxlength="60" required="no"
+            inlinehelp="Leave blank to auto-generate a slug" />
+
+        <field name="content" label="Page Content">
+            <wysihtml5:editor/>
+        </field>
+
+        <adapt-field field="slug">
+            <moya:return value="slug:values.title" if="not value"/>
+        </adapt-field>
+    </form>
+
+    <form extends="#form.post" libname="form.newpost" legend="New Post" xmlns="http://moyaproject.com/forms">
+        <actions>
+            <submit-button class="btn-primary" name="action" clicked="create" text="Create"/>
+            <submit-button class="btn-info" name="action" clicked="publish" text="Create &amp; Publish"/>
+        </actions>
+        <validate-field field="slug">
+            <db:get model="#Post" let:slug="slug:value" dst="post"/>
+            <fail if="post">
+                Slug exists, please edit
+            </fail>
+            <fail if="slug:value != lower:value">
+                Slug should only contain letters, numbers and hyphens
+            </fail>
+        </validate-field>
+    </form>
+
+    <form extends="#form.post" libname="form.editpost" legend="Edit Post" xmlns="http://moyaproject.com/forms">
+        <actions>
+            <submit-button class="btn-primary" name="submit" text="Edit Post"/>
+            <html:a class="btn" href="${cancel_url}">Cancel</html:a>
+        </actions>
+    </form>
+
+    <form libname="form.deletepost" legend="Delete Post" xmlns="http://moyaproject.com/forms">
+        <w:dialog>
+            <moya:markdown>Are you sure you wish to delete post *${post.title}*?</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+    <form libname="form.publishpost" legend="Publish Post" xmlns="http://moyaproject.com/forms">
+        <moya:get-url name="showpost" let:slug="post.slug" dst="posturl" />
+        <w:dialog>
+            <moya:markdown>Are you sure you wish to publish post *${post.title}*?</moya:markdown>
+            <moya:markdown>The URL will be **${posturl}**</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="publish" text="Publish" clicked="publish" />
+                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+    <form libname="form.hidepost" legend="Hide Post" xmlns="http://moyaproject.com/forms">
+        <moya:get-url name="showpost" let:slug="post.slug" dst="posturl" />
+        <w:dialog>
+            <moya:markdown>Are you sure you wish to hide post *${post.title}*?</moya:markdown>
+            <moya:markdown>Hidden posts will be visible to admin only</moya:markdown>
+            <w:dialog-buttons>
+                <submit-button class="btn-primary" name="hide" text="Hide" clicked="publish" />
+                <submit-button class="btn" name="cancel" text="cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
+    </form>
+
+</moya>

@@ -1,0 +1,80 @@
+{
+    "name": "get-permissions",
+    "doc_namespace": "xmlns.http://moyaproject.com/auth",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-permissions",
+        "lib": "moya.auth",
+        "namespace_slug": "moyaproject_dot_com_auth",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 5)",
+        "doc": "Get list of permissions for a given user",
+        "namespace": "http://moyaproject.com/auth",
+        "synopsis": "query user permissions",
+        "tag_name": "get-permissions",
+        "params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
+            "user": {
+                "default_display": null,
+                "name": "user",
+                "missing": true,
+                "default": null,
+                "doc": "A User object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/auth.get-permissions"
+}

@@ -1,0 +1,10 @@
+<moya xmlns="http://moyaproject.com">
+
+    <widget name="content" ns="http://moyaproject.com/pages" template="widgets/content.html">
+        <doc>Renders page content</doc>
+        <signature>
+        	<attribute name="page" type="index" />
+        </signature>
+    </widget>
+
+</moya>

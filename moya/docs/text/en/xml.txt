@@ -1,0 +1,102 @@
+[title XML]
+
+To create a web application with Moya you will need to be familiar with writing and editing [url http://en.wikipedia.org/wiki/XML]XML[/url]. This document will get you up to speed with working with XML but is not intended to be comprehensive. You should be able to find plenty of resources on the Internet if you would like to know more.
+
+[aside]Even if you are familiar with XML, the section on [link xml#namespaces]Namespaces[/link] may be worth a read.[/aside]
+
+[h1]Tags and Text[/h1]
+
+An XML document consists of [i]tags[/i] which looks something like this:
+
+[code xml]
+<moya>
+</moya>
+[/code]
+
+The text [c]<moya>[/c] marks the beginning of a tag, and the text [c]</moya>[/c] marks the end. There may be other tags inside a tag. For example:
+
+[code xml]
+<moya>
+    <macro docname="main">
+        <echo>Hello, World</echo>
+    </macro>
+</moya>
+[/code]
+
+Here we can see there is [c]<macro>[/c] tag [i]inside[/i] the [c]<moya>[/c] tag.
+
+You may have noticed that the [c]<macro>[/c] tag has some additional text, [c]docname="main"[/c], inside the angular brackets. This is called a tag [i]attribute[/i], which associates information with the tag. In the previous example, the [c]<macro>[/c] tag has a tag attribute called [c]docname[/c] with a value of [c]main[/c]. A tag may contain zero or more attributes.
+
+Tags may also contain text. In the previous example, there is an [c]echo[/c] tag which contains the text [c]Hello, World[/c].
+
+If a tag doesn't contain any [i]child[/i] tags or text, it may be [i]auto-closed[/i] with the following syntax:
+
+[code xml]
+<breakpoint/>
+[/code]
+
+Here we can see an auto-closed tag which is equivalent to the following:
+
+[code xml]
+<breakpoint></breakpoint>
+[/code]
+
+[h1]Comments[/h1]
+
+You can insert [i]comments[/i] in the an XML document which serve has reminders to refresh your memory when re-visiting code you may have written some time ago. Comments are introduced with [c]<!--[/c] and end with [c]-->[/c]. Here is an example of an XL comment:
+
+[code xml]
+<moya>
+    <!-- this is a comment -->
+</moya>
+[/code]
+
+[h1]Namespaces[/h1]
+
+XML documents may mix tags defined from various sources. A problem arises that a tag may have the same name as another, and the parser would be unable to know which one was intended. This is true in Moya, which allows third party libraries to implement tags.
+
+As an example, Moya defines a tag called [tag]{http://moyaproject.com/db}get[/tag] which gets a form, it also defines a tag called [tag]{http://moyaproject.com/forms}get[/tag] which gets an object from the database. The way the parser can know which tag is which is through XML [i]namespaces[/i]. You can set the namespace of a tag with the [c]xmlns[/c] attribute. For example:
+
+[code xml]
+<moya>
+    <get xmlns="http://moyaproject.com/db"/>
+    <get xmlns="http://moyaproject.com/forms"/>
+</moya>
+[/code]
+
+Here we can see two [c]<get>[/c] tags with a different [c]xmlns[/c] attribute for each. This attribute takes a URL which has been reserved for the namespace. The parser never reads the URL, in fact the URL doesn't need to return any content if you visit it in a browser. URLs are used to identify namespaces because if you only use URLs from domains you own, you can be sure there will not be any conflict with third parties.
+
+Setting the namespace this way can be somewhat verbose if you are mixing tags from a variety of namespaces. A more compact way of setting the namespace is to define a namespace prefix on an outer tag (often the root tag). Here's an example of setting a namespace prefix:
+
+[code xml]
+<moya xmlns:db="http://moyaproject.com/db" xmlns:forms="http://moyaproject.com/forms">
+    <db:get/>
+    <form:get/>
+</moya>
+[/code]
+
+The text [c]xmlns:db="http://moyaproject.com/db"[/c] introduces the namespace prefix [c]db:[/c]. Any child tags with [c]db:[/c] will be in the [c]http://moyaproject.com/db[/c] namespace. A namespace prefix for [c]forms[/c] is defined in the same way. The prefix text may be anything you want, and is generally chosen to be short yet descriptive.
+
+[h1]Moya Boilerplate[/h1]
+
+The first tag (known as the [i]root[/i] tag) you write in a Moya project file should be [tag]moya[/tag]. Further tags (forms, content, views etc.) should be contained within this root tag.
+
+There are a number of commonly used namespaces that would would be worthwhile including in a template file you can use as a starting point for new code. There may be a feature in your OS or editor to simplify this.
+
+Here's a good start for a blank Moya XML file:
+
+[code xml]
+<?xml version="1.0" ?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:forms="http://moyaproject.com/forms"/>
+
+    <!-- your content goes here -->
+
+</moya>
+[/code]
+
+The first line in the above XML file is a [i]processing instruction[/i] which indicates the version of the XML specification. It is not strictly necessary, and Moya will happily parse any XML files without it.
+
+Note the namespace declaration of [c]xmlns="http://moyaproject.com"[/c] which sets the default namespace for tags without a namespace prefix (which is most tags in Moya). This is also not strictly necessarily because Moya assumes this namespace by default. However, it is good practice to include it. The other namespace declarations introduce the [link moyacode#let-extension]LET extension[/link], [link db]database[/link] and [link forms]form[/link] tags.

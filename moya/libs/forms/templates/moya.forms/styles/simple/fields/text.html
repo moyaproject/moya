@@ -1,0 +1,1 @@
+<input id="${field.id}" name="${field.name}" type="${field.type or 'text'}" {% if field.maxlength %}maxlength="${str:field.maxlength}"{% endif %} value="${str:field.value or ''}" class="form-control ${field.class}" {% if field.placeholder %} placeholder="${field.placeholder}"{% endif %}>

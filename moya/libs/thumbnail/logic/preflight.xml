@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:preflight="http://moyaproject.com/preflight">
+
+    <preflight:check>
+        <preflight:fail if="app.settings.fs not in .fs">
+            [settings]/fs should be a valid filesystem name, not ${debug:app.settings.fs}
+        </preflight:fail>
+        <preflight:fail if="app.settings.app_serve not in .apps">
+            [settings]/app_serve should be an instance of moya.static that serves the images and thumbnails
+        </preflight:fail>
+    </preflight:check>
+
+</moya>

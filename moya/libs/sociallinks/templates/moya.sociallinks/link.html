@@ -1,0 +1,22 @@
+
+<div class="moya-sociallinks-link{% if link.sticky %} sticky{% endif %}">
+    {%- if link.sticky %}<div class="position"></div>{% endif %}
+    {% include "vote-box.html" %}
+    <div class="link" {% if not link.sticky %}style="padding-left:40px;"{% endif %}>
+        <a href="${link.url}">${link.title}</a>
+        <div class="attribution">
+            submitted ${localize:(.now - datetime:link.time)} ago by <strong>${link.user.username}</strong>
+            &ndash; in <a href="{% url 'topic' with topic=link.topic.slug %}">${link.topic.title}</a>
+        </div>
+        <div class="details">
+        {%- if .user == link.user or permission:'admin' %}
+            <a href="{% url 'edit_link' with link=link.slug, topic=link.topic.slug %}">Edit</a>
+        {%- endif %}
+        </div>
+    </div>
+    {%- if self.children %}
+    <div class="link-text">
+    {%- children %}
+    </div>
+    {%- endif %}
+</div>

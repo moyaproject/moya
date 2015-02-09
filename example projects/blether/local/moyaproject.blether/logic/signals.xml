@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:let="http://moyaproject.com/let">
+
+    <handle signal="moya.auth.new-user,moya.auth.post-login">
+        <if test="not signal.data.user.timeline">
+            <db:create model="blether#Timeline" let:user="signal.data.user"/>
+            <log-info>Created timeline for ${signal.data.user}</log-info>
+        </if>
+    </handle>
+
+</moya>

@@ -1,0 +1,21 @@
+<select id="${field.id}" name="${field.name}" class="form-control ${field.class}"{% if field.multiple %} multiple="multiple"{% endif %}>
+    {%- for group, choices in field.groups %}
+    {%- if group %}
+    <optgroup label="${group}">
+    {%- endif %}
+
+    {%- if field.multiple %}
+        {%- for choice in choices %}
+        <option value="${choice.value}"{% if choice.value instr field.values %} selected="selected"{% endif %}>${choice.text}</option>
+        {%- endfor %}
+    {%- else %}
+        {%- for choice in choices %}
+        <option value="${choice.value}"{% if str:field.value==choice.value %} selected="selected"{% endif %}>${choice.text}</option>
+        {%- endfor %}
+    {%- endif %}
+
+    {%- if group %}
+    </optgroup>
+    {%- endif %}
+    {%- endfor %}
+</select>

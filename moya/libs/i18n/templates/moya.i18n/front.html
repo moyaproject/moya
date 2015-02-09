@@ -1,0 +1,31 @@
+<p>
+    <ul>
+    {%- for lang in ['en', 'fr', 'es'] %}
+        <li>
+            <a href="{% url 'lang_front' with lang=lang %}">${.locale.languages[lang]} (${lang})</a>
+        </li>
+    {%- endfor %}
+    </ul>
+    <h1>{% trans comment "greeting" %}Hello!{% end %}</h1>
+
+    {% def "cats" %}
+	    {% trans number count comment "plural test" %}
+	    	There is ${count} ${name}
+	    {% plural %}
+	    	There are ${count} ${name}s
+	    {% endtrans %}
+    {% enddef %}
+
+    <ul>
+    {% for count in [1, 2, 3] %}
+    	<li>{% call "cats" with count=count, name="cat" %}</li>
+    {% endfor %}
+    </ul>
+
+    <p>
+        {% trans context "month name" %}May{% endtrans %}
+    </p>
+    <p>
+        {% trans context "to indicate possibility" %}May{% endtrans %}
+    </p>
+</p>

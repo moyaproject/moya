@@ -1,0 +1,52 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:rpc="http://moyaproject.com/jsonrpc"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db">
+
+    <enum libname="enum.jsonrpc.errors">
+        <value id="1" label="not_logged_in" description="You must be logged in to do that" />
+     	<value label="invalid_score" description="Score must be -1, 0 or +1"/>
+     	<value label="unknown_link" description="Link object was not found"/>
+    </enum>
+
+    <rpc:interface libname="jsonrpc" errors="#enum.jsonrpc.errors">
+
+        <rpc:method name="greet" call="#method.greet" description="Test method">
+            <rpc:parameter name="who" required="yes">
+                Name you would like to greet
+            </rpc:parameter>
+        </rpc:method>
+
+        <rpc:method name="vote" description="Vote for a link" call="#method.vote">
+            <doc>Add a vote to a given link</doc>
+            <rpc:parameter name="link" type="number" required="yes">
+            	PK of the link to vote for
+            </rpc:parameter>
+            <rpc:parameter name="score" type="number" required="yes">
+            	Vote to give (-1, 0, +1)
+            </rpc:parameter>
+            <rpc:error code="not_logged_in" if="not .user" />
+            <rpc:error code="invalid_score" if="score not in [-1,0,1]"/>
+        </rpc:method>
+
+    </rpc:interface>
+
+    <macro libname="method.greet">
+        <return>
+            <str>Hello, ${who}!</str>
+        </return>
+    </macro>
+
+    <macro libname="method.vote">
+        <db:transaction>
+            <db:get model="#Link" let:id="link" dst="link" />
+            <db:get model="#Vote" let:link="link" dst="vote" />
+            <db:create if="not vote"
+                model="#Vote" let:link="link" let:user=".user" let:score="score" dst="vote" />
+            <let link.score="link.score - vote.score" vote.score="score" />
+            <let link.score="link.score + vote.score" />
+        </db:transaction>
+        <return value="link.score" />
+    </macro>
+
+</moya>

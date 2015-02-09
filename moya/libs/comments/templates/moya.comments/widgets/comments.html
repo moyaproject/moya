@@ -1,0 +1,153 @@
+{%- def "comment" %}
+<a id="comment${comment.id}" style="margin-top:-50px;position:absolute;"></a>
+<div class="moya-comment clearfix level-${comment.level}{% if comment.level > 0 %} reply{% endif %}">
+    <div class="moya-comment-body{% if comment.user %} user{% endif %} moya-comment-${comment.id}">
+        {%- if comment.commenter_url %}
+        <a href="${comment.commenter_url}">
+            <img class="gravatar" alt="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
+        </a>
+        {%- else %}
+        <img class="gravatar" alt="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
+        {%- endif %}
+
+        <div class="text">
+            <div class="author">
+                {%- if comment.commenter_url %}
+                <a href="${comment.commenter_url}" class="name">${comment.user.username or comment.commenter_name}</a>
+                {%- else %}
+                <span class="name">${comment.user.username or comment.commenter_name}</span>
+                {%- endif %}
+                <span class="time">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
+            </div>
+            <div class="content">
+                {% markup comment.text as (commentobject.markup or 'text') %}
+
+                {%- if commentobject.allow_new %}
+                <div class="moya-comment-actions">
+                    <a href="#" data-commentid="${comment.id}" class="reply">{% trans %}reply{% end %}</a>
+                </div>
+                {%- endif %}
+            </div>
+        </div>
+    </div>
+    {%- if commentobject.allow_new %}
+    <form style="display:none" name="${comment.id}" class="moya-comment-reply-form" method="POST" action="{% url "newcomment" %}">
+        <input type="hidden" name="namespace" value="${namespace}" />
+        <input type="hidden" name="object" value="${topic}" />
+        <input type="hidden" name="object_url" value="${.request.path}" />
+        <input type="hidden" name="format" value="text" />
+        <input type="hidden" name="parentid" value="${comment.id}" />
+
+        {%- if self.children %}
+        {% children %}
+        {%- else %}
+        <div class="form-group">
+            <textarea class="form-control input-block-level" name="text" rows="7"></textarea>
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <input type="submit" class="btn btn-sm btn-primary" value="Comment" />
+            <a class="btn btn-default btn-sm cancel" data-commentid="${comment.id}">{% trans %}Cancel{% end %}</a>
+            <label class="moya-comment-replies checkbox inline">
+                <input type="checkbox" name="subscribe" checked="checked">
+                {% trans %}Email me about replies{% end %}
+            </label>
+        </div>
+    </form>
+    {%- endif %}
+    {%- if commentgraph[comment.id] %}
+    <div class="moya-comments">
+        {%- for comment in commentgraph[comment.id] %}
+        {%- call "comment" %}
+        {%- endfor %}
+    </div>
+    {%- endif %}
+</div>
+{%- enddef %}
+
+<div class="moya-comments-container" id="${id}">
+<a id="comments"></a>
+{%- if .permissions.admin %}
+<div class="moya-comments-admin">
+    <div class="btn-group">
+        <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-target="#" title="Comment admin">
+            <i class="glyphicon glyphicon-wrench"></i> {% trans %}Comments{% end %}
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li {% if commentobject.hide %}class="disabled"{% endif %}>
+                <a href="{% url "commentaction" %}?{% urlencode namespace=commentobject.namespace, object=commentobject.object, url=.request.path, action=(commentobject.allow_new ? 'disable' : 'enable') %}">
+                <i class="glyphicon glyphicon-edit"></i>
+                {% if commentobject.allow_new %}{% trans %}Disable new comments{% end %}{% else %}Enable new comments{% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{% url "commentaction" %}?{% urlencode namespace=commentobject.namespace, object=commentobject.object, url=.request.path, action=(commentobject.hide ? 'show' : 'hide') %}">
+                <i class="glyphicon glyphicon-edit"></i>
+                {% if commentobject.hide %}{% trans %}Show comments{% end %}{% else %}{% trans %}Hide comments{% end %}{% endif %}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                {% if subscribed %}
+                <a href="{% url "subscription" with comment_object_id=commentobject.id %}?{% urlencode action='unsubscribe', url=.request.path %}">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                    {% trans %}Unsubscribe{% end %}
+                </a>
+                {% else %}
+                <a href="{% url "subscription" with comment_object_id=commentobject.id %}?{% urlencode action='subscribe', url=.request.path %}">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                    {% trans %}Subscribe{% end %}
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
+{%- endif %}
+
+{%- if commentobject.allow_new and not commentobject.hide %}
+<form class="moya-comment-form" method="POST" action="{% url "newcomment" %}">
+    <input type="hidden" name="namespace" value="${namespace}" />
+    <input type="hidden" name="object" value="${topic}" />
+    <input type="hidden" name="object_url" value="${.request.path}" />
+
+    <div class="form-group">
+        <textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Comment" />
+    <label class="moya-comment-replies checkbox inline" style="white-space:nowrap;">
+        <input type="checkbox" name="subscribe" checked="checked"/> {% trans %}Email me about replies{% end %}
+    </label>
+</form>
+{%- endif %}
+
+{%- if not commentobject.hide %}
+{%- with numcomments=len:comments %}
+    <span class="text-muted moya-comment-count">
+    {% if not commentobject.allow_new %}
+    {% trans %}Comments disabled{% end %}
+    {% else %}
+    {%- if numcomments == 0 %}
+
+    {%- elif numcomments == 1 %}
+        {% trans %}1 Comment{% end %}
+    {%- else %}
+        ${numcomments} {% trans %}comments{% end %}
+    {%- endif %}
+    {%- endif %}
+    </span>
+{%- endwith %}
+
+{%- if comments %}
+{% cache for 1d key [commentobject.id, commentobject.updates, bool:.user] %}
+<div class="moya-comments root">
+{%- for comment in commentgraph.root %}
+{%- call "comment"  %}
+{%- endfor %}
+</div>
+{% endcache %}
+{%- endif %}
+
+{%- endif %}
+</div>

@@ -1,0 +1,102 @@
+{
+    "name": "sort",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "sort",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Sort a Query Set",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "sort a query set",
+        "tag_name": "sort",
+        "params": {
+            "orderby": {
+                "default_display": "",
+                "name": "orderby",
+                "missing": true,
+                "default": null,
+                "doc": "Order by",
+                "required": true,
+                "type": "comma list",
+                "metavar": null,
+                "choices": null
+            },
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source query, if further query operations are required",
+                "required": false,
+                "type": "reference",
+                "metavar": "QUERYSET",
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Model app",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "reverse": {
+                "default_display": "no",
+                "name": "reverse",
+                "missing": true,
+                "default": false,
+                "doc": "Reverse order?",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.sort"
+}

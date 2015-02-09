@@ -1,0 +1,10 @@
+<moya xmlns="http://moyaproject.com">
+    <mountpoint name="main">
+        <url route="/favicon.ico" name="favicon">
+            <for src=".app.settings.fs.list" dst="fsname" >
+                <serve-file fs="${fsname}" path="${.app.settings.iconpath}" ifexists="yes"/>
+            </for>
+            <not-found/>
+        </url>
+    </mountpoint>
+</moya>

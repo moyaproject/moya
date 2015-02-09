@@ -1,0 +1,47 @@
+{
+    "name": "mountpoint",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "mountpoint",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "A [i]mountpoint[/i] defines a collection of URL routes which map URLs on to moya code.\n\n    An app will typically have at least one mountpoint with [c]name=\"main\"[/c] (the default) which is used when the app is mounted. Moya will check each enclosed <url> in turn until it finds a route which matches the url.\n\n    An app may contain multiple mountpoints, which can be [i]mounted[/i] separately.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define a collection of url routes",
+        "tag_name": "mountpoint",
+        "params": {
+            "name": {
+                "default_display": "\"main\"",
+                "name": "name",
+                "missing": true,
+                "default": "main",
+                "doc": "Mountpoint name unique to the application",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <mountpoint name=\"main\">\n            <!-- should contain <url> tags -->\n        </mountpoint>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.mountpoint"
+}

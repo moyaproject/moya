@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let">
+
+    <handle signal="db.pre-update" sender="moya.auth#User">
+        <!-- Hash password automatically -->
+        <let user="signal.data.object"/>
+        <call macro="#hashpassword" if="'$' not in user.password"
+            dst="user.password" let:password="user.password"/>
+    </handle>
+
+</moya>

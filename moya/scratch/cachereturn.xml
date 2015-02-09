@@ -1,0 +1,25 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="fact">
+        <signature>
+            <argument name="n"/>
+        </signature>
+        <cache-return key="n">
+            <echo>calculating n!</echo>
+            <let f="1"/>
+            <while test="n">
+                <let f="f*n" n="n-1"/>
+            </while>
+            <return value="f"/>
+        </cache-return>
+    </macro>
+
+    <macro docname="main">
+        <call macro="fact" let:n="7" dst="result"/>
+        <echo>${result}</echo>
+        <echo>${result}</echo>
+        <echo>${result}</echo>
+    </macro>
+
+</moya>

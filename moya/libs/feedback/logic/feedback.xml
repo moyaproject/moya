@@ -1,0 +1,66 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:feedback="http://moyaproject.com/feedback"
+      xmlns:w="http://moyaproject.com/widgets"
+      xmlns:email="http://moyaproject.com/email">
+
+    <mountpoint name="main">
+        <url route="/" methods="GET,POST" view="#view.feedback" name="feedback" />
+    </mountpoint>
+
+    <content libname="content.feedback" template="base.html">
+        <title>Feedback</title>
+        <section name="body">
+            <w:success if="sent">
+                <html:strong>Thank you!</html:strong> <html:br/>Your feedback has been sent.
+            </w:success>
+            <render src="form" if="not sent"/>
+        </section>
+    </content>
+
+    <form libname="form.feedback" legend="Leave us feedback" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input name="name" label="Your name" class="input-xxlarge" required="yes"/>
+        <input name="email" label="Your email address" class="input-xxlarge" required="yes"/>
+        <moya:get-data tag="subject" ns="http://moyaproject.com/feedback" dst="subjects"/>
+        <select libname="feedback_subjects" name="subject" label="Subject" class="input-xxlarge">
+            <moya:if test="subjects">
+                <moya:for src="subjects" dst="subject">
+                    <option>${subject.text}</option>
+                </moya:for>
+            </moya:if>
+            <moya:else>
+                <option>General Feedback</option>
+                <option>Report Abuse</option>
+                <option>Technical Issue</option>
+            </moya:else>
+        </select>
+        <text-area name="message" label="Your feedback" class="input-block-level" rows="8" required="yes"/>
+        <submit-button text="Send" class="btn-primary" />
+        <validate-field field="email">
+            <fail if="'@' not in value or '.' not in value">
+                Please enter a valid email address
+            </fail>
+        </validate-field>
+    </form>
+
+    <email libname="email.feedback" xmlns="http://moyaproject.com/email"
+           to="${.app.settings.email_to}" from="${.app.settings.email_from}">
+        <text template="email/feedback.txt" />
+        <html template="email/feedback.html" />
+    </email>
+
+    <view libname="view.feedback" content="#content.feedback">
+        <forms:get form="#form.feedback" dst="form" />
+        <forms:validate src="form" if=".request.POST">
+            <email:send email="#email.feedback"
+                       replyto="${form.data.email}"
+                       subject="${.app.settings.subject_prefix} ${form.data.subject}"
+                       data="form.data"/>
+            <true dst="sent" />
+        </forms:validate>
+    </view>
+
+</moya>

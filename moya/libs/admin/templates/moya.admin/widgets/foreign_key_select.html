@@ -1,0 +1,17 @@
+<div class="picker-control {% if not object %}null-object{% endif %}" data-field="${field.id}">
+    <button type="button" class="btn btn-default show-picker" data-show="content_${field.id}" style="width:50%;" title="Click to select">
+        <div class="picker-object">{% render object %}</div>
+        <div class="picker-null"><em>None set</em></div>
+    </button>
+
+    <button type="button" class="btn btn-default picker-clear">
+        <span class="glyphicon glyphicon-remove"></span>
+        Clear
+    </button>
+
+    <div id="content_${field.id}" style="display:none;">
+    <p>
+    {% children %}
+    </p>
+    </div>
+</div>

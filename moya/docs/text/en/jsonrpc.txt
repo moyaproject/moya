@@ -1,0 +1,266 @@
+[title Moya JSON-RPC]
+
+ [url http://en.wikipedia.org/wiki/JSON-RPC]JSON-RPC[/url] is a way for the user's browser, or other computer systems, to communicate with your web application without the need for a page refresh -- a technique known as [url http://en.wikipedia.org/wiki/Ajax_(programming)]AJAX[/url]. While not the only way to implement AJAX, the JSON-RPC protocol is powerful, well-supported and easy to work with in Javascript. The [url http://www.jsonrpc.org/specification]specification[/url] is worth a read, but you won't need to be familiar with the inner workings to implement remote methods.
+
+[aside]Since JSON-RPC uses JSON and [i]not[/i] XML, it would be more accurate to call it AJAJ. However the term never really caught on, probably because it is not easy to pronounce.[/aside]
+
+[h1]Installation[/h1]
+
+The Moya JSON-RPC library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.jsonrpc"/>
+[/code]
+
+You can install Moya JSON-RPC with the following:
+
+[code xml]
+<install name="jsonrpc" lib="moya.jsonrpc" />
+[/code]
+
+Note that this library doesn't provide any mountpoints or views, so doesn't strictly require being installed at all. The purpose of installing it is to serve the a JQuery plugin which can call the remote methods. If don't want to use this, then you can leave out the install line entirely.
+
+[h1]Namespace[/h1]
+
+This library uses the namespace [c]http://moyaproject.com/jsonrpc[/c]. Since we will be mixing rpc methods with tags in the default namespace it is advisable to add [c]xmlns:rpc="http://moyaproject.com/jsonrpc[/c] to the top level tag, which will enable the [c]rpc:[/c] prefix.
+
+[h1]Interfaces[/h1]
+
+The Moya JSON-RPC library handles the job of decoding requests, invoking methods (macros), and encoding the response. It can also generate a self-documenting index page.
+
+To serve remote methods, add an [tag jsonrpc]interface[/tag] tag. An [i]interface[/i] is a container for your remote methods, and functions just like a view. You can mount an rpc interface in the same way you would mount a view, i.e. with the [c]view[/c] parameter on a [tag]url[/tag].
+
+Here's an example of the simplest possible interface:
+
+[code xml]
+<moya xmlns="http://moyaproject.com"
+      xmlns:rpc="http://moyaproject.com/jsonrpc">
+
+    <rpc:interface libname="jsonrpc.interface">
+        <!-- methods go here -->
+    </rpc:interface>
+
+</moya>
+[/code]
+
+We can mount this as follows:
+
+[code xml]
+<url route="/jsonrpc/" methods="GET,POST" view='#jsonrpc.interface' name="jsonrpc" />
+[/code]
+
+Now if you were to visit [c]/jsonrpc/[/c] you would see the interface documentation page. Although without any [i]methods[/i] (see below), it will not be particularly useful.
+
+[h1]Methods[/h1]
+
+A [i]method[/i] is Moya code that may be invoked via JSON-RPC. You can define a method with the [tag jsonrpc]method[/tag] tag, which documents the method and sets the parameters the method will take, as well as containing the code the method will run.
+
+To add a method to a interface, insert a [tag jsonrpc]method[/tag] inside the [tag jsonrpc]interface[/tag]. Alternatively, if you prefer to organize your methods differently you can put the [tag jsonrpc]method[/tag] elsewhere and link it to the interface with the [c]interface[/c] attribute. Here's an example of a trivial method that gets a string containing the current time:
+
+[code xml]
+<rpc:interface libname="jsonrpc.interface">
+    <rpc:method name="time">
+        <return-str>${.now}</return-str>
+    </rpc:method>
+</rpc:interface>
+[/code]
+
+[h2]Documenting Methods[/h2]
+
+You can associate text with each method that will be displayed in the auto-generate documentation page, with the [tag jsonrpc]dpc[/tag] tag. Documentation is useful, even if the rpc methods are for internal use, but essential if third parties will be using your remote methods. Here's an example of adding a [tag jsonrpc]doc[/tag] to a remote method:
+
+[code xml]
+<rpc:interface libname="jsonrpc.interface">
+    <rpc:method name="time">
+        <doc>Get the current time.</doc>
+        <return-str>${.now}</return-str>
+    </rpc:method>
+</rpc:interface>
+[/code]
+
+[h2]Parameters[/h2]
+
+If a method has parameters, the [tag jsonrpc]method[/tag] tag should contain a [tag jsonrpc]parameter[/tag] for each parameter. These are used to document the method and to validate remote calls. For example, parameters may be set as requried (with the [c]required[/c] attribute). You can also set a requirement on the type of the value in a remote call with the [c]type[/c] attribute, which should be one of the following values:
+
+[definitions]
+
+[define anything]
+No particular requirements for the parameter.
+[/define]
+
+[define bool]
+The parameter should be a boolean, e.g. [c]True[/c] or [c]False[/c].
+[/define]
+
+[define list]
+The parameter should be a list, e.g [c][1, 2, 3, 4][/c].
+[/define]
+
+[define number]
+The parameter should be a number, e.g [c]3.14[/c].
+[/define]
+
+[define object]
+The parameter should be an object (dict in Moya), e.g. [c]{'foo': 'bar'}[/c].
+[/define]
+
+[define string]
+The parameter should be a string, e.g. [c]"moya"[/c].
+[/define]
+
+[/definitions]
+
+If the method call doesn't match the parameter requirements, then Moya JSON-RPC will return an appropriate response code.
+
+The following example builds on the previous method to get the server time, and adds a [c]format[/c] parameter to select the format of the returned time:
+
+[code xml]
+<rpc:interface libname="jsonrpc.interface">
+    <rpc:method name="time">
+        <rpc:parameter name="format" type="string" default="medium" required="yes">
+            Time format to return
+        </rpc:parameter>
+        <return-str>${.now::format}</return-str>
+    </rpc:method>
+</rpc:interface>
+[/code]
+
+If can now call this method with [c]format[/c] set to a datetime format, such as [c]'YYYY mm dd'[/c]
+
+[h2]Errors[/h2]
+
+You can return an error response with the [tag jsonrpc]error[/tag] tag which sets the error message, an error code with the [c]code[/c] attribute, and optional message data with the [c]data[/c] attribute. An [tag jsonrpc]error[/tag] acts like a return and immediately stops processing the method.
+
+For example, lets say we want to restrict the format parameter on the gettime example to one of four standard formats: [c]short[/c], [c]medium[/c], [c]long[/c], and [c]full[/c]. We could add the following to the method, before the call to [tag]return-str[/tag]:
+
+[code xml]
+<rpc:error code="100" if="format not in ['short', 'medium', 'long', 'full']">
+    Format parameter is not correct
+</rpc:error>
+[/code]
+
+Numerical error codes can be hard to keep track of, especially when the number of methods grows. To manage error codes, you can use an enumeration to map the integer on to a label. Here's how to create an enumeration the previous error:
+
+[code xml]
+<enum libname="enum.jsonrpc.errors">
+    <value id="100" label="bad_time_format">
+        The format for the time method should be on of: 'short', 'medium', 'long', 'full'
+    </value>
+</enum>
+[/code]
+
+Error enumerations also make it possible for the auto-generated docs to list the error codes in a table.
+
+To use this enumeration, set it on the the [tag jsonrpc]interface[/tag] with the [c]errors[/c] attribute. Then you can replace the error code [c]100[/c] with its corresponding label, [c]bad_time_format[/c]. Here's the complete [c]gettime[/c] method:
+
+[code xml]
+<rpc:interface libname="jsonrpc.interface">
+
+    <enum libname="enum.jsonrpc.errors">
+        <value id="100" label="bad_time_format">
+            The format for the time method should be one of: 'short', 'medium', 'long', 'full'
+        </value>
+    </enum>
+
+    <rpc:method name="time">
+        <rpc:parameter name="format" type="string" default="medium" required="yes">
+            Time format to return
+        </rpc:parameter>
+        <rpc:error code="bad_time_format" if="format not in ['short', 'medium', 'long', 'full']">
+            Format parameter is not correct
+        </rpc:error>
+        <return-str>${.now::format}</return-str>
+    </rpc:method>
+
+</rpc:interface>
+[/code]
+
+[h1]Logging[/h1]
+
+Moya JSON-RPC writes information about each call and it's return value to the logger, [c]moya.jsonrpc[/c]. See [doc logging] for information on configuring the logging system.
+
+[h1]Javascript[/h1]
+
+The Moya JSON-RPC library comes with a [url http://jquery.com/]JQuery[/url] plugin to call remote methods from Javascript.
+
+[aside]Any other Javascript client should work with Moya JSON-RPC.[/aside]
+
+To load the JS file you can add the following to your content:
+
+[code xml]
+<include-js from="moya.jsonrpc" path="js/jsonrpc.js" />
+[/code]
+
+Alternatively, you can add the following to your template:
+
+[code moyatemplate]
+<script type="text/javascript" src="{% media 'js/jsonrpc.js' from 'moya.jsonrpc' %}"></script>
+[/code]
+
+This makes available a class called [c]JSONRPC[/c], which you can create as follows:
+
+[code js]
+var rpc = new JSONRPC('/jsonrpc/');
+[/code]
+
+The constructor takes the URL of the JSON-RPC server, and an optional object containing default callbacks.
+
+[definitions]
+
+[define ""success""]
+[c]function success(result){}[/c][br]
+Called when the remote method executes successfully.
+[/define]
+
+[define ""error""]
+[c]function error(response) {}[/c][br]
+Called when the remote method returns an error code.
+[/define]
+
+[define ""failure""]
+[c]function failure(jqXHR, textStatus, errorThrown) {}[/c][br]
+Called when there is a error making the remote call (and no remote method was called).
+[/define]
+
+[define ""complete""]
+[c]function complete() {}[/c][br]
+Called when the the call completes (regardless of whether it was successful), prior to other callbacks. This may be used to disable a [i]throbber[/i], for example.
+[/define]
+
+[/definitions]
+
+[h2]Calls[/h2]
+
+You can make calls with the [c]call[/c] method, which takes the method name, followed by the parameters and a function that processes the result. Here's an example which gets the time with the remote [c]gettime[/c] method we created:
+
+[code js]
+rpc.call('gettime',
+        {'format': 'long'},
+        function(result){
+            alert("The time is: " + result);
+        });
+[/code]
+
+You can also add an optional callbacks object as the fourth parameter, which can have the same callback functions as the constructor. Any callbacks supplied to the [c]call[/c] method will override those set in the constructor.
+
+[h2]Notifications[/h2]
+
+An alternative to [c]call[/c] is the [c]notify[/c] method which sends [i]notifications[/i]. Notifications are remote calls where you aren't interested in the result. This is reflected in the [c]success[/c] parameter which will be invoked with no parameters.
+
+[h2]Batch Calls[/h2]
+
+You can make [i]batch[/i] calls (multiple calls in a single requests) by calling [c]createBatch[/c] method which returns a new [c]JSONRPCBatch[/c] object. You may then use the [c]call[/c] and [c]notifiy[/c] methods on the batch object to store a list of method calls, and send then to the server with [c]JSONRPC.batch[/c]. Here's an example that calls the [c]gettime[/c] method with two different parameters, in a single request.
+
+[code js]
+/* make a batch object */
+var batch = rpc.createBatch();
+function log_time(result)
+{
+    console.log(result);
+}
+/* Add calls to batch */
+batch.call('gettime', {'format':'medium'}, log_time);
+batch.call('gettime', {'format':'short'}, log_time);
+/* send calls to server and invoke callbacks */
+rpc.batch(batch);
+[/code]

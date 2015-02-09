@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+    <!-- define your widgets here -->
+
+    <widget name="editor" template="widgets/editor.html" ns="http://moyaproject.com/wysihtml5">
+    	<doc>
+            A rich text editor.
+
+            The [c]buttons[/c] and [c]rbuttons[/c] attributes may be used to configure the row of buttons at the top of the editor. You can set them to a comma separated list of the following possible values:
+
+            [definitions]
+            [define bold]Bold [b]text[/b][/define]
+            [define italic]Italic [i]text[/i][/define]
+            [define underline]Underline [u]text[/u][/define]
+            [define strike]Strikethrough [s]text[/s][/define]
+            [define h1 - h7]Header level 1 through 7[/define]
+            [define ol]Ordered List[/define]
+            [define ul]Unordered List[/define]
+            [define left]Left align[/define]
+            [define center]Center align[/define]
+            [define right]Right align[/define]
+            [define justify]Justify text[/define]
+            [define quote]Block quote[/define]
+            [define link]Insert a link[/define]
+            [define image]Insert an image[/define]
+            [define view]Switch between rich text and markup view[/define]
+            [/definitions]
+
+            You can also add a bar symbol ([b]|[/b]) which will insert a divider between the buttons.
+
+            The default for buttons is to have all text controls on the left, and the view button on the right.
+
+        </doc>
+        <signature>
+    	    <attribute name="rows" type="integer" default="12">
+                Number of rows.
+            </attribute>
+    	    <attribute name="buttons" type="commalist" default="bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image">
+                A list of buttons.
+            </attribute>
+    	    <attribute name="rbuttons" type="commalist" default="view">
+                A list of buttons on the right hand side.
+            </attribute>
+            <attribute name="name" default="">
+                The name attribute of the textarea.
+            </attribute>
+        </signature>
+        <include-js path="js/wysihtml5-0.4.0pre.min.js" />
+        <include-js path="js/parser_rules/advanced.js" />
+        <include-css path="css/moya_editor.css" />
+        <include-css path="css/content.css" />
+        <media-url path="css/content.css" dst="css_url" />
+        <let widget_id=".content.id" />
+        <js>
+        	$(function(){
+        		new wysihtml5.Editor("${widget_id}",{
+        			toolbar: "${widget_id}-toolbar",
+        			parserRules: wysihtml5ParserRules,
+                    useLineBreaks: false,
+        			stylesheets: ["${css_url}"]
+        		});
+        	});
+        </js>
+
+    </widget>
+
+</moya>

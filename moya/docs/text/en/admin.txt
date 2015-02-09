@@ -1,0 +1,130 @@
+[title Moya Admin]
+
+Moya Admin creates a fully features [i]administration[/i] site, which allows users (with admin permissions) to query and manage objects stored in the database.
+
+[h1]Installation[/h1]
+
+The Moya Admin library is built in to Moya and may be imported via its Python path as follows:
+
+[code xml]
+<import py="moya.libs.forms"/>
+[/code]
+
+The above line should be in your [tag]server[/tag] declaration.
+
+You can install the library with the following:
+
+[code xml]
+<install name="admin" lib="moya.admin" mount="/admin/" />
+[/code]
+
+This will install Moya Admin and mount it on [b]/admin/[/b].
+
+[aside]If you created your project with [b]moya start[/b] then Moya Admin will have been installed automatically.
+
+[h1]Namespace[/h1]
+
+Moya Admin uses the namespace [c]http://moyaproject.com/admin[/c].
+
+
+[h1]Introduction[/h1]
+
+If you visit the admin site (on /admin/) you will see a list of [i]modules[/i] in a panel. These are headings which contain a sub-menu of table views which display objects stored in the database. From a table view you can search the database for a particular object, and also create / edit / delete items from the database.
+
+Libraries can advertise what modules / tables they support and customize admin functionality as well as look and feel. You won't need to do any particular configuration for a library to use the admin sites; installing a library is enough to register with the admin sites.
+
+[h1]Modules[/h1]
+
+A library can [i]advertise[/i] the modules it wishes to add to the admin site by adding a [tag admin]module[/tag] tag anywhere in the library code -- by convention in a file called [c]admin.xml[/c]. There is typically only one module per application, but it is entirely possible to have more than one.
+
+Here's how you might create a module in your library:
+
+[code xml]
+<module xmlns="http://moyaproject.com/admin"
+    slug="sushi-shop" title="Sushi Shop" description="Manage Sushi Products">
+</module>
+[/code]
+
+This will create a link in the admin panel using these details. If you click on a module link in admin (as apposed to just expanding the menu), you will see a simple title page. You can customize this page by setting the [c]content[/c] attribute to your new content. Your custom content should extend [c]moya.admin#content.cover[/c], and contain a section called [c]content[/c]. Here's an example:
+
+[code xml]
+<module xmlns="http://moyaproject.com/admin" content="content.custom.admin"
+    slug="sushi-shop" title="Sushi Shop" description="Manage Sushi Products">
+</module>
+
+<content libname="content.custom.admin" extends="moya.admin#content.cover">
+    <section name="content">
+        <markdown>
+Sushi Shop
+==========
+
+Get your sushi here!
+        </markdown>
+    </section>
+</content>
+
+[/code]
+
+
+A [tag admin]module[/tag] should contain one or more [tag admin]link[/tag] tags. These reference [tag admin]table[/tag] tags which define a table view. See the next section for an overview of defining tables.
+
+[h1]Tables[/h1]
+
+Tables are advertised with the [tag admin]table[/tag] tag which sets the [c]title[/c]. [c]slug[/c], and [c]model[/c] for the table view. The model should be a reference to the [tag db]model[/tag] you want to list in the table.
+
+Within the [tag admin]table[/tag] should be a sequence of [tag admin]column[/tag] tags which define the columns to be displayed in the table. Here's an example of a table definition with two columns:
+
+[code xml]
+<table libname="admintable.products" slug="products"
+    title="Sushi Products" model="#Product">
+
+    <column title="Product" sort="name">${object.name}</column>
+    <column title="Stock" sort="stock">${object.stock} piece(s)</column>
+
+</table>
+[/code]
+
+When Moya Admin renders a table, it iterates through each object in the database and creates table cells from the [tag admin]column[/tag] tags, to which it passes the current object as a value called [c]object[/c]. Columns may contain simple expressions, for example [c]${object.name}[/c] to display the [c]name[/c] field of the database object, or, any other content tags. This makes tables infinitely customizable as you can put text, images, widgets, forms or any other renderable content inside a cell.
+
+To display this table in the modules panel, you would add a [tag admin]link[/tag] to your module definition. Here's how to add the products table to the Sushi Shop model:
+
+[code xml]
+<module xmlns="http://moyaproject.com/admin"
+    slug="sushi-shop" title="Sushi Shop" description="Manage Sushi Products">
+    <link to="admintable.products" title="Products"/>
+</module>
+[/code]
+
+[h1]Searching[/h1]
+
+You can add a search field to the table by setting the [c]search[/c] attribute on the [c]table[/c]. This should be a [link db#database-expressions]database expression[/link] referencing the value [c]q[/c] which contains the text the user searched for. Here's how we would add search capabilities to the Sushi Products table:
+
+[code xml]
+<table libname="admintable.products" slug="products"
+    search="#Product.name == q"
+    title="Sushi Products" model="#Product">
+
+    <column title="Product" sort="name">${object.name}</column>
+    <column title="Stock" sort="stock">${object.stock} piece(s)</column>
+
+</table>
+[/code]
+
+The db expression, [c]#Product.name == q[/c] matches all products a name field set to the search query. You can use a more complicated db expression to search multiple fields, or to do more relaxed queries. For instance [c]#Product.name icontains q[/c], would match any products with a name containing the search substring.
+
+[h1]Filtering[/h1]
+
+By default, Moya Admin will list all objects of the specified type in the table. It is also possible to restrict the query to objects matching a db expression. You might want to do this if you want several tables, each showing a different subset of objects. To filter objects in a table, set the [c]filter[/c] attribute to a db expression. Here's how you would create a table view that displayed only the sushi products in stock:
+
+[code xml]
+<table libname="admintable.products_in_stock" slug="products_on_stock"
+    search="#Product.name == q"
+    description="Products in stock"
+    filter="#Product.stock gt 0"
+    title="Sushi Products" model="#Product">
+
+    <column title="Product" sort="name">${object.name}</column>
+    <column title="Stock" sort="stock">${object.stock} piece(s)</column>
+
+</table>
+[/code]

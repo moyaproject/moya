@@ -1,0 +1,102 @@
+{
+    "name": "sort-map",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "sort-map",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nSort a query set in one of a number of different ways.\n\nThis is typically used to sort a table of results based on a value in the query set.\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "sort a query set dynamically",
+        "tag_name": "sort-map",
+        "params": {
+            "sort": {
+                "default_display": ".request.GET.sort",
+                "name": "sort",
+                "missing": true,
+                "default": ".request.GET.sort",
+                "doc": "Sort value?",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": false,
+                "default": null,
+                "doc": "Query to sort",
+                "required": true,
+                "type": "reference",
+                "metavar": "QUERYSET",
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Model app",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "choices": null
+            },
+            "reverse": {
+                "default_display": ".request.GET.order=='desc'",
+                "name": "reverse",
+                "missing": true,
+                "default": ".request.GET.order=='desc'",
+                "doc": "Reverse order?",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <db:sort-map src=\"characters\" sort=\".request.GET.sort\" reverse=\".request.GET.order=='desc'\">\n            <str dst=\"name\">#Character.name</str>\n            <str dst=\"species\">#Character.species</str>\n            <str dst=\"age\">#Character.age</str>\n        </db:sort-map>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.sort-map"
+}

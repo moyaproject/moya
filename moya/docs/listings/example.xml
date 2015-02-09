@@ -1,0 +1,8 @@
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+    <macro docname="main">
+        <echo>Hello, World!</echo>
+    </macro>
+    <macro docname="greet">
+        <echo>Hello, ${name}!</echo>
+    </macro>
+</moya>
