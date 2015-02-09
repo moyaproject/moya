@@ -55,5 +55,5 @@ setup(name='moya',
                         'commonmark',
                         'requests',
                         'lxml'],
-      setup_requires = ["setuptools_git >= 0.3",]
+      setup_requires=["setuptools_git >= 0.3"]
       )

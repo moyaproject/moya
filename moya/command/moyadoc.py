@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from .. import __version__
-from ..versioning import Version
 from .. import namespaces
 from ..settings import SettingsContainer
 from .. import build as moya_build
@@ -107,7 +106,7 @@ class MoyaDoc(object):
                             help="Build HTML docs")
         parser.add_argument("-no-browser", '-n', dest="nobrowser", action="store_true",
                             help="Don't launch the browser")
-        parser.add_argument("-s", "--settings", dest="settings", metavar="PATH", default="~/.moyadoc.ini",
+        parser.add_argument("-s", "--settings", dest="settings", metavar="PATH", default="~/.moyadoc",
                             help="Doc settings file")
         return parser
 

@@ -8,6 +8,8 @@ Moya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue 
 
 [h1]Install from PyPi[/h1]
 
+[alert NOTE]Moya is not currently on PyPi, please install from source[/alert]
+
 Moya is available on PyPi, and may be installed via pip:
 
 [code]
@@ -16,7 +18,11 @@ $ pip install moya
 
 [h1]Install from code[/h1]
 
-If you want the cutting edge code, you can install the latest from github. The Moya repos also contains example projects that you may want to try out.
+If you want the cutting edge code, you can install the latest from Github. The Moya repos also contains example projects that you may want to try out.
+
+See the repos page for more information:
+
+[url https://github.com/moyaproject/moya]https://github.com/moyaproject/moya[/url]
 
 [h1]Command Line Application[/h1]
 
