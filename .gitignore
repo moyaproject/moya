@@ -5,5 +5,5 @@
 *.egg-info
 *.db
 *.sqlite
-*.sublime_*
+*.sublime-*
 /**/__*__

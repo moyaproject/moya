@@ -15,7 +15,7 @@ cachedata/*
 moya.egg-info
 *.db
 *.sqlite
-*.sublime-*
+*.sublime-project
 moya/example/docs/*
 uploads/*
 moya/docs/html/*

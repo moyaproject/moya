@@ -145,7 +145,7 @@
             <else>
                 <w:success><bbcode>[b]${len:object_pks}[/b] object(s) were deleted successfully</bbcode></w:success>
                 <w:buttons>
-                    <w:link from="moya.auth" url="${back_url}">Return to table</w:link>
+                    <w:link app="moya.auth" url="${back_url}">Return to table</w:link>
                 </w:buttons>
             </else>
         </section>
@@ -163,8 +163,8 @@
                     <markdown>New object **${obj}** was created successfully.</markdown>
                 </w:success>
                 <w:buttons>
-                    <w:link from="moya.admin" name="admin_new_object" with=".url">Add Another</w:link>
-                    <w:link from="moya.admin" name="admin_table_edit" with=".url" let:pk="obj.id">Edit</w:link>
+                    <w:link app="moya.admin" name="admin_new_object" with=".url">Add Another</w:link>
+                    <w:link app="moya.admin" name="admin_table_edit" with=".url" let:pk="obj.id">Edit</w:link>
                 </w:buttons>
             </if>
             <else>
