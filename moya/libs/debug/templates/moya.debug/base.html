@@ -32,6 +32,14 @@
             white-space:pre;
             font-family:'Droid Sans Mono', Monaco, Menlo, Consolas, 'Courier New', monospace;
         }
+        .touch .code .line
+        {
+            white-space: nowrap;
+        }
+        .touch .code
+        {
+            overflow:auto;
+        }
 
         .code .line.highlight .lineno
         {
@@ -199,6 +207,8 @@
     </style>
     {% block css %}{% endblock %}
     <script type="text/javascript">
+
+    document.documentElement.className += (("ontouchstart" in document.documentElement) ? ' touch': ' no-touch');
 
     function toggle(id)
     {
