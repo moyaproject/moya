@@ -45,6 +45,9 @@
             <attribute name="name" default="">
                 The name attribute of the textarea.
             </attribute>
+            <attribute name="breaks" default="yes" type="boolean">
+                Use line breaks?
+            </attribute>
         </signature>
         <include-js path="js/wysihtml5-0.4.0pre.min.js" />
         <include-js path="js/parser_rules/advanced.js" />
@@ -57,7 +60,7 @@
         		new wysihtml5.Editor("${widget_id}",{
         			toolbar: "${widget_id}-toolbar",
         			parserRules: wysihtml5ParserRules,
-                    useLineBreaks: false,
+                    useLineBreaks: ${breaks ? 'true' : 'false'},
         			stylesheets: ["${css_url}"]
         		});
         	});
