@@ -40,7 +40,7 @@ The code inside the processor transforms that image. The new image is then writt
             <attribute name="format" default="jpeg" choices="jpeg,png">
                 Image format for the thumbnail
             </attribute>
-            <attribute name="quality (if using jpeg)" default="80" type="expression" required="no">
+            <attribute name="quality" default="80" type="expression" required="no">
                 The quality of jpeg thumbnails (max 100)
             </attribute>
         </signature>

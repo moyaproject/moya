@@ -16,7 +16,7 @@
     <dl class="dl-horizontal">
         {%- for k, v in sorted:items:map %}
         <dt>${k}</dt>
-        <dd>${v or html:'&nbsp;'}</dd>
+        <dd>${debug:v or html:'&nbsp;'}</dd>
         {%- endfor %}
     </dl>
     {%- endif %}
