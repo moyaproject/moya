@@ -37,11 +37,16 @@
     <view libname="view.new-post" content="#content.edit-post" requires=".permissions.admin">
         <forms:get form="#form.newpost" dst="form"/>
         <forms:validate src="form">
+            <let slug="form.data.slug or slug:form.data.title"/>
             <db:create model="#Post" obj="form.data" dst="post"
                 let:owner=".user"
-                let:slug="form.data.slug or slug:form.data.title"
+                let:slug="slug"
                 let:published_date=".now"
                 let:published="form.data.action == 'publish'"/>
+            <catch exception="db.integrity-error">
+                <forms:error field="slug" src="form">A post with slug '${slug}' exists</forms:error>
+                <break/>
+            </catch>
             <redirect name="list"/>
         </forms:validate>
     </view>

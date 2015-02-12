@@ -26,12 +26,12 @@
             <submit-button class="btn-info" name="action" clicked="publish" text="Create &amp; Publish"/>
         </actions>
         <validate-field field="slug">
-            <db:get model="#Post" let:slug="slug:value" dst="post"/>
+            <db:get model="#Post" let:slug="value" dst="post"/>
             <fail if="post">
                 Slug exists, please edit
             </fail>
             <fail if="slug:value != lower:value">
-                Slug should only contain letters, numbers and hyphens
+                Slug should only contain lowerletters, numbers and hyphens
             </fail>
         </validate-field>
     </form>
