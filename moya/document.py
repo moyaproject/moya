@@ -179,9 +179,11 @@ class DocumentNode(object):
         if libname is None and structure.library is not None:
             libname = structure.library.allocate_libname(docid)
 
+        replace_lib = False
         if libname is not None and '#' in libname:
             lib_, _, libname = libname.partition('#')
             lib = archive.get_or_create_library(lib_)
+            replace_lib = True
         else:
             lib = self.structure.library
 
@@ -219,10 +221,14 @@ class DocumentNode(object):
             document.register_named_element(docname, element)
 
         if lib:
-            lib.register_named_element(libname,
-                                       element,
-                                       priority=structure.library.priority)
             element._libid = "{}#{}".format(lib.long_name, libname)
+            if replace_lib:
+                lib.add_replacement_node(element)
+            else:
+                lib.register_named_element(libname,
+                                           element,
+                                           priority=structure.library.priority)
+
         return element
 
     @property

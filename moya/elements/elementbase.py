@@ -493,7 +493,6 @@ class ElementBaseType(object):
             else:
                 msg = "{} are not valid attributes on this tag"
 
-            #startup_log.warning(msg.format(textual_list(unknown_attrs, 'and')))
             raise errors.ElementError(msg.format(textual_list(unknown_attrs, 'and')), element=self, diagnosis=diagnosis)
 
         self._attr_values = attr_values = {}
@@ -530,7 +529,6 @@ class ElementBaseType(object):
         self._tag_attributes = self.__class__._tag_attributes
         self._required_tag_attributes = self.__class__._required_tag_attributes
         self._document = weakref.ref(document)
-        #self.__document = document
         self.xmlns = xmlns
         self._tag_name = tag_name
         self._element_type = (xmlns, tag_name)
@@ -546,9 +544,6 @@ class ElementBaseType(object):
         if not hasattr(self.__class__, '_definition'):
             self.__class__._definition = inspect.getsourcefile(self.__class__)
         document.register_element(self)
-        #self.libname = None
-        #if document.lib is not None:
-        #    self._lib_long_name = document.lib.long_name
 
     def close(self):
         pass
@@ -767,6 +762,13 @@ class ElementBaseType(object):
                         if not (k in attrs and attrs[k] == v):
                             continue
                         yield child
+
+    def replace(self, element):
+        """replace this node with a different element"""
+        for i, sibling in enumerate(self.parent._children):
+            if sibling is self:
+                self.parent._children[i] = element
+                element.parent_docid = self.parent_docid
 
     def children(self, element_type=None, element_class=None, **attrs):
         return self.find(element_type, element_class, **attrs)

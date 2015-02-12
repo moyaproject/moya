@@ -60,6 +60,7 @@ class MoyaTemplateEngine(TemplateEngine):
             return True
 
     def render(self, paths, data, base_context=None, app=None, **tdata):
+
         if paths is None:
             paths = []
         if isinstance(paths, string_types):
@@ -90,6 +91,9 @@ class MoyaTemplateEngine(TemplateEngine):
         if '_t' in base_context:
             tdata = base_context['_t'].copy().update(tdata)
 
+        #save_app = base_context.root.get('app', None)
+        #base_context.set_dynamic('.app', lambda context: context['._t.app'])
+        #try:
         with base_context.root_stack('_t', tdata):
             with template.frame(base_context, data):
                 try:
@@ -98,6 +102,8 @@ class MoyaTemplateEngine(TemplateEngine):
                     if not hasattr(e, 'template_stack'):
                         e.template_stack = base_context['.__t_stack'][:]
                     raise
+        #finally:
+        #    base_context.root['app'] = save_app
 
 
 @implements_to_string

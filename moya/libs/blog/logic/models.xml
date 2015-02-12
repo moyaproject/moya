@@ -6,7 +6,9 @@
         <string name="slug" length="100" null="no" unique="yes" />
         <boolean name="published" default="no" />
         <datetime name="published_date" null="yes" />
-        <text name="content" null="no" default="" />
+        <datetime name="updated_date" null="yes" />
+        <integer name="update" null="no" default="0" />
+        <text name="content" null="no" default="" markup="${.app.settings.default_markup}" />
     </model>
 
 </moya>

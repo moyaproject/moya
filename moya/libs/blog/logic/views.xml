@@ -38,7 +38,7 @@
         <forms:get form="#form.newpost" dst="form"/>
         <forms:validate src="form">
             <db:create model="#Post" obj="form.data" dst="post"
-                let:user=".user"
+                let:owner=".user"
                 let:slug="form.data.slug or slug:form.data.title"
                 let:published_date=".now"
                 let:published="form.data.action == 'publish'"/>

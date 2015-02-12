@@ -94,19 +94,19 @@ class BBCodeMarkup(MarkupBase):
         return HTML(html)
 
 
-class MarkdownMarkup(MarkupBase):
-    name = "markdown"
+# class MarkdownMarkup(MarkupBase):
+#     name = "markdown"
 
-    def create(self, options):
-        if 'output_format' not in options:
-            options['output_format'] = 'html5'
-        self.markdown = markdown.Markdown(**options)
+#     def create(self, options):
+#         if 'output_format' not in options:
+#             options['output_format'] = 'html5'
+#         self.markdown = markdown.Markdown(**options)
 
-    def escape(self, text):
-        return html.escape(text)
+#     def escape(self, text):
+#         return html.escape(text)
 
-    def process_html(self, text, target, options):
-        return HTML(self.markdown.convert(text))
+#     def process_html(self, text, target, options):
+#         return HTML(self.markdown.convert(text))
 
 
 class SummaryMarkup(MarkupBase):
@@ -116,8 +116,8 @@ class SummaryMarkup(MarkupBase):
         return HTML(html.summarize(text, max_size=options.get('length', 100)))
 
 
-class CommonMarkMarkup(MarkupBase):
-    name = "commonmark"
+class MarkdownMarkup(MarkupBase):
+    name = "markdown"
 
     def create(self, options):
         self.parser = CommonMark.DocParser()

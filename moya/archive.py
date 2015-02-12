@@ -11,6 +11,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from . import elements
+elements
 from .library import Library
 from . import logic
 from .tags.context import ContextElementBase
@@ -572,13 +573,13 @@ class Archive(object):
         tag_type = (namespace, tag_name)
 
         for app in itervalues(self.apps):
-            elements = []
-            append = elements.append
+            _elements = []
+            append = _elements.append
             for e in self.data_tags_by_lib[app.lib.long_name].get(tag_type, []):
                 if e.check(context):
                     append(DataElement(e, context))
-            if elements:
-                data.append((app, elements))
+            if _elements:
+                data.append((app, _elements))
         return data
 
     def add_filesystem(self, name, fs):
@@ -861,7 +862,6 @@ class Archive(object):
 
     def get_elements_by_type(self, ns, type):
         """Get all elements of a given namespace, type"""
-        print("!")
         _elements = []
         extend = _elements.extend
         element_type = (ns, type)

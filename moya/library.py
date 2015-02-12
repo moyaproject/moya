@@ -84,6 +84,7 @@ class Library(object):
         # A list of the documents that failed to import
         self.failed_documents = []
         self._libnames = defaultdict(int)
+        self.replace_nodes = defaultdict(list)
 
         self.py = {}
         self.filters = {}
@@ -127,6 +128,9 @@ class Library(object):
 
     def __repr__(self):
         return '<library {}>'.format(self.long_name)
+
+    def add_replacement_node(self, element):
+        self.replace_nodes[element.libname].append(element)
 
     def get_element(self, element_ref, app=None):
         return self.archive.get_element(element_ref, app=app, lib=self.lib)
@@ -227,8 +231,18 @@ class Library(object):
             doc.document_finalize(context)
         for doc in self.documents:
             doc.lib_finalize(context)
+        self.do_replace_nodes()
         self.built = True
         self.finalized = True
+
+    def do_replace_nodes(self):
+        for libname, elements in iteritems(self.replace_nodes):
+            winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
+            existing = self.get_named_element(libname)
+            if existing.lib.priority < winner.lib.priority:
+                log.debug('%r replaced with %r', existing, winner)
+                existing.replace(winner)
+        self.replace_nodes.clear()
 
     def load(self, fs, settings_path=None):
         self.loaded = True
@@ -409,20 +423,21 @@ class Library(object):
 
     def register_named_element(self, name, element, priority=0):
         """Called by parser to register a named element"""
-        if name in self.elements_by_name:
-            # This element exists, we may need to replace it
-            existing_element = self.elements_by_name[name]
-            self.unregister_element(existing_element)
-            if existing_element.priority <= priority:
-                # Priority is less, so do the replace
-                siblings = existing_element.siblings
-                for i, el in enumerate(siblings):
-                    if el == existing_element:
-                        siblings[i] = element
-                        break
-                self.elements_by_name[name] = element
-        else:
-            self.elements_by_name[name] = element
+        # if name in self.elements_by_name:
+        #     # This element exists, we may need to replace it
+        #     existing_element = self.elements_by_name[name]
+        #     self.unregister_element(existing_element)
+        #     if existing_element.priority <= priority:
+        #         log.debug('replacing %s with %s', existing_element, element)
+        #         # Priority is less, so do the replace
+        #         siblings = existing_element.siblings
+        #         for i, el in enumerate(siblings):
+        #             if el == existing_element:
+        #                 siblings[i] = element
+        #                 break
+        #         self.elements_by_name[name] = element
+        # else:
+        self.elements_by_name[name] = element
         self.register_element(element)
 
     def register_filter(self, name, _filter):

@@ -283,6 +283,8 @@ class TemplateNode(Node):
     __repr__ = __str__
 
     def __getitem__(self, key):
+        if key == 'app':
+            return self.td.get(key, self.app)
         return self.td[key]
 
     def get(self, key, default=None):

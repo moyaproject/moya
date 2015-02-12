@@ -11,7 +11,7 @@
         <input class="input-xxlarge" name="slug" label="Slug" maxlength="60" required="no"
             inlinehelp="Leave blank to auto-generate a slug" />
 
-        <field name="content" label="Page Content">
+        <field name="content" label="Content" libname="form.post.editor">
             <wysihtml5:editor/>
         </field>
 
