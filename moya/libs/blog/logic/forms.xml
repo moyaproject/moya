@@ -31,7 +31,7 @@
                 Slug exists, please edit
             </fail>
             <fail if="slug:value != lower:value">
-                Slug should only contain lowerletters, numbers and hyphens
+                Slug should only contain lower-case letters, numbers and hyphens
             </fail>
         </validate-field>
     </form>

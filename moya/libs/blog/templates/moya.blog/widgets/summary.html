@@ -8,7 +8,7 @@
         {% endif %}
         <h4 class="list-grou-item-heading">${post.title}</h4>
         <p class="list-group-item-text">
-            {% markupcontents as 'summary' set length=100 %}
+            {% summarize chars 100 %}
             {% markup post.content as self.app.settings.default_markup %}
             {% end %}
         </p>

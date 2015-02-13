@@ -45,7 +45,7 @@
             <attribute name="name" default="">
                 The name attribute of the textarea.
             </attribute>
-            <attribute name="breaks" default="yes" type="boolean">
+            <attribute name="breaks" default="no" type="boolean">
                 Use line breaks?
             </attribute>
         </signature>

@@ -8,7 +8,9 @@
     <small>${localize:post.published_date}
     {% if not post.published %}<span class="label text-sm label-warning">Un-published</span>{% endif %}</small>
     {% if solo %}</h1>{% else %}</h2>{% endif %}
+    {% cache for 1d key [post.updated_time] %}
     {% markup post.content as self.app.settings.default_markup %}
+    {% endcache %}
     <div class="post-info">
     {%- if numcomments %}
     <a class="comment-count" href="{% url "showpost" with slug=post.slug %}#comments">{% if numcomments == 1 %}1 comment{% else %}${numcomments} comments{% endif %}</a>

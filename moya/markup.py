@@ -6,7 +6,6 @@ from .render import HTML
 from . import html
 from .compat import with_metaclass, implements_to_string, text_type
 import postmarkup
-import markdown
 import CommonMark
 
 

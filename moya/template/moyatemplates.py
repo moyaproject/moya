@@ -1307,8 +1307,8 @@ class MarkupNode(Node):
         return html
 
 
-class MarkupContentsNode(Node):
-    tag_name = "markupall"
+class MarkupBlockNode(Node):
+    tag_name = "markupblock"
 
     def on_create(self, environment, parser):
         exp_map = parser.expect_word_expression_map('as', 'target', 'set')
