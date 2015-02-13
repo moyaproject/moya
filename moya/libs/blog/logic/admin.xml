@@ -1,0 +1,34 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:moya="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:auth="http://moyaproject.com/auth"
+      xmlns:admin="http://moyaproject.com/admin"
+      xmlns:html="http://moyaproject.com/html">
+
+    <admin:module xmlns="http://moyaproject.com/admin"
+        slug="moya-blog" title="Blog" description="Manage your Blog">
+
+        <link to="#admintable.posts"/>
+
+    </admin:module>
+
+    <table xmlns="http://moyaproject.com/admin" libname="admintable.posts"
+        slug="posts" title="Posts" model="#Post"
+        search="#Post.title ==q or #Post.title icontains q" >
+        <column title="Title" link="yes" sort="title">${object.title}</column>
+        <column title="Published?" sort="published">
+            <check ticked="object.published" />
+        </column>
+        <column title="Published Date" sort="published_date">
+            ${object.published_date ? localize:object.published_date: ''}
+        </column>
+        <column title="Updated Date" sort="updated_date">
+            ${object.updated_date ? localize:object.updated_date: ''}
+        </column>
+        <column title="URL" sort="slug">
+            <moya:get-url name="showpost" let:slug="object.slug" dst="post_url" />
+            <html:a href="${post_url}">${post_url}</html:a>
+        </column>
+    </table>
+
+</moya>
