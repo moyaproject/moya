@@ -2,4 +2,6 @@
 
 Moya is a Web Application server, written in Python.
 
-[http://www.moyaproject.com/](http://www.moyaproject.com/)
+[Moya Homepage](http://www.moyaproject.com/) 
+
+[Documentation](http://docs.moyaproject.com/) 
