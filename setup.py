@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.0"
+VERSION = "0.5.1a"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [

@@ -8,7 +8,7 @@
     <small>${localize:post.published_date}
     {% if not post.published %}<span class="label text-sm label-warning">Un-published</span>{% endif %}</small>
     {% if solo %}</h1>{% else %}</h2>{% endif %}
-    {% cache for 1d key [post.updated_time] %}
+    {% cache for 1d key [post.id, post.updated_date, post.published_date] %}
     {% markup post.content as self.app.settings.default_markup %}
     {% endcache %}
     <div class="post-info">

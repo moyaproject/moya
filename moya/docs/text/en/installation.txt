@@ -32,9 +32,9 @@ Moya has only been tested on Linux / Window so far.
 
 [h1]Installing from Source[/h1]
 
-If you want the cutting edge code, you can install the latest from Github. The Moya repos also contains example projects that you may want to try out.
+If you want the cutting edge code, you can install the latest from GitHub. The Moya repos also contains example projects that you may want to try out.
 
-To get the source, clone the [url https://github.com/moyaproject/moya]Moya Github repository[/url], then run the following:
+To get the source, clone the [url https://github.com/moyaproject/moya]Moya GitHub repository[/url], then run the following:
 
 [code]
 $ sudo python setup.py install
