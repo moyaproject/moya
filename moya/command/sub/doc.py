@@ -15,7 +15,7 @@ class Doc(SubCommand):
     help = """automatically generate Moya documentation"""
 
     def add_arguments(self, parser):
-        parser.add_argument(dest="action", metavar="EXTRACT,BUILD",
+        parser.add_argument(dest="action", metavar="EXTRACT or BUILD",
                             help="Documentation action")
 
         parser.add_argument(dest="location", default=None, metavar="PATH",

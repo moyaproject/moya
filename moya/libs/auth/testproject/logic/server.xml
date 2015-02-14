@@ -17,6 +17,8 @@
         <import py="moya.libs.links" />
         <import py="moya.libs.bootstrap" />
         <import py="moya.libs.forms" />
+        <import py="moya.libs.jsonrpc" />
+        <import py="moya.libs.wysihtml5" />
 
         <!-- The 'site' library, for non reusable content -->
         <import location="./site" priority="10" />
@@ -33,6 +35,8 @@
         <install name="welcome" lib="moya.welcome" mount="/" />
         <install name="links" lib="moya.links" />
         <install name="favicon" lib="moya.favicon" mount="/" />
+        <install name="jsonrpc" lib="moya.jsonrpc" mount="/" />
+        <install name="wysihtml5" lib="moya.wysihtml5"/>
 
     </server>
 

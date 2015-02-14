@@ -49,7 +49,6 @@ class Builder(object):
         self.output_fs = output_fs
         self.theme_fs = theme_fs
         self.template_engine = MoyaTemplateEngine(None, self.theme_fs, None)
-        #self.template_env = Environment(self.theme_fs, None)
         self.docs = {}
         self.theme = Theme(self.theme_fs)
         self.settings = None
