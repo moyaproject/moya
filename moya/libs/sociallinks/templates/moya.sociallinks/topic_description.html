@@ -1,8 +1,0 @@
-    {%- if topic.description %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {% render html:topic.description %}
-        </div>
-    </div>
-    {% endif %}
-    <a href="{% url "post" with topic=topic.slug %}" class="btn btn-default" style="width:100%;">Submit a Link</a>

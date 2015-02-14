@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<moya xmlns="http://moyaproject.com"
-    xmlns:let="http://moyaproject.com/let">
-
-    <handle signal="db.before-update" sender="moya.sociallinks#Link">
-        <call macro="#macro.calculate_hotness" let:link="signal.data.object" />
-    </handle>
-
-</moya>

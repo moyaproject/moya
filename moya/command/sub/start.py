@@ -420,7 +420,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
         cfg = None
         if not self.args.location and project_path:
             from ... import build
-            cfg = build.read_config(project_path, self.args.settings)
+            cfg = build.read_config(project_path, self.get_settings())
 
         if not self.args.acceptdefaults:
             console.table([[Cell("Moya Library Wizard", bold=True, fg="green", center=True)],
