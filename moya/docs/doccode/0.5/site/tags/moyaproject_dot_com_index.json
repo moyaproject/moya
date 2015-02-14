@@ -5158,7 +5158,6 @@
                             "markdown",
                             "bbcode",
                             "text",
-                            "commonmark",
                             "summary",
                             "html",
                             "markupbasetype"

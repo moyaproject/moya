@@ -16,17 +16,6 @@
         "synopsis": "define a thumbnail processor",
         "tag_name": "processor",
         "params": {
-            "quality (if using jpeg)": {
-                "default_display": "80",
-                "name": "quality (if using jpeg)",
-                "missing": true,
-                "default": "80",
-                "doc": "The quality of jpeg thumbnails (max 100)",
-                "required": false,
-                "type": "expression",
-                "metavar": null,
-                "choices": null
-            },
             "version": {
                 "default_display": "1",
                 "name": "version",
@@ -35,6 +24,17 @@
                 "doc": "A version number of the processor",
                 "required": false,
                 "type": "integer",
+                "metavar": null,
+                "choices": null
+            },
+            "quality": {
+                "default_display": "80",
+                "name": "quality",
+                "missing": true,
+                "default": "80",
+                "doc": "The quality of jpeg thumbnails (max 100)",
+                "required": false,
+                "type": "expression",
                 "metavar": null,
                 "choices": null
             },

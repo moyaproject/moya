@@ -6,25 +6,41 @@ Moya is distributed as a Python module.
 
 Moya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue for its lifespan -- likely many years yet.
 
-[h1]Install from PyPi[/h1]
+[h1]Linux[/h1]
 
-[alert NOTE]Moya is not currently on PyPi, please install from source[/alert]
-
-Moya is available on PyPi, and may be installed via pip:
+Moya requires [url http://lxml.de]lxml[/url]. Probably the simplest way to install lxml is via your package manager:
 
 [code]
-$ pip install moya
+$ sudo apt-get install python-lxml
 [/code]
 
-[h1]Install from code[/h1]
+[aside]If you are using Python 3, install [b]python3-lxml[/b][/aside]
+
+You can then install Moya with the following:
+
+[code]
+$ sudo pip install moya
+[/code]
+
+[h1]Windows[/h1]
+
+Moya should run on Windows, but at the moment we are concentrating on Linux.
+
+[h1]OSX[/h1]
+
+Moya has only been tested on Linux / Window so far.
+
+[h1]Installing from Source[/h1]
 
 If you want the cutting edge code, you can install the latest from Github. The Moya repos also contains example projects that you may want to try out.
 
-See the repos page for more information:
+To get the source, clone the [url https://github.com/moyaproject/moya]Moya Github repository[/url], then run the following:
 
-[url https://github.com/moyaproject/moya]https://github.com/moyaproject/moya[/url]
+[code]
+$ sudo python setup.py install
+[/code]
 
-[h1]Command Line Application[/h1]
+[h1]Command Line Application [/h1]
 
 After installation you should have the [c]moya[/c] command available on the command line. Enter the following in a terminal to confirm installation was successful and display the version number:
 

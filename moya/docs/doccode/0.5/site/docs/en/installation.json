@@ -6,7 +6,7 @@
         "doc.index"
     ],
     "data": {
-        "body": "[title Installing Moya]\n\nMoya is distributed as a Python module.\n\n[h1]Requirements[/h1]\n\nMoya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue for its lifespan -- likely many years yet.\n\n[h1]Install from PyPi[/h1]\n\n[alert NOTE]Moya is not currently on PyPi, please install from source[/alert]\n\nMoya is available on PyPi, and may be installed via pip:\n\n[code]\n$ pip install moya\n[/code]\n\n[h1]Install from code[/h1]\n\nIf you want the cutting edge code, you can install the latest from Github. The Moya repos also contains example projects that you may want to try out.\n\nSee the repos page for more information:\n\n[url https://github.com/moyaproject/moya]https://github.com/moyaproject/moya[/url]\n\n[h1]Command Line Application[/h1]\n\nAfter installation you should have the [c]moya[/c] command available on the command line. Enter the following in a terminal to confirm installation was successful and display the version number:\n\n[code]\n$ moya -v\n[/code]\n\nThe command app has extensive help; run the following to get help information on the available sub-commands:\n\n[code]\n$ moya -h\n[/code]\n\nYou can get help on a sub-command by typing [c]moya[/c] followed by the name of the sub-command and [c]-h[/c]. Here's an example:\n\n[code]\n$ moya runserver -h\n[/code]",
+        "body": "[title Installing Moya]\n\nMoya is distributed as a Python module.\n\n[h1]Requirements[/h1]\n\nMoya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue for its lifespan -- likely many years yet.\n\n[h1]Linux[/h1]\n\nMoya requires [url http://lxml.de]lxml[/url]. Probably the simplest way to install lxml is via your package manager:\n\n[code]\n$ sudo apt-get install python-lxml\n[/code]\n\n[aside]If you are using Python 3, install [b]python3-lxml[/b][/aside]\n\nYou can then install Moya with the following:\n\n[code]\n$ sudo pip install moya\n[/code]\n\n[h1]Windows[/h1]\n\nMoya should run on Windows, but at the moment we are concentrating on Linux.\n\n[h1]OSX[/h1]\n\nMoya has only been tested on Linux / Window so far.\n\n[h1]Installing from Source[/h1]\n\nIf you want the cutting edge code, you can install the latest from Github. The Moya repos also contains example projects that you may want to try out.\n\nTo get the source, clone the [url https://github.com/moyaproject/moya]Moya Github repository[/url], then run the following:\n\n[code]\n$ sudo python setup.py install\n[/code]\n\n[h1]Command Line Application[/h1]\n\nAfter installation you should have the [c]moya[/c] command available on the command line. Enter the following in a terminal to confirm installation was successful and display the version number:\n\n[code]\n$ moya -v\n[/code]\n\nThe command app has extensive help; run the following to get help information on the available sub-commands:\n\n[code]\n$ moya -h\n[/code]\n\nYou can get help on a sub-command by typing [c]moya[/c] followed by the name of the sub-command and [c]-h[/c]. Here's an example:\n\n[code]\n$ moya runserver -h\n[/code]",
         "name": "installation",
         "docmap": [
             [
@@ -15,11 +15,19 @@
             ],
             [
                 1,
-                "Install from PyPi"
+                "Linux"
             ],
             [
                 1,
-                "Install from code"
+                "Windows"
+            ],
+            [
+                1,
+                "OSX"
+            ],
+            [
+                1,
+                "Installing from Source"
             ],
             [
                 1,

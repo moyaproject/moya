@@ -114,17 +114,6 @@
                     "next_tag": "thumbnails",
                     "synopsis": "define a thumbnail processor",
                     "params": {
-                        "quality (if using jpeg)": {
-                            "default_display": "80",
-                            "name": "quality (if using jpeg)",
-                            "missing": true,
-                            "default": "80",
-                            "doc": "The quality of jpeg thumbnails (max 100)",
-                            "required": false,
-                            "type": "expression",
-                            "metavar": null,
-                            "choices": null
-                        },
                         "version": {
                             "default_display": "1",
                             "name": "version",
@@ -133,6 +122,17 @@
                             "doc": "A version number of the processor",
                             "required": false,
                             "type": "integer",
+                            "metavar": null,
+                            "choices": null
+                        },
+                        "quality": {
+                            "default_display": "80",
+                            "name": "quality",
+                            "missing": true,
+                            "default": "80",
+                            "doc": "The quality of jpeg thumbnails (max 100)",
+                            "required": false,
+                            "type": "expression",
                             "metavar": null,
                             "choices": null
                         },
@@ -13625,7 +13625,6 @@
                                 "markdown",
                                 "bbcode",
                                 "text",
-                                "commonmark",
                                 "summary",
                                 "html",
                                 "markupbasetype"
@@ -23665,6 +23664,17 @@
                             "metavar": null,
                             "choices": null
                         },
+                        "breaks": {
+                            "default_display": "no",
+                            "name": "breaks",
+                            "missing": true,
+                            "default": "no",
+                            "doc": "Use line breaks?",
+                            "required": false,
+                            "type": "boolean",
+                            "metavar": null,
+                            "choices": null
+                        },
                         "buttons": {
                             "default_display": "bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image",
                             "name": "buttons",
@@ -30414,6 +30424,17 @@
                         "doc": "The name attribute of the textarea.",
                         "required": false,
                         "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "breaks": {
+                        "default_display": "no",
+                        "name": "breaks",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "Use line breaks?",
+                        "required": false,
+                        "type": "boolean",
                         "metavar": null,
                         "choices": null
                     },
@@ -37989,7 +38010,6 @@
                             "markdown",
                             "bbcode",
                             "text",
-                            "commonmark",
                             "summary",
                             "html",
                             "markupbasetype"
@@ -40363,17 +40383,6 @@
                 "next_tag": "thumbnails",
                 "synopsis": "define a thumbnail processor",
                 "params": {
-                    "quality (if using jpeg)": {
-                        "default_display": "80",
-                        "name": "quality (if using jpeg)",
-                        "missing": true,
-                        "default": "80",
-                        "doc": "The quality of jpeg thumbnails (max 100)",
-                        "required": false,
-                        "type": "expression",
-                        "metavar": null,
-                        "choices": null
-                    },
                     "version": {
                         "default_display": "1",
                         "name": "version",
@@ -40382,6 +40391,17 @@
                         "doc": "A version number of the processor",
                         "required": false,
                         "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "quality": {
+                        "default_display": "80",
+                        "name": "quality",
+                        "missing": true,
+                        "default": "80",
+                        "doc": "The quality of jpeg thumbnails (max 100)",
+                        "required": false,
+                        "type": "expression",
                         "metavar": null,
                         "choices": null
                     },

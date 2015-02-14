@@ -49,6 +49,17 @@
                 "metavar": null,
                 "choices": null
             },
+            "breaks": {
+                "default_display": "no",
+                "name": "breaks",
+                "missing": true,
+                "default": "no",
+                "doc": "Use line breaks?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
             "buttons": {
                 "default_display": "bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image",
                 "name": "buttons",
