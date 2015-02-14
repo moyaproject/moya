@@ -11,7 +11,7 @@ from .. import pilot
 from ..context.expressionrange import ExpressionRange
 
 from datetime import date, time, datetime, timedelta
-from calendar import monthrange
+from calendar import monthrange, isleap
 from math import floor
 import re
 import iso8601
@@ -20,6 +20,7 @@ from babel.dates import (format_datetime,
                          format_time,
                          format_timedelta)
 
+import calendar
 from time import mktime
 from pytz import UTC
 
@@ -84,8 +85,6 @@ class DatetimeInclusiveRange(DatetimeExclusiveRange):
             while d >= self.end:
                 yield d
                 d -= self.step
-        if d != self.end:
-            yield self.end
 
 
 class ExpressionDate(date, interface.Proxy):
@@ -114,7 +113,8 @@ class ExpressionDate(date, interface.Proxy):
     @implements_to_string
     class ProxyInterface(AttributeExposer):
         __moya_exposed_attributes__ = ["year", "month", "day",
-                                       "isoformat", "next_day", "previous_day"]
+                                       "isoformat", "next_day", "previous_day",
+                                       "leap"]
 
         def __init__(self, obj):
             self.date = obj
@@ -181,6 +181,10 @@ class ExpressionDate(date, interface.Proxy):
         @property
         def previous_day(self):
             return ExpressionDate.from_date(self.date + timedelta(days=-1))
+
+        @property
+        def leap(self):
+            return calendar.isleap(self.year)
 
         def __sub__(self, other):
             dt = self.date
@@ -303,7 +307,6 @@ class ExpressionTime(time, interface.Proxy):
             except:
                 raise ValueError("'{}' is not a valid time format string".format(fmt))
 
-
         @property
         def isoformat(self):
             return self.time.isoformat()
@@ -374,6 +377,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
                                        "year_start", "month_start", "day_start",
                                        "next_day", "next_year", "next_month",
                                        "previous_day", "previous_month", "previous_year",
+                                       'leap',
                                        "days_in_month", "epoch",
                                        "isoformat", "local", 'utc', 'naive',
                                        "html5_datetime", "html5_date", "html5_time"]
@@ -399,11 +403,11 @@ class ExpressionDateTime(datetime, interface.Proxy):
         def __moyaconsole__(self, console):
             console.text(text_type(self.ctime()))
 
-        def __moyarange__(self, end, inclusive=False):
+        def __moyarange__(self, context, end, inclusive=False):
             if inclusive:
-                return DatetimeInclusiveRange(self, end)
+                return DatetimeInclusiveRange(context, self, end)
             else:
-                return DatetimeExclusiveRange(self, end)
+                return DatetimeExclusiveRange(context, self, end)
 
         def __str__(self):
             return self.isoformat
@@ -541,6 +545,10 @@ class ExpressionDateTime(datetime, interface.Proxy):
                 return ExpressionDateTime(dt.year - 1, 12, 1, tzinfo=dt.tzinfo)
             else:
                 return ExpressionDateTime(dt.year, dt.month - 1, 1, tzinfo=dt.tzinfo)
+
+        @property
+        def leap(self):
+            return calendar.isleap(self.date.year)
 
         @property
         def days_in_month(self):

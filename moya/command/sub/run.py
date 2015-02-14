@@ -5,7 +5,11 @@ from ...tools import timer
 from ... import errors
 from ... import namespaces
 from ...compat import text_type
+from ...context.expressiontime import ExpressionDateTime
+from ...__init__ import pilot
+from ...timezone import Timezone
 
+import os
 import os.path
 import sys
 
@@ -53,6 +57,15 @@ class Run(SubCommand):
         c = Context()
         c['.console'] = self.console
         c['.app'] = app
+        c['.now'] = ExpressionDateTime.utcnow()
+        try:
+            c['tz'] = Timezone(os.environ['TZ'])
+        except KeyError:
+            pass
+
+        import locale
+        _locale, encoding = locale.getdefaultlocale()
+        c['.locale'] = _locale
 
         params = {}
         if args.params:
@@ -91,6 +104,7 @@ class Run(SubCommand):
         # call = archive.get_callable('moya.run#main',
         #                             'moya.run',
         #                             breakpoint=args.breakpoint)
+
         call = archive.get_callable_from_document(fspath,
                                                   args.elementref,
                                                   fs=fs,
@@ -101,10 +115,11 @@ class Run(SubCommand):
         if call is None:
             raise ValueError("Element reference '%s' not found in document" % args.elementref)
         try:
-            if args.timer:
-                with timer():
+            with pilot.manage_request(None, c):
+                if args.timer:
+                    with timer():
+                        call(c, **params)
+                else:
                     call(c, **params)
-            else:
-                call(c, **params)
         except Exception as e:
             console.obj(c, e)

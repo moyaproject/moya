@@ -5,27 +5,27 @@
       xmlns:w="http://moyaproject.com/widgets"
       xmlns:forms="http://moyaproject.com/forms">
 
-	<model libname="ShortURL" name="shorturl" xmlns="http://moyaproject.com/db"
+    <model libname="ShortURL" name="shorturl" xmlns="http://moyaproject.com/db"
         repr="shorturl ${id}">
-		<string name="url" length="300" />
-		<integer name="visitcount" default="0"/>
-	</model>
+        <string name="url" length="300" />
+        <integer name="visitcount" default="0"/>
+    </model>
 
     <mountpoint name="main">
         <url route="/" view="#view.front" />
         <url route="/{urlkey}" view="#view.redirect" name="redirect" />
     </mountpoint>
 
-	<form libname="form.create_shorturl" xmlns="http://moyaproject.com/forms" style="horizontal" legend="URL Shortener">
-		<input name="url" maxlength="300" required="yes" label="URL" class="input-xlarge"/>
+    <form libname="form.create_shorturl" xmlns="http://moyaproject.com/forms" style="horizontal" legend="URL Shortener">
+        <input name="url" maxlength="300" required="yes" label="URL" class="input-xlarge"/>
         <submit-button class="btn-primary" name="shorten" text="Shorten URL"/>
-		<validate-field field="url">
+        <validate-field field="url">
             <fail if="len:value gt 300">URL must be no more than 300 characters</fail>
             <fail if="not (value ^= 'http://' or value ^='https://')">
                 URL must start with http:// or https://
             </fail>
-		</validate-field>
-	</form>
+        </validate-field>
+    </form>
 
     <view libname="view.front" content="#content.front" requires=".permissions.admin">
         <forms:get form="#form.create_shorturl" dst="form" />
