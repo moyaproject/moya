@@ -240,7 +240,7 @@ class Library(object):
             winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
             existing = self.get_named_element(libname)
             if existing.lib.priority < winner.lib.priority:
-                log.debug('%r replaced with %r', existing, winner)
+                startup_log.debug('%r replaced with %r', existing, winner)
                 existing.replace(winner)
         self.replace_nodes.clear()
 
