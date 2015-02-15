@@ -770,9 +770,10 @@ class Expression(object):
             else:
                 throw('math.arithmetic-error', text_type(e))
         except Exception as e:
-            print("In expression.eval {!r}".format(self))
-            import traceback
-            traceback.print_exc(e)
+            if context['.develop']:
+                print("In expression.eval {!r}".format(self))
+                import traceback
+                traceback.print_exc(e)
 
             raise ExpressionEvalError(self.exp, original=e)
 
