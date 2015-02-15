@@ -702,9 +702,10 @@ class Server(LogicElement):
             if self.urlmapper.has_route(url + '/', method, None):
                 _, ext = splitext(url)
                 if not ext:
-                    response = MoyaResponse(status=StatusCode.temporary_redirect,
-                                            location=url + '/')
-                    return response
+                    for result in self._dispatch_mapper(archive, context, self.urlmapper, url + '/', method):
+                        response = MoyaResponse(status=StatusCode.temporary_redirect,
+                                                location=url + '/')
+                        return response
 
         # No response returned, handle 404
         return self.dispatch_handler(archive,
