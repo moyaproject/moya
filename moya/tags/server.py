@@ -699,13 +699,13 @@ class Server(LogicElement):
         # Append slash and redirect if url doesn't end in a slash
         if not url.endswith('/') and site.append_slash:
             # Check in advance if the url ending with / actually maps to anything
-            if self.urlmapper.has_route(url + '/', method, None):
+            if request.method in ('HEAD', 'GET') and self.urlmapper.has_route(url + '/', method, None):
                 _, ext = splitext(url)
+                # Don't redirect when the filename has an extension
                 if not ext:
-                    for result in self._dispatch_mapper(archive, context, self.urlmapper, url + '/', method):
-                        response = MoyaResponse(status=StatusCode.temporary_redirect,
-                                                location=url + '/')
-                        return response
+                    response = MoyaResponse(status=StatusCode.temporary_redirect,
+                                            location=url + '/')
+                    return response
 
         # No response returned, handle 404
         return self.dispatch_handler(archive,
