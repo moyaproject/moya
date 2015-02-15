@@ -33,6 +33,7 @@ from ..compat import urlencode
 
 from webob import Response
 
+from fs.path import splitext
 import pytz
 
 import sys
@@ -511,7 +512,7 @@ class Server(LogicElement):
         response.text = text_type(result)
         return self.process_response(context, response)
 
-    def _dispatch_result(self, archive, context, request, result):
+    def _dispatch_result(self, archive, context, request, result, status=StatusCode.ok):
         if result is None:
             return None
         if isinstance(result, ReplaceRequest):
@@ -523,7 +524,7 @@ class Server(LogicElement):
                                          result.status)
         if not isinstance(result, Response):
             html = render_object(result, archive, context, "html")
-            response = MoyaResponse(charset=b'utf8' if PY2 else 'utf8')
+            response = MoyaResponse(charset=b'utf8' if PY2 else 'utf8', status=status)
             response.text = html
         else:
             response = result
@@ -699,9 +700,11 @@ class Server(LogicElement):
         if not url.endswith('/') and site.append_slash:
             # Check in advance if the url ending with / actually maps to anything
             if self.urlmapper.has_route(url + '/', method, None):
-                response = MoyaResponse(status=StatusCode.temporary_redirect,
-                                        location=url + '/')
-                return response
+                _, ext = splitext(url)
+                if not ext:
+                    response = MoyaResponse(status=StatusCode.temporary_redirect,
+                                            location=url + '/')
+                    return response
 
         # No response returned, handle 404
         return self.dispatch_handler(archive,
@@ -739,7 +742,7 @@ class Server(LogicElement):
             method = request.method
             for result in self._dispatch_mapper(archive, context, self.urlmapper, url, method, status):
                 if not isinstance(result, RespondWith):
-                    return self._dispatch_result(archive, context, request, result)
+                    return self._dispatch_result(archive, context, request, result, status=status)
         except Exception as e:
             log.exception('error in dispatch_handler')
             #from traceback import print_exc
