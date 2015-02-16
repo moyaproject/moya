@@ -703,7 +703,10 @@ class Context(object):
         _lookup = self._set_lookup
         for index, value in seq:
             obj, final = _lookup(index)
-            (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+            try:
+                (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+            except Exception as e:
+                raise ContextKeyError(self, index)
 
     @synchronize
     def set_new(self, index, value):

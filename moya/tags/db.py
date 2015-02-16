@@ -1275,6 +1275,16 @@ class StringMap(FieldElement):
         return None
 
 
+class _GenericKey(FieldElement):
+    moya_column = dbcolumns.GenericKeyColumn
+
+    class Help:
+        synopsis = """a generic foreign key"""
+
+    def get_default(self, context):
+        return None
+
+
 class DBDataSetter(DataSetter, DBMixin):
     xmlns = namespaces.db
 

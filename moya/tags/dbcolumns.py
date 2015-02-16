@@ -6,6 +6,7 @@ from ..elements.boundelement import BoundElement
 from ..timezone import Timezone
 from ..compat import text_type
 from ..context.expressiontime import ExpressionDateTime, ExpressionDate
+from ..generickey import GenericKey
 
 from sqlalchemy import (Column,
                         Boolean,
@@ -55,7 +56,6 @@ class MoyaCustomDate(TypeDecorator):
 
 class JSONEncodedDict(TypeDecorator):
     "Represents an immutable structure as a json-encoded string."
-
     impl = TEXT
 
     def process_bind_param(self, value, dialect):
@@ -66,6 +66,20 @@ class JSONEncodedDict(TypeDecorator):
     def process_result_value(self, value, dialect):
         if value is not None:
             value = json.loads(value)
+        return value
+
+
+class GenericKeyObject(TypeDecorator):
+
+    impl = TEXT
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            any_key = GenericKey.from_object(value)
+            value = any_key.encode()
+        return value
+
+    def process_result_value(self, value, dialect):
+        value = GenericKey.decode(value)
         return value
 
 
@@ -407,3 +421,8 @@ class StringMapColumn(MoyaDBColumn):
 
     def get_sa_type(self):
         return StringMap.as_mutable(JSONEncodedDict)
+
+
+class GenericKeyColumn(MoyaDBColumn):
+    dbtype = GenericKeyObject
+
