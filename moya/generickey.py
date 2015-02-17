@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from __future__ import print_function
-import json
 
 from .errors import ElementNotFoundError
 
@@ -33,7 +32,7 @@ class GenericKey(object):
             return cls(None, None, None)
         try:
             app, model, pk = [v or None for v in value.split(',')]
-            pk  = int(pk)
+            pk = int(pk)
         except ValueError:
             # Malformed generic key in the database
             return cls(None, None, None)
@@ -57,7 +56,7 @@ class GenericKey(object):
     def __moyacontext__(self, context):
         return self.lookup(context)
 
-    def __dbobject__(self):
+    def __moyadbobject__(self):
         return self.encode()
 
     def encode(self):
@@ -66,16 +65,17 @@ class GenericKey(object):
         return ",".join((self.app.name, self.model.libname, text_type(self.pk)))
 
     def lookup(self, context):
-        if self.app is not None:
-            element_ref = '{}#{}'.format(self.app.name, self.model.libname)
-            try:
-                model_app, model = self.app.archive.get_element(element_ref)
-            except ElementNotFoundError:
-                log.warning('no model found for generic key {!r}', self)
-                return None
-            db = model.get_db()
-            dbsession = context['._dbsessions'][db.name]
-            table_class = model.get_table_class(model_app)
-            qs = dbsession.query(table_class).filter(table_class.id == self.pk)
-            return qs.first()
+        if self.app is None:
+            return None
 
+        element_ref = '{}#{}'.format(self.app.name, self.model.libname)
+        try:
+            model_app, model = self.app.archive.get_element(element_ref)
+        except ElementNotFoundError:
+            log.warning('no model found for generic key {!r}', self)
+            return None
+        db = model.get_db()
+        dbsession = context['._dbsessions'][db.name]
+        table_class = model.get_table_class(model_app)
+        qs = dbsession.query(table_class).filter(table_class.id == self.pk)
+        return qs.first()

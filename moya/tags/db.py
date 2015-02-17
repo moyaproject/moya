@@ -1276,6 +1276,10 @@ class StringMap(FieldElement):
 
 
 class _GenericKey(FieldElement):
+    """
+    Create a [i]generic[/i] key. A generic key is [tag db]foreign-key[/tag], but can link to any database object.
+
+    """
     moya_column = dbcolumns.GenericKeyColumn
 
     class Help:
