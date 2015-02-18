@@ -96,8 +96,8 @@
                 {%- else %}
                 {% if 'moya.signup' in .libs %}
                 <a href="{% url 'signup' from 'moya.signup' %}" class="navbar-link">Create Account</a>
-                {% endif %}
                 or
+                {% endif %}
                 <a href="${.urls.auth.login}?fwd=${.request.path}" class="navbar-link">Log in</a>
                 {%- endif %}
             </p>
