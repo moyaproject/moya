@@ -18,11 +18,19 @@ python setup.py install
 
 Whichever method you use, this will add a `moya` command line application.
 
+## Example Projects
+
+In addition to the `example projects` directory in the Moya repos, you can check out the following complete projects:
+
+* [Social Links](https://github.com/moyaproject/sociallinks)
+  A social linking (Reddit like) application
+
+* [Short URL](https://github.com/moyaproject/shorturl)
+  A super simple URL shortener application
+
 ## Running a project
 
-See the `example projects` directory for an example. The is a Twitter clone there.
-
-Navigate to the project you want to run, then do the following:
+Navigate to the project directory you want to run, then do the following:
 
 ```
 moya db sync
@@ -39,6 +47,6 @@ moya runserver
 
 And navigate to http://127.0.0.1:8000
 
-## More information
+## More Information
 
 See the [Moya Homepage](http://www.moyaproject.com/) for more information. Or go straight to [Moya's Documentation](http://docs.moyaproject.com/).
