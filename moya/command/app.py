@@ -124,12 +124,10 @@ To list all available commands for a given application, omit the libname:
             return self.project_invoke(sys.argv[1])
 
         if len(sys.argv) > 1 and sys.argv[1] in SUBCOMMANDS:
-            subcommand_module = 'moya.command.sub.{}'.format(sys.argv[1])
-            importlib.import_module(subcommand_module)
+            importlib.import_module('.' + sys.argv[1], 'moya.command.sub')
         else:
             for name in SUBCOMMANDS:
-                subcommand_module = 'moya.command.sub.{}'.format(name)
-                importlib.import_module(subcommand_module)
+                importlib.import_module('.' + name, 'moya.command.sub')
 
         self.make_subcommands()
 
