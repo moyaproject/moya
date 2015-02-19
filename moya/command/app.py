@@ -127,7 +127,10 @@ To list all available commands for a given application, omit the libname:
             subcommand_module = 'moya.command.sub.{}'.format(sys.argv[1])
             importlib.import_module(subcommand_module)
         else:
-            from .sub import *
+            for name in SUBCOMMANDS:
+                subcommand_module = 'moya.command.sub.{}'.format(name)
+                importlib.import_module(subcommand_module)
+
         self.make_subcommands()
 
         parser = self.get_argparse()

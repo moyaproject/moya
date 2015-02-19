@@ -3,7 +3,7 @@ from __future__ import print_function
 
 from .errors import ElementNotFoundError
 
-from compat import text_type
+from .compat import text_type
 import logging
 log = logging.getLogger('moya.db')
 

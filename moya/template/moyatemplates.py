@@ -942,19 +942,24 @@ class MediaNode(Node):
 
     def on_create(self, environment, parser):
         self.path_expression = parser.expect_expression()
-        expression_map = parser.expect_word_expression_map('media', 'from')
+        expression_map = parser.expect_word_expression_map('media', 'from', 'index')
         self.media_expression = expression_map.get('media')
         self.in_expression = expression_map.get('from')
+        self.index_expression = expression_map.get('index')
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         media = 'media'
 
         path = text_type(self.path_expression.eval(context))
+        if self.index_expression is not None:
+            media_url_index = self.index_expression.eval(context)
+        else:
+            media_url_index = None
 
         if path.startswith('/'):
             app = self.template_app(environment.archive, context.get('._t.app', None))
-            media_path = environment.archive.get_media_url(None, media, path)
+            media_path = environment.archive.get_media_url(context, None, media, path, url_index=media_url_index)
             return media_path
 
         if self.media_expression is not None:
@@ -977,7 +982,7 @@ class MediaNode(Node):
                 raise self.render_error("Could not detect app to get media url",
                                         diagnosis=diagnosis)
 
-        media_path = environment.archive.get_media_url(app, media, path)
+        media_path = environment.archive.get_media_url(context, app, media, path, url_index=media_url_index)
         return media_path
 
 
@@ -1254,9 +1259,9 @@ class DataNode(Node):
         try:
             data = self.data = json.loads(self.text)
         except Exception as e:
-            raise errors.TagError("data didn't validate as JSON ({})".format(e), self)
+            self.render_error("data didn't validate as JSON ({})".format(e))
         if self.data_name is None and not isinstance(data, dict):
-            raise errors.TagError("data should be a JS object if no name is given", self)
+            self.render_error("data should be a JS object if no name is given")
 
         if self.data_name is None:
             context.update(self.data)
@@ -1276,11 +1281,11 @@ class LetNode(Node):
     def render(self, environment, context, template, text_escape):
         let = self.let_expression.eval(context)
         if not hasattr(let, 'items'):
-            raise errors.TagError("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let), self)
+            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let))
         try:
             context.update(let)
         except:
-            raise errors.TagError("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let), self)
+            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let))
         return ''
 
 

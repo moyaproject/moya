@@ -14,7 +14,7 @@ from ..tools import url_join
 from ..context.missing import is_missing
 from ..markup import Markup
 from ..template import Template as MoyaTemplate
-from ..compat import string_types
+from ..compat import string_types, text_type
 
 
 class Renderable(object):
@@ -320,10 +320,11 @@ class RenderBase(LogicElement):
             pass
 
     def include_css(self, context, media, app, path):
-        app = self.archive.get_app_from_lib('moya.debug')
-        media_path = self.archive.get_media_url(app, media)
-        path = url_join(media_path, path)
-        context['.content'].include['includecss'].append(path)
+        if isinstance(app, text_type):
+            app = self.archive.get_app_from_lib(app)
+        path = self.archive.get_media_url(context, app, media, path)
+        content = context['.content']
+        content.include('css', IncludePath('css', path, IncludeCSS.format))
 
 
 class RenderContent(DataSetter, ContentElementMixin):
@@ -496,7 +497,7 @@ class MediaURL(DataSetter):
     def logic(self, context):
         params = self.get_parameters(context)
         app = self.get_app(context)
-        media_path = self.archive.get_media_url(app, params.media)
+        media_path = self.archive.get_media_url(context, app, params.media)
         url = url_join(media_path, params.path)
         self.set_context(context, params.dst, url)
 
@@ -543,7 +544,7 @@ class IncludeCSS(LogicElement, ContentElementMixin):
             if params.path.startswith('/'):
                 path = params.path
             else:
-                media_path = self.archive.get_media_url(app, params.media)
+                media_path = self.archive.get_media_url(context, app, params.media)
                 path = url_join(media_path, params.path)
         content.include(params.type, IncludePath(params.type, path, self.format))
 
@@ -773,7 +774,7 @@ class ConsoleRender(RenderBase):
     obj = Attribute("Object to render", type="expression", required=True)
 
     def logic(self, context):
-        obj = self.obj(context, context)
+        obj = self.obj(context)
         c = Console(nocolors=False, text=False, width=120, html=True)
         text = c.obj(context, obj).get_text()
         html = '<div class="moya-console">{}</div>'.format(text)

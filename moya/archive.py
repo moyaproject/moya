@@ -227,7 +227,7 @@ class Archive(object):
         self.log_color = True
         self.log_width = None
 
-        self.media_url = None
+        self.media_urls = None
         self.media_app = None
 
         self.failed_documents = []
@@ -238,6 +238,10 @@ class Archive(object):
 
     def __repr__(self):
         return "<archive>"
+
+    @property
+    def media_url(self):
+        return self.media_urls[0] if self.media_urls else None
 
     def get_console_file(self):
         if self.log_logger:
@@ -729,7 +733,7 @@ class Archive(object):
                 media_fs = fsopendir(location)
                 mount_fs = self.add_filesystem('media', MountFS())
                 mount_fs.mountdir("/", media_fs)
-                self.media_url = section.get('url', None)
+                self.media_urls = section.get_list('url')
                 self.media_app = section.get('app', 'media')
 
             elif what == "smtp":
@@ -768,17 +772,18 @@ class Archive(object):
     def init_media(self):
         if 'media' not in self.filesystems:
             return
-        if not self.media_url:
+        if not self.media_urls:
             if not self.media_app:
                 raise errors.StartupFailedError("no 'url' or 'app' specified in [media] section")
             if self.media_app not in self.apps:
                 startup_log.warning('app set in [media]/app has not been installed ({})'.format(self.media_app))
                 return
             try:
-                self.media_url = self.apps[self.media_app].mounts[0][1]
+                self.media_urls = [self.apps[self.media_app].mounts[0][1]]
             except:
                 raise errors.StartupFailedError('unable to detect media url! (specify in [media]/url)')
-        startup_log.debug('media url is %s', self.media_url)
+        for i, _url in enumerate(self.media_urls):
+            startup_log.debug('media url #%s is %s', i, _url)
 
         media_fs = self.filesystems['media']
         for app in itervalues(self.apps):
@@ -800,11 +805,14 @@ class Archive(object):
             if lib.data_fs is not None:
                 data_fs.addfs(lib.long_name, lib.data_fs, priority=lib.data_info.get('priorty', 0))
 
-    def get_media_url(self, app, media, path=''):
+    def get_media_url(self, context, app, media, path='', url_index=None):
         """Get a URL to media in a given app"""
+        if url_index is None:
+            url_index = context.inc('._media_url_index')
+        url_no = url_index % len(self.media_urls)
         if app is None:
-            return url_join(self.media_url or '', path)
-        return url_join(self.media_url or '',
+            return url_join(self.media_urls[url_no] or '', path)
+        return url_join(self.media_urls[url_no] or '',
                         app.get_media_directory(media),
                         path)
 

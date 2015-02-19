@@ -47,7 +47,7 @@ class Table(LogicElement):
             "caption": params.caption
         }
         app = self.get_app(context)
-        css_path = self.archive.get_media_url(app, 'media', 'css/tables.css')
+        css_path = self.archive.get_media_url(context, app, 'media', 'css/tables.css')
         content.include_css(css_path)
         with content.template_node("table", app.resolve_template(params.template), {'table': table}):
             yield logic.DeferNodeContents(self)

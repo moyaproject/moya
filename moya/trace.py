@@ -5,9 +5,9 @@ from __future__ import print_function
 from . import syntax
 from .console import Console, Cell
 from .template.errors import (TagError,
-                                  RenderError,
-                                  TemplateError,
-                                  MissingTemplateError)
+                              RenderError,
+                              TemplateError,
+                              MissingTemplateError)
 from .context.expression import ExpressionError
 from .context.errors import SubstitutionError
 from .logic import MoyaException

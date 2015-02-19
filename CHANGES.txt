@@ -1,0 +1,16 @@
+0.5.2
+-----
+
+ * Added the ability to specify a list of media URLs. The {% media %} template tag will alternate through them when rendering templates. This allows you to distribute media across media servers, and permit more simultaneous connects than the browser would allow for a single server.
+ * Added <generic-key> to database tags.
+
+0.5.1
+-----
+
+Mostly bugfixes
+
+0.5.0
+-----
+
+First public release. Too many changes to list.
+

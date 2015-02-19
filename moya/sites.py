@@ -149,6 +149,9 @@ class Site(object):
     def __repr__(self):
         return "Site('{}', {!r})".format(self.domain, self.site_data)
 
+    def __moyarepr__(self, context):
+        return '''<site '{}', {}>'''.format(self.domain, context.to_expr(self.site_data))
+
     def match(self, domain):
         match = self._match(domain)
         if match is None:

@@ -844,6 +844,24 @@ class Context(object):
                 return value
         return default
 
+    def inc(self, index):
+        """Increment an integer value and return it"""
+        try:
+            value = self.get(index, 0) + 1
+        except ValueError:
+            value = 0
+        self.set(index, value)
+        return value
+
+    def dec(self, index):
+        """Decrement an integer value and return it"""
+        try:
+            value = self.get(index, 0) - 1
+        except ValueError:
+            value = 0
+        self.set(index, value)
+        return value
+
     def get_first_true(self, default=None, *indices):
         """Return the first index that evaluates to true, or a default"""
         get = self.get
