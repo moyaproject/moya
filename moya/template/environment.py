@@ -14,6 +14,10 @@ from fs.errors import ResourceNotFoundError, NoSysPathError
 import weakref
 
 
+# Update for backwards incompatible changes, so we don't get old cached templates
+TEMPLATE_VERSION = 1
+
+
 class Environment(object):
     name = "moya"
 
@@ -55,7 +59,7 @@ class Environment(object):
             except ResourceNotFoundError:
                 raise MissingTemplateError(template_path)
             modified_time = info.get('st_mtime', None) or datetime_to_epoch(info['modified_time'])
-            cache_name = "%s@%s" % (template_path, modified_time)
+            cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, modified_time)
             cached_template = self.cache.get(cache_name, None)
             if cached_template is not None:
                 template = Template.load(cached_template)

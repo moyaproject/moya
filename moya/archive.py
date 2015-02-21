@@ -729,10 +729,13 @@ class Archive(object):
                 add_engine(self, name, section)
 
             elif what == 'media':
+                priority = section.get_int('priority', 1)
                 location = section["location"]
-                media_fs = fsopendir(location)
-                mount_fs = self.add_filesystem('media', MountFS())
-                mount_fs.mountdir("/", media_fs)
+                static_media_fs = fsopendir(location)
+                media_fs = MultiFS()
+                media_fs.addfs("static", static_media_fs, priority=priority)
+                self.add_filesystem('media', media_fs)
+
                 self.media_urls = section.get_list('url')
                 self.media_app = section.get('app', 'media')
 
@@ -786,6 +789,7 @@ class Archive(object):
             startup_log.debug('media url #%s is %s', i, _url)
 
         media_fs = self.filesystems['media']
+        media_mount_fs = MountFS()
         for app in itervalues(self.apps):
             for media_name, media_sub_fs in iteritems(app.lib.media):
                 name = "%s_%s" % (app.name, media_name)
@@ -797,7 +801,8 @@ class Archive(object):
                     mount_media = media_sub_fs
                 if name not in self.filesystems:
                     self.filesystems[name] = mount_media
-                media_fs.mountdir(media_path, mount_media)
+                media_mount_fs.mountdir(media_path, mount_media)
+        media_fs.addfs("media", media_mount_fs)
 
     def init_data(self):
         data_fs = self.data_fs

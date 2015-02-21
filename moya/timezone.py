@@ -72,6 +72,6 @@ if __name__ == "__main__":
     tz = Timezone("Asia/Seoul")
 
     print(repr(tz))
-    print(unicode(tz))
+    print(text_type(tz))
 
     print(tz(t))
