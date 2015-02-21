@@ -1400,8 +1400,9 @@ class GetOrCreate(DBDataSetter):
         created = False
         dst = params.dst
         let_map = self.get_let_map(context, check_missing=True)
-        query = [getattr(table_class, k) == dbobject(v)
-                 for k, v in let_map.items()]
+        #query = [getattr(table_class, k) == dbobject(v)
+        #         for k, v in let_map.items()]
+        query = Get._get_attributes_query(self, context, table_class, let_map)
         qs = dbsession.query(table_class).filter(*query)
 
         if filter is not None:
@@ -1576,6 +1577,19 @@ class Get(DBDataSetter):
     _from = Attribute("Application", type="application", default=None)
     filter = Attribute("Filter expression", type="dbexpression", required=False, default=None)
 
+    @classmethod
+    def _get_attributes_query(cls, element, context, table_class, let_map):
+        q = []
+        append = q.append
+        for k, v in let_map.items():
+            try:
+                append(getattr(table_class, k) == dbobject(v))
+            except:
+                element.throw("db.get.invalid-comparison",
+                              "field {} can not be compared with value {}".format(context.to_expr(k), context.to_expr(v)),
+                              diagnosis="check the type of the value matches the column in the database model")
+        return q
+
     @wrap_db_errors
     def logic(self, context):
         params = self.get_parameters(context)
@@ -1613,7 +1627,9 @@ For example **let:{k}="name or 'anonymous'"**
                 self.throw("db.unknown-field",
                            "the value '{}' is not a valid attribute for this model".format(k))
 
-        query = ((getattr(table_class, k) == v) for k, v in query.items())
+        #query = ((getattr(table_class, k) == v) for k, v in query.items())
+
+        query = self._get_attributes_query(self, context, table_class, query)
 
         qs = dbsession.query(table_class).filter(*query)
 

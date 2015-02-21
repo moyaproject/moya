@@ -62,7 +62,6 @@ function JSONRPC(url, options)
             data:rpc_json,
             success:function(remote)
             {
-                console.log(remote.error);
                 self.active -= 1;
                 (callbacks.complete || self.complete)();
                 if (remote.error)
