@@ -398,12 +398,12 @@ class Form(object):
         if self.validated:
             if self.errors:
                 console.text("Form errors", fg="red", bold=True)
-                error_table = [(field, '\n' .join('* %s' % e for e in _errors))
+                error_table = [(field, '\n' .join('* %s' % e.strip() for e in _errors))
                                for field, _errors in iteritems(self.errors)]
                 console.table(error_table, ["field", "error"])
             else:
                 if self.error:
-                    console.text('Form error "%s"' % self.error, fg="red", bold=True)
+                    console.text('Form error "%s"' % self.error.strip(), fg="red", bold=True)
                 else:
                     console.text("Validated, no errors", fg="green", bold=True)
 
@@ -480,6 +480,28 @@ class Reset(ContextElementBase):
     def logic(self, context):
         form = self.src(context)
         form.reset()
+
+
+class Bind(ContextElementBase):
+    """
+    Bind a form to data
+
+    """
+    xmlns = namespaces.forms
+
+    class Help:
+        synopsis = "Add data to a form"
+
+    bind = Attribute("Object to bind to", type="expression", required=False)
+    src = Attribute("Source object to fill in fields", type="expression", default=None)
+
+    def logic(self, context):
+        bind, src = self.get_parameters(context, 'bind', 'src')
+        if bind is None:
+            bind = {}
+        bind.update(self.get_let_map(context))
+        form = src
+        form.bind(context, bind)
 
 
 class Get(ContextElementBase):

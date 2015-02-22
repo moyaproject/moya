@@ -35,12 +35,12 @@ from fs.path import (basename,
 
 
 import hashlib
+import urllib
+import copy
 from collections import OrderedDict
 from datetime import datetime
 from operator import truth
 from math import ceil, floor, log
-
-import copy
 
 
 class Path(text_type):
@@ -628,6 +628,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
             data = v
         url.query.update(data)
         return text_type(url)
+
+    def urlunquote(self, context, v):
+        return urllib.unquote(text_type(v))
+
+    def urlquote(self, context, v):
+        return urllib.quote(text_type(v))
 
     def validfloat(self, context, v):
         return self._validfloat(context, v)

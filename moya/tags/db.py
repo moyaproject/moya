@@ -1704,7 +1704,9 @@ class IfExists(ContextElementBase, DBMixin):
         query = {k: dbobject(v) for k, v in self.get_let_map(context).items()}
 
         table_class = model.get_table_class(app)
-        query = ((getattr(table_class, k) == v) for k, v in query.items())
+        #query = ((getattr(table_class, k) == v) for k, v in query.items())
+
+        query = Get._get_attributes_query(self, context, table_class, query)
 
         qs = dbsession.query(table_class).filter(*query)
 
