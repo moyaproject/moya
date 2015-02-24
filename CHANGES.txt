@@ -5,6 +5,7 @@
  * Added <generic-key> to database tags.
  * Added <forms:bind> tag
  * added urlquote and urlunquote modifiers
+ * added <rpc:signature tag>
 
 0.5.1
 -----

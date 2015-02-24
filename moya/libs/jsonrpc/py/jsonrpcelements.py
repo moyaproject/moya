@@ -584,6 +584,16 @@ class Error(LogicElement):
                    data=data)
 
 
+class SignatureTag(ElementBase):
+    """Contains RPC signature"""
+    xmlns = namespaces.jsonrpc
+    _element_class = "data"
+
+    class Meta:
+        tag_name = "signature"
+        logic_skip = True
+
+
 class ParameterTag(ElementBase):
     """Defines a parameter in an RPC call."""
     xmlns = namespaces.jsonrpc
@@ -672,7 +682,13 @@ class MethodTag(LogicElement):
                                           element=self)
 
         params = {}
-        for param_tag in self.children((namespaces.jsonrpc, "parameter")):
+        for sig_tag in self.children((namespaces.jsonrpc, 'signature')):
+            param_tags = sig_tag.children((namespaces.jsonrpc, "parameter"))
+            break
+        else:
+            param_tags = self.children((namespaces.jsonrpc, "parameter"))
+
+        for param_tag in param_tags:
             (param_name,
              _type,
              default,
