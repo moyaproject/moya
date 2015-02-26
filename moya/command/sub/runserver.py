@@ -7,9 +7,15 @@ from ...wsgi import WSGIApplication
 from wsgiref.simple_server import WSGIRequestHandler, make_server
 
 import sys
-import thread
 import logging
 log = logging.getLogger('moya.runtime')
+
+from moya.compat import PY2
+
+if PY2:
+    from thread import interrupt_main
+else:
+    from _thread import interrupt_main
 
 
 class RequestHandler(WSGIRequestHandler):
@@ -62,7 +68,7 @@ class Runserver(SubCommand):
         def handle_error(request, client_address):
             _type, value, tb = sys.exc_info()
             if isinstance(value, KeyboardInterrupt):
-                thread.interrupt_main()
+                interrupt_main()
         # Allow keyboard interrupts in threads to propagate
         server.handle_error = handle_error
 

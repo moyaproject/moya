@@ -1,6 +1,7 @@
 """Hacked up script to sort modifiers"""
 # Couldn't find a tool for this
 
+"""
 import io
 with io.open('modifiers.py', 'rt') as f:
 
@@ -23,3 +24,4 @@ with io.open('modifiers.py', 'rt') as f:
 
     for d in sorted(defs, key=lambda m: m[0]):
         print ''.join(d),
+"""
