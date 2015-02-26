@@ -605,11 +605,11 @@ class Get(ContextElementBase):
                     break
                 parent_el = el
                 app, el = el.get_element(extend)
-                if (app, el) in visited:
+                if (app, el.libid) in visited:
                     raise errors.ElementError("Recursive form extends, element {} has already been extended".format(el),
                                               element=self,
                                               diagnosis="This form has circular references. i.e. the extend attribute references a form that has already been extended.")
-                visited[(app, el)] = parent_el
+                visited[(app, el.libid)] = parent_el
                 if not style:
                     style = el.style(context)
                 if not template:
