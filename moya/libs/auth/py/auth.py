@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 import moya
-from moya.compat import text_type
+from moya.compat import text_type, PY2
 
 import hashlib
 import random
@@ -16,11 +16,18 @@ except NotImplementedError:
 
 from passlib.context import CryptContext
 
-moya_pwd_context = CryptContext(
-    schemes=[b"bcrypt", b"sha512_crypt", b"pbkdf2_sha512"],
-    default=b"pbkdf2_sha512",
-    all__vary_rounds=0.1,
-)
+if PY2:
+    moya_pwd_context = CryptContext(
+        schemes=[b"bcrypt", b"sha512_crypt", b"pbkdf2_sha512"],
+        default=b"pbkdf2_sha512",
+        all__vary_rounds=0.1,
+    )
+else:
+    moya_pwd_context = CryptContext(
+        schemes=["bcrypt", "sha512_crypt", "pbkdf2_sha512"],
+        default="pbkdf2_sha512",
+        all__vary_rounds=0.1,
+    )
 
 UNUSABLE_PASSWORD = "!"
 
