@@ -36,6 +36,7 @@ from random import choice
 from time import sleep
 from textwrap import dedent
 
+import sys
 import logging
 log = logging.getLogger('moya.runtime')
 
@@ -2281,7 +2282,9 @@ class Input(DataSetter):
         if text:
             text += ' '
         if self.password(context):
-            response = getpass.getpass(text)
+            console = context.root['console']
+            console(text)
+            response = getpass.getpass('')
         else:
             response = raw_input(text)
         if not response:
