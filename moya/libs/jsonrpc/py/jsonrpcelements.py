@@ -271,7 +271,7 @@ class Interface(LogicElement):
             enum_element = self.get_element(self.errors(context)).element
             self.errors = self.archive.get_enum(enum_element.libid)
         else:
-            self.error = None
+            self.errors = None
 
     def logic(self, context):
         pass
