@@ -31,6 +31,8 @@ def _resolve(name):
 def init_logging(path, disable_existing_loggers=False):
     """Sane logging.ini"""
 
+    level_names ={0: 'NOTSET', 10: 'DEBUG', 'WARN': 30, 20: 'INFO', 'ERROR': 40, 'DEBUG': 10, 30: 'WARNING', 'INFO': 20, 'WARNING': 30, 40: 'ERROR', 50: 'CRITICAL', 'CRITICAL': 50, 'NOTSET': 0}
+
     ini_path = path
     ini_stack = []
     while 1:
@@ -134,7 +136,7 @@ def init_logging(path, disable_existing_loggers=False):
             h = kass(*args)
             if "level" in opts:
                 level = get(section_name, "level")
-                h.setLevel(logging._levelNames[level])
+                h.setLevel(level_names[level])
             if len(fmt):
                 h.setFormatter(formatters[fmt])
             if issubclass(kass, MemoryHandler):
@@ -161,8 +163,7 @@ def init_logging(path, disable_existing_loggers=False):
         opts = ini[section_name]
         if "level" in opts:
             level = get(section_name, "level")
-            print(level)
-            log.setLevel(logging._levelNames[level])
+            log.setLevel(level_names[level])
         for h in root.handlers[:]:
             root.removeHandler(h)
         if 'handlers' in opts:
@@ -198,9 +199,9 @@ def init_logging(path, disable_existing_loggers=False):
                 existing.remove(qn)
             if "level" in opts:
                 level = get(section_name, "level", "NOTSET")
-                if level not in logging._levelNames:
+                if level not in level_names:
                     raise errors.LoggingSettingsError("unknown logging level '{}' in  [{}]".format(level, section_name))
-                logger.setLevel(logging._levelNames[level])
+                logger.setLevel(level_names[level])
             for h in logger.handlers[:]:
                 logger.removeHandler(h)
             logger.propagate = propagate
