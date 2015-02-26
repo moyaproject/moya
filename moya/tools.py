@@ -298,7 +298,7 @@ def make_cache_key(key_data):
 def levenshtein(seq1, seq2):
     """Levenshtein word distance"""
     oneago = None
-    thisrow = range(1, len(seq2) + 1) + [0]
+    thisrow = list(range(1, len(seq2) + 1)) + [0]
     for x in xrange(len(seq1)):
         twoago, oneago, thisrow = oneago, thisrow, [0] * len(seq2) + [x + 1]
         for y in xrange(len(seq2)):

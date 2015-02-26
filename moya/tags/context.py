@@ -2282,7 +2282,7 @@ class Input(DataSetter):
             text += ' '
         if self.password(context):
             console = context.root['console']
-            console(text)
+            console(text).flush()
             response = getpass.getpass('')
         else:
             response = raw_input(text)
