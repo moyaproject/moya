@@ -1,14 +1,20 @@
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...loggingconf import init_logging
+from ...compat import PY2
 
 from fs.path import dirname
 from fs.opener import fsopendir
 from os.path import join as pathjoin
 
 import sys
-import thread
 from wsgiref.simple_server import WSGIRequestHandler, make_server
+
+
+if PY2:
+    from thread import interrupt_main
+else:
+    from _thread import interrupt_main
 
 
 import logging
@@ -54,6 +60,6 @@ class Serve(SubCommand):
         def handle_error(request, client_address):
             _type, value, tb = sys.exc_info()
             if isinstance(value, KeyboardInterrupt):
-                thread.interrupt_main()
+                interrupt_main()
         server.handle_error = handle_error
         server.serve_forever()
