@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import json
 
-from .compat import urlopen
+import requests
 
 
 class ProtocolError(Exception):
@@ -150,13 +150,7 @@ class JSONRPC(object):
 
     def _send(self, call):
         call_json = json.dumps(call).encode('utf-8')
-        url_file = None
-        try:
-            url_file = urlopen(self.url, call_json)
-            response_json = url_file.read()
-        finally:
-            if url_file is not None:
-                url_file.close()
+        response_json = requests.post(self.url, call_json).json()
         return response_json
 
     def call(self, method, **params):
@@ -168,8 +162,7 @@ class JSONRPC(object):
             "params": params,
             "id": call_id
         }
-        response_json = self._send(call)
-        response = json.loads(response_json)
+        response = self._send(call)
 
         if 'jsonrpc' not in response or 'id' not in response:
             raise ProtocolError("Invalid response from server")
