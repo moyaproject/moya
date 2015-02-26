@@ -24,6 +24,7 @@
         <import py="moya.libs.feedback"/>
         <import py="moya.libs.jsonrpc"/>
         <import py="moya.libs.wysihtml5"/>
+        <import py="moya.libs.recaptcha" />
 
         <!-- The 'site' library, for non reusable content -->
         <import location="./site" priority="10"/>
