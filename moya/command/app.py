@@ -170,7 +170,6 @@ To list all available commands for a given application, omit the libname:
 
         parser = argparse.ArgumentParser(prog=self.__class__.__name__.lower() + " " + element_ref,
                                          description="Call command %s in moya project" % element_ref,
-                                         version="1.0.0",
                                          add_help=False)
 
         parser.add_argument('-h', '--help', dest="help", action="store_true", default=False,
