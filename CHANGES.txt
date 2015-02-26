@@ -1,3 +1,13 @@
+0.5.4
+-----
+
+* Python 3 fixes
+
+0.5.3
+-----
+
+* Fixes for Windows
+
 0.5.2
 -----
 
@@ -6,7 +16,6 @@
  * Added <forms:bind> tag
  * added urlquote and urlunquote modifiers
  * added <rpc:signature tag>
- * Fixes for Windows
 
 0.5.1
 -----

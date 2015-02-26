@@ -214,8 +214,7 @@ Find, install and manage Moya Libraries
     def run(self):
         parser = self.get_argparse()
         self.args = args = parser.parse_args(sys.argv[1:])
-
-        method_name = "run_" + args.subcommand
+        method_name = "run_" + args.subcommand.decode('utf-8', 'replace')
         try:
             return getattr(self, method_name)() or 0
         except CommandError as e:
