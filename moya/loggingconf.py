@@ -5,6 +5,7 @@ import io
 
 from . import iniparse
 from . import errors
+
 import logging
 from logging import handlers
 MemoryHandler = handlers.MemoryHandler
@@ -151,7 +152,7 @@ def init_logging(path, disable_existing_loggers=False):
         if 'root' not in _loggers:
             raise errors.LoggingSettingsError('unable to initialize logging (section [logger:root] is missing from "{}")'.format(ini_path))
 
-        llist = _loggers.keys()
+        llist = list(_loggers.keys())
         llist.remove('root')
 
         root = logging.root

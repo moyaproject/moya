@@ -10,7 +10,7 @@ import sys
 import logging
 log = logging.getLogger('moya.runtime')
 
-from moya.compat import PY2
+from ...compat import PY2
 
 if PY2:
     from thread import interrupt_main
