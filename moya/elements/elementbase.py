@@ -18,6 +18,7 @@ from ..compat import (implements_to_string,
                       text_type,
                       string_types,
                       with_metaclass,
+                      iteritems,
                       iteritems)
 
 import inspect
@@ -421,7 +422,7 @@ class ElementBaseType(object):
             eval = eval or context.eval
             let_map = {k: eval(v) for k, v in self._let.items()}
             if check_missing:
-                for k, v in let_map.iteritems():
+                for k, v in iteritems(let_map):
                     if getattr(v, 'moya_missing', False):
                         raise errors.ElementError("let:{} must not be missing (it is {!r})".format(k, v))
             return let_map
