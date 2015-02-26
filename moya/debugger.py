@@ -191,7 +191,7 @@ class MoyaCmdDebugger(Cmd):
             return False
 
         self.console.div("Moya Debugger", fg="blue", bold=True)
-        self.console.text("Moya's Debugger http://moyaproject.com/debugger/", fg="black", bold=True).nl()
+        self.console.text("Moya's Debugger http://www.moyaproject.com/debugger/", fg="black", bold=True).nl()
         table = [(Cell("Command", bold=True), Cell("Description", bold=True))]
         command_help = sorted(self.command_help, key=lambda h: h[0])
 
