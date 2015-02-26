@@ -51,7 +51,7 @@ class ServeTemplate(RenderTemplate):
     def on_value(self, context, value):
         content_type = self.content_type(context)
         html = render_object(value, self.archive, context, self.format(context))
-        response = MoyaResponse(charset=b'utf8' if PY2 else 'utf8')
+        response = MoyaResponse(charset=py2bytes('utf8'))
         if content_type:
             response.content_type = py2bytes(content_type)
         response.text = html

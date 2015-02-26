@@ -43,7 +43,7 @@ class DBEngine(object):
 
 def _get_db_error(e):
     """Extract information from sqlalchemy error"""
-    message = e.message
+    message = getattr(e, 'message', text_type(e))
     info = {'sql': e.statement, 'params': e.params}
     if hasattr(e, 'orig'):
         try:

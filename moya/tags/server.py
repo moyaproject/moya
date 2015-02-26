@@ -25,7 +25,7 @@ from ..settings import SettingsContainer, SettingContainer
 from ..context.errors import SubstitutionError
 from ..context.tools import to_expression, set_dynamic
 from ..sites import LocaleProxy
-from ..compat import text_type, PY2, itervalues
+from ..compat import text_type, PY2, itervalues, py2bytes
 from .. import db
 from ..response import MoyaResponse
 from ..request import ReplaceRequest
@@ -508,7 +508,7 @@ class Server(LogicElement):
 
     def render_response(self, archive, context, obj, status=StatusCode.ok):
         result = render_object(obj, archive, context, "html")
-        response = Response(charset=b'utf8', status=int(status))
+        response = Response(charset=py2bytes('utf8'), status=int(status))
         response.text = text_type(result)
         return self.process_response(context, response)
 
@@ -524,7 +524,7 @@ class Server(LogicElement):
                                          result.status)
         if not isinstance(result, Response):
             html = render_object(result, archive, context, "html")
-            response = MoyaResponse(charset=b'utf8' if PY2 else 'utf8', status=status)
+            response = MoyaResponse(charset=py2bytes('utf8'), status=status)
             response.text = html
         else:
             response = result
@@ -771,10 +771,8 @@ class Server(LogicElement):
         # We'll look for a template named <status code>.html and render that
         template_filename = "{}.html".format(int(status))
         try:
-            if PY2:
-                response = MoyaResponse(charset=b'utf8', status=status)
-            else:
-                response = MoyaResponse(charset='utf8', status=status)
+            response = MoyaResponse(charset=py2bytes('utf8'), status=status)
+
             rc = RenderContainer.create(None, template=template_filename)
             rc['request'] = request
             rc['status'] = status
@@ -796,7 +794,7 @@ class Server(LogicElement):
 
 
         # Render a very basic response
-        response = Response(charset=b"utf8", status=status)
+        response = Response(charset=py2bytes("utf8"), status=status)
         url = request.path_info
         try:
             response.text = standard_response(status, url, error, moya_trace, debug=archive.debug)
