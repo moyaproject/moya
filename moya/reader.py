@@ -44,7 +44,7 @@ class DataReader(object):
         if mime_type == "text/plain":
             data = self.fs.getcontents(path, mode="rt", encoding="utf-8")
         elif mime_type == "application/json":
-            with self.fs.open(path, 'rb') as f:
+            with self.fs.open(path, 'rt', encoding="utf-8") as f:
                 data = json.load(f)
         elif mime_type == "application/octet-stream":
             data = self.fs.getcontents(path, mode="rb")
