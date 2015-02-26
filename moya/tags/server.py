@@ -25,7 +25,7 @@ from ..settings import SettingsContainer, SettingContainer
 from ..context.errors import SubstitutionError
 from ..context.tools import to_expression, set_dynamic
 from ..sites import LocaleProxy
-from ..compat import text_type, PY2, itervalues, py2bytes
+from ..compat import text_type, PY2, itervalues, py2bytes, iteritems
 from .. import db
 from ..response import MoyaResponse
 from ..request import ReplaceRequest
@@ -271,7 +271,7 @@ class GetURL(DataSetter):
             else:
                 url_params = self.get_let_map(context)
 
-            for k, v in url_params.iteritems():
+            for k, v in iteritems(url_params):
                 if not v:
                     self.throw('bad-value.parameter', "URL parameter '{}' must not be blank or missing (it is {})".format(k, to_expression(context, v)))
 

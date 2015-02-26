@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from ..compat import text_type, number_types, iteritems
+from ..compat import text_type, number_types, iteritems, PY2
 from ..context.missing import MoyaAttributeError
 
 import codecs
@@ -39,7 +39,10 @@ def get_moya_attribute(context, obj, key, default=None):
 
 
 def quote_string(obj):
-    return "'{}'".format(codecs.encode(obj, 'unicode_escape').replace("'", "\\'"))
+    s = codecs.encode(obj, 'unicode_escape')
+    if not PY2:
+        s = s.decode('utf-8')
+    return "'{}'".format(s.replace("'", "\\'"))
 
 
 def yield_join(seq, join=", "):
