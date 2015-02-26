@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from ...command import SubCommand
 from ...console import Cell
 from ...command.sub import templatebuilder
-from ...compat import text_type
+from ...compat import text_type, raw_input
 
 import sys
 try:

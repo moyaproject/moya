@@ -6,7 +6,7 @@ Elements used in exposing external services to Moya code
 
 from ..tags.context import ContextElementBase
 from ..elements.elementbase import ReturnContainer
-from ..compat import text_type
+from ..compat import text_type, raw_input
 
 import subprocess
 import weakref
