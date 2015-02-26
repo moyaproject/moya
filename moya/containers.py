@@ -78,7 +78,7 @@ class QueryData(OrderedDict):
         return urlencode(self.items(), doseq=True)
 
     def __repr__(self):
-        return '<querydata "{}">'.format(urlencode(self.items(), doseq=True))
+        return '<querydata "{}">'.format(urlencode(list(self.items()), doseq=True))
 
     def __setitem__(self, k, v):
         if v is None:
