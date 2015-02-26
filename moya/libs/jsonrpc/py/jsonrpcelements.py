@@ -379,7 +379,7 @@ class Interface(LogicElement):
         context['.jsonrpc'] = {"request": {}}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode('utf-8'))
         except Exception as e:
             log.debug("%s badly formatted JSONRPC request: %s", interface_id, e)
             response = self.make_error(None,
