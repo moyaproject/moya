@@ -19,7 +19,7 @@ from ..compat import (implements_to_string,
                       string_types,
                       with_metaclass,
                       iteritems,
-                      iteritems)
+                      iterkeys)
 
 import inspect
 import weakref
@@ -152,7 +152,7 @@ class _Parameters(object):
         return self.__attr_values.keys()
 
     def values(self):
-        return [self[k] for k in self.__attr_values.iterkeys()]
+        return [self[k] for k in iterkeys(self.__attr_values)]
 
     def items(self):
         return {k: self[k] for k in self.__attr_values}
@@ -172,7 +172,7 @@ class _Parameters(object):
         return key in self.__attr_values
 
     def __moyaconsole__(self, console):
-        console.obj(context, self._get_param_dict())
+        console.obj(None, self._get_param_dict())
 
 
 def _open_tag(tag_name, attrs):

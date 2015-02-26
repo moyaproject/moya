@@ -6,7 +6,7 @@ from .render import render_object, HTML, RenderList
 from .containers import OrderedDict
 from .html import escape
 from . import interface
-from .compat import implements_to_string, text_type, string_types
+from .compat import implements_to_string, text_type, string_types, iteritems, iterkeys
 from .tools import unique
 
 from contextlib import contextmanager
@@ -164,7 +164,7 @@ class Content(interface.AttributeExposer):
         """Merge this content with another"""
         self.app = content.app
         self.merge_td(content.td)
-        for k, v in content._include.iteritems():
+        for k, v in iteritems(content._include):
             include_list = self._include[k]
             for item in v:
                 if item not in include_list:
@@ -297,19 +297,19 @@ class TemplateNode(Node):
         return key in self.td
 
     def iterkeys(self):
-        return self.td.iterkeys()
+        return iterkeys(self.td)
 
     def keys(self):
         return self.td.keys()
 
     def itervalues(self):
-        return self.td.itervalues()
+        return iteritems(self.td)
 
     def values(self):
         return self.td.values()
 
     def iteritems(self):
-        return self.td.iteritems()
+        return iteritems(self.td)
 
     def items(self):
         return self.td.items()

@@ -46,4 +46,4 @@ class BoundElement(object):
         return [('app', self.app), ('element', self.element)]
 
     def iteritems(self):
-        return self.iteritems()
+        return self.items()
