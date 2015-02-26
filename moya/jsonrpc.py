@@ -1,5 +1,9 @@
-import urllib
+from __future__ import unicode_literals
+from __future__ import print_function
+
 import json
+
+from .compat import urlopen
 
 
 class ProtocolError(Exception):
@@ -148,7 +152,7 @@ class JSONRPC(object):
         call_json = json.dumps(call)
         url_file = None
         try:
-            url_file = urllib.urlopen(self.url, call_json)
+            url_file = urlopen(self.url, call_json)
             response_json = url_file.read()
         finally:
             if url_file is not None:
