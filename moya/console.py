@@ -751,15 +751,20 @@ class Console(object):
                 raw_tb = exc
             else:
                 import traceback
-                raw_tb = traceback.format_exc(exc)
+                raw_tb = traceback.format_exc()
 
             if self.terminal_colors:
                 from pygments import highlight
-                from pygments.lexers import PythonTracebackLexer
+                from pygments.lexers import PythonTracebackLexer, Python3TracebackLexer
                 from pygments.formatters import TerminalFormatter
 
+                if PY2:
+                    lexer = PythonTracebackLexer
+                else:
+                    lexer = Python3TracebackLexer
+
                 htb = highlight(raw_tb,
-                                PythonTracebackLexer(),
+                                lexer(),
                                 TerminalFormatter())
                 self(htb)
             else:
