@@ -232,7 +232,7 @@ if platform.system() == 'Windows':
             from ctypes import windll, create_string_buffer
 
             # stdin handle is -10
-            # stdout handle is -11
+            # stdout handle is -11from
             # stderr handle is -12
 
             h = windll.kernel32.GetStdHandle(-12)
@@ -242,7 +242,7 @@ if platform.system() == 'Windows':
             if res:
                 import struct
                 (bufx, bufy, curx, cury, wattr,
-                 left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
+                 left, top, right, bottom, maxx, maxy) = struct.unpack(b"hhhhHhhhhhh", csbi.raw)
                 sizex = right - left + 1
                 sizey = bottom - top + 1
             else:
