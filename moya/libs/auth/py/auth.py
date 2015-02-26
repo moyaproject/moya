@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 import moya
-from moya.compat import text_type, PY2
+from moya.compat import text_type, PY2, py2bytes
 
 import hashlib
 import random
@@ -66,10 +66,10 @@ def makesessionkey(app):
 @moya.expose.macro("hashpassword")
 def hashpassword(app, password):
     rounds = app.settings.get_int('rounds', 10000)
-    scheme = text_type(app.settings.get('scheme', 'pbkdf2_sha512')).encode('utf-8')
+    scheme = text_type(app.settings.get('scheme', 'pbkdf2_sha512'))
     try:
         password_hash = moya_pwd_context.encrypt(password,
-                                                 scheme=scheme,
+                                                 scheme=py2bytes(scheme),
                                                  rounds=rounds)
     except Exception as e:
         app.throw('moya.auth.password-hash-fail', text_type(e))
