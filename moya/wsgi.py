@@ -46,8 +46,13 @@ class ReloadChangeWatcher(object):
         self._app = weakref.ref(app)
         self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
         self.watching_fs = fsopendir(watch_location)
-        self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
-        startup_log.debug('watching "{}" for changes'.format(watch_location))
+        try:
+            self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
+        except:
+            startup_log.debug('failed to watch "{}" for changes'.format(watch_location))
+            startup_log.debug("have you installed 'pyinotify'?")
+        else:
+            startup_log.debug('watching "{}" for changes'.format(watch_location))
 
     @property
     def app(self):
