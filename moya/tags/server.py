@@ -282,7 +282,7 @@ class GetURL(DataSetter):
             self.throw('get-url.no-route', text_type(e))
 
         if query and hasattr(query, 'items'):
-            qs = urlencode(query.items(), True)
+            qs = urlencode(list(query.items()), True)
             url += '?' + qs
 
         if params.base:
