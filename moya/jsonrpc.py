@@ -149,7 +149,7 @@ class JSONRPC(object):
         return self.call_id
 
     def _send(self, call):
-        call_json = json.dumps(call)
+        call_json = json.dumps(call).encode('utf-8')
         url_file = None
         try:
             url_file = urlopen(self.url, call_json)
