@@ -454,7 +454,7 @@ class Console(object):
             self.terminal_width = w
         else:
             self.terminal_width = width or 80
-        self.unicode_borders = self.terminal_colors
+        self.unicode_borders = self.terminal_colors and not sys.platform.startswith('win')
 
     @property
     def width(self):
@@ -985,7 +985,7 @@ class Console(object):
             else:
                 start, end = line_range
 
-            xml = xml.replace('\r', '\n')
+            #xml = xml.replace('\r', '\n')
             xml = AttrText(xml)
 
             if highlighter is None:
