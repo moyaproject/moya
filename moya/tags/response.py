@@ -319,7 +319,7 @@ class Redirect(LogicElement):
             url = text_type(context.get(url_index))
 
         if query:
-            qs = urlencode(query.items(), True)
+            qs = urlencode(list(query.items()), True)
             url += '?' + qs
 
         location = url
