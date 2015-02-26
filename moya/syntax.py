@@ -38,6 +38,9 @@ def highlight(format,
               highlight_lines=None,
               highlight_range=None,
               highlight_range_style="error"):
+    if isinstance(code, bytes):
+        code = code.decode('utf-8', 'replace')
+
     HL = HighlighterMeta.highlighters.get(format, Highlighter)
     h = HL()
     html = h.highlight(code,

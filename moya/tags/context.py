@@ -22,7 +22,7 @@ from ..logic import (DeferNodeContents,
                      MoyaException)
 from ..console import style as console_style
 from ..render import HTML
-from ..compat import zip_longest, raw_input, text_type, string
+from ..compat import zip_longest, raw_input, text_type, string, xrange
 
 import json
 import weakref
