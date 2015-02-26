@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from random import choice
 from functools import reduce
 
-from os.path import abspath, dirname, join, isfile
+from os.path import abspath, dirname, join, isfile, basename
 import re
 import os
 import sys
@@ -111,10 +111,10 @@ def get_moya_dir(path=None):
 
     """
     if path is None:
-        path = os.curdir
+        path = os.getcwd()
     path = abspath(path)
     while not isfile(join(path, 'moya')):
-        if path in ('', '/'):
+        if basename(path) in ('', '/'):
             raise ValueError("Moya project directory not found")
         path = dirname(path)
     return path

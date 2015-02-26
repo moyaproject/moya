@@ -6,6 +6,7 @@
  * Added <forms:bind> tag
  * added urlquote and urlunquote modifiers
  * added <rpc:signature tag>
+ * Fixes for Windows
 
 0.5.1
 -----

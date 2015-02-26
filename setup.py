@@ -51,9 +51,10 @@ setup(name='moya',
                         'pillow',
                         'pymysql',
                         'passlib',
-                        'pyinotify',
+                        #'pyinotify',
                         'commonmark',
                         'requests',
-                        'lxml'],
+                        'lxml',
+                        'colorama'],
       setup_requires=["setuptools_git >= 0.3"]
       )

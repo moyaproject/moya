@@ -13,6 +13,11 @@
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
+.moya-editor-textarea a
+{
+    /* text-decoration: underline !important; */
+}
+
 .moya-editor > .moya-editor-toolbar .moya-editor-buttons
 {
 

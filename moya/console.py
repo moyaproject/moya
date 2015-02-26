@@ -10,6 +10,13 @@ from textwrap import wrap, dedent
 warnings.filterwarnings("ignore")
 from os.path import splitext
 
+try:
+    import colorama
+except ImportError:
+    colorama = None
+else:
+    colorama.init()
+
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -439,7 +446,9 @@ class Console(object):
         if nocolors:
             self.terminal_colors = False
         else:
-            self.terminal_colors = not sys.platform.startswith('win') and self.is_terminal()
+            self.terminal_colors = self.is_terminal()
+            if sys.platform.startswith('win') and not colorama:
+                self.terminal_colors = False
         if self.is_terminal():
             w, h = getTerminalSize()
             self.terminal_width = w

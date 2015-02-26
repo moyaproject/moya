@@ -89,13 +89,4 @@ namespace_docs = {
     "http://moyaproject.com/wysihtml5": """
         Tags to create a rich text editor with [link wysihtml5]WYSIHTML5[/link].
     """
-
-
-
-
-
-
-
-
-
 }
