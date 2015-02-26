@@ -18,7 +18,7 @@ from ..application import Application
 from ..compat import text_type, string_types, implements_to_string, with_metaclass, implements_bool
 from ..tools import make_cache_key, nearest_word
 from .. import tools
-from ..compat import urlencode
+from ..compat import urlencode, PY2
 
 from fs.path import pathjoin, dirname
 
@@ -1024,7 +1024,9 @@ class URLEncodeNode(Node):
         attribs = self.attribs_expression.eval(context)
         if not hasattr(attribs, 'items'):
             self.render_error('urlencode tag requires a mapping')
-        encoded_url = urlencode(attribs).decode('ascii')
+        encoded_url = urlencode(attribs)
+        if PY2:
+            encoded_url = encoded_url.decode('ascii')
         return encoded_url
 
 
