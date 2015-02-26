@@ -22,11 +22,10 @@ from ..logic import (DeferNodeContents,
                      MoyaException)
 from ..console import style as console_style
 from ..render import HTML
-from ..compat import zip_longest, raw_input, text_type
+from ..compat import zip_longest, raw_input, text_type, string
 
 import json
 import weakref
-import string
 import getpass
 import time
 from collections import defaultdict

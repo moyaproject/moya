@@ -22,13 +22,12 @@ from ..dbexpression import DBExpression
 from ..template.rendercontainer import RenderContainer
 from .. import timezone
 from .. import http
-from ..compat import text_type, implements_bool, implements_to_string, iteritems, py2bytes, xrange, number_types
+from ..compat import text_type, implements_bool, implements_to_string, iteritems, py2bytes, xrange, number_types, string
 from .. import pilot
 
 from json import loads
 from collections import namedtuple
 from random import choice
-import string
 
 from sqlalchemy import (Table,
                         Column,

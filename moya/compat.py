@@ -96,6 +96,14 @@ else:
     next_method_name = "__next__"
 
 
+class string(object):
+    lowercase = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    digits = '0123456789'
+    punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+
+
+
 def with_metaclass(meta, *bases):
     class metaclass(meta):
         __call__ = type.__call__
