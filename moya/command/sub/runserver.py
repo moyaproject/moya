@@ -75,7 +75,8 @@ class Runserver(SubCommand):
         try:
             server.serve_forever()
         finally:
-            pass
+            log.debug('user exit')
+            application.close()             
 
             # del server
             # del application

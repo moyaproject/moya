@@ -12,6 +12,7 @@ from fs.path import pathjoin
 from fs.opener import fsopendir
 
 from os.path import dirname, abspath
+import imp
 import sys
 import textwrap
 from time import time
@@ -135,7 +136,7 @@ class Import(LogicElement):
             location = _location
         else:
             if py in sys.modules:
-                reload(sys.modules[py])
+                imp.reload(sys.modules[py])
             try:
                 __import__(py)
             except ImportError as e:

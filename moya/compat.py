@@ -59,6 +59,13 @@ if PY2:
 else:
     import pickle
 
+if PY2:
+    from imp import reload
+else:
+    try:
+        from importlib import reload
+    except ImportError:
+        from imp import reload
 
 if PY2:
     def implements_to_string(cls):
