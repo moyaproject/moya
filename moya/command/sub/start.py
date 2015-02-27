@@ -69,7 +69,7 @@ class Question(object):
             try:
                 response = raw_input()
             except KeyboardInterrupt:
-                console.nl().text("\rCancelled", bold=True, fg="red")
+                console.nl().text("\rCanceled", bold=True, fg="red")
                 raise
             if not isinstance(response, text_type):
                 response = response.decode(sys.getdefaultencoding(), 'replace')
