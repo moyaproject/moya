@@ -3,8 +3,8 @@ from ...wsgi import WSGIApplication
 from ...loggingconf import init_logging
 from ...compat import PY2
 
-from fs.path import dirname
 from fs.opener import fsopendir
+import os.path
 from os.path import join as pathjoin
 
 import sys
@@ -34,7 +34,7 @@ class Serve(SubCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(dest="fs", metavar="PATH",
-                            help="Path to Serve")
+                            help="Path to serve")
         parser.add_argument('--host', dest='host', default='127.0.0.1',
                             help="Host")
         parser.add_argument('-p', '--port', default='8000',
@@ -45,7 +45,7 @@ class Serve(SubCommand):
         fs = fsopendir(args.fs)
 
         from ...command.sub import project_serve
-        location = dirname(project_serve.__file__)
+        location = os.path.dirname(project_serve.__file__)
 
         init_logging(pathjoin(location, 'logging.ini'))
         application = WSGIApplication(location, 'settings.ini', 'main')
@@ -57,9 +57,14 @@ class Serve(SubCommand):
                              handler_class=RequestHandler)
         log.info("server started on http://{}:{}".format(args.host, args.port))
 
+
         def handle_error(request, client_address):
             _type, value, tb = sys.exc_info()
             if isinstance(value, KeyboardInterrupt):
                 interrupt_main()
         server.handle_error = handle_error
-        server.serve_forever()
+
+        try:
+            server.serve_forever()
+        finally:
+            application.close()

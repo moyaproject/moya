@@ -25,6 +25,7 @@ from fs.path import splitext, pathjoin
 from fs.opener import fsopendir
 from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
 
+import sys
 from time import time, clock
 from threading import RLock
 import weakref
@@ -46,11 +47,13 @@ class ReloadChangeWatcher(object):
         self._app = weakref.ref(app)
         self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
         self.watching_fs = fsopendir(watch_location)
+        self.is_win = sys.platform.startswith('win')
         try:
             self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
         except:
-            startup_log.debug('failed to watch "{}" for changes'.format(watch_location))
-            startup_log.debug("have you installed 'pyinotify'?")
+            startup_log.exception('failed to watch "{}" for changes'.format(watch_location))
+            if not self.is_win:
+                startup_log.debug("have you installed 'pyinotify'?")
         else:
             startup_log.debug('watching "{}" for changes'.format(watch_location))
 
@@ -58,14 +61,19 @@ class ReloadChangeWatcher(object):
     def app(self):
         return self._app()
 
+    def close(self):
+        self.watching_fs.close()
+
     def on_change(self, event):
         if self.app is None or not hasattr(self.app, 'archive'):
             return
         ext = splitext(event.path)[1].lower()
         if ext not in self.watch_types:
             return
-        if isinstance(event, MODIFIED) and not event.closed:
-            return
+
+        if not self.is_win:
+            if isinstance(event, MODIFIED) and not event.closed:
+                return
 
         if not self.app.rebuild_required:
             log.info("detected modification to project, rebuild will occur on next request")
@@ -103,6 +111,7 @@ class WSGIApplication(object):
             startup_log.critical(text_type(e))
             raise
 
+        self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
             watch_location = self.archive.cfg.get('autoreload', 'location', '')
             watch_location = pathjoin(self.filesystem_url, watch_location)
@@ -113,6 +122,10 @@ class WSGIApplication(object):
         # Called prior to Python finalizing the WSGIApplication, but before __del__
         # Note, application_weakref will always return None. There is no way to use the original object at this point
         pass
+
+    def close(self):
+        if self.watcher is not None:
+            self.watcher.close()
 
     # def __del__(self):
     #     pass
