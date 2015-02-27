@@ -38,6 +38,7 @@ from .tools import nearest_word
 from .reader import DataReader
 from .context.tools import to_expression
 from . import logtools
+from . import settings
 
 from fs.opener import fsopendir
 from fs.multifs import MultiFS
@@ -45,6 +46,8 @@ from fs.mountfs import MountFS
 from fs.path import pathjoin, abspath
 
 from collections import defaultdict, namedtuple, deque
+import os
+import io
 import re
 from time import time
 import weakref
@@ -234,6 +237,7 @@ class Archive(object):
         self.enum = {}
         self.signals = Signals()
 
+        self._moyarc = None
         self.console = self.create_console()
 
     def __repr__(self):
@@ -242,6 +246,16 @@ class Archive(object):
     @property
     def media_url(self):
         return self.media_urls[0] if self.media_urls else None
+
+    @property
+    def moyarc(self):
+        if self._moyarc is None:
+            try:
+                with io.open(os.path.expanduser("~/.moyarc"), 'rt') as f:
+                    self._moyarc = settings.SettingsContainer.read_from_file(f)
+            except IOError:
+                self._moyarc = settings.SettingsContainer()
+        return self._moyarc
 
     def get_console_file(self):
         if self.log_logger:
@@ -252,7 +266,7 @@ class Archive(object):
 
     def create_console(self):
         console = Console(out=self.get_console_file(),
-                          nocolors=not self.log_color,
+                          nocolors=not (self.log_color and self.moyarc.get_bool('console', 'color')),
                           width=self.log_width or None)
         return console
 

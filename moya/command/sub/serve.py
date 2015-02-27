@@ -3,8 +3,8 @@ from ...wsgi import WSGIApplication
 from ...loggingconf import init_logging
 from ...compat import PY2
 
-from fs.path import dirname
 from fs.opener import fsopendir
+import os.path
 from os.path import join as pathjoin
 
 import sys
@@ -45,7 +45,7 @@ class Serve(SubCommand):
         fs = fsopendir(args.fs)
 
         from ...command.sub import project_serve
-        location = dirname(project_serve.__file__)
+        location = os.path.dirname(project_serve.__file__)
 
         init_logging(pathjoin(location, 'logging.ini'))
         application = WSGIApplication(location, 'settings.ini', 'main')

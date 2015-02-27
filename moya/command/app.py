@@ -31,7 +31,7 @@ class Command(object):
     description = ''
 
     def __init__(self):
-        self.console = Console()
+        self._console = None
         self.subcommands = {}
 
     def make_subcommands(self):
@@ -68,6 +68,13 @@ To list all available commands for a given application, omit the libname:
 
     moya auth#
 """
+
+    @property
+    def console(self):
+        if self._console is None:
+            color = self.moyarc.get_bool('console', 'color', True)
+            self._console = Console(nocolors=not color)
+        return self._console
 
     def get_default(self, name, default=None):
         return self.moyarc.get('defaults', name, default)

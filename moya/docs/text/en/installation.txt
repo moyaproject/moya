@@ -24,7 +24,13 @@ $ sudo pip install moya
 
 [h1]Windows[/h1]
 
-Moya should run on Windows, but at the moment we are concentrating on Linux.
+You can stall Moya on Windows with the following:
+
+[code]
+pip install moya
+[/code]
+
+If you get errors about lxml not installing, you may need to install lxml separately. Download a binary from [url http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml]http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml[/url] and install with pip. Then run install Moya again (with pip).
 
 [h1]OSX[/h1]
 

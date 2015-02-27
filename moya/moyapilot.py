@@ -5,6 +5,10 @@ from threading import local
 from .console import Console
 from .compat import implements_to_string
 from .interface import ObjectExposer
+from .import settings
+
+import os
+import io
 
 
 class _LocalAttribute(object):
@@ -78,7 +82,16 @@ class Pilot(ObjectExposer):
     """Request manager singleton"""
 
     _local = local()
-    console = Console()  # Console is thread safe
+#    console = Console()  # Console is thread safe
+
+    def __init__(self):
+        try:
+            with io.open(os.path.expanduser("~/.moyarc"), 'rt') as f:
+                self.moyarc = settings.SettingsContainer.read_from_file(f)
+        except IOError:
+            self.moyarc = settings.SettingsContainer()
+        self.console = Console(nocolors=not self.moyarc.get_bool('console', 'color'))
+        super(Pilot, self).__init__()
 
     def manage_request(self, request, context):
         self._stack.append(_PilotStackEntry(request, context, {}))
