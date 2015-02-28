@@ -46,6 +46,8 @@ class Runserver(SubCommand):
                             help="don't validate database models before running server")
         parser.add_argument('--breakpoint-startup', dest="breakpoint_startup", action="store_true", default=False,
                             help="debug startup process")
+        parser.add_argument('--no-reload', dest="noreload", action="store_true", default=False,
+                            help="disable auto-reload")
         return parser
 
     def run(self):
@@ -56,7 +58,9 @@ class Runserver(SubCommand):
                                       args.server,
                                       breakpoint=args.breakpoint,
                                       breakpoint_startup=args.breakpoint_startup,
-                                      validate_db=not args.novalidate)
+                                      validate_db=not args.novalidate,
+                                      disable_autoreload=self.args.noreload
+                                      )
         application.preflight()
 
         server = make_server(args.host,
@@ -76,7 +80,7 @@ class Runserver(SubCommand):
             server.serve_forever()
         finally:
             log.debug('user exit')
-            application.close()             
+            application.close()
 
             # del server
             # del application

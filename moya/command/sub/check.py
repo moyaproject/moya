@@ -20,7 +20,8 @@ class Check(SubCommand):
         try:
             build_result = build_server(self.location,
                                         self.get_settings(),
-                                        server_element=args.server)
+                                        server_element=args.server,
+                                        disable_autoreload=True)
         except Exception as e:
             self.console.exception(e, tb=args.debug)
         else:

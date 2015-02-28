@@ -34,7 +34,7 @@ class Extract(SubCommand):
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location, self.get_settings())
+        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
         archive = application.archive
 
         try:

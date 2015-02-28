@@ -40,7 +40,7 @@ class DB(SubCommand):
         getattr(self, "sub_" + self.args.dbsubcommand)()
 
     def sub_sync(self):
-        application = WSGIApplication(self.location, self.get_settings())
+        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
         archive = application.archive
         return db.sync_all(archive, self.console)
 

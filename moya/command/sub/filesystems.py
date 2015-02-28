@@ -48,7 +48,8 @@ class FS(SubCommand):
         args = self.args
         application = WSGIApplication(self.location,
                                       self.get_settings(),
-                                      args.server)
+                                      args.server,
+                                      disable_autoreload=True)
         archive = application.archive
 
         filesystems = archive.filesystems

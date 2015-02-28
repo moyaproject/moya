@@ -360,7 +360,7 @@ class Interface(LogicElement):
 
     @classmethod
     def log_result(cls, context, result):
-        log.debug("↪ %s", lazystr(to_expression, context, result, max_size=120))
+        log.debug("= %s", lazystr(to_expression, context, result, max_size=120))
 
     def run(self, context):
         """Generate a response for either a GET or a POST"""

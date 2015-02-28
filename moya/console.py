@@ -20,6 +20,7 @@ else:
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
+WIN = sys.platform.startswith('win')
 
 if PY3:
     text_type = str
@@ -454,7 +455,7 @@ class Console(object):
             self.terminal_width = w
         else:
             self.terminal_width = width or 80
-        self.unicode_borders = self.terminal_colors and not sys.platform.startswith('win')
+        self.unicode_borders = self.terminal_colors and not WIN
 
     @property
     def width(self):
@@ -599,8 +600,15 @@ class Console(object):
             return ''.join(out)
 
         if PY3:
+            def console_encode(s):
+                """Work around a bug with colorama on Windows"""
+                if self.encoding.lower() != 'utf-8':
+                    return s.encode(self.encoding, 'replace').decode(self.encoding)
+                return s
             with self._lock:
-                self.out.write(''.join(text.decode('utf-8') if isinstance(text, bytes) else text for text in out))
+                self.out.write(''.join(
+                               (text.decode('utf-8', 'replace') if isinstance(text, bytes) else console_encode(text))
+                               for text in out))
         else:
             with self._lock:
                 self.out.write(b''.join(
@@ -839,6 +847,8 @@ class Console(object):
 
             self.update_terminal_width()
             terminal_width = self.terminal_width
+            if WIN:
+                terminal_width -= 1
             table = [[Cell.create(cell, cell_processors.get(rowno))
                       for rowno, cell in enumerate(row)] for row in table]
 
@@ -861,13 +871,13 @@ class Console(object):
 
                 # make each column its minimum until the table fits, starting with the widest column
                 for i, (cell_length, min_length) in sorted(enumerate(zip(cell_lengths, cell_min_lengths)), key=lambda c: c[1][1], reverse=True):
-                    over_size = table_width - self.terminal_width
+                    over_size = table_width - terminal_width
                     cell_lengths[i] -= min(over_size, (cell_length - min_length))
                     table_width = sum(cell_lengths) + table_padding
-                    if sum(cell_lengths) <= self.terminal_width:
+                    if sum(cell_lengths) <= terminal_width:
                         break
 
-                over_space = table_width - self.terminal_width
+                over_space = table_width - terminal_width
                 while over_space > 0:
                     largest_value = 0
                     largest_index = None
@@ -1065,10 +1075,11 @@ class Console(object):
             return self
 
     def show_cursor(self, show=True):
-        if show:
-            self.out.write("\033[?25h")
-        else:
-            self.out.write("\033[?25l")
+        if not WIN:
+            if show:
+                self.out.write("\033[?25h")
+            else:
+                self.out.write("\033[?25l")
         self.out.flush()
 
 

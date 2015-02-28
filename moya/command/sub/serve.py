@@ -48,7 +48,7 @@ class Serve(SubCommand):
         location = os.path.dirname(project_serve.__file__)
 
         init_logging(pathjoin(location, 'logging.ini'))
-        application = WSGIApplication(location, 'settings.ini', 'main')
+        application = WSGIApplication(location, 'settings.ini', 'main', disable_autoreload=True)
         application.archive.filesystems['static'] = fs
 
         server = make_server(args.host,

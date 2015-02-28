@@ -18,7 +18,7 @@ class Apps(SubCommand):
         return parser
 
     def run(self):
-        application = WSGIApplication(self.location, self.get_settings())
+        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
         archive = application.archive
         table = []
 

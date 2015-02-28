@@ -28,7 +28,8 @@ class Help(SubCommand):
         try:
             application = WSGIApplication(self.location,
                                           self.get_settings(),
-                                          args.server)
+                                          args.server,
+                                          disable_autoreload=True)
             archive = application.archive
         except (ValueError, NoProjectError):
             archive = Archive()

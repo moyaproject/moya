@@ -26,7 +26,7 @@ class Preflight(SubCommand):
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location, self.get_settings(), args.server)
+        application = WSGIApplication(self.location, self.get_settings(), args.server, disable_autoreload=True)
 
         preflight = application.preflight(report=False)
 

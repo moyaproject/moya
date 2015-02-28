@@ -22,10 +22,10 @@ class Settings(SubCommand):
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location, self.get_settings(), args.server)
+        application = WSGIApplication(self.location, self.get_settings(), args.server, disable_autoreload=True)
         archive = application.archive
 
-        libstyle = dict(bold=True, fg="blue")
+        libstyle = dict(bold=True, fg="magenta")
         appstyle = dict(bold=True, fg="green")
 
         if args.name is not None:
@@ -45,7 +45,7 @@ class Settings(SubCommand):
 
         for name, lib in sorted(libs):
             if lib.settings:
-                self.console("[LIB] %s settings" % name, **libstyle).nl()
+                self.console.nl()("[LIB] %s settings" % name, **libstyle).nl()
                 table = []
                 table.append([Cell("Setting", bold=True), Cell("Value", bold=True)])
                 for k, v in lib.settings.items():
@@ -54,7 +54,7 @@ class Settings(SubCommand):
 
         for name, app in sorted(apps):
             if app.settings:
-                self.console("[APP] %s: %s settings" % (app.lib.long_name, app.name), **appstyle).nl()
+                self.console.nl()("[APP] %s: %s settings" % (app.lib.long_name, app.name), **appstyle).nl()
 
                 table = []
                 table.append([Cell("Setting", bold=True), Cell("Value", bold=True)])

@@ -32,7 +32,8 @@ class Trace(SubCommand):
         args = self.args
         application = WSGIApplication(self.location,
                                       self.get_settings(),
-                                      args.server)
+                                      args.server,
+                                      disable_autoreload=True)
 
         count = 0
         for route_data, (app, element) in application.server.trace(application.archive,
