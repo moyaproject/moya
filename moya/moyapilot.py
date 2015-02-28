@@ -90,7 +90,7 @@ class Pilot(ObjectExposer):
                 self.moyarc = settings.SettingsContainer.read_from_file(f)
         except IOError:
             self.moyarc = settings.SettingsContainer()
-        self.console = Console(nocolors=not self.moyarc.get_bool('console', 'color'))
+        self.console = Console(nocolors=not self.moyarc.get_bool('console', 'color', True))
         super(Pilot, self).__init__()
 
     def manage_request(self, request, context):

@@ -266,7 +266,7 @@ class Archive(object):
 
     def create_console(self):
         console = Console(out=self.get_console_file(),
-                          nocolors=not (self.log_color and self.moyarc.get_bool('console', 'color')),
+                          nocolors=not (self.log_color and self.moyarc.get_bool('console', 'color', True)),
                           width=self.log_width or None)
         return console
 
