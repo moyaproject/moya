@@ -31,7 +31,19 @@ def _resolve(name):
 def init_logging(path, disable_existing_loggers=False):
     """Sane logging.ini"""
 
-    level_names ={0: 'NOTSET', 10: 'DEBUG', 'WARN': 30, 20: 'INFO', 'ERROR': 40, 'DEBUG': 10, 30: 'WARNING', 'INFO': 20, 'WARNING': 30, 40: 'ERROR', 50: 'CRITICAL', 'CRITICAL': 50, 'NOTSET': 0}
+    level_names = {0: 'NOTSET',
+                   10: 'DEBUG',
+                   20: 'INFO',
+                   30: 'WARNING',
+                   40: 'ERROR',
+                   50: 'CRITICAL',
+                   'NOTSET': 0,
+                   'DEBUG': 10,
+                   'INFO': 20,
+                   'WARN': 30,
+                   'WARNING': 30,
+                   'ERROR': 40,
+                   'CRITICAL': 50}
 
     ini_path = path
     ini_stack = []

@@ -12,7 +12,6 @@ from fs.path import pathjoin
 from fs.opener import fsopendir
 
 from os.path import dirname, abspath
-import imp
 import sys
 import textwrap
 from time import time

@@ -6,7 +6,7 @@ from ..tools import get_moya_dir, is_moya_dir
 from ..compat import with_metaclass
 from ..loggingconf import init_logging
 
-from fs.path import pathjoin
+import os.path
 
 import logging
 log = logging.getLogger('moya.startup')
@@ -46,7 +46,8 @@ class SubCommandType(object):
 
     def run(self):
         location = self.location
-        init_logging(pathjoin(location, self.args.logging))
+        # TODO: make logging work from a FS object
+        init_logging(os.path.join(location, self.args.logging))
         log.debug('project found in "%s"', location)
 
     def init_logging(self, location):
