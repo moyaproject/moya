@@ -1,5 +1,6 @@
-0.6.7
+0.6.6
 
+ * Added --no-reload switch to runserver command
  * More Windows fixes. Windows support is quite robust now.
 
 0.5.5
