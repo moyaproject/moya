@@ -1,3 +1,7 @@
+0.6.7
+
+ * More Windows fixes. Windows support is quite robust now.
+
 0.5.5
 -----
 
@@ -31,4 +35,3 @@ Mostly bugfixes
 -----
 
 First public release. Too many changes to list.
-
