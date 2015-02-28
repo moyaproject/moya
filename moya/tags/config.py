@@ -6,7 +6,7 @@ from .. import logic
 from .. import errors
 from ..elements.attributetypes import *
 from ..contextenum import ContextEnum
-from ..compat import iteritems, text_type
+from ..compat import iteritems, text_type, reload
 
 from fs.path import pathjoin
 from fs.opener import fsopendir
@@ -136,7 +136,7 @@ class Import(LogicElement):
             location = _location
         else:
             if py in sys.modules:
-                imp.reload(sys.modules[py])
+                reload(sys.modules[py])
             try:
                 __import__(py)
             except ImportError as e:
