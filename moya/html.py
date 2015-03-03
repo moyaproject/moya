@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from .compat import text_type
+from moya.compat import text_type
 
 import re
 import unicodedata
@@ -12,23 +12,11 @@ _re_html = re.compile(r'<.*?>|\&.*?\;', re.UNICODE | re.DOTALL)
 
 def escape(text):
     """Escape text for inclusion in html"""
-    return text_type(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    return text_type(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", "&#39;")
 
-
-def escape_quote(text):
-    """Escape text for inclusion in html and within attributes"""
-    return text_type(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
-
-
-# # Borrowed from django
-# def slugify(value):
-#     if not isinstance(value, text_type):
-#         value = text_type(value, 'utf-8')
-#     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-#     value = text_type(re.sub('[^\w\s-]', '', value).strip().lower())
-#     return re.sub('[-\s]+', '-', value)
 
 def slugify(value):
+    # Borrowed from Django
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     return re.sub('[-\s]+', '-', value)
@@ -59,3 +47,20 @@ if __name__ == "__main__":
     print(escape("10 > 5 < 8 & foo"))
 
     print(summarize('Hello <a href="#">test</a> werwer'))
+
+    # from moya.tools import timer, MultiReplace
+
+    # replace = MultiReplace({'&': '&amp;', '<' : '&lt;', '>' : '&gt;', '"': '&quote;', "'": "&#39"})
+
+    # text = '''Some "text" & 'stuff'<>'''
+
+    # REPEAT = xrange(100000)
+
+
+    # with timer('chained escape'):
+    #     for _ in REPEAT:
+    #         escape(text)
+
+    # with timer('multi escape'):
+    #     for _ in REPEAT:
+    #         replace(text)

@@ -131,3 +131,8 @@
 .wysiwyg-clear-left {
   clear: left;
 }
+
+.moya-editor-textarea p a
+{
+    text-decoration: underline;
+}

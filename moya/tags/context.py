@@ -6,7 +6,7 @@ from ..elements.elementbase import (LogicElement,
                                     ReturnContainer,
                                     Attribute)
 from ..context import Expression
-from ..context.expressiontime import ExpressionDateTime
+from ..context.expressiontime import ExpressionDateTime, TimeSpan
 from ..context import dataindex
 from ..context.errors import ContextKeyError
 from ..containers import OrderedDict
@@ -578,6 +578,27 @@ class HTMLTag(DataSetter):
 #     def get_value(self, context):
 #         from postmarkup import render_bbcode
 #         return HTML(render_bbcode(context.sub(self.text)))
+
+
+class _TimeSpan(DataSetter):
+    """Create a datetime object"""
+
+    class Help:
+        synopsis = "create a timespan object"
+        example = """
+        <time-span dst="span" value="1d"/>
+        """
+
+    value = Attribute("Value", type="text", default="")
+
+    def get_value(self, context):
+        text = self.value(context) or context.sub(self.text)
+        if not text:
+            self.throw('time-span.invalid', "no timespan value specified")
+        try:
+            return TimeSpan(text)
+        except ValueError as e:
+            self.throw('time-span.invalid', text_type(e))
 
 
 class Datetime(DataSetter):

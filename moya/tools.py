@@ -97,7 +97,7 @@ class TimeDeltaParser(object):
         """
         match = cls._re_td.match(s)
         if match is None:
-            return None
+            raise ValueError("'{}' is not a valid timespan".format(s))
         t, unit = match.groups()
         t = int(t) * cls._to_ms.get(unit or 'ms')
         return t
@@ -256,6 +256,8 @@ def get_ids(seq):
 
 
 class MultiReplace(object):
+    """Replace multiple tokens at once"""
+    # Note, this typically slower than chained calles to .replace
     def __init__(self, replace_map):
         self.get_replace = replace_map.__getitem__
         self._re = re.compile("|".join(re.escape(k) for k in replace_map.keys()))

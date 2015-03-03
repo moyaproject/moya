@@ -1,6 +1,9 @@
 0.5.7
 -----
 
+ * Added a <time-span> tag
+ * Added a --slow flag to runserver command, to simulate a slow network
+
 0.5.6
 -----
 

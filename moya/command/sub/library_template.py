@@ -16,8 +16,8 @@ title = ${{ library.title }}
 url = ${{ library.url }}
 namespace = ${{ library.namespace }}
 name = ${{ library.longname }}
-# Set to 0.0.1 for your first release
-version = 0.0.1-dev
+# Set to 0.1.0 for your first release
+version = 0.1.0-dev
 
 [settings]
 

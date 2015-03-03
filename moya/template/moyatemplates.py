@@ -8,7 +8,7 @@ from ..context.errors import SubstitutionError
 from ..markup import Markup
 from ..template.enginebase import TemplateEngine
 from ..template.errors import MissingTemplateError, BadTemplateError
-from ..html import escape, escape_quote
+from ..html import escape
 from ..template import errors
 from ..errors import AppError
 from ..render import render_object
@@ -91,9 +91,6 @@ class MoyaTemplateEngine(TemplateEngine):
         if '_t' in base_context:
             tdata = base_context['_t'].copy().update(tdata)
 
-        #save_app = base_context.root.get('app', None)
-        #base_context.set_dynamic('.app', lambda context: context['._t.app'])
-        #try:
         with base_context.root_stack('_t', tdata):
             with template.frame(base_context, data):
                 try:
@@ -102,8 +99,6 @@ class MoyaTemplateEngine(TemplateEngine):
                     if not hasattr(e, 'template_stack'):
                         e.template_stack = base_context['.__t_stack'][:]
                     raise
-        #finally:
-        #    base_context.root['app'] = save_app
 
 
 @implements_to_string
@@ -1005,7 +1000,7 @@ class AttribNode(Node):
                 continue
             if isinstance(v, list):
                 v = " ".join(item for item in v if item)
-            attribs_text.append('{}="{}"'.format(escape(k), escape_quote(v)))
+            attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
         if not attribs_text:
             return ""
         return " " + " ".join(attribs_text)
@@ -1729,16 +1724,16 @@ class Template(object):
                                      original=e,
                                      code=current_node.template.source)
 
+    @classmethod
+    def _sub_escape(cls, text, _text_type=text_type, _hasattr=hasattr):
+        if _hasattr(text, 'html_safe'):
+            return _text_type(text)
+        return _text_type('' if text is None else text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", "&#39;")
+
     def render(self, context, environment=None):
         self.parse(environment)
         stack = [self.get_root_node(environment)]
-
-        def sub_escape(text):
-            if hasattr(text, 'html_safe'):
-                return text_type(text)
-            return text_type('' if text is None else text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
-        return self._render_nodes(stack, environment, context, sub_escape)
+        return self._render_nodes(stack, environment, context, self._sub_escape)
 
 
 if __name__ == "__main__":

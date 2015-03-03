@@ -29,11 +29,13 @@ function JSONRPC(url, options)
     function error(response) {};
     function failure(jqXHR, textStatus, errorThrown) {};
     function complete() {};
+    function tasks() {};
 
     self.success = options.success || success;
     self.error = options.error || error;
     self.failure = options.failure || failure;
     self.complete = options.complete || complete;
+    self.tasks = options.tasks || tasks;
 
     self.active = 0;
 
@@ -48,6 +50,7 @@ function JSONRPC(url, options)
         var callbacks = callbacks || {};
         rpc_id += 1;
         self.active += 1;
+        self.tasks(self.active);
         var call = {
             rpc: self,
             method: method,
@@ -63,6 +66,7 @@ function JSONRPC(url, options)
             success:function(remote)
             {
                 self.active -= 1;
+                self.tasks(self.active);
                 (callbacks.complete || self.complete)();
                 if (remote.error)
                 {
@@ -76,6 +80,7 @@ function JSONRPC(url, options)
             error:function(jqXHR, textStatus, errorThrown)
             {
                 self.active -= 1;
+                self.tasks(self.active);
                 (callbacks.complete || self.complete).call();
                 (callbacks.failure || self.failure)(jqXHR, textStatus, errorThrown);
             }

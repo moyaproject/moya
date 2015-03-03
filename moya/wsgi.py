@@ -26,7 +26,8 @@ from fs.opener import fsopendir
 from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
 
 import sys
-from time import time, clock
+import random
+from time import time, clock, sleep
 from threading import RLock
 import weakref
 from collections import defaultdict
@@ -90,7 +91,8 @@ class WSGIApplication(object):
                  disable_autoreload=False,
                  breakpoint=False,
                  breakpoint_startup=False,
-                 validate_db=False):
+                 validate_db=False,
+                 simulate_slow_network=False):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -102,6 +104,7 @@ class WSGIApplication(object):
         self._new_build_lock = RLock()
         self.archive = None
         self._self = weakref.ref(self, self.on_close)
+        self.simulate_slow_network = simulate_slow_network
 
         if logging is not None:
             init_logging(pathjoin(self.filesystem_url, logging))
@@ -302,6 +305,9 @@ class WSGIApplication(object):
         if not is_debugging() and self.rebuild_required:
             with debug_lock:
                 self.do_rebuild()
+
+        if self.simulate_slow_network:
+            sleep(random.uniform(.2, .5))
 
         start = time()
         start_clock = clock()

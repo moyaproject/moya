@@ -48,25 +48,31 @@ class Runserver(SubCommand):
                             help="debug startup process")
         parser.add_argument('--no-reload', dest="noreload", action="store_true", default=False,
                             help="disable auto-reload")
+        parser.add_argument('--slow', dest="slow", action="store_true", default=False,
+                            help="simulate network latency by inserting delays")
         return parser
 
     def run(self):
         super(Runserver, self).run()
         args = self.args
+
         application = WSGIApplication(self.location,
                                       self.get_settings(),
                                       args.server,
                                       breakpoint=args.breakpoint,
                                       breakpoint_startup=args.breakpoint_startup,
                                       validate_db=not args.novalidate,
-                                      disable_autoreload=self.args.noreload
-                                      )
+                                      disable_autoreload=self.args.noreload,
+                                      simulate_slow_network=self.args.slow)
         application.preflight()
 
         server = make_server(args.host,
                              int(args.port),
                              application,
                              handler_class=RequestHandler)
+
+        if self.args.slow:
+            log.info('network latency simulation is enabled')
         log.info("development server started on http://{}:{}".format(args.host, args.port))
 
         def handle_error(request, client_address):

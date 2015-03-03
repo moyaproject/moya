@@ -168,7 +168,7 @@ class EvalCurrentScope(EvalVariable):
 
     def eval(self, context):
         return context.obj
-        return context.capture_scope()
+        #return context.capture_scope()
 
 
 class EvalExplicitVariable(EvalVariable):

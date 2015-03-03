@@ -11,7 +11,7 @@ from .. import pilot
 from ..context.expressionrange import ExpressionRange
 
 from datetime import date, time, datetime, timedelta
-from calendar import monthrange, isleap
+from calendar import monthrange
 from math import floor
 import re
 import iso8601
