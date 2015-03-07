@@ -3,6 +3,8 @@
 
  * Added a <time-span> tag
  * Added a --slow flag to runserver command, to simulate a slow network
+ * Added 'priority' to <mount> and 'urlpriority' attribute to <install>
+ * Added 'logger' attribute to <log> and related tags
 
 0.5.6
 -----

@@ -33,8 +33,8 @@ class LRUCache(OrderedDict):
 
     def __setitem__(self, key, value):
         with self.lock:
-            if key not in self:
-                if len(self) == self.cache_size:
+            if self.cache_size is not None and key not in self:
+                if len(self) >= self.cache_size:
                     self.popitem(last=False)
             OrderedDict.__setitem__(self, key, value)
 

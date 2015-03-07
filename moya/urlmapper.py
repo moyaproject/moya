@@ -11,6 +11,7 @@ from .context.tools import to_expression
 
 import re
 from collections import namedtuple, defaultdict
+from operator import attrgetter
 from .compat import quote
 
 from pyparsing import Literal, QuotedString, Word, OneOrMore, printables
@@ -327,11 +328,13 @@ class URLMapper(object):
 
     def __init__(self, name=''):
         self.name = name
-        self.routes = []
-        self.route_cache = LRUCache(1000)
-        self.named_routes = defaultdict(list)
+        self._routes = []
+        self._route_cache = LRUCache(1000)
+        self._named_routes = defaultdict(list)
         self._named_urls = None
         self._proxy = None
+        self._insert_order = 0
+        self._finalized = False
 
     def __repr__(self):
         if self.name:
@@ -345,12 +348,36 @@ class URLMapper(object):
         return self._proxy
 
     @property
+    def routes(self):
+        self.finalize()
+        return self._routes
+
+    @property
+    def named_routes(self):
+        self.finalize()
+        return self._named_routes
+
+    def _get_order(self, priority):
+        """Get a tuple for use as a route order attribute"""
+        order = (-priority, self._insert_order)
+        self._insert_order += 1
+        return order
+
+    def finalize(self, _get_order=attrgetter('order')):
+        """Finalize the url mapper (does sorting)"""
+        if not self._finalized:
+            self._finalized = True
+            self._routes.sort(key=_get_order)
+            for k, v in iteritems(self._named_routes):
+                v.sort(key=_get_order)
+
+    @property
     def named_urls(self):
         if self._named_urls is None:
             self._named_urls = _NamedURLs(self)
         return self._named_urls
 
-    def map(self, url, target, methods=None, handlers=None, defaults=None, name=None):
+    def map(self, url, target, methods=None, handlers=None, defaults=None, name=None, priority=0):
         """Map a url on to a target object"""
         route = Route(self,
                       url,
@@ -359,14 +386,16 @@ class URLMapper(object):
                       methods=methods,
                       handlers=handlers,
                       target=target,
-                      name=name)
+                      name=name,
+                      order=self._get_order(priority))
         route.re_route
-        self.routes.append(route)
+        self._routes.append(route)
         if name is not None:
-            self.named_routes[name].append(route)
+            self._named_routes[name].append(route)
+        self._finalized = False
         return route
 
-    def mount(self, url, mapper, defaults=None, name=None):
+    def mount(self, url, mapper, defaults=None, name=None, priority=0):
         """Mount a sub-mapper on a url"""
         if url:
             if not url.startswith('/'):
@@ -379,10 +408,12 @@ class URLMapper(object):
                       defaults=defaults or {},
                       target=mapper,
                       methods=None,
-                      name=name)
+                      name=name,
+                      order=self._get_order(priority))
         if name is not None:
-            self.named_routes[name].append(route)
-        self.routes.append(route)
+            self._named_routes[name].append(route)
+        self._routes.append(route)
+        self._finalized = False
         return route
 
     def get_routes(self, name, default=Ellipsis):
@@ -402,13 +433,14 @@ class URLMapper(object):
 
         route_key = (url, method, handler)
 
-        if route_key in self.route_cache:
-            route_matches = self.route_cache.lookup(route_key)
+        if route_key in self._route_cache:
+            route_matches = self._route_cache.lookup(route_key)
 
         else:
+            self.finalize()
             route_matches = []
             add_route_match = route_matches.append
-            for route in self.routes:
+            for route in self._routes:
                 if route.match_method(method, handler):
                     if route.partial:
                         remaining_url, url_data = route.partial_parse(url)
@@ -428,7 +460,7 @@ class URLMapper(object):
                         if route_data is not None:
                             add_route_match(RouteMatch(route_data, route.target, route.name))
 
-            self.route_cache[route_key] = route_matches
+            self._route_cache[route_key] = route_matches
         return iter(route_matches)
 
     def has_route(self, url, method="GET", handler=None):
@@ -472,7 +504,8 @@ class Route(object):
                  methods=None,
                  handlers=None,
                  target=None,
-                 name=None):
+                 name=None,
+                 order=(0, 0)):
         self.mapper = mapper
         self._route = route
         self.route = route
@@ -482,6 +515,8 @@ class Route(object):
         self.handlers = handlers or []
         self.target = target
         self.name = name
+        self.order = order
+
         self.component_names = []
         self.component_callables = {}
         self.handlers = [int(handler) for handler in self.handlers]

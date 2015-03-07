@@ -196,6 +196,7 @@ class Install(LogicElement):
     name = Attribute("Name of the application (must not contain a dot), e.g. \"auth\"", required=True)
     mount = Attribute("URL component to mount, e.g. \"auth\"")
     mountpoint = Attribute("Name of the <mountpoint> tag", required=False, default="main")
+    urlpriority = Attribute("Priority for URLs in mountpoint", type="integer", required=False, default=0)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -222,13 +223,15 @@ class Install(LogicElement):
             server.urlmapper.mount(params.mount,
                                    mountpoint.urlmapper,
                                    defaults={'app': app.name},
-                                   name=params.name)
+                                   name=params.name,
+                                   priority=params.urlpriority)
 
             for stage, urlmapper in iteritems(server.middleware):
                 urlmapper.mount(params.mount,
                                 mountpoint.middleware[stage],
                                 defaults={'app': app.name},
-                                name=params.name)
+                                name=params.name,
+                                priority=params.urlpriority)
             startup_log.debug("%s installed, mounted on %s", app, params.mount)
         else:
             startup_log.debug("%s installed", app)
@@ -263,20 +266,29 @@ class Log(LogicElement):
     _default_level = "info"
 
     level = Attribute('''Logging level''',
+                      required=False,
                       default=None,
                       choices=_levels.keys())
+    logger = Attribute("Logger to write to",
+                       default=None,
+                       required=False)
 
     def logic(self, context):
         text = textwrap.dedent(context.sub(self.text))
-        _level = self.level(context)
-        if _level is None:
-            _level = self._default_level
-        level = self._levels.get(_level, logging.INFO)
-        app_name = context.get('.app.name', None)
-        if app_name is None:
-            log = runtime_log
+        _level, _logger = self.get_parameters(context, 'level', 'logger')
+        _level = _level or self._default_level
+        if _level.isdigit():
+            level = int(_level)
         else:
-            log = logging.getLogger('moya.app.{}'.format(app_name))
+            level = self._levels.get(_level, logging.INFO)
+        if _logger:
+            log = logging.getLogger(_logger)
+        else:
+            app_name = context.get('.app.name', None)
+            if app_name is None:
+                log = runtime_log
+            else:
+                log = logging.getLogger('moya.app.{}'.format(app_name))
         for line in text.splitlines():
             if line:
                 log.log(level, line)
