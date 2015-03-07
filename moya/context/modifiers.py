@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from decimal import Decimal
 
 from ..versioning import Version, VersionSpec
-from ..url import URL
+from ..url import URL, get_domain
 from ..compat import (text_type,
                       string_types,
                       int_types,
@@ -300,6 +300,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def dirname(self, context, v):
         return dirname(v)
+
+    def domain(self, context, v, _get_domain=get_domain):
+        return _get_domain(text_type(v))
 
     def enum(self, context, v):
         key = text_type(v)
@@ -610,7 +613,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return text_type(v).upper()
 
     def url(self, context, v):
-        from ..url import URL
         return URL(v)
 
     def urldecode(self, context, v):

@@ -17,6 +17,18 @@ else:
     from urllib.parse import urlsplit, urlunsplit, urljoin
 
 
+def get_domain(url):
+    """Get a domain from a URL or empty string"""
+    if not isinstance(url, text_type):
+        return ''
+    netloc = urlsplit(url).netloc
+    if ':' in netloc:
+        domain = netloc.split(':', 1)[0]
+    else:
+        domain = netloc
+    return domain
+
+
 class _Exposed(object):
     def __init__(self, name):
         self.attribute_name = "_" + name

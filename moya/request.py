@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 from .interface import AttributeExposer
 from .compat import implements_to_string
 from .console import Cell
+from .url import URL
 
 from webob import Request
 

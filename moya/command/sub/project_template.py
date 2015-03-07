@@ -3,7 +3,7 @@ template = """
 # encoding=UTF-8from __future__ import unicode_literals
 from moya.wsgi import Application
 
-application = Application('./', 'production.ini', server='main', logging='prodlogging.ini')
+application = Application('./', ('local.ini', production.ini'), server='main', logging='prodlogging.ini')
 @TEXT /logging.ini
 [logger:root]
 handlers=moyaconsole
