@@ -266,8 +266,8 @@ class Log(LogicElement):
     _default_level = "info"
 
     level = Attribute('''Logging level''',
-                      default=None,
                       required=False,
+                      default=None,
                       choices=_levels.keys())
     logger = Attribute("Logger to write to",
                        default=None,
@@ -275,13 +275,14 @@ class Log(LogicElement):
 
     def logic(self, context):
         text = textwrap.dedent(context.sub(self.text))
-        _level, _logger = self.get_paramters(context, 'level', 'logger')
+        _level, _logger = self.get_parameters(context, 'level', 'logger')
+        _level = _level or self._default_level
         if _level.isdigit():
             level = int(_level)
         else:
-            level = self._levels.get(_level or self._default_level, logging.INFO)
+            level = self._levels.get(_level, logging.INFO)
         if _logger:
-            log = logger.getLogger(_logger)
+            log = logging.getLogger(_logger)
         else:
             app_name = context.get('.app.name', None)
             if app_name is None:
