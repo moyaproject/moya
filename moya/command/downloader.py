@@ -38,11 +38,11 @@ def _filesize(size):
     return "{:,.01f} {}".format((base * size / unit), suffix)
 
 
-def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16, auth=None):
+def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16, auth=None, verify_ssl=True):
     """Download a url and render a progress bar"""
     if console is None:
         console = Console()
-    response = requests.get(url, stream=True, auth=auth)
+    response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
     start = time()
     length = response.headers.get('content-length')
     if response.status_code != 200:

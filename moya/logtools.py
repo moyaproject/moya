@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from . import pilot
 from .console import ConsoleHighlighter
 
+import io
 import logging
 
 
@@ -58,6 +59,18 @@ class MoyaConsoleHandler(logging.StreamHandler):
         text = self.format(record)
         htext = LogHighlighter.highlight(text)
         pilot.console(htext).nl()
+
+
+class MoyaFileHandler(logging.Handler):
+
+    def __init__(self, filename):
+        self._filename = filename
+        super(MoyaFileHandler, self).__init__()
+
+    def emit(self, record):
+        text = self.format(record)
+        with io.open(self._filename, 'at') as f:
+            f.write(text + '\n')
 
 
 class LoggerFile(object):

@@ -56,7 +56,7 @@ class MoyaPI(object):
 Moya Package Index
 ==================
 
-Find, install and manage Moya Libraries
+Find, install and manage Moya libraries
 """
 
     def __init__(self):
@@ -195,7 +195,8 @@ Find, install and manage Moya Libraries
                                                description="Download and install a library")
 
         install_parser.add_argument(dest='package', metavar="PACKAGE",
-                                    help="Package to installed (may include version spec e.g. moya.package>=1.0)")
+                                    help="Package to installed (may include version spec e.g. moya.package>=1.0)",
+                                    nargs="*")
 
         install_parser.add_argument("-l", '--location', dest="location", default=None, metavar="PATH",
                                     help="location of the Moya server code")
@@ -466,87 +467,89 @@ Find, install and manage Moya Libraries
         args = self.args
         console = self.console
 
-        console.div("installing {}".format(args.package), bold=True, fg="magenta")
-        package_select = self.call('package.select', package=args.package)
-
-        if package_select['version'] is None:
-            raise CommandError("no install candidate for '{}', run 'moya-pm list' to see available packages".format(args.package))
-
-        package_name = package_select['name']
-        install_version = versioning.Version(package_select['version'])
-
-
-        filename = package_select['md5']
-        download_url = package_select['download']
-        package_filename = download_url.rsplit('/', 1)[-1]
-
-        libs = []
-        output_fs = fsopendir(args.output)
-
-        application = WSGIApplication(self.location, args.settings)
-        archive = application.archive
-
-        libs = [(lib.long_name, lib.version, lib.install_location)
-                for lib in archive.libs.values() if lib.long_name == package_name]
-
-        force = args.force
-        if not force:
-            for name, version, location in libs:
-                if name == package_name:
-                    if install_version > version:
-                        if not args.force:
-                            raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
-                    elif install_version == version:
-                        if not args.force:
-                            raise CommandError("version {} is already installed, use --force to force installation".format(version))
-                    else:
-                        if not args.upgrade:
-                            raise CommandError("an older version ({}) is installed, user --upgrade to force upgrade".format(version))
-                    force = True
-
         installed = []
 
-        username = self.settings.get('upload', 'username', None)
-        password = self.settings.get('upload', 'password', None)
-        if username and password:
-            auth = (username, password)
-        else:
-            auth = None
+        for install_package in args.package:
 
-        with TempFS('moyapi') as temp_fs:
-            with temp_fs.open(filename, 'wb') as package_file:
-                checksum = downloader.download(download_url,
-                                               package_file,
-                                               console=console,
-                                               auth=auth)
-            if checksum != package_select['md5']:
-                raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
+            #console.div("installing {}".format(install_package), bold=True, fg="magenta")
+            package_select = self.call('package.select', package=install_package)
 
-            if args.download:
-                with fsopendir(args.download) as dest_fs:
-                    fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
-                return 0
+            if package_select['version'] is None:
+                raise CommandError("no install candidate for '{}', run 'moya-pm list' to see available packages".format(install_package))
 
-            install_location = relativefrom(self.location, pathjoin(self.location, args.output, package_select['name']))
-            package_select['location'] = install_location
+            package_name = package_select['name']
+            install_version = versioning.Version(package_select['version'])
 
-            with temp_fs.open(filename, 'rb') as package_file:
-                with ZipFS(package_file, 'r') as package_fs:
-                    with output_fs.makeopendir(package_select['name']) as lib_fs:
-                        if not lib_fs.isdirempty('/') and not force:
-                            raise CommandError("install directory is not empty, use --force to overwrite")
-                        fs.utils.copydir(package_fs, lib_fs)
-                        installed.append(package_select)
+            filename = package_select['md5']
+            download_url = package_select['download']
+            package_filename = download_url.rsplit('/', 1)[-1]
+
+            libs = []
+            output_fs = fsopendir(args.output)
+
+            application = WSGIApplication(self.location, args.settings, disable_autoreload=True)
+            archive = application.archive
+
+            libs = [(lib.long_name, lib.version, lib.install_location)
+                    for lib in archive.libs.values() if lib.long_name == package_name]
+
+            force = args.force
+            if not force:
+                for name, version, location in libs:
+                    if name == package_name:
+                        if install_version > version:
+                            if not args.force:
+                                raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
+                        elif install_version == version:
+                            if not args.force:
+                                raise CommandError("version {} is already installed, use --force to force installation".format(version))
+                        else:
+                            if not args.upgrade:
+                                raise CommandError("an older version ({}) is installed, user --upgrade to force upgrade".format(version))
+                        force = True
+
+            username = self.settings.get('upload', 'username', None)
+            password = self.settings.get('upload', 'password', None)
+            if username and password:
+                auth = (username, password)
+            else:
+                auth = None
+
+            with TempFS('moyapi') as temp_fs:
+                with temp_fs.open(filename, 'wb') as package_file:
+                    checksum = downloader.download(download_url,
+                                                   package_file,
+                                                   console=console,
+                                                   auth=auth,
+                                                   verify_ssl=False)
+                if checksum != package_select['md5']:
+                    raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
+
+                if args.download:
+                    with fsopendir(args.download) as dest_fs:
+                        fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
+                    return 0
+
+                install_location = relativefrom(self.location, pathjoin(self.location, args.output, package_select['name']))
+                package_select['location'] = install_location
+
+                with temp_fs.open(filename, 'rb') as package_file:
+                    with ZipFS(package_file, 'r') as package_fs:
+                        with output_fs.makeopendir(package_select['name']) as lib_fs:
+                            if not lib_fs.isdirempty('/') and not force:
+                                raise CommandError("install directory is not empty, use --force to erase and overwrite")
+                            fs.utils.remove_all(lib_fs, '/')
+                            fs.utils.copydir(package_fs, lib_fs)
+                            installed.append(package_select)
 
         table = []
-        for package in installed:
-            table.append([Cell("{name}=={version}".format(**package), fg="magenta", bold=True),
-                          Cell(package['location'], fg="blue", bold=True),
-                          Cell(package['notes'], italic=True)])
+        for _package in installed:
+            table.append([Cell("{name}=={version}".format(**_package), fg="magenta", bold=True),
+                          Cell(_package['location'], fg="blue", bold=True),
+                          Cell(_package['notes'], italic=True)])
 
         if table:
             console.table(table, ['package', 'location', 'release notes'])
-
 
 
 def main():
