@@ -76,7 +76,7 @@ Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag t
             </attribute>
         </signature>
 
-        <let settings="thumbnails.app.settings"
+        <let settings=".app.settings"
             fsname="settings.fs"
             thumbnail_directory="settings.thumb_dir" />
 

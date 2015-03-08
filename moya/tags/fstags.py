@@ -22,16 +22,20 @@ class SetContents(LogicElement):
     fsobj = Attribute("Filesystem object", required=False, default=None)
     fs = Attribute("Filesystem name", required=False, default=None)
     path = Attribute("Destination path", required=True)
-    contents = Attribute("File contents", type="expression", required=True)
+    contents = Attribute("File contents", type="expression", required=True, missing=False)
 
     def logic(self, context):
         params = self.get_parameters(context)
+        params.contents
         if self.has_parameter('fsobj'):
             dst_fs = params.fsobj
         else:
             dst_fs = self.archive.get_filesystem(params.fs)
-        dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
-        dst_fs.setcontents(params.path, params.contents)
+        try:
+            dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
+            dst_fs.setcontents(params.path, params.contents)
+        except Exception as e:
+            self.throw("set-contents.fail", "unable to set file contents ({})".format(e))
 
 
 class GetMD5(DataSetter):

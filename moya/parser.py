@@ -16,6 +16,7 @@ from .cache.dictcache import DictCache
 from .compat import text_type, string_types
 
 from fs.path import abspath
+from fs.errors import FSError
 
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 
@@ -75,7 +76,8 @@ class Parser(object):
         #         return document
 
         xml = self.xml
-        if xml.isspace():
+        if xml.isspace() or not xml:
+            log.warning("file '{}' is empty".format(self.location))
             return None
 
         structure = document.structure = DocumentStructure(document,

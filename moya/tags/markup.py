@@ -16,6 +16,8 @@ class _Markup(RenderBase):
 
     def logic(self, context):
         type = self.type(context)
+        if not Markup.supports(type):
+            self.throw('markup.unsupported', "markup type '{}' is not supported".format(type))
         options = self.get_let_map(context)
         source_text = self.source(context) if self.has_parameter('source') else self.text
         text = self.source(context) or Markup.sub(type, context, source_text, options)
@@ -32,6 +34,8 @@ class MarkupTag(RenderBase):
         undocumented = True
 
     def logic(self, context):
+        if not Markup.supports(self.markup):
+            self.throw('markup.unsupported', "markup type '{}' is not supported".format(self.markup))
         options = self.get_let_map(context)
         source_text = self.source(context) if self.has_parameter('source') else self.text
         if not self.has_parameter('source') and self.dedent(context):
@@ -55,17 +59,3 @@ class Markdown(MarkupTag):
 
     class Help:
         synopsis = "add markdown to content"
-
-
-class CommonMark(MarkupTag):
-    """
-    Add markdown to content.
-
-    The output of this tag is similar to [tag]markdown[/tag], but uses [url http://commonmark.org/]CommonMark[/url] -- a standardized version of Markdown.
-
-    """
-
-    markup = "commonmark"
-
-    class Help:
-        synopsis = "add commonmark to content"

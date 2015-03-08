@@ -57,32 +57,74 @@ class Read(DataSetterBase):
     class Help:
         synopsis = """read an image from disk"""
 
-    path = Attribute("Path", required=True)
+    class Meta:
+        one_of = [('fsobj', 'fs', 'file')]
+
+    path = Attribute("Path", required=False, default=None)
     fsobj = Attribute("FS", type="Index")
     fs = Attribute("FS name")
     dst = Attribute('Destination', type="reference", default="image")
+    _file = Attribute('File object with image data', type="expression")
+
+    def get_image(self, context, params):
+        if self.has_parameter('file'):
+            fp = getattr(params.file, '__moyafile__', lambda: params.file)()
+            try:
+                fp.seek(0)
+                img = Image.open(fp)
+            except Exception as e:
+                self.throw("image.read-fail", "Failed to read image from file ({})".format(e))
+        else:
+            if params.fsobj is not None:
+                fs = params.fsobj
+            else:
+                try:
+                    fs = self.archive.filesystems[params.fs]
+                except KeyError:
+                    self.throw("image.no-fs", "No filesystem called '{}'".format(params.fs))
+            if params.path is None:
+                self.throw("image.path-required", "a path is required when reading from a filesystem")
+            try:
+                fp = fs.open(params.path, 'rb')
+                img = Image.open(fp)
+            except Exception as e:
+                self.throw("image.read-fail", "failed to read '{}' from {} ({})".format(params.path, fs, e))
+        return img
 
     def logic(self, context):
         params = self.get_parameters(context)
-
-        if params.fsobj is not None:
-            fs = params.fsobj
-        else:
-            try:
-                fs = self.archive.filesystems[params.fs]
-            except KeyError:
-                self.throw("moya.image.no-fs", "No filesystem called '{}'".format(params.fs))
-                return
-
+        img = self.get_image(context, params)
         try:
-            with fs.open(params.path, 'rb') as fp:
-                img = Image.open(fp)
-                img.load()
+            img.load()
         except Exception as e:
-            self.throw("moya.image.read-fail", "Failed to read '{}' from {} ({})".format(params.path, fs, e))
+            self.throw("image.read-fail", "Failed to read image ({})".format(e))
 
-        moya_image = MoyaImage(img, filename=basename(params.path))
+        moya_image = MoyaImage(img, filename=basename(params.path or ''))
         self.set_context(context, params.dst, moya_image)
+
+
+class GetSize(Read):
+    """Get the dimensions of an image without loading image data, returns a dictionary with keys 'width' and 'height'."""
+    xmlns = namespaces.image
+
+    class Help:
+        synopsis = """get the dimensions of an image"""
+
+    class Meta:
+        one_of = [('fsobj', 'fs', 'file')]
+
+    path = Attribute("Path")
+    fsobj = Attribute("FS", type="Index")
+    fs = Attribute("FS name")
+    dst = Attribute('Destination', type="reference", default="image")
+    _file = Attribute('File object with image data', type="expression")
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        img = self.get_image(context, params)
+        w, h = img.size
+        result = {'width': w, 'height': h}
+        self.set_context(context, params.dst, result)
 
 
 class Write(LogicElement):
@@ -92,7 +134,10 @@ class Write(LogicElement):
     class Help:
         synopsis = """write an image to disk"""
 
-    image = Attribute("Image to write", type="expression", default="image", evaldefault=True)
+    class Meta:
+        one_of = [('fs', 'fsobj')]
+
+    image = Attribute("Image to write", type="expression", default="image", evaldefault=True, missing=False)
     dirpath = Attribute("Directory to write image", required=False, default="/")
     filename = Attribute("Image filename", required=True)
     fsobj = Attribute("FS", type="Index")
@@ -109,7 +154,7 @@ class Write(LogicElement):
             try:
                 fs = self.archive.filesystems[params.fs]
             except KeyError:
-                self.throw("moya.image.no-fs", "No filesystem called '{}'".format(params.fs))
+                self.throw("image.no-fs", "No filesystem called '{}'".format(params.fs))
                 return
         path = pathjoin(params.dirpath, params.filename)
 
@@ -121,7 +166,7 @@ class Write(LogicElement):
                 with dir_fs.open(params.filename, 'wb') as f:
                     img.save(f, params.format, **save_params)
         except Exception as e:
-            self.throw('moya.image.write-fail', "Failed to write {} to '{}' in {} ({})".format(params.image, path, fs, e))
+            self.throw('image.write-fail', "Failed to write {} to '{}' in {} ({})".format(params.image, path, fs, e))
 
 
 class New(DataSetterBase):
@@ -217,7 +262,7 @@ class ResizeToFit(LogicElement):
         new_size = _fit_dimensions(image, params.width, params.height)
         w, h = new_size
         if not w or not h:
-            self.throw('moya.image.bad-dimensions',
+            self.throw('image.bad-dimensions',
                        'Invalid image dimensions ({} x {})'.format(params.width, params.height),
                        diagnosis="Width and / or height should be supplied, and should be non-zero")
         params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
@@ -241,7 +286,7 @@ class Resize(LogicElement):
         new_size = (params.width, params.height)
         w, h = new_size
         if not w or not h:
-            self.throw('moya.image.bad-dimensions',
+            self.throw('image.bad-dimensions',
                        'Invalid image dimensions ({} x {})'.format(params.width, params.height),
                        diagnosis="Width and / or height should be supplied, and should be non-zero")
         params.image.replace(image.resize(new_size, _resample_methods[params.resample]))

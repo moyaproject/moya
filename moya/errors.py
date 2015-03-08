@@ -123,10 +123,12 @@ class DocumentError(MoyaError):
 class AttributeError(MoyaError):
     """An attribute related parse error"""
     hide_py_traceback = True
+    error_type = "Attribute error"
 
 
 class BadValueError(MoyaError):
     hide_py_traceback = True
+    error_type = "Invalid attribute error"
 
 
 @implements_to_string

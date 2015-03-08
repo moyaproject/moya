@@ -8,7 +8,6 @@ from __future__ import unicode_literals
 from .interface import AttributeExposer
 from .compat import implements_to_string
 from .console import Cell
-from .url import URL
 
 from webob import Request
 
@@ -54,8 +53,15 @@ class UploadFileProxy(AttributeExposer):
 
     def __init__(self, field_storage):
         self.field_storage = field_storage
+        self.file = field_storage.file
         self.read = field_storage.file.read
+        self.seek = field_storage.file.seek
+        self.tell = field_storage.file.seek
+        self.readline = field_storage.file.seek
         self.filename = field_storage.filename
+
+    def __moyafile__(self):
+        return self.file
 
     def __repr__(self):
         return '<upload "{}">'.format(self.filename)

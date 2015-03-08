@@ -159,6 +159,10 @@ class Markup(object):
             raise ValueError("No markup processor called '{}'".format(type))
         return context.sub(text, markup_processor.escape)
 
+    @classmethod
+    def supports(cls, name):
+        return name in MarkupBaseMeta.markup_registry
+
     def __str__(self):
         return self.markup_processor.process(self.source, "text", None)
 
