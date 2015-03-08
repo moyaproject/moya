@@ -1,6 +1,8 @@
 0.5.8
 -----
 
+ * Added ability to read images from files
+ * Fixes for moya-pm
 
 0.5.7
 -----

@@ -140,9 +140,10 @@ class JSONRPC(object):
 
     unknown_error_msg = "the server did not supply further information"
 
-    def __init__(self, url):
+    def __init__(self, url, ssl_verify=True):
         self.url = url
         self.call_id = 1
+        self.ssl_verify = ssl_verify
 
     def new_call_id(self):
         self.call_id += 1
@@ -150,7 +151,7 @@ class JSONRPC(object):
 
     def _send(self, call):
         call_json = json.dumps(call).encode('utf-8')
-        response_json = requests.post(self.url, call_json).json()
+        response_json = requests.post(self.url, call_json, verify=self.ssl_verify).json()
         return response_json
 
     def call(self, method, **params):

@@ -27,7 +27,7 @@ from fs.zipfs import ZipFS
 
 
 DEFAULT_CONF = "~/.moyapirc"
-DEFAULT_HOST = "http://packages.moyaproject.com/jsonrpc/"
+DEFAULT_HOST = "https://packages.moyaproject.com/jsonrpc/"
 
 
 class CommandError(Exception):
@@ -107,7 +107,8 @@ Find, install and manage Moya Libraries
         server_url = self.settings.get('server', 'url', DEFAULT_HOST)
         self.settings.set('server', 'url', server_url)
         if self._rpc is None:
-            self._rpc = jsonrpc.JSONRPC(server_url)
+            # Disable ssl cert verify, because it breaks on ubuntu
+            self._rpc = jsonrpc.JSONRPC(server_url, ssl_verify=False)
         return self._rpc
 
     def call(self, method, **params):
