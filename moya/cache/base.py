@@ -72,7 +72,7 @@ class CacheType(object):
             cache_cls = CacheMeta.cache_backends[cache_type]
         except KeyError:
             types = ', '.join("'{}'".format(k) for k in sorted(CacheMeta.cache_backends.keys()))
-            raise errors.StartupFailedError("Cache type must be one of {} (not '{}'')".format(types, cache_type))
+            raise errors.StartupFailedError("Cache type must be one of {} (not '{}')".format(types, cache_type))
         debug = settings.get_bool('debug', False)
         cache = cache_cls.initialize(name, settings)
         if debug:
