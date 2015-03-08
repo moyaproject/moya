@@ -54,6 +54,7 @@ class LogHighlighter(ConsoleHighlighter):
 
 
 class MoyaConsoleHandler(logging.StreamHandler):
+    """A handler that writes colored output to the console"""
 
     def emit(self, record):
         text = self.format(record)
@@ -62,6 +63,12 @@ class MoyaConsoleHandler(logging.StreamHandler):
 
 
 class MoyaFileHandler(logging.Handler):
+    """A handler that writes to a file.
+
+    The default FileHanlder keeps the file open, which breaks when Ubuntu rotates the logs. This handler
+    avoids that issue by closing the file on every emit.
+
+    """
 
     def __init__(self, filename):
         self._filename = filename
@@ -69,7 +76,7 @@ class MoyaFileHandler(logging.Handler):
 
     def emit(self, record):
         text = self.format(record)
-        with io.open(self._filename, 'at') as f:
+        with io.open(self._filename, 'at', encoding="utf-8") as f:
             f.write(text + '\n')
 
 
