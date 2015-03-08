@@ -1637,7 +1637,7 @@ For example **let:{k}="name or 'anonymous'"**
             qs = exp_context.process_qs(qs)
 
         if params.orderby:
-            qs = self._make_order(qs, self.archive, context, table_class, params.orderby, app=app)
+            qs = Query._make_order(self, qs, self.archive, context, table_class, params.orderby, app=app)
 
         value = self.get_value(context, qs)
         self.check_value(context, value)
@@ -1977,7 +1977,7 @@ class SortMap(DBDataSetter):
         orderby = sort_map.get(params.sort, None)
 
         if orderby is not None:
-            qs = Query._make_order(qs,
+            qs = Query._make_order(self, qs,
                                    self.archive,
                                    context,
                                    None,
@@ -2059,8 +2059,8 @@ class Query(DBDataSetter):
                     order.append(sort_col)
         return order
 
-    #@classmethod
-    def _make_order(self, qs, archive, context, table_class, orderby, reverse=False, app=None):
+    @classmethod
+    def _make_order(cls, element, qs, archive, context, table_class, orderby, reverse=False, app=None):
         order = []
         for field in orderby:
             if not field:
@@ -2082,9 +2082,9 @@ class Query(DBDataSetter):
                 order.append(sort_col)
             else:
                 if not table_class:
-                    self.throw('db.model-required',
-                               'Model required for order',
-                               diagnosis='Specify the model attribute, or use a field reference in order by (e.g. order="#Model.field")')
+                    element.throw('db.model-required',
+                                  'Model required for order',
+                                  diagnosis='Specify the model attribute, or use a field reference in order by (e.g. order="#Model.field")')
                 else:
                     sort_col = getattr(table_class, field, None)
                     if sort_col is None:
@@ -2179,13 +2179,14 @@ class Query(DBDataSetter):
                            diagnosis="Specfiy the 'model' or use the 'filter' attribute")
 
         if params.orderby:
-            qs = self._make_order(qs,
-                                  self.archive,
-                                  context,
-                                  table_class,
-                                  params.orderby,
-                                  params.reverse,
-                                  app=app)
+            qs = Query._make_order(self,
+                                   qs,
+                                   self.archive,
+                                   context,
+                                   table_class,
+                                   params.orderby,
+                                   params.reverse,
+                                   app=app)
 
         if params.distinct:
             qs = qs.distinct()

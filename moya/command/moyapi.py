@@ -373,6 +373,7 @@ Find, install and manage Moya Libraries
                 auth = None
 
             response = requests.post(url,
+                                     verify=False,
                                      auth=auth,
                                      files=files,
                                      data=data,
