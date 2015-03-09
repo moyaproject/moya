@@ -3,6 +3,7 @@
 
  * Added ability to read images from files
  * Fixes for moya-pm
+ * Added <process-markup> tag
 
 0.5.7
 -----
