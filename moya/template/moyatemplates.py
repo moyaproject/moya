@@ -1335,7 +1335,7 @@ class SummarizeNode(Node):
 
     def on_create(self, environment, parser):
         exp_map = parser.expect_word_expression_map('chars')
-        self.max_characters = exp_map.get('chars')
+        self.max_characters = exp_map.get('chars') or DefaultExpression(200)
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1348,6 +1348,34 @@ class SummarizeNode(Node):
 
         html = render_object(markup_renderable, environment.archive, context, target, options=options)
         return html
+
+
+# TODO: Is this required?
+
+# class FilterNode(Node):
+#     tag_name = "filter"
+
+#     def on_create(self, parameter, parser):
+#         self.get_filter = parser.expect_expression()
+#         parser.expect_end()
+
+#     def render(self, environment, context, template, text_escape):
+#         app = self.template_app(environment.archive, context.get('._t.app', None))
+#         filter_obj = self.get_filter.eval(context)
+
+#         if isinstance(filter_obj, text_type) and '.filters' in context:
+#             try:
+#                 filter_obj = context['.filters'].lookup(app, filter_obj)
+#             except Exception as e:
+#                 self.render_error(text_type(e))
+
+#         value = template.render_nodes(self.children, environment, context, text_type)
+
+#         moya_filter = getattr(filter_obj, '__moyafilter__', None)
+#         if moya_filter is None:
+#             self.render_error("value {} is not a valid filter".format(context.to_expr(filter_obj)))
+#         result = moya_filter(context, app, value)
+#         return result
 
 
 TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])

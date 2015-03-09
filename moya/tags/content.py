@@ -591,7 +591,7 @@ class Render(DataSetter, ContentElementMixin):
         <render src="form" />
         """
 
-    src = Attribute("Object to render", required=False, type="index")
+    src = Attribute("Object to render", required=False, type="expression")
     dst = Attribute("Destination to store rendered content", required=False, type="reference")
     target = Attribute("Render target", required=False, default="html")
 

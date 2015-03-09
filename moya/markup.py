@@ -168,3 +168,6 @@ class Markup(object):
 
     def moya_render(self, archive, context, target, options):
         return self.markup_processor.process(self.source, target, options)
+
+    def process(self, target="html", **options):
+        return self.markup_processor.process(self.source, target, options)

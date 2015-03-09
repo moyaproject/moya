@@ -8,6 +8,18 @@ import weakref
 
 
 @implements_to_string
+class FilterKeyError(KeyError):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
+    def __repr__(self):
+        return "FilterKeyError({!r})".format(self.msg)
+
+
+@implements_to_string
 class FilterContainer(object):
     """Collection that exposes a unified interface to filters"""
 
@@ -55,7 +67,7 @@ class FilterContainer(object):
 
         filters = [filter_app.filters[name] for filter_app in apps if name in filter_app.filters]
         if not filters:
-            raise KeyError("no filter called '{}'".format(name))
+            raise FilterKeyError("no filter called '{}'".format(name))
         if len(filters) != 1:
             raise ValueError('filter is ambiguous, specify "{} from <APP or LIB>"'.format(name))
         return filters[0]
@@ -63,7 +75,7 @@ class FilterContainer(object):
     def __getitem__(self, name):
         f = self._lookup(None, name)
         if not f:
-            raise KeyError(name)
+            raise FilterKeyError(name)
         if len(f) == 1:
             return f[0]
         return f

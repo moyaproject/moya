@@ -320,7 +320,6 @@ class EvalFilterOp(Evaluator):
                 filter_obj = context['.filters'].lookup(app, filter_obj)
 
             if hasattr(filter_obj, '__moyafilter__'):
-                #app = getattr(filter_obj, 'app', app)
                 prod = filter_obj.__moyafilter__(context, app, prod)
             else:
                 if callable(filter_obj):

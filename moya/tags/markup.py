@@ -1,6 +1,8 @@
 from ..markup import Markup, get_installed_markups
 from ..elements.elementbase import Attribute
 from ..tags.content import RenderBase
+from ..tags.context import DataSetter
+from ..compat import text_type
 
 from textwrap import dedent
 
@@ -43,6 +45,28 @@ class MarkupTag(RenderBase):
         sub_text = Markup.sub(self.markup, context, source_text, options)
         markup = Markup(sub_text, self.markup, options)
         context['.content'].add_renderable(self._tag_name, markup)
+
+
+class ProcessMarkup(DataSetter):
+    """Process a given markup in to text"""
+
+    type = Attribute("Markup type", required=False, default="bbcode", choices=get_installed_markups())
+    src = Attribute("Markup source", required=False, default=None, type="expression")
+    dst = Attribute("Destination", type="reference", default=None)
+
+    class Help:
+        synopsis = "markup text"
+
+    def logic(self, context):
+        type = self.type(context)
+        if not Markup.supports(type):
+            self.throw('markup.unsupported', "markup type '{}' is not supported".format(type))
+        options = self.get_let_map(context)
+        source_text = self.src(context) if self.has_parameter('src') else self.text
+        text = self.src(context) or Markup.sub(type, context, source_text, options)
+        markup = Markup(text, type, options)
+        result = markup.process()
+        self.set_context(context, self.dst(context), result)
 
 
 class BBCode(MarkupTag):
