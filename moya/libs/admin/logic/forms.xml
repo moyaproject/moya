@@ -175,7 +175,8 @@
                 <if test="column.picker">
 
                     <get-element name="${column.picker}" from="${model.app.name}" dst="picker_table"/>
-                    <let selected="[object[column.name]['id']]"/>
+
+                    <let selected="object[column.name] ? [object[column.name]['id']] : []"/>
 
                     <forms:field label="${str:column.label or title:column.name}" name="${column.dbname}"
                         help="${str:column.help}"
@@ -242,7 +243,7 @@
 
                 <get-element name="${relationship.picker}" from="${model.app.name}" dst="picker_table"/>
 
-                <let related="object[relationship.name]"/>
+                <let related="object ? object[relationship.name]: []"/>
 
                 <db:get-column modelobj="relationship.ref_model" name="id" dst="relationship_id" />
                 <db:new-query model="relationship.ref_model" dst="selected"/>
@@ -250,7 +251,7 @@
 
                 <forms:field label="${str:relationship.label or title:relationship.name}"
                     name="${relationship.name}" help="${str:relationship.help}"
-                    adapt="fromjson:value">
+                    adapt="fromjson:value or []">
 
                     <get-url name="admin_table_picker" dst="picker_url"
                         let:appname="model.app.name" let:table="picker_table.params.slug"

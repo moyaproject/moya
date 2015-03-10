@@ -14,7 +14,7 @@
         <datetime name="date_joined" label="Date user was created" auto="yes" blank="yes"/>
         <text name="notes" label="Notes" null="yes" blank="yes" />
         <many-to-many name="groups" label="Group memberships" model="#Group" through="#GroupMembership"
-            backref="users" backpicker="#admintable.users"
+
             search="#User.username icontains q"
             options="#Group.user == None or #Group.user == object" orderby="username" />
     </model>

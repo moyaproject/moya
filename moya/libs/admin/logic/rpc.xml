@@ -61,7 +61,6 @@
             <rpc:error code="table_not_found"/>
         </catch>
         <db:inspect model="${table.params.model}" from="${appname}" dst="model" />
-        <breakpoint/>
         <echo>${module}</echo>
         <echo>${table}</echo>
     </macro>

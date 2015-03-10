@@ -2133,7 +2133,6 @@ class Query(DBDataSetter):
             columns = params.columns.eval(self.archive, context, app=app)
             if not isinstance(columns, list):
                 columns = [columns]
-
             try:
                 qs = dbsession.query(*columns)
             except:

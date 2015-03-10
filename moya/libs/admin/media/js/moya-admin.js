@@ -175,8 +175,8 @@ function set_checked(field, item, $row)
 {
     var $field = $("form.moya-admin-form input[name=" + field + "]");
     var val = $field.val();
-    var selected = $field.data('selected');
-    var changes = $field.data('changes');
+    var selected = $field.data('selected') || [];
+    var changes = $field.data('changes') || {};
     var checked = selected.indexOf(item) != -1;
     var original = checked;
     if (changes[item])

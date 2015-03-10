@@ -9,10 +9,11 @@
     			A User object
     		</attribute>
     	</signature>
-
+        <return value="{}" if="not user"/>
         <db:query
             columns="#PermissionMembership.permission_id"
-            filter="#GroupMembership.user == user"
+            filter="#PermissionMembership.group.id in user.groups or #PermissionMembership.group.user == user"
+            flat="yes"
             dst="perm_memberships"/>
         <db:query
             model="#Permission"
