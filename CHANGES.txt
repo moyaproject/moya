@@ -1,3 +1,9 @@
+0.5.10
+------
+
+Fixed issue with overriding elements.
+
+
 0.5.9
 -----
 
