@@ -47,6 +47,18 @@ moya runserver
 
 And navigate to http://127.0.0.1:8000
 
+
+## Package Index
+
+Find packages for Moya on the [Moya Package Index](https://packages.moyaproject.com).
+
+Install packages `moya-pm` which comes with Moya:
+
+```
+moya-pm install moya.sociallinks
+```
+
+
 ## More Information
 
 See the [Moya Homepage](http://www.moyaproject.com/) for more information. Or go straight to [Moya's Documentation](http://docs.moyaproject.com/).
