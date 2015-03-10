@@ -231,17 +231,21 @@ class Library(object):
             doc.document_finalize(context)
         for doc in self.documents:
             doc.lib_finalize(context)
-        self.do_replace_nodes()
         self.built = True
         self.finalized = True
 
-    def do_replace_nodes(self):
+    def on_archive_finalize(self):
+        #startup_log.debug('%r finalized', self)
         for libname, elements in iteritems(self.replace_nodes):
             winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
             existing = self.get_named_element(libname)
             if existing.lib.priority < winner.lib.priority:
-                startup_log.debug('%r replaced with %r', existing, winner)
+                #startup_log.debug('%r replaced with %r', existing, winner)
                 existing.replace(winner)
+                self.elements_by_name[existing.libname] = winner
+                element_type = (existing.xmlns, existing._tag_name)
+                by_type = self.elements_by_type[element_type]
+                by_type[by_type.index(existing)] = winner
         self.replace_nodes.clear()
 
     def load(self, fs, settings_path=None):
@@ -423,20 +427,6 @@ class Library(object):
 
     def register_named_element(self, name, element, priority=0):
         """Called by parser to register a named element"""
-        # if name in self.elements_by_name:
-        #     # This element exists, we may need to replace it
-        #     existing_element = self.elements_by_name[name]
-        #     self.unregister_element(existing_element)
-        #     if existing_element.priority <= priority:
-        #         log.debug('replacing %s with %s', existing_element, element)
-        #         # Priority is less, so do the replace
-        #         siblings = existing_element.siblings
-        #         for i, el in enumerate(siblings):
-        #             if el == existing_element:
-        #                 siblings[i] = element
-        #                 break
-        #         self.elements_by_name[name] = element
-        # else:
         self.elements_by_name[name] = element
         self.register_element(element)
 

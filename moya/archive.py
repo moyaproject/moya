@@ -485,6 +485,10 @@ class Archive(object):
 
     def finalize(self):
         self.build_libs()
+
+        for lib in itervalues(self.libs):
+            lib.on_archive_finalize()
+
         if self.database_engines:
             for app in itervalues(self.apps):
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):

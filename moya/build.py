@@ -225,6 +225,7 @@ def build_server(fs,
     if failed:
         raise errors.StartupFailedError(error_msg or 'Failed to build project')
 
+   # archive.finalize()
     archive.init_media()
     archive.init_data()
 
