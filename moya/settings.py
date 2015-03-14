@@ -34,6 +34,8 @@ class SettingsContainer(OrderedDict):
     @classmethod
     def apply_master(self, master, settings):
         for section_name, section in master.items():
+            if section_name == 'service':
+                continue
             if section_name in settings:
                 settings[section_name].update(section)
             else:
@@ -146,13 +148,12 @@ class SettingsContainer(OrderedDict):
             else:
                 return default
         section = self[section_name]
-        try:
-            return section[key]
-        except KeyError:
+        if key not in section:
             if default is Ellipsis:
                 raise SettingsKeyError("Key '%s' not found in section '%s'" % (key, section_name))
             else:
                 return default
+        return section[key]
 
     def set(self, section_name, key, value):
         if section_name not in self:
