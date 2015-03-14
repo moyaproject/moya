@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from .interface import AttributeExposer
-from .compat import iteritems, implements_to_string
+from .compat import iteritems, implements_to_string, text_type
 
 from babel import Locale
 
@@ -208,7 +208,9 @@ class Sites(object):
             self._sites.append(site)
 
     def add(self, domains, **data):
-        for domain in domains.split(','):
+        if isinstance(domains, text_type):
+            domains = domains.split(',')
+        for domain in domains:
             domain = domain.strip()
             site = Site(domain, data=data)
             self._sites.append(site)

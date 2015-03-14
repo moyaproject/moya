@@ -34,7 +34,7 @@ def read_config(fs, settings_path="settings.ini"):
     return cfg
 
 
-def build(fs, settings_path="settings.ini", rebuild=False, archive=None):
+def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_settings=None):
     """Build a project"""
     if isinstance(fs, string_types):
         if '://' in fs:
@@ -59,7 +59,7 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None):
         root['apps'] = archive.apps
         root['fs'] = FSWrapper(fs)
 
-        archive.cfg = SettingsContainer.read(fs, settings_path)
+        archive.cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
         root['settings'] = SettingsContainer.from_dict(archive.cfg['settings'])
         startup_path = archive.cfg.get('project', 'startup')
         docs_location = archive.cfg.get('project', 'location')
@@ -163,7 +163,8 @@ def build_server(fs,
                  no_console=False,
                  rebuild=False,
                  validate_db=False,
-                 breakpoint=False):
+                 breakpoint=False,
+                 master_settings=None):
     """Build a server"""
     start = time()
     archive = Archive()

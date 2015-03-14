@@ -32,7 +32,15 @@ class SettingsKeyError(KeyError):
 class SettingsContainer(OrderedDict):
 
     @classmethod
-    def read(self, fs, path):
+    def apply_master(self, master, settings):
+        for section_name, section in settings.items():
+            if section_name in settings:
+                settings[section_name].update(section)
+            else:
+                settings[section_name] = settings
+
+    @classmethod
+    def read(cls, fs, path, master=None):
         visited = []
 
         if not isinstance(path, string_types):
@@ -60,13 +68,16 @@ class SettingsContainer(OrderedDict):
                 break
         settings_stack = settings_stack[::-1]
         settings = settings_stack[0]
-        s = self.__class__(settings_stack[0])
+        s = cls.__class__(settings_stack[0])
         for s in settings_stack[1:]:
             for section_name, section in s.items():
                 if section_name in settings:
                     settings[section_name].update(section)
                 else:
                     settings[section_name] = section
+
+        if master is not None:
+            cls.apply_master(master, settings)
         return settings
 
     @classmethod

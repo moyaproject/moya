@@ -17,7 +17,8 @@ from .response import MoyaResponse
 from . import http
 from .compat import text_type, itervalues, py2bytes
 from . import namespaces
-from .loggingconf import init_logging_fs
+from .loggingconf import init_logging_fs, init_logging
+
 
 from webob import Response
 
@@ -95,7 +96,9 @@ class WSGIApplication(object):
                  breakpoint=False,
                  breakpoint_startup=False,
                  validate_db=False,
-                 simulate_slow_network=False):
+                 simulate_slow_network=False,
+                 master_settings=None,
+                 master_logging=None):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -108,8 +111,13 @@ class WSGIApplication(object):
         self.archive = None
         self._self = weakref.ref(self, self.on_close)
         self.simulate_slow_network = simulate_slow_network
+        self.master_settings = master_settings
+        self.master_logging = master_logging
 
-        if logging is not None:
+        if master_logging is not None:
+            init_logging(master_logging)
+
+        elif logging is not None:
             with fsopendir(self.filesystem_url) as logging_fs:
                 init_logging_fs(logging_fs, logging)
         try:
@@ -149,7 +157,8 @@ class WSGIApplication(object):
                                         self.settings_path,
                                         server_element=self.server_ref,
                                         validate_db=self.validate_db,
-                                        breakpoint=breakpoint)
+                                        breakpoint=breakpoint,
+                                        master_settings=self.master_settings)
         if build_result is None:
             msg = "Failed to build project"
             raise errors.StartupFailedError(msg)

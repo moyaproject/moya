@@ -12,7 +12,7 @@ MemoryHandler = handlers.MemoryHandler
 
 import fs.path
 
-from os.path import abspath, join, dirname
+from os.path import abspath, join, dirname, normpath
 
 
 def _resolve(name):
@@ -67,11 +67,15 @@ def init_logging(path, disable_existing_loggers=False):
 
     ini_path = path
     ini_stack = []
+    visited = set()
     while 1:
-        path = abspath(path)
+        path = abspath(normpath(path))
+        if path in visited:
+            raise errors.LoggingSettingsError('recursive extends in logging ini')
         try:
             with io.open(path, 'rt') as ini_file:
                 s = iniparse.parse(ini_file)
+            visited.add(path)
         except IOError:
             raise errors.LoggingSettingsError('unable to read logging settings file "{}"'.format(path))
         ini_stack.append(s)
