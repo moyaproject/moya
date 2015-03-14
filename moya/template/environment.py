@@ -58,7 +58,7 @@ class Environment(object):
                 info = self.template_fs.getinfokeys(template_path, 'modified_time', 'st_mtime')
             except ResourceNotFoundError:
                 raise MissingTemplateError(template_path)
-            modified_time = info.get('st_mtime', None) or datetime_to_epoch(info['modified_time'])
+            modified_time = info.get('st_mtime', None) or datetime_to_epoch(info.get('modified_time', 0))
             cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, modified_time)
             cached_template = self.cache.get(cache_name, None)
             if cached_template is not None:

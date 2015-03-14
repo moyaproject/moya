@@ -13,7 +13,7 @@ import os
 import sys
 import hashlib
 
-from .compat import zip_longest, iteritems, xrange, text_type, PY3, implements_to_string
+from .compat import zip_longest, iteritems, xrange, text_type, PY3, implements_to_string, number_types
 
 
 _re_xml_namespace = re.compile(r'^\{(.*?)\}(.*)$', re.UNICODE)
@@ -146,6 +146,8 @@ def make_id():
 
 
 def datetime_to_epoch(d):
+    if isinstance(d, number_types):
+        return int(d)
     return mktime(d.timetuple())
 
 

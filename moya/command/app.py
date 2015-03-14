@@ -7,13 +7,12 @@ import argparse
 import logging.config
 import io
 import importlib
-from fs.path import pathjoin
 
 from ..command.sub import __all__ as SUBCOMMANDS
 from ..console import Console
 from ..context import Context
 from ..context.tools import set_dynamic
-from ..tools import get_moya_dir, nearest_word
+from ..tools import get_moya_dir, is_moya_dir, nearest_word
 from ..errors import ElementNotFoundError
 from ..compat import text_type
 from ..command.subcommand import SubCommandMeta
@@ -23,8 +22,14 @@ from .. import errors
 
 from .. import __version__ as version
 
+from fs.opener import fsopendir
+
 import logging
 logging.raiseExceptions = False
+
+
+class NoProjectError(Exception):
+    pass
 
 
 class Command(object):
@@ -69,6 +74,11 @@ To list all available commands for a given application, omit the libname:
     moya auth#
 """
 
+    def __init__(self):
+        super(Moya, self).__init__()
+        self._location = None
+        self._location_fs = None
+
     @property
     def console(self):
         if self._console is None:
@@ -110,6 +120,30 @@ To list all available commands for a given application, omit the libname:
             return []
         ini_list = [s.strip() for s in settings.splitlines() if s.strip()]
         return ini_list
+
+    @property
+    def location(self):
+        if self._location is not None:
+            return self._location
+        location = self.args.location or os.environ.get('MOYA_PROJECT', None)
+        if location is None:
+            location = './'
+        if location and '://' in location:
+            return location
+        try:
+            location = get_moya_dir(location)
+        except ValueError:
+            raise NoProjectError("Moya project directory not found, run this command from a project directory or specify --location")
+        if not is_moya_dir(location):
+            raise NoProjectError("Location is not a moya project (no 'moya' file found)")
+        self._location = location
+        return location
+
+    @property
+    def location_fs(self):
+        if self._location_fs is None:
+            self._location_fs = fsopendir(self.location)
+        return self._location_fs
 
     def debug(self, text):
         """Write debug text, if enabled through command line switch"""
@@ -186,7 +220,7 @@ To list all available commands for a given application, omit the libname:
         parser.add_argument('-V', '--verbose', dest="verbose", action="store_true", default=False,
                             help='enables verbose output')
         parser.add_argument('--logging', dest="logging", default=None, help="path to logging configuration file", metavar="LOGGINGINI")
-        parser.add_argument("-l", "--location", dest="location", default='./', metavar="PATH",
+        parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",
                             help="location of the Moya server code")
         parser.add_argument("-i", "--ini", dest="settings", default=None, metavar="SETTINGSPATH",
                             help="path to project settings file")
@@ -197,24 +231,24 @@ To list all available commands for a given application, omit the libname:
         self.args = args
         show_help = args.help
 
-        location = args.location
-        try:
-            location = get_moya_dir(location)
-        except ValueError:
-            self.error("Moya project directory not found")
-            return -1
+        # location = args.location
+        # try:
+        #     location = get_moya_dir(location)
+        # except ValueError:
+        #     self.error("Moya project directory not found")
+        #     return -1
 
-        if args.logging:
-            logging.config.fileConfig(pathjoin(location, args.logging), disable_existing_loggers=False)
-        else:
-            log = logging.getLogger('moya.runtime')
-            log.setLevel(logging.ERROR)
+        # if args.logging:
+        #     logging.config.fileConfig(pathjoin(location, args.logging), disable_existing_loggers=False)
+        # else:
+        #     log = logging.getLogger('moya.runtime')
+        #     log.setLevel(logging.ERROR)
 
         from .. import pilot
         from ..wsgi import WSGIApplication
 
         try:
-            application = WSGIApplication(location,
+            application = WSGIApplication(self.location_fs,
                                           self.get_settings(),
                                           disable_autoreload=True)
         except Exception as e:

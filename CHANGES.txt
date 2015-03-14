@@ -1,6 +1,8 @@
 0.5.11
 ------
 
+Added MOYA_PROJECT environment variable to override default project location
+
 0.5.10
 ------
 

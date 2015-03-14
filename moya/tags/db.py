@@ -216,7 +216,7 @@ class TableClassBase(object):
     def __moyaconsole__(self, console):
         moyadb = self._moyadb
         table = make_table_header("field name", "value")
-        table_body = [(field.name, getattr(self, field.name))
+        table_body = [(field.name, pilot.context.to_expr(getattr(self, field.name)))
                       for field in moyadb.moya_columns]
         table += table_body
         console.table(table)

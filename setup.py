@@ -27,9 +27,11 @@ setup(name='moya',
       entry_points={
           "console_scripts": [
               'moya = moya.command.app:main',
-              'moya-pm = moya.command.moyapi:main'
+              'moya-pm = moya.command.moyapi:main',
+              'moya-srv = moya.command.moyasrv:main',
           ]
       },
+      #scripts=['scripts/moya-srv'],
 
       platforms=['any'],
       packages=find_packages(),

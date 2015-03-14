@@ -10,6 +10,9 @@ from .tools import textual_list
 
 from fs.path import normpath, relpath
 
+import io
+import os
+
 
 def read_settings(fs, path):
     with fs.safeopen(path, 'rb') as settings_file:
@@ -46,6 +49,35 @@ class SettingsContainer(OrderedDict):
             if path in visited:
                 raise errors.SettingsError('''recursive extends detected, "{}" has already been extended'''.format(path))
             with fs.open(path, 'rt') as settings_file:
+                s = iniparse.parse(settings_file,
+                                   SettingsContainer(),
+                                   section_class=SettingsSectionContainer)
+            visited.append(path)
+            settings_stack.append(s)
+            if "extends" in s['']:
+                path = s['']['extends']
+            else:
+                break
+        settings_stack = settings_stack[::-1]
+        settings = settings_stack[0]
+        s = self.__class__(settings_stack[0])
+        for s in settings_stack[1:]:
+            for section_name, section in s.items():
+                if section_name in settings:
+                    settings[section_name].update(section)
+                else:
+                    settings[section_name] = section
+        return settings
+
+    @classmethod
+    def read_os(self, path):
+        visited = []
+        settings_stack = []
+        while 1:
+            path = os.path.abspath(os.path.normpath(path))
+            if path in visited:
+                raise errors.SettingsError('''recursive extends detected, "{}" has already been extended'''.format(path))
+            with io.open(path, 'rt') as settings_file:
                 s = iniparse.parse(settings_file,
                                    SettingsContainer(),
                                    section_class=SettingsSectionContainer)

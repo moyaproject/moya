@@ -43,9 +43,8 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None):
             fs = OSFS(fs)
 
     if archive is None:
-        archive = Archive()
+        archive = Archive(fs)
     context = Context()
-    archive.fs = fs
 
     syspath = fs.getsyspath('/', allow_none=True)
 
@@ -72,7 +71,7 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None):
 
         parser = Parser(archive, fs.opendir(docs_location), startup_path)
         doc = parser.parse()
-        archive.build(doc)
+        archive.build(doc, fs=fs)
 
         return archive, context, doc
 
@@ -197,6 +196,7 @@ def build_server(fs,
             fs = fsopendir(fs)
         else:
             fs = OSFS(fs)
+    archive.project_fs = fs
 
     try:
         app, server = doc.get_element(server_element)

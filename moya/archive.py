@@ -194,7 +194,8 @@ class Archive(object):
 
     _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
 
-    def __init__(self, breakpoint=False):
+    def __init__(self, project_fs=None, breakpoint=False):
+        self.project_fs = project_fs
         self.registry = ElementRegistry()
         self.libs = {}
         self.apps = OrderedDict()
@@ -257,6 +258,16 @@ class Archive(object):
                 self._moyarc = settings.SettingsContainer()
         return self._moyarc
 
+    def open_fs(self, fs_url):
+        if isinstance(fs_url, text_type):
+            if '://' in fs_url:
+                fs = fsopendir(fs_url)
+            else:
+                fs = self.project_fs.opendir(fs_url)
+        else:
+            fs = fs_url
+        return fs
+
     def get_console_file(self):
         if self.log_logger:
             console_file = logtools.LoggerFile(self.log_logger)
@@ -286,9 +297,11 @@ class Archive(object):
                           self,
                           (time() - start) * 1000.0)
 
-    def build(self, documents, context=None, log_time=True):
+    def build(self, documents, context=None, log_time=True, fs=None):
         """Build all documents in the library"""
         # This handles tags defined out of order
+        if fs is not None:
+            self.project_fs = fs
         start = time()
 
         if isinstance(documents, Document):
@@ -605,10 +618,9 @@ class Archive(object):
         return data
 
     def add_filesystem(self, name, fs):
-        if isinstance(fs, string_types):
-            fs = fsopendir(fs)
-        self.filesystems[name] = fs
-        startup_log.debug("%s fs added as '%s'", fs, name)
+        add_fs = self.open_fs(fs)
+        self.filesystems[name] = add_fs
+        startup_log.debug("%s fs added as '%s'", add_fs, name)
         return fs
 
     def get_filesystem(self, name):
@@ -655,7 +667,7 @@ class Archive(object):
 
     def init_templates(self, name, location, priority):
         templates_fs = self.filesystems.get("templates")
-        fs = fsopendir(location)
+        fs = self.open_fs(location)
         templates_fs.addfs(name, fs, priority=priority)
         startup_log.debug("%s added to templates filesystem, priority %s", fs, priority)
 
@@ -726,7 +738,7 @@ class Archive(object):
 
             elif what == "data":
                 location = section.get("location")
-                data_fs = fsopendir(location)
+                data_fs = self.open_fs(location)
                 self.data_fs.addfs('archive',
                                    data_fs,
                                    priority=section.get_int('priority', 0))
@@ -749,7 +761,7 @@ class Archive(object):
             elif what == 'media':
                 priority = section.get_int('priority', 1)
                 location = section["location"]
-                static_media_fs = fsopendir(location)
+                static_media_fs = self.open_fs(location)
                 media_fs = MultiFS()
                 media_fs.addfs("static", static_media_fs, priority=priority)
                 self.add_filesystem('media', media_fs)

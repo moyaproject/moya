@@ -17,13 +17,14 @@ from .response import MoyaResponse
 from . import http
 from .compat import text_type, itervalues, py2bytes
 from . import namespaces
-from .loggingconf import init_logging
+from .loggingconf import init_logging_fs
 
 from webob import Response
 
-from fs.path import splitext, pathjoin
+from fs.path import splitext
 from fs.opener import fsopendir
 from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
+from fs.errors import FSError
 
 import sys
 import random
@@ -32,6 +33,7 @@ from threading import RLock
 import weakref
 from collections import defaultdict
 from textwrap import dedent
+import os.path
 
 import logging
 log = logging.getLogger("moya")
@@ -44,10 +46,11 @@ preflight_log = logging.getLogger("moya.preflight")
 
 class ReloadChangeWatcher(object):
 
-    def __init__(self, watch_location, app):
+    def __init__(self, watch_fs, app):
         self._app = weakref.ref(app)
         self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
-        self.watching_fs = fsopendir(watch_location)
+        self.watching_fs = watch_fs
+        watch_location = watch_fs.desc('/')
         self.is_win = sys.platform.startswith('win')
         try:
             self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
@@ -107,18 +110,22 @@ class WSGIApplication(object):
         self.simulate_slow_network = simulate_slow_network
 
         if logging is not None:
-            init_logging(pathjoin(self.filesystem_url, logging))
+            with fsopendir(self.filesystem_url) as logging_fs:
+                init_logging_fs(logging_fs, logging)
         try:
             self.build(breakpoint=breakpoint_startup)
         except Exception as e:
             startup_log.critical(text_type(e))
             raise
-
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
-            watch_location = self.archive.cfg.get('autoreload', 'location', '')
-            watch_location = pathjoin(self.filesystem_url, watch_location)
-            self.watcher = ReloadChangeWatcher(watch_location, self)
+            try:
+                location = self.archive.project_fs.getsyspath('/')
+            except FSError:
+                log.warning('project filesystem has no syspath, disabling autorealod')
+            else:
+                watch_location = os.path.join(location, self.archive.cfg.get('autoreload', 'location', ''))
+                self.watcher = ReloadChangeWatcher(fsopendir(watch_location), self)
 
     @classmethod
     def on_close(cls, application_weakref):

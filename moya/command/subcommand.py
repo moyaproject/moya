@@ -2,11 +2,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from ..tools import get_moya_dir, is_moya_dir
 from ..compat import with_metaclass
-from ..loggingconf import init_logging
-
-import os.path
+from ..loggingconf import init_logging_fs
 
 import logging
 log = logging.getLogger('moya.startup')
@@ -22,10 +19,6 @@ class SubCommandMeta(type):
         return new_class
 
 
-class NoProjectError(Exception):
-    pass
-
-
 class SubCommandType(object):
     help = ''
     description = ''
@@ -33,7 +26,6 @@ class SubCommandType(object):
     def __init__(self, command):
         self.command = command
         self.console = self.command.console
-        self._location = None
 
     def add_arguments(self, parser):
         pass
@@ -47,29 +39,19 @@ class SubCommandType(object):
     def run(self):
         location = self.location
         # TODO: make logging work from a FS object
-        init_logging(os.path.join(location, self.args.logging))
+        init_logging_fs(self.location_fs, self.args.logging)
         log.debug('project found in "%s"', location)
 
-    def init_logging(self, location):
-        init_logging(logging)
+    # def init_logging(self, location):
+    #     init_logging(logging)
 
     @property
     def location(self):
-        if self._location is not None:
-            return self._location
-        location = self.args.location
-        if location is None:
-            location = './'
-        if location and '://' in location:
-            return location
-        try:
-            location = get_moya_dir(location)
-        except ValueError:
-            raise NoProjectError("Moya project directory not found, run this command from a project directory or specify --location")
-        if not is_moya_dir(location):
-            raise NoProjectError("Location is not a moya project (no 'moya' file found)")
-        self._location = location
-        return location
+        return self.command.location
+
+    @property
+    def location_fs(self):
+        return self.command.location_fs
 
     def get_settings(self):
         return self.command.get_settings()

@@ -17,4 +17,5 @@ __all__ = ['call',
            'serve',
            'libs',
            'apps',
-           'syntax']
+           'syntax',
+           'workhere']

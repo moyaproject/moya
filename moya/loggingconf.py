@@ -10,6 +10,8 @@ import logging
 from logging import handlers
 MemoryHandler = handlers.MemoryHandler
 
+import fs.path
+
 from os.path import abspath, join, dirname
 
 
@@ -27,23 +29,41 @@ def _resolve(name):
             found = getattr(found, n)
     return found
 
+_logging_level_names = {0: 'NOTSET',
+                        10: 'DEBUG',
+                        20: 'INFO',
+                        30: 'WARNING',
+                        40: 'ERROR',
+                        50: 'CRITICAL',
+                        'NOTSET': 0,
+                        'DEBUG': 10,
+                        'INFO': 20,
+                        'WARN': 30,
+                        'WARNING': 30,
+                        'ERROR': 40,
+                        'CRITICAL': 50}
+
+
+def init_logging_fs(logging_fs, path, disable_existing_loggers=False):
+
+    ini_path = path
+    ini_stack = []
+    while 1:
+        try:
+            with logging_fs.open(path, 'rt') as ini_file:
+                s = iniparse.parse(ini_file)
+        except IOError:
+            raise errors.LoggingSettingsError('unable to read logging settings file "{}"'.format(path))
+        ini_stack.append(s)
+        if "extends" in s['']:
+            path = fs.path.join(fs.path.dirname(path), s['']['extends'])
+        else:
+            break
+    return _init_logging(ini_path, ini_stack, disable_existing_loggers)
+
 
 def init_logging(path, disable_existing_loggers=False):
     """Sane logging.ini"""
-
-    level_names = {0: 'NOTSET',
-                   10: 'DEBUG',
-                   20: 'INFO',
-                   30: 'WARNING',
-                   40: 'ERROR',
-                   50: 'CRITICAL',
-                   'NOTSET': 0,
-                   'DEBUG': 10,
-                   'INFO': 20,
-                   'WARN': 30,
-                   'WARNING': 30,
-                   'ERROR': 40,
-                   'CRITICAL': 50}
 
     ini_path = path
     ini_stack = []
@@ -59,6 +79,10 @@ def init_logging(path, disable_existing_loggers=False):
             path = join(dirname(path), s['']['extends'])
         else:
             break
+    return _init_logging(ini_path, ini_stack, disable_existing_loggers)
+
+
+def _init_logging(path, ini_stack, disable_existing_loggers=False):
 
     ini_stack = ini_stack[::-1]
     ini = ini_stack[0]
@@ -148,7 +172,7 @@ def init_logging(path, disable_existing_loggers=False):
             h = kass(*args)
             if "level" in opts:
                 level = get(section_name, "level")
-                h.setLevel(level_names[level])
+                h.setLevel(_logging_level_names[level])
             if len(fmt):
                 h.setFormatter(formatters[fmt])
             if issubclass(kass, MemoryHandler):
@@ -175,7 +199,7 @@ def init_logging(path, disable_existing_loggers=False):
         opts = ini[section_name]
         if "level" in opts:
             level = get(section_name, "level")
-            log.setLevel(level_names[level])
+            log.setLevel(_logging_level_names[level])
         for h in root.handlers[:]:
             root.removeHandler(h)
         if 'handlers' in opts:
@@ -211,9 +235,9 @@ def init_logging(path, disable_existing_loggers=False):
                 existing.remove(qn)
             if "level" in opts:
                 level = get(section_name, "level", "NOTSET")
-                if level not in level_names:
+                if level not in _logging_level_names:
                     raise errors.LoggingSettingsError("unknown logging level '{}' in  [{}]".format(level, section_name))
-                logger.setLevel(level_names[level])
+                logger.setLevel(_logging_level_names[level])
             for h in logger.handlers[:]:
                 logger.removeHandler(h)
             logger.propagate = propagate
