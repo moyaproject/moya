@@ -170,7 +170,7 @@ def build_server(fs,
     archive = Archive()
     console = archive.console
     try:
-        archive, context, doc = build(fs, settings_path, rebuild=rebuild)
+        archive, context, doc = build(fs, settings_path, rebuild=rebuild, master_settings=master_settings)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:

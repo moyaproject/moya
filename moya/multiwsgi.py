@@ -34,7 +34,7 @@ not_found_response = """<!DOCTYPE html>
 
 
 class Server(object):
-    def __init__(self, name, domains, location, ini, logging, master_logging, master_settings):
+    def __init__(self, name, domains, location, ini, logging, master_settings=None, master_logging=None):
         self.name = name
         self.domains = domains
         self.location = location
@@ -142,4 +142,3 @@ class Service(MultiWSGIApplication):
     def _read_project(self, path):
         settings = SettingsContainer.read_os(path)
         return settings
-
