@@ -65,7 +65,7 @@ class MultiWSGIApplication(object):
         name = settings.get('service', 'name')
         domains = settings.get_list('service', 'domains')
         location = os.path.join(self.home_dir, settings.get('service', 'location'))
-        ini = settings.get_list('service', 'ini')
+        ini = settings.get_list('service', 'ini') or ['production.ini']
         os.path.join(location)
         logging_setting = settings.get('service', 'logging', None)
         if logging_setting is None:

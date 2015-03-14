@@ -38,10 +38,6 @@ class MoyaSrv(object):
                                             help="list projects",
                                             description="List enabled projects")
 
-        serve_parser = subparsers.add_parser("serve-all",
-                                             help="serve all projects",
-                                             description="Serve all projects")
-
         return parser
 
     def error(self, msg, code=-1):
@@ -51,7 +47,7 @@ class MoyaSrv(object):
     def run(self):
         parser = self.get_argparse()
         args = parser.parse_args(sys.argv[1:])
-        self.console = console = Console()
+        self.console =  Console()
 
         self.home_dir = home_dir = args.home or os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
 
@@ -62,7 +58,6 @@ class MoyaSrv(object):
         except IOError:
             self.error('unable to read {}'.format(settings_path))
             return -1
-
 
         method_name = "run_" + args.subcommand.replace('-', '_')
         try:
@@ -93,10 +88,14 @@ class MoyaSrv(object):
         return settings
 
     def run_list(self):
-
+        table = []
         for path in self._get_projects():
             settings = self.read_project(path)
-        print(settings)
+            location = settings.get('service', 'location', '?')
+            name = settings.get('service', 'name', '?')
+            domains = "\n".join(settings.get_list('service', 'domains', ""))
+            table.append([name, location, domains])
+        self.console.table(table, header_row=['name', 'location', 'domains'])
 
 
 def main():
