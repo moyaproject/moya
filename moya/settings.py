@@ -33,7 +33,7 @@ class SettingsContainer(OrderedDict):
 
     @classmethod
     def apply_master(self, master, settings):
-        for section_name, section in settings.items():
+        for section_name, section in master.items():
             if section_name in settings:
                 settings[section_name].update(section)
             else:
