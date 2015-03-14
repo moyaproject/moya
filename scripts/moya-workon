@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export MOYA_PROJECT="$(moya-srv where $1)"
+export MOYA_PROJECT_NAME="$1"
+#echo MOYA_PROJECT="$(moya-srv where $1)"
+$SHELL
