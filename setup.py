@@ -31,7 +31,7 @@ setup(name='moya',
               'moya-srv = moya.command.moyasrv:main',
           ]
       },
-      #scripts=['scripts/moya-srv'],
+      scripts=['scripts/moya-workon'],
 
       platforms=['any'],
       packages=find_packages(),

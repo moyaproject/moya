@@ -113,7 +113,7 @@ class MoyaSrv(object):
                 location = settings.get('service', 'location', None)
         if location is None:
             return -1
-        print(location)
+        sys.stdout.write(location)
 
 
 def main():
