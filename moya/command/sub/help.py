@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from ...wsgi import WSGIApplication
 from ...command import SubCommand
-from ...command.subcommand import NoProjectError
+from ...command.app import NoProjectError
 from ...archive import Archive
 
 

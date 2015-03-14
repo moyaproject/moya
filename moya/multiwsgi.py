@@ -66,7 +66,6 @@ class MultiWSGIApplication(object):
         domains = settings.get_list('service', 'domains')
         location = os.path.join(self.home_dir, settings.get('service', 'location'))
         ini = settings.get_list('service', 'ini') or ['production.ini']
-        os.path.join(location)
         logging_setting = settings.get('service', 'logging', None)
         if logging_setting is None:
             logging = 'logging.ini'
@@ -117,11 +116,7 @@ class Service(MultiWSGIApplication):
 
         for path in self._get_projects():
             settings = self._read_project(path)
-            try:
-                self.add_project(settings)
-            except Exception as e:
-                print(e)
-                raise
+            self.add_project(settings)
 
         self.build_all()
 

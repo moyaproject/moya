@@ -28,7 +28,7 @@ class MoyaSrv(object):
         parser.add_argument('-d', '--debug', dest="debug", action="store_true",
                             help="enable debug information (show tracebacks)")
         parser.add_argument('--home', dest="home", metavar="PATH", default=None,
-                            help="Moya service directory")
+                            help="moya service directory")
 
         subparsers = parser.add_subparsers(title="available sub-commands",
                                            dest="subcommand",
@@ -36,7 +36,14 @@ class MoyaSrv(object):
 
         list_parser = subparsers.add_parser('list',
                                             help="list projects",
-                                            description="List enabled projects")
+                                            description="list enabled projects")
+
+        where_parser = subparsers.add_parser('where',
+                                             help='find project directory',
+                                             description="output the location of the project")
+
+        where_parser.add_argument(dest="name", metavar="PROJECT",
+                                  help="name of a project")
 
         return parser
 
@@ -46,8 +53,8 @@ class MoyaSrv(object):
 
     def run(self):
         parser = self.get_argparse()
-        args = parser.parse_args(sys.argv[1:])
-        self.console =  Console()
+        self.args = args = parser.parse_args(sys.argv[1:])
+        self.console = Console()
 
         self.home_dir = home_dir = args.home or os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
 
@@ -97,7 +104,18 @@ class MoyaSrv(object):
             table.append([name, location, domains])
         self.console.table(table, header_row=['name', 'location', 'domains'])
 
+    def run_where(self):
+        name = self.args.name
+        location = None
+        for path in self._get_projects():
+            settings = self.read_project(path)
+            if settings.get('service', 'name', None) == name:
+                location = settings.get('service', 'location', None)
+        if location is None:
+            return -1
+        print(location)
+
 
 def main():
     moya_srv = MoyaSrv()
-    sys.exit(moya_srv.run())
+    sys.exit(moya_srv.run() or 0)
