@@ -100,7 +100,7 @@ class MoyaSrv(object):
             settings = self.read_project(path)
             location = settings.get('service', 'location', '?')
             name = settings.get('service', 'name', '?')
-            domains = "\n".join(settings.get_list('service', 'domains', ""))
+            domains = "\n".join(settings.get_list('service', 'domain(s)', ""))
             table.append([name, location, domains])
         self.console.table(table, header_row=['name', 'location', 'domains'])
 
