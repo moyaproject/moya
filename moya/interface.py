@@ -49,10 +49,10 @@ class AttributeExposer(object):
     """
 
     def keys(self):
-        return self.__moya_exposed_attributes__
+        return [k.lstrip('_') for k in self.__moya_exposed_attributes__]
 
     def iterkeys(self):
-        return iter(self.__moya_exposed_attributes__)
+        return iter(k.lstrip('_') for k in self.__moya_exposed_attributes__)
 
     def itervalues(self):
         for k in self.__moya_exposed_attributes__:
@@ -63,41 +63,49 @@ class AttributeExposer(object):
                 for k in self.__moya_exposed_attributes__]
 
     def items(self):
-        return [(k, getattr(self, k))
+        return [(k.lstrip('_'), getattr(self, k))
                 for k in self.__moya_exposed_attributes__]
 
     def iteritems(self):
         for k in self.__moya_exposed_attributes__:
-            yield (k, getattr(self, k))
+            yield (k.lstrip('_'), getattr(self, k))
 
     def __getitem__(self, k):
         if k in self.__moya_exposed_attributes__:
             return getattr(self, k)
+        if '_' + k in self.__moya_exposed_attributes__:
+            return getattr(self, '_' + k)
         raise KeyError(k)
 
     def __setitem__(self, k, v):
         if k in self.__moya_exposed_attributes__:
             return setattr(self, k, v)
+        if '_' + k in self.__moya_exposed_attributes__:
+            return setattr(self, '_' + k, v)
         raise KeyError(k)
 
     def __contains__(self, k):
-        return k in self.__moya_exposed_attributes__
+        return k in self.__moya_exposed_attributes or ('_' + k) in self.__moya_exposed_attributes__
 
     def get(self, k, default=None):
         if k in self.__moya_exposed_attributes__:
             return getattr(self, k, default)
+        if '_' + k in self.__moya_exposed_attributes__:
+            return getattr(self, '_' + k, default)
         raise KeyError(k)
 
     def set(self, k, v):
         if k in self.__moya_exposed_attributes__:
             setattr(self, k, v)
+        if '_' + k in self.__moya_exposed_attributes__:
+            setattr(self, '_' + k, v)
         raise KeyError(k)
 
     def copy(self):
         return dict(self.iteritems())
 
     def __iter__(self):
-        return iter(self.__moya_exposed_attributes__)
+        return iter(k.lstrip('_') for k in self.__moya_exposed_attributes__)
 
     def __len__(self):
         return len(self.__moya_exposed_attributes__)

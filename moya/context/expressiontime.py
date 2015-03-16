@@ -380,7 +380,8 @@ class ExpressionDateTime(datetime, interface.Proxy):
                                        'leap',
                                        "days_in_month", "epoch",
                                        "isoformat", "local", 'utc', 'naive',
-                                       "html5_datetime", "html5_date", "html5_time"]
+                                       "html5_datetime", "html5_date", "html5_time",
+                                       'rfc2822']
 
         _re_date = re.compile(r"^(\d\d\d\d)-(\d\d)-(\d\d)$")
         _re_time = re.compile(r'^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$')
@@ -584,6 +585,11 @@ class ExpressionDateTime(datetime, interface.Proxy):
         def isoformat(self):
             dt = self._obj
             return datetime.isoformat(dt)
+
+        @property
+        def rfc2822(self):
+            from email import utils
+            return utils.formatdate(self.epoch)
 
         @property
         def utc(self):

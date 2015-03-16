@@ -14,6 +14,7 @@
         <url route="/publish/{posinteger:id}/" methods="POST" view="#view.publish.post" />
         <url route="/hide/{posinteger:id}/" methods="GET,POST" view="#view.hide" name="hide" />
         <url route="/{posinteger:year}/{posinteger:month}/" methods="GET" view="#view.posts-by-month" />
+        <url route="/feed/" methods="GET" view="#view.feed" name="feed"/>
     </mountpoint>
 
     <view libname="view.list" content="#content.recent-posts">
@@ -109,6 +110,24 @@
             <let post.published="no" if="not .request.POST.cancel"/>
             <redirect name="showpost" let:slug="post.slug" />
         </if-post>
+    </view>
+
+    <view libname="view.feed">
+        <get-fq-url name="list" dst="blog_url" />
+        <feed title="${.app.settings.title or 'blog'}"
+            description="${.app.settings.title or 'blog feed'}"
+            link="${blog_url}" dst="feed"/>
+
+        <db:query model="#Post" dst="posts" orderby="-published_date" filter="#Post.published==True" maxresults="25"/>
+        <for src="posts" dst="post">
+            <get-fq-url name="showpost" let:slug="post.slug" dst="post_url"/>
+            <process-markup src="post.content" type="${.app.settings.default_markup}" dst="description"/>
+            <add-feed-item src="feed"
+                title="post.title" link="post_url" description="description"
+                pub_date="post.published_date"/>
+        </for>
+
+        <serve-xml content_type="application/rss+xml" obj="feed"/>
     </view>
 
 </moya>

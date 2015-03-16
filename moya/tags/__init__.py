@@ -3,6 +3,7 @@ __all__ = ['cookie',
            'config',
            'content',
            'context',
+           'feed',
            'renderable',
            'response',
            'server',
@@ -31,6 +32,7 @@ from . import command
 from . import config
 from . import content
 from . import context
+from . import feed
 from . import renderable
 from . import response
 from . import server

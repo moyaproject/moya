@@ -1,7 +1,13 @@
+0.5.12
+------
+
+Added <feed> and <add-feed-item> tags, and RSS feed url to moya.blog
+
 0.5.11
 ------
 
 Added MOYA_PROJECT environment variable to override default project location
+Added moya-srv command
 
 0.5.10
 ------

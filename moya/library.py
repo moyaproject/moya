@@ -123,6 +123,10 @@ class Library(object):
         """Get a version spec for precisely this version"""
         return VersionSpec("{}=={}".format(self.long_name, self.version))
 
+    @property
+    def version_name(self):
+        return "{} {}".format(self.long_name, self.version)
+
     def __str__(self):
         return '<library {}>'.format(self.long_name)
 

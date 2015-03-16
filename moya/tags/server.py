@@ -288,9 +288,29 @@ class GetURL(DataSetter):
             qs = urlencode(list(query.items()), True)
             url += '?' + qs
 
-        if params.base:
-            url = params.base + url
+        url = self.qualify(context, url)
 
+        return url
+
+    def qualify(self, context, url):
+        base = self.base(context)
+        if base is not None:
+            url = base + url
+        return url
+
+
+class GetFqURL(GetURL):
+    """Get a [i]fully qualified[/i] (including domain name and scheme) named URL"""
+    base = Attribute("Base (protocol and domain) of the URL", default=None)
+
+    class Help:
+        synopsis = "get a fully qualified URL"
+
+    def qualify(self, context, url):
+        base = self.base(context)
+        if base is None:
+            base = context['.request.host_url']
+        url = base + url
         return url
 
 

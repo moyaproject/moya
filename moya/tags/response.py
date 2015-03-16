@@ -8,7 +8,7 @@ from .. import http
 from ..tools import datetime_to_epoch, md5_hexdigest
 from ..context.missing import is_missing
 from .. import errors
-from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse
+from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse, py2bytes
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
 
@@ -178,7 +178,7 @@ class ServeJSON(LogicElement):
     class Help:
         synopsis = """serve an object as JSON"""
 
-    obj = Attribute("Objecty to __moyajson__", type="index", required=False, default=None)
+    obj = Attribute("Object to build JSON from", type="index", required=False, default=None)
     indent = Attribute("Indent to make JSON more readable", required=False, default=4)
 
     def logic(self, context):
@@ -189,6 +189,35 @@ class ServeJSON(LogicElement):
             json_obj = context.sub(self.text)
         response = MoyaResponse(content_type=b'application/json' if PY2 else 'application/json',
                                 body=json_obj)
+        raise logic.EndLogic(response)
+
+
+class ServeXML(LogicElement):
+    """Serve XML"""
+
+    class Help:
+        synopsis = """serve xml"""
+
+    obj = Attribute("A string of XML, or an object that may be converted to XML", type="expression", required=True)
+    content_type = Attribute("Mime type", default="application/xml")
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        mime_type = params.content_type
+        xml = params.obj
+
+        if hasattr(xml, '__xml__'):
+            try:
+                xml = xml.__xml__()
+            except Exception as e:
+                self.throw('serve-xml.fail', 'failed to covert {} to XML ({})'.format(context.to_expr(xml), e))
+
+        if not isinstance(xml, bytes):
+            xml = text_type(xml)
+            xml_bytes = xml.encode('utf-8')
+        else:
+            xml_bytes = xml
+        response = MoyaResponse(content_type=py2bytes(mime_type), body=xml_bytes)
         raise logic.EndLogic(response)
 
 

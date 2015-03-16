@@ -16,6 +16,10 @@
 
     <content libname="content.list-posts" template="list.html">
         <title>${.app.settings.name}</title>
+        <get-url name="feed" dst="feed_url"/>
+        <section name="head">
+            <html:link href="${feed_url}" type="application/rss+xml" rel="alternate" />
+        </section>
         <section name="posts">
             <not-found if="page lt 1" />
             <map src="posts" value="sub:'post-${id}'" dst="comment_objects" />
@@ -69,6 +73,10 @@
 
     <content libname="content.post" template="showpost.html">
         <title>${post.title}</title>
+        <get-url name="feed" dst="feed_url"/>
+        <section name="head">
+            <html:link href="${feed_url}" type="application/rss+xml" rel="home" />
+        </section>
         <section name="body">
             <comments:get-count namespace="app-${.app.name}" topic="post-${post.id}" dst="numcomments"/>
             <blog:post newer="newer" older="older" post="post" slug="url.slug" linktitle="no" solo="yes" numcomments="numcomments"/>
