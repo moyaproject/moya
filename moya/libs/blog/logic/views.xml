@@ -115,7 +115,7 @@
     <view libname="view.feed">
         <get-fq-url name="list" dst="blog_url" />
         <feed title="${.app.settings.title or 'blog'}"
-            description="${.app.settings.title or 'blog feed'}"
+            description="${.app.settings.description or 'blog feed'}"
             link="${blog_url}" dst="feed"/>
 
         <db:query model="#Post" dst="posts" orderby="-published_date" filter="#Post.published==True" maxresults="25"/>
