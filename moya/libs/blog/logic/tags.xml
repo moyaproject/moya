@@ -6,7 +6,7 @@
         <signature>
             <attribute name="count" default="10" type="integer"/>
         </signature>
-        <db:query model="#Post" dst="posts" orderby="-published_date" let:published="yes"/>
+        <db:query model="#Post" dst="posts" orderby="-published_date" let:published="yes" maxresults="count"/>
         <return value="posts" />
     </tag>
 
