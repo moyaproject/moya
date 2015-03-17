@@ -45,7 +45,7 @@
             "image": {
                 "default_display": "image",
                 "name": "image",
-                "missing": true,
+                "missing": false,
                 "default": "image",
                 "doc": "Image to write",
                 "required": false,

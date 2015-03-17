@@ -16,14 +16,14 @@
         "synopsis": "mount a library on a given URL",
         "tag_name": "mount",
         "params": {
-            "url": {
-                "default_display": "",
-                "name": "url",
+            "priority": {
+                "default_display": "0",
+                "name": "priority",
                 "missing": true,
-                "default": null,
-                "doc": "Url",
-                "required": true,
-                "type": "text",
+                "default": 0,
+                "doc": "Priority (highest priority is checked first)",
+                "required": false,
+                "type": "integer",
                 "metavar": null,
                 "choices": null
             },
@@ -44,6 +44,17 @@
                 "missing": true,
                 "default": null,
                 "doc": "Application",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "Url",
                 "required": true,
                 "type": "text",
                 "metavar": null,

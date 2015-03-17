@@ -16,6 +16,17 @@
         "synopsis": "write information to the log",
         "tag_name": "log",
         "params": {
+            "logger": {
+                "default_display": "",
+                "name": "logger",
+                "missing": true,
+                "default": null,
+                "doc": "Logger to write to",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
             "level": {
                 "default_display": "",
                 "name": "level",

@@ -10,7 +10,7 @@
         "name": "login",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 41)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 42)",
         "doc": "Validate a username and password combination",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "log in a user",

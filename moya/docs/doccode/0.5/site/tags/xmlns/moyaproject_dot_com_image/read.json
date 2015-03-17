@@ -22,7 +22,7 @@
                 "missing": true,
                 "default": null,
                 "doc": "Path",
-                "required": true,
+                "required": false,
                 "type": "text",
                 "metavar": null,
                 "choices": null
@@ -46,6 +46,17 @@
                 "doc": "FS",
                 "required": false,
                 "type": "index",
+                "metavar": null,
+                "choices": null
+            },
+            "file": {
+                "default_display": "None",
+                "name": "file",
+                "missing": true,
+                "default": null,
+                "doc": "File object with image data",
+                "required": false,
+                "type": "expression",
                 "metavar": null,
                 "choices": null
             }

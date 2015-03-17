@@ -10,7 +10,7 @@
         "name": "new-user",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 101)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 102)",
         "doc": "Create a user",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "create a new user",

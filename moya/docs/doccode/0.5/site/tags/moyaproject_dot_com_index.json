@@ -6,12 +6,128 @@
     "data": {
         "tags": [
             {
+                "name": "add-feed-item",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/feed.py",
+                "doc": "\nAdd an item to a [tag]feed[/tag].\n",
+                "prev_tag": "yield",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "add-feed-item",
+                "next_tag": "append",
+                "synopsis": "add an item to an RSS feed",
+                "params": {
+                    "category": {
+                        "default_display": "None",
+                        "name": "category",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Includes the item in one or more categories",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "feed to add to",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": "None",
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Item description",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "author": {
+                        "default_display": "None",
+                        "name": "author",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Email address of the author of this item",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": "None",
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Title of Feed",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "link": {
+                        "default_display": "None",
+                        "name": "link",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Link to this item on the web",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "guid": {
+                        "default_display": "None",
+                        "name": "guid",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A string that uniquely identifies the item.",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "pub_date": {
+                        "default_display": "None",
+                        "name": "pub_date",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Indicates when the item was published",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "append",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/context.py",
                 "doc": "Append a value to a list or other collection.",
-                "prev_tag": "yield",
+                "prev_tag": "add-feed-item",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "append",
                 "next_tag": "arg",
@@ -943,7 +1059,7 @@
                 "prev_tag": "choose",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "command",
-                "next_tag": "common-mark",
+                "next_tag": "content",
                 "synopsis": "define a command",
                 "params": {
                     "synopsis": {
@@ -962,72 +1078,12 @@
                 "inherited_params": {}
             },
             {
-                "name": "common-mark",
-                "lib": null,
-                "namespace_slug": "moyaproject_dot_com",
-                "defined": "/home/will/projects/moya/moya/tags/markup.py",
-                "doc": "\nAdd markdown to content.\n\nThe output of this tag is similar to [tag]markdown[/tag], but uses [url http://commonmark.org/]CommonMark[/url] -- a standardized version of Markdown.\n\n",
-                "prev_tag": "command",
-                "namespace": "http://moyaproject.com",
-                "tag_name": "common-mark",
-                "next_tag": "content",
-                "synopsis": "add commonmark to content",
-                "params": {},
-                "example": null,
-                "inherited_params": {
-                    "dedent": {
-                        "default_display": "yes",
-                        "name": "dedent",
-                        "missing": true,
-                        "default": true,
-                        "doc": "De-dent source (remove common leading whitespace)?",
-                        "required": false,
-                        "type": "boolean",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "source": {
-                        "default_display": "None",
-                        "name": "source",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Markup source",
-                        "required": false,
-                        "type": "expression",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "obj": {
-                        "default_display": "",
-                        "name": "obj",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Object to render",
-                        "required": false,
-                        "type": "index",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "if": {
-                        "default_display": "yes",
-                        "name": "if",
-                        "missing": true,
-                        "default": true,
-                        "doc": "Conditional expression",
-                        "required": false,
-                        "type": "expression",
-                        "metavar": null,
-                        "choices": null
-                    }
-                }
-            },
-            {
                 "name": "content",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
                 "doc": "\nBegin a [link content]content[/link] definition.\n\nContent is a high level description of a page.\n\n",
-                "prev_tag": "common-mark",
+                "prev_tag": "command",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "content",
                 "next_tag": "continue",
@@ -2070,10 +2126,104 @@
                 "prev_tag": "extend",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "false",
-                "next_tag": "filter",
+                "next_tag": "feed",
                 "synopsis": "create a False boolean",
                 "params": {},
                 "example": "\n        <false dst=\"bool\"/> <!-- Always False -->\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "feed",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/feed.py",
+                "doc": "\nCreate a [url http://en.wikipedia.org/wiki/RSS]RSS[/url] Feed object.\n\nYou can add items to a feed with [tag]add-feed-item[/tag].\n\n",
+                "prev_tag": "false",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "feed",
+                "next_tag": "filter",
+                "synopsis": "create an RSS feed",
+                "params": {
+                    "link": {
+                        "default_display": "",
+                        "name": "link",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Link",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": "",
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Description of feed",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "language": {
+                        "default_display": "",
+                        "name": "language",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Language",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "title": {
+                        "default_display": "",
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Title of Feed",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <view libname=\"view.feed\">\n            <!-- create feed object -->\n            <get-fq-url name=\"list\" dst=\"blog_url\" />\n            <feed title=\"${.app.settings.title or 'blog'}\"\n                description=\"${.app.settings.description or 'blog feed'}\"\n                link=\"${blog_url}\" dst=\"feed\"/>\n\n            <db:query model=\"#Post\" dst=\"posts\" orderby=\"-published_date\"\n                filter=\"#Post.published==True\" maxresults=\"25\"/>\n\n            <!-- add items -->\n            <for src=\"posts\" dst=\"post\">\n                <get-fq-url name=\"showpost\" let:slug=\"post.slug\" dst=\"post_url\"/>\n                <process-markup src=\"post.content\" type=\"${.app.settings.default_markup}\" dst=\"description\"/>\n                <add-feed-item src=\"feed\"\n                    title=\"post.title\" link=\"post_url\" description=\"description\"\n                    pub_date=\"post.published_date\"/>\n            </for>\n\n            <!-- serve feed XML -->\n            <serve-xml content_type=\"application/rss+xml\" obj=\"feed\"/>\n        </view>\n        ",
                 "inherited_params": {
                     "dst": {
                         "default_display": "",
@@ -2116,7 +2266,7 @@
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/filter.py",
                 "doc": "\nDefine a [i]filter[/i], which may be used in expressions.\n\nHere's an example of a filter:\n\n[code xml]\n<filter name=\"repeat\">\n    <return-str>${str:value * count}</return-str>\n</filter>\n[/code]\n\nAnd here is how you might use it in an expression:\n\n[code xml]\n<echo>${\"beetlejuice \"|repeat(count=3)}</echo>\n[/code]\n",
-                "prev_tag": "false",
+                "prev_tag": "feed",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "filter",
                 "next_tag": "filter-seq",
@@ -3075,7 +3225,7 @@
                 "prev_tag": "get-element",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "get-enum",
-                "next_tag": "get-locale",
+                "next_tag": "get-fq-url",
                 "synopsis": "get an enumeration",
                 "params": {
                     "enum": {
@@ -3128,12 +3278,116 @@
                 }
             },
             {
+                "name": "get-fq-url",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/server.py",
+                "doc": "Get a [i]fully qualified[/i] (including domain name and scheme) named URL",
+                "prev_tag": "get-enum",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "get-fq-url",
+                "next_tag": "get-locale",
+                "synopsis": "get a fully qualified URL",
+                "params": {},
+                "example": null,
+                "inherited_params": {
+                    "from": {
+                        "default_display": null,
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "URL name",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "base": {
+                        "default_display": "",
+                        "name": "base",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Base (protocol and domain) of the URL",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "query": {
+                        "default_display": "None",
+                        "name": "query",
+                        "missing": false,
+                        "default": null,
+                        "doc": "Mapping expression to use as a query string",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": "EXPRESSION",
+                        "choices": null
+                    },
+                    "with": {
+                        "default_display": "None",
+                        "name": "with",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extract URL values from this object",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "get-locale",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/server.py",
                 "doc": "Get an object containing locale information",
-                "prev_tag": "get-enum",
+                "prev_tag": "get-fq-url",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "get-locale",
                 "next_tag": "get-tag-text",
@@ -4120,6 +4374,17 @@
                         "metavar": null,
                         "choices": null
                     },
+                    "urlpriority": {
+                        "default_display": "0",
+                        "name": "urlpriority",
+                        "missing": true,
+                        "default": 0,
+                        "doc": "Priority for URLs in mountpoint",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "name": {
                         "default_display": "",
                         "name": "name",
@@ -4527,6 +4792,17 @@
                 "next_tag": "log-debug",
                 "synopsis": "write information to the log",
                 "params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -4575,6 +4851,17 @@
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -4620,6 +4907,17 @@
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -4665,6 +4963,17 @@
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -4710,6 +5019,17 @@
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -4755,6 +5075,17 @@
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "logger": {
+                        "default_display": "",
+                        "name": "logger",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Logger to write to",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "level": {
                         "default_display": "",
                         "name": "level",
@@ -5526,14 +5857,14 @@
                 "next_tag": "mountpoint",
                 "synopsis": "mount a library on a given URL",
                 "params": {
-                    "url": {
-                        "default_display": "",
-                        "name": "url",
+                    "priority": {
+                        "default_display": "0",
+                        "name": "priority",
                         "missing": true,
-                        "default": null,
-                        "doc": "Url",
-                        "required": true,
-                        "type": "text",
+                        "default": 0,
+                        "doc": "Priority (highest priority is checked first)",
+                        "required": false,
+                        "type": "integer",
                         "metavar": null,
                         "choices": null
                     },
@@ -5554,6 +5885,17 @@
                         "missing": true,
                         "default": null,
                         "doc": "Application",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "url": {
+                        "default_display": "",
+                        "name": "url",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Url",
                         "required": true,
                         "type": "text",
                         "metavar": null,
@@ -6175,11 +6517,90 @@
                 "prev_tag": "pop",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "preflight",
-                "next_tag": "profile-python",
+                "next_tag": "process-markup",
                 "synopsis": "check initial settings",
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "process-markup",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/markup.py",
+                "doc": "Process a given markup in to text",
+                "prev_tag": "preflight",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "process-markup",
+                "next_tag": "profile-python",
+                "synopsis": "markup text",
+                "params": {
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Markup source",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "type": {
+                        "default_display": "",
+                        "name": "type",
+                        "missing": true,
+                        "default": "bbcode",
+                        "doc": "Markup type",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": [
+                            "markdown",
+                            "bbcode",
+                            "text",
+                            "summary",
+                            "html",
+                            "markupbasetype"
+                        ]
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "if": {
                         "default_display": "yes",
                         "name": "if",
@@ -6199,7 +6620,7 @@
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/tools.py",
                 "doc": "\nProfile Python code.\n\n",
-                "prev_tag": "preflight",
+                "prev_tag": "process-markup",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "profile-python",
                 "next_tag": "progress",
@@ -6664,13 +7085,13 @@
                 "synopsis": "render an object in content",
                 "params": {
                     "src": {
-                        "default_display": "",
+                        "default_display": "None",
                         "name": "src",
                         "missing": true,
                         "default": null,
                         "doc": "Object to render",
                         "required": false,
-                        "type": "index",
+                        "type": "expression",
                         "metavar": null,
                         "choices": null
                     },
@@ -8279,7 +8700,7 @@
                         "choices": null
                     }
                 },
-                "example": "\n        <servefile fs=\"static\" path=\"/images/logo.jpg />\n        ",
+                "example": "\n        <serve-file fs=\"static\" path=\"/images/logo.jpg />\n        ",
                 "inherited_params": {
                     "if": {
                         "default_display": "yes",
@@ -8309,9 +8730,9 @@
                     "obj": {
                         "default_display": "",
                         "name": "obj",
-                        "missing": true,
+                        "missing": false,
                         "default": null,
-                        "doc": "Objecty to __moyajson__",
+                        "doc": "Object to build JSON from",
                         "required": false,
                         "type": "index",
                         "metavar": null,
@@ -8353,7 +8774,7 @@
                 "prev_tag": "serve-json",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "serve-template",
-                "next_tag": "server",
+                "next_tag": "serve-xml",
                 "synopsis": "render and serve a template",
                 "params": {
                     "content_type": {
@@ -8450,12 +8871,62 @@
                 }
             },
             {
+                "name": "serve-xml",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/response.py",
+                "doc": "Serve XML",
+                "prev_tag": "serve-template",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "serve-xml",
+                "next_tag": "server",
+                "synopsis": "serve xml",
+                "params": {
+                    "obj": {
+                        "default_display": "None",
+                        "name": "obj",
+                        "missing": false,
+                        "default": null,
+                        "doc": "A string of XML, or an object that may be converted to XML",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "content_type": {
+                        "default_display": "\"application/xml\"",
+                        "name": "content_type",
+                        "missing": true,
+                        "default": "application/xml",
+                        "doc": "Mime type",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "server",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/server.py",
                 "doc": "Defines a server",
-                "prev_tag": "serve-template",
+                "prev_tag": "serve-xml",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "server",
                 "next_tag": "set",
@@ -9256,7 +9727,7 @@
                 "prev_tag": "tag",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "throw",
-                "next_tag": "timer",
+                "next_tag": "time-span",
                 "synopsis": "throw an exception",
                 "params": {
                     "msg": {
@@ -9347,12 +9818,61 @@
                 }
             },
             {
+                "name": "time-span",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/context.py",
+                "doc": "Create a datetime object",
+                "prev_tag": "throw",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "time-span",
+                "next_tag": "timer",
+                "synopsis": "create a timespan object",
+                "params": {},
+                "example": "\n        <time-span dst=\"span\" value=\"1d\"/>\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "timer",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/tools.py",
                 "doc": "\nTime a block of code, and log the elapsed time. The log will display two time values; the first is the wall time, the second is [i]processor time[/i]. Processor time is more useful for profiling, as it doesn't include the time spent waiting on IO.\n\n",
-                "prev_tag": "throw",
+                "prev_tag": "time-span",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "timer",
                 "next_tag": "title",

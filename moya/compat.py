@@ -112,7 +112,6 @@ class string(object):
     punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 
 
-
 def with_metaclass(meta, *bases):
     class metaclass(meta):
         __call__ = type.__call__

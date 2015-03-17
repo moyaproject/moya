@@ -72,7 +72,7 @@
                 "choices": null
             }
         },
-        "example": "\n        <servefile fs=\"static\" path=\"/images/logo.jpg />\n        ",
+        "example": "\n        <serve-file fs=\"static\" path=\"/images/logo.jpg />\n        ",
         "inherited_params": {
             "if": {
                 "default_display": "yes",

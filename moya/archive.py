@@ -33,7 +33,7 @@ from .elements.dataelement import DataElement
 from .library import FailedDocument
 from .elements.registry import ElementRegistry
 from .tools import url_join
-from .compat import text_type, string_types, iteritems, itervalues, zip_longest
+from .compat import text_type, iteritems, itervalues, zip_longest
 from .tools import nearest_word
 from .reader import DataReader
 from .context.tools import to_expression

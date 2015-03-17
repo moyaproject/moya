@@ -180,7 +180,7 @@
                 "prev_tag": "apply",
                 "namespace": "http://moyaproject.com/forms",
                 "tag_name": "apply-field",
-                "next_tag": "check-select",
+                "next_tag": "bind",
                 "synopsis": "apply a form field",
                 "params": {
                     "field": {
@@ -211,12 +211,62 @@
                 }
             },
             {
+                "name": "bind",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_forms",
+                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "doc": "\nBind a form to data\n\n",
+                "prev_tag": "apply-field",
+                "namespace": "http://moyaproject.com/forms",
+                "tag_name": "bind",
+                "next_tag": "check-select",
+                "synopsis": "Add data to a form",
+                "params": {
+                    "bind": {
+                        "default_display": "None",
+                        "name": "bind",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Object to bind to",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Source object to fill in fields",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "check-select",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
                 "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a [i]check select[/i] to a form.\n\nA check select is an alternative to a multiple select ([tag forms]select[/tag]) which uses checkboxes rather than an input.\n\n",
-                "prev_tag": "apply-field",
+                "prev_tag": "bind",
                 "namespace": "http://moyaproject.com/forms",
                 "tag_name": "check-select",
                 "next_tag": "checkbox",

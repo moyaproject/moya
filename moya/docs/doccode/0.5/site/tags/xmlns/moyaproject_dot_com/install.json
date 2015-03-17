@@ -38,6 +38,17 @@
                 "metavar": null,
                 "choices": null
             },
+            "urlpriority": {
+                "default_display": "0",
+                "name": "urlpriority",
+                "missing": true,
+                "default": 0,
+                "doc": "Priority for URLs in mountpoint",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "choices": null
+            },
             "name": {
                 "default_display": "",
                 "name": "name",

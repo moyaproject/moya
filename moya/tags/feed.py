@@ -59,16 +59,42 @@ class Feed(AttributeExposer):
 # http://validator.w3.org/feed/docs/rss2.html
 class FeedElement(DataSetter):
     """
-    Create a RSS Feed
+    Create a [url http://en.wikipedia.org/wiki/RSS]RSS[/url] Feed object.
+
+    You can add items to a feed with [tag]add-feed-item[/tag].
+
     """
 
     class Help:
-        synopsis = "create a RSS feed"
+        synopsis = "create an RSS feed"
+        example = """
+        <view libname="view.feed">
+            <!-- create feed object -->
+            <get-fq-url name="list" dst="blog_url" />
+            <feed title="${.app.settings.title or 'blog'}"
+                description="${.app.settings.description or 'blog feed'}"
+                link="${blog_url}" dst="feed"/>
+
+            <db:query model="#Post" dst="posts" orderby="-published_date"
+                filter="#Post.published==True" maxresults="25"/>
+
+            <!-- add items -->
+            <for src="posts" dst="post">
+                <get-fq-url name="showpost" let:slug="post.slug" dst="post_url"/>
+                <process-markup src="post.content" type="${.app.settings.default_markup}" dst="description"/>
+                <add-feed-item src="feed"
+                    title="post.title" link="post_url" description="description"
+                    pub_date="post.published_date"/>
+            </for>
+
+            <!-- serve feed XML -->
+            <serve-xml content_type="application/rss+xml" obj="feed"/>
+        </view>
+        """
 
     class Meta:
         tag_name = "feed"
 
-    format = Attribute("Format of feed", choices=['rss'], default="rss")
     dst = Attribute("Destination object", type="reference", default=None)
 
     title = Attribute("Title of Feed", required=True)
@@ -86,7 +112,7 @@ class FeedElement(DataSetter):
         optional = self.get_let_map(context)
         if 'generator' not in optional:
             optional['generator'] = text_type(context['.app.lib.version_name'])
-        feed = Feed(format=params.format,
+        feed = Feed(format='rss',
                     url=context['.request.url'],
                     title=params.title,
                     description=params.description,
@@ -97,7 +123,7 @@ class FeedElement(DataSetter):
 
 class AddFeedItem(LogicElement):
     """
-    Add an item to an RSS feed
+    Add an item to a [tag]feed[/tag].
     """
 
     class Help:
@@ -108,13 +134,12 @@ class AddFeedItem(LogicElement):
 
     src = Attribute("feed to add to", type="expression", required=True)
     title = Attribute("Title of Feed", type="expression", required=False)
-    link = Attribute("Link", type="expression", required=True, default=None)
+    link = Attribute("Link to this item on the web", type="expression", required=True, default=None)
     description = Attribute("Item description", type="expression", required=False)
     author = Attribute("Email address of the author of this item", type="expression", required=False, default=None)
     category = Attribute("Includes the item in one or more categories", type="expression", required=False, default=None)
     guid = Attribute("A string that uniquely identifies the item.", type="expression", required=False, default=None)
     pub_date = Attribute("Indicates when the item was published", type="expression", required=False, default=None)
-    update_date = Attribute("Indicates when the item was published", type="expression", required=False, default=None)
 
     _item_names = [('title', None),
                    ('link', None),

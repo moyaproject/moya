@@ -52,7 +52,7 @@
             "contents": {
                 "default_display": "None",
                 "name": "contents",
-                "missing": true,
+                "missing": false,
                 "default": null,
                 "doc": "File contents",
                 "required": true,

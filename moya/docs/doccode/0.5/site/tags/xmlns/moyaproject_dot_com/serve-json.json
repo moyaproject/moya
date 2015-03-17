@@ -19,9 +19,9 @@
             "obj": {
                 "default_display": "",
                 "name": "obj",
-                "missing": true,
+                "missing": false,
                 "default": null,
-                "doc": "Objecty to __moyajson__",
+                "doc": "Object to build JSON from",
                 "required": false,
                 "type": "index",
                 "metavar": null,

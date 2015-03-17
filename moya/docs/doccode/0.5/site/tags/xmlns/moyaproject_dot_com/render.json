@@ -17,13 +17,13 @@
         "tag_name": "render",
         "params": {
             "src": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "src",
                 "missing": true,
                 "default": null,
                 "doc": "Object to render",
                 "required": false,
-                "type": "index",
+                "type": "expression",
                 "metavar": null,
                 "choices": null
             },

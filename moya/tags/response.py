@@ -8,7 +8,7 @@ from .. import http
 from ..tools import datetime_to_epoch, md5_hexdigest
 from ..context.missing import is_missing
 from .. import errors
-from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse, py2bytes
+from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
 
@@ -63,8 +63,8 @@ class ResponseTag(DataSetter):
             try:
                 setattr(response, k, v)
             except:
-                self.throw("response.badvalue",
-                           "Can't set '{}' to {!r}".format(k, v))
+                self.throw("bad-value.response-value",
+                           "Can't set {} to {}".format(context.to_expr(k), context.to_expr(v)))
         if headers:
             response.headers.update(headers)
         return response
@@ -100,7 +100,7 @@ class ServeFile(LogicElement):
     class Help:
         synopsis = "serve a file"
         example = """
-        <servefile fs="static" path="/images/logo.jpg />
+        <serve-file fs="static" path="/images/logo.jpg />
         """
 
     path = Attribute("Path in filesystem", required=True)
@@ -178,7 +178,7 @@ class ServeJSON(LogicElement):
     class Help:
         synopsis = """serve an object as JSON"""
 
-    obj = Attribute("Object to build JSON from", type="index", required=False, default=None)
+    obj = Attribute("Object to build JSON from", type="index", required=False, default=None, missing=False)
     indent = Attribute("Indent to make JSON more readable", required=False, default=4)
 
     def logic(self, context):
@@ -198,7 +198,7 @@ class ServeXML(LogicElement):
     class Help:
         synopsis = """serve xml"""
 
-    obj = Attribute("A string of XML, or an object that may be converted to XML", type="expression", required=True)
+    obj = Attribute("A string of XML, or an object that may be converted to XML", type="expression", required=True, missing=False)
     content_type = Attribute("Mime type", default="application/xml")
 
     def logic(self, context):
