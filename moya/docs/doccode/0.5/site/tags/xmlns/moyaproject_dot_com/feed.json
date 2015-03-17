@@ -1,0 +1,102 @@
+{
+    "name": "feed",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "feed",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/feed.py",
+        "doc": "\nCreate a [url http://en.wikipedia.org/wiki/RSS]RSS[/url] Feed object.\n\nYou can add items to a feed with [tag]add-feed-item[/tag].\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create an RSS feed",
+        "tag_name": "feed",
+        "params": {
+            "link": {
+                "default_display": "",
+                "name": "link",
+                "missing": true,
+                "default": null,
+                "doc": "Link",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "description": {
+                "default_display": "",
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "Description of feed",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "language": {
+                "default_display": "",
+                "name": "language",
+                "missing": true,
+                "default": null,
+                "doc": "Language",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "title": {
+                "default_display": "",
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "Title of Feed",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            }
+        },
+        "example": "\n        <view libname=\"view.feed\">\n            <!-- create feed object -->\n            <get-fq-url name=\"list\" dst=\"blog_url\" />\n            <feed title=\"${.app.settings.title or 'blog'}\"\n                description=\"${.app.settings.description or 'blog feed'}\"\n                link=\"${blog_url}\" dst=\"feed\"/>\n\n            <db:query model=\"#Post\" dst=\"posts\" orderby=\"-published_date\"\n                filter=\"#Post.published==True\" maxresults=\"25\"/>\n\n            <!-- add items -->\n            <for src=\"posts\" dst=\"post\">\n                <get-fq-url name=\"showpost\" let:slug=\"post.slug\" dst=\"post_url\"/>\n                <process-markup src=\"post.content\" type=\"${.app.settings.default_markup}\" dst=\"description\"/>\n                <add-feed-item src=\"feed\"\n                    title=\"post.title\" link=\"post_url\" description=\"description\"\n                    pub_date=\"post.published_date\"/>\n            </for>\n\n            <!-- serve feed XML -->\n            <serve-xml content_type=\"application/rss+xml\" obj=\"feed\"/>\n        </view>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.feed"
+}

@@ -1,0 +1,90 @@
+{
+    "name": "get-size",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-size",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Get the dimensions of an image without loading image data, returns a dictionary with keys 'width' and 'height'.",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "get the dimensions of an image",
+        "tag_name": "get-size",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "FS name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "\"image\"",
+                "name": "dst",
+                "missing": true,
+                "default": "image",
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "choices": null
+            },
+            "file": {
+                "default_display": "None",
+                "name": "file",
+                "missing": true,
+                "default": null,
+                "doc": "File object with image data",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            },
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "FS",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.get-size"
+}
