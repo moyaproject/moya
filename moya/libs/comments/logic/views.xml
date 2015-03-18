@@ -103,13 +103,13 @@ If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.p
             <redirect name="anoncomment" />
         </if>
         <forms:get form="#form.comment" dst="form"/>
+        <redirect-to url="${form.raw_data.object_url}" if="not form.csrf_check"/>
         <forms:validate-post src="form">
             <call macro="#create_comment" dst="comment"
                 let:parentid="form.data.parentid"
                 let:object="form.data.object"
                 let:namespace="form.data.namespace"
                 let:object_url="form.data.object_url"/>
-
             <let comment.user=".user"
                  comment.moderated="yes"
                  comment.text="form.data.text"

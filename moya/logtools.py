@@ -47,7 +47,7 @@ class LogHighlighter(ConsoleHighlighter):
 
         r'(?P<get>\"GET .*?\")',
         r'(?P<post>\"POST .*?\")',
-        r'(?P<url>https{0,1}://\S*)',
+        r'(?P<url>https{0,1}://[a-zA-Z0-9\.\%\:\/\-]*)[\s\'\"$]?',
         r'(?P<parenthesis>\(.*?\))'
 
     ]

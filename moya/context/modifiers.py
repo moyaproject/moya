@@ -265,6 +265,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return v.copy()
         return copy.copy(v)
 
+    def csrf(self, context, v):
+        user_id = text_type(context['.session_key'] or '')
+        form_id = text_type(v)
+        secret = text_type(context['.settings.secret'] or context['.settings.project_title'])
+        raw_token = "{}{}{}".format(user_id, secret, form_id).encode('utf-8', 'ignore')
+        m = hashlib.md5()
+        m.update(raw_token)
+        token_hash = m.hexdigest()
+        return token_hash
+
     def d(self, context, v):
         return Decimal(v)
 

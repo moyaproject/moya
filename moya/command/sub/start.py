@@ -13,6 +13,17 @@ try:
 except ImportError:
     pass
 
+import random
+
+
+def make_secret(size=64, allowed_chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&()*+,-./:;<=>?@[]^_`{|}~'):
+    """make a secret key"""
+    try:
+        choice = random.SystemRandom().choice
+    except:
+        choice = random.choice
+    return ''.join(choice(allowed_chars) for _ in range(size))
+
 
 def make_name(*names):
     names = [''.join(c for c in name.lower() if c.isalpha() or c.isdigit())
@@ -362,7 +373,8 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
 
         data = dict(author=author,
                     project=project,
-                    timezone=self.get_timezone())
+                    timezone=self.get_timezone(),
+                    secret=make_secret())
 
         from ...command.sub import project_template
         from fs.memoryfs import MemoryFS

@@ -117,6 +117,9 @@ default = yes
 [settings]
 project_title = ${{ project.title }}
 
+# A randomly generated secret key used by csrf protection
+secret = ${{ secret }}
+
 [project]
 # Enable debug mode
 debug = yes

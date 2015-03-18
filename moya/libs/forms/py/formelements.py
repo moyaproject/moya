@@ -15,11 +15,17 @@ from moya.request import UploadFileProxy
 from moya.compat import iteritems, itervalues, implements_to_string, string_types, text_type
 from moya.context.tools import to_expression
 from moya import errors
+from moya import http
+from moya.interface import AttributeExposer
 
 from collections import defaultdict
 from itertools import groupby
 from operator import attrgetter
 from cgi import FieldStorage
+import hashlib
+
+import logging
+security_log = logging.getLogger('moya.security')
 
 
 class SelectOption(object):
@@ -222,10 +228,32 @@ class RootFormRenderable(FormRenderable):
         return rendered
 
 
-class Form(object):
+class Form(AttributeExposer):
     moya_render_targets = ['html']
 
-    def __init__(self, element, context, app, style, template, action, enctype, _class=None):
+    __moya_exposed_attributes__ = sorted(['action',
+                                          'app',
+                                          'bound',
+                                          'content',
+                                          'id',
+                                          'template',
+                                          'csrf_check',
+                                          'class',
+                                          'csrf',
+                                          'csrf_token',
+                                          'data',
+                                          'element',
+                                          'raw_data',
+                                          'error',
+                                          'errors',
+                                          'fields',
+                                          'legend',
+                                          'ok',
+                                          'style',
+                                          'validated'])
+
+    def __init__(self, element, context, app, style, template, action, enctype, csrf=True, _class=None):
+        super(Form, self).__init__()
         self.element = element
         self.context = context
         self.app = app
@@ -233,6 +261,7 @@ class Form(object):
         self.template = template
         self.action = action
         self.enctype = enctype
+        self.csrf = csrf
         setattr(self, 'class', _class)
 
         self._fields = OrderedDict()
@@ -256,6 +285,25 @@ class Form(object):
         self.field_adapters = defaultdict(list)
         self.field_applyers = defaultdict(list)
 
+    def add_csrf(self):
+        context = self.context
+        field_data = {
+            'name': '_moya_csrf',
+            'fieldname': 'hidden',
+            'src': None,
+            'dst': None,
+            'initial': self.csrf_token,
+            'required': True,
+            'label': 'csrf',
+            'visible': False,
+            'type': 'text',
+            '_if': True
+        }
+        field = self.add_field(field_data, template=None)
+        content = context['.content']
+        context['field'] = field
+        content.add_renderable('hiddeninput', field)
+
     def __repr__(self):
         return "<form '{}'>".format(self.element.libid)
 
@@ -265,6 +313,47 @@ class Form(object):
         self.raw_data = {}
         for field in self.all_fields:
             field.value = None
+
+    @property
+    def csrf_token(self):
+        """Return a csrf token"""
+        context = self.context
+        user_id = text_type(context['.session_key'] or '')
+        form_id = self.element.libid
+        secret = text_type(context['.settings.secret'] or context['.settings.project_title'])
+        raw_token = "{}{}{}".format(user_id, secret, form_id).encode('utf-8', 'ignore')
+        m = hashlib.md5()
+        m.update(raw_token)
+        token_hash = m.hexdigest()
+        return token_hash
+
+    def validate_csrf(self, context):
+        """Validate CSRF token and raise forbidden error if it fails"""
+        if not self.csrf:
+            return
+        if context['.user'] and context['.request.method'] in ('POST', 'PUT', 'DELETE'):
+            csrf = context['.request.POST._moya_csrf']
+            if csrf != self.csrf_token:
+                request = context['.request']
+                if request:
+                    security_log.info('''CSRF detected on request "%s %s" referer='%s' user='%s\'''',
+                                      request.method, request.url, request.referer, context['.user.username'])
+                raise logic.EndLogic(http.RespondForbidden())
+
+    @property
+    def csrf_check(self):
+        if not self.csrf:
+            return True
+        context = self.context
+        if context['.user'] and context['.request.method'] in ('POST', 'PUT', 'DELETE'):
+            csrf = context['.request.POST._moya_csrf']
+            if csrf != self.csrf_token:
+                request = context['.request']
+                if request:
+                    security_log.info('''CSRF detected on request "%s %s" referer='%s' user='%s\'''',
+                                      request.method, request.url, request.referer, context['.user.username'])
+                return False
+        return True
 
     @property
     def renderables(self):
@@ -339,6 +428,7 @@ class Form(object):
                       style=style,
                       data=data,
                       **params)
+
         field.id = "field{}_{}".format(self.id, self.current_field_id)
         self.current_field_id += 1
         if params.get('name'):
@@ -406,6 +496,9 @@ class Form(object):
                     console.text('Form error "%s"' % self.error.strip(), fg="red", bold=True)
                 else:
                     console.text("Validated, no errors", fg="green", bold=True)
+
+        if not self.csrf_check:
+            console.text('CSRF check failed -- form did not originate from here!', fg="red", bold=True)
 
     def fill_initial(self, context):
         for field in self.all_fields():
@@ -573,12 +666,14 @@ class Get(ContextElementBase):
              form_template,
              form_action,
              _class,
-             enctype) = form_element.get_parameters(context,
-                                                    'style',
-                                                    'template',
-                                                    'action',
-                                                    'class',
-                                                    'enctype')
+             enctype,
+             csrf) = form_element.get_parameters(context,
+                                                 'style',
+                                                 'template',
+                                                 'action',
+                                                 'class',
+                                                 'enctype',
+                                                 'csrf')
             style = form_style or style
             template = form_template or template
             action = form_action or action
@@ -592,7 +687,8 @@ class Get(ContextElementBase):
                                              template=template,
                                              action=action,
                                              enctype=enctype,
-                                             _class=_class)
+                                             _class=_class,
+                                             csrf=csrf)
             context['_content'] = form
 
             extends = [form_element]
@@ -623,6 +719,8 @@ class Get(ContextElementBase):
 
             with push_content(context, form.content):
                 with form.content.section('fields'):
+                    if csrf:
+                        form.add_csrf()
                     for el in reversed(extends):
                         yield logic.DeferNodeContents(el)
 
@@ -681,6 +779,8 @@ class Validate(LogicElement):
         values = {name: field.value for name, field in iteritems(form.fields_map)}
         app = self.get_app(context)
         new_values = {}
+
+        form.validate_csrf(context)
 
         for field in form.fields:
             new_values[field.name] = field.value
@@ -794,14 +894,14 @@ class Apply(LogicElement):
                 else:
                     with context.frame(dst):
                         field_dst = field.dst
-                        if dst:
+                        if field_dst:
                             value = form_data.get(field.name, None)
                             try:
                                 context[field_dst] = value
                             except Exception as e:
                                 diagnosis_msg = "Check you are setting this field to an appropriate value."
                                 self.throw('moya.forms.apply-fail',
-                                           "unable to set for field '{}' to {}".format(dst, context.to_expr(value)),
+                                           "unable to set field '{}' to {}".format(dst, context.to_expr(value)),
                                            diagnosis=diagnosis_msg,
                                            info={'field': field.name, 'error': text_type(e)})
 
@@ -830,6 +930,7 @@ class FormElement(LogicElement):
     enctype = Attribute("Form encoding type", default=None)
     extends = Attribute("Extend another form", default=None)
     _class = Attribute("Additional CSS class", required=False, default=None)
+    csrf = Attribute("Enable csrf protection?", type="boolean", default=True)
 
     class Meta:
         tag_name = "form"

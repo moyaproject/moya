@@ -34,6 +34,10 @@ Logs information about each request.
 Logs information about events that occur during normal operation.
 [/define]
 
+[define moya.security]
+Logs information about security issues, such [url http://en.wikipedia.org/wiki/Cross-site_request_forgery]CSRF[/url] attempts detected by the forms library.
+[/define]
+
 [define moya.signal]
 Log messages regarding signals.
 [/define]

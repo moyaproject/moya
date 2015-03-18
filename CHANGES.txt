@@ -1,6 +1,8 @@
 0.5.13
 ------
 
+Added CSRF protection to forms
+
 0.5.12
 ------
 

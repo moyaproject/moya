@@ -85,7 +85,7 @@ class AttributeExposer(object):
         raise KeyError(k)
 
     def __contains__(self, k):
-        return k in self.__moya_exposed_attributes or ('_' + k) in self.__moya_exposed_attributes__
+        return k in self.__moya_exposed_attributes__ or ('_' + k) in self.__moya_exposed_attributes__
 
     def get(self, k, default=None):
         if k in self.__moya_exposed_attributes__:
