@@ -56,13 +56,16 @@ class Server(object):
 
     def build(self):
         log.debug('building %r', self)
-        application = WSGIApplication(self.location,
-                                      self.ini,
-                                      logging=self.logging,
-                                      master_settings=self.master_settings,
-                                      master_logging=self.master_logging)
-        application.build()
-        self.application = application
+        try:
+            application = WSGIApplication(self.location,
+                                          self.ini,
+                                          logging=self.logging,
+                                          master_settings=self.master_settings,
+                                          master_logging=self.master_logging)
+            application.build()
+            self.application = application
+        except:
+            log.exception('error building %r', self)
 
     def rebuild(self):
         log.debug('re-building %r', self)
@@ -74,6 +77,7 @@ class Server(object):
                                           master_logging=self.master_logging)
             application.build()
         except Exception:
+            log.debug('error re-building %r', self)
             return False
         else:
             self.application = application
@@ -143,6 +147,8 @@ class Service(MultiWSGIApplication):
 
     def __init__(self, home_dir=None):
         super(Service, self).__init__()
+        self.changes = {}
+
         self.home_dir = home_dir = os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
 
         settings_path = os.path.join(home_dir, 'moya.conf')
@@ -164,9 +170,6 @@ class Service(MultiWSGIApplication):
             settings = self._read_project(path)
             self.add_project(settings)
 
-        self.build_all()
-
-        self.changes = {}
         for server_name in self.servers:
             path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
             try:
@@ -176,6 +179,8 @@ class Service(MultiWSGIApplication):
                 sys.stderr.write("{}\n".format(text_type(e)))
                 return -1
             self.changes[server_name] = os.path.getmtime(path)
+
+        self.build_all()
 
     def reload_required(self, server_name):
         path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
