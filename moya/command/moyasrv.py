@@ -6,6 +6,7 @@ import os
 import sys
 import io
 import glob
+import tempfile
 
 from moya.compat import text_type
 from moya.settings import SettingsContainer
@@ -44,6 +45,13 @@ class MoyaSrv(object):
 
         where_parser.add_argument(dest="name", metavar="PROJECT",
                                   help="name of a project")
+
+        restart_parser = subparsers.add_parser('restart',
+                                               help='restart a project server',
+                                               description="restart a server")
+
+        restart_parser.add_argument(dest="name", metavar="PROJECT",
+                                    help="name of a project")
 
         return parser
 
@@ -87,8 +95,14 @@ class MoyaSrv(object):
                 paths.extend([os.path.abspath(p) for p in glob_paths])
         finally:
             os.chdir(cwd)
-
         return paths
+
+    def project_exists(self, name):
+        for path in self._get_projects():
+            settings = self.read_project(path)
+            if settings.get('service', 'name', None) == name:
+                return True
+        return False
 
     def read_project(self, path):
         settings = SettingsContainer.read_os(path)
@@ -100,9 +114,9 @@ class MoyaSrv(object):
             settings = self.read_project(path)
             location = settings.get('service', 'location', '?')
             name = settings.get('service', 'name', '?')
-            domains = "\n".join(settings.get_list('service', 'domain(s)', ""))
-            table.append([name, location, domains])
-        self.console.table(table, header_row=['name', 'location', 'domains'])
+            domains = "\n".join(settings.get_list('service', 'domains', ""))
+            table.append([name, domains, path, location])
+        self.console.table(table, header_row=['name', 'domain(s)', 'conf', 'location'])
 
     def run_where(self):
         name = self.args.name
@@ -112,8 +126,27 @@ class MoyaSrv(object):
             if settings.get('service', 'name', None) == name:
                 location = settings.get('service', 'location', None)
         if location is None:
+            sys.stderr.write("no project '{}'\n".format(name))
             return -1
         sys.stdout.write(location)
+
+    def run_restart(self):
+        name = self.args.name
+        if not self.project_exists(name):
+            sys.stderr.write("no project '{}'\n".format(name))
+            return -1
+        temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
+        try:
+            os.makedirs(temp_dir)
+        except OSError:
+            pass
+        change_path = os.path.join(temp_dir, "{}.changes".format(name))
+        try:
+            with open(change_path, 'a'):
+                os.utime(change_path, None)
+        except IOError as e:
+            sys.stderr.write("{}\n".format(text_type(e)))
+            return -1
 
 
 def main():

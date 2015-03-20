@@ -4,7 +4,7 @@ from __future__ import print_function
 from moya.wsgi import WSGIApplication
 from moya.sites import Sites
 from moya.settings import SettingsContainer
-from moya.compat import py2bytes, itervalues
+from moya.compat import py2bytes, itervalues, text_type
 
 from webob import Response
 
@@ -12,6 +12,8 @@ import sys
 import os
 import io
 import glob
+import tempfile
+import threading
 from collections import OrderedDict
 
 
@@ -54,12 +56,27 @@ class Server(object):
         application.build()
         self.application = application
 
+    def rebuild(self):
+        try:
+            application = WSGIApplication(self.location,
+                                          self.ini,
+                                          logging=self.logging,
+                                          master_settings=self.master_settings,
+                                          master_logging=self.master_logging)
+            application.build()
+        except Exception:
+            return False
+        else:
+            self.application = application
+        return True
+
 
 class MultiWSGIApplication(object):
 
     def __init__(self):
         self.servers = OrderedDict()
         self.sites = Sites()
+        self._lock = threading.Lock()
 
     def add_project(self, settings):
         name = settings.get('service', 'name')
@@ -86,17 +103,28 @@ class MultiWSGIApplication(object):
         response = Response(charset=py2bytes("utf8"), status=404)
         response.text = not_found_response
 
+    def reload_required(server_name):
+        return False
+
+    def reload(self, server_name):
+        self.servers[server_name].rebuild()
+
     def __call__(self, environ, start_response):
         domain = environ['SERVER_NAME']
         site_match = self.sites.match(domain)
         if site_match is None:
             return self.not_found()
         server_name = site_match.data['name']
-        server_application = self.servers[server_name].application
-        return server_application(environ, start_response)
+        if self.reload_required(server_name):
+            with self._lock:
+                if self.reload_required(server_name):
+                    self.reload(server_name)
+        server = self.servers[server_name]
+        return server.application(environ, start_response)
 
 
 class Service(MultiWSGIApplication):
+    """WSGI applicaion to load projects from /etc/moya"""
 
     def error(self, msg, code=-1):
         sys.stderr.write(msg + '\n')
@@ -107,6 +135,7 @@ class Service(MultiWSGIApplication):
         self.home_dir = home_dir = os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
 
         settings_path = os.path.join(home_dir, 'moya.conf')
+
         try:
             with io.open(settings_path, 'rt') as f:
                 self.settings = SettingsContainer.read_from_file(f)
@@ -114,11 +143,38 @@ class Service(MultiWSGIApplication):
             self.error('unable to read {}'.format(settings_path))
             return -1
 
+        self.temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
+        try:
+            os.makedirs(self.temp_dir)
+        except OSError:
+            pass
+
         for path in self._get_projects():
             settings = self._read_project(path)
             self.add_project(settings)
 
         self.build_all()
+
+        self.changes = {}
+        for server_name in self.servers:
+            path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
+            try:
+                with open(path, 'a'):
+                    os.utime(path, None)
+            except IOError as e:
+                sys.stderr.write("{}\n".format(text_type(e)))
+                return -1
+            self.changes[server_name] = os.path.getmtime(path)
+
+    def reload_required(self, server_name):
+        path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
+        mtime = os.path.getmtime(path)
+        return self.changes[server_name] != mtime
+
+    def reload(self, server_name):
+        path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
+        self.changes[server_name] = os.path.getmtime(path)
+        super(Service, self).reload(server_name)
 
     def _get_projects(self):
         project_paths = self.settings.get_list('projects', 'read')

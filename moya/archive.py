@@ -680,6 +680,7 @@ class Archive(object):
 
     def init_settings(self, cfg=None):
         cfg = cfg or self.cfg
+        self.secret = cfg.get('project', 'secret', '')
         self.preflight = cfg.get_bool('project', 'preflight', False)
         self.debug = cfg.get_bool('project', 'debug')
         self.develop = cfg.get_bool('project', 'develop')

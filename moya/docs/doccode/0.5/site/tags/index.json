@@ -21247,6 +21247,17 @@
                             "metavar": null,
                             "choices": null
                         },
+                        "template": {
+                            "default_display": "",
+                            "name": "template",
+                            "missing": true,
+                            "default": null,
+                            "doc": "Form template",
+                            "required": false,
+                            "type": "text",
+                            "metavar": null,
+                            "choices": null
+                        },
                         "class": {
                             "default_display": "",
                             "name": "class",
@@ -21269,14 +21280,14 @@
                             "metavar": null,
                             "choices": null
                         },
-                        "template": {
-                            "default_display": "",
-                            "name": "template",
+                        "csrf": {
+                            "default_display": "yes",
+                            "name": "csrf",
                             "missing": true,
-                            "default": null,
-                            "doc": "Form template",
+                            "default": true,
+                            "doc": "Enable csrf protection?",
                             "required": false,
-                            "type": "text",
+                            "type": "boolean",
                             "metavar": null,
                             "choices": null
                         },
@@ -23574,6 +23585,17 @@
                             "type": "index",
                             "metavar": null,
                             "choices": null
+                        },
+                        "csrf": {
+                            "default_display": "yes",
+                            "name": "csrf",
+                            "missing": true,
+                            "default": true,
+                            "doc": "Enable CSRF check?",
+                            "required": false,
+                            "type": "boolean",
+                            "metavar": null,
+                            "choices": null
                         }
                     },
                     "example": null,
@@ -23651,6 +23673,17 @@
                             "doc": "Form source",
                             "required": false,
                             "type": "index",
+                            "metavar": null,
+                            "choices": null
+                        },
+                        "csrf": {
+                            "default_display": "yes",
+                            "name": "csrf",
+                            "missing": true,
+                            "default": true,
+                            "doc": "Enable CSRF check?",
+                            "required": false,
+                            "type": "boolean",
                             "metavar": null,
                             "choices": null
                         },
@@ -33133,6 +33166,17 @@
                         "metavar": null,
                         "choices": null
                     },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Form template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
                     "class": {
                         "default_display": "",
                         "name": "class",
@@ -33155,14 +33199,14 @@
                         "metavar": null,
                         "choices": null
                     },
-                    "template": {
-                        "default_display": "",
-                        "name": "template",
+                    "csrf": {
+                        "default_display": "yes",
+                        "name": "csrf",
                         "missing": true,
-                        "default": null,
-                        "doc": "Form template",
+                        "default": true,
+                        "doc": "Enable csrf protection?",
                         "required": false,
-                        "type": "text",
+                        "type": "boolean",
                         "metavar": null,
                         "choices": null
                     },
@@ -52323,6 +52367,17 @@
                         "type": "index",
                         "metavar": null,
                         "choices": null
+                    },
+                    "csrf": {
+                        "default_display": "yes",
+                        "name": "csrf",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Enable CSRF check?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
                     }
                 },
                 "example": null,
@@ -52400,6 +52455,17 @@
                         "doc": "Form source",
                         "required": false,
                         "type": "index",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "csrf": {
+                        "default_display": "yes",
+                        "name": "csrf",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Enable CSRF check?",
+                        "required": false,
+                        "type": "boolean",
                         "metavar": null,
                         "choices": null
                     },

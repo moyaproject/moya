@@ -117,10 +117,9 @@ default = yes
 [settings]
 project_title = ${{ project.title }}
 
+[project]
 # A randomly generated secret key used by csrf protection
 secret = ${{ secret }}
-
-[project]
 # Enable debug mode
 debug = yes
 # Show file and line for <echo> text

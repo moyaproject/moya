@@ -27,6 +27,17 @@
                 "metavar": null,
                 "choices": null
             },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Form template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "choices": null
+            },
             "class": {
                 "default_display": "",
                 "name": "class",
@@ -49,14 +60,14 @@
                 "metavar": null,
                 "choices": null
             },
-            "template": {
-                "default_display": "",
-                "name": "template",
+            "csrf": {
+                "default_display": "yes",
+                "name": "csrf",
                 "missing": true,
-                "default": null,
-                "doc": "Form template",
+                "default": true,
+                "doc": "Enable csrf protection?",
                 "required": false,
-                "type": "text",
+                "type": "boolean",
                 "metavar": null,
                 "choices": null
             },

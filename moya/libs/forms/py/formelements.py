@@ -320,7 +320,7 @@ class Form(AttributeExposer):
         context = self.context
         user_id = text_type(context['.session_key'] or '')
         form_id = self.element.libid
-        secret = text_type(context['.settings.secret'] or context['.settings.project_title'])
+        secret = text_type(self.element.archive.secret)
         raw_token = "{}{}{}".format(user_id, secret, form_id).encode('utf-8', 'ignore')
         m = hashlib.md5()
         m.update(raw_token)
@@ -755,6 +755,7 @@ class Validate(LogicElement):
     xmlns = namespaces.forms
 
     src = Attribute("Form source", type="index", default="form", evaldefault=True, map_to="src")
+    csrf = Attribute("Enable CSRF check?", type="boolean", default=True)
 
     class Meta:
         is_call = True
@@ -780,7 +781,8 @@ class Validate(LogicElement):
         app = self.get_app(context)
         new_values = {}
 
-        form.validate_csrf(context)
+        if self.csrf(context):
+            form.validate_csrf(context)
 
         for field in form.fields:
             new_values[field.name] = field.value

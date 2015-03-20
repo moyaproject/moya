@@ -29,6 +29,17 @@
                 "metavar": null,
                 "choices": null
             },
+            "csrf": {
+                "default_display": "yes",
+                "name": "csrf",
+                "missing": true,
+                "default": true,
+                "doc": "Enable CSRF check?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "choices": null
+            },
             "if": {
                 "default_display": "yes",
                 "name": "if",
