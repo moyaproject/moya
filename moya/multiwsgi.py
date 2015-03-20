@@ -5,6 +5,7 @@ from moya.wsgi import WSGIApplication
 from moya.sites import Sites
 from moya.settings import SettingsContainer
 from moya.compat import py2bytes, itervalues, text_type
+from moya.loggingconf import init_logging
 
 from webob import Response
 
@@ -40,28 +41,26 @@ not_found_response = """<!DOCTYPE html>
 
 
 class Server(object):
-    def __init__(self, name, domains, location, ini, logging, master_settings=None, master_logging=None):
+    def __init__(self, name, domains, location, ini, master_settings=None, master_logging=None):
         self.name = name
         self.domains = domains
         self.location = location
         self.ini = ini
-        self.logging = logging
         self.master_logging = master_logging
         self.master_settings = master_settings
 
         self.application = None
 
     def __repr__(self):
-        return "<server '{}'>".format(self.name)
+        return "<project '{}'>".format(self.name)
 
     def build(self):
         log.debug('building %r', self)
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
-                                          logging=self.logging,
-                                          master_settings=self.master_settings,
-                                          master_logging=self.master_logging)
+                                          logging=None,
+                                          master_settings=self.master_settings)
             application.build()
             self.application = application
         except:
@@ -72,9 +71,8 @@ class Server(object):
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
-                                          logging=self.logging,
-                                          master_settings=self.master_settings,
-                                          master_logging=self.master_logging)
+                                          logging=self.None,
+                                          master_settings=self.master_settings)
             application.build()
         except Exception:
             log.debug('error re-building %r', self)
@@ -91,20 +89,13 @@ class MultiWSGIApplication(object):
         self.sites = Sites()
         self._lock = threading.Lock()
 
-    def add_project(self, settings):
+    def add_project(self, settings, logging_path=None):
         name = settings.get('service', 'name')
         domains = settings.get_list('service', 'domains')
         location = os.path.join(self.home_dir, settings.get('service', 'location'))
         ini = settings.get_list('service', 'ini') or ['production.ini']
-        logging_setting = settings.get('service', 'logging', None)
-        if logging_setting is None:
-            logging = 'logging.ini'
-            master_logging = None
-        else:
-            logging = None
-            master_logging = os.path.join(self.home_dir, logging_setting)
 
-        server = Server(name, domains, location, ini, logging, master_settings=settings, master_logging=master_logging)
+        server = Server(name, domains, location, ini, master_settings=settings)
         self.servers[name] = server
         self.sites.add(domains, name=name)
         log.debug('registered %r', self)
@@ -160,6 +151,13 @@ class Service(MultiWSGIApplication):
         except IOError:
             self.error('unable to read {}'.format(settings_path))
             return -1
+
+        logging_setting = self.settings.get('projects', 'logging', 'logging.ini')
+        logging_path = os.path.join(self.home_dir, logging_setting)
+        try:
+            init_logging(logging_path)
+        except:
+            log.exception('error with logging configuration')
 
         self.temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
         try:
