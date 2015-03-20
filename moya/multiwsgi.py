@@ -107,6 +107,7 @@ class MultiWSGIApplication(object):
         server = Server(name, domains, location, ini, logging, master_settings=settings, master_logging=master_logging)
         self.servers[name] = server
         self.sites.add(domains, name=name)
+        log.debug('registered %r', self)
 
     def build_all(self):
         for server in itervalues(self.servers):
@@ -167,6 +168,7 @@ class Service(MultiWSGIApplication):
             pass
 
         for path in self._get_projects():
+            log.debug('reading project settings %s', path)
             settings = self._read_project(path)
             self.add_project(settings)
 
