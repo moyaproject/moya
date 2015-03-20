@@ -51,7 +51,11 @@ class Server(object):
 
         self.application = None
 
+    def __repr__(self):
+        return "<server '{}'>".format(self.name)
+
     def build(self):
+        log.debug('building %r', self)
         application = WSGIApplication(self.location,
                                       self.ini,
                                       logging=self.logging,
@@ -61,6 +65,7 @@ class Server(object):
         self.application = application
 
     def rebuild(self):
+        log.debug('re-building %r', self)
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
@@ -111,7 +116,7 @@ class MultiWSGIApplication(object):
         return False
 
     def reload(self, server_name):
-        log.debug("reloading '{}'".format(server_name))
+        log.debug("reloading '%s'", server_name)
         self.servers[server_name].rebuild()
 
     def __call__(self, environ, start_response):
@@ -121,7 +126,7 @@ class MultiWSGIApplication(object):
             return self.not_found()
         server_name = site_match.data['name']
         if self.reload_required(server_name):
-            log.debug("reload of '{}' required".format(server_name))
+            log.debug("reload of '%s' required", server_name)
             with self._lock:
                 if self.reload_required(server_name):
                     self.reload(server_name)
