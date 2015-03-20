@@ -17,6 +17,10 @@ import threading
 from collections import OrderedDict
 
 
+import logging
+log = logging.getLogger('moya.srv')
+
+
 DEFAULT_HOME_DIR = "/etc/moya"
 
 not_found_response = """<!DOCTYPE html>
@@ -107,6 +111,7 @@ class MultiWSGIApplication(object):
         return False
 
     def reload(self, server_name):
+        log.debug("reloading '{}'".format(server_name))
         self.servers[server_name].rebuild()
 
     def __call__(self, environ, start_response):
@@ -116,6 +121,7 @@ class MultiWSGIApplication(object):
             return self.not_found()
         server_name = site_match.data['name']
         if self.reload_required(server_name):
+            log.debug("reload of '{}' required".format(server_name))
             with self._lock:
                 if self.reload_required(server_name):
                     self.reload(server_name)
