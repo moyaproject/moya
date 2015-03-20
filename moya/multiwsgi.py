@@ -71,7 +71,7 @@ class Server(object):
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
-                                          logging=self.None,
+                                          logging=None,
                                           master_settings=self.master_settings)
             application.build()
         except Exception:
