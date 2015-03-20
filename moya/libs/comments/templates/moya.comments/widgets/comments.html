@@ -4,10 +4,10 @@
     <div class="moya-comment-body{% if comment.user %} user{% endif %} moya-comment-${comment.id}">
         {%- if comment.commenter_url %}
         <a href="${comment.commenter_url}">
-            <img class="gravatar" alt="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
+            <img class="gravatar" alt="gravatar" src="//www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
         </a>
         {%- else %}
-        <img class="gravatar" alt="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
+        <img class="gravatar" alt="gravatar" src="//www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
         {%- endif %}
 
         <div class="text">
