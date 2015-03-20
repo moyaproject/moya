@@ -59,9 +59,9 @@ class Server(object):
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
+                                          disable_autoreload=True,
                                           logging=None,
                                           master_settings=self.master_settings)
-            application.build()
             self.application = application
         except:
             log.exception('error building %r', self)
@@ -71,9 +71,9 @@ class Server(object):
         try:
             application = WSGIApplication(self.location,
                                           self.ini,
+                                          disable_autoreload=True,
                                           logging=None,
                                           master_settings=self.master_settings)
-            application.build()
         except Exception:
             log.debug('error re-building %r', self)
             return False
@@ -131,7 +131,7 @@ class MultiWSGIApplication(object):
 
 
 class Service(MultiWSGIApplication):
-    """WSGI applicaion to load projects from /etc/moya"""
+    """WSGI application to load projects from /etc/moya"""
 
     def error(self, msg, code=-1):
         sys.stderr.write(msg + '\n')
@@ -156,8 +156,8 @@ class Service(MultiWSGIApplication):
         logging_path = os.path.join(self.home_dir, logging_setting)
         try:
             init_logging(logging_path)
-        except:
-            log.exception('error with logging configuration')
+        except Exception as e:
+            log.error("%s", e)
 
         self.temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
         try:
