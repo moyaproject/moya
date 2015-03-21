@@ -268,7 +268,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def csrf(self, context, v):
         user_id = text_type(context['.session_key'] or '')
         form_id = text_type(v)
-        secret = text_type(context['.settings.secret'] or context['.settings.project_title'])
+        secret = text_type(context['.server.archive'].secret)
         raw_token = "{}{}{}".format(user_id, secret, form_id).encode('utf-8', 'ignore')
         m = hashlib.md5()
         m.update(raw_token)
