@@ -409,6 +409,7 @@ class Archive(object):
         root['moya'] = {'version': __version__}
         root['enum'] = self.enum
         root['media_url'] = self.media_url
+        root['secret'] = self.secret
         context.set_dynamic('.app', lambda context: getattr(context.get('.call', None), 'app'))
 
     @classmethod

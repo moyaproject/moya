@@ -497,7 +497,7 @@ Find, install and manage Moya libraries
             if not force:
                 for name, version, location in libs:
                     if name == package_name:
-                        if install_version > version:
+                        if version > install_version:
                             if not args.force:
                                 raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
                         elif install_version == version:

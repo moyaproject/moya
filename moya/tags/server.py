@@ -663,7 +663,8 @@ class Server(LogicElement):
                             'enum': archive.enum,
                             'accept_language': list(request.accept_language),
                             'media_url': archive.media_url,
-                            'filters': archive.filters}
+                            'filters': archive.filters,
+                            'secret': archive.secret}
         context.root.update(populate_context)
         set_dynamic(context)
 

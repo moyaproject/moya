@@ -10,6 +10,7 @@ from ..compat import iteritems, text_type, reload
 
 from fs.path import pathjoin
 from fs.opener import fsopendir
+from fs.errors import FSError
 
 from os.path import dirname, abspath
 import sys
@@ -153,12 +154,17 @@ class Import(LogicElement):
                 import_fs = fsopendir(location)
             else:
                 project_fs = context['fs']
-                if project_fs.hassyspath('/'):
-                    project_path = project_fs.getsyspath('/')
-                    import_path = pathjoin(project_path, location)
-                    import_fs = fsopendir(import_path)
-                else:
-                    import_fs = context['fs'].opendir(location)
+                try:
+                    if project_fs.hassyspath('/'):
+                        project_path = project_fs.getsyspath('/')
+                        import_path = pathjoin(project_path, location)
+                        import_fs = fsopendir(import_path)
+                    else:
+                        import_fs = context['fs'].opendir(location)
+                except FSError as e:
+                    self.throw("import.fail",
+                               "unable to import library from {}".format(location),
+                               diagnosis=text_type(e))
         lib = archive.load_library(import_fs,
                                    priority=priority,
                                    template_priority=template_priority,
