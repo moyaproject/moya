@@ -242,7 +242,7 @@ def _logic_loop(context,
                     push_stack(next_node)
 
         except MoyaException as moya_exception:
-            callstack = context.get('.callstack', [])[:]
+            callstack = context.get('._callstack', [])[:]
             exc_node = node
             exc_type = moya_exception.type
 
@@ -358,7 +358,7 @@ def _logic_loop(context,
             if on_exception:
                 on_exception(node_stack, node, logic_exception)
             request = context.get('.request', None)
-            callstack = context.get('.callstack', [])[:]
+            callstack = context.get('._callstack', [])[:]
             moya_trace = trace.build(context, None, node, logic_exception, sys.exc_info(), request)
             exc_node = node
             raise LogicError(logic_exception, moya_trace)
@@ -408,7 +408,7 @@ def moya_traceback(stack, node, exc, console, message="Logic Error"):
     console.div(message, bold=True, fg="red")
     node = getattr(node, 'node', node)
     # if stack is None:
-    #     stack = context.get('.callstack', [])
+    #     stack = context.get('._callstack', [])
     for s in stack:
         e = getattr(s, 'element', None)
         if e and e._code:
@@ -526,7 +526,7 @@ def run_logic_debug(archive, context, node, node_stack):
             extralines = 2
         node = getattr(node, '__node__', node)
         if stack is None:
-            stack = context.get('.callstack', [])
+            stack = context.get('._callstack', [])
         for s in stack:
             e = getattr(s, 'element', None)
             if e and e._code:
@@ -537,7 +537,7 @@ def run_logic_debug(archive, context, node, node_stack):
             console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines)
 
     def show_exception(stack, node, exc):
-        moya_traceback(context.get('.callstack', []), node, exc, console)
+        moya_traceback(context.get('._callstack', []), node, exc, console)
         exc._displayed = True
         debug_hook(node, error_analysis=True)
 

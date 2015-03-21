@@ -24,7 +24,8 @@ __all__ = ['cookie',
            'tools',
            'filter',
            'unittest',
-           'request'
+           'request',
+           'threads'
            ]
 
 from . import cookie
@@ -54,3 +55,4 @@ from . import tools
 from . import filter
 from . import unittest
 from . import request
+from . import threads

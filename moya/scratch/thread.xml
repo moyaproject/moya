@@ -1,0 +1,24 @@
+<moya>
+
+    <macro docname="main">
+        <echo>entered main...</echo>
+
+        <thread dst="result">
+            <echo>In thread</echo>
+
+            <!-- simulate something slow -->
+            <repeat times="5">
+                <sleep for="1s"/>
+                <echo>Working...</echo>
+            </repeat>
+
+            <echo>Exiting thread</echo>
+            <return value="100"/>
+        </thread>
+
+        <!-- use of 'result' blocks for the thread-->
+        <echo>Result is: ${result}</echo>
+        <echo>leaving main</echo>
+    </macro>
+
+</moya>

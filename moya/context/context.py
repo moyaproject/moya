@@ -11,6 +11,7 @@ from .errors import ContextKeyError, SubstitutionError
 from .missing import Missing
 from .tools import get_keys, to_expression
 from ..tools import lazystr
+from ..moyaexceptions import MoyaException
 
 import re
 
@@ -588,6 +589,8 @@ class Context(object):
         def sub(match):
             try:
                 return process(get_eval(match.group(1), self))
+            except MoyaException:
+                raise
             except Exception as e:
                 start, end = match.span(1)
                 raise SubstitutionError(match.group(1),

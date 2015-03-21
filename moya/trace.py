@@ -143,7 +143,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     if node is not None:
         node = getattr(node, 'node', node)
     if stack is None:
-        stack = context.get('.callstack', [])
+        stack = context.get('._callstack', [])
 
     if request is not None:
         traceback = Traceback(request.path_info, request.method, exc=exc)

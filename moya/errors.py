@@ -17,7 +17,7 @@ class LogicError(Exception):
 
     @property
     def diagnosis(self):
-        return self.original.diagnosis
+        return getattr(self.original, 'diagnosis', None)
 
     def __moyaconsole__(self, console):
         self.moya_trace.__moyaconsole__(console)

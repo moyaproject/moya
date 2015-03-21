@@ -14,7 +14,7 @@ __all__ = ["MoyaException",
 class MoyaException(Exception, AttributeExposer):
     fatal = False
 
-    __moya_exposed_attributes__ = ["type", "msg", "info"]
+    __moya_exposed_attributes__ = ["type", "msg", "info", "diagnosis"]
 
     def __init__(self, type, msg, diagnosis=None, info=None):
         self.type = type
@@ -24,7 +24,7 @@ class MoyaException(Exception, AttributeExposer):
 
     @property
     def diagnosis(self):
-        return diagnose.diagnose_moya_exception(self)
+        return self._diagnosis or diagnose.diagnose_moya_exception(self)
 
     def __str__(self):
         return '{}: {}'.format(self.type, self.msg)

@@ -2,6 +2,8 @@
 ------
 
 Added CSRF protection to forms
+Added moya-src restart subcommand
+Added <thread> tag
 
 0.5.12
 ------

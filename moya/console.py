@@ -743,7 +743,6 @@ class Console(object):
         return self
 
     def exception(self, exc, tb=False):
-
         with self._lock:
             self.update_terminal_width()
 

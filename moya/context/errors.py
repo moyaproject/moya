@@ -43,6 +43,10 @@ class SubstitutionError(ContextError):
         else:
             self.msg = None
 
+    # @property
+    # def diagnosis(self):
+    #     return getattr(self.original, 'diagnosis', None)
+
     def __str__(self):
         if self.msg:
             return 'substitution failed for ${{{}}} ({})'.format(self.exp, self.msg)

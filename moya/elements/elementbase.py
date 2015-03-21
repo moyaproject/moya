@@ -1149,7 +1149,7 @@ class LogicElement(ElementBase):
         return _CallContext(self, context, app, call_params)
 
     def push_call(self, context, params, app=None, yield_element=None, yield_frame=None):
-        callstack = context.set_new_call('.callstack', list)
+        callstack = context.set_new_call('._callstack', list)
         call = CallStackEntry(self, app, yield_element=yield_element, yield_frame=yield_frame)
         call.update(params)
         callstack.append(call)
@@ -1158,7 +1158,7 @@ class LogicElement(ElementBase):
         return call
 
     def pop_call(self, context):
-        callstack = context.set_new_call('.callstack', list)
+        callstack = context.set_new_call('._callstack', list)
         call = callstack.pop()
         context.pop_frame()
         if callstack:
@@ -1171,14 +1171,14 @@ class LogicElement(ElementBase):
         return _DeferContext(self, context, app)
 
     def push_defer(self, context, app=None):
-        callstack = context.set_new_call('.callstack', list)
+        callstack = context.set_new_call('._callstack', list)
         call = CallStackEntry(self, app)
         callstack.append(call)
         context.root['call'] = call
         return call
 
     def pop_defer(self, context):
-        callstack = context.set_new_call('.callstack', list)
+        callstack = context.set_new_call('._callstack', list)
         call = callstack.pop()
         if callstack:
             context.root['call'] = callstack[-1]

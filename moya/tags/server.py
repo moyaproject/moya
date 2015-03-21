@@ -554,7 +554,7 @@ class Server(LogicElement):
         return self.process_response(context, response)
 
     def handle_error(self, archive, context, request, error, exc_info):
-        context.safe_delete('.callstack')
+        context.safe_delete('._callstack')
         context.safe_delete('.call')
         return self.dispatch_handler(archive,
                                      context,
@@ -695,14 +695,14 @@ class Server(LogicElement):
             return response
 
         def response_middleware(response):
-            context.safe_delete('.callstack', '.call')
+            context.safe_delete('._callstack', '.call')
             context.root['response'] = response
             new_response = self.run_middleware('response', archive, context, request, url, method)
             return new_response or response
 
         # Run main views
         root['urltrace'] = root['_urltrace'] = []
-        context.safe_delete('.callstack', '.call')
+        context.safe_delete('._callstack', '.call')
         status_code = StatusCode.not_found
         response = None
         try:
@@ -745,7 +745,7 @@ class Server(LogicElement):
                          error=None,
                          exc_info=None):
         """Respond to a status code"""
-        context.safe_delete('.callstack',
+        context.safe_delete('._callstack',
                             '.call',
                             '.td',
                             '._td',
@@ -780,7 +780,7 @@ class Server(LogicElement):
                 moya_trace2 = trace.build(context, None, None, error2, sys.exc_info(), request)
 
         context.reset()
-        context.safe_delete('.callstack',
+        context.safe_delete('._callstack',
                             '.call',
                             '.td',
                             '._td',
