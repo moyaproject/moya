@@ -9,9 +9,14 @@
         <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
         <password name="password" label="Password" maxlength="30" required="yes"/>
         <submit-button name="login" text="Log In" />
+
         <moya:get-url name="forgot_password" dst="forgot_password_url" />
         <field>
             <moya:markdown>[I've forgotten my password](${forgot_password_url})</moya:markdown>
+            <moya:if test=".libs['moya.signup']">
+                <moya:get-url name="signup" from="moya.signup" dst="signup_url" />
+                <moya:markdown>[Create an account](${signup_url})</moya:markdown>
+            </moya:if>
         </field>
     </form>
 
