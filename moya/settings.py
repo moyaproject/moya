@@ -208,6 +208,10 @@ class SettingsSectionContainer(OrderedDict):
         table += sorted(self.items())
         console.table(table)
 
+    def __setitem__(self, key, value):
+        value = SettingContainer(text_type(value))
+        super(SettingsSectionContainer, self).__setitem__(key, value)
+
 
 class EmptySettings(object):
     def __getitem__(self, key):
@@ -246,7 +250,7 @@ class EmptySettings(object):
         console.table(table)
 
 
-implements_to_string
+@implements_to_string
 class SettingContainer(text_type):
     def __init__(self, setting_text):
         if PY2:

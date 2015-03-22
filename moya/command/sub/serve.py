@@ -36,9 +36,11 @@ class Serve(SubCommand):
         parser.add_argument(dest="fs", metavar="PATH",
                             help="Path to serve")
         parser.add_argument('--host', dest='host', default='127.0.0.1',
-                            help="Host")
+                            help="server host")
         parser.add_argument('-p', '--port', default='8000',
-                            help="port")
+                            help="server port")
+        parser.add_argument('-t', '--templates', dest="serve_templates", action="store_true",
+                            help="render and serve .html files as moya templates")
 
     def run(self):
         args = self.args
@@ -48,7 +50,13 @@ class Serve(SubCommand):
         location = os.path.dirname(project_serve.__file__)
 
         init_logging(pathjoin(location, 'logging.ini'))
-        application = WSGIApplication(location, 'settings.ini', 'main', disable_autoreload=True)
+
+        if args.serve_templates:
+            ini = 'templatesettings.ini'
+        else:
+            ini = 'settings.ini'
+
+        application = WSGIApplication(location, ini, 'main', disable_autoreload=True)
         application.archive.filesystems['static'] = fs
 
         server = make_server(args.host,
@@ -56,7 +64,6 @@ class Serve(SubCommand):
                              application,
                              handler_class=RequestHandler)
         log.info("server started on http://{}:{}".format(args.host, args.port))
-
 
         def handle_error(request, client_address):
             _type, value, tb = sys.exc_info()

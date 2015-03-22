@@ -19,6 +19,7 @@ from ..compat import text_type, string_types, implements_to_string, with_metacla
 from ..tools import make_cache_key, nearest_word
 from .. import tools
 from ..compat import urlencode, PY2
+from . import lorem
 
 from fs.path import pathjoin, dirname
 
@@ -369,6 +370,30 @@ class ConsoleNode(Node):
         from .. import pilot
         pilot.console.obj(context, obj)
         return ''
+
+
+class LoremNode(Node):
+    tag_name = "lorem"
+    auto_close = True
+
+    def on_create(self, environment, parser):
+        self.type = parser.expect_word('p', 'paragraphs', 's', 'sentences', 'w', 'words')
+        self.count = parser.expect_expression()
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        count = self.count.eval(context)
+        try:
+            count = int(count)
+        except:
+            self.render_error('an integer is required here')
+
+        if self.type in ('p', 'paragraphs'):
+            return lorem.paragraphs(count)
+        elif self.type in('s', 'sentences'):
+            return lorem.sentences(count)
+        elif self.type in ('w', 'words'):
+            return lorem.words(count)
 
 
 class InspectNode(Node):

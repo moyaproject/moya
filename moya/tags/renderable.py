@@ -4,10 +4,14 @@ from __future__ import print_function
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter
 from ..template.rendercontainer import RenderContainer
+from ..template.moyatemplates import Template
 from ..logic import DeferNodeContents, EndLogic
 from ..render import render_object
 from ..response import MoyaResponse
-from ..compat import PY2, py2bytes
+from ..compat import py2bytes, text_type
+
+
+from fs.errors import FSError
 
 
 class RenderTemplate(DataSetter):
@@ -17,7 +21,7 @@ class RenderTemplate(DataSetter):
         synopsis = "render a template and store the result"
 
     template = Attribute("Template", type="template", required=True)
-    withscope = Attribute("Use current scope?", default=False, type="boolean")
+    withscope = Attribute("Use data from current scope?", default=False, type="boolean")
     format = Attribute("Format to render", default="html", required=False)
     _from = Attribute("Application", type="application", required=False, default=None)
 
@@ -51,6 +55,69 @@ class ServeTemplate(RenderTemplate):
     def on_value(self, context, value):
         content_type = self.content_type(context)
         html = render_object(value, self.archive, context, self.format(context))
+        response = MoyaResponse(charset=py2bytes('utf8'))
+        if content_type:
+            response.content_type = py2bytes(content_type)
+        response.text = html
+        raise EndLogic(response)
+
+
+class RenderTemplateFS(DataSetter):
+    """
+    Render a template from a filesystem.
+
+    This tag renders a template outside of the template filesystem.
+
+    """
+
+    class Help:
+        synopsis = "render a template in a filesystem"
+
+    fs = Attribute("Filesystem", required=True, type="expression")
+    path = Attribute("Path to template")
+    withscope = Attribute("Use data from current scope?", default=False, type="boolean")
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+
+        template_fs = self.archive.get_filesystem(params.fs)
+        try:
+            template_source = template_fs.getcontents(params.path)
+        except FSError as e:
+            self.throw('render-template-fs.read-fail',
+                       "failed to read '{}' from '{}'".format(params.path, template_fs),
+                       text_type(e))
+
+        template = Template(template_source, template_fs.desc(params.path), raw_path=params.path)
+        template.parse(self)
+
+        scope = {}
+        if params.withscope:
+            scope.update(context['.call'])
+        params = {'app': context['.app']}
+        params.update(self.get_let_map(context))
+
+        engine = self.archive.get_template_engine("moya")
+        html = engine.render_template(template, scope, **params)
+
+        self.on_value(context, html)
+
+
+class ServeTemplateFS(RenderTemplateFS):
+    """
+    Render and serve a template from a filesystem.
+
+    See [tag]render-template-fs[/tag].
+
+    """
+
+    content_type = Attribute("Mime Type", required=False, default=None)
+
+    class Help:
+        synopsis = """render and serve a template in a filesystem"""
+
+    def on_value(self, context, html):
+        content_type = self.content_type(context)
         response = MoyaResponse(charset=py2bytes('utf8'))
         if content_type:
             response.content_type = py2bytes(content_type)

@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+    <server docname="main">
+        <log>starting template server</log>
+        <import py="moya.libs.debug" />
+        <import py="moya.libs.static" />
+        <install name="static" lib="moya.static" mount="/" />
+        <install name="debug" lib="moya.debug" mount="/debug/" />
+    </server>
+</moya>

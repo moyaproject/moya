@@ -4,6 +4,7 @@
 Added CSRF protection to forms
 Added moya-src restart subcommand
 Added <thread> tag
+Added {% lorem %} template tag
 
 0.5.12
 ------
