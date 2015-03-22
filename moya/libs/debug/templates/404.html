@@ -3,11 +3,11 @@
 
 {%- def "info" %}
     {%- if map %}
-    {% if title %}<h3>${title}</h3>{% endif %}
+    {% if title %}<h3><small>${title}</small></h3>{% endif %}
     <dl class="dl-horizontal">
         {%- for k, v in sorted:items:map %}
         <dt>${k}</dt>
-        <dd>${v or html:'&nbsp;'}</dd>
+        <dd>${debug:v}</dd>
         {%- endfor %}
     </dl>
     {%- endif %}
@@ -90,9 +90,9 @@ span.url-value
         <div class="accordian-inner">
             <div class="request-get">
                 <dl class="dl-horizontal">
-                    <dt>url</dt><dd>${request.url}</dd>
-                    <dt>method</dt><dd>${request.method}</dd>
-                    <dt>content type</dt><dd>${request.content_type}</dd>
+                    <dt>url</dt><dd>${debug:request.url}</dd>
+                    <dt>method</dt><dd>${debug:request.method}</dd>
+                    <dt>content type</dt><dd>${debug:request.content_type}</dd>
                 </dl>
                 {%- call "info" with map=request.POST, title="POST" %}
                 {%- call "info" with map=.site, title=str:.sys.site %}
