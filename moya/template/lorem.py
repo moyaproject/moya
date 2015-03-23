@@ -21,16 +21,21 @@ _words = ' '.join(_lorem).replace('.', '').replace(',', '').split(' ')
 _sentences = " ".join(p + '. ' for p in ' '.join(_lorem).split('.'))
 
 
-def paragraphs(count):
+def paragraphs(count, offset=0):
     l = len(_lorem)
-    return "\n".join("<p>{}</p>".format(_lorem[i % l]) for i in range(count))
+    return "\n".join("<p>{}</p>".format(_lorem[i % l]) for i in range(offset, offset + count))
 
 
-def sentences(count):
+def sentences(count, offset=0):
     l = len(_sentences)
-    return "".join(_sentences[i % l] for i in range(count))
+    return "".join(_sentences[i % l] for i in range(offset, offset + count))
 
 
-def words(count):
+def words(count, offset=0):
     l = len(_words)
-    return " ".join(_words[i % l] for i in range(count))
+    return " ".join(_words[i % l] for i in range(offset, offset + count)).lower()
+
+
+def title(count, offset=0):
+    l = len(_words)
+    return " ".join(_words[i % l] for i in range(offset, offset + count)).title()

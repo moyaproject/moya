@@ -199,6 +199,10 @@ class TagParser(object):
             self.syntax_error("unable to parse expression from '{}'".format(self.text))
         return expression
 
+    def expect_expression_or_end(self):
+        expression = self.get_expression()
+        return expression
+
     def expect_word(self, *words):
         word = self.get_word()
         if word is None:
@@ -242,7 +246,7 @@ class TagParser(object):
 
     def expect_end(self):
         if self:
-            self.syntax_error("unexpected text in tag: %s" % self.text.strip())
+            self.syntax_error("unexpected text in tag: '%s'" % self.text.strip())
 
     def expect_text(self):
         if not self:
@@ -377,23 +381,33 @@ class LoremNode(Node):
     auto_close = True
 
     def on_create(self, environment, parser):
-        self.type = parser.expect_word('p', 'paragraphs', 's', 'sentences', 'w', 'words')
+        self.type = parser.expect_word('p', 'paragraphs', 's', 'sentences', 'w', 'words', 't', 'title')
         self.count = parser.expect_expression()
+        offset_map = parser.expect_word_expression_map('offset')
+        self.offset = offset_map.get('offset', DefaultExpression(0))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         count = self.count.eval(context)
+        offset = self.offset.eval(context)
         try:
             count = int(count)
         except:
-            self.render_error('an integer is required here')
+            self.render_error('count should be an integer')
+
+        try:
+            offset = int(offset)
+        except:
+            self.render_error('offset should be an integer')
 
         if self.type in ('p', 'paragraphs'):
-            return lorem.paragraphs(count)
+            return lorem.paragraphs(count, offset)
         elif self.type in('s', 'sentences'):
-            return lorem.sentences(count)
+            return lorem.sentences(count, offset)
         elif self.type in ('w', 'words'):
-            return lorem.words(count)
+            return lorem.words(count, offset)
+        elif self.type in ('t', 'title'):
+            return lorem.title(count, offset)
 
 
 class InspectNode(Node):
