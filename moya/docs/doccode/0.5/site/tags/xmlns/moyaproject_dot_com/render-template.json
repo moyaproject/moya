@@ -32,7 +32,7 @@
                 "name": "withscope",
                 "missing": true,
                 "default": false,
-                "doc": "Use current scope?",
+                "doc": "Use data from current scope?",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,

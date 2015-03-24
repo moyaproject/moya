@@ -5,6 +5,8 @@ Added CSRF protection to forms
 Added moya-src restart subcommand
 Added <thread> tag
 Added {% lorem %} template tag
+Added --handler switch to 'moya urls' command
+Added <system-call> tag
 
 0.5.12
 ------

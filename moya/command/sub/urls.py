@@ -2,7 +2,7 @@ from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...console import ConsoleHighlighter
 from ...tools import url_join
-
+from ...http import StatusCode
 
 class URLHighlight(ConsoleHighlighter):
     styles = {
@@ -46,6 +46,8 @@ class URLS(SubCommand):
                             help="only show urls for the given method")
         parser.add_argument('-a', '--app', dest="app", metavar="APPLICATION", default=None,
                             help="only show urls for given app")
+        parser.add_argument('--handler', default=None, metavar="STATUS",
+                            help="show handlers for the given error")
 
     def run(self):
         args = self.args
@@ -62,10 +64,17 @@ class URLS(SubCommand):
                 if route.partial:
                     render_urlmapper(app_name, url_join(parent_url, route.route), route.target)
                 else:
-                    if args.method and not route.match_method(args.method, None):
-                        continue
-                    if args.app and args.app != app_name:
-                        continue
+                    if args.handler:
+                        handler = StatusCode(args.handler)
+                        if handler not in route.handlers:
+                            continue
+                    else:
+                        if args.method and not route.match_method(args.method, None):
+                            continue
+                        if route.handlers:
+                            continue
+                        if args.app and args.app != app_name:
+                            continue
                     urls.append((
                                 ", ".join(route.methods or ['*']),
                                 url_join(parent_url, route.route),

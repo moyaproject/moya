@@ -8,6 +8,7 @@ import sys
 import argparse
 import getpass
 import requests
+import tempfile
 
 from .. import settings
 from .. import jsonrpc
@@ -18,6 +19,7 @@ from ..console import Console, Cell
 from ..compat import text_type, raw_input
 from ..command import downloader
 from ..tools import get_moya_dir, is_moya_dir, nearest_word
+from .. import build
 
 import fs.utils
 from fs.path import relativefrom, pathjoin
@@ -164,6 +166,7 @@ Find, install and manage Moya libraries
                                              description="Build a library")
 
         build_parser.add_argument(dest="location",
+                                  metavar="PATH",
                                   help="Library location")
         build_parser.add_argument('-f', '--force', dest="force", action="store_true",
                                   help="Overwrite the package if it exists")
@@ -179,9 +182,11 @@ Find, install and manage Moya libraries
         upload_parser.add_argument(dest="location",
                                    help="Library location")
         upload_parser.add_argument('--version', dest="version", default=None, required=False,
-                                   help="Version to upload")
+                                   help="version to upload")
         upload_parser.add_argument('--overwrite', dest="overwrite", action="store_true", default=False,
-                                   help="Force over-writing of releases")
+                                   help="force over-writing of releases")
+        upload_parser.add_argument('-d', '--docs', dest="docs", default=False, action="store_true",
+                                   help="upload docs")
 
         list_parser = subparsers.add_parser('list',
                                             help="list package releases",
@@ -221,7 +226,7 @@ Find, install and manage Moya libraries
             parser.print_usage()
             return 1
 
-        method_name = "run_" + args.subcommand
+        method_name = "run_" + args.subcommand.replace('_', '-')
         try:
             return getattr(self, method_name)() or 0
         except CommandError as e:
@@ -409,6 +414,10 @@ Find, install and manage Moya libraries
 
         lib_name = lib_settings.get("lib", "name")
         lib_version = args.version or lib_settings.get("lib", "version")
+
+        if args.docs:
+            return self.upload_docs(lib_name, lib_version)
+
         package_name = "{}-{}".format(lib_name, lib_version)
         package_filename = "{}.zip".format(package_name)
 
@@ -427,6 +436,64 @@ Find, install and manage Moya libraries
                     package_destination_fs,
                     package_filename,
                     overwrite=args.overwrite)
+
+    def upload_docs(self, lib_name, lib_version):
+        args = self.args
+
+        archive, lib = build.build_lib(args.location)
+        archive.finalize()
+        lib_name = lib.long_name
+
+        #namespaces = list(archive.known_namespaces)
+        from ..docgen.extracter import Extracter
+
+        extract_fs = TempFS('moyadoc-{}'.format(lib_name))
+
+        extracter = Extracter(archive, extract_fs)
+        extracter.extract_lib(lib_name)
+
+        temp_filename = tempfile.mkstemp('moyadocs')
+        temp_filename = "docs.zip"
+
+        with ZipFS(temp_filename, 'w') as docs_zip_fs:
+            fs.utils.copydir(extract_fs, docs_zip_fs)
+
+        package_name = "{}-{}".format(lib_name, lib_version)
+        package_filename = "{}.docs.zip".format(package_name)
+
+        upload_info = self.call('package.get-upload-info')
+        docs_url = upload_info['docs_url']
+
+        self.console("uploading '{}'...".format(package_filename)).nl()
+
+        with io.open(temp_filename, 'rb') as package_file:
+            files = [('file', (package_filename, package_file, 'application/octet-stream'))]
+            data = {"auth": self.auth_token,
+                    "package": package_name,
+                    "version": lib_version}
+
+            response = requests.post(docs_url,
+                                     verify=False,
+                                     files=files,
+                                     data=data,
+                                     hooks={})
+
+        if response.status_code != 200:
+            raise CommandError("upload failed -- server returned {} response".format(response.status_code))
+
+        message = response.headers.get(b'moya-upload-package-message', '').decode('utf-8')
+        result = response.headers.get(b'moya-upload-package-result', '').decode('utf-8')
+
+        if result == 'success':
+            self.console('[server] ', fg="green")(message).nl()
+        else:
+            raise CommandError(message)
+        if result == "success":
+            #self.console.success("package was uploaded")
+            pass
+        else:
+            self.console.error("upload failed")
+
 
     def run_list(self):
         args = self.args

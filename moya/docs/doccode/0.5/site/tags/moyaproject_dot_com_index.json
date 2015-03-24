@@ -7319,7 +7319,7 @@
                 "prev_tag": "render-content",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "render-template",
-                "next_tag": "repeat",
+                "next_tag": "render-template-fs",
                 "synopsis": "render a template and store the result",
                 "params": {
                     "from": {
@@ -7338,7 +7338,7 @@
                         "name": "withscope",
                         "missing": true,
                         "default": false,
-                        "doc": "Use current scope?",
+                        "doc": "Use data from current scope?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
@@ -7405,12 +7405,95 @@
                 }
             },
             {
+                "name": "render-template-fs",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/renderable.py",
+                "doc": "\nRender a template from a filesystem.\n\nThis tag renders a template outside of the template filesystem.\n\n",
+                "prev_tag": "render-template",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "render-template-fs",
+                "next_tag": "repeat",
+                "synopsis": "render a template in a filesystem",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path to template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "None",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "withscope": {
+                        "default_display": "no",
+                        "name": "withscope",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Use data from current scope?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "repeat",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/context.py",
                 "doc": "Repeat a block a set number of times, or indefinitely. You can leave a repeat loop prematurely with the [tag]break[/tag] tag.\n\n    [alert Note]Be careful not to create infinite loops with this tag[/alert]\n\n",
-                "prev_tag": "render-template",
+                "prev_tag": "render-template-fs",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "repeat",
                 "next_tag": "request",
@@ -8774,7 +8857,7 @@
                 "prev_tag": "serve-json",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "serve-template",
-                "next_tag": "serve-xml",
+                "next_tag": "serve-template-fs",
                 "synopsis": "render and serve a template",
                 "params": {
                     "content_type": {
@@ -8851,7 +8934,101 @@
                         "name": "withscope",
                         "missing": true,
                         "default": false,
-                        "doc": "Use current scope?",
+                        "doc": "Use data from current scope?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "serve-template-fs",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/renderable.py",
+                "doc": "\nRender and serve a template from a filesystem.\n\nSee [tag]render-template-fs[/tag].\n\n",
+                "prev_tag": "serve-template",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "serve-template-fs",
+                "next_tag": "serve-xml",
+                "synopsis": "render and serve a template in a filesystem",
+                "params": {
+                    "content_type": {
+                        "default_display": "",
+                        "name": "content_type",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Mime Type",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "fs": {
+                        "default_display": "None",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path to template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "withscope": {
+                        "default_display": "no",
+                        "name": "withscope",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Use data from current scope?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
@@ -8876,7 +9053,7 @@
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/response.py",
                 "doc": "Serve XML",
-                "prev_tag": "serve-template",
+                "prev_tag": "serve-template-fs",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "serve-xml",
                 "next_tag": "server",
@@ -9628,7 +9805,7 @@
                 "prev_tag": "sum",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "switch",
-                "next_tag": "tag",
+                "next_tag": "system-call",
                 "synopsis": "jump to matching case",
                 "params": {
                     "on": {
@@ -9659,15 +9836,120 @@
                 }
             },
             {
+                "name": "system-call",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/system.py",
+                "doc": "\nCall a system command and get the return code.\n\nCommands may be invoked in one of two ways; either with the [c]args[/c] attribute, which should be a list,\nor with the [c]shell[/c] attribute which should be a string to be passed to the shell. For example, the following\ntwo calls are equivalent:\n\n[code xml]\n<system-call shell=\"ls -al\"/>\n[/code]\n[code xml]\n<system-call args=\"['ls', '-al']\"/>\n[/code]\n\nThe [c]args[/c] form is preferred because [c]shell[/c] is a potential security risk, if you don't escape parameters\nretrieved from a request.\n\nIf the process returns a non-zero error code, then a [c]system-call.process-error[/c] exception is thrown. The [c]info[/c]\nvalue of the exception will contain [c]code[/c] and [c]output[/c].\n\n",
+                "prev_tag": "switch",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "system-call",
+                "next_tag": "tag",
+                "synopsis": "run a system command",
+                "params": {
+                    "output": {
+                        "default_display": "",
+                        "name": "output",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination for output",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "shell": {
+                        "default_display": "",
+                        "name": "shell",
+                        "missing": true,
+                        "default": null,
+                        "doc": "shell command",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "args": {
+                        "default_display": "None",
+                        "name": "args",
+                        "missing": true,
+                        "default": null,
+                        "doc": "call arguments",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "console": {
+                        "default_display": "no",
+                        "name": "console",
+                        "missing": true,
+                        "default": false,
+                        "doc": "write output to the console?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "log": {
+                        "default_display": "",
+                        "name": "log",
+                        "missing": true,
+                        "default": null,
+                        "doc": "write output to this log",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <system-call shell=\"ls -al\" console=\"yes\"/>\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "tag",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/tag.py",
                 "doc": "\nDefine a custom tag. A custom tag is in a callable tag that works like builtin logic tags. Here's an example of defining a custom tag:\n\n[code xml]\n<tag name=\"getstock\">\n    <doc>Get count of available stock</doc>\n    <signature>\n        <attribute name=\"product\" />\n    </signature>\n    <db:get model=\"#Product.name == product\" dst=\"product\"/>\n    <return value=\"product.count\"/>\n</tag>\n[/code]\n\nYou may define a custom tag anywhere in a library. Once defined, the tag is available to any code that uses the appropriate namespace defined in [c]lib.ini[/c]. For example, if the above tag is defined in a library with an xml namespace of [c]http://moyaproject.com/sushifinder[/c], it could be invoked with the following file:\n\n[code xml]\n<moya xmlns:sushifinder=\"http://moyaproject.com/sushifinder\">\n    <macro name=\"main\">\n        <sushifinder:getstock product=\"tuna-roll\" dst=\"count\" />\n        <echo>We have ${count} tuna rolls in stock.</echo>\n    </macro>\n</moya>\n[/code]\n\nCustom tags are preferred over macros when exposing functionality to other libraries.\n\n",
-                "prev_tag": "switch",
+                "prev_tag": "system-call",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "tag",
-                "next_tag": "throw",
+                "next_tag": "thread",
                 "synopsis": "define a custom tag",
                 "params": {
                     "undocumented": {
@@ -9719,12 +10001,84 @@
                 "inherited_params": {}
             },
             {
+                "name": "thread",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/system.py",
+                "doc": "\nRun enclosed block in a thread.\n\nThe thread\n\n\n",
+                "prev_tag": "tag",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "thread",
+                "next_tag": "throw",
+                "synopsis": "run a thread",
+                "params": {
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Name of thread",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "timeout": {
+                        "default_display": "",
+                        "name": "timeout",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Maximum time to wait for thread to complete",
+                        "required": false,
+                        "type": "timespan",
+                        "metavar": null,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "throw",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/context.py",
                 "doc": "Throw a Moya exception. An exception consists of a name in dotted notation with an optional message.\n\n    Custom exceptions should be named to start with the [i]long name[/i] of the library. Moya reserves exceptions with a single dot for internal use. These [i]may[/i] be thrown if appropriate.\n\n",
-                "prev_tag": "tag",
+                "prev_tag": "thread",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "throw",
                 "next_tag": "time-span",

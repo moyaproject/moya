@@ -5,6 +5,7 @@ import sys
 import platform
 import warnings
 import re
+import tempfile
 from threading import RLock
 from textwrap import wrap, dedent
 warnings.filterwarnings("ignore")
@@ -405,6 +406,17 @@ class _TextOut(object):
         return ''.join(self.text)
 
 
+class _ConsoleFileInterface(object):
+    """A simple writable file-like proxy"""
+
+    def __init__(self, console, **style):
+        self._console = console
+        self._style = style
+
+    def write(self, text):
+        self._console(text, **self._style)
+
+
 class Console(object):
     """Write output to the console, with styles and color"""
 
@@ -460,6 +472,9 @@ class Console(object):
     @property
     def width(self):
         return self.terminal_width
+
+    def make_file_interface(self, **style):
+        return _ConsoleFileInterface(self)
 
     def flush(self):
         with self._lock:

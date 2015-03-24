@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+
 from ...command import SubCommand
 from ...archive import Archive
 from ...context import Context
@@ -31,6 +34,8 @@ class Run(SubCommand):
                             help="Set the template directory")
         parser.add_argument('--let', dest='params', nargs="*",
                             help="parameters in the form foo=bar")
+        parser.add_argument('--logging', dest="logging", default=None,
+                            help="logging conf")
         return parser
 
     def run(self):
@@ -40,7 +45,7 @@ class Run(SubCommand):
         fs, fspath = opener.parse(args.path)
 
         from ...loggingconf import init_logging
-        if os.path.exists(args.logging):
+        if args.logging and os.path.exists(args.logging):
             init_logging(args.logging)
 
         archive = Archive()
@@ -100,10 +105,6 @@ class Run(SubCommand):
                                    line,
                                    col)
             raise errors.StartupFailedError('Failed to build project')
-
-        # call = archive.get_callable('moya.run#main',
-        #                             'moya.run',
-        #                             breakpoint=args.breakpoint)
 
         call = archive.get_callable_from_document(fspath,
                                                   args.elementref,

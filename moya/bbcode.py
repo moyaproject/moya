@@ -378,7 +378,6 @@ class BreakTag(BlockTag):
         return "<br>"
 
 
-
 _re_remove_markup = re.compile(r'\[.*?\]', re.DOTALL | re.UNICODE)
 _re_break_groups = re.compile('[\n]{2,}', re.DOTALL | re.UNICODE)
 
@@ -555,7 +554,6 @@ class BBCode(object):
             original_html = html
             html = cls._re_blank_tags.sub(" ", html)
             html = cls._re_blank_with_spaces_tags.sub(" ", html)
-        #html = _re_break_groups.sub("\n", html)
         return html
 
     def wrap(self, bbcode, max_length=79):
@@ -563,13 +561,14 @@ class BBCode(object):
         lines = []
         line_length = 0
 
-        bbcode = textwrap.dedent(bbcode)
+        bbcode = textwrap.dedent(bbcode.strip('\n'))
+
         for l in bbcode.splitlines():
             lines.append([])
             line_length = 0
             for loc, tag_type, tag_token in self.tokenize(l):
-                if not lines[-1]:
-                    tag_token = tag_token.lstrip()
+                #if not lines[-1]:
+                #    tag_token = tag_token.lstrip()
                 if not tag_token:
                     continue
                 if tag_type == TOKEN_TEXT:
@@ -590,7 +589,7 @@ class BBCode(object):
 
     def render_console(self, bbcode, max_length=79):
         from .console import AttrText, style, XMLHighlighter
-        bbcode = self.wrap(bbcode.strip(), max_length=min(120, max_length)) + '\n'
+        bbcode = self.wrap(bbcode, max_length=min(120, max_length)) + '\n'
         TOKEN_TAG, TOKEN_PTAG, TOKEN_TEXT, TOKEN_PARAGRAPH = range(4)
         _bbcode_map = {
             'b': 'bold',
@@ -627,6 +626,10 @@ class BBCode(object):
                         tag_stack.append((tag_name, pos, tag_style))
                     else:
                         tag_stack.append((tag_name, pos, None))
+
+                        if not self.supports_tag(tag_name):
+                            text += tag_token
+                            pos += len(tag_token)
 
             elif tag_type == TOKEN_PARAGRAPH:
                 text.append('\n')
@@ -739,6 +742,9 @@ class BBCode(object):
 
     def __moyacall__(self, params):
         return MoyaFilterParams(self, params)
+
+    def supports_tag(self, name):
+        return any(tag.match(name) for tag in self.registry)
 
     def get_tag(self, tag_name, attribs, data):
         for tag_instance in self.registry:
