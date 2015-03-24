@@ -1,0 +1,18 @@
+<moya>
+
+    <macro docname="main">
+        <breakpoint />
+        <system-call shell="ls -al" dst="result"/>
+        <echo obj="result" />
+        <system-call shell="ls -al" console="yes"/>
+        <system-call shell="ls -al" log="moya.runtime"/>
+        <system-call args="['ls', '-al']" log="moya.runtime"/>
+
+        <thread>
+            <system-call args="['ls', '-al']" log="moya.runtime"/>
+        </thread>
+
+        <system-call shell="echo 'this will be an error'; exit 1" console="yes" log="moya.runtime"/>
+    </macro>
+
+</moya>
