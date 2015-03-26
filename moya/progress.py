@@ -1,7 +1,9 @@
-from __future__ import unicode_literals
-from __future__ import division
 
 """Simple text based progress bar"""
+
+
+from __future__ import unicode_literals
+from __future__ import division
 
 
 class Progress(object):
@@ -39,8 +41,6 @@ class Progress(object):
         self.complete = min(complete, 1.0)
         if msg is not None:
             self.msg = msg
-        if not self.console.is_terminal():
-            return
         self.render()
         # if self.step == self.num_steps:
         #     self.done()
@@ -48,6 +48,8 @@ class Progress(object):
         #     self.render()
 
     def render(self, line_end='\r'):
+        if not self.console.is_terminal():
+            return
         progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
         num_bars = int(self.complete * self.width)
         bars = '=' * num_bars
@@ -55,7 +57,6 @@ class Progress(object):
         out = "{indent}[{bars}] {progress}".format(indent=self.indent,
                                                    bars=bars,
                                                    progress=progress)
-
         if self.msg:
             out = "\r{1} {0}".format(self.msg, out)
 
@@ -69,7 +70,10 @@ class Progress(object):
     def done(self, msg=None):
         if msg is not None:
             self.msg = msg
-        self.render(line_end='\n')
+        if not self.console.is_terminal():
+            self.console.text(self.msg)
+        else:
+            self.render(line_end='\n')
 
 
 class ProgressContext(object):

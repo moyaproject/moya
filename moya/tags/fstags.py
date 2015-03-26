@@ -38,6 +38,41 @@ class SetContents(LogicElement):
             self.throw("set-contents.fail", "unable to set file contents ({})".format(e))
 
 
+class GetSyspath(DataSetter):
+    """
+    Get a system path for a path in a filesystem.
+
+    A system path (or 'syspath') is a path that maps to the file on the OS filesystem. Not all filesystems can generate syspaths. If Moya is unable to generate a syspath it will throw a [c]get-syspath.no-syspath[/c] exception.
+
+    """
+    xmlns = namespaces.fs
+
+    class Help:
+        synopsis = "get a system path"
+        example = """
+        <fs:get-syspath fs="templates" path="index.html" dst="index_template_path"/>
+        """
+
+    fsobj = Attribute("Filesystem object", required=False, default=None)
+    fs = Attribute("Filesystem name", required=False, default=None)
+    path = Attribute("Destination path", required=True)
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+
+        if self.has_parameter('fsobj'):
+            dst_fs = params.fsobj
+        else:
+            dst_fs = self.archive.get_filesystem(params.fs)
+
+        try:
+            syspath = dst_fs.getsyspath(params.path)
+        except:
+            self.throw('get-syspath.no-syspath',
+                       "{!r} can not generate a syspath for '{}'".format(dst_fs, params.path))
+        self.set_context(context, self.dst(context), syspath)
+
+
 class GetMD5(DataSetter):
     """Get the MD5 of a file"""
     xmlns = namespaces.fs

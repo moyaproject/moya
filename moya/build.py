@@ -125,7 +125,7 @@ def build_lib(location, archive=None):
 
     with fsopendir(location) as import_fs:
         lib = archive.load_library(import_fs)
-    lib.finalize()
+    archive.build_libs()
 
     require_libs = lib._cfg.get_list('tests', 'import', '') or []
     for require_lib in require_libs:

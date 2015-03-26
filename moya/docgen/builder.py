@@ -101,6 +101,10 @@ class Builder(object):
             for doc in progress(self.docs.values()):
                 self.render_doc(doc, urls, build_data)
 
+        if 'doc' in urls:
+            return urls['doc'].get('index', None)
+        return None
+
     def process_indices(self, urls):
         for doc in self.docs.values():
             data = doc.data

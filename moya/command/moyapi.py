@@ -233,13 +233,17 @@ Find, install and manage Moya libraries
             self.console.error(text_type(e))
             return -1
         except jsonrpc.JSONRPCError as e:
-            self.console('[server] ', bold=True, fg="red")(e.message).nl()
+            self.server_response(e.message, bold=True, fg="red")
             return e.code
         except Exception as e:
             self.console.error(text_type(e))
             if args.debug:
                 raise
             return -1
+
+    def server_response(self, text, **style):
+        for line in text.splitlines():
+            self.console('[server] ', **style)(line.lstrip()).nl()
 
     def run_auth(self):
         args = self.args
@@ -392,7 +396,7 @@ Find, install and manage Moya libraries
         result = response.headers.get(b'moya-upload-package-result', '').decode('utf-8')
 
         if result == 'success':
-            self.console('[server] ', fg="green")(message).nl()
+            self.server_response(message, fg='green')
         else:
             raise CommandError(message)
         if result == "success":
@@ -458,8 +462,7 @@ Find, install and manage Moya libraries
         with ZipFS(temp_filename, 'w') as docs_zip_fs:
             fs.utils.copydir(extract_fs, docs_zip_fs)
 
-        package_name = "{}-{}".format(lib_name, lib_version)
-        package_filename = "{}.docs.zip".format(package_name)
+        package_filename = "{}-{}.docs.zip".format(lib_name, lib_version)
 
         upload_info = self.call('package.get-upload-info')
         docs_url = upload_info['docs_url']
@@ -469,7 +472,7 @@ Find, install and manage Moya libraries
         with io.open(temp_filename, 'rb') as package_file:
             files = [('file', (package_filename, package_file, 'application/octet-stream'))]
             data = {"auth": self.auth_token,
-                    "package": package_name,
+                    "package": lib_name,
                     "version": lib_version}
 
             response = requests.post(docs_url,
@@ -485,9 +488,9 @@ Find, install and manage Moya libraries
         result = response.headers.get(b'moya-upload-package-result', '').decode('utf-8')
 
         if result == 'success':
-            self.console('[server] ', fg="green")(message).nl()
+            self.server_response(message, fg="green")
         else:
-            raise CommandError(message)
+            raise CommandError('upload error ({})'.format(message))
         if result == "success":
             #self.console.success("package was uploaded")
             pass

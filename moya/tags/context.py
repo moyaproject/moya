@@ -774,6 +774,44 @@ class List(DataSetter):
             context.pop_scope()
 
 
+class Lines(DataSetter):
+    """
+    Create a list from lines.
+
+    This tag create a list of strings from the lines in the enclosed text. Lines are striped of whitespace.
+
+    The following two examples are equivalent:
+
+    [code python]
+    <list dst="hobbits">
+        <str>Sam</str>
+        <str>Bilbo</str>
+        <str>Frodo</str>
+    </list>
+    [/code]
+    [code]
+    <lines dst="hobbits">
+        Sam
+        Bilbo
+        Frodo
+    </lines>
+    [/code]
+    """
+
+    class Help:
+        synopsis = """create a list from lines"""
+        example = """
+        <lines dst="hobbits">
+            Sam
+            Bilbo
+            Frodo
+        </lines>
+        """
+
+    def get_value(self, context):
+        return [s.strip() for s in context.sub(self.text).strip().splitlines()]
+
+
 class Sum(DataSetter):
     """Sums a sequence of values together."""
 

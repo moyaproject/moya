@@ -402,6 +402,9 @@ class _TextOut(object):
             text = text_type(text, 'utf-8')
         self.text.append(text)
 
+    def flush(self):
+        pass
+
     def getvalue(self):
         return ''.join(self.text)
 
@@ -496,7 +499,7 @@ class Console(object):
 
     def is_terminal(self):
         try:
-            return self.out.isatty()
+            return self.out.isatty() and not self.html
         except AttributeError:
             return False
 

@@ -31,7 +31,7 @@ class MoyaThread(Thread):
 
     def run(self):
         try:
-            self._result = self.element.archive.call(self.element.libid, self.context, self.app)
+            self._result = self.element.archive.call(self.element.libid, self.context, self.app, **self.data)
         except Exception as e:
             self.context['.console'].obj(self.context, e)
             self._error = e
@@ -83,13 +83,17 @@ class ThreadElement(DataSetter):
         tag_name = "thread"
 
     name = Attribute("Name of thread", required=False, default=None)
+    scope = Attribute("Use the current scope?", type="boolean", default=True)
     timeout = Attribute("Maximum time to wait for thread to complete", type="timespan", default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
 
         thread_context = Context({k: v for k, v in iteritems(context.root) if not k.startswith('_')})
-        data = self.get_let_map(context)
+        data = {}
+        if params.scope:
+            data.update(context.capture_scope())
+        data.update(self.get_let_map(context))
 
         moya_thread = MoyaThread(self,
                                  context.get('.app', None),
