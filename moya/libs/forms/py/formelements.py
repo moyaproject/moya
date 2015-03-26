@@ -540,14 +540,17 @@ class Form(AttributeExposer):
         return binding
 
     def bind(self, context, *bindings):
+        self.set_data(context, *bindings)
+        self.bound = True
+
+    def set_data(self, context, *data):
         for field in self.all_fields:
-            for binding in reversed(bindings):
+            for binding in reversed(data):
                 if field.name in binding:
                     value = binding[field.name]
                     if value is not None:
                         field.value = self.raw_data[field.name] = value
                         break
-        self.bound = True
 
     def moya_render(self, archive, context, target, options):
         form_template = self.template
@@ -736,8 +739,10 @@ class Get(ContextElementBase):
                 binding = form.get_binding(context, bind)
                 bindings.append(binding)
             if bindings:
-                form.bind(context, *bindings)
-
+                if bind is None:
+                    form.set_data(context, *bindings)
+                else:
+                    form.bind(context, *bindings)
         else:
             form = None
 
