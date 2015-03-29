@@ -444,8 +444,8 @@ Find, install and manage Moya libraries
     def upload_docs(self, lib_name, lib_version):
         args = self.args
 
-        archive, lib = build.build_lib(args.location)
-        archive.finalize()
+        archive, lib = build.build_lib(args.location, ignore_errors=True)
+        #archive.finalize()
         lib_name = lib.long_name
 
         #namespaces = list(archive.known_namespaces)
@@ -456,8 +456,8 @@ Find, install and manage Moya libraries
         extracter = Extracter(archive, extract_fs)
         extracter.extract_lib(lib_name)
 
-        temp_filename = tempfile.mkstemp('moyadocs')
-        temp_filename = "docs.zip"
+        _fh, temp_filename = tempfile.mkstemp('moyadocs')
+        #temp_filename = "docs.zip"
 
         with ZipFS(temp_filename, 'w') as docs_zip_fs:
             fs.utils.copydir(extract_fs, docs_zip_fs)
@@ -496,7 +496,6 @@ Find, install and manage Moya libraries
             pass
         else:
             self.console.error("upload failed")
-
 
     def run_list(self):
         args = self.args

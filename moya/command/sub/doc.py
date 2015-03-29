@@ -38,8 +38,6 @@ class Doc(SubCommand):
                                             description="Extract and build docs, and launch the browser")
 
         def build_args(parser):
-            parser.add_argument('-l', '--lib', dest="location", default='.', metavar="PATH",
-                                help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
             # parser.add_argument('-b', '--lib', dest="lib", metavar="LONG.NAME", default=None,
             #                     help="library to generate docs for")
             parser.add_argument('-t', '--theme', dest='theme', metavar="PATH", default=None,
@@ -50,11 +48,15 @@ class Doc(SubCommand):
         build_args(build_parser)
         build_args(view_parser)
 
+        view_parser.add_argument(dest="location", default='.', metavar="PATH",
+                                 help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
+
         build_parser.add_argument('-o', '--output', dest="output", metavar="PATH", default=None,
                                   help="path for documentation output, defaults to ./documentation in project root")
 
         extract_parser.add_argument(dest="location", default=None, metavar="PATH",
                                     help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
+
         # extract_parser.add_argument('-n', '--xmlns', dest="namespaces", metavar="XML NAMESPACE", action="append",
         #                             help="Namespace to generate docs for")
         extract_parser.add_argument('-e', '--extract', dest="extract", metavar="PATH", default=None,
@@ -81,8 +83,8 @@ class Doc(SubCommand):
         try:
             action = args.action.lower()
             if action == 'extract':
+                archive, lib = build.build_lib(args.location, ignore_errors=True)
                 print("Extracting docs from {}...".format(lib.long_name))
-                archive, lib = build.build_lib(args.location)
                 self.extract(archive, lib.long_name)
 
             elif action == 'build':
@@ -90,17 +92,18 @@ class Doc(SubCommand):
                     self.console.text("Building docs from {}...".format(args.source))
                     extract_fs = fsopendir(args.source)
                 else:
+                    archive, lib = build.build_lib(args.location, ignore_errors=True)
                     self.console.text("Building docs for {}...".format(lib.long_name))
-                    archive, lib = build.build_lib(args.location)
                     extract_fs = self.extract(archive, lib.long_name)
                 return self.build(extract_fs)
 
             elif action == 'view':
-                print("Building docs for {}...".format(lib.long_name))
                 if args.source is not None:
+                    self.console.text("Building docs from {}...".format(args.source))
                     extract_fs = fsopendir(args.source)
                 else:
-                    archive, lib = build.build_lib(args.location)
+                    archive, lib = build.build_lib(args.location, ignore_errors=True)
+                    self.console.text("Building docs for {}...".format(lib.long_name))
                     extract_fs = self.extract(archive, lib.long_name)
                 return self.view(archive, extract_fs)
 
@@ -109,7 +112,7 @@ class Doc(SubCommand):
                 return -1
         finally:
             if args.html:
-                _stdout.write(self.console.get_text()+'\n')
+                _stdout.write(self.console.get_text() + '\n')
 
     def extract(self, archive, lib_name):
         args = self.args
@@ -122,7 +125,6 @@ class Doc(SubCommand):
             extract_fs = self.get_fs(join(args.extract, lib_name))
         extracter = Extracter(archive, extract_fs)
         extracter.extract_lib(lib_name)
-        extract_fs.tree()
         return extract_fs
 
     def build(self, source_fs):

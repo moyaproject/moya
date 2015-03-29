@@ -89,7 +89,6 @@ class Extracter(object):
         indices = defaultdict(list)
         tags = []
         tag_namespaces = set()
-
         with pilot.console.progress("extracting tags", len(elements) + 1) as progress:
             for element in progress(elements):
                 tag_namespaces.add(element.xmlns)
@@ -104,6 +103,7 @@ class Extracter(object):
                                 namespace_slug=self.slugify_namespace(element.xmlns),
                                 name=element_name,
                                 lib=element._lib_long_name)
+                doc.data.update(const_data)
                 doc.add_reference("doc.index")
                 doc.add_reference('tags.index')
                 indices[element.xmlns].append(doc.data)

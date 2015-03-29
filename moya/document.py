@@ -396,11 +396,16 @@ class Document(object):
     def finalize(self, context):
         if self.finalized:
             return
+        ignore_errors = bool(context['._ignore_finalize_errors'])
 
         def do_finalize(element):
             for child in element:
                 do_finalize(child)
-            element.finalize(context)
+            try:
+                element.finalize(context)
+            except:
+                if not ignore_errors:
+                    raise
         if self.root:
             do_finalize(self.root)
         self.finalize = True
@@ -408,11 +413,16 @@ class Document(object):
     def document_finalize(self, context):
         if self.document_finalized:
             return
+        ignore_errors = bool(context['._ignore_finalize_errors'])
 
         def do_finalize(element):
             for child in element:
                 do_finalize(child)
-            element.document_finalize(context)
+            try:
+                element.document_finalize(context)
+            except:
+                if not ignore_errors:
+                    raise
         if self.root:
             do_finalize(self.root)
         self.document_finalized = True
@@ -420,11 +430,16 @@ class Document(object):
     def lib_finalize(self, context):
         if self.lib_finalized:
             return
+        ignore_errors = bool(context['._ignore_finalize_errors'])
 
         def do_finalize(element):
             for child in element._children:
                 do_finalize(child)
-            element.lib_finalize(context)
+            try:
+                element.lib_finalize(context)
+            except:
+                if not ignore_errors:
+                    raise
         if self.root_element:
             do_finalize(self.root_element)
         self.lib_finalized = True

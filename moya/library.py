@@ -225,10 +225,10 @@ class Library(object):
 
         return import_count
 
-    def finalize(self):
+    def finalize(self, ignore_errors=False):
         if self.finalized:
             return
-        context = Context()
+        context = Context({'_ignore_finalize_errors': ignore_errors})
         context.root['_lib_long_name'] = self.long_name
         context.root['lib'] = self
         for doc in self.documents:

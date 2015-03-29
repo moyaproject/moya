@@ -281,7 +281,7 @@ class Archive(object):
                           width=self.log_width or None)
         return console
 
-    def build_libs(self):
+    def build_libs(self, ignore_errors=False):
         libs = [lib for lib in itervalues(self.libs) if not lib.built]
         if not libs:
             return
@@ -291,7 +291,7 @@ class Archive(object):
                     for doc in lib.documents],
                    log_time=False)
         for lib in libs:
-            lib.finalize()
+            lib.finalize(ignore_errors=ignore_errors)
 
         startup_log.debug("%s built libraries %0.1fms",
                           self,
@@ -497,8 +497,8 @@ class Archive(object):
         self.libs[lib.long_name] = lib
         return lib
 
-    def finalize(self):
-        self.build_libs()
+    def finalize(self, ignore_errors=False):
+        self.build_libs(ignore_errors=ignore_errors)
 
         for lib in itervalues(self.libs):
             lib.on_archive_finalize()

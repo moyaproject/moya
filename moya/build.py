@@ -112,7 +112,7 @@ def render_failed_documents(archive, console, no_console=False):
     return failed
 
 
-def build_lib(location, archive=None):
+def build_lib(location, archive=None, dependancies=None, ignore_errors=False):
     """Build a project with a single lib (for testing)"""
     if archive is None:
         archive = Archive()
@@ -125,19 +125,22 @@ def build_lib(location, archive=None):
 
     with fsopendir(location) as import_fs:
         lib = archive.load_library(import_fs)
-    archive.build_libs()
+        #lib.finalize()
 
-    require_libs = lib._cfg.get_list('tests', 'import', '') or []
-    for require_lib in require_libs:
-        if require_lib.startswith('py:'):
-            py = require_lib.split(':', 1)[1]
-            __import__(py)
-            module = sys.modules[py]
-            location = dirname(abspath(module.__file__))
-        else:
-            location = require_lib
-        with fsopendir(location) as import_fs:
-            _lib = archive.load_library(import_fs)
+    #require_libs = lib._cfg.get_list('tests', 'import', '') or []
+    if dependancies:
+        for require_lib in dependancies:
+            if require_lib.startswith('py:'):
+                py = require_lib.split(':', 1)[1]
+                __import__(py)
+                module = sys.modules[py]
+                location = dirname(abspath(module.__file__))
+            else:
+                location = require_lib
+            with fsopendir(location) as import_fs:
+                _lib = archive.load_library(import_fs)
+
+    archive.finalize(ignore_errors=ignore_errors)
 
     return archive, lib
 
