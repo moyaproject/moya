@@ -68,6 +68,7 @@ class Doc(SubCommand):
         if path is None:
             path = join(get_moya_dir(), './documentation')
         fs = fsopendir(path, create_dir=True)
+        fs.dir_mode = int('777', 8)
         return fs
 
     def run(self):
