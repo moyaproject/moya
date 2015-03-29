@@ -338,7 +338,7 @@ class Archive(object):
                     build_queue_appendleft(_BuildFrame(sorted(node.children, key=get_doc_id, reverse=True), element=element))
                 else:
                     if element is not None:
-                        if node.tag_type in unbuildable:
+                        if node in unbuildable:
                             # A previously deferred node, but we still can't built it
                             build_queue.popleft()  # Can't process siblings either
                             unbuilt.append(node)
@@ -346,10 +346,10 @@ class Archive(object):
                             # Defer this node till later
                             nodes.append(node)
                             build_queue.rotate(-1)
-                            unbuildable.add(node.tag_type)
+                            unbuildable.add(node)
             else:
                 if nodes.element is not None:
-                    unbuildable.clear()
+                    unbuildable_clear()
                     try:
                         nodes.element.finalize(context)
                     except Exception as e:

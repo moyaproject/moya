@@ -3,6 +3,7 @@
 	  xmlns:let="http://moyaproject.com/let">
 
 	<mountpoint name="main">
+        <url route="/" name="root" />
 		<url route="{*path}" view="serve" name="serve"/>
 	</mountpoint>
 

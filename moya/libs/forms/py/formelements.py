@@ -243,6 +243,7 @@ class Form(AttributeExposer):
                                           'csrf_token',
                                           'data',
                                           'element',
+                                          'enctype',
                                           'raw_data',
                                           'error',
                                           'errors',

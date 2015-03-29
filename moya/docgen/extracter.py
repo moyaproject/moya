@@ -3,6 +3,8 @@ from ..elements import registry
 from .. import bbcode
 from .. import pilot
 from .. import namespaces
+from ..compat import text_type
+
 
 from fs.path import *
 
@@ -177,22 +179,25 @@ class Extracter(object):
     def extract_lib(self, long_name):
         lib = self.archive.libs[long_name]
 
-        const_data = {"long_name": long_name,
-                      "lib": {"title": lib.title,
-                              "url": lib.url}
-                      }
+        const_data = {
+            "long_name": long_name,
+            "lib": {
+                "title": lib.title,
+                "url": lib.url,
+                "version": text_type(lib.version)
+            },
+            "author": lib.author
+        }
 
         lib_cover = Doc('cover', 'cover', doc_class='cover')
         lib_cover.add_reference("doc.index")
         lib_cover.data.update(const_data)
-        lib_cover.data.update(author=lib.author, lib={"title": lib.title, "url": lib.url})
+
         lib_cover.write(self.fs)
 
-        #lib_namespace = "lib.{}".format(long_name.replace('.', '_'))
         if lib.documentation_location is not None:
             with lib.load_fs.opendir(lib.documentation_location) as docs_fs:
                 self.extract_docs(long_name, docs_fs, const_data)
-
 
         lib_tags = self.archive.registry.get_elements_in_lib(long_name)
         self.extract_tags(lib_tags, const_data=const_data)

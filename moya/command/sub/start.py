@@ -239,7 +239,7 @@ class Mount(Question):
 
 class AppName(Question):
     text = """What should the application be named?"""
-    extra = """An mounted application requires a 'short name', which should be a single word, no space or dots."""
+    extra = """A mounted application requires a 'short name', which should be a single word, no space or dots."""
     examples = ["myblog",
                 "beetlesshop"]
     required = False

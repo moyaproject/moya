@@ -2,12 +2,14 @@
 ------
 
 Added CSRF protection to forms
-Added moya-src restart subcommand
+Added moya-srv restart subcommand
 Added <thread> tag
 Added {% lorem %} template tag
 Added --handler switch to 'moya urls' command
 Added <system-call> tag
 Added <get-syspath> tag
+Fixed form encoding bug
+Added 'root' url to moya.static
 
 0.5.12
 ------

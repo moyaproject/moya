@@ -11,6 +11,8 @@ from ..context import Context
 from ..compat import iteritems
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter
+from ..import db
+from ..__init__ import pilot
 
 
 class MoyaThread(Thread):
@@ -30,11 +32,17 @@ class MoyaThread(Thread):
         return "<thread {} '{}'>".format(self.libid, self.name)
 
     def run(self):
-        try:
-            self._result = self.element.archive.call(self.element.libid, self.context, self.app, **self.data)
-        except Exception as e:
-            self.context['.console'].obj(self.context, e)
-            self._error = e
+        with pilot.manage(self.context):
+            try:
+                try:
+                    self._result = self.element.archive.call(self.element.libid, self.context, self.app, **self.data)
+                except Exception as e:
+                    self.context['.console'].obj(self.context, e)
+                    self._error = e
+            finally:
+                dbsessions = self.context['._dbsessions']
+                if dbsessions:
+                    db.commit_sessions(self.context)
 
     def __moyacontext__(self, context):
 
@@ -83,17 +91,26 @@ class ThreadElement(DataSetter):
         tag_name = "thread"
 
     name = Attribute("Name of thread", required=False, default=None)
-    scope = Attribute("Use the current scope?", type="boolean", default=True)
+    scope = Attribute("Use the current scope?", type="boolean", default=False)
     timeout = Attribute("Maximum time to wait for thread to complete", type="timespan", default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
 
         thread_context = Context({k: v for k, v in iteritems(context.root) if not k.startswith('_')})
+        if '._dbsessions' in context:
+            thread_context['._dbsessions'] = db.get_session_map(self.archive)
+
         data = {}
         if params.scope:
             data.update(context.capture_scope())
         data.update(self.get_let_map(context))
+
+        for k, v in iteritems(data):
+            if hasattr(v, '_moyadb'):
+                self.throw("thread.not-thread-safe",
+                           "thread parameter {} ('{}') may not be passed to a thread".format(context.to_expr(v), k),
+                           diagnosis="Database objects are not [i]thread safe[/i], try retrieving the object again inside the thread.")
 
         moya_thread = MoyaThread(self,
                                  context.get('.app', None),
