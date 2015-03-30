@@ -41,15 +41,20 @@ not_found_response = """<!DOCTYPE html>
 
 
 class Server(object):
-    def __init__(self, name, domains, location, ini, master_settings=None, master_logging=None):
-        self.name = name
-        self.domains = domains
-        self.location = location
-        self.ini = ini
-        self.master_logging = master_logging
-        self.master_settings = master_settings
-
+    def __init__(self, settings_path):
+        self.settings_path = settings_path
+        self.load()
         self.application = None
+
+    def load(self):
+        settings = SettingsContainer.read_os(self.settings_path)
+
+        self.name = settings.get('service', 'name')
+        self.domains = settings.get_list('service', 'domains')
+        self.location = settings.get('service', 'location')
+        self.ini = settings.get_list('service', 'ini') or ['production.ini']
+
+        self.master_settings = settings
 
     def __repr__(self):
         return "<project '{}'>".format(self.name)
@@ -65,21 +70,7 @@ class Server(object):
             self.application = application
         except:
             log.exception('error building %r', self)
-
-    def rebuild(self):
-        log.debug('re-building %r', self)
-        try:
-            application = WSGIApplication(self.location,
-                                          self.ini,
-                                          disable_autoreload=True,
-                                          logging=None,
-                                          master_settings=self.master_settings)
-        except Exception:
-            log.debug('error re-building %r', self)
-            return False
-        else:
-            self.application = application
-        return True
+            raise
 
 
 class MultiWSGIApplication(object):
@@ -89,16 +80,11 @@ class MultiWSGIApplication(object):
         self.sites = Sites()
         self._lock = threading.Lock()
 
-    def add_project(self, settings, logging_path=None):
-        name = settings.get('service', 'name')
-        domains = settings.get_list('service', 'domains')
-        location = os.path.join(self.home_dir, settings.get('service', 'location'))
-        ini = settings.get_list('service', 'ini') or ['production.ini']
-
-        server = Server(name, domains, location, ini, master_settings=settings)
-        self.servers[name] = server
-        self.sites.add(domains, name=name)
-        log.debug('registered %r', self)
+    def add_project(self, settings_path, logging_path=None):
+        server = Server(settings_path)
+        self.servers[server.name] = server
+        self.sites.add(server.domains, name=server.name)
+        log.debug('registered %r', server)
 
     def build_all(self):
         for server in itervalues(self.servers):
@@ -112,21 +98,37 @@ class MultiWSGIApplication(object):
         return False
 
     def reload(self, server_name):
+        """
+        Reload the server
+
+        This actually creates a new server object, so that if the load fails it will continue to
+        process requests with the old server instance.
+        """
+
         log.debug("reloading '%s'", server_name)
-        self.servers[server_name].rebuild()
+
+        server = self.servers[server_name]
+        try:
+            new_server = Server(server.settings_path)
+            new_server.build()
+        except:
+            log.exception("reload of '%s' failed", server_name)
+        else:
+            self.servers[server_name] = new_server
+            self.sites.clear()
+            for server in itervalues(self.servers):
+                self.sites.add(server.domains, name=server.name)
 
     def __call__(self, environ, start_response):
         domain = environ['SERVER_NAME']
-        site_match = self.sites.match(domain)
-        if site_match is None:
-            return self.not_found()
-        server_name = site_match.data['name']
-        if self.reload_required(server_name):
-            log.debug("reload of '%s' required", server_name)
-            with self._lock:
-                if self.reload_required(server_name):
-                    self.reload(server_name)
-        server = self.servers[server_name]
+        with self._lock:
+            site_match = self.sites.match(domain)
+            if site_match is None:
+                return self.not_found()
+            server_name = site_match.data['name']
+            if self.reload_required(server_name):
+                self.reload(server_name)
+            server = self.servers[server_name]
         return server.application(environ, start_response)
 
 
@@ -142,7 +144,6 @@ class Service(MultiWSGIApplication):
         self.changes = {}
 
         self.home_dir = home_dir = os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
-
         settings_path = os.path.join(home_dir, 'moya.conf')
 
         try:
@@ -154,12 +155,17 @@ class Service(MultiWSGIApplication):
 
         logging_setting = self.settings.get('projects', 'logging', 'logging.ini')
         logging_path = os.path.join(self.home_dir, logging_setting)
+
         try:
             init_logging(logging_path)
         except Exception as e:
-            log.error("%s", e)
+            log.exception('error reading logging')
 
-        self.temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
+        log.debug('read conf from %s', settings_path)
+        log.debug('read logging from %s', logging_path)
+
+        temp_dir_root = self.settings.get('service', 'temp_dir', tempfile.gettempdir())
+        self.temp_dir = os.path.join(temp_dir_root, 'moyasrv')
         try:
             os.makedirs(self.temp_dir)
         except OSError:
@@ -167,14 +173,17 @@ class Service(MultiWSGIApplication):
 
         for path in self._get_projects():
             log.debug('reading project settings %s', path)
-            settings = self._read_project(path)
-            self.add_project(settings)
+            try:
+                self.add_project(path)
+            except:
+                log.exception("error adding project from '%s'", path)
 
         for server_name in self.servers:
             path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
             try:
-                with open(path, 'a'):
-                    os.utime(path, None)
+                if not os.path.exists(path):
+                    with open(path, 'wb'):
+                        pass
             except IOError as e:
                 sys.stderr.write("{}\n".format(text_type(e)))
                 return -1
@@ -205,7 +214,3 @@ class Service(MultiWSGIApplication):
             os.chdir(cwd)
 
         return paths
-
-    def _read_project(self, path):
-        settings = SettingsContainer.read_os(path)
-        return settings

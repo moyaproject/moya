@@ -170,6 +170,10 @@ class Sites(object):
     def __repr__(self):
         return repr(self._sites)
 
+    def clear(self):
+        """Clear all site information"""
+        del self._sites[:]
+
     def set_defaults(self, section):
         self.base_content = section.get('base_content', 'site#content.base')
         self.timezone = section.get('timezone', 'UTC')

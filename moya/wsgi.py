@@ -9,7 +9,7 @@ from . import db
 from .context import Context
 from . import tags
 from .tags import cookie
-from .tools import timer
+from .tools import timer, lazystr
 from .logic import debug_lock, is_debugging
 from .logic import _notify
 from .request import MoyaRequest, ReplaceRequest
@@ -325,13 +325,12 @@ class WSGIApplication(object):
         context = Context()
         request = MoyaRequest(environ)
         response = self.get_response(request, context)
-
-        start_response(response.status,
-                       response.headerlist)
-
         taken = time() - start
         clock_taken = clock() - start_clock
-        taken_ms = "{:.1f}ms {:.1f}ms".format(taken * 1000, clock_taken * 1000)
+
+        start_response(response.status, response.headerlist)
+
+        taken_ms = lazystr("{:.1f}ms {:.1f}ms".format, taken * 1000, clock_taken * 1000)
         request_log.info('"%s %s %s" %i %s %s',
                          request.method,
                          request.path_qs,

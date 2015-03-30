@@ -10,6 +10,7 @@ Added <system-call> tag
 Added <get-syspath> tag
 Fixed form encoding bug
 Added 'root' url to moya.static
+Fixed moya-srv restart not loading master settings
 
 0.5.12
 ------
