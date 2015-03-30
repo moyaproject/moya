@@ -27,9 +27,6 @@ location = ./templates
 [media:media]
 location = ./media
 
-[py]
-location = ./py
-
 [locale]
 location = ./locale
 default_language = en

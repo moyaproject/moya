@@ -248,6 +248,18 @@ class ExpressionModifiers(ExpressionModifiersBase):
         seq, key = v
         return [obj_index(obj, key) for obj in seq]
 
+    def collectmap(self, context, v):
+        seq, key = v
+        result = {}
+        for obj in seq:
+            try:
+                k = obj_index(obj, key)
+            except:
+                pass
+            else:
+                result[k] = obj
+        return result
+
     def collectids(self, context, v, _lookup_key=ExpressionModifiersBase._lookup_key):
         return [_item for _item in (_lookup_key(item, 'id', Ellipsis) for item in v) if _item is not Ellipsis]
 

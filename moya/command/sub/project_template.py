@@ -337,9 +337,7 @@ This folder should contain libraries that are local to the project, i.e. authore
         {{%- if project.feedback %}}
         <import py="moya.libs.feedback" />
         {{%- endif %}}
-        {{%- if project.jsonrpc %}}
         <import py="moya.libs.jsonrpc" />
-        {{%- endif %}}
         <import py="moya.libs.wysihtml5" />
         {{%- if project.signup or project.comments %}}
         <import py="moya.libs.recaptcha" />
