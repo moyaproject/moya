@@ -85,9 +85,11 @@
     <view libname="view.showpost" content="#content.post">
         <db:get-required model="#Post" dst="post" let:slug="url.slug" />
         <not-found if="not .permissions.admin and not post.published" />
-        <db:query dst="newer_posts" model="#Post" filter="#Post.published_date gt post.published_date" orderby="published_date"/>
+        <db:query dst="newer_posts" model="#Post"
+            filter="#Post.published_date gt post.published_date and #Post.published" orderby="published_date"/>
         <let newer="newer_posts.first"/>
-        <db:query dst="older_posts" model="#Post" filter="#Post.published_date lt post.published_date" orderby="-published_date"/>
+        <db:query dst="older_posts" model="#Post"
+            filter="#Post.published_date lt post.published_date and #Post.published" orderby="-published_date"/>
         <let older="older_posts.first"/>
         <let post_url=".request.path" />
     </view>
