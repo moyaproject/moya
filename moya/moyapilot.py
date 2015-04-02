@@ -6,6 +6,7 @@ from .console import Console
 from .compat import implements_to_string
 from .interface import ObjectExposer
 from .import settings
+from .moyaexceptions import MoyaException
 
 import os
 import io
@@ -100,6 +101,9 @@ class Pilot(ObjectExposer):
     def manage(self, context):
         self._stack.append(_PilotStackEntry(None, context, {}))
         return self
+
+    def throw(self, type, msg, diagnosis=None, info=None):
+        raise MoyaException(type, msg, diagnosis=diagnosis, info=info)
 
     @property
     def request(self):

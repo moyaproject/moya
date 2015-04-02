@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from .compat import implements_to_string
-from . import pilot
 from . import diagnose
 from .interface import AttributeExposer
 
@@ -33,6 +32,7 @@ class MoyaException(Exception, AttributeExposer):
         return '<exception %s:"%s">' % (self.type, self.msg)
 
     def __moyaconsole__(self, console):
+        from . import pilot
         console(self.type + ": ", fg="red", bold=True)(self.msg).nl()
         if self.info:
             console.obj(pilot.context, self.info)
