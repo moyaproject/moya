@@ -542,6 +542,18 @@ class Archive(object):
             raise errors.AmbiguousAppError(lib_name, apps)
         return self.apps[apps[0]]
 
+    def get_app_from_lib_default(self, lib, default=None):
+        if isinstance(lib, Library):
+            lib_name = lib.long_name
+        else:
+            lib_name = text_type(lib)
+        if '.' not in lib_name:
+            return lib_name
+        apps = self.apps_by_lib[lib_name]
+        if len(apps) != 1:
+            return default
+        return self.apps[apps[0]]
+
     def find_app(self, name):
         """Find an app from either its name or its lib name.
 
@@ -857,8 +869,8 @@ class Archive(object):
         """Gets an element from a reference"""
         app_id, lib_id, name = self.parse_element_ref(element_ref)
         if lib_id:
-            element_app = None
             lib = self.get_library(lib_id)
+            element_app = self.get_app_from_lib_default(lib)
             element = lib.get_named_element(name)
         elif app_id:
             try:
