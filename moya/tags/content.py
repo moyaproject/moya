@@ -92,12 +92,15 @@ class ContentElementMixin(object):
             merge_content.append(content)
 
             if content_element.has_children:
-                with self.call(context, content_app):
-                    self.push_content_frame(context, content)
+                self.push_content_frame(context, content)
+                try:
+                    self.push_defer(context, content_app)
                     try:
                         yield logic.DeferNodeContents(content_element)
                     finally:
-                        self.pop_content_frame(context)
+                        self.pop_defer(context)
+                finally:
+                    self.pop_content_frame(context)
 
         content = merge_content[0]
         for extended_content in merge_content[1:]:
