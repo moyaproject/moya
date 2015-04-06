@@ -501,11 +501,11 @@ class Form(AttributeExposer):
         if not self.csrf_check:
             console.text('CSRF check failed -- form did not originate from here!', fg="red", bold=True)
 
-    def fill_initial(self, context):
-        for field in self.all_fields():
-            if field.initial is not None:
-                value = field.initial
-                field.value = self.raw_data[field.value] = value
+    # def fill_initial(self, context):
+    #     for field in self.all_fields:
+    #         if field.initial is not None:
+    #             value = field.initial
+    #             field.value = self.raw_data[field.value] = value
 
     def get_initial_binding(self, context):
         binding = {}

@@ -16,11 +16,4 @@ pilot = Pilot()
 
 import decimal
 
-
-class MoyaDecimal(decimal.Decimal):
-
-    def __moyarepr__(self, context):
-        return "d:'{}'".format(text_type(self))
-
-
-decimal.Decimal = MoyaDecimal
+decimal.Decimal.__moyarepr__ = lambda self, context: "d:'{}'".format(text_type(self))

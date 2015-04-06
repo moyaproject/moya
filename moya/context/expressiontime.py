@@ -352,6 +352,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             dt = iso8601.parse_date(s)
             return cls.from_datetime(dt)
         except:
+            raise
             return None
 
     def __moyarepr__(self, context):
