@@ -149,7 +149,7 @@
 			    <case if="column.type=='datetime'"/>
 				<forms:input template="/moya.admin/datetimeinput.html"
                     class="datetime" label="${str:column.label or title:column.name}" name="${column.name}"
-                    help="${str:column.help}" initial="object[column.name]['isoformat']"
+                    help="${str:column.help}" initial="object[column.name]['isoformat'] or None"
                     adapt="datetime:value"
                     required="not column.blank"/>
                 <forms:validate-field field="${column.name}">

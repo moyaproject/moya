@@ -20,7 +20,7 @@
     <view libname="view.list" content="#content.recent-posts">
         <not-found if="exists:.request.GET.page and not int:.request.GET.page" />
         <let page="int:.request.GET.page or 1" pagesize=".app.settings.page_size.int"/>
-        <db:query model="#Post" dst="posts" orderby="-published_date"/>
+        <db:query model="#Post" dst="posts" orderby="published,-published_date"/>
         <db:query model="#Post" src="posts" dst="posts" filter="#Post.published==1" if="not .permissions.admin" />
     </view>
 
@@ -39,11 +39,15 @@
         <forms:get form="#form.newpost" dst="form"/>
         <forms:validate src="form">
             <let slug="form.data.slug or slug:form.data.title"/>
-            <db:create model="#Post" obj="form.data" dst="post"
-                let:owner=".user"
-                let:slug="slug"
-                let:published_date=".now"
-                let:published="form.data.action == 'publish'"/>
+            <try>
+                <db:create model="#Post" obj="form.data" dst="post"
+                    let:owner=".user"
+                    let:slug="slug"
+                    let:updated_date=".now"/>
+                <let post.published_date=".now"
+                     post.published="yes"
+                     if="form.data.action == 'publish'"/>
+            </try>
             <catch exception="db.integrity-error">
                 <forms:error field="slug" src="form">A post with slug '${slug}' exists</forms:error>
                 <break/>
@@ -58,6 +62,7 @@
         <forms:get form="#form.editpost" src="post" dst="form" let:post="post" let:cancel_url="cancel_url"/>
         <forms:validate-post src="form">
             <forms:apply src="form" dst="post"/>
+            <let post.updated_date=".now" />
             <db:commit />
             <catch exception="db.integrity-error">
                 <forms:error field="slug" src="form">Slug exists, please edit</forms:error>
@@ -85,12 +90,15 @@
     <view libname="view.showpost" content="#content.post">
         <db:get-required model="#Post" dst="post" let:slug="url.slug" />
         <not-found if="not .permissions.admin and not post.published" />
-        <db:query dst="newer_posts" model="#Post"
-            filter="#Post.published_date gt post.published_date and #Post.published" orderby="published_date"/>
-        <let newer="newer_posts.first"/>
-        <db:query dst="older_posts" model="#Post"
-            filter="#Post.published_date lt post.published_date and #Post.published" orderby="-published_date"/>
-        <let older="older_posts.first"/>
+        <db:query model="#Post" let:published="yes" dst="posts"/>
+        <if test="post.published_date">
+            <db:query dst="newer_posts" src="posts"
+                filter="#Post.published_date gt post.published_date" orderby="published_date"/>
+            <let newer="newer_posts.first"/>
+            <db:query dst="older_posts" src="posts"
+                filter="#Post.published_date lt post.published_date" orderby="-published_date"/>
+            <let older="older_posts.first"/>
+        </if>
         <let post_url=".request.path" />
     </view>
 
@@ -101,7 +109,7 @@
 
     <view libname="view.publish.post" requires=".permissions.admin">
         <db:get-required model="#Post" dst="post" let:id="url.id" />
-        <let post.published="yes" if="not .request.POST.cancel"/>
+        <let post.published="yes" post.published_date=".now" if="not .request.POST.cancel"/>
         <redirect name="showpost" let:slug="post.slug" />
     </view>
 
