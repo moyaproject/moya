@@ -491,6 +491,19 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return None
         return v
 
+    # def partition(self, context, v):
+    #     split_on = None
+    #     if isinstance(v, list):
+    #         try:
+    #             v = text_type(v[0])
+    #             split_on = text_type(v[1])
+    #         except IndexError:
+    #             pass
+    #     else:
+    #         v = text_type(v)
+    #     a, b = v.partition(split_on)
+    #     return a, v
+
     def path(self, context, v):
         return Path(v)
 
@@ -567,13 +580,13 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             return self.split(context, v)[0]
         except IndexError:
-            raise ValueError('splitfirst has nothing to return')
+            return ''
 
     def splitlast(self, context, v):
         try:
             return self.split(context, v)[-1]
         except IndexError:
-            raise ValueError('splitlast has nothing to return')
+            return ''
 
     def splitlines(self, context, v):
         return text_type(v).splitlines()
