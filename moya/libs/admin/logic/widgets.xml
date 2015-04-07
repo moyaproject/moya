@@ -85,6 +85,7 @@
             <break />
         </for>
         <let start="(page_no - 1) * page_size" />
+
         <slice src="objects" dst="render_objects" start="start" stop="start + page_size" />
         <let ids="set:.request.multi.GET.id" />
 

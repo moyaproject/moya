@@ -1,1 +1,1 @@
-<textarea id="${field.id}" class="form-control ${field.class}" name="${field.name}" rows="${field.rows}" >${field.value or ''}</textarea>
+<textarea id="${field.id}" class="form-control ${field.class}" name="${field.name}" rows="${field.rows}" {% if field.disabled %} disabled{% endif %}>${field.value or ''}</textarea>

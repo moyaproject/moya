@@ -967,6 +967,7 @@ class FieldElement(LogicElement):
     maxlength = Attribute("Maximum length", required=False, default=None)
     adapt = Attribute("Function to adapt field before applying", type="function", default="value", evaldefault=True)
     process = Attribute("Function to process src in to a string", type="function", default="str:value", evaldefault=True)
+    disabled = Attribute("Disabled control?", type="boolean", required=False, default=False)
 
     def __str__(self):
         return "<%s>" % self._tag_name

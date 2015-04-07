@@ -26,7 +26,7 @@
     	<signature>
             <attribute name="template" required="no" type="template" default="widgets/table.html" />
             <attribute name="filter" required="no" />
-            <attribute name="model" required="no" default="" />
+            <attribute name="model" required="yes" default="" />
             <attribute name="slug" type="text" required="yes" />
             <attribute name="order" type="text" required="no" />
             <attribute name="title" type="text" required="no" />

@@ -1,1 +1,1 @@
-<input id="${field.id}" name="${field.name}" type="${field.type or 'file'}" {% attrib class=field.class %}>
+<input id="${field.id}" name="${field.name}" type="${field.type or 'file'}" {% attrib class=field.class %}{% if field.disabled %} disabled{% endif %}>

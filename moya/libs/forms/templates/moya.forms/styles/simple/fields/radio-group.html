@@ -3,8 +3,8 @@
 {%- endif %}
     {%- for value, text in choices %}
     <div class="radio">
-        <label>
-            <input type="radio" name="${field.name}" value="${value}" {% if value instr field.values %} checked="checked"{% endif %}/> ${text}
+        <label>{% if field.disabled %} disabled{% endif %}
+            <input type="radio" name="${field.name}" value="${value}" {% if value instr field.values %} checked="checked"{% endif %}{% if field.disabled %} disabled{% endif %}/> ${text}
         </label>
     </div>
     {%- endfor %}

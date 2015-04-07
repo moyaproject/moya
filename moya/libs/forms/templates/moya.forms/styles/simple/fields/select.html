@@ -1,4 +1,4 @@
-<select id="${field.id}" name="${field.name}" class="form-control ${field.class}"{% if field.multiple %} multiple="multiple"{% endif %}>
+<select id="${field.id}" name="${field.name}" class="form-control ${field.class}"{% if field.multiple %} multiple="multiple"{% endif %}{% if field.disabled %} disabled{% endif %}>
     {%- for group, choices in field.groups %}
     {%- if group %}
     <optgroup label="${group}">
