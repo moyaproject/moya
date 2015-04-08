@@ -136,4 +136,17 @@
         </else>
     </widget>
 
+    <widget name="tab-panel" template="tabpanel/panel.html" synopsis="tab panel container" container="yes">
+        <signature>
+            <attribute name="id" required="no" default=""/>
+            <attribute name="active"/>
+        </signature>
+    </widget>
+
+    <widget name="tab" template="tabpanel/tab.html" synopsis="individial tab" container="yes">
+        <signature>
+            <attribute name="id" required="yes"/>
+            <attribute name="title" required="yes"/>
+        </signature>
+    </widget>
 </moya>

@@ -3,7 +3,7 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:forms="http://moyaproject.com/forms"
       xmlns:auth="http://moyaproject.com/auth"
-      xmlns:widgets="http://moyaproject.com/widgets"
+      xmlns:w="http://moyaproject.com/widgets"
       xmlns:html="http://moyaproject.com/html">
 
     <mountpoint name="tests" libname="mountpoint.main">
@@ -18,33 +18,42 @@
         <title>Tests</title>
         <section name="body">
 
-            <widgets:success>This is a success message</widgets:success>
-            <widgets:danger>This is a danger message</widgets:danger>
-            <widgets:info>This is an info message</widgets:info>
-            <widgets:warning>This is a warning message</widgets:warning>
-            <widgets:error>An error</widgets:error>
+            <w:tab-panel id="testtabs" active="tab1">
+                <w:tab id="tab1" title="Tab One">
+                    <markdown>This is in Tab 1</markdown>
+                </w:tab>
+                <w:tab id="tab2" title="Tab number Two">
+                    <markdown>Hello World</markdown>
+                </w:tab>
+            </w:tab-panel>
 
-            <widgets:info>
+            <w:success>This is a success message</w:success>
+            <w:danger>This is a danger message</w:danger>
+            <w:info>This is an info message</w:info>
+            <w:warning>This is a warning message</w:warning>
+            <w:error>An error</w:error>
+
+            <w:info>
                 <bbcode>[b]note[/b] May contain other content</bbcode>
-            </widgets:info>
+            </w:info>
 
-            <widgets:link from="moya.auth" name="login">Login</widgets:link>
+            <w:link app="moya.auth" name="login">Login</w:link>
 
-            <widgets:success>
+            <w:success>
                 <markdown>Success Message</markdown>
-                <widgets:buttons>
-                    <widgets:link from="moya.auth" name="login">Button1</widgets:link>
-                    <widgets:link from="moya.auth" name="login">Button2</widgets:link>
-                </widgets:buttons>
-            </widgets:success>
+                <w:buttons>
+                    <w:link app="moya.auth" name="login">Button1</w:link>
+                    <w:link app="moya.auth" name="login">Button2</w:link>
+                </w:buttons>
+            </w:success>
 
-            <widgets:dialog>
+            <w:dialog>
                 <markdown>A dialog</markdown>
-                <widgets:dialog-buttons>
-                    <widgets:link from="moya.auth" name="login">Button1</widgets:link>
-                    <widgets:link from="moya.auth" name="login">Button2</widgets:link>
-                </widgets:dialog-buttons>
-            </widgets:dialog>
+                <w:dialog-buttons>
+                    <w:link app="moya.auth" name="login">Button1</w:link>
+                    <w:link app="moya.auth" name="login">Button2</w:link>
+                </w:dialog-buttons>
+            </w:dialog>
 
         </section>
     </content>

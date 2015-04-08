@@ -14,7 +14,7 @@ class MissingTemplateError(Exception):
 
     def __init__(self, path, diagnosis=None):
         self.path = path
-        self.diagnosis = diagnosis or """The referenced template doesn't exists in the templates filesystem. Run the following to see what templates are installed:\n\n **$ moya fs template --tree**"""
+        self.diagnosis = diagnosis or """The referenced template doesn't exists in the templates filesystem. Run the following to see what templates are installed:\n\n **$ moya fs templates --tree**"""
 
     def __str__(self):
         return 'Missing template "{}"'.format(self.path)
