@@ -7,6 +7,10 @@ html, body
     height:100%;
 }
 
+.voffset-md
+{
+    margin-top: 20px;
+}
 
 #footer
 {
@@ -288,7 +292,7 @@ li.active a.moya-admin-nav-module-link
     margin-left:220px;
 
     min-height:100%;
-    background-color:#fff;
+    background-color:#f9f9f9;
 }
 
 .moya-admin-container
@@ -410,7 +414,7 @@ table.moya-admin-table th a:hover
 
 .moya-admin-content-column .content
 {
-    /*background-color:#fff;*/
+    background-color:#fff;
     /*background-color:#f9f9f9;*/
     border-bottom:1px solid #f0f0f0;
     padding:16px;

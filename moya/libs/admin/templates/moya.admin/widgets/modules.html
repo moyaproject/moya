@@ -19,7 +19,11 @@
                 {%- for item in menu.submenu %}
                     <li{% if .request.path == item.url %} class="active"{% endif %}>
                         <a href="${item.url}">
+                            {%- if item.icon == 'table' %}
                             <span class="glyphicon glyphicon-list-alt"></span>
+                            {%- elif item.icon == 'link' %}
+                            <span class="glyphicon glyphicon-link"></span>
+                            {%- endif %}
                             ${item.title}
                         </a>
                     </li>

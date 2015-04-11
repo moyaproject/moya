@@ -304,6 +304,7 @@ class ElementBaseType(object):
 
     _element_class = "data"
     _lib_long_name = None
+    _ignore_skip = False
     element_class = "default"
     xmlns = "http://moyaproject.com"
     preserve_attributes = []

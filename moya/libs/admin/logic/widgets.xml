@@ -27,7 +27,7 @@
                     <if test="link.data.view">
                         <get-url name="admin_custom_view" dst="url"
                             let:appname="module_app.name" let:slug="link.data.slug" let:module="module.data.slug" />
-                        <let data="link.data" data.url="url" data.appname="module_app.name" />
+                        <let data="link.data" data.url="url" data.appname="module_app.name" data.icon="'link'"/>
                         <qualify-elementref app="module_app.name" ref="link.data.view" dst="view" />
                         <set-item src="views_dict" index="str:link.data.slug" value="view" />
                     </if>
@@ -35,7 +35,7 @@
                         <get-element from="${module_app.name}" name="${link.data.to}" dst="link_element" />
                         <get-url name="admin_table" dst="url"
                             let:module="module.data.slug" let:appname="module_app.name" let:table="link_element.data.slug" />
-                        <let data="link_element.data" data.url="url" data.module="module.data.slug"/>
+                        <let data="link_element.data" data.url="url" data.module="module.data.slug" data.icon="'table'"/>
                     </else>
                     <append src="menu.submenu" value="data" />
                 </for>

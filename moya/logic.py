@@ -230,7 +230,8 @@ def _logic_loop(context,
                     continue
                 if debugging and debug_hook and not getattr(node, '_debug_skip', False):
                     debugging, breakpoints_enabled = debug_hook(node)
-                skip = None
+                if not node._ignore_skip:
+                    skip = None
                 if node.check(context):
                     result = node.logic(context)
                     if result:

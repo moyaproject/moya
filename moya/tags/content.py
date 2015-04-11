@@ -766,6 +766,8 @@ class CSS(RenderBase):
 
 class Text(RenderBase):
 
+    _ignore_skip = True
+
     def logic(self, context):
         text = self.lib.translate(context, self.text)
         text = escape(context.sub(text))
