@@ -16,8 +16,10 @@
     <data-tag name="link" synopsis="link to admin content">
         <doc>A link to admin content (must go inside a module tag)</doc>
         <signature>
-            <attribute name="to" type="reference" required="yes"/>
-            <attribute name="title" required="not"/>
+            <attribute name="to" type="reference" />
+            <attribute name="title" required="no"/>
+            <attribute name="view" type="reference" />
+            <attribute name="slug" type="reference" />
         </signature>
     </data-tag>
 

@@ -17,6 +17,9 @@
         <url route="/apps/{appname}/modules/{module}/tables/{table}/new/" view="#view.table.new" name="admin_new_object" />
         <url route="/apps/{appname}/modules/{module}/tables/{table}/action/" view="#view.table.action" name="admin_table_action"/>
         <url route="/apps/{appname}/modules/{module}/tables/{table}/edit/{pk}/" view="#view.table.edit" name="admin_table_edit" />
+
+        <url route="/apps/{appname}/modules/{module}/custom/{slug}/" view="#view.custom" name="admin_custom_view" />
+
         <url route="/jsonrpc/" view="#jsonrpc.interface" name="admin_rpc" />
 
     </mountpoint>
