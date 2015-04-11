@@ -39,6 +39,10 @@
         </section>
     </content>
 
+    <content libname="content.custom" extends="#content.navigation.base">
+        <call macro="#get_module" dst="module" />
+    </content>
+
     <content libname="content.cover" extends="#content.module">
         <section name="content">
             <node template="cover.html" let:module="module"/>

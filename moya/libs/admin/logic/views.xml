@@ -141,10 +141,19 @@
         </if-post>
     </view>
 
-    <view libname="view.custom" content="#content.module">
-        <call macro="#get_module" dst="module" />
+    <view libname="view.custom">
+        <!-- <call macro="#get_module" dst="module" /> -->
         <call macro="#get_module_info" dst="modules" />
         <echo obj="modules" />
+        <let views="modules.views[.url.module]"/>
+        <not-found if="not views" />
+        <let view="views[.url.slug]"/>
+        <not-found if="not view" />
+
+        <return>
+            <call macro="${view}"/>
+        </return>
+
     </view>
 
 </moya>

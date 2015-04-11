@@ -2463,7 +2463,11 @@ class Call(ContextElementBase):
 
             self.push_call(context, call, app=macro_app)
             try:
-                yield DeferNodeContents(macro_element)
+                if hasattr(macro_element, 'run'):
+                    for el in macro_element.run(context):
+                        yield el
+                else:
+                    yield DeferNodeContents(macro_element)
             finally:
                 call = self.pop_call(context)
             if '_return' in call:

@@ -29,7 +29,7 @@
                             let:appname="module_app.name" let:slug="link.data.slug" let:module="module.data.slug" />
                         <let data="link.data" data.url="url" data.appname="module_app.name" />
                         <qualify-elementref app="module_app.name" ref="link.data.view" dst="view" />
-                        <set-item src="views_dict" index="link.data.slug" value="view" />
+                        <set-item src="views_dict" index="str:link.data.slug" value="view" />
                     </if>
                     <else>
                         <get-element from="${module_app.name}" name="${link.data.to}" dst="link_element" />
