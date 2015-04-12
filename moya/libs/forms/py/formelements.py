@@ -616,7 +616,7 @@ class Get(ContextElementBase):
 
     bind = Attribute("Object to bind to", type="expression", default=".request.method == 'POST' ? .request.multi.POST : None", evaldefault=True)
     form = Attribute("Form reference", required=True)
-    src = Attribute("Source object to fill in fields", default=None)
+    src = Attribute("Source object to fill in fields", type="reference", default=None)
     dst = Attribute("Destination to store form", required=True, default=None)
     style = Attribute("Override form style", required=False, default=None)
     template = Attribute("Override form template", required=False, default=None)
