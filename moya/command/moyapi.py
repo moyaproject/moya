@@ -555,27 +555,36 @@ Find, install and manage Moya libraries
 
             libs = []
             output_fs = fsopendir(args.output)
-
-            application = WSGIApplication(self.location, args.settings, disable_autoreload=True)
-            archive = application.archive
-
-            libs = [(lib.long_name, lib.version, lib.install_location)
-                    for lib in archive.libs.values() if lib.long_name == package_name]
-
             force = args.force
-            if not force:
-                for name, version, location in libs:
-                    if name == package_name:
-                        if version > install_version:
-                            if not args.force:
-                                raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
-                        elif install_version == version:
-                            if not args.force:
-                                raise CommandError("version {} is already installed, use --force to force installation".format(version))
-                        else:
-                            if not args.upgrade:
-                                raise CommandError("an older version ({}) is installed, user --upgrade to force upgrade".format(version))
-                        force = True
+
+            try:
+                application = WSGIApplication(self.location, args.settings, disable_autoreload=True)
+            except Exception as e:
+                if not args.force:
+                    console.exception(e)
+                    console.text('unable to load project, use the --force switch to force installation')
+                    return -1
+
+            else:
+                archive = application.archive
+
+                libs = [(lib.long_name, lib.version, lib.install_location)
+                        for lib in archive.libs.values() if lib.long_name == package_name]
+
+
+                if not force:
+                    for name, version, location in libs:
+                        if name == package_name:
+                            if version > install_version:
+                                if not args.force:
+                                    raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
+                            elif install_version == version:
+                                if not args.force:
+                                    raise CommandError("version {} is already installed, use --force to force installation".format(version))
+                            else:
+                                if not args.upgrade:
+                                    raise CommandError("an older version ({}) is installed, use --upgrade to force upgrade".format(version))
+                            force = True
 
             username = self.settings.get('upload', 'username', None)
             password = self.settings.get('upload', 'password', None)

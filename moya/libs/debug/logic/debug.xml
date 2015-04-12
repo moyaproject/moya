@@ -67,6 +67,7 @@
 	</content>
 
 	<preflight:check>
+        <return if="not ._dbsessions" />
 		<db:check />
 		<!-- <catch exception="db.*">
 			<preflight:fail>

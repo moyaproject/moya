@@ -427,6 +427,27 @@ class InspectNode(Node):
         return html
 
 
+class EscapeNode(Node):
+    """Escape enclosed text"""
+    tag_name = "escape"
+
+    def on_create(self, environment, parser):
+        self.text = []
+
+    def process_token(self, token_type, text, token_text):
+        if token_type == "tag":
+            if text.strip().split(' ', 1)[0] == "endescape":
+                return False
+        self.text.append(token_text)
+        return True
+
+    def finalize(self, environment, template):
+        self.text = ''.join(self.text)
+
+    def render(self, environment, context, template, text_escape):
+        return text_escape(self.text)
+
+
 class RootNode(Node):
     tag_name = "root"
 
