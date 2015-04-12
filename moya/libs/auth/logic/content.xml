@@ -9,7 +9,9 @@
     <content libname="content.login" extends="#content.base">
         <title>Log In</title>
         <section name="body">
-            <render src="form"/>
+            <node template="login_container.html">
+                <render src="form"/>
+            </node>
         </section>
     </content>
 

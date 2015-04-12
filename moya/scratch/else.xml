@@ -1,0 +1,14 @@
+<moya>
+
+    <macro docname="main">
+
+        <if test="1">
+            <echo>True</echo>
+        </if>
+        <else>
+            <echo>False</echo>
+        </else>
+
+    </macro>
+
+</moya>

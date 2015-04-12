@@ -243,7 +243,7 @@ class Library(object):
         for libname, elements in iteritems(self.replace_nodes):
             winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
             existing = self.get_named_element(libname)
-            if existing.lib.priority < winner.lib.priority:
+            if existing and existing.lib.priority < winner.lib.priority:
                 #startup_log.debug('%r replaced with %r', existing, winner)
                 existing.replace(winner)
                 self.elements_by_name[existing.libname] = winner
