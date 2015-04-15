@@ -217,6 +217,7 @@ class AttributeTag(ElementBase):
     default = Attribute("Default", required=False, default=None)
     metavar = Attribute("Metavar (identifier used in documentation)", required=False)
     missing = Attribute("Are missing values allowed?", type="boolean", default=True, required=False)
+    empty = Attribute("Are empty values allowed?", type="boolean", default=True, required=False)
     choices = Attribute("Valid values for this attribute", type="commalist", default=None, required=False)
 
     def post_build(self, context):

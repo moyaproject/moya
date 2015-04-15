@@ -272,7 +272,7 @@ class GetURL(DataSetter):
                 url_params = self.get_let_map(context)
                 url_params.update(params['with'])
             else:
-                url_params = self.get_let_map(context)
+                url_params = {k: text_type(v) for k, v in iteritems(self.get_let_map(context))}
 
             for k, v in iteritems(url_params):
                 if not v:

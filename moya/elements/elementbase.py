@@ -53,7 +53,8 @@ class Attribute(object):
                  synopsis=None,
                  choices=None,
                  translate=None,
-                 missing=True
+                 missing=True,
+                 empty=True,
                  ):
         self.doc = doc
         self.name = name
@@ -76,6 +77,7 @@ class Attribute(object):
         self.choices = choices
         self.translate = translate or self.type.translate
         self.missing = missing
+        self.empty = empty
         self.enum = None
         #if translate is not None:
         #    self.translate = translate
@@ -118,7 +120,8 @@ class Attribute(object):
             "default_display": self.default_display(self.default),
             "metavar": self.metavar,
             "choices": self.choices,
-            "missing": self.missing
+            "missing": self.missing,
+            "empty": self.empty
         }
         return param_info
 
@@ -283,7 +286,6 @@ class ChoicesChecker(object):
 
 
 class MissingChecker(object):
-
     def __init__(self, value_callable, name, element):
         self.value_callable = value_callable
         self.name = name
@@ -292,8 +294,23 @@ class MissingChecker(object):
     def __call__(self, context):
         value = self.value_callable(context)
         if is_missing(value):
-            raise errors.ElementError("attribute '{}' must not be missing (it is {!r})".format(self.name, value),
+            raise errors.ElementError("attribute '{}' must not be missing (it is {})".format(self.name, context.to_expr(value)),
                                       diagnosis="The expression has referenced a value on the context which doesn't exist. Check the expression for typos.",
+                                      element=self.element)
+        return value
+
+
+class EmptyChecker(object):
+    def __init__(self, value_callable, name, element):
+        self.value_callable = value_callable
+        self.name = name
+        self.element = element
+
+    def __call__(self, context):
+        value = self.value_callable(context)
+        if not value:
+            raise errors.ElementError("attribute '{}' must not be empty or evaluate to false (it is {})".format(self.name, context.to_expr(value)),
+                                      diagnosis="Check the expression returns a non-empty result.",
                                       element=self.element)
         return value
 
@@ -516,6 +533,8 @@ class ElementBaseType(object):
                 value = ChoicesChecker(value, name, self, attribute.choices)
             if not attribute.missing:
                 value = MissingChecker(value, name, self)
+            if not attribute.empty:
+                value = EmptyChecker(value, name, self)
             if attribute_name in self._translatable_attrs:
                 value = Translator(value, self.lib)
             setattr(self, name, value)

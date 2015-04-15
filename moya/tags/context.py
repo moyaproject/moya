@@ -1720,7 +1720,7 @@ class Map(DataSetter):
             <dict let:name="aeryn" let:species="peacekeeper" />
         </dict>
         <map src="crew" dst="manifest"
-            expression="sub:'${title:name$} is ${species}'" />
+            value="sub:'${title:name$} is ${species}'" />
         <!-- ['John is human', 'Rygen is hynerian', 'Aeryn is peacekeeper'] -->
         """
 
