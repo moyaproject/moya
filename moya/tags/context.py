@@ -2003,7 +2003,7 @@ class Macro(ContextElementBase):
         </macro>
         """
 
-    def finalize(self, context):
+    def lib_finalize(self, context):
         for signature in self.children('signature'):
             self.validator = signature.validator
             self.validate_call = self.validator.validate

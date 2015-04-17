@@ -175,7 +175,6 @@
                 <if test="column.picker">
 
                     <get-element name="${column.picker}" from="${model.app.name}" dst="picker_table"/>
-
                     <let selected="object[column.name] ? [object[column.name]['id']] : []"/>
 
                     <forms:field label="${str:column.label or title:column.name}" name="${column.dbname}"
@@ -183,7 +182,7 @@
                         adapt="fromjson:value">
 
                         <get-url name="admin_table_picker_single" dst="picker_url"
-                            let:appname="model.app.name" let:table="picker_table.params.slug"
+                            let:appname="picker_table.app.name" let:table="picker_table.params.slug"
                             let:field="field.name"
                             query="{'model':model.name,
                                     'pk': object.id,
@@ -192,7 +191,8 @@
                                     'options':column.options or ''}"/>
 
                         <admin:foreign-key-select object="object[column.name]">
-                            <admin:picker-single url="picker_url" id="field.id" selected="selected" fieldname="field.name" value="object[field.name]"/>
+                            <admin:picker-single url="picker_url" id="field.id" selected="selected"
+                                fieldname="field.name" value="object[field.name]"/>
                         </admin:foreign-key-select>
 
                     </forms:field>
@@ -254,7 +254,7 @@
                     adapt="fromjson:value or []">
 
                     <get-url name="admin_table_picker" dst="picker_url"
-                        let:appname="model.app.name" let:table="picker_table.params.slug"
+                        let:appname="picker_table.app.name" let:table="picker_table.params.slug"
                         let:field="field.name"
                         query="{'model':model.name,
                                 'pk': object.id,
@@ -317,7 +317,7 @@
         </forms:actions>
     </forms:form>
 
-    <forms:form libname="form.new" legend="New ${model.title}" extends="#form.object">
+    <forms:form libname="form.new" legend="New ${model.title}" extends="#form.object" class="moya-admin-form">
         <forms:actions>
             <forms:submit-button text="Create" />
         </forms:actions>
