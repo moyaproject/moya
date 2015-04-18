@@ -71,6 +71,10 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_
 
         parser = Parser(archive, fs.opendir(docs_location), startup_path)
         doc = parser.parse()
+
+        if doc is None:
+            raise errors.StartupFailedError('unable to parse "{}"'.format(startup_path))
+
         archive.build(doc, fs=fs)
 
         return archive, context, doc

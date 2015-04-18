@@ -9,6 +9,7 @@ from __future__ import print_function
 from __future__ import division
 
 from ..console import Console
+from ..progress import Progress
 
 import hashlib
 import requests
@@ -42,28 +43,35 @@ def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16,
     """Download a url and render a progress bar"""
     if console is None:
         console = Console()
-    response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
-    start = time()
-    length = response.headers.get('content-length')
-    if response.status_code != 200:
-        raise DownloaderError('downloader received bad status code ({})'.format(response.status_code))
 
     if filename is None:
         filename = url.rsplit('/')[-1]
 
-    m = hashlib.md5()
-    bytes_read = 0
-    if length is None:
-        console('downloading {}'.format(filename))
-        console.flush()
-        for data in response.iter_content(chunk_size):
-            store_file.write(data)
-            m.update(data)
+    progress_width = 20
+    progress = Progress(console, 'downloading {}'.format(filename), width=progress_width)
+    progress.update(0, msg="contacting server")
+    try:
 
-        console.nl()
-    else:
-        length = int(length)
-        with console.progress('downloading {}'.format(filename), length, width=20) as progress:
+        response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
+        start = time()
+        length = response.headers.get('content-length')
+        if response.status_code != 200:
+            raise DownloaderError('downloader received bad status code ({})'.format(response.status_code))
+
+        m = hashlib.md5()
+        bytes_read = 0
+        if length is None:
+            console('downloading {}'.format(filename))
+            console.flush()
+            for data in response.iter_content(chunk_size):
+                store_file.write(data)
+                m.update(data)
+
+            console.nl()
+        else:
+            length = int(length)
+            progress.set_num_steps(length)
+            #with console.progress('downloading {}'.format(filename), length, width=progress_width) as progress:
             for data in response.iter_content(chunk_size):
                 store_file.write(data)
                 m.update(data)
@@ -73,5 +81,7 @@ def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16,
                 speed = "downloading {} {}/s".format(filename, _filesize(bytes_per_second))
 
                 progress.step(len(data), msg=speed)
+    finally:
+        progress.done()
 
     return m.hexdigest()

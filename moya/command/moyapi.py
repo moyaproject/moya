@@ -20,6 +20,7 @@ from ..compat import text_type, raw_input
 from ..command import downloader
 from ..tools import get_moya_dir, is_moya_dir, nearest_word
 from .. import build
+from . import installer
 
 import fs.utils
 from fs.path import relativefrom, pathjoin
@@ -200,14 +201,13 @@ Find, install and manage Moya libraries
                                                description="Download and install a library")
 
         install_parser.add_argument(dest='package', metavar="PACKAGE",
-                                    help="Package to installed (may include version spec e.g. moya.package>=1.0)",
-                                    nargs="*")
+                                    help="Package to installed (may include version spec e.g. moya.package>=1.0)")
 
         install_parser.add_argument("-l", '--location', dest="location", default=None, metavar="PATH",
                                     help="location of the Moya server code")
         install_parser.add_argument("-i", "--ini", dest="settings", default="settings.ini", metavar="SETTINGSPATH",
                                     help="path to project settings file")
-        install_parser.add_argument('-d', "--download-only", dest="download", default=None, metavar="DIRECTORY",
+        install_parser.add_argument('-d', "--download", dest="download", default=None, metavar="DIRECTORY",
                                     help="don't install package, just download package to DIRECTORY")
         install_parser.add_argument('-b', '--lib-dir', dest="output", default="external/", metavar="DIRECTORY",
                                     help="directory to install the library (relative to project root)")
@@ -215,6 +215,10 @@ Find, install and manage Moya libraries
                                     help="force overwrite of installed package")
         install_parser.add_argument('--upgrade', dest="upgrade", default=False, action="store_true",
                                     help="upgrade existing version")
+        install_parser.add_argument('--mount', dest="mount", default=None,
+                                    help="optional path to mount application")
+        install_parser.add_argument('--app', dest="app", default=None,
+                                    help="name of app to install")
 
         return parser
 
@@ -535,90 +539,96 @@ Find, install and manage Moya libraries
     def run_install(self):
         args = self.args
         console = self.console
-
         installed = []
+        install_package = args.package
 
-        for install_package in args.package:
+        package_select = self.call('package.select', package=install_package)
 
-            #console.div("installing {}".format(install_package), bold=True, fg="magenta")
-            package_select = self.call('package.select', package=install_package)
+        if package_select['version'] is None:
+            raise CommandError("no install candidate for '{}', run 'moya-pm list' to see available packages".format(install_package))
 
-            if package_select['version'] is None:
-                raise CommandError("no install candidate for '{}', run 'moya-pm list' to see available packages".format(install_package))
+        package_name = package_select['name']
+        install_version = versioning.Version(package_select['version'])
 
-            package_name = package_select['name']
-            install_version = versioning.Version(package_select['version'])
+        filename = package_select['md5']
+        download_url = package_select['download']
+        package_filename = download_url.rsplit('/', 1)[-1]
 
-            filename = package_select['md5']
-            download_url = package_select['download']
-            package_filename = download_url.rsplit('/', 1)[-1]
+        libs = []
+        output_fs = fsopendir(args.output)
+        force = args.force
 
-            libs = []
-            output_fs = fsopendir(args.output)
-            force = args.force
-
-            try:
+        archive = None
+        try:
+            if not args.download:
                 application = WSGIApplication(self.location, args.settings, disable_autoreload=True)
-            except Exception as e:
-                if not args.force:
-                    console.exception(e)
-                    console.text('unable to load project, use the --force switch to force installation')
-                    return -1
-
-            else:
                 archive = application.archive
+        except Exception as e:
+            if not args.force:
+                console.exception(e)
+                console.text('unable to load project, use the --force switch to force installation')
+                return -1
+        else:
+            libs = [(lib.long_name, lib.version, lib.install_location)
+                    for lib in archive.libs.values() if lib.long_name == package_name]
 
-                libs = [(lib.long_name, lib.version, lib.install_location)
-                        for lib in archive.libs.values() if lib.long_name == package_name]
+            if not force:
+                for name, version, location in libs:
+                    if name == package_name:
+                        if version > install_version:
+                            if not args.force:
+                                raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
+                        elif install_version == version:
+                            if not args.force:
+                                raise CommandError("version {} is already installed, use --force to force installation".format(version))
+                        else:
+                            if not args.upgrade:
+                                raise CommandError("an older version ({}) is installed, use --upgrade to force upgrade".format(version))
+                        force = True
 
+        username = self.settings.get('upload', 'username', None)
+        password = self.settings.get('upload', 'password', None)
+        if username and password:
+            auth = (username, password)
+        else:
+            auth = None
 
-                if not force:
-                    for name, version, location in libs:
-                        if name == package_name:
-                            if version > install_version:
-                                if not args.force:
-                                    raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
-                            elif install_version == version:
-                                if not args.force:
-                                    raise CommandError("version {} is already installed, use --force to force installation".format(version))
-                            else:
-                                if not args.upgrade:
-                                    raise CommandError("an older version ({}) is installed, use --upgrade to force upgrade".format(version))
-                            force = True
+        with TempFS('moyapi') as temp_fs:
+            with temp_fs.open(filename, 'wb') as package_file:
+                checksum = downloader.download(download_url,
+                                               package_file,
+                                               console=console,
+                                               auth=auth,
+                                               verify_ssl=False)
+            if checksum != package_select['md5']:
+                raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
 
-            username = self.settings.get('upload', 'username', None)
-            password = self.settings.get('upload', 'password', None)
-            if username and password:
-                auth = (username, password)
-            else:
-                auth = None
+            if args.download:
+                with fsopendir(args.download) as dest_fs:
+                    fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
+                return 0
 
-            with TempFS('moyapi') as temp_fs:
-                with temp_fs.open(filename, 'wb') as package_file:
-                    checksum = downloader.download(download_url,
-                                                   package_file,
-                                                   console=console,
-                                                   auth=auth,
-                                                   verify_ssl=False)
-                if checksum != package_select['md5']:
-                    raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
+            install_location = relativefrom(self.location, pathjoin(self.location, args.output, package_select['name']))
+            package_select['location'] = install_location
 
-                if args.download:
-                    with fsopendir(args.download) as dest_fs:
-                        fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
-                    return 0
+            with temp_fs.open(filename, 'rb') as package_file:
+                with ZipFS(package_file, 'r') as package_fs:
+                    with output_fs.makeopendir(package_select['name']) as lib_fs:
+                        if not lib_fs.isdirempty('/') and not force:
+                            raise CommandError("install directory is not empty, use --force to erase and overwrite")
+                        fs.utils.remove_all(lib_fs, '/')
+                        fs.utils.copydir(package_fs, lib_fs)
+                        installed.append(package_select)
 
-                install_location = relativefrom(self.location, pathjoin(self.location, args.output, package_select['name']))
-                package_select['location'] = install_location
-
-                with temp_fs.open(filename, 'rb') as package_file:
-                    with ZipFS(package_file, 'r') as package_fs:
-                        with output_fs.makeopendir(package_select['name']) as lib_fs:
-                            if not lib_fs.isdirempty('/') and not force:
-                                raise CommandError("install directory is not empty, use --force to erase and overwrite")
-                            fs.utils.remove_all(lib_fs, '/')
-                            fs.utils.copydir(package_fs, lib_fs)
-                            installed.append(package_select)
+        if args.app:
+            installer.install(project_path=self.location,
+                              server_xml_location=archive.cfg.get('project', 'location'),
+                              server_xml=archive.cfg.get('project', 'startup'),
+                              server_name=application.server_ref,
+                              lib_path=install_location,
+                              lib_name=package_name,
+                              app_name=args.app,
+                              mount=args.mount)
 
         table = []
         for _package in installed:
