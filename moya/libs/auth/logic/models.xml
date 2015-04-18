@@ -19,7 +19,8 @@
             options="#Group.user == None or #Group.user == object" orderby="username" />
     </model>
 
-	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="model/user.html"/>
+	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db"
+        repr="${username} #${id}" template="model/user.html"/>
 
 	<model name="GroupMembership" libname="GroupMembership" xmlns="http://moyaproject.com/db" repr="${user} in ${group}">
 		<foreign-key model="#User" name="user" null="no"/>

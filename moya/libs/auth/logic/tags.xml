@@ -1,6 +1,7 @@
 <moya xmlns="http://moyaproject.com"
       xmlns:let="http://moyaproject.com/let"
-      xmlns:db="http://moyaproject.com/db">
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:auth="http://moyaproject.com/auth">
 
     <tag name="get-permissions" synopsis="query user permissions">
     	<doc>Get list of permissions for a given user</doc>
@@ -39,8 +40,25 @@
         </return>
     </tag>
 
-    <tag name="login" synopsis="log in a user">
-        <doc>Validate a username and password combination</doc>
+    <tag name="login-user" synopsis="log in a user">
+        <doc>Login a give user without checking credentials</doc>
+        <signature>
+            <attribute name="user" type="expression" required="yes"/>
+        </signature>
+        <db:transaction>
+            <var dst="session_expire">${.app.settings.session_expire}</var>
+            <db:create model="#Session" dst="session" let:user="user" let:expire_date=".now + session_expire">
+                <call macro="#makesessionkey" dst="session_key" />
+            </db:create>
+            <let user.previous_login="user.last_login" user.last_login=".now"/>
+        </db:transaction>
+        <db:query model="#Session" let:user="user" filter="#Session.expire_date lt .now" action="delete" />
+        <set-cookie name="authsession" value="${session.session_key}" overwrite="yes" />
+        <fire signal="moya.auth.post-login" let:user="user"/>
+    </tag>
+
+    <tag name="login" synopsis="log in a user with username/password">
+        <doc>Check credentials and login a user</doc>
         <signature>
             <attribute name="username" type="expression" required="yes"/>
             <attribute name="password" type="expression" required="yes"/>
@@ -60,16 +78,7 @@
         <throw exception="moya.auth.forbidden.not-validated" msg="validated email required"
             if="not user.email_validated and .app.settings.required_validated_email.bool" />
 
-        <db:transaction>
-            <var dst="session_expire">${.app.settings.session_expire}</var>
-            <db:create model="#Session" dst="session" let:user="user" let:expire_date=".now + session_expire">
-                <call macro="#makesessionkey" dst="session_key" />
-            </db:create>
-            <let user.previous_login="user.last_login" user.last_login=".now"/>
-        </db:transaction>
-        <db:query model="#Session" let:user="user" filter="#Session.expire_date lt .now" action="delete" />
-        <set-cookie name="authsession" value="${session.session_key}" overwrite="yes" />
-        <fire signal="moya.auth.post-login" let:user="user"/>
+        <auth:login-user user="user"/>
         <return value="user" />
     </tag>
 
