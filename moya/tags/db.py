@@ -1657,6 +1657,10 @@ class GetOne(Get):
 
     """
 
+    class Help:
+        synopsis = "get precisely one matching object"
+        example = None
+
     def get_value(self, qs):
         try:
             result = qs.one()
