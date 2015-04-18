@@ -65,6 +65,8 @@ def makesessionkey(app):
 
 @moya.expose.macro("hashpassword")
 def hashpassword(app, password):
+    if password is None:
+        return None
     rounds = app.settings.get_int('rounds', 10000)
     scheme = text_type(app.settings.get('scheme', 'pbkdf2_sha512'))
     try:
