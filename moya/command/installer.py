@@ -33,7 +33,6 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
 
             server_el = "{{http://moyaproject.com}}server[@docname='{}']".format(server_name)
             for server in root.findall(server_el):
-
                 add_import_tag = not has_child(server,
                                                "{http://moyaproject.com}import",
                                                location=lib_path)

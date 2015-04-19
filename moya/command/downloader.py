@@ -47,14 +47,12 @@ def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16,
     if filename is None:
         filename = url.rsplit('/')[-1]
 
-
     console.show_cursor(False)
     try:
         progress_width = 20
         progress = Progress(console, 'downloading {}'.format(filename), width=progress_width)
         progress.update(0, msg="contacting server")
         try:
-
             response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
             start = time()
             length = response.headers.get('content-length')
@@ -69,12 +67,10 @@ def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16,
                 for data in response.iter_content(chunk_size):
                     store_file.write(data)
                     m.update(data)
-
                 console.nl()
             else:
                 length = int(length)
                 progress.set_num_steps(length)
-                #with console.progress('downloading {}'.format(filename), length, width=progress_width) as progress:
                 for data in response.iter_content(chunk_size):
                     store_file.write(data)
                     m.update(data)
