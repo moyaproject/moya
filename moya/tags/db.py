@@ -1661,7 +1661,7 @@ class GetOne(Get):
         synopsis = "get precisely one matching object"
         example = None
 
-    def get_value(self, qs):
+    def get_value(self, context, qs):
         try:
             result = qs.one()
         except NoResultFound:
