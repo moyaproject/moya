@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from fs.opener import fsopendir
+from fs.utils import open_atomic_write
 
 
 def install(project_path, server_xml_location, server_xml, server_name, lib_path, lib_name, app_name, mount=None):
@@ -44,6 +45,6 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
                 if add_install_tag:
                     server.append(install_tag)
 
-            with server_fs.open(server_xml, 'wb') as server_xml_file:
+            with open_atomic_write(server_fs, server_xml, 'wb') as server_xml_file:
                 root.write(server_xml_file)
-                #root = write(server_xml_file)
+    return add_import_tag or add_install_tag

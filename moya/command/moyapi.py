@@ -219,6 +219,8 @@ Find, install and manage Moya libraries
                                     help="optional path to mount application")
         install_parser.add_argument('--app', dest="app", default=None,
                                     help="name of app to install")
+        install_parser.add_argument('--no-add', dest="no_add", default=False, action="store_true",
+                                    help="don't add to server.xml")
 
         return parser
 
@@ -620,24 +622,38 @@ Find, install and manage Moya libraries
                         fs.utils.copydir(package_fs, lib_fs)
                         installed.append(package_select)
 
-        if args.app:
-            installer.install(project_path=self.location,
-                              server_xml_location=archive.cfg.get('project', 'location'),
-                              server_xml=archive.cfg.get('project', 'startup'),
-                              server_name=application.server_ref,
-                              lib_path=install_location,
-                              lib_name=package_name,
-                              app_name=args.app,
-                              mount=args.mount)
+        changed_server_xml = False
+        if not args.no_add:
+            app_name = args.app
+            if app_name is None:
+                app_name = package_name.split('.')[-1]
+            server_xml = archive.cfg.get('project', 'startup')
+            changed_server_xml =\
+                installer.install(project_path=self.location,
+                                  server_xml_location=archive.cfg.get('project', 'location'),
+                                  server_xml=server_xml,
+                                  server_name=application.server_ref,
+                                  lib_path=install_location,
+                                  lib_name=package_name,
+                                  app_name=app_name,
+                                  mount=args.mount)
 
         table = []
         for _package in installed:
             table.append([Cell("{name}=={version}".format(**_package), fg="magenta", bold=True),
                           Cell(_package['location'], fg="blue", bold=True),
-                          Cell(_package['notes'], italic=True)])
+                          Cell(args.mount or '', fg="cyan", bold=True)])
 
         if table:
-            console.table(table, ['package', 'location', 'release notes'])
+            console.table(table, ['package', 'location', 'mount'])
+
+        notes = _package['notes']
+        if notes:
+            console.table([[notes]], ['release notes'])
+
+        if changed_server_xml:
+            console.text("moya-pm modified '{}' -- please check changes".format(server_xml), fg="green", bold="yes")
+
 
 
 def main():
