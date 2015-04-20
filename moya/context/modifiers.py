@@ -428,6 +428,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def join(self, context, v):
         return ''.join(text_type(i) for i in v)
 
+    def joinspace(self, context, v):
+        return ' '.join(text_type(i) for i in v if i)
+
     def keys(self, context, v):
         return self._keys(context, v)
 

@@ -776,9 +776,9 @@ class Expression(object):
 
             raise ExpressionEvalError(self.exp, original=e)
 
-    def make_function(self, context):
+    def make_function(self, context=None):
         """Returns a callable from this expression"""
-        return Function(self, context.obj)
+        return Function(self, context.obj if context else None)
 
     def __repr__(self):
         return "Expression(%r)" % self.exp

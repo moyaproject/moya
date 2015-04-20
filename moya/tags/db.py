@@ -624,7 +624,8 @@ class DBModel(DBElement):
 
         for definition_app, ext in definitions:
             for k, v in ext.object_properties:
-                setattr(table_class, k, v(definition_app, self) if callable(v) else v)
+                _prop = property(v(definition_app, self) if callable(v) else v)
+                setattr(table_class, k, _prop)
 
         mapper(table_class,
                table,
@@ -652,6 +653,26 @@ class DBModel(DBElement):
                           app,
                           self.libid,
                           signal_params)
+
+
+class Property(DBElement):
+    """Add a property to a db object"""
+
+    class Help:
+        synopsis = "add a property to a database object"
+
+    _name = Attribute("Property name", required=True)
+    expression = Attribute("expression using database object", type="function")
+
+    def document_finalize(self, context):
+        params = self.get_parameters(context)
+        model = self.get_ancestor((self.xmlns, "model"))
+        func = params.expression
+
+        def get_property(app, model):
+            return lambda obj: func.call(pilot.context, obj)
+
+        model.add_object_property(params.name, get_property)
 
 
 class _ForeignKey(DBElement):

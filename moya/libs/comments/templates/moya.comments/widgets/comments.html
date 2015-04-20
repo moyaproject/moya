@@ -13,9 +13,9 @@
         <div class="text">
             <div class="author">
                 {%- if comment.commenter_url %}
-                <a href="${comment.commenter_url}" class="name">${comment.user.username or comment.commenter_name}</a>
+                <a href="${comment.commenter_url}" class="name">${comment.user.display_name or comment.commenter_name}</a>
                 {%- else %}
-                <span class="name">${comment.user.username or comment.commenter_name}</span>
+                <span class="name">${comment.user.display_name or comment.commenter_name}</span>
                 {%- endif %}
                 <span class="time">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
             </div>

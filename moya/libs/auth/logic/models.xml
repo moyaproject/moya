@@ -17,6 +17,9 @@
             backref="users" backpicker="#admintable.users"
             search="#User.username icontains q"
             options="#Group.user == None or #Group.user == object" orderby="username" />
+        <property name="display_name" expression="first_name ? joinspace:[first_name, last_name] : username" />
+        <property name="full_name" expression="first_name ? joinspace:[first_name, last_name] : None" />
+        <!-- <property name="display_name" expression="'hello'" /> -->
     </model>
 
 	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db"

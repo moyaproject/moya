@@ -90,7 +90,7 @@
             <p class="navbar-text pull-right">
                 {%- if .user %}
                 <span class="glyphicon glyphicon-user"></span>
-                <a href="{% url 'user_edit' from 'moya.auth' %}" class="navbar-link">${.user.username}</a>&nbsp;
+                <a href="{% url 'user_edit' from 'moya.auth' %}" class="navbar-link">${.user.display_name}</a>&nbsp;
                 <span class="glyphicon glyphicon-log-out"></span>
                 <a href="${.urls.auth.logout}?fwd=${.request.path}" class="navbar-link">Logout</a>
                 {%- else %}
