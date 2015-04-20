@@ -1009,6 +1009,31 @@ class FieldElement(LogicElement):
             with content.node():
                 yield logic.DeferNodeContents(self)
 
+class Group(LogicElement):
+    """Renders a group of form elements within a div"""
+    xmlns = namespaces.forms
+
+    class Help:
+        synopsis = "render form elements in a group"
+
+    _class = Attribute("Class", required=False, default="well")
+    style = Attribute("Style for child fields", required=False, default=None)
+
+    def logic(self, context):
+        form = context['_return']
+        params = self.get_parameters(context)
+        content = context['.content']
+        app = self.archive.find_app('moya.forms')
+
+        style = params.style or form.style or 'simple'
+        template = "/moya.forms/styles/%s/group.html" % style
+        td = {'class': params['class']}
+
+        content.add_template("group", template, td)
+        with content.node():
+            yield logic.DeferNodeContents(self)
+
+
 
 class _Field(FieldElement):
     """

@@ -92,13 +92,13 @@
                 <span class="glyphicon glyphicon-user"></span>
                 <a href="{% url 'user_edit' from 'moya.auth' %}" class="navbar-link">${.user.display_name}</a>&nbsp;
                 <span class="glyphicon glyphicon-log-out"></span>
-                <a href="${.urls.auth.logout}?fwd=${.request.path}" class="navbar-link">Logout</a>
+                <a href="${.urls.auth.logout}?fwd=${.request.path}" class="navbar-link">Sign out</a>
                 {%- else %}
                 {% if 'moya.signup' in .libs %}
-                <a href="{% url 'signup' from 'moya.signup' %}" class="navbar-link">Create Account</a>
+                <a href="{% url 'signup' from 'moya.signup' %}" class="navbar-link">Create account</a>
                 or
                 {% endif %}
-                <a href="${.urls.auth.login}?fwd=${.request.path}" class="navbar-link">Log in</a>
+                <a href="${.urls.auth.login}?fwd=${.request.path}" class="navbar-link">Sign in</a>
                 {%- endif %}
             </p>
             {%- endif %}

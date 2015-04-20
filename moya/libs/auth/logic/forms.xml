@@ -2,13 +2,19 @@
     xmlns:db="http://moyaproject.com/db"
     xmlns:let="http://moyaproject.com/let"
     xmlns:moya="http://moyaproject.com"
-    xmlns:w="http://moyaproject.com/widgets">
+    xmlns:w="http://moyaproject.com/widgets"
+    xmlns:html="http://moyaproject.com/html">
 
-    <form libname="form.login" legend="Please Login" style="horizontal" action="${.urls.auth.login}" xmlns="http://moyaproject.com/forms">
+    <form libname="form.login" legend="Please Sign In" style="basic" action="${.urls.auth.login}" xmlns="http://moyaproject.com/forms">
         <hidden-input name="fwd" required="no" initial=".request.GET.fwd" />
-        <input name="username" label="Username" type="text" maxlength="30" required="yes"/>
-        <password name="password" label="Password" maxlength="30" required="yes"/>
-        <submit-button name="login" text="Log In" />
+
+        <moya:include-css path="css/auth.css" from="moya.auth" />
+
+        <group>
+            <input name="username" label="" type="text" maxlength="30" required="yes" placeholder="username"/>
+            <password name="password" label="" maxlength="30" required="yes" placeholder="password"/>
+            <submit-button name="login" text="Sign In" class="btn-block btn-primary" style="display:inline;"/>
+        </group>
 
         <moya:get-url name="forgot_password" dst="forgot_password_url" />
         <field>

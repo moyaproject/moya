@@ -682,6 +682,27 @@ class Raw(RenderBase):
         context['.content'].add_renderable(self._tag_name, HTML(context.sub(self.text)))
 
 
+class Wrap(RenderBase):
+    """Wrap content between two templates"""
+
+    head = Attribute("head template")
+    tail = Attribute("tail template")
+    _from = Attribute("Application", type="application", required=False, default=None)
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        td = self.get_let_map(context)
+        content = context['.content']
+        app = self.get_app(context)
+
+        head_template = app.resolve_template(params.head)
+        tail_template = app.resolve_template(params.tail)
+
+        content.add_template('head', head_template, td)
+        yield logic.DeferNodeContents(self)
+        content.add_template('tail', tail_template, td)
+
+
 class DefaultMarkup(RenderBase):
     """Use default markup if a value is None or missing"""
 
