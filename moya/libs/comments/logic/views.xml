@@ -176,7 +176,7 @@ If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.p
                 let:subscribe="form.data.subscribe" />
 
             <let comment.text="form.data.text"
-                 comment.format="fcomment.commentobject.markup"
+                 comment.format="comment.commentobject.markup"
                  comment.user=".user"/>
 
             <db:commit />
