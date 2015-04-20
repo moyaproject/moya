@@ -39,7 +39,14 @@ def _filesize(size):
     return "{:,.01f} {}".format((base * size / unit), suffix)
 
 
-def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16, auth=None, verify_ssl=True):
+def download(url,
+             store_file,
+             filename=None,
+             console=None,
+             chunk_size=1024 * 16,
+             auth=None,
+             verify_ssl=True,
+             msg="contacting server"):
     """Download a url and render a progress bar"""
     if console is None:
         console = Console()
@@ -51,7 +58,7 @@ def download(url, store_file, filename=None, console=None, chunk_size=1024 * 16,
     try:
         progress_width = 20
         progress = Progress(console, 'downloading {}'.format(filename), width=progress_width)
-        progress.update(0, msg="contacting server")
+        progress.update(0, msg=msg)
         try:
             response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
             start = time()

@@ -307,8 +307,6 @@ This folder should contain libraries that are local to the project, i.e. authore
     <!-- Initialize a server -->
     <server docname="main">
 
-        <log>Starting up!</log>
-
         <!-- Import libraries for use in your project -->
         <import py="moya.libs.debug" if=".debug"/>
         {{%- if project.auth %}}

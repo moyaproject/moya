@@ -15,15 +15,15 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
             with server_fs.open(server_xml, 'rb') as server_xml_file:
                 root = parse(server_xml_file)
 
-            import_tag = XML('<import location="{lib_path}"/>\n\n'.format(lib_path=lib_path))
+            import_tag = XML('<import location="{lib_path}"/><!-- added by moya-pm -->\n\n'.format(lib_path=lib_path))
             import_tag.tail = "\n"
 
             if mount is not None:
-                tag = '<install name="{app_name}" lib="{lib_name}" mount="{mount}" />'
+                tag = '<install name="{app_name}" lib="{lib_name}" mount="{mount}" /><!-- added by moya-pm -->'
             else:
-                tag = '<install name="{app_name}" lib="{lib_name}" />'
+                tag = '<install name="{app_name}" lib="{lib_name}" /><!-- added by moya-pm -->'
             install_tag = XML(tag.format(app_name=app_name, lib_name=lib_name, mount=mount))
-            install_tag.tail = "\n\n"
+            install_tag.tail = "\n"
 
             def has_child(node, tag, **attribs):
                 for el in node.findall(tag):
@@ -40,7 +40,7 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
                                                 "{http://moyaproject.com}install",
                                                 lib=lib_name)
                 if add_import_tag:
-                    server.append(import_tag)
+                    server.insert(0, import_tag)
                 if add_install_tag:
                     server.append(install_tag)
 

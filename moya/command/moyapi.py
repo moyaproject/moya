@@ -601,7 +601,8 @@ Find, install and manage Moya libraries
                                                package_file,
                                                console=console,
                                                auth=auth,
-                                               verify_ssl=False)
+                                               verify_ssl=False,
+                                               msg="requesting {name}=={version}".format(**package_select))
             if checksum != package_select['md5']:
                 raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
 
