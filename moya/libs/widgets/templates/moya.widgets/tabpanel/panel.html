@@ -4,7 +4,7 @@
     {%- for child in self.children if not isstr:child %}
         <li role="presentation" {% if self.active ? self.active==child.id : forloop.first %}class="active"{% endif %}>
             <a href="#${self.id}-${child.id}" aria-controls="${self.id}-${child.id}" role="tab" data-toggle="tab">
-                ${child.title}
+                {% if child.icon %}<i class="${child.icon}"></i> {% endif %} ${child.title}
             </a>
         </li>
     {%- endfor %}

@@ -148,6 +148,9 @@
         <signature>
             <attribute name="id" required="yes"/>
             <attribute name="title" required="yes"/>
+            <attribute name="icon" required="no">
+                Icon class
+            </attribute>
         </signature>
     </widget>
 
