@@ -1,14 +1,13 @@
-
 {%- for field in self.children %}
-    {%- if field.visible %}
-        <tr{% if field.errors %} class="error"{% endif %}>
-            <th>${field.label or ''}</th>
-            <td>
-            {% render field set style="simple" %}
-            {%- include "common/helperror.html" from "moya.forms" %}
-            </td>
-        </tr>
-    {%- else %}
+{%- if field.is_form_field and field.visible %}
+    <tr{% if field.errors %} class="error"{% endif %}>
+        <th>${field.label or ''}</th>
+        <td>
         {% render field set style="simple" %}
-    {%- endif %}
+        {%- include "common/helperror.html" from "moya.forms" %}
+        </td>
+    </tr>
+{%- else %}
+    {% render field set style="simple" %}
+{%- endif %}
 {%- endfor %}

@@ -1,6 +1,5 @@
-<div {% attrib class=class %}>
 {%- for field in self.children %}
-    {%- if field.visible %}
+    {%- if field.is_form_field and field.visible %}
         <p{% if field.errors %} class="has-error"{% endif %}>
             {%- if field.label %}
             <label for="${field.id}">${field.label}</label>
@@ -12,4 +11,3 @@
         {% render field set style="simple" %}
     {%- endif %}
 {% endfor %}
-</div>

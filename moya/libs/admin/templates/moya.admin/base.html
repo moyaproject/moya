@@ -44,8 +44,8 @@ $(function(){
             <div class="user">
                 <div class="hidden-xs">
                     {# <img class="gravatar" src="http://www.gravatar.com/avatar/${md5:lower:.user.email}?s=24&amp;d=identicon" alt="gravatar"/> #}
-                    Logged in as <strong>${.user.username}</strong>
-                    <a class="user-link moya-admin-logout" href="{% url 'logout' from 'moya.auth' %}">Log Out</a>
+                    Sgined in as <strong>${.user.username}</strong>
+                    <a class="user-link moya-admin-logout" href="{% url 'logout' from 'moya.auth' %}">Sign Out</a>
                 </div>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".moya-admin-navigation-header">
                     <span class="icon-bar"></span>

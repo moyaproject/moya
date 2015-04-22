@@ -140,6 +140,7 @@
         <signature>
             <attribute name="id" required="no" default=""/>
             <attribute name="active"/>
+            <attribute name="class" required="no">Additional class(es)</attribute>
         </signature>
     </widget>
 
@@ -149,4 +150,6 @@
             <attribute name="title" required="yes"/>
         </signature>
     </widget>
+
+    <widget name="show-code" template="showcode.html" synopsis="render contents as code" container="yes"/>
 </moya>

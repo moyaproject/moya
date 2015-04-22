@@ -448,6 +448,23 @@ class EscapeNode(Node):
         return text_escape(self.text)
 
 
+class _EscapeCodeWrap(Node):
+    def __init__(self, node):
+        self._node = node
+
+    def render(self, environment, context, template, text_escape):
+        for c in self._node.render(environment, context, template, text_escape):
+            yield text_escape(c)
+
+
+class CodeNode(Node):
+    """render enclosed code as escaped code"""
+    tag_name = "code"
+
+    def render(self, environment, context, template, text_escape):
+        yield iter(_EscapeCodeWrap(child) for child in self.children)
+
+
 class RootNode(Node):
     tag_name = "root"
 

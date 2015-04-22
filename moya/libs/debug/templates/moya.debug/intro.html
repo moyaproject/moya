@@ -3,9 +3,9 @@
 {% block "body" %}
 <h2>Moya Debug <small>project details</small></h2>
 {%- if .user %}
-<p>You are currently logged in as <a href="{% url "user" with username=.user.username %}">${.user.username}</a></p>
+<p>You are currently signed in as <a href="{% url "user" with username=.user.username %}">${.user.username}</a></p>
 {%- else %}
-<p>You are <em>not</em> currently logged in</p>
+<p>You are <em>not</em> currently signed in</p>
 {% endif %}
 
 <h3>${.sys.site}</h3>

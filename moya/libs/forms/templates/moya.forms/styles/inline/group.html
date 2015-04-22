@@ -1,6 +1,5 @@
-<div {% attrib class=class %}>
 {%- for field in self.children %}
-    {%- if field.visible %}
+    {%- if field.is_form_field and field.visible %}
         <div class="form-group{% if field.errors %} has-error{% endif %}">
             {%- if field.label %}
             <label class="sr-only" for="${field.id}">${field.label}</label>
@@ -11,4 +10,3 @@
         {%- render field set style="simple" %}
     {%- endif %}
 {% endfor %}
-</div>

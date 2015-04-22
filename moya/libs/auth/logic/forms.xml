@@ -7,14 +7,15 @@
 
     <form libname="form.login" legend="Please Sign In" style="basic" action="${.urls.auth.login}" xmlns="http://moyaproject.com/forms">
         <hidden-input name="fwd" required="no" initial=".request.GET.fwd" />
-
         <moya:include-css path="css/auth.css" from="moya.auth" />
 
-        <group>
-            <input name="username" label="" type="text" maxlength="30" required="yes" placeholder="username"/>
-            <password name="password" label="" maxlength="30" required="yes" placeholder="password"/>
-            <submit-button name="login" text="Sign In" class="btn-block btn-primary" style="display:inline;"/>
-        </group>
+        <w:well>
+            <group>
+                <input name="username" label="" type="text" maxlength="30" required="yes" placeholder="username"/>
+                <password name="password" label="" maxlength="30" required="yes" placeholder="password"/>
+                <submit-button name="login" text="Sign In" class="btn-block btn-primary"/>
+            </group>
+        </w:well>
 
         <moya:get-url name="forgot_password" dst="forgot_password_url" />
         <field>

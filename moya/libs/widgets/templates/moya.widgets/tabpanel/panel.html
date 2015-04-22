@@ -1,5 +1,5 @@
 
-<div id="${self.id}"role="tabpanel">
+<div id="${self.id}" role="tabpanel"{% attrib class=self.class %}>
     <ul class="nav nav-tabs" role="tablist">
     {%- for child in self.children if not isstr:child %}
         <li role="presentation" {% if self.active ? self.active==child.id : forloop.first %}class="active"{% endif %}>
