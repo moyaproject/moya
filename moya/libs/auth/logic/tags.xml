@@ -121,10 +121,10 @@
         <db:transaction>
             <db:create model="#User"
                 let:username="username"
-                let:email="email"
+                let:email="email or None"
                 let:first_name="first_name"
                 let:last_name="last_name"
-                let:password="password"
+                let:password="password or None"
                 dst="newuser" />
             <catch exception="db.integrity-error">
                 <throw exception="moya.auth.duplicate-user" msg="Can't create user - username exists"/>

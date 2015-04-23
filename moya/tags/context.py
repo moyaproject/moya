@@ -1534,10 +1534,10 @@ class Switch(ContextElementBase):
 
     [code xml]
     <switch>
-        <case if="species=="'human'"/>
+        <case if="species=='human'"/>
         <echo>Humans come from Earth</echo>
 
-        <case if="species=="'hynerian'"/>
+        <case if="species=='hynerian'"/>
         <echo>Hynerians come from Hyneria</echo>
 
         <default-case/>
