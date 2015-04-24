@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError, StatementError
@@ -203,7 +203,7 @@ def rollback_sessions(context):
             try:
                 dbsession.session.rollback()
             except:
-                db_log.exeption('error rolling back session')
+                db_log.exception('error rolling back session')
             else:
                 count += 1
     return count

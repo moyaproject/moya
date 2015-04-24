@@ -5,6 +5,7 @@ from ..elements.elementbase import LogicElement, Attribute
 from ..tags.context import DataSetter
 from .. import logic
 from .. import http
+from .. import serve
 from ..tools import datetime_to_epoch, md5_hexdigest
 from ..context.missing import is_missing
 from .. import errors
@@ -126,50 +127,8 @@ class ServeFile(LogicElement):
             return
 
         req = context.root["request"]
-        res = MoyaResponse()
+        serve.serve_file(req, fs, path, name=params.name)
 
-        mime_type, encoding = mimetypes.guess_type(basename(path))
-        if mime_type is None:
-            mime_type = b"application/octet-stream" if PY2 else "application/octet-stream"
-
-        if not path or not fs.isfile(path):
-            raise logic.EndLogic(http.RespondNotFound())
-
-        serve_file = None
-        try:
-            file_size = fs.getsize(path)
-            info = fs.getinfokeys(path, 'modified_time')
-            serve_file = fs.open(path, 'rb')
-        except FSError:
-            if serve_file is not None:
-                serve_file.close()
-            raise logic.EndLogic(http.RespondNotFound())
-        else:
-            mtime = info.get('modified_time', None)
-            if mtime is None:
-                mtime = time.time()
-            else:
-                mtime = datetime_to_epoch(mtime)
-            res.date = datetime.utcnow()
-            res.content_type = py2bytes(mime_type)
-            res.last_modified = mtime
-            res.etag = "%i-%i-%s" % (mtime, file_size, md5_hexdigest(path))
-            res.server = "Moya/1.0"
-            if params.name:
-                res.content_disposition = 'attachment; filename="{}"'.format(params.name)
-
-            status304 = False
-            if req.if_none_match and res.etag:
-                status304 = res.etag in req.if_none_match
-            elif req.if_modified_since and res.last_modified:
-                status304 = res.last_modified <= req.if_modified_since
-            if status304:
-                res.status = 304
-                serve_file.close()
-            else:
-                res.body_file = serve_file
-            res.content_length = file_size
-        raise logic.EndLogic(res)
 
 
 class ServeJSON(LogicElement):
