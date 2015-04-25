@@ -5,7 +5,8 @@
     xmlns:w="http://moyaproject.com/widgets"
     xmlns:html="http://moyaproject.com/html">
 
-    <form libname="form.login" legend="Please Sign In" style="basic" action="${.urls.auth.login}" xmlns="http://moyaproject.com/forms">
+    <form libname="form.login" xmlns="http://moyaproject.com/forms"
+        legend="Please Sign In" style="basic" action="${.urls.auth.login}" class="moya-auth-signin" >
         <hidden-input name="fwd" required="no" initial=".request.GET.fwd" />
         <moya:include-css path="css/auth.css" from="moya.auth" />
 
