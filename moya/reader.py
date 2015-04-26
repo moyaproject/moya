@@ -40,20 +40,30 @@ class DataReader(object):
             mime_type, encoding = mimetypes.guess_type(filename)
 
         _type, sub_type = mime_type.split('/', 1)
+        try:
+            if mime_type == "text/plain":
+                data = self.fs.getcontents(path, mode="rt", encoding="utf-8")
+            elif mime_type == "application/json":
+                with self.fs.open(path, 'rt', encoding="utf-8") as f:
+                    data = json.load(f)
+            elif mime_type == "application/octet-stream":
+                data = self.fs.getcontents(path, mode="rb")
 
-        if mime_type == "text/plain":
-            data = self.fs.getcontents(path, mode="rt", encoding="utf-8")
-        elif mime_type == "application/json":
-            with self.fs.open(path, 'rt', encoding="utf-8") as f:
-                data = json.load(f)
-        elif mime_type == "application/octet-stream":
-            data = self.fs.getcontents(path, mode="rb")
+            elif _type == "text":
+                data = self.fs.getcontents(path, mode="rt", encoding="utf-8")
 
-        elif _type == "text":
-            data = self.fs.getcontents(path, mode="rt", encoding="utf-8")
-
-        else:
-            raise UnknownFormat("Moya doesn't know how to read file '{}' (in {!r})".format(path, self.fs))
+            else:
+                raise UnknownFormat("Moya doesn't know how to read file '{}' (in {!r})".format(path, self.fs))
+        except FSError as e:
+            from .logic import MoyaException
+            info = {
+                "path": path,
+                "mime_type": mime_type
+            }
+            raise MoyaException("data.read-fail",
+                                "unable to read data from {path} ({e})".format(path=path, e=e),
+                                diagnosis="check the data exists with **moya fs data --tree**",
+                                info=info)
 
         return data
 

@@ -9,6 +9,7 @@ from . import errors
 from .settings import SettingsContainer
 from .filesystems import FSWrapper
 from .compat import text_type, string_types, iteritems
+from .tools import textual_list
 
 from fs.opener import fsopendir
 from fs.osfs import OSFS
@@ -42,6 +43,9 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_
         else:
             fs = OSFS(fs)
 
+    if isinstance(settings_path, text_type):
+        settings_path = [settings_path]
+
     if archive is None:
         archive = Archive(fs)
     context = Context()
@@ -59,6 +63,7 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_
         root['apps'] = archive.apps
         root['fs'] = FSWrapper(fs)
 
+        log.debug("reading settings from {}".format(textual_list(settings_path)))
         archive.cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
         root['settings'] = SettingsContainer.from_dict(archive.cfg['settings'])
         startup_path = archive.cfg.get('project', 'startup')

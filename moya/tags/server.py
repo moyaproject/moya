@@ -779,6 +779,13 @@ class Server(LogicElement):
             if moya_trace2 is None:
                 moya_trace2 = trace.build(context, None, None, error2, sys.exc_info(), request)
 
+
+        log.error('unhandled exception ({})'.format(error))
+        try:
+            context['.console'].obj(context, moya_trace)
+        except:
+            pass
+
         context.reset()
         context.safe_delete('._callstack',
                             '.call',
@@ -815,7 +822,6 @@ class Server(LogicElement):
             #traceback.print_exc(e)
             #print(e)
             pass
-
 
         # Render a very basic response
         response = Response(charset=py2bytes("utf8"), status=status)
