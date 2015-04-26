@@ -21,6 +21,7 @@ from ..command import downloader
 from ..tools import get_moya_dir, is_moya_dir, nearest_word
 from .. import build
 from . import installer
+from . import dependencies
 
 import fs.utils
 from fs.path import relativefrom, pathjoin
@@ -221,6 +222,8 @@ Find, install and manage Moya libraries
                                     help="name of app to install")
         install_parser.add_argument('--no-add', dest="no_add", default=False, action="store_true",
                                     help="don't add to server.xml")
+        install_parser.add_argument('--no-deps', dest="no_deps", default=False, action="store_true",
+                                    help="don't install dependencies")
 
         return parser
 
@@ -560,33 +563,39 @@ Find, install and manage Moya libraries
         output_fs = fsopendir(args.output)
         force = args.force
 
+        installed_libs = {}
+
         archive = None
-        try:
-            if not args.download:
+        if not args.download:
+            try:
                 application = WSGIApplication(self.location, args.settings, disable_autoreload=True)
                 archive = application.archive
-        except Exception as e:
-            if not args.force:
-                console.exception(e)
-                console.text('unable to load project, use the --force switch to force installation')
-                return -1
-        else:
-            libs = [(lib.long_name, lib.version, lib.install_location)
-                    for lib in archive.libs.values() if lib.long_name == package_name]
+            except Exception as e:
+                if not args.force:
+                    console.exception(e)
+                    console.text('unable to load project, use the --force switch to force installation')
+                    return -1
+            else:
+                libs = [(lib.long_name, lib.version, lib.install_location)
+                        for lib in archive.libs.values() if lib.long_name == package_name]
+                print(libs)
 
-            if not force:
-                for name, version, location in libs:
-                    if name == package_name:
-                        if version > install_version:
-                            if not args.force:
-                                raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
-                        elif install_version == version:
-                            if not args.force:
-                                raise CommandError("version {} is already installed, use --force to force installation".format(version))
-                        else:
-                            if not args.upgrade:
-                                raise CommandError("an older version ({}) is installed, use --upgrade to force upgrade".format(version))
-                        force = True
+                installed_libs = archive.libs.copy()
+
+                if not force:
+                    for name, version, location in libs:
+                        if name == package_name:
+                            if version > install_version:
+                                if not args.force:
+                                    raise CommandError("a newer version ({}) is already installed, use --force to force installation".format(version))
+                            elif install_version == version:
+                                if not args.force:
+                                    raise CommandError("version {} is already installed, use --force to force installation".format(version))
+                            else:
+                                if not args.upgrade:
+                                    raise CommandError("an older version ({}) is installed, use --upgrade to force upgrade".format(version))
+                            force = True
+
 
         username = self.settings.get('upload', 'username', None)
         password = self.settings.get('upload', 'password', None)
@@ -595,26 +604,60 @@ Find, install and manage Moya libraries
         else:
             auth = None
 
-        with TempFS('moyapi') as temp_fs:
-            with temp_fs.open(filename, 'wb') as package_file:
+        packages = dependencies.gather_dependencies(self.rpc, install_package, console, no_deps=args.no_deps)
+
+        for package_name, package_select in packages.items():
+            if package_select['version'] is None:
+                raise CommandError("no install candidate for required package '{}', run 'moya-pm list {}' to see available packages".format(package_name, package_name))
+
+        download_temp_fs = TempFS()
+        for package_name, package_select in packages.items():
+
+            package_name = package_select['name']
+            install_version = versioning.Version(package_select['version'])
+
+            filename = "{}-{}.{}".format(package_name, install_version, package_select['md5'])
+            download_url = package_select['download']
+            package_filename = download_url.rsplit('/', 1)[-1]
+
+            with download_temp_fs.open(filename, 'wb') as package_file:
                 checksum = downloader.download(download_url,
                                                package_file,
                                                console=console,
                                                auth=auth,
                                                verify_ssl=False,
                                                msg="requesting {name}=={version}".format(**package_select))
-            if checksum != package_select['md5']:
-                raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
+                if checksum != package_select['md5']:
+                    raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
 
             if args.download:
                 with fsopendir(args.download) as dest_fs:
-                    fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
-                return 0
+                    fs.utils.copyfile(download_temp_fs, filename, dest_fs, package_filename)
+
+        if args.download:
+            return 0
+
+
+        changed_server_xml = False
+        for package_name, package_select in packages.items():
+
+            package_name = package_select['name']
+            install_version = versioning.Version(package_select['version'])
+
+            filename = "{}-{}.{}".format(package_name, install_version, package_select['md5'])
+            print(filename)
+            download_url = package_select['download']
+            package_filename = download_url.rsplit('/', 1)[-1]
+
+            # if args.download:
+            #     with fsopendir(args.download) as dest_fs:
+            #         fs.utils.copyfile(temp_fs, filename, dest_fs, package_filename)
+            #     return 0
 
             install_location = relativefrom(self.location, pathjoin(self.location, args.output, package_select['name']))
             package_select['location'] = install_location
 
-            with temp_fs.open(filename, 'rb') as package_file:
+            with download_temp_fs.open(filename, 'rb') as package_file:
                 with ZipFS(package_file, 'r') as package_fs:
                     with output_fs.makeopendir(package_select['name']) as lib_fs:
                         if not lib_fs.isdirempty('/') and not force:
@@ -623,21 +666,20 @@ Find, install and manage Moya libraries
                         fs.utils.copydir(package_fs, lib_fs)
                         installed.append(package_select)
 
-        changed_server_xml = False
-        if not args.no_add:
-            app_name = args.app
-            if app_name is None:
-                app_name = package_name.split('.')[-1]
-            server_xml = archive.cfg.get('project', 'startup')
-            changed_server_xml =\
-                installer.install(project_path=self.location,
-                                  server_xml_location=archive.cfg.get('project', 'location'),
-                                  server_xml=server_xml,
-                                  server_name=application.server_ref,
-                                  lib_path=install_location,
-                                  lib_name=package_name,
-                                  app_name=app_name,
-                                  mount=args.mount)
+            if not args.no_add:
+                app_name = args.app
+                if app_name is None:
+                    app_name = package_name.split('.')[-1]
+                server_xml = archive.cfg.get('project', 'startup')
+                changed_server_xml =\
+                    installer.install(project_path=self.location,
+                                      server_xml_location=archive.cfg.get('project', 'location'),
+                                      server_xml=server_xml,
+                                      server_name=application.server_ref,
+                                      lib_path=install_location,
+                                      lib_name=package_name,
+                                      app_name=app_name,
+                                      mount=args.mount)
 
         table = []
         for _package in installed:
