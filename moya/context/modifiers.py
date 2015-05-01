@@ -288,6 +288,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return token_hash
 
     def d(self, context, v):
+        if isinstance(v, Decimal):
+            return v
         return Decimal(v)
 
     def data(self, context, v):

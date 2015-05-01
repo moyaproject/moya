@@ -30,9 +30,9 @@ class WidgetBase(LogicElement):
             app = self.get_parameter(context, 'from') or None
         if app is None:
             try:
-                app = self.archive.get_app_from_lib(self._lib_long_name)
+                app = self.archive.detect_app(context, self._lib_long_name)
             except:
-                app = context.get('.app', None)
+                app = None
         if app is None:
             self.throw("widget.ambiguous-app",
                        "unable to detect app for this widget (you may need to supply the 'from' attribute)")

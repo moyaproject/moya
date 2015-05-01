@@ -14,7 +14,7 @@ _moya_exception_errors = {
                            """You may need to add a &lt;install/&gt; tag to your *server.xml*.""",
 
     "widget.ambiguous-app": """Moya doesn't know which application to use for this widget because the library is installed multiple times.\n\n"""
-                            """You can resolve this ambiguity by adding an 'app' attribute to the tag."""
+                            """You can resolve this ambiguity by adding a 'from' attribute to the tag."""
 
 }
 

@@ -232,21 +232,23 @@ class Mount(LogicElement):
         params = self.get_parameters(context)
         app = self.archive.find_app(params.app)
         server = self.get_ancestor('server')
+        url_params = self.get_let_map(context, check_missing=False)
+        url_params['app'] = app.name
         mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint",
                                                                "name",
                                                                params.mountpoint)
         app.mounts.append((params.mountpoint, params.url))
         server.urlmapper.mount(params.url,
                                mountpoint.urlmapper,
-                               defaults={'app': app.name},
-                               name=params.name,
+                               defaults=url_params,
+                               name=params.name or app.name,
                                priority=params.priority)
 
         for stage, urlmapper in server.middleware.items():
             urlmapper.mount(params.url,
                             mountpoint.middleware[stage],
-                            defaults={'app': app.name},
-                            name=params.name,
+                            defaults=url_params,
+                            name=params.name or app.name,
                             priority=params.priority)
         startup_log.debug("%s (%s) mounted on %s", app, params.mountpoint, params.url)
 
@@ -779,12 +781,12 @@ class Server(LogicElement):
             if moya_trace2 is None:
                 moya_trace2 = trace.build(context, None, None, error2, sys.exc_info(), request)
 
-
-        log.error('unhandled exception ({})'.format(error))
-        try:
-            context['.console'].obj(context, moya_trace)
-        except:
-            pass
+        if error is not None:
+            log.error('unhandled exception ({})'.format(error))
+            try:
+                context['.console'].obj(context, moya_trace)
+            except:
+                pass
 
         context.reset()
         context.safe_delete('._callstack',

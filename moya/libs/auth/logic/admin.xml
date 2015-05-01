@@ -22,7 +22,7 @@
         <column title="ID" sort="id">${object.id}</column>
         <column title="Username" sort="username" link="yes">${object.username}</column>
         <column title="Active?" sort="active">
-            <check ticked="object.active" />
+            <w:check if="object.active" />
         </column>
         <column title="First name" sort="first_name">${object.first_name}</column>
         <column title="Last name" sort="last_name">${object.last_name}</column>

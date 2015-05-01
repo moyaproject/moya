@@ -115,7 +115,7 @@
                     adapt="int:value"
                     required="not column.blank"/>
                 <forms:validate-field field="${column.name}">
-                    <forms:fail if="not column.blank and not validint:value">
+                    <forms:fail if="(value and not validint:value) or (not value and not column.blank)">
                         Must be an integer
                     </forms:fail>
                 </forms:validate-field>
@@ -124,6 +124,23 @@
                     <return value="column.null ? None : column.default" />
                 </forms:adapt-field>
 
+                <case if="column.type=='decimal'"/>
+                <forms:input label="${str:column.label or title:column.name}"
+                    name="${column.name}"
+                    help="${str:column.help}"
+                    initial="str:object[column.name]"
+                    adapt="str:value"
+                    required="not column.blank"/>
+                <forms:validate-field field="${column.name}">
+                    <forms:fail if="(value and not validfloat:value) or (not value and not column.blank)">
+                        Must be a number
+                    </forms:fail>
+
+                </forms:validate-field>
+                <forms:adapt-field field="${column.name}">
+                    <return value="d:value" if="value" />
+                    <return value="column.null ? None : column.default" />
+                </forms:adapt-field>
 
                 <case if="column.type=='float'"/>
                 <forms:input label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}" type="number"
@@ -131,7 +148,7 @@
                     adapt="float:value"
                     required="not column.blank" />
                 <forms:validate-field field="${column.name}">
-                    <forms:fail if="not validfloat:value">
+                    <forms:fail if="(value and not validfloat:value) or (not value and not column.blank)">
                         Must be a number
                     </forms:fail>
                 </forms:validate-field>
@@ -237,7 +254,7 @@
 
 		</for>
 
-        <for src="model.relationships" dst="relationship">
+        <for src="model.relationships" dst="relationship" if="not new">
 
             <if test="relationship.picker">
 
@@ -277,7 +294,6 @@
                         <db:query src="remove_objects" filter="relationship_id in value.removed" dst="remove_objects" />
                         <remove values="remove_objects" src="object[field.name]" />
                     </if>
-
                 </forms:apply-field>
             </if>
             <else>

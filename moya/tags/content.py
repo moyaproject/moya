@@ -154,10 +154,9 @@ class ContentElement(ContextElementBase):
         node = self
         nodes = [(app, node)]
         extends_ref = node.extends
-
         while extends_ref:
             element_refs.add(extends_ref)
-            node_app, node = self.document.get_app_element(extends_ref, app=app)
+            node_app, node = self.document.detect_app_element(context, extends_ref, app=app)
             app = node_app or app
             if node is None:
                 break

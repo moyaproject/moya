@@ -962,7 +962,7 @@ class URLNode(Node):
                 app = _in
             else:
                 try:
-                    app = environment.archive.find_app(_in)
+                    app = environment.archive.detect_app(context, _in)
                 except Exception as e:
                     raise self.render_error(text_type(e), original=e, diagnosis="Check the 'from' attribute for typos.")
         else:

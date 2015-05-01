@@ -22,11 +22,12 @@ class TagBase(LogicElement):
             app = self.get_parameter(context, 'from') or None
         if app is None:
             try:
-                app = self.archive.get_app_from_lib(self._lib_long_name)
+                app = self.archive.get_app_from_lib(self._lib_long_name, current=context['.app'])
             except Exception as e:
-                self.throw("tag.ambiguous-app",
-                           text_type(e),
-                           diagnosis="You may need to supply the 'from' attribute")
+                if app is None:
+                    self.throw("tag.ambiguous-app",
+                               text_type(e),
+                               diagnosis="You may need to supply the 'from' attribute")
         return app
 
     def logic(self, context):

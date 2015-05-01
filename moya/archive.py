@@ -528,7 +528,7 @@ class Archive(object):
     def has_app(self, app_id):
         return app_id in self.apps
 
-    def get_app_from_lib(self, lib):
+    def get_app_from_lib(self, lib, current=None):
         if isinstance(lib, Library):
             lib_name = lib.long_name
         else:
@@ -539,6 +539,9 @@ class Archive(object):
         if len(apps) != 1:
             if not apps:
                 raise errors.AppRequiredError(lib_name)
+            if current:
+                if current.name in apps:
+                    return current
             raise errors.AmbiguousAppError(lib_name, apps)
         return self.apps[apps[0]]
 
@@ -571,6 +574,36 @@ class Archive(object):
                 if not apps:
                     raise KeyError("No app called '{}'".format(name))
                 if len(apps) != 1:
+                    raise errors.AmbiguousAppError(name, apps)
+                return self.apps[apps[0]]
+            else:
+                return self.apps[name]
+        except KeyError:
+            raise errors.UnknownAppError(app=name)
+
+    def detect_app(self, context, name):
+        """
+        Find an app from either its name or its libname
+
+        if the app is ambiguous, attempt to detect it from the callstack.
+
+        """
+        if isinstance(name, Application):
+            return name
+        if not name:
+            raise errors.UnknownAppError("Value {} is not a valid app or lib name".format(context.expr(name)))
+        try:
+            if '.' in name:
+                apps = self.apps_by_lib[name]
+                if not apps:
+                    raise KeyError("No app called '{}'".format(name))
+                if len(apps) != 1:
+                    _app = context['.app']
+                    if _app and _app.name in apps:
+                        return _app
+                    for c in reversed(context['._callstack']):
+                        if c.app.name in apps:
+                            return c.app
                     raise errors.AmbiguousAppError(name, apps)
                 return self.apps[apps[0]]
             else:

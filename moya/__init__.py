@@ -17,3 +17,7 @@ pilot = Pilot()
 import decimal
 
 decimal.Decimal.__moyarepr__ = lambda self, context: "d:'{}'".format(text_type(self))
+
+_decimal_str = decimal.Decimal.__str__
+decimal.Decimal.__str__ = lambda self: "{:f}".format(self.normalize())
+decimal.Decimal.__unicode__ = decimal.Decimal.__str__

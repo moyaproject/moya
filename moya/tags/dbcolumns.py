@@ -13,6 +13,7 @@ from sqlalchemy import (Column,
                         ForeignKey,
                         BigInteger,
                         Integer,
+                        Numeric,
                         SmallInteger,
                         String,
                         Float,
@@ -334,6 +335,21 @@ class IntegerColumn(MoyaDBColumn):
 
     def adapt(self, value):
         return int(value)
+
+
+class DecimalColumn(MoyaDBColumn):
+    dbtype = Numeric
+
+    def __init__(self, type, name, precision=20, scale=2, *args, **kwargs):
+        self.precision = precision
+        self.scale = scale
+        super(DecimalColumn, self).__init__(type, name, *args, **kwargs)
+
+    def get_sa_type(self):
+        return self.dbtype(precision=self.precision,
+                           scale=self.scale,
+                           decimal_return_scale=self.scale,
+                           asdecimal=True)
 
 
 class BigIntegerColumn(IntegerColumn):

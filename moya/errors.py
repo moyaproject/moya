@@ -172,7 +172,7 @@ class ElementNotFoundError(MoyaError):
     hide_py_traceback = True
     error_type = "Element not found error"
 
-    def __init__(self, elementref, app=None, lib=None, msg=None):
+    def __init__(self, elementref, app=None, lib=None, msg=None, reason=None):
         if isinstance(elementref, tuple):
             xmlns, ref = elementref
             elementref = "{{" + xmlns + "}}" + ref
@@ -181,12 +181,14 @@ class ElementNotFoundError(MoyaError):
         self.lib = lib
         if msg is None:
             if app or lib:
-                msg = "element '{elementref}' not found in {obj}".format(elementref=self.elementref,
+                msg = "unable to reference element '{elementref}' in {obj}".format(elementref=self.elementref,
                                                                          obj=self.app or self.lib)
             else:
-                msg = "element '{elementref}' was not found".format(elementref=self.elementref)
+                msg = "unable to reference element '{elementref}'".format(elementref=self.elementref)
         else:
             msg = msg.replace('{', '{{').replace('}', '}}')
+        if reason is not None:
+            msg = "{} ({})".format(msg, reason)
         super(ElementNotFoundError, self).__init__(msg, elementref=elementref)
 
     # def get_message(self):

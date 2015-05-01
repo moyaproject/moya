@@ -341,10 +341,22 @@ class Document(object):
             if lib_id is not None:
                 try:
                     app = self.archive.find_app(lib_id)
-                except:
-                    raise ElementNotFoundError(element_ref, app=app)
+                except Exception as e:
+                    raise ElementNotFoundError(element_ref, app=app, reason=text_type(e))
                 element_ref = "{}#{}".format(app.name, name)
         return self.get_element(element_ref, app=app)
+
+    def detect_app_element(self, context, element_ref, app=None):
+        if '#' in element_ref:
+            app_id, lib_id, name = self.archive.parse_element_ref(element_ref)
+            if lib_id is not None:
+                try:
+                    app = self.archive.detect_app(context, lib_id)
+                except Exception as e:
+                    raise ElementNotFoundError(element_ref, app=app, reason=text_type(e))
+                element_ref = "{}#{}".format(app.name, name)
+        return self.get_element(element_ref, app=app)
+
 
     def qualify_element_ref(self, element_ref, app=None, lib=None):
         if element_ref.find('#', 1) != -1:

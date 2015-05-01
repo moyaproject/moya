@@ -9,20 +9,17 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
     from lxml.etree import fromstring, ElementTree, parse
     from lxml.etree import XML, Comment
 
+    changes = 0
     with fsopendir(project_path) as project_fs:
         with project_fs.opendir(server_xml_location) as server_fs:
 
             with server_fs.open(server_xml, 'rb') as server_xml_file:
                 root = parse(server_xml_file)
 
-            import_tag = XML('<import location="{lib_path}"/><!-- added by moya-pm -->\n\n'.format(lib_path=lib_path))
+            import_tag = XML('<import location="{lib_path}"/>'.format(lib_path=lib_path))
             import_tag.tail = "\n"
 
-            if mount is not None:
-                tag = '<install name="{app_name}" lib="{lib_name}" mount="{mount}" /><!-- added by moya-pm -->'
-            else:
-                tag = '<install name="{app_name}" lib="{lib_name}" /><!-- added by moya-pm -->'
-            install_tag = XML(tag.format(app_name=app_name, lib_name=lib_name, mount=mount))
+            install_tag = XML('<install name="{app_name}" lib="{lib_name}" />'.format(app_name=app_name, lib_name=lib_name, mount=mount))
             install_tag.tail = "\n"
 
             def has_child(node, tag, **attribs):
@@ -33,17 +30,25 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
 
             server_el = "{{http://moyaproject.com}}server[@docname='{}']".format(server_name)
             for server in root.findall(server_el):
-                add_import_tag = not has_child(server,
-                                               "{http://moyaproject.com}import",
-                                               location=lib_path)
-                add_install_tag = not has_child(server,
-                                                "{http://moyaproject.com}install",
-                                                lib=lib_name)
-                if add_import_tag:
+                def get_comment():
+                    comment = Comment('added by moya-pm')
+                    return comment
+                if not has_child(server, "{http://moyaproject.com}import", location=lib_path):
                     server.insert(0, import_tag)
-                if add_install_tag:
+                    server.insert(0, get_comment())
+                    changes += 1
+                if not has_child(server, "{http://moyaproject.com}install", lib=lib_name):
+                    server.append(Comment('added by moya-pm'))
                     server.append(install_tag)
+                    changes += 1
+                    if mount is not None and app_name is not None:
+                        if not has_child(server, "{http://moyaproject.com}mount", app_name=app_name):
+                            mount_tag = XML('<mount app="{app_name}" url="{mount}" />'.format(app_name=app_name, mount=mount))
+                            mount_tag.tail = '\n'
+                            server.append(get_comment())
+                            server.append(mount_tag)
+                            changes += 1
 
             with open_atomic_write(server_fs, server_xml, 'wb') as server_xml_file:
                 root.write(server_xml_file)
-    return add_import_tag or add_install_tag
+    return bool(changes)

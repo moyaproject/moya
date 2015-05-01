@@ -28,6 +28,7 @@ from .. import pilot
 from json import loads
 from collections import namedtuple
 from random import choice
+import uuid
 
 from sqlalchemy import (Table,
                         Column,
@@ -1093,6 +1094,20 @@ class _Float(FieldElement):
         """
 
 
+class _Decimal(FieldElement):
+    """Defines a fixed precision number field in a <model>. Use this field element for currency."""
+    moya_column = dbcolumns.DecimalColumn
+
+    precision = Attribute("number of digits", type="integer", default=36)
+    scale = Attribute("number of digits after the decimal point", type="integer", default=8)
+
+    class Help:
+        synopsis = """a fix precision number"""
+        example = """
+            <decimal name="balance" precision="12" scale="2" />
+        """
+
+
 class _Integer(FieldElement):
     """Defines an [i]integer[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.IntegerColumn
@@ -1202,28 +1217,34 @@ class UUID(FieldElement):
     moya_column = dbcolumns.StringColumn
 
     length = Attribute("Maximum length of UUID (should be >= 36)", required=False, default=36, type="integer")
-    #length = 36
 
-    version = Attribute("Type of UUID", choices=['1', '2', '3', '4', '5'], default="1")
-    namespace = Attribute("Namespace (if using variant 3 or 5)", choices=["dns", 'url', 'oid', 'x500'], default="dns")
-    name = Attribute("Name in namespace (if using variant 3 or 5)", default="moyaproject.org")
+    version = Attribute("Type of UUID", choices=['1', '3', '4', '5'], default="1")
+    nstype = Attribute("Namespace (if using variant 3 or 5)", choices=["dns", 'url', 'oid', 'x500'], default="url")
+    nsname = Attribute("Name in namespace (if using variant 3 or 5)", default="http://moyaproject.org")
 
-    _non_field_attributes = ['version', 'namespace', 'name']
+    _non_field_attributes = ['version', 'nstype', 'nsname']
+
+    _namespace_map = {
+        "dns": uuid.NAMESPACE_DNS,
+        "url": uuid.NAMESPACE_URL,
+        "oid": uuid.NAMESPACE_OID,
+        "x500": uuid.NAMESPACE_X500
+    }
 
     def get_default(self, context):
-        import uuid
-        version, namespace, name = self.get_parameters(context,
-                                                       'version',
-                                                       'namespace',
-                                                       'name')
+        version, nstype, nsname = self.get_parameters(context,
+                                                      'version',
+                                                      'nstype',
+                                                      'nsname')
+        namespace = self._namespace_map[nstype]
         if version == "1":
             uid = uuid.uuid1()
         elif version == "3":
-            uid = uuid.uuid3(namespace, name)
+            uid = uuid.uuid3(namespace, nsname)
         elif version == "4":
             uid = uuid.uuid4()
         elif version == "5":
-            uid = uuid.uuid5(namespace, name)
+            uid = uuid.uuid5(namespace, nsname)
         uid_value = text_type(uid)
         return uid_value
 
