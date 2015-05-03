@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from .containers import OrderedDict
 from . import iniparse
-from .compat import text_type, string_types, PY2, implements_to_string
+from .compat import text_type, string_types, PY2, implements_to_string, implements_bool
 from . import errors
 from .tools import textual_list
 
@@ -213,6 +213,7 @@ class SettingsSectionContainer(OrderedDict):
         super(SettingsSectionContainer, self).__setitem__(key, value)
 
 
+@implements_bool
 class EmptySettings(object):
     def __getitem__(self, key):
         if key == "list":
@@ -222,6 +223,9 @@ class EmptySettings(object):
         if key == "int":
             return 0
         return ''
+
+    def __repr__(self):
+        return "<emptysettings>"
 
     def get_int(self, key, default=None):
         return default
@@ -234,6 +238,9 @@ class EmptySettings(object):
 
     def get(self, key, default=None):
         return default
+
+    def __bool__(self):
+        return False
 
     def __unicode__(self):
         return ''

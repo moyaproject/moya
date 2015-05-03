@@ -57,7 +57,7 @@
         <doc>Renders a link, styled as a button.</doc>
         <signature>
             <attribute name="name" type="text" default=""/>
-            <attribute name="app" type="text" required="no" default="" />
+            <attribute name="app" type="text" required="no" default="" empty="no"/>
             <attribute name="url" required="no" />
             <attribute name="with" required="no" type="expression"/>
             <attribute name="class" required="no" default="btn btn-default"/>

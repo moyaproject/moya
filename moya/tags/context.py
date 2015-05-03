@@ -2283,6 +2283,7 @@ class CacheReturn(ContextElementBase):
             cache_key = make_cache_key(cache_key_data)
         if cache_local:
             cache_key = "{}--{}".format(self.libid, cache_key)
+
         cache = self.archive.get_cache(cache_name)
         cache_result = cache.get(cache_key, Ellipsis)
         if cache_result is Ellipsis:

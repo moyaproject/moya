@@ -779,6 +779,7 @@ class OneToOne(_ForeignKey):
                                              options=params.options,
                                              orderby=params.orderby,
                                              backref=params.backref,
+                                             picker=params.picker,
                                              uselist=False)
             ref_model.element.add_reference(model.libid)
             return col
@@ -1412,7 +1413,7 @@ class GetOrCreate(DBDataSetter):
     class Help:
         synopsis = """Get an object from the database, or create it if it doesn't exist."""
         example = """
-            <db:getcreate model="#Permission" let:name="'admin'"
+            <db:get-or-create model="#Permission" let:name="'admin'"
                 let:description="'User may perform administration tasks'" />
         """
 
@@ -1483,8 +1484,7 @@ class GetOrCreate(DBDataSetter):
                               model.libid,
                               signal_params)
 
-        if dst is not None:
-            dst = self.set_context(context, params.dst, value)
+        dst = self.set_context(context, dst, value)
         if params.created:
             context[params.created] = created
 
@@ -2163,7 +2163,7 @@ class Query(DBDataSetter):
                 qs = src._get_query_set()
             else:
                 qs = src
-            table_class = src.table_class
+            table_class = dbobject(src).table_class
         else:
             if params.model:
                 try:

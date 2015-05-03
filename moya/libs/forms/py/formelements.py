@@ -869,7 +869,7 @@ class Apply(LogicElement):
         <forms:apply src="form" dst="post" />
         """
 
-    src = Attribute("form", type="index", default="form")
+    src = Attribute("form", type="index", default="form", evaldefault=True)
     dst = Attribute("Destination object", type="reference", default=None)
     fields = Attribute("fields to apply", type="commalist", default=None)
 
@@ -885,7 +885,8 @@ class Apply(LogicElement):
             if field_names is None:
                 fields = list(form.fields)
             else:
-                fields = [form.fields[name] for name in field_names]
+                fields_map = form.fields_map
+                fields = [fields_map[name] for name in field_names]
 
             for field in fields:
                 applyers = form.field_applyers[field.name]
