@@ -213,6 +213,8 @@ def sync_all(archive, console):
     if validate_all(archive, console) != 0:
         return -1
     engines = archive.database_engines
+    if not engines:
+        return 0
     for engine in itervalues(engines):
         if engine.default:
             default_engine = engine
@@ -222,6 +224,7 @@ def sync_all(archive, console):
 
     apps = archive.apps.values()
 
+    synced = []
     try:
         with console.progress('syncing', num_steps=len(apps), width=24) as progress:
             progress.update(None, 'building models...')
@@ -229,7 +232,6 @@ def sync_all(archive, console):
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):
                     model._build_model(app)
 
-            synced = []
             for app in apps:
                 progress.update(None, 'syncing {!r}'.format(app))
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):
@@ -247,7 +249,6 @@ def sync_all(archive, console):
     finally:
         for app in synced:
             console(text_type(app), bold=True, fg="magenta")(" synced", bold=True, fg="black").nl()
-
     return 0
 
 

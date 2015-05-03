@@ -31,6 +31,7 @@ function JSONRPC(url, options)
     function complete() {};
     function tasks() {};
 
+    var options = options || {};
     self.success = options.success || success;
     self.error = options.error || error;
     self.failure = options.failure || failure;
