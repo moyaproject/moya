@@ -848,13 +848,13 @@ class Set(DataSetter):
     class Help:
         synopsis = """create a set object"""
         example = """
-        <list dst="hobbits">
+        <set dst="hobbits">
             <str>Sam</str>
             <str>Bilbo</str>
             <str>Frodo</str>
             <str>Bilbo</str>
             <str>Sam</str>
-        </list>
+        </set>
         <!-- Will display 3, because duplicates are removed -->
         <echo>There are ${len:hobbits} in the set.</echo>
 
@@ -909,6 +909,22 @@ class Dict(DataSetter):
 
         with context.scope(dst):
             yield DeferNodeContents(self)
+
+
+class Unpack(DataSetter):
+    """Unpack the keys and values in an object, and set them on the parent"""
+
+    obj = Attribute("Object to unpack", type="expression")
+
+    def logic(self, context):
+        obj = self.obj(context)
+        try:
+            items = obj.items()
+        except:
+            self.throw('bad-value.map-required',
+                       'a dict or other mapping is required for obj')
+        for k, v in items:
+            self.set_context(context, context.escape(k), v)
 
 
 class MakeToken(DataSetter):

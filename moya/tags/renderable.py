@@ -14,6 +14,21 @@ from ..compat import py2bytes, text_type
 from fs.errors import FSError
 
 
+class ResolveTemplate(DataSetter):
+    """Resolve a relative template and return a absolute path"""
+
+    class Help:
+        synopsis = "resolve a relative template path"
+
+    path = Attribute("Template path", required=True)
+    _from = Attribute("Application", type="application", required=False, default=None)
+
+    def get_value(self, context):
+        app = self.get_app(context)
+        template_path = app.resolve_template(self.path(context))
+        return template_path
+
+
 class RenderTemplate(DataSetter):
     """Render a template"""
 

@@ -8,6 +8,15 @@ from .. import errors
 from ..logic import DeferNodeContents
 
 
+class GetParentElement(DataSetter):
+    class Help:
+        synopis = "get information about the parent element"
+
+    def get_value(self, context):
+        element_proxy = self.parent.get_proxy(context, app=context['.app'])
+        return element_proxy
+
+
 class GetElement(DataSetter):
     """Retrieve information regarding an element."""
 
@@ -23,7 +32,6 @@ class GetElement(DataSetter):
         name = self.name(context)
         dst = self.dst(context)
         element_app, element = self.get_element(name, app=app)
-
         element_proxy = element.get_proxy(context, element_app)
         self.set_context(context, dst, element_proxy)
 

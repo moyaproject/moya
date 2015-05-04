@@ -452,6 +452,9 @@ class _EscapeCodeWrap(Node):
     def __init__(self, node):
         self._node = node
 
+    def __getattr__(self, k):
+        return getattr(self._node, k)
+
     def render(self, environment, context, template, text_escape):
         for c in self._node.render(environment, context, template, text_escape):
             yield text_escape(c)
@@ -462,7 +465,7 @@ class CodeNode(Node):
     tag_name = "code"
 
     def render(self, environment, context, template, text_escape):
-        yield iter(_EscapeCodeWrap(child) for child in self.children)
+        yield iter(child if isinstance(child, text_type) else _EscapeCodeWrap(child) for child in self.children)
 
 
 class RootNode(Node):
@@ -1822,6 +1825,7 @@ class Template(object):
                                      original=e.original,
                                      code=current_node.template.source)
         except Exception as e:
+            raise
             raise errors.RenderError("render error",
                                      current_node.template.path,
                                      *current_node.location,

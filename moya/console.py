@@ -70,6 +70,7 @@ class XMLHighlighter(ConsoleHighlighter):
         "attribute": "not bold cyan",
         "string": "yellow",
         "substitution": "bold magenta",
+        "templatetag": "bold magenta",
         "braced": "bold",
         "comment": "dim white italic"
     }
@@ -80,6 +81,7 @@ class XMLHighlighter(ConsoleHighlighter):
         r'(?P<string>\".*?\")',
         r'(?P<braced>\{.*?\})',
         r'(?P<substitution>\$\{.*?\})',
+        r'(?P<templatetag>\{\%.*?\%\})',
         r'(?P<comment>\<\!\-\-.*?\-\-\>)',
     ]
 

@@ -49,6 +49,8 @@ class WidgetBase(LogicElement):
         td.pop('_if', None)
         let_map = self.get_let_map(context)
         widget_app = self.get_widget_app(context)
+        if '_caller' not in td:
+            td['_caller'] = self.get_proxy(context, context['.app'])
 
         def on_yield(context, app, content, element, data):
             context.push_frame(widget_frame)

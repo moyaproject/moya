@@ -545,6 +545,10 @@ class Context(object):
                 setattr(self, method_name, make_sync(self, method))
         self.thread_safe = True
 
+    @classmethod
+    def escape(cls, v):
+        return v.replace('.', '\\.')
+
     def __repr__(self):
         return "<context>"
 
