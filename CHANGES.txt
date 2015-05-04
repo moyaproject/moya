@@ -13,6 +13,8 @@ Added 'root' url to moya.static
 Fixed moya-srv restart not loading master settings
 Added <db:property> tag and attributes .display_name and .full_name to auth model
 Added <db:decimal> db field
+Added <get-parent-element> tag
+Added <resolve-template> tag
 Added <unpack> tag
 
 0.5.12
