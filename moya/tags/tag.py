@@ -33,6 +33,10 @@ class TagBase(LogicElement):
     def logic(self, context):
         dst, lazy = self.get_parameters(context, 'dst', 'lazy')
         params = self.get_all_parameters(context)
+        if self._let_dst:
+            params[self._let_dst] = self.get_let_map(context)
+        if '_caller' not in params:
+            params['_caller'] = self.get_proxy(context, context['.app'])
 
         app = self.get_tag_app(context)
 
@@ -172,6 +176,7 @@ class Tag(ElementBase):
     name = Attribute("Tag name", required=True)
     synopsis = Attribute("Short description of tag")
     undocumented = Attribute("Set to yes to disabled documentation for this tag", type="boolean", default=False)
+    let = Attribute("Let destination", required=False, default=None)
 
     _tag_base = TagBase
 
@@ -227,7 +232,7 @@ class Tag(ElementBase):
                          'source_line': self.source_line,
                          '_code': self._code,
                          '_lib_long_name': context.get('._lib_long_name', None)})
-
+        cls_dict['_let_dst'] = params.let
         cls_dict.update({'_attribute_' + k: v for k, v in attributes.items()})
 
         tag_class = type(py2bytes(params.name),

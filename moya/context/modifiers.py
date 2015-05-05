@@ -40,6 +40,7 @@ import copy
 from collections import OrderedDict
 from datetime import datetime
 from operator import truth
+import random
 from math import ceil, floor, log
 
 
@@ -641,6 +642,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def title(self, context, v):
         return text_type(v).title()
+
+    def token(self, context, v):
+        try:
+            size = int(v)
+        except:
+            raise ValueError('token: modifier requires an integer')
+        if size < 1:
+            raise ValueError('token: modifer requires a size >= 1')
+        return ''.join(random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for _ in range(size))
 
     def json(self, context, v):
         return moyajson.dumps(v)

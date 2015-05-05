@@ -16,6 +16,7 @@ Added <db:decimal> db field
 Added <get-parent-element> tag
 Added <resolve-template> tag
 Added <unpack> tag
+Added token modifier
 
 0.5.12
 ------
