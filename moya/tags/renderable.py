@@ -49,8 +49,7 @@ class RenderTemplate(DataSetter):
         value.update(self.get_let_map(context))
         if params.withscope:
             value.update(context['.call'])
-        context['_render'] = value
-        with context.scope('_render'):
+        with context.data_scope(value):
             yield DeferNodeContents(self)
         self.on_value(context, value)
 

@@ -25,7 +25,8 @@
     </view>
 
     <view libname="view.editpage" requires="permission:'admin'">
-        <db:get-required model="#Page" let:name="url.pagename" dst="page"/>
+        <db:get model="#Page" let:name="url.pagename" dst="page"/>
+        <return if="not page"/>
         <forms:get form="#form.editpage" dst="form" src="page" let:page="page"/>
         <forms:validate-post src="form">
             <forms:apply src="form" dst="page" />
@@ -35,7 +36,8 @@
     </view>
 
     <view libname="view.deletepage" requires="permission:'admin'">
-        <db:get-required model="#Page" let:name="url.pagename" dst="page"/>
+        <db:get model="#Page" let:name="url.pagename" dst="page"/>
+        <return if="not page"/>
         <forms:get form="#form.deletepage" dst="form" withscope="yes"/>
         <forms:validate-post src="form">
             <redirect name="showpage" let:pagename="page.name" if="not form.data.delete"/>

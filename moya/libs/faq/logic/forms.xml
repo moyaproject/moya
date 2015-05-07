@@ -10,7 +10,7 @@
         <input class="input-block-level" name="question" label="Question" maxlength="60" src="question" dst="question" required="yes"/>
         <field name="answer" label="Answer" src="answer" dst="answer">
             <wysihtml5:editor/>
-         </field>
+        </field>
     </form>
 
     <form xmlns="http://moyaproject.com/forms" extends="#form.faqbase" libname="form.createfaq" legend="Create Question">
