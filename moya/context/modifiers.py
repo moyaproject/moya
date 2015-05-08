@@ -381,6 +381,14 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except:
             return None
 
+    def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+        seq, key = v
+        result = OrderedDict()
+        for item in seq:
+            k = _get(item, key)
+            result.setdefault(k, []).append(item)
+        return result
+
     def hasdata(self, context, v):
         try:
             data_fs = context['.fs']['data']

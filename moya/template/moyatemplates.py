@@ -1594,7 +1594,10 @@ class Template(object):
                     if comment < 0:
                         raise errors.UnmatchedCommentError("Unbalanced end comment",
                                                            self.path,
-                                                           lineno, start, end)
+                                                           lineno + 1, start + 1, end,
+                                                           raw_path=self.raw_path,
+                                                           diagnosis="Check that there is a corresponding {# for every #}",
+                                                           code=self.source)
                     pos = end
                     continue
                 if comment:
@@ -1622,10 +1625,10 @@ class Template(object):
         if comment:
             raise errors.UnmatchedCommentError("End of comment expected before end of template",
                                                self.path,
-                                               lineno,
-                                               start,
-                                               end,
-                                               code=self.template.source)
+                                               lineno + 1, start + 1, len(line),
+                                               raw_path=self.raw_path,
+                                               diagnosis="Check that there is a corresponding {# for every #}",
+                                               code=self.source)
         return tokens
 
     def parse(self, environment):

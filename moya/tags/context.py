@@ -1717,7 +1717,7 @@ class Sleep(ContextElementBase):
         synopsis = """wait for while"""
         example = """<sleep for="10s"/> <!-- do nothing for 10 seconds -->"""
 
-    _for = Attribute("Time", required=True, type="timespan")
+    _for = Attribute("Amount of time to sleep for", required=True, type="timespan")
 
     def logic(self, context):
         t = self.get_parameter(context, 'for')
@@ -1730,13 +1730,13 @@ class Map(DataSetter):
     class Help:
         synopsis = "map an expression on to sequence"
         example = """
-        <dict dst="crew">
-            <dict let:name="john" let:species="human" />
-            <dict let:name="rygel" let:species="hynerian" />
-            <dict let:name="aeryn" let:species="peacekeeper" />
-        </dict>
+        <list dst="crew">
+            <dict let:name="'john'" let:species="'human'" />
+            <dict let:name="'rygel'" let:species="'hynerian'" />
+            <dict let:name="'aeryn'" let:species="'peacekeeper'" />
+        </list>
         <map src="crew" dst="manifest"
-            value="sub:'${title:name$} is ${species}'" />
+            value="sub:'${title:name} is ${species}'" />
         <!-- ['John is human', 'Rygen is hynerian', 'Aeryn is peacekeeper'] -->
         """
 
@@ -1757,17 +1757,54 @@ class Map(DataSetter):
         return result
 
 
+class Group(DataSetter):
+    """
+    Group a sequence in to a list of values with common keys.
+
+    """
+
+    class Help:
+        synopsis = "group a sequence by common keys"
+        example = """
+        <list dst="crew">
+            <dict let:name="'Rygel'" let:species="'hynerian'" />
+            <dict let:name="'Aeryn'" let:species="'peacekeeper'" />
+            <dict let:name="'Jothee'" let:species="'luxan'" />
+            <dict let:name="'D\'Argo'" let:species="'luxan'" />
+        </list>
+        <group src="crew" key="species" value="name" dst="by_species" />
+        <!-- {'hynerian': ['Rygel'], 'peacekeeper': ['Aeryn'], 'luxan': ['Jothee', 'D\'Argo']} -->
+
+        """
+
+    src = Attribute("Source sequence", required=True, type="expression")
+    dst = Attribute("Destination", required=False, type="reference")
+    key = Attribute("Key", required=True, type="function")
+    value = Attribute("Expression", required=False, type="function", default="$$", evaldefault=True)
+
+    def get_value(self, context):
+        result = OrderedDict()
+        objects, dst, _key, _value = self.get_parameters(context, 'src', 'dst', 'key', 'value')
+        key_func = _key.get_scope_callable(context)
+        value_func = _value.get_scope_callable(context)
+        for obj in objects:
+            key = key_func(obj)
+            value = value_func(obj)
+            result.setdefault(key, []).append(value)
+        return result
+
+
 class MapDict(DataSetter):
     """Create a list of dictionaries from a sequence."""
 
     class Help:
         synopsis = "generate a list of dictionaries"
         example = """
-        <dict dst="crew">
-            <dict let:name="john" let:species="human" />
-            <dict let:name="rygel" let:species="hynerian" />
-            <dict let:name="aeryn" let:species="peacekeeper" />
-        </dict>
+        <list dst="crew">
+            <dict let:name="'john'" let:species="'human'" />
+            <dict let:name="'rygel'" let:species="'hynerian'" />
+            <dict let:name="'aeryn'" let:species="'peacekeeper'" />
+        </list>
         <map-dict src="crew" dst="crew" let:name="title:name" let:human="species == 'human'"/>
         <!-- [{'name':John, 'human':yes}, {'name':Rygel, 'human':no}, {'name':'Aeryn',  'human':no}] -->
         """

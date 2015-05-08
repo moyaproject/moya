@@ -17,6 +17,7 @@ Added <get-parent-element> tag
 Added <resolve-template> tag
 Added <unpack> tag
 Added token modifier
+Adde <group> tag
 
 0.5.12
 ------
