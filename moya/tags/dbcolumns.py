@@ -333,6 +333,13 @@ class FloatColumn(MoyaDBColumn):
 class IntegerColumn(MoyaDBColumn):
     dbtype = Integer
 
+    def __init__(self, type, name, choices=None, *args, **kwargs):
+        if choices is None:
+            self.choices = choices
+        else:
+            self.choices = list(choices or [])
+        super(IntegerColumn, self).__init__(type, name, *args, **kwargs)
+
     def adapt(self, value):
         return int(value)
 

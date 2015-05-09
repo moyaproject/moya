@@ -39,7 +39,7 @@ from sqlalchemy import (Table,
                         UniqueConstraint)
 
 from sqlalchemy.sql import text
-from sqlalchemy.orm import mapper, relationship, backref
+from sqlalchemy.orm import mapper, relationship, backref, aliased
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
@@ -1112,6 +1112,8 @@ class _Decimal(FieldElement):
 class _Integer(FieldElement):
     """Defines an [i]integer[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.IntegerColumn
+
+    choices = Attribute("A sequence of possible choices", type="expression")
 
     class Help:
         synopsis = """a field that stores an integer"""

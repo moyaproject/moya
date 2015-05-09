@@ -74,7 +74,9 @@ class ExpressionContext(object):
         return "<expressioncontext '{}'>".format(self.exp)
 
     def process_qs(self, qs):
-        for i, j in enumerate(self.joins):
+        return qs
+        # TODO: Is this deprecated now?
+        for j in self.joins:
             if isinstance(j, (tuple, list)):
                 qs = qs.join(*j)
             else:
