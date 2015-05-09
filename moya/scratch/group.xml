@@ -1,0 +1,28 @@
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="main">
+        <list dst="crew">
+            <dict let:name="'Rygel'" let:species="'hynerian'" />
+            <dict let:name="'Aeryn'" let:species="'peacekeeper'" />
+            <dict let:name="'Jothee'" let:species="'luxan'" />
+            <dict let:name="'D\'Argo'" let:species="'luxan'" />
+        </list>
+        <group src="crew" key="species" value="name" dst="by_species" />
+        <echo obj="by_species" />
+        <echo>${debug:by_species}</echo>
+
+        <list dst="crew">
+            <dict let:name="'john'" let:species="'human'" />
+            <dict let:name="'rygel'" let:species="'hynerian'" />
+            <dict let:name="'aeryn'" let:species="'peacekeeper'" />
+        </list>
+        <map src="crew" dst="manifest"
+            value="sub:'${title:name} is ${species}'" />
+
+        <echo obj="manifest" />
+
+    </macro>
+
+
+</moya>
