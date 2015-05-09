@@ -25,7 +25,7 @@ from pyparsing import (Word,
 ParserElement.enablePackrat()
 
 from sqlalchemy import and_, or_, func
-#from sqlalchemy.orm import aliased
+from sqlalchemy.orm import aliased
 
 import operator
 import re
@@ -65,12 +65,16 @@ def pairs(tokenlist):
 
 
 class ExpressionContext(object):
-    def __init__(self):
+    def __init__(self, exp):
+        self.exp = exp
         self.joins = []
         super(ExpressionContext, self).__init__()
 
+    def __repr__(self):
+        return "<expressioncontext '{}'>".format(self.exp)
+
     def process_qs(self, qs):
-        for j in self.joins:
+        for i, j in enumerate(self.joins):
             if isinstance(j, (tuple, list)):
                 qs = qs.join(*j)
             else:
@@ -430,7 +434,7 @@ class DBExpression(object):
         return self.exp
 
     def eval(self, archive, context, app=None):
-        exp_context = ExpressionContext()
+        exp_context = ExpressionContext(self.exp)
         eval = self.compile_cache(self.exp)
         try:
             result = eval(archive, context, app, exp_context)
@@ -439,7 +443,7 @@ class DBExpression(object):
         return result
 
     def eval2(self, archive, context, app=None):
-        exp_context = ExpressionContext()
+        exp_context = ExpressionContext(self.exp)
         eval = self.compile_cache(self.exp)
         try:
             result = eval(archive, context, app, exp_context)
