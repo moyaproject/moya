@@ -1,0 +1,44 @@
+.moya-widgets-select
+{
+
+    border:1px solid rgba(0,0,0,0.15);
+    z-index:10;
+    background-color:#fff;
+
+    margin-top:4px;
+    border-radius:3px;
+
+    padding:0px 0px;
+
+    overflow:auto;
+    max-height:100px;
+}
+
+.moya-widgets-option
+{
+    padding:5px 10px;
+    color:#333;
+}
+
+.moya-widgets-option:hover
+{
+    background-color:#f4f4f4;
+    cursor:pointer;
+}
+
+.moya-widgets-option.active
+{
+    background-color:#428bca;
+    color:#fff;
+    opacity:.7;
+}
+
+.moya-widgets-select-container.focused .moya-widgets-select
+{
+
+}
+
+.moya-widgets-select-container.focused .moya-widgets-option.active
+{
+    opacity:1;
+}
