@@ -1,3 +1,3 @@
-<div class="moya-widgets-option option-${index}" data-value="${value}">
+<div class="moya-widgets-option option-${index}{% if field.value==value %} active{% endif %}" data-value="${value}" data-index="${index}">
 {% children %}
 </div>

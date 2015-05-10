@@ -161,6 +161,11 @@
             <!-- <attribute name="options" required="yes"/> -->
             <attribute name="multiple" required="no" type="boolean" default="no" />
         </signature>
+        <make-token dst="id" />
+        <include-css path="css/moya-widgets.css"/>
+        <include-js path="js/moya-widgets.js"/>
+        <dict dst="options"/>
+        <js>$("#${id}").moyaSelect(${json:options});</js>
     </widget>
 
     <widget name="option" template="option.html" synopsis="option in a select">
