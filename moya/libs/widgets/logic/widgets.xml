@@ -155,4 +155,19 @@
     </widget>
 
     <widget name="show-code" template="showcode.html" synopsis="render contents as code" container="yes"/>
+
+    <widget name="select" template="select.html" synopsis="an alternative form select widget" container="yes" text="no">
+        <signature>
+            <!-- <attribute name="options" required="yes"/> -->
+            <attribute name="multiple" required="no" type="boolean" default="no" />
+        </signature>
+    </widget>
+
+    <widget name="option" template="option.html" synopsis="option in a select">
+        <signature>
+            <attribute name="value" required="yes"/>
+        </signature>
+    </widget>
+
+
 </moya>

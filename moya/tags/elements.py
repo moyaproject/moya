@@ -102,7 +102,7 @@ class GetChildren(DataSetter):
     element_ref = Attribute("Element Reference", default=None)
     element = Attribute("Element", type="expression", default=None)
     tag = Attribute("Element type")
-    ns = Attribute("XML namespace", type="namespace")
+    ns = Attribute("XML namespace", type="namespace", default=None)
     dst = Attribute("Destination", type="reference", default=None)
     data = Attribute("Data only", type="boolean", default=False)
 
@@ -120,6 +120,9 @@ class GetChildren(DataSetter):
                                      'dst',
                                      'data')
         app = getattr(element, 'app', None)
+        if element is None and element_ref is None:
+            element_ref = self.parent.libid
+
         if element is not None:
             if not hasattr(element, '__moyaelement__'):
                 self.throw("bad-value.not-an-element",

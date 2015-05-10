@@ -20,6 +20,10 @@ class WidgetBase(LogicElement):
         text_nodes = "text"
         is_call = True
 
+    class NoTextMeta:
+        text_nodes = None
+        is_call = True
+
     def __init__(self, *args, **kwargs):
         self.init_args = (args, kwargs)
         super(WidgetBase, self).__init__(*args, **kwargs)
@@ -133,6 +137,7 @@ class Widget(ElementBase):
     container = Attribute("Is this widget a container?", type="boolean", default=True, required=False)
     synopsis = Attribute("Short description of the widget")
     undocumented = Attribute("Set to yes to disabled documentation for this tag", type="boolean", default=False)
+    text = Attribute("Include text children?", type="boolean", default=True)
 
     def finalize(self, context):
         params = self.get_parameters(context)
@@ -172,7 +177,10 @@ class Widget(ElementBase):
         cls_dict['xmlns'] = params.ns or self.lib.namespace or namespaces.default
         cls_dict.update(('_attribute_' + k, v)
                         for k, v in attributes.items())
-        cls_dict['Meta'] = WidgetBase.Meta
+        if params.text:
+            cls_dict['Meta'] = WidgetBase.Meta
+        else:
+            cls_dict['Meta'] = WidgetBase.NoTextMeta
         cls_dict['_registry'] = self.archive.registry
 
         if params.container:
