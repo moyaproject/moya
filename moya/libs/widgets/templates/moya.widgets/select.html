@@ -1,3 +1,4 @@
+<input id="${widget_id}" class="moya-editor-textarea form-control ${field.class}" name="${name or field.name}" value="${field.value or ''}"/>
 <div class="moya-widgets-select well">
 {% for index, child in enumerate:self.children %}
     {% render child with index=index %}
