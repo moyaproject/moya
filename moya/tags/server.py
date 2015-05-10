@@ -224,7 +224,7 @@ class Mount(LogicElement):
     app = Attribute('Application', required=True)
     url = Attribute("Url", required=True)
     mountpoint = Attribute("Mount point", required=False, default="main")
-    name = Attribute("Name", required=False)
+    #name = Attribute("Name", required=False)
     priority = Attribute("Priority (highest priority is checked first)", type="integer", required=False, default=0)
 
     def logic(self, context):
@@ -241,14 +241,14 @@ class Mount(LogicElement):
         server.urlmapper.mount(params.url,
                                mountpoint.urlmapper,
                                defaults=url_params,
-                               name=params.name or app.name,
+                               name=app.name,
                                priority=params.priority)
 
         for stage, urlmapper in server.middleware.items():
             urlmapper.mount(params.url,
                             mountpoint.middleware[stage],
                             defaults=url_params,
-                            name=params.name or app.name,
+                            name=app.name,
                             priority=params.priority)
         startup_log.debug("%s (%s) mounted on %s", app, params.mountpoint, params.url)
 

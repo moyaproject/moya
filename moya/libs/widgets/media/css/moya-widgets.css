@@ -29,8 +29,12 @@
 .moya-widgets-option.active
 {
     background-color:#428bca;
-    color:#fff;
     opacity:.7;
+}
+
+.moya-widgets-option.active *
+{
+    color:#fff !important;
 }
 
 .moya-widgets-select-container.focused .moya-widgets-select

@@ -19,7 +19,7 @@
         <doc>Renders an error message.</doc>
     </widget>
 
-    <widget name="well" template="well.html" synopsis="render a well">
+    <widget name="well" template="well.html" synopsis="render a well" text="no">
         <doc>Renders a well (highlighted panel)</doc>
     </widget>
     <widget name="small-well" template="small-well.html" synopsis="render a small well">
@@ -50,14 +50,14 @@
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
         <update values="with" src="url_with" if="with" />
-        <get-url name="${name}" from="${app}" with="url_with" dst="url" if="name and not url"/>
+        <get-url name="${name}" from="${app or _caller.app.name}" with="url_with" dst="url" if="name and not url"/>
     </widget>
 
     <widget name="button-link" template="buttonlink.html" let="params" synopsis="render a link styled as a button">
         <doc>Renders a link, styled as a button.</doc>
         <signature>
             <attribute name="name" type="text" default=""/>
-            <attribute name="app" type="text" required="no" default="${.app.name}"/>
+            <attribute name="app" type="text" required="no"/>
             <attribute name="url" required="no" />
             <attribute name="with" required="no" type="expression"/>
             <attribute name="class" required="no" default="btn btn-default"/>
@@ -66,7 +66,7 @@
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
         <update values="with" src="url_with" if="with" />
-        <get-url name="${name}" from="${app}" with="url_with" dst="url" if="not url"/>
+        <get-url name="${name}" from="${app or _caller.app.name}" with="url_with" dst="url" if="not url"/>
     </widget>
 
     <widget name="buttons" template="buttons.html" synopsis="renders enclosed links as buttons">

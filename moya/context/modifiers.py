@@ -24,8 +24,10 @@ from ..context.tools import to_expression
 from ..context.missing import Missing
 from ..tools import unique
 from ..reader import ReaderError
+from ..render import render_object
 from .. import connectivity
 from .. import moyajson
+from .. import pilot
 
 from fs.path import (basename,
                      pathjoin,
@@ -538,6 +540,13 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def relto(self, context, v):
         base = dirname(context.get('.request.path', '/'))
         return relativefrom(base, text_type(v))
+
+    def render(self, context, v):
+        archive = context['.app.archive']
+        if archive is None:
+            return text_type(v)
+        html = render_object(v, archive, context, 'html')
+        return html
 
     def renderable(self, context, v):
         return getattr(v, '__moyarenderable__', lambda c: v)(context)

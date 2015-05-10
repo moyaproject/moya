@@ -39,11 +39,11 @@ from sqlalchemy import (Table,
                         UniqueConstraint)
 
 from sqlalchemy.sql import text
-from sqlalchemy.orm import mapper, relationship, backref, aliased
+from sqlalchemy.orm import mapper, relationship, backref
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
-from sqlalchemy import event
+from sqlalchemy import event, func, distinct
 
 
 ExtendedDefinition = namedtuple('ExtendedDefinition', ['columns',
@@ -104,6 +104,7 @@ class MoyaQuerySet(interface.AttributeExposer):
         self._qs = qs
         self.table_class = table_class
         self.dbsession = session
+        self._count = None
 
     def __repr__(self):
         if self.table_class:
@@ -120,7 +121,7 @@ class MoyaQuerySet(interface.AttributeExposer):
 
     @wrap_db_errors
     def __len__(self):
-        return self._qs.count()
+        return self.count
 
     @property
     def sql(self):
@@ -147,7 +148,15 @@ class MoyaQuerySet(interface.AttributeExposer):
 
     @property
     def count(self):
-        return self._qs.count()
+        if self._count is None:
+            #return self._qs.count()
+            self._count = sum(1 for _ in self._qs)
+
+            # if self.table_class:
+            #     self._count = self.dbsession.query(self.table_class.id).count()
+            # else:
+            #     self._count = self._qs.count()
+        return self._count
 
     @property
     def exists(self):
