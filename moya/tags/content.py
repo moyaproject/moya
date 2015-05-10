@@ -582,6 +582,25 @@ class IncludeJS(IncludeCSS):
     format = """<script src="{path}"></script>"""
 
 
+class RenderProxy(object):
+
+    def __init__(self, obj, td):
+        self.obj = obj
+        self.td = td
+        self.moya_render_targets = obj.moya_render_targets
+
+    def on_content_insert(self, context):
+        if hasattr(self.obj, 'on_content_insert'):
+            return self.obj.on_content_insert(context)
+
+    def moya_render(self, archive, context, target, options):
+        options['with'] = self.td
+        return self.obj.moya_render(archive, context, target, options)
+
+        #rendered = render_object(self.obj, archive, context, target, options={'with': self.td})
+        #return rendered
+
+
 class Render(DataSetter, ContentElementMixin):
     """
     Render a [i]renderable[/i] object.
@@ -604,9 +623,9 @@ class Render(DataSetter, ContentElementMixin):
                                                'src',
                                                'dst',
                                                'target')
-
+        td = self.get_let_map(context)
         if src is None:
-            section = Section(None, td=self.get_let_map(context), name=self.libid)
+            section = Section(None, td=td, name=self.libid)
             self.push_content_frame(context, section)
             try:
                 yield logic.DeferNodeContents(self)
@@ -619,7 +638,7 @@ class Render(DataSetter, ContentElementMixin):
         if not is_renderable(obj) and not is_safe(obj):
             obj = Unsafe(obj)
         if content_container is not None:
-            content_container.add_renderable(self._tag_name, obj)
+            content_container.add_renderable(self._tag_name, RenderProxy(obj, td))
         else:
             rendered = render_object(obj, self.archive, context, target)
             self.set_context(context, dst, rendered)

@@ -188,6 +188,9 @@ def make_table_class(model, name, columns, app, table):
 
 class TableClassBase(object):
     """The base class for dynamically created classes that map on to DB abstractions"""
+
+    moya_render_targets = ['html']
+
     def __init__(self, **kwargs):
         moyadb = self._moyadb
         adapt = moyadb.adapt
@@ -241,6 +244,8 @@ class TableClassBase(object):
         template = self._app.resolve_template(template)
         render_container = RenderContainer.create(self._app, template=template)
         render_container['self'] = self
+        if 'with' in options:
+            render_container.update(options['with'])
         return render_container.moya_render(archive, context, target, options)
 
     def __getitem__(self, key):
