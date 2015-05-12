@@ -2017,6 +2017,7 @@ class SortMap(DBDataSetter):
     src = Attribute("Query to sort", type="reference", default=None, metavar="QUERYSET", missing=False, required=True)
     sort = Attribute("Sort value?", type="expression", required=False, evaldefault=True, default=".request.GET.sort")
     reverse = Attribute("Reverse order?", type="expression", required=False, default=".request.GET.order=='desc'", evaldefault=True)
+    columns = Attribute("Sort columns", type="expression", required=False)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -2032,7 +2033,10 @@ class SortMap(DBDataSetter):
         if hasattr(qs, '_get_query_set'):
             qs = qs._get_query_set()
 
-        sort_map = {}
+        sort_map = params.columns or {}
+        if not hasattr(sort_map, 'items'):
+            self.throw("bad-value.columns",
+                       "Columns attribute should be a dict or other mapping")
         with context.data_scope(sort_map):
             yield DeferNodeContents(self)
 
