@@ -17,19 +17,29 @@
         var $input = $this.find('input');
         var $options = $this.find('.moya-widgets-select')
 
+        var $active = $this.find('.moya-widgets-option.active');
+        if($active.length)
+        {
+            selection = parseInt($active.data('index'));
+        }
 
-        var height = 0;
-        $options.find('.moya-widgets-option').each(function(i, el){
-            if(i>=10)
-            {
-                return false;
-            }
-            height += $(el).outerHeight();
-        });
-        var gutter = $options.outerHeight() - $options.innerHeight();
-        height += gutter;
-        $options.css('max-height', height + 'px');
-
+        function update_height()
+        {
+            var $o = $options.clone();
+            $('body').append($o);
+            var height = 0;
+            $o.find('.moya-widgets-option').each(function(i, el){
+                if(i>=10)
+                {
+                    return false;
+                }
+                height += $(el).outerHeight();
+            });
+            var gutter = $o.outerHeight() - $o.innerHeight();
+            height += gutter;
+            $options.css('max-height', height + 'px');
+            $o.remove();
+        }
 
         $input.focus(function(e){
             $this.addClass('focused');
@@ -54,11 +64,14 @@
         {
             $this.find('.moya-widgets-option').removeClass('active');
             $this.find('.moya-widgets-option.option-' + selection).addClass('active');
-            var value = $this.find('.moya-widgets-option.active').data('value');
+            var $active = $this.find('.moya-widgets-option.active');
+            var value = $active.data('value');
+
+            if (!$active.length)
+            {
+                return;
+            }
             $input.val(value);
-
-
-            var $active = $options.find('.moya-widgets-option.active');
             var row_h = $active.outerHeight();
             var container_h = $options.height();
             var scroll = $options.scrollTop();
@@ -120,6 +133,9 @@
 
             }
         });
+
+        update_height();
+        refresh_selection();
     }
 
 })(jQuery);

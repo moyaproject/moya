@@ -587,7 +587,8 @@ class RenderProxy(object):
     def __init__(self, obj, td):
         self.obj = obj
         self.td = td
-        self.moya_render_targets = obj.moya_render_targets
+        if hasattr(obj, 'moya_render_targets'):
+            self.moya_render_targets = obj.moya_render_targets
 
     def on_content_insert(self, context):
         if hasattr(self.obj, 'on_content_insert'):
@@ -596,9 +597,6 @@ class RenderProxy(object):
     def moya_render(self, archive, context, target, options):
         options['with'] = self.td
         return self.obj.moya_render(archive, context, target, options)
-
-        #rendered = render_object(self.obj, archive, context, target, options={'with': self.td})
-        #return rendered
 
 
 class Render(DataSetter, ContentElementMixin):

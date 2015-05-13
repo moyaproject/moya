@@ -36,7 +36,7 @@
 	</model>
 
 	<model name="Session" libname="Session" xmlns="http://moyaproject.com/db" repr="Session #${id} ${session_key}">
-		<foreign-key model="#User" name="user" null="no" blank="no" label="User"/>
+		<foreign-key model="#User" name="user" null="no" blank="no" label="User" picker="#admintable.users"/>
 		<string name="session_key" length="40" index="yes" label="Session key"/>
 		<datetime name="expire_date" label="Expires"/>
 	</model>

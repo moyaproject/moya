@@ -341,7 +341,8 @@ class LogFatal(Log):
 
 
 class Enum(ElementBase):
-    """Define and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.
+    """
+    Define and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.
 
     It is generally preferably to use an enumeration over hard-coded numbers; it makes code easier to read and maintain.
 
@@ -468,7 +469,8 @@ class Handle(LogicElement):
 
 
 class Fire(LogicElement):
-    """Fire (broadcast) a signal. Additional data may be provided to the signal handlers, by setting values in the [i]let map[/i]. Signals may be [i]handlers[/i] with the [tag]handle[/tag] tag.
+    """
+    Fire (broadcast) a signal. Additional data may be provided to the signal handlers, by setting values in the [i]let map[/i]. Signals may be [i]handlers[/i] with the [tag]handle[/tag] tag.
 
     Moya will catch and log any exceptions raised by the signal handler(s).
 

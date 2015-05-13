@@ -948,10 +948,21 @@ class ManyToMany(DBElement, DBMixin):
                     def __repr__(self):
                         return "<ListCollection {}>".format(self._instance)
 
+                    @property
+                    def table_class(self):
+                        return ref_table_class
+
                     def __moyadbsubselect__(self, context):
                         dbsession = many_to_many.get_session(context, model.dbname)
                         qs = dbsession.query(getattr(assoc_table.c, right_key))
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, left_key))
+                        return qs
+
+                    def __moyaqs__(self, context):
+                        dbsession = many_to_many.get_session(context, model.dbname)
+                        qs = dbsession.query(getattr(assoc_table.c, right_key))
+                        qs = qs.filter(self._instance.id == getattr(assoc_table.c, left_key))
+                        qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
                         return qs
 
                     def __check_type__(self, obj):
@@ -964,10 +975,21 @@ class ManyToMany(DBElement, DBMixin):
                     def __repr__(self):
                         return "<ListCollection {}>".format(self._instance)
 
+                    @property
+                    def table_class(self):
+                        return model.get_table_class(app)
+
                     def __moyadbsubselect__(self, context):
                         dbsession = many_to_many.get_session(context, model.dbname)
                         qs = dbsession.query(getattr(assoc_table.c, left_key))
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
+                        return qs
+
+                    def __moyaqs__(self, context):
+                        dbsession = many_to_many.get_session(context, model.dbname)
+                        qs = dbsession.query(getattr(assoc_table.c, left_key))
+                        qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
+                        qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
                         return qs
 
                     def __check_type__(self, obj):
@@ -1353,6 +1375,13 @@ class DBDataSetter(DataSetter, DBMixin):
     class Help:
         undocumented = True
 
+    def _qs(self, context, value):
+        if hasattr(value, '__moyaqs__'):
+            return value.__moyaqs__(context)
+        if hasattr(value, '_get_query_set'):
+            value = value._get_query_set()
+        return value
+
 
 class Create(DBDataSetter):
     """Create new object in the database."""
@@ -1633,6 +1662,7 @@ class Get(DBDataSetter):
     dst = Attribute("Destination", type="reference", default=None)
     _from = Attribute("Application", type="application", default=None)
     filter = Attribute("Filter expression", type="dbexpression", required=False, default=None)
+    src = Attribute("query set to restrict search", type="expression", required=False, default=None)
 
     @classmethod
     def _get_attributes_query(cls, element, context, table_class, let_map):
@@ -1686,9 +1716,18 @@ For example **let:{k}="name or 'anonymous'"**
 
         #query = ((getattr(table_class, k) == v) for k, v in query.items())
 
+
         query = self._get_attributes_query(self, context, table_class, query)
 
-        qs = dbsession.query(table_class).filter(*query)
+        if params.src:
+            src = params.src
+            qs = self._qs(context, src)
+            # if hasattr(src, '_get_query_set'):
+            #     qs = src._get_query_set()
+            # else:
+            #     qs = src
+        else:
+            qs = dbsession.query(table_class).filter(*query)
 
         if filter is not None:
             qs = qs.filter(filter)
@@ -2178,12 +2217,13 @@ class Query(DBDataSetter):
         table_class = None
 
         if params.src is not None:
-            src = params.src
-            if hasattr(src, '_get_query_set'):
-                qs = src._get_query_set()
-            else:
-                qs = src
-            table_class = dbobject(src).table_class
+            qs = self._qs(context, params.src)
+            #src = params.src
+            #if hasattr(src, '_get_query_set'):
+            #    qs = src._get_query_set()
+            #else:
+            #    qs = src
+            table_class = dbobject(params.src).table_class
         else:
             if params.model:
                 try:
@@ -2458,15 +2498,20 @@ class Update(DBDataSetter):
         <db:update src="votes" let:topic="#Vote.score + 1" />
         """
 
-    src = Attribute("Queryset", required=True, type="index", metavar="QUERYSET")
+    src = Attribute("Queryset", required=True, type="expression", metavar="QUERYSET")
+    db = Attribute("Database", default="_default")
+    synchronize = Attribute("Synchronize session strategy", choices=['none', 'fetch', 'evaulate'], default="fetch")
 
     def logic(self, context):
         params = self.get_parameters(context)
         dbsession = self.get_session(context, params.db)
-        qs = self.src(context)
+        qs = self._qs(context, self.src(context))
         let = self.get_let_map(context, lambda l: DBExpression(l).eval(self.archive, context))
+        sync = params.synchronize
+        if sync == 'none':
+            sync = None
         with dbsession.manage(self):
-            qs._qs.update(let)
+            qs.update(let, synchronize_session=sync)
 
 
 class Commit(DBContextElement):
