@@ -589,6 +589,8 @@ class RenderProxy(object):
         self.td = td
         if hasattr(obj, 'moya_render_targets'):
             self.moya_render_targets = obj.moya_render_targets
+        if hasattr(obj, 'html_safe'):
+            self.html_safe = obj.html_safe
 
     def on_content_insert(self, context):
         if hasattr(self.obj, 'on_content_insert'):
@@ -636,7 +638,7 @@ class Render(DataSetter, ContentElementMixin):
         if not is_renderable(obj) and not is_safe(obj):
             obj = Unsafe(obj)
         if content_container is not None:
-            content_container.add_renderable(self._tag_name, RenderProxy(obj, td))
+            content_container.add_renderable(self._tag_name, RenderProxy(obj, td) if hasattr(obj, 'moya_render') else obj)
         else:
             rendered = render_object(obj, self.archive, context, target)
             self.set_context(context, dst, rendered)
