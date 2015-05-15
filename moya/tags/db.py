@@ -1275,17 +1275,21 @@ class UUID(FieldElement):
                                                       'version',
                                                       'nstype',
                                                       'nsname')
-        namespace = self._namespace_map[nstype]
-        if version == "1":
-            uid = uuid.uuid1()
-        elif version == "3":
-            uid = uuid.uuid3(namespace, nsname)
-        elif version == "4":
-            uid = uuid.uuid4()
-        elif version == "5":
-            uid = uuid.uuid5(namespace, nsname)
-        uid_value = text_type(uid)
-        return uid_value
+
+        def getter():
+            namespace = self._namespace_map[nstype]
+            if version == "1":
+                uid = uuid.uuid1()
+            elif version == "3":
+                uid = uuid.uuid3(namespace, nsname)
+            elif version == "4":
+                uid = uuid.uuid4()
+            elif version == "5":
+                uid = uuid.uuid5(namespace, nsname)
+            uid_value = text_type(uid)
+            return uid_value
+
+        return getter
 
 
 class Timezone(FieldElement):

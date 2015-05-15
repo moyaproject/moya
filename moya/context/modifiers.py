@@ -513,8 +513,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
         split_on = ' '
         if isinstance(v, list):
             try:
-                v = text_type(v[0])
                 split_on = text_type(v[1])
+                v = text_type(v[0])
             except IndexError:
                 pass
         else:
