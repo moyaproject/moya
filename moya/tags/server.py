@@ -30,6 +30,7 @@ from .. import db
 from ..response import MoyaResponse
 from ..request import ReplaceRequest
 from ..compat import urlencode
+from .. import tools
 
 from webob import Response
 
@@ -250,7 +251,7 @@ class Mount(LogicElement):
                             defaults=url_params,
                             name=app.name,
                             priority=params.priority)
-        startup_log.debug("%s (%s) mounted on %s", app, params.mountpoint, params.url)
+        startup_log.debug("%s (%s) mounted on %s", app, params.mountpoint, tools.normalize_url_path(params.url))
 
 
 class GetURL(DataSetter):

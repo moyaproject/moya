@@ -7,6 +7,7 @@ from .. import errors
 from ..elements.attributetypes import *
 from ..contextenum import ContextEnum
 from ..compat import iteritems, text_type, reload
+from .. import tools
 
 from fs.path import pathjoin
 from fs.opener import fsopendir
@@ -238,7 +239,7 @@ class Install(LogicElement):
                                 defaults={'app': app.name},
                                 name=params.name,
                                 priority=params.urlpriority)
-            startup_log.debug("%s installed, mounted on %s", app, params.mount)
+            startup_log.debug("%s installed, mounted on %s", app, tools.normalize_url_path(params.mount))
         else:
             startup_log.debug("%s installed", app)
 
