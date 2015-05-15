@@ -337,6 +337,15 @@ def show_tb(f):
     return deco
 
 
+def normalize_url_path(p):
+    """Makes sure a URL path starts and ends with a forward slash"""
+    if not p.startswith('/'):
+        p = '/' + p
+    if not p.endswith('/'):
+        p = p + '/'
+    return p
+
+
 @implements_to_string
 class lazystr(object):
     """convert to a string lazily, for use in logging"""
