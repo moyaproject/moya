@@ -32,11 +32,12 @@ If multiple versions match, the most up-to-date will be returned.
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from .interface import AttributeExposer
-from .compat import text_type, implements_to_string
+from moya.interface import AttributeExposer
+from moya.compat import text_type, implements_to_string
 
 
 import re
+from itertools import izip_longest
 
 
 _re_version = re.compile(r'^([\d\.]+)(?:\-([0-9A-Za-z-\.]+))?$')
@@ -133,6 +134,19 @@ class Version(AttributeExposer):
                                    'tuple',
                                    'base']
 
+    @classmethod
+    def _cmp_seq(cls, v1, v2):
+        """Compares a version sequence, padded with zeros to be the same size"""
+        for a, b in izip_longest(v1, v2, fillvalue=0):
+            # If types are different, treat them as text
+            if type(a) != type(b):
+                a = text_type(a)
+                b = text_type(b)
+            c = cmp(a, b)
+            if c:
+                return c
+        return 0
+
     def __init__(self, v):
         if isinstance(v, Version):
             self.release = v.release[:]
@@ -145,7 +159,7 @@ class Version(AttributeExposer):
             version_text, release = version_match.groups()
 
             if release:
-                self.release = release.split('.')
+                self.release = [int(r) if r.isdigit() else r for r in release.split('.')]
             else:
                 self.release = []
             try:
@@ -182,23 +196,20 @@ class Version(AttributeExposer):
     def text(self):
         text = ".".join(text_type(n) for n in self.number)
         if self.release:
-            text += "-{}".format('.'.join(self.release))
+            text += "-{}".format('.'.join(text_type(t) for t in self.release))
         return text
 
     def _cmp(self, other):
         other = Version(other)
-        if other.number > self.number:
-            return +1
-        elif other.number < self.number:
+        _cmp = self._cmp_seq(other.number, self.number)
+        if _cmp:
+            return _cmp
+        if other.release and not self.release:
             return -1
-        else:
-            if other.release or self.release:
-                if len(other.release) < len(self.release):
-                    return +1
-                elif len(other.release) > len(self.release):
-                    return -1
-                else:
-                    return cmp(other.release, self.release)
+        if self.release and not other.release:
+            return + 1
+        if other.release or self.release:
+            return self._cmp_seq(other.release, self.release)
         return 0
 
     def __eq__(self, other):
@@ -246,7 +257,7 @@ class Version(AttributeExposer):
     @property
     def base(self):
         if self.release:
-            return "{}.{}-{}".format(self.major, self.minor, '.'.join(self.release))
+            return "{}.{}-{}".format(self.major, self.minor, '.'.join(text_type(r) for r in self.release))
         else:
             return "{}.{}".format(self.major, self.minor)
 
@@ -278,7 +289,7 @@ if __name__ == "__main__":
     print(v.compare('1.0'))
 
     print(Version("1.2-beta"))
-    versions = ["0.1", "0.2", "0.2.0-dev", "0.1.1", "0.1.6", "1.0", "0.1.9", "0.5", "0.9.23", "1.1.0"]
+    versions = ["0", "1", "0.1", "0.2", "0.2.0-dev", "0.1.1", "0.2.0-dev.1", "0.2.0-dev.2", "0.2.0-2", "0.1.6", "1.0", "0.1.9", "0.5", "0.9.23", "1.1.0"]
     print("sorted", Version.sorted(versions))
     print(v.filter(versions))
     print(v.get_highest(versions))
@@ -288,7 +299,7 @@ if __name__ == "__main__":
     print(Version("1.3.4-beta").tuple)
 
     print()
-    v = Version("1.2-dev")
+    v = Version("1.2-dev.2")
     print(v)
     print(v > "1.1-dev")
     print("1.3-dev" > v)
@@ -300,3 +311,4 @@ if __name__ == "__main__":
     print(v.number)
     print(v.release)
     print(v.text)
+    print(v.base)
