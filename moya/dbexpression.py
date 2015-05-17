@@ -278,7 +278,7 @@ class EvalComparisonOp(object):
         a = qs(a)
         try:
             return a.in_(qs(b))
-        except NotImplementedError:
+        except:
             raise DBEvalError("db expression 'in' operator works on columns only (did you mean .id)?")
 
     def notin_(context, a, b):
@@ -289,7 +289,7 @@ class EvalComparisonOp(object):
         a = qs(a)
         try:
             return a.notin_(qs(b))
-        except NotImplementedError:
+        except:
             raise DBEvalError("db expression 'not in' operator works on columns only (did you mean .id)?")
 
     def contains_(context, a, b):

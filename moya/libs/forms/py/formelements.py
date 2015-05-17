@@ -1470,6 +1470,7 @@ class Fail(LogicElement):
     def logic(self, context):
         field = context['_field'].name
         context['form'].add_fail(field, context.sub(self.text.strip()))
+        raise logic.Unwind()
 
 
 class Actions(LogicElement):

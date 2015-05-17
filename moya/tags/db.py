@@ -1726,6 +1726,7 @@ For example **let:{k}="name or 'anonymous'"**
         if params.src:
             src = params.src
             qs = self._qs(context, src)
+            qs = qs.filter(*query)
             # if hasattr(src, '_get_query_set'):
             #     qs = src._get_query_set()
             # else:
