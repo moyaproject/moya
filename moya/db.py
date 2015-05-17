@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from sqlalchemy import create_engine, MetaData, event
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError, StatementError
@@ -28,7 +28,7 @@ class DBEngine(object):
         self.engine_name = engine_name
         self.engine = engine
         self.default = default
-        self.Session = sessionmaker(bind=engine)
+        self.Session = sessionmaker(bind=engine)  # expire_on_commit
         self.metadata = MetaData()
 
     def get_session(self):

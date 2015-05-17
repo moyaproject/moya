@@ -60,7 +60,7 @@ def render_object(obj, archive, context, target, options=None):
             rendered = ''
         else:
             rendered = obj
-    if not getattr(rendered, 'html_safe', False):
+    if target in ('', 'html') and not getattr(rendered, 'html_safe', False):
         rendered = escape(rendered)
     return rendered
 

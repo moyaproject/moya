@@ -172,7 +172,7 @@ class MailServer(object):
             failures = 0
             for email, msg in emails:
                 try:
-                    sender = getattr(email, 'from') or self.sender or 'admin@localhost'
+                    sender = text_type(getattr(email, 'from') or self.sender or 'admin@localhost')
                     smtp.sendmail(sender, ', '.join(email.to), msg)
                 except SMTPException:
                     if not fail_silently:

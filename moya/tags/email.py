@@ -95,7 +95,7 @@ class Get(LogicElement):
         synopsis = "get an email object"
 
     dst = Attribute("Destination to store exception object", type="reference", required=True)
-    email = Attribute("Destination to store exception object", type="elementref")
+    email = Attribute("Reference to email tag", type="elementref")
     subject = Attribute("Email subject", default=None)
     data = Attribute("Template / content data", type="expression", default=None)
 
@@ -179,9 +179,9 @@ class Send(Get):
             mail_server.send(email)
             log.info('sent email to "{}", subject "{}"'.format(email.to_text, email.subject or ''))
         except Exception as e:
-            log.error('failed to send email to "{}", with subject "{}"'.format(email.to_text, email.subject or ''))
+            raise
+            log.error('failed to send email to "%s", with subject "%s" (%s)', email.to_text, email.subject or '', e)
             if not fail_silently:
-                log.error('failed to sent email to "{}", with subject "{}"'.format(email.to_text, email.subject or ''))
                 self.throw('email.send-failed',
                            "Moya was unable to send email '{}' ({})".format(_email, e),
                            diagnosis="Check the [smtp:] section in settings, and that the mail server is running.",

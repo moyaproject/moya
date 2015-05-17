@@ -43,7 +43,7 @@ from sqlalchemy.orm import mapper, relationship, backref
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
-from sqlalchemy import event, func, distinct
+from sqlalchemy import event
 
 
 ExtendedDefinition = namedtuple('ExtendedDefinition', ['columns',
@@ -149,8 +149,8 @@ class MoyaQuerySet(interface.AttributeExposer):
     @property
     def count(self):
         if self._count is None:
-            #return self._qs.count()
-            self._count = sum(1 for _ in self._qs)
+            self._count = self._qs.count()
+            #self._count = sum(1 for _ in self._qs)
 
             # if self.table_class:
             #     self._count = self.dbsession.query(self.table_class.id).count()
@@ -958,8 +958,7 @@ class ManyToMany(DBElement, DBMixin):
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, left_key))
                         return qs
 
-                    def __moyaqs__(self, context):
-                        dbsession = many_to_many.get_session(context, model.dbname)
+                    def __moyaqs__(self, context, dbsession):
                         qs = dbsession.query(getattr(assoc_table.c, right_key))
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, left_key))
                         qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
@@ -985,8 +984,7 @@ class ManyToMany(DBElement, DBMixin):
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
                         return qs
 
-                    def __moyaqs__(self, context):
-                        dbsession = many_to_many.get_session(context, model.dbname)
+                    def __moyaqs__(self, context, dbsession):
                         qs = dbsession.query(getattr(assoc_table.c, left_key))
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
                         qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
@@ -1379,9 +1377,9 @@ class DBDataSetter(DataSetter, DBMixin):
     class Help:
         undocumented = True
 
-    def _qs(self, context, value):
+    def _qs(self, context, dbsession, value):
         if hasattr(value, '__moyaqs__'):
-            return value.__moyaqs__(context)
+            return value.__moyaqs__(context, dbsession)
         if hasattr(value, '_get_query_set'):
             value = value._get_query_set()
         return value
@@ -1725,7 +1723,7 @@ For example **let:{k}="name or 'anonymous'"**
 
         if params.src:
             src = params.src
-            qs = self._qs(context, src)
+            qs = self._qs(context, dbsession, src)
             qs = qs.filter(*query)
             # if hasattr(src, '_get_query_set'):
             #     qs = src._get_query_set()
@@ -2222,7 +2220,7 @@ class Query(DBDataSetter):
         table_class = None
 
         if params.src is not None:
-            qs = self._qs(context, params.src)
+            qs = self._qs(context, dbsession, params.src)
             #src = params.src
             #if hasattr(src, '_get_query_set'):
             #    qs = src._get_query_set()
@@ -2510,7 +2508,7 @@ class Update(DBDataSetter):
     def logic(self, context):
         params = self.get_parameters(context)
         dbsession = self.get_session(context, params.db)
-        qs = self._qs(context, self.src(context))
+        qs = self._qs(context, dbsession, self.src(context))
         let = self.get_let_map(context, lambda l: DBExpression(l).eval(self.archive, context))
         sync = params.synchronize
         if sync == 'none':
