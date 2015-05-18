@@ -45,6 +45,8 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
 
+import logging
+log = logging.getLogger('moya.db')
 
 ExtendedDefinition = namedtuple('ExtendedDefinition', ['columns',
                                                        'properties',
@@ -2603,19 +2605,24 @@ class Atomic(DBContextElement):
     @wrap_db_errors
     def logic(self, context):
         dbsession = self.get_session(context, self.db(context))
-        session = dbsession.session
 
-        session.begin_nested()
-        try:
-            yield DeferNodeContents(self)
-        except:
-            session.rollback()
-            raise
+        if dbsession.engine.driver == 'pysqlite':
+            log.warning('sqlite driver does not support <atomic>')
+            try:
+                yield DeferNodeContents(self)
+            except:
+                log.warning('exception in <atomic> block')
+                raise
         else:
-            session.commit()
-
-        # with dbsession.manage(self):
-        #     yield DeferNodeContents(self)
+            session = dbsession.session
+            session.begin_nested()
+            try:
+                yield DeferNodeContents(self)
+            except:
+                session.rollback()
+                raise
+            else:
+                session.commit()
 
 
 class Transaction(DBContextElement):

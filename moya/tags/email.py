@@ -179,7 +179,6 @@ class Send(Get):
             mail_server.send(email)
             log.info('sent email to "{}", subject "{}"'.format(email.to_text, email.subject or ''))
         except Exception as e:
-            raise
             log.error('failed to send email to "%s", with subject "%s" (%s)', email.to_text, email.subject or '', e)
             if not fail_silently:
                 self.throw('email.send-failed',
