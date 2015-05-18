@@ -20,9 +20,7 @@
         <if test=".request.cookies.session">
             <db:get model="#Session" dst="session" let:key=".request.cookies.session" />
             <if test="session">
-                <db:transaction>
-                    <let session.expire_time=".now + timespan:.app.settings.expire" /> <!-- extend session for an hour -->
-                </db:transaction>
+                <let session.expire_time=".now + timespan:.app.settings.expire" />
                 <return value="session"/>
             </if>
         </if>

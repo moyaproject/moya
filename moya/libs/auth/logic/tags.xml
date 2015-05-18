@@ -152,12 +152,10 @@
             <attribute name="name" required="yes"/>
             <attribute name="description" required="no" />
         </signature>
-        <db:atomic>
-            <db:get-or-create model="#Permission"
-                let:name="name"
-                initial="{'description':description}"
-                dst="permission" />
-        </db:atomic>
+        <db:get-or-create model="#Permission"
+            let:name="name"
+            initial="{'description':description}"
+            dst="permission" />
     </tag>
 
     <tag name="add-permission" synopsis="add a permission to a group or user">
@@ -185,9 +183,7 @@
             <attribute name="user" required="no" type="expression">A user object</attribute>
             <attribute name="group" required="yes">The name of a group</attribute>
         </signature>
-        <db:atomic>
-            <db:get-existing model="#Group" let:name="group" dst="group" />
-            <append src="user.groups" value="group" />
-        </db:atomic>
+        <db:get-existing model="#Group" let:name="group" dst="group" />
+        <append src="user.groups" value="group" />
     </tag>
 </moya>

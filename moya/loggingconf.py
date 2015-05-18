@@ -44,7 +44,7 @@ _logging_level_names = {0: 'NOTSET',
                         'CRITICAL': 50}
 
 
-def init_logging_fs(logging_fs, path, disable_existing_loggers=False):
+def init_logging_fs(logging_fs, path, disable_existing_loggers=True):
 
     ini_path = path
     ini_stack = []
@@ -62,7 +62,7 @@ def init_logging_fs(logging_fs, path, disable_existing_loggers=False):
     return _init_logging(ini_path, ini_stack, disable_existing_loggers)
 
 
-def init_logging(path, disable_existing_loggers=False):
+def init_logging(path, disable_existing_loggers=True):
     """Sane logging.ini"""
 
     ini_path = path
@@ -86,8 +86,8 @@ def init_logging(path, disable_existing_loggers=False):
     return _init_logging(ini_path, ini_stack, disable_existing_loggers)
 
 
-def _init_logging(path, ini_stack, disable_existing_loggers=False):
-
+def _init_logging(path, ini_stack, disable_existing_loggers=True):
+    ini_path = path
     ini_stack = ini_stack[::-1]
     ini = ini_stack[0]
     for extend_ini in ini_stack[1:]:

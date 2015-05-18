@@ -709,13 +709,15 @@ class Server(LogicElement):
         status_code = StatusCode.not_found
         response = None
         try:
-            try:
-                for result in self._dispatch_mapper(archive, context, self.urlmapper, url, method, breakpoint=breakpoint):
-                    response = self._dispatch_result(archive, context, request, result)
-                    if response:
-                        return response_middleware(response)
-            finally:
-                db.commit_sessions(context)
+            for result in self._dispatch_mapper(archive, context, self.urlmapper, url, method, breakpoint=breakpoint):
+
+                response = self._dispatch_result(archive, context, request, result)
+                if response:
+                    response = response_middleware(response)
+                    db.commit_sessions(context)
+                    return response
+                else:
+                    db.commit_sessions(context)
 
         except Exception as e:
             db.rollback_sessions(context)
