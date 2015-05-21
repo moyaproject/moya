@@ -30,9 +30,10 @@ class ContextEnumValue(object):
         return self.label
 
     def __moyaconsole__(self, console):
-        console("<value {} '{}.{}')>".format(self.id,
-                                             self.enum.name,
-                                             self.label), bold=True, fg="magenta").nl()
+        console("<value '{}.{}' ({}))>".format(self.label,
+                                               self.id,
+                                               self.enum.name,
+                                               self.label), bold=True, fg="magenta").nl()
 
     def __eq__(self, other):
         # Other enum values only compare if they are the same type

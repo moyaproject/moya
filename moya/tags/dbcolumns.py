@@ -367,10 +367,8 @@ class SmallIntegerColumn(IntegerColumn):
 class StringColumn(MoyaDBColumn):
     def __init__(self, type, name, length=None, choices=None, *args, **kwargs):
         self.length = length
-        if choices is None:
-            self.choices = choices
-        else:
-            self.choices = list(choices or [])
+        self.choices = choices
+
         super(StringColumn, self).__init__(type, name, *args, **kwargs)
 
     def get_sa_type(self):

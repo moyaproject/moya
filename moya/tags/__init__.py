@@ -25,8 +25,7 @@ __all__ = ['cookie',
            'filter',
            'unittest',
            'request',
-           'system'
-           ]
+           'system']
 
 from . import cookie
 from . import command

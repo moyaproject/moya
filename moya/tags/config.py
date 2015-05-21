@@ -8,6 +8,7 @@ from ..elements.attributetypes import *
 from ..contextenum import ContextEnum
 from ..compat import iteritems, text_type, reload
 from .. import tools
+from .. import timezone
 
 from fs.path import pathjoin
 from fs.opener import fsopendir
@@ -341,6 +342,49 @@ class LogFatal(Log):
         synopsis = "write information to the log"
 
 
+class Choices(ElementBase):
+    """
+    Define choices, used by db models
+
+    """
+
+    def finalize(self, context):
+        self.choices = choices = []
+        append = choices.append
+        for choice in self.get_children('choice'):
+            append(choice.get_parameters(context, 'value', 'label'))
+
+
+class Choice(ElementBase):
+    """
+    An individual choice
+
+    """
+
+    value = Attribute("Choice value")
+    label = Attribute("Label to display")
+
+    def finalize(self, context):
+        params = self.get_parameters(context)
+        choices_parent = self.get_ancestor('choices')
+
+
+class GetChoices(DataSetter):
+    """
+    Get choice data from a [tag]choices[/tag] tag
+
+    """
+    choices = Attribute("Choices element", type="elementref", required="yes")
+    _from = Attribute("Application", type="application", required=False, default=None)
+
+
+    def get_value(self, context):
+        app, choices = self.get_parameters(context, 'from', 'choices')
+        app = app or context['.app']
+        _app, choices_el = app.get_element(choices)
+        return choices_el.choices
+
+
 class Enum(ElementBase):
     """
     Define and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.
@@ -368,7 +412,7 @@ class Enum(ElementBase):
 
         enum = ContextEnum(name, start=start)
         self.archive.add_enum(self.libid, enum)
-        startup_log.debug("%s created", enum)
+        #startup_log.debug("%s created", enum)
 
 
 class Value(ElementBase):
@@ -378,7 +422,7 @@ class Value(ElementBase):
         synopsis = """a value in an enumeration"""
 
     id = Attribute("Enumeration ID", type="integer", default=None)
-    label = Attribute("Enumeration label", required=True)
+    name = Attribute("Value name", required=True)
     description = Attribute("Description of enumeration value", default='')
     group = Attribute("Group name", default='')
 
@@ -391,7 +435,7 @@ class Value(ElementBase):
         enum = self.archive.get_enum(enum_parent.libid)
         if description:
             description = description.strip()
-        enum.add_value(params.label,
+        enum.add_value(params.name,
                        enum_id=params.id,
                        description=description,
                        group=params.group)
@@ -435,6 +479,17 @@ class GetTimezones(DataSetter):
     def logic(self, context):
         timezones = pytz.common_timezones[:]
         self.set_context(context, dst, timezones)
+
+
+class GetTimezoneGroups(DataSetter):
+    """Get timezone information, for use in select controls."""
+
+    class Help:
+        synopsis = "get timezone choices"
+
+    def get_value(self, context):
+        return timezone.get_common_timezones_groups()
+
 
 
 # class Signal(ElementBase):

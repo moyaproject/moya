@@ -1,6 +1,13 @@
 <moya xmlns="http://moyaproject.com"
     xmlns:moya="http://moyaproject.com">
 
+
+    <choices libname="choices.markup">
+        <choice value="text" label="Text"/>
+        <choice value="bbcode" label="BBCode"/>
+        <choice value="html" label="HTML"/>
+    </choices>
+
     <model name="CommentObject" libname="CommentObject" xmlns="http://moyaproject.com/db"
         repr="CommentObject ${object_url} (${namespace}.${object})" title="Comment Object">
         <unique-together>
@@ -12,7 +19,7 @@
         <boolean label="Hidden?" name="hide" default="no" null="no"/>
         <boolean label="Allow new comments?" name="allow_new" default="yes" null="no"/>
         <integer name="updates" default="0" null="no" blank="yes" />
-        <string name="markup" label="Markup to use in comments" default="bbcode" choices="[['text', 'Text'], ['bbcode', 'BBCode'], ['html', 'HTML']]" null="no" length="20" />
+        <string name="markup" label="Markup to use in comments" default="bbcode" choices="#choices.markup" null="no" length="20" />
     </model>
 
     <model name="Comment" libname="Comment" xmlns="http://moyaproject.com/db"

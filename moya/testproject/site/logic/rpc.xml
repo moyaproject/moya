@@ -3,7 +3,7 @@
       xmlns:let="http://moyaproject.com/let">
 
     <enum libname="enum.jsonrpc.errors">
-        <value id="100" label="name_too_long">
+        <value id="100" name="name_too_long">
             Indicates that the name parameter has *too many* characters
         </value>
     </enum>

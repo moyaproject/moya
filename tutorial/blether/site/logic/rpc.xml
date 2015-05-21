@@ -6,7 +6,7 @@
 
     <!-- Use an enumeration so you can refer to error codes by a label -->
     <enum libname="enum.jsonrpc.errors">
-        <value id="1" label="name_too_long">
+        <value id="1" name="name_too_long">
             This error occurs when you enter a name of more than 10 characters.
         </value>
     </enum>

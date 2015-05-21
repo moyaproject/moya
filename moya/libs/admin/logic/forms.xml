@@ -42,12 +42,32 @@
 
             <switch>
 
-                <case if="column.type in ['string', 'timezone']" />
-                <if test="column.choices">
-                    <forms:select label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+                <case if="column.type == 'timezone'"/>
+                <get-timezone-groups dst="tzchoices" />
+                <forms:select label="${str:column.label or title:column.name}"
+                    name="${column.name}"
+                    help="${str:column.help}"
                     initial="object[column.dbname]">
+                    <forms:option value=""> --- not set --- </forms:option>
+                    <forms:add-choices choices="tzchoices"/>
+                </forms:select>
+                <forms:validate-field field="${column.name}">
+                    <forms:fail if="not value and not column.blank">
+                        Please select an option
+                    </forms:fail>
+                </forms:validate-field>
+                <defer to="adapt_null" />
+
+
+                <case if="column.type == 'string'" />
+                <if test="column.choices">
+                    <get-element name="${column.choices}" from="${model.app.name}" dst="choices_element" />
+                    <forms:select label="${str:column.label or title:column.name}"
+                        name="${column.name}"
+                        help="${str:column.help}"
+                        initial="object[column.dbname]">
                         <forms:option value=""> --- not set --- </forms:option>
-                        <forms:add-choices choices="list:column.choices"/>
+                        <forms:add-choices choices="choices_element.tag.choices"/>
                     </forms:select>
                     <forms:validate-field field="${column.name}">
                         <forms:fail if="not value and not column.blank">
