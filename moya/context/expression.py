@@ -569,6 +569,7 @@ real = Combine(Word(nums) + "." + Word(nums))
 
 constant = oneOf('True False None yes no') + WordEnd(word_characters)
 
+# TODO: expand on variable regex
 variable = Regex(r'([a-zA-Z0-9\._]+)')
 explicit_variable = '$' + Regex(r'([a-zA-Z0-9\._]+)')
 current_scope = Literal('$$')

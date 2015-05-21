@@ -348,7 +348,8 @@ class Enum(ElementBase):
     It is generally preferably to use an enumeration over hard-coded numbers; it makes code easier to read and maintain.
 
     """
-    start = Attribute("Starting ID if not specified in <enumvalue>", type="expression", default=1)
+    name = Attribute('Identifier for enum', required=False, default=None)
+    start = Attribute("Starting ID if not specified in <enumvalue>", type="integer", default=1)
 
     class Help:
         synopsis = """map numbers on to identifiers"""
@@ -361,10 +362,13 @@ class Enum(ElementBase):
         """
 
     def post_build(self, context):
-        start = asint(self.start(context), 1)
-        enum = ContextEnum(self.libid, start=start)
-        self.archive.add_enum(enum)
-        #startup_log.debug("%s created", enum)
+        params = self.get_parameters(context)
+        start = params.start
+        name = params.name or self.libname
+
+        enum = ContextEnum(name, start=start)
+        self.archive.add_enum(self.libid, enum)
+        startup_log.debug("%s created", enum)
 
 
 class Value(ElementBase):
@@ -405,10 +409,16 @@ class GetEnum(DataSetter):
         """
 
     enum = Attribute("enumeration ref", type="elementref")
+    _from = Attribute("from application", type="application", default=".app", evaldefault=True)
 
     def logic(self, context):
-        enum = self.get_element(self.enum(context))
-        self.set_context(context, dst, enum)
+        params = self.get_parameters(context)
+        app, el = params['from'].get_element(params.enum)
+        enum = self.archive.get_enum(el.libid)
+        self.set_context(context, params.dst, enum)
+
+        #enum = self.get_element(self.enum(context))
+        #self.set_context(context, dst, enum)
 
 
 class GetTimezones(DataSetter):

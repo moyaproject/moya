@@ -5,7 +5,6 @@ import sys
 import platform
 import warnings
 import re
-import tempfile
 from threading import RLock
 from textwrap import wrap, dedent
 warnings.filterwarnings("ignore")

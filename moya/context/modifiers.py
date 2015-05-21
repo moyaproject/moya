@@ -241,6 +241,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def ceil(self, context, v):
         return ceil(float(v))
 
+    def choices(self, context, v):
+        return getattr(v, 'choices', [])
+
     def chr(self, context, v):
         try:
             return unichr(v)
@@ -334,8 +337,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return _get_domain(text_type(v))
 
     def enum(self, context, v):
-        key = text_type(v)
-        return context['.enum'].get(key, None)
+        key = v
+        if '#' in key:
+            app, el = context['.app'].get_element(key)
+            return context['.enum'].get(el.libid, None)
+        else:
+            return context['.app.lib.enum'].get(key, None)
 
     def enumerate(self, context, v):
         return enumerate(v)

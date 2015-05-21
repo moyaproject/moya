@@ -1149,7 +1149,7 @@ class _Integer(FieldElement):
     """Defines an [i]integer[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.IntegerColumn
 
-    choices = Attribute("A sequence of possible choices", type="expression")
+    choices = Attribute("A reference to an enum of choices", type="elementref")
 
     class Help:
         synopsis = """a field that stores an integer"""

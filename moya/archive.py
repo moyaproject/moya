@@ -236,6 +236,7 @@ class Archive(object):
 
         self.failed_documents = []
         self.enum = {}
+        self.enum_by_lib = {}
         self.signals = Signals()
 
         self._moyarc = None
@@ -959,13 +960,20 @@ class Archive(object):
             extend(lib.get_elements_by_type(element_type))
         return _elements
 
-    def add_enum(self, enum):
+    def add_enum(self, libid, enum):
         """Add an enumeration"""
-        self.enum[enum.name] = enum
+        self.enum[libid] = enum
+        libname = libid.partition('#')[0]
+        if enum.name:
+            self.enum_by_lib.setdefault(libname, {})[enum.name] = enum
 
     def get_enum(self, enum_libid):
         """Get an enumeration"""
         return self.enum[enum_libid]
+
+    def get_lib_enums(self, libname):
+        """Get enumeration for a given lib"""
+        return self.enum_by_lib.get(libname, None) or {}
 
     def fire(self, context, signal_name, app=None, sender=None, data=None):
         """Fire a signal"""

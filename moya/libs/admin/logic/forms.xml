@@ -43,11 +43,11 @@
             <switch>
 
                 <case if="column.type in ['string', 'timezone']" />
-                <if test="list:column.choices">
+                <if test="column.choices">
                     <forms:select label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
                     initial="object[column.dbname]">
                         <forms:option value=""> --- not set --- </forms:option>
-                        <forms:add-choices choices="column.choices"/>
+                        <forms:add-choices choices="list:column.choices"/>
                     </forms:select>
                     <forms:validate-field field="${column.name}">
                         <forms:fail if="not value and not column.blank">
@@ -107,13 +107,14 @@
 
 
                 <case if="column.type in ['integer', 'big-integer', 'small-integer']"/>
-                <if test="list:column.choices">
+                <if test="column.choices">
+                    <get-enum enum="${column.choices}" from="${model.app.name}" dst="choice_enum" />
                     <forms:select label="${str:column.label or title:column.name}"
                         name="${column.name}"
                         help="${str:column.help}"
                         adapt="int:value"
                         initial="str:object[column.name]">
-                        <forms:add-choices choices="column.choices"/>
+                    <forms:add-choices choices="choices:choice_enum"/>
                     </forms:select>
                 </if>
                 <else>

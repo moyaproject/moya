@@ -112,6 +112,10 @@ class Library(object):
         return self._archive()
 
     @property
+    def enum(self):
+        return self.archive.get_lib_enums(self.long_name)
+
+    @property
     def install_location(self):
         try:
             return self.load_fs.getsyspath('/')
