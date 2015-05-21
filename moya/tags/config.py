@@ -344,9 +344,22 @@ class LogFatal(Log):
 
 class Choices(ElementBase):
     """
-    Define choices, used by db models
+    Define choices, for use by select fields.
+
+    Choices are a list of values and labels, that might be used by a select control. You can retrieve the data defined by this tag with [tag]get-choices[/tag].
 
     """
+
+    class Help:
+        synopsis = "define choices"
+        example = """
+            <choices libname="choices.markup">
+                <choice value="text" label="Plain text"/>
+                <choice value="bbcode" label="BBCode markup"/>
+                <choice value="html" label="HTML"/>
+            </choices>
+            <get-choices choices="#choices.markup" dst="choices" />
+        """
 
     def finalize(self, context):
         self.choices = choices = []
@@ -357,16 +370,15 @@ class Choices(ElementBase):
 
 class Choice(ElementBase):
     """
-    An individual choice
+    Define a choice in a [tag]choices[/tag] tag.
 
     """
 
+    class Help:
+        synopis = "define a choice"
+
     value = Attribute("Choice value")
     label = Attribute("Label to display")
-
-    def finalize(self, context):
-        params = self.get_parameters(context)
-        choices_parent = self.get_ancestor('choices')
 
 
 class GetChoices(DataSetter):
@@ -389,19 +401,19 @@ class Enum(ElementBase):
     """
     Define and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.
 
-    It is generally preferably to use an enumeration over hard-coded numbers; it makes code easier to read and maintain.
+    You can retrieve an enumeration object with the [tag]get-enum[/tag] tag.
 
     """
     name = Attribute('Identifier for enum', required=False, default=None)
-    start = Attribute("Starting ID if not specified in <enumvalue>", type="integer", default=1)
+    start = Attribute("Starting ID if not specified in <value>", type="integer", default=1)
 
     class Help:
         synopsis = """map numbers on to identifiers"""
         example = """
         <enum libname="enum.jsonrpc.errors">
-            <value id="1" label="not_logged_in" description="You must be logged in to do that" />
-            <value label="invalid_score" description="Score must be -1, 0 or +1"/>
-            <value label="unknown_link" description="Link object was not found"/>
+            <value id="1" name="not_logged_in" description="You must be logged in to do that" />
+            <value name="invalid_score" description="Score must be -1, 0 or +1"/>
+            <value name="unknown_link" description="Link object was not found"/>
         </enum>
         """
 
