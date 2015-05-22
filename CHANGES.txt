@@ -17,7 +17,8 @@ Added <get-parent-element> tag
 Added <resolve-template> tag
 Added <unpack> tag
 Added token modifier
-Adde <group> tag
+Added <group> tag
+Updated bootstrap to v3.3.4
 
 0.5.12
 ------
