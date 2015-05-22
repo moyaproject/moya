@@ -316,6 +316,8 @@ class MoyaDB(object):
                 value = value.__datetime__()
             elif isinstance(value, (list, tuple)):
                 value = ExpressionDateTime(*value)
+        else:
+            value = self.moya_columns_map[field].adapt(value)
         return value
 
 
