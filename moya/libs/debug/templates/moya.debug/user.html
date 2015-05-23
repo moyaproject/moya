@@ -9,6 +9,8 @@
 <dl class="dl-horizontal">
     <dt>Username</dt>
     <dd>${user.username}</dd>
+    <dt>Auth domain</dt>
+    {% if user.domain %}<dd>${user.domain}</dd>{% else %}<dd><em>default</em></dd>{% endif %}
     <dt>ID</dt>
     <dd>#${user.id}</dd>
     <dt>First name</dt>
