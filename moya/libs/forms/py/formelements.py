@@ -240,6 +240,7 @@ class Form(AttributeExposer):
                                           'template',
                                           'csrf_check',
                                           'class',
+                                          'method',
                                           'csrf',
                                           'csrf_token',
                                           'data',
@@ -254,7 +255,7 @@ class Form(AttributeExposer):
                                           'style',
                                           'validated'])
 
-    def __init__(self, element, context, app, style, template, action, enctype, csrf=True, _class=None):
+    def __init__(self, element, context, app, style, template, action, method, enctype, csrf=True, _class=None):
         super(Form, self).__init__()
         self.element = element
         self.context = context
@@ -262,6 +263,7 @@ class Form(AttributeExposer):
         self.style = style
         self.template = template
         self.action = action
+        self.method = method
         self.enctype = enctype
         self.csrf = csrf
         setattr(self, 'class', _class)
@@ -622,6 +624,7 @@ class Get(ContextElementBase):
     style = Attribute("Override form style", required=False, default=None)
     template = Attribute("Override form template", required=False, default=None)
     action = Attribute("Form action", required=False, default=None)
+    method = Attribute("Form method", required=False, default="post", choices=['get', 'post'])
     withscope = Attribute("Use current scope?", default=False, type="boolean")
     blank = Attribute("Blank form?", default=False, type="boolean")
 
@@ -633,6 +636,7 @@ class Get(ContextElementBase):
          style,
          template,
          action,
+         method,
          withscope,
          blank) = self.get_parameters(context,
                                       'bind',
@@ -642,6 +646,7 @@ class Get(ContextElementBase):
                                       'style',
                                       'template',
                                       'action',
+                                      'method',
                                       'withscope',
                                       'blank')
         if withscope:
@@ -670,18 +675,22 @@ class Get(ContextElementBase):
             (form_style,
              form_template,
              form_action,
+             form_method,
              _class,
              enctype,
              csrf) = form_element.get_parameters(context,
                                                  'style',
                                                  'template',
                                                  'action',
+                                                 'method',
                                                  'class',
                                                  'enctype',
                                                  'csrf')
-            style = form_style or style
-            template = form_template or template
-            action = form_action or action
+            style = style or form_style
+            template = template or form_template
+            action = action or form_action
+            if not self.has_parameter('method'):
+                method = form_method
             if action is None:
                 action = context['.request.path']
 
@@ -691,6 +700,7 @@ class Get(ContextElementBase):
                                              style=style,
                                              template=template,
                                              action=action,
+                                             method=method,
                                              enctype=enctype,
                                              _class=_class,
                                              csrf=csrf)
@@ -937,6 +947,7 @@ class FormElement(LogicElement):
     style = Attribute("Form style", default=None)
     template = Attribute("Form template", default=None)
     action = Attribute("Form action", default=None)
+    method = Attribute("Form method", default="post", choices=['get', 'post'])
     enctype = Attribute("Form encoding type", default=None)
     extends = Attribute("Extend another form", default=None)
     _class = Attribute("Additional CSS class", required=False, default=None)

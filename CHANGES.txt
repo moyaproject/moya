@@ -19,6 +19,7 @@ Added <unpack> tag
 Added token modifier
 Added <group> tag
 Updated bootstrap to v3.3.4
+Added method parameter to <forms:form> and <forms:get> tag
 
 0.5.12
 ------
