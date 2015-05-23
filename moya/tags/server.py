@@ -602,25 +602,16 @@ class Server(LogicElement):
         if ':' in domain:
             domain = domain.split(':', 1)[0]
 
-        site_match = archive.sites.match(domain)
+        site_instance = archive.sites.match(context, domain)
 
-        if site_match is None:
+        if site_instance is None:
             log.error('no site matching domain "{domain}", consider adding [site:{domain}] to settings'.format(domain=domain))
             return None
 
-        context.root['site'] = site_settings = SettingsContainer.from_dict(site_match.data)
-        context.root['sys']['site'] = site_match.site
+        context.root['sys']['site'] = site_instance
+        context.root['site'] = site_instance._data
 
-        if site_match is not None:
-            with context.frame('.site'):
-                new_site_data = {}
-                for k, v in site_match.data.items():
-                    try:
-                        new_site_data[k] = SettingContainer(context.sub(v))
-                    except SubstitutionError as e:
-                        log.error("unable to substitute site data '%s=%s' (%s)", k, v, e)
-                site_settings.update(new_site_data)
-        return site_match.site
+        return site_instance
 
     @classmethod
     def _get_tz(self, context, default_timezone='UTC', user_timezone=False):

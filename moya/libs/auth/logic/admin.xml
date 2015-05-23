@@ -14,6 +14,7 @@
         <link to="#admintable.permissions" title="Permissions" />
         <link to="#admintable.sessions" title="Sessions" />
         <link to="#admintable.passwordresets" title="Password Resets"/>
+        <link to="#admintable.domains" title="Domains"/>
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
@@ -86,6 +87,12 @@
     <content libname="content.admin" extends="moya.admin#content.cover">
 
     </content>
+
+    <table xmlns="http://moyaproject.com/admin"
+        libname="admintable.domains" slug="domains" title="Auth Domains" model="#Domain">
+        <column title="name" link="yes" sort="#Domain.name">${object.name}</column>
+        <column title="Created" sort="#Domain.created">${localize:object.created}</column>
+    </table>
 
 
 </moya>

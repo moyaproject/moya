@@ -3,6 +3,7 @@ from __future__ import print_function
 
 from .interface import AttributeExposer
 from .compat import iteritems, implements_to_string, text_type
+from .settings import SettingsContainer
 
 from babel import Locale
 
@@ -13,7 +14,7 @@ import logging
 log = logging.getLogger('moya.runtime')
 
 
-SiteMatch = namedtuple("SiteMatch", ["site", "data"])
+SiteMatch = namedtuple("SiteMatch", ["site", "site_data", "custom_data"])
 
 
 @implements_to_string
@@ -79,6 +80,59 @@ class LocaleProxy(AttributeExposer):
 
 
 @implements_to_string
+class SiteInstance(AttributeExposer):
+
+    __moya_exposed_attributes__ = ['user_domain',
+                                   'base_content',
+                                   'timezone',
+                                   'user_timezone',
+                                   'append_slash',
+                                   'language',
+                                   'locale',
+                                   'datetime_format',
+                                   'time_format',
+                                   'date_format',
+                                   'timespan_format',
+                                   'translations']
+
+    def __init__(self, site, site_data, custom_data, _as_bool=lambda t: t.strip().lower() in ('yes', 'true')):
+        self._site = site
+        self._data = SettingsContainer.from_dict(custom_data)
+
+        get = site_data.get
+        self.user_domain = get('user_domain')
+        self.base_content = get('base_content')
+        self.timezone = get('timezone')
+        self.user_timezone = _as_bool(get('user_timezone', 'no'))
+        self.append_slash = _as_bool(get('append_slash', 'no'))
+        self.language = get('language')
+        try:
+            self.locale = LocaleProxy(get('locale'))
+        except:
+            log.error("unable to get locale '{}', defaulting to 'en'")
+            self.locale = LocaleProxy('en')
+        self.datetime_format = get('datetime_format')
+        self.time_format = get('time_format')
+        self.date_format = get('date_format')
+        self.timespan_format = get('timespan_format')
+        self.translations = gettext.NullTranslations()
+
+    def __str__(self):
+        return '''<site "{}">'''.format(self._site.domain)
+
+    def __repr__(self):
+        return "Site('{}')".format(self._site.domain)
+
+    def __moyarepr__(self, context):
+        return '''<site '{}'>'''.format(self._site.domain)
+
+    def __moyaconsole__(self, console):
+        console.text(text_type(self), fg="green", bold=True)
+        table = sorted([(k, getattr(self, k)) for k in self.__moya_exposed_attributes__])
+        console.table(table, header_row=['key', 'value'])
+
+
+@implements_to_string
 class Site(object):
     """Site data associated with a domain"""
 
@@ -87,38 +141,23 @@ class Site(object):
 
     def __init__(self,
                  domain,
-                 base_content='site#content.base',
-                 timezone='UTC',
-                 user_timezone=True,
-                 append_slash=True,
-                 language='en-US',
-                 locale='en_US.UTF-8',
-                 datetime_format='medium',
-                 date_format='medium',
-                 time_format='medium',
-                 timespan_format='medium',
-                 data=None):
+                 insert_order,
+                 site_data,
+                 custom_data):
         self.domain = domain
 
-        self.base_content = base_content
-        self.timezone = timezone
-        self.user_timezone = user_timezone
-        self.append_slash = append_slash
-        self.language = language
-        try:
-            self.locale = LocaleProxy(locale)
-        except:
-            log.error("Unable to get locale '{}', defaulting to 'en'")
-            self.locale = LocaleProxy('fr')
-        self.datetime_format = datetime_format
-        self.time_format = time_format
-        self.date_format = date_format
-        self.timespan_format = timespan_format
-        self.translations = gettext.NullTranslations()
+        if 'priority' in site_data:
+            try:
+                priority = int(site_data.get('priority'))
+            except:
+                log.error('priority in site section should should be an integer')
+        else:
+            priority = 0
+        self.order = (priority, insert_order)
 
-        if data is None:
-            data = {}
-        self.site_data = data
+        self.site_data = site_data
+        self.custom_data = custom_data
+
         tokens = []
         for token in self._re_domain.split(domain):
             if token:
@@ -155,17 +194,34 @@ class Site(object):
     def match(self, domain):
         match = self._match(domain)
         if match is None:
-            return None
-        data = self.site_data.copy()
-        data.update(match.groupdict())
-        return data
+            return None, None
+        match_dict = match.groupdict()
+        site_data = self.site_data.copy()
+        custom_data = self.custom_data.copy()
+        site_data.update(match_dict)
+        custom_data.update(match_dict)
+        return site_data, custom_data
 
 
 class Sites(object):
     """A container that maps site wild-cards on to a dictionary"""
 
+    _site_keys = [("base_content", 'site#content.base'),
+                  ("user_domain", ''),
+                  ("timezone", 'UTC'),
+                  ("user_timezone", 'yes'),
+                  ("append_slash", 'no'),
+                  ("locale", 'en_us.UTF-8'),
+                  ("language", 'en-US'),
+                  ("datetime_format", 'medium'),
+                  ("date_format", 'medium'),
+                  ("time_format", 'medium'),
+                  ("timespan_format", 'medium')]
+
     def __init__(self):
+        self._defaults = {}
         self._sites = []
+        self._order = 0
 
     def __repr__(self):
         return repr(self._sites)
@@ -175,40 +231,23 @@ class Sites(object):
         del self._sites[:]
 
     def set_defaults(self, section):
-        self.base_content = section.get('base_content', 'site#content.base')
-        self.timezone = section.get('timezone', 'UTC')
-        self.user_timezone = section.get_bool('user_timezone', True)
-        self.append_slash = section.get_bool('append_slash', False)
-        self.locale = section.get('locale', 'en_US.UTF-8')
-        self.language = section.get('language', 'en-US')
-        self.datetime_format = section.get('datetime_format', 'medium')
-        self.date_format = section.get('date_format', 'medium')
-        self.time_format = section.get('time_format', 'medium')
-        self.timespan_format = section.get('timespan_format', 'medium')
+        self._defaults = {k: section.get('k', default) for k, default in self._site_keys}
 
     def add_from_section(self, domains, section):
         """Add a site from a named section in settings"""
-        kwargs = {
-            "base_content": section.get('base_content', self.base_content),
-            "timezone": section.get('timezone', self.timezone),
-            "user_timezone": section.get_bool('user_timezone', self.user_timezone),
-            "append_slash": section.get('append_slash', self.append_slash),
-            "language": section.get('language', self.language),
-            "locale": section.get('locale', self.locale),
-            "datetime_format": section.get('datetime_format', self.datetime_format),
-            "date_format": section.get('date_format', self.date_format),
-            "time_format": section.get('time_format', self.time_format),
-            'timespan_format': section.get('timespan_format', self.timespan_format)
-        }
-        data = {}
+        site_data = self._defaults.copy()
+        custom_data = {}
         for k, v in iteritems(section):
-            if k.startswith('data-'):
-                data_k = k.split('-', 1)[1]
-                data[data_k] = v
+            prefix, hyphen, key = k.partition('-')
+            if hyphen and prefix in ('data', ''):
+                custom_data[key] = v
+            else:
+                site_data[k] = v
 
         for domain in domains.split(','):
             domain = domain.strip()
-            site = Site(domain, data=data, **kwargs)
+            site = Site(domain, self._order, site_data=site_data, custom_data=custom_data)
+            self._order += 1
             self._sites.append(site)
 
     def add(self, domains, **data):
@@ -219,12 +258,25 @@ class Sites(object):
             site = Site(domain, data=data)
             self._sites.append(site)
 
-    def match(self, domain):
+    def _match(self, domain):
+        self._sites.sort(key=lambda s: s.order, reverse=True)
         for site in self._sites:
-            site_data = site.match(domain)
+            site_data, custom_data = site.match(domain)
             if site_data is not None:
-                return SiteMatch(site, site_data)
+                return SiteMatch(site, site_data, custom_data)
         return None
+
+    def match(self, context, domain):
+        site_match = self._match(domain)
+        if site_match is None:
+            return None
+        site, site_data, custom_data = site_match
+        sub = context.sub
+        with context.data_frame(site_data):
+            new_site_data = {k: sub(v) for k, v in site_data.items()}
+        with context.data_frame(custom_data):
+            new_custom_data = {k: sub(v) for k, v in custom_data.items()}
+        return SiteInstance(site, new_site_data, new_custom_data)
 
     def __contains__(self, domain):
         return self.match(domain) is not None

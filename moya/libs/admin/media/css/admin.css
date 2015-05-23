@@ -546,7 +546,12 @@ table.moya-admin-table th a:hover
 
 .admin-table-search-bar .input-group
 {
+    width:100%;
+}
 
+.admin-table-search-bar .input-group .input-group-btn
+{
+    width:1%;
 }
 
 .moya-admin-picker

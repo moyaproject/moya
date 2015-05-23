@@ -116,11 +116,13 @@
             <attribute name="password" required="no" type="expression" />
             <attribute name="first_name" required="no" default="" type="expression" />
             <attribute name="last_name" required="no" default="" type="expression" />
+            <attribute name="domain" required="no" default="None" type="expression" />
         </signature>
         <call macro="#hashpassword" dst="password" let:password="password"/>
-        <db:transaction>
+        <db:atomic>
             <db:create model="#User"
                 let:username="username"
+                let:domain="domain"
                 let:email="email or None"
                 let:first_name="first_name"
                 let:last_name="last_name"
@@ -131,7 +133,7 @@
             </catch>
             <db:create model="#Group" let:user="newuser" dst="group"/>
             <append value="group" src="newuser.groups" />
-        </db:transaction>
+        </db:atomic>
         <return value="newuser" />
     </tag>
 

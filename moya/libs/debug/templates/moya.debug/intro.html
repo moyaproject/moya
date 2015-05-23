@@ -14,7 +14,7 @@
     <table class="table table-condensed">
         <thead>
             <tr>
-                <th>Site Setting</th>
+                <th>Setting</th>
                 <th>Value</th>
             </tr>
         </thead>
@@ -23,6 +23,26 @@
             <tr>
                 <td>${k}</td>
                 <td>${v}</td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p>System Settings (stored in <strong>.sys.site</strong>)</p>
+<div class="well">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%- for k, v in sorted:items:.sys.site %}
+            <tr>
+                <td>${k}</td>
+                <td>${debug:v}</td>
             </tr>
             {%- endfor %}
         </tbody>
