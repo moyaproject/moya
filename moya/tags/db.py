@@ -44,6 +44,7 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
+from sqlalchemy.orm import aliased
 
 import logging
 log = logging.getLogger('moya.db')
@@ -170,6 +171,13 @@ class MoyaQuerySet(interface.AttributeExposer):
     def notin_(self, context, b):
         return self.table_class.id.notin_(b)
 
+    def __add__(self, rhs):
+        if isinstance(rhs, MoyaQuerySet):
+            union_qs = self._qs.order_by(None).union(rhs._qs.order_by(None))
+            return MoyaQuerySet(union_qs, self.table_class, self.dbsession)
+        else:
+            raise TypeError("Can only add query sets to query sets")
+
 
 class DBElement(ElementBase):
     xmlns = namespaces.db
@@ -194,14 +202,18 @@ class TableClassBase(object):
     moya_render_targets = ['html']
 
     def __init__(self, **kwargs):
+
         moyadb = self._moyadb
         adapt = moyadb.adapt
         #args = moyadb.defaults.copy()
-        args = {k: v() if callable(v) else v for k, v in moyadb.defaults.items()}
-        args.update(kwargs)
-        for k, v in iteritems(args):
+        for k, v in iteritems(kwargs):
             setattr(self, k, adapt(k, v))
+        for k, v in moyadb.defaults.items():
+            if not hasattr(self, k):
+                setattr(self, k, v() if callable(v) else v)
+        #args = {k: v() if callable(v) else v for k, v in moyadb.defaults.items() if not hasattr(self, k)}
         super(TableClassBase, self).__init__()
+
 
     @classmethod
     def _get_column(cls, column_name, default=None):
@@ -224,8 +236,10 @@ class TableClassBase(object):
                     node, join = col.get_join(node)
                     if join is not None:
                         joins.append(join)
+                else:
+                    raise ValueError("get index fail")
         if joins:
-            exp_context.joins.append(joins)
+            exp_context.add_joins(joins)
         return dbobject(node)
 
     def __moyaconsole__(self, console):
@@ -317,7 +331,8 @@ class MoyaDB(object):
             elif isinstance(value, (list, tuple)):
                 value = ExpressionDateTime(*value)
         else:
-            value = self.moya_columns_map[field].adapt(value)
+            if field in self.moya_columns_map:
+                value = self.moya_columns_map[field].adapt(value)
         return value
 
 
@@ -1430,6 +1445,8 @@ class Create(DBDataSetter):
             with context.scope(dst):
                 yield DeferNodeContents(self)
 
+        print(repr(fields))
+
         value = table_class(**fields)
         signal_params = {'object': value, 'model': model.libid, 'app': app}
         self.archive.fire(context,
@@ -2184,11 +2201,12 @@ class Query(DBDataSetter):
             if '#' in field:
                 sort_col, exp_context = DBExpression(field).eval2(archive, context, app)
                 if qs is not None:
-                    for j in exp_context.joins:
-                        if isinstance(j, (tuple, list)):
-                            qs = qs.join(*j)
-                        else:
-                            qs = qs.join(j)
+                    qs = exp_context.process_qs(qs)
+                    # for j in exp_context.joins:
+                    #     if isinstance(j, (tuple, list)):
+                    #         qs = qs.join(*j)
+                    #     else:
+                    #         qs = qs.join(j)
                 if reverse or descending:
                     sort_col = desc(sort_col)
                 order.append(sort_col)

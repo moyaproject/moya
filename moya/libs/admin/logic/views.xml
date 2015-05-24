@@ -127,6 +127,7 @@
         <db:inspect model="${table.params.model}" from="${.url.appname}" dst="model" />
         <forms:get form="#form.new" dst="form" let:model="model" let:object="None" let:new="yes"/>
         <if-post>
+            <breakpoint />
             <forms:validate src="form">
                 <db:transaction>
                     <db:create model="${table.params.model}" from="${.url.appname}" obj="form.data" dst="obj"/>

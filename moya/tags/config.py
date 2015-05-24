@@ -465,11 +465,12 @@ class GetEnum(DataSetter):
         """
 
     enum = Attribute("enumeration ref", type="elementref")
-    _from = Attribute("from application", type="application", default=".app", evaldefault=True)
+    _from = Attribute("from application", type="application", default=None, evaldefault=True)
 
     def logic(self, context):
         params = self.get_parameters(context)
-        app, el = params['from'].get_element(params.enum)
+        app = self.get_app(context)
+        app, el = app.get_element(params.enum)
         enum = self.archive.get_enum(el.libid)
         self.set_context(context, params.dst, enum)
 

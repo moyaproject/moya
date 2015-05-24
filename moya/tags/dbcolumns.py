@@ -20,7 +20,7 @@ from sqlalchemy import (Column,
                         UnicodeText,
                         DateTime,
                         Sequence)
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.mutable import Mutable
 
 from sqlalchemy.types import TypeDecorator, TEXT, DATETIME, DATE
@@ -73,6 +73,7 @@ class JSONEncodedDict(TypeDecorator):
 class GenericKeyObject(TypeDecorator):
 
     impl = TEXT
+
     def process_bind_param(self, value, dialect):
         if value is not None:
             any_key = GenericKey.from_object(value)
@@ -176,7 +177,7 @@ class MoyaDBColumn(object):
         self.markup = markup
 
     def __repr__(self):
-        return "<column {} {}>".format(self.type, self.name)
+        return "<column {} '{}'>".format(self.type, self.name)
 
     def get_dbname(self):
         return self.name
@@ -313,7 +314,9 @@ class ForeignKeyColumn(MoyaDBColumn):
 
     def get_join(self, node):
         ref_model_table_class = self.ref_model.element.get_table_class(self.ref_model.app)
-        return ref_model_table_class, getattr(node, self.name)
+        tc = aliased(ref_model_table_class)
+        return tc, (tc, getattr(node, self.name))
+        #return ref_model_table_class, getattr(node, self.name)
 
 
 class BoolColumn(MoyaDBColumn):

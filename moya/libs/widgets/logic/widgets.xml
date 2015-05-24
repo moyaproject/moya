@@ -174,5 +174,8 @@
         </signature>
     </widget>
 
+    <widget name="breadcrumbs" template="breadcrumbs.html" text="no" synopsis="navigation breadcrumbs">
+
+    </widget>
 
 </moya>

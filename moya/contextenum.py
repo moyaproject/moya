@@ -29,6 +29,9 @@ class ContextEnumValue(object):
     def __str__(self):
         return self.label
 
+    def __moyadbobject__(self):
+        return self.id
+
     def __moyaconsole__(self, console):
         console("<value '{}.{}' ({}))>".format(self.label,
                                                self.id,

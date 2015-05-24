@@ -67,16 +67,18 @@ def pairs(tokenlist):
 class ExpressionContext(object):
     def __init__(self, exp):
         self.exp = exp
-        self.joins = []
+        self._joins = []
         super(ExpressionContext, self).__init__()
 
     def __repr__(self):
         return "<expressioncontext '{}'>".format(self.exp)
 
+    def add_joins(self, joins):
+        self._joins.append(joins)
+
     def process_qs(self, qs):
-        return qs
         # TODO: Is this deprecated now?
-        for j in self.joins:
+        for j in self._joins:
             if isinstance(j, (tuple, list)):
                 qs = qs.join(*j)
             else:

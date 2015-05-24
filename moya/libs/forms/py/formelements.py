@@ -1200,7 +1200,7 @@ class Radio(FieldElement):
         synopsis = "add a radio button to a field"
 
     fieldname = Attribute("Field name", required=False, default="radio")
-    text = Attribute("Text associated with checkbox", required=False, default='')
+    text = Attribute("Text associated with checkbox", required=False, default='', map_to="rtext")
     on = Attribute("Value when selected", required=True)
 
     def logic(self, context):
@@ -1208,7 +1208,7 @@ class Radio(FieldElement):
             return super(Radio, self).logic(context)
         radiogroup = context['_radiogroup']
         on = self.on(context)
-        text = self.text(context)
+        text = self.rtext(context) or context.sub(self.text)
         radiogroup.add_option(on or text, text)
 
 
