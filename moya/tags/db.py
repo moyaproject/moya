@@ -1445,8 +1445,6 @@ class Create(DBDataSetter):
             with context.scope(dst):
                 yield DeferNodeContents(self)
 
-        print(repr(fields))
-
         value = table_class(**fields)
         signal_params = {'object': value, 'model': model.libid, 'app': app}
         self.archive.fire(context,
