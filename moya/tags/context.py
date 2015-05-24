@@ -2495,7 +2495,7 @@ class Call(ContextElementBase):
             macro_app, macro_element = self.get_element(macro, app)
 
             if hasattr(macro_element, 'validate_call'):
-                macro_element.validate_call(context, macro_element, call)
+                macro_element.validate_call(context, macro_element, kwargs)
 
             element_callable = self.archive.get_callable_from_element(macro_element,
                                                                       app=macro_app or app)

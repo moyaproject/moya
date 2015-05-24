@@ -36,7 +36,8 @@
 
         <return>
             <call macro="#checkpassword"
-                let:password="password" let:stored_password="user.password"/>
+                let:password="password"
+                let:stored_password="user.password"/>
         </return>
     </tag>
 
@@ -116,13 +117,11 @@
             <attribute name="password" required="no" type="expression" />
             <attribute name="first_name" required="no" default="" type="expression" />
             <attribute name="last_name" required="no" default="" type="expression" />
-            <attribute name="domain" required="no" default="None" type="expression" />
         </signature>
         <call macro="#hashpassword" dst="password" let:password="password"/>
         <db:atomic>
             <db:create model="#User"
                 let:username="username"
-                let:domain="domain"
                 let:email="email or None"
                 let:first_name="first_name"
                 let:last_name="last_name"

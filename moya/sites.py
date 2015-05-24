@@ -82,8 +82,7 @@ class LocaleProxy(AttributeExposer):
 @implements_to_string
 class SiteInstance(AttributeExposer):
 
-    __moya_exposed_attributes__ = ['user_domain',
-                                   'base_content',
+    __moya_exposed_attributes__ = ['base_content',
                                    'timezone',
                                    'user_timezone',
                                    'append_slash',
@@ -100,7 +99,6 @@ class SiteInstance(AttributeExposer):
         self._data = SettingsContainer.from_dict(custom_data)
 
         get = site_data.get
-        self.user_domain = get('user_domain')
         self.base_content = get('base_content')
         self.timezone = get('timezone')
         self.user_timezone = _as_bool(get('user_timezone', 'no'))
@@ -207,7 +205,6 @@ class Sites(object):
     """A container that maps site wild-cards on to a dictionary"""
 
     _site_keys = [("base_content", 'site#content.base'),
-                  ("user_domain", ''),
                   ("timezone", 'UTC'),
                   ("user_timezone", 'yes'),
                   ("append_slash", 'no'),

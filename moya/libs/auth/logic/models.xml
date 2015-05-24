@@ -1,11 +1,8 @@
 <moya xmlns="http://moyaproject.com" xmlns:moya="http://moyaproject.com">
 
     <model name="UserBase" libname="UserBase" abstract="yes" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="model/user.html">
-        <unique-together>
-            <string name="username" label="Username" length="30" blank="no" index="yes" />
-            <foreign-key model="#Domain" name="domain" label="User domain" null="yes" blank="yes"
-                help="Leave blank if you don't have multiple user domains"/>
-        </unique-together>
+
+        <string name="username" label="Username" length="30" blank="no" unique="yes" index="yes" />
         <boolean name="active" label="Login is enabled?" default="yes" />
         <string name="first_name" label="First name" length="30" default="" />
         <string name="last_name" label="Last name" length="30" default="" />
@@ -24,12 +21,6 @@
         <property name="display_name" expression="first_name ? joinspace:[first_name, last_name] : username" />
         <property name="full_name" expression="first_name ? joinspace:[first_name, last_name] : None" />
         <!-- <property name="display_name" expression="'hello'" /> -->
-    </model>
-
-    <model libname="Domain" xmlns="http://moyaproject.com/db" repr="domain '${name}' #${id}">
-        <datetime name="created" auto="yes" null="no"/>
-        <string name="name" length="300" null="no" />
-        <text name="notes" null="yes" />
     </model>
 
 	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db"

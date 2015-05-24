@@ -12,6 +12,8 @@ from ..compat import text_type, py2bytes
 from .. import errors
 from .. import namespaces
 
+from collections import OrderedDict
+
 
 class WidgetBase(LogicElement):
     _container = False
@@ -264,6 +266,7 @@ class ArgumentTag(ElementBase):
     name = Attribute("Name of the attribute", required=True)
     required = Attribute("Is this argument required?", type="boolean", default=False)
     check = Attribute("A boolean expression that the attribute must satisfy", type="function", default=None)
+    default = Attribute("A value to use if the argument is not supplied", type="function", default=None)
 
     def post_build(self, context):
         self.doc = context.sub(self.text.strip())
@@ -277,10 +280,13 @@ class ArgumentValidator(object):
         self.required = []
         self.checks = []
         self.arg_names = set()
+        self.defaults = OrderedDict()
         for arg in element.children():
             if arg._element_type != (namespaces.default, 'argument'):
                 raise errors.ElementError("must contain <argument> tags", element=element)
-            name, required, check = arg.get_parameters(context, 'name', 'required', 'check')
+            name, required, check, default = arg.get_parameters(context, 'name', 'required', 'check', 'default')
+            if default is not None:
+                self.defaults[name] = default
             self.arg_names.add(name)
             if required:
                 self.required.append(name)
@@ -296,6 +302,9 @@ class ArgumentValidator(object):
             return "<validator>"
 
     def validate(self, context, element, arg_map):
+        for k, default in self.defaults.items():
+            if k not in arg_map:
+                arg_map[k] = default(context)
         if not self.arg_names.issuperset(arg_map.keys()):
             for k in arg_map:
                 if k not in self.arg_names:
