@@ -1,0 +1,9 @@
+<ol class="breadcrumb">
+{%- for child in self.children -%}
+{%- if forloop.last -%}
+<li>{% renderall child.children %}</li>
+{%- else -%}
+<li>{% render child %}</li>
+{%- endif -%}
+{%- endfor -%}
+</ol>
