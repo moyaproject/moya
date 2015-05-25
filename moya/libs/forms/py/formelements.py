@@ -144,7 +144,7 @@ class Field(Node):
         return value
 
     def add_option(self, value, text, group=None, help=None, renderable=None):
-        self._choices.append(SelectOption(value, text, group, help, renderable))
+        self._choices.append(SelectOption(value, text, group or self.current_group, help, renderable))
 
     def set_group(self, label):
         self.current_group = label
@@ -1260,12 +1260,8 @@ class Select(FieldElement):
             if isinstance(choices, text_type):
                 select.add_option(group, choices)
             else:
-                if group:
-                    for choice, choice_label in choices:
-                        select.add_option(choice, choice_label, group=group)
-                else:
-                    for choice, choice_label in choices:
-                        select.add_option(choice, choice_label, group=group)
+                for choice, choice_label in choices:
+                    select.add_option(choice, choice_label, group=group)
 
     def logic(self, context):
         form = context['_return']

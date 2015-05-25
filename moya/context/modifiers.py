@@ -310,7 +310,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return data
 
     def date(self, context, v):
-        return ExpressionDate.from_isoformat(v)
+        if not v:
+            return None
+        if isinstance(v, text_type):
+            return ExpressionDate.from_isoformat(v)
+        else:
+            return ExpressionDate.from_sequence(v)
 
     def datetime(self, context, v):
         if not v:

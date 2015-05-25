@@ -90,6 +90,16 @@ class DatetimeInclusiveRange(DatetimeExclusiveRange):
 class ExpressionDate(date, interface.Proxy):
 
     @classmethod
+    def from_sequence(self, seq):
+        try:
+            year, month, day = (int(s) for s in seq)
+        except ValueError:
+            raise ValueError('[year, month, day] should be integers')
+        except:
+            raise ValueError('[year, month, day] required')
+        return ExpressionDate(year, month, day).moya_proxy
+
+    @classmethod
     def from_date(self, d):
         return ExpressionDate(d.year, d.month, d.day).moya_proxy
 
@@ -113,6 +123,7 @@ class ExpressionDate(date, interface.Proxy):
     @implements_to_string
     class ProxyInterface(AttributeExposer):
         __moya_exposed_attributes__ = ["year", "month", "day",
+                                       "next_month", "previous_month",
                                        "isoformat", "next_day", "previous_day",
                                        "leap"]
 
@@ -181,6 +192,25 @@ class ExpressionDate(date, interface.Proxy):
         @property
         def previous_day(self):
             return ExpressionDate.from_date(self.date + timedelta(days=-1))
+
+        @property
+        def next_month(self):
+            """The first date in the following month"""
+            d = self.date
+            if d.month == 12:
+                return ExpressionDate(d.year + 1, 1,)
+            else:
+                return ExpressionDate(d.year, d.month + 1, 1)
+
+        @property
+        def previous_month(self):
+            """First date in the previous month"""
+            d = self.date
+            if d.month == 1:
+                return ExpressionDate(d.year - 1, 12, 1)
+            else:
+                return ExpressionDate(d.year, d.month - 1, 1)
+
 
         @property
         def leap(self):
