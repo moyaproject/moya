@@ -132,6 +132,8 @@ class Import(LogicElement):
                                                   'py',
                                                   'priority',
                                                   'templatepriority')
+        if template_priority is None:
+            template_priority = priority
         archive = self.document.archive
         absolute = False
         if _location is not None:
