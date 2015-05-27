@@ -2628,8 +2628,8 @@ class Atomic(DBContextElement):
             log.warning('sqlite driver does not support <atomic>')
             try:
                 yield DeferNodeContents(self)
-            except:
-                log.warning('exception in <atomic> block')
+            except Exception as e:
+                log.warning('exception in <atomic> block ()'.format(e))
                 raise
         else:
             session = dbsession.session

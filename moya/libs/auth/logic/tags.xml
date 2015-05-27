@@ -119,6 +119,7 @@
             <attribute name="last_name" required="no" default="" type="expression" />
         </signature>
         <call macro="#hashpassword" dst="password" let:password="password"/>
+
         <db:atomic>
             <db:create model="#User"
                 let:username="username"

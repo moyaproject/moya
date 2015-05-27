@@ -228,7 +228,7 @@ class Sites(object):
         del self._sites[:]
 
     def set_defaults(self, section):
-        self._defaults = {k: section.get('k', default) for k, default in self._site_keys}
+        self._defaults = {k: section.get(k, default) for k, default in self._site_keys}
 
     def add_from_section(self, domains, section):
         """Add a site from a named section in settings"""

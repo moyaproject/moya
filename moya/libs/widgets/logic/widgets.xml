@@ -44,6 +44,7 @@
             <attribute name="app" type="text" required="no" default="" />
             <attribute name="url" required="no" />
             <attribute name="with" required="no" type="expression"/>
+            <attribute name="query" required="no" type="expression"/>
             <attribute name="class" required="no" />
             <attribute name="icon" required="no"/>
         </signature>
@@ -60,13 +61,14 @@
             <attribute name="app" type="text" required="no"/>
             <attribute name="url" required="no" />
             <attribute name="with" required="no" type="expression"/>
+            <attribute name="query" required="no" type="expression"/>
             <attribute name="class" required="no" default="btn btn-default"/>
             <attribute name="icon" required="no"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
         <update values="with" src="url_with" if="with" />
-        <get-url name="${name}" from="${app or _caller.app.name}" with="url_with" dst="url" if="not url"/>
+        <get-url name="${name}" from="${app or _caller.app.name}" with="url_with" dst="url" query="query" if="not url"/>
     </widget>
 
     <widget name="buttons" template="buttons.html" synopsis="renders enclosed links as buttons">
