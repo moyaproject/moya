@@ -44,7 +44,6 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
-from sqlalchemy.orm import aliased
 
 import logging
 log = logging.getLogger('moya.db')

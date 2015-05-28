@@ -12,7 +12,7 @@ from ..compat import (text_type,
                       number_types,
                       unichr,
                       urlencode)
-from ..html import slugify, textilize
+from ..html import slugify, textilize, linebreaks
 from ..render import HTML
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
 from ..context.expressiontime import (TimeSpan,
@@ -341,6 +341,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def domain(self, context, v, _get_domain=get_domain):
         return _get_domain(text_type(v))
 
+    def dropchar(self, context, v):
+        return text_type(v)[1:]
+
     def enum(self, context, v):
         key = v
         if '#' in key:
@@ -350,10 +353,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return context['.app.lib.enum'].get(key, None)
 
     def enumerate(self, context, v):
-        return enumerate(v)
+        try:
+            return enumerate(v)
+        except:
+            return []
 
     def enumerate1(self, context, v):
-        return enumerate(v, start=1)
+        try:
+            return enumerate(v, start=1)
+        except:
+            return []
 
     def eval(self, context, v):
         from .expression import Expression
@@ -467,6 +476,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def len(self, context, v):
         return len(v)
+
+    def linebreaks(self, context, v):
+        return HTML(linebreaks(v))
 
     def list(self, context, v):
         try:

@@ -43,6 +43,12 @@ def summarize(s, max_size=100):
     return s
 
 
+def linebreaks(text):
+    """Replace new lines with <br>"""
+    html = "<br>\n".join(escape(text_type(text)).splitlines())
+    return html
+
+
 if __name__ == "__main__":
     print(escape("10 > 5 < 8 & foo"))
 

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from moya.elements.elementbase import LogicElement, Attribute
-from moya.tags.context import ContextElementBase
+from moya.tags.context import ContextElementBase, DataSetter
 from moya import logic
 from moya.console import Cell
 from moya.containers import OrderedDict
@@ -604,7 +604,7 @@ class Bind(ContextElementBase):
         form.bind(context, bind)
 
 
-class Get(ContextElementBase):
+class Get(DataSetter):
     """
     Get a form object.
 
@@ -620,7 +620,7 @@ class Get(ContextElementBase):
     bind = Attribute("Object to bind to", type="expression", default=".request.method == 'POST' ? .request.multi.POST : None", evaldefault=True)
     form = Attribute("Form reference", required=True)
     src = Attribute("Source object to fill in fields", type="reference", default=None)
-    dst = Attribute("Destination to store form", required=True, default=None)
+    dst = Attribute("Destination to store form", required=False, default=None)
     style = Attribute("Override form style", required=False, default=None)
     template = Attribute("Override form template", required=False, default=None)
     action = Attribute("Form action", required=False, default=None)
@@ -757,8 +757,7 @@ class Get(ContextElementBase):
                     form.bind(context, *bindings)
         else:
             form = None
-
-        context[dst] = form
+        self.set_context(context, dst, form)
 
 
 class Validate(LogicElement):
@@ -885,6 +884,9 @@ class Apply(LogicElement):
 
     def logic(self, context):
         form, dst = self.get_parameters(context, 'src', 'dst')
+        if not isinstance(form, Form):
+            self.throw('bad-value.form',
+                       'form attribute should be a form, not {}'.format(context.to_expr(form)))
         form_data = form.data
         dst_obj = context[dst]
         if not hasattr(dst_obj, 'items'):

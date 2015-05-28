@@ -656,16 +656,18 @@ class Context(object):
         """Returns a context manager for a scope"""
         return _ScopeContext(self, *index)
 
-    def temp_scope(self, *index):
+    def temp_scope(self, index):
         """Returns a context manager for a temporary scope (deletes scope index on exit)"""
-        return _TempScopeContext(self, *index)
+        return _TempScopeContext(self, index)
 
     def get_frame(self):
         """Get the current frame"""
         return text_type(self._stack.index)
 
-    def data_scope(self, data):
+    def data_scope(self, data=dict):
         """Make a context manager to create a scope from arbitrary mapping"""
+        if callable(data):
+            data = data()
         return _DataScopeContext(self, data)
 
     def data_frame(self, data):
@@ -681,7 +683,8 @@ class Context(object):
         try:
             final = indices.tokens[-1]
         except IndexError:
-            raise ContextKeyError(self, index, message="Can't set root")
+            raise
+            raise ContextKeyError(self, index, message="Can't set root!")
         try:
             for name in indices.tokens[:-1]:
                 obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(name)

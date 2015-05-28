@@ -1550,7 +1550,7 @@ class Template(object):
                 if not text.isspace():
                     text = text.lstrip()
                     remove_whitespace = False
-                    add_token(("text", (lineno, pos, start), text, text))
+                    add_token(("text", pos, text, text))
                     return False
                 return True
             add_token(("text", pos, token, text))
@@ -1567,7 +1567,7 @@ class Template(object):
                         text = text.rstrip()
                         tokens.pop()
                         if text:
-                            tokens.append((token_type, pos, text, text))
+                            add_token((token_type, pos, text, text))
                         break
                 break
 

@@ -12,10 +12,10 @@
 
 .moya-tables-sortable.sort-active.sort-asc a::after
 {
-    content: ' ↑';
+    content: '\00a0↑';
 }
 
 .moya-tables-sortable.sort-active.sort-desc a::after
 {
-    content: ' ↓';
+    content: '\00a0↓';
 }

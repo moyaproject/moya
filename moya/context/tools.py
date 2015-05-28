@@ -137,9 +137,7 @@ def to_expression(context, obj, max_size=None, truncate_text=" [...]"):
 
 def get_app_from_callstack(context):
     call = context.get('.call', None)
-    if call is None:
-        return None
-    return getattr(call, 'app', None)
+    return getattr(call, 'app', None) or context.get('._t.app', None)
 
 
 def set_dynamic(context):

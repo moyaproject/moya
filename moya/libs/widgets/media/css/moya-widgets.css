@@ -32,7 +32,7 @@
     opacity:.7;
 }
 
-.moya-widgets-option.active *
+.moya-widgets-select .moya-widgets-option.active *
 {
     color:#fff !important;
 }

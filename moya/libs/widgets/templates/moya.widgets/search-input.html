@@ -1,0 +1,13 @@
+<div class="input-group">
+    <input placeholder="${placeholder}" title="${placeholder}" name="${name}" class="input-small form-control" value="${value}" type="search">
+    <span class="input-group-btn">
+        {%- if value %}
+        <a class="btn btn-default reset-search" href="${urlupdate:(q=None)}" title="Reset">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
+        {%- endif %}
+        <button type="submit" class="btn btn-default" title="Search">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </span>
+</div>

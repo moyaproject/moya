@@ -64,6 +64,7 @@
             <attribute name="query" required="no" type="expression"/>
             <attribute name="class" required="no" default="btn btn-default"/>
             <attribute name="icon" required="no"/>
+            <attribute name="size" required="no" choices="sm,md,lg" default="md" />
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
@@ -121,6 +122,9 @@
             </attribute>
             <attribute name="auto" type="boolean" default="yes" required="no">
                 If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.
+            </attribute>
+            <attribute name="fragment" required="no">
+                Option fragment to add to links.
             </attribute>
         </signature>
         <let objects="src"/>
@@ -182,4 +186,12 @@
         </doc>
     </widget>
 
+    <widget name="search-input" template="search-input.html">
+        <doc>A search input with cancel button</doc>
+        <signature>
+            <attribute name="value" required="no" type="expression"/>
+            <attribute name="name" required="no" default="q"/>
+            <attribute name="placeholder" default="search" />
+        </signature>
+    </widget>
 </moya>

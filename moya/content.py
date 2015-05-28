@@ -426,6 +426,9 @@ class Section(object):
     def add_renderable(self, name, renderable):
         self.add_node(renderable)
 
+    def append(self, value):
+        self.add_node(value)
+
     def add_td(self, name, value):
         self.td[name] = value
 

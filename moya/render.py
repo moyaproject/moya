@@ -55,6 +55,8 @@ def render_object(obj, archive, context, target, options=None):
             rendered = obj.moya_render(archive, context, target, options or {})
     elif target == "json":
         rendered = json.dumps(obj)
+    elif target == "html.linebreaks":
+        rendered = HTML("<br>\n".join(escape(text_type(obj)).splitlines()))
     else:
         if obj is None:
             rendered = ''

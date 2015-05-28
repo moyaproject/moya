@@ -5,6 +5,8 @@ from moya.elements.elementbase import LogicElement, Attribute
 from moya import logic
 from moya import namespaces
 
+import itertools
+
 
 class Table(LogicElement):
     """
@@ -44,13 +46,16 @@ class Table(LogicElement):
         table = {
             "class": params['class'],
             "id": params.id,
-            "caption": params.caption
+            "caption": params.caption,
+            "hide_cols": [],
         }
         app = self.get_app(context)
         css_path = self.archive.get_media_url(context, app, 'media', 'css/tables.css')
         content.include_css(css_path)
-        with content.template_node("table", app.resolve_template(params.template), {'table': table}):
-            yield logic.DeferNodeContents(self)
+        with context.data_scope():
+            context['_moyatable'] = table
+            with content.template_node("table", app.resolve_template(params.template), {'table': table}):
+                yield logic.DeferNodeContents(self)
 
 
 class Columns(LogicElement):
@@ -88,6 +93,7 @@ class Header(LogicElement):
     template = Attribute("Template", required=False, default="header.html")
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    hide = Attribute("Hide this column?", type="boolean", required=False, default=False)
 
     class Meta:
         text_nodes = "text"
@@ -97,8 +103,10 @@ class Header(LogicElement):
         params = self.get_parameters(context)
         content = context['.content']
         td = {'class': params['class']}
-        with content.template_node('column', app.resolve_template(params.template), td):
-            yield logic.DeferNodeContents(self)
+        context['_moyatable.hide_cols'].append(params.hide)
+        if not params.hide:
+            with content.template_node('column', app.resolve_template(params.template), td):
+                yield logic.DeferNodeContents(self)
 
 
 class SortHeader(LogicElement):
@@ -115,6 +123,7 @@ class SortHeader(LogicElement):
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     name = Attribute("Name to be set in query string", required=True)
     _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    hide = Attribute("Hide this column?", type="boolean", required=False, default=False)
 
     class Meta:
         text_nodes = "text"
@@ -125,8 +134,10 @@ class SortHeader(LogicElement):
         content = context['.content']
         td = {'class': params['class'],
               'name': params.name}
-        with content.template_node('column', app.resolve_template(params.template), td):
-            yield logic.DeferNodeContents(self)
+        context['_moyatable.hide_cols'].append(params.hide)
+        if not params.hide:
+            with content.template_node('column', app.resolve_template(params.template), td):
+                yield logic.DeferNodeContents(self)
 
 
 class Row(LogicElement):
@@ -186,22 +197,29 @@ class Rows(LogicElement):
         content = context['.content']
         app = self.get_app(context)
 
+        hide_cols = context['_moyatable.hide_cols'] or []
         if self.has_parameter('src'):
             objects, dst = self.get_parameters(context, 'src', 'dst')
 
             with content.template_node('rows', app.resolve_template(params.template)):
                 for obj in objects:
+                    _hide_cols = itertools.chain(hide_cols, itertools.repeat(False))
                     if dst:
                         context[dst] = obj
                     td = {'id': self.id(context),
                           'class': self.row_class(context),
                           'style': self.style(context)}
                     with content.template_node("row", app.resolve_template(params.row_template), td):
-                        yield logic.DeferNodeContents(self)
+                        for hidden, child in zip(_hide_cols, self.get_children(element_type=('http://moyaproject.com/tables', 'cell'))):
+                            if not hidden:
+                                yield logic.DeferNode(child)
 
         else:
             with content.template_node('rows', app.resolve_template(params.template)):
-                yield logic.DeferNodeContents(self)
+                _hide_cols = itertools.chain(hide_cols, itertools.repeat(False))
+                for hidden, child in zip(_hide_cols, self.get_children(element_type=('http://moyaproject.com/tables', 'cell'))):
+                    if not hidden:
+                        yield logic.DeferNode(child)
 
 
 class Cell(LogicElement):

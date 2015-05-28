@@ -468,12 +468,12 @@ class Server(LogicElement):
     class Help:
         synopsis = "define a server"
 
-    @classmethod
-    def get_app_from_callstack(self, context):
-        call = context.get('.call', None)
-        if call is None:
-            return None
-        return getattr(call, 'app', None)
+    # @classmethod
+    # def get_app_from_callstack(self, context):
+    #     call = context.get('.call', None)
+    #     if call is None:
+    #         return None
+    #     return getattr(call, 'app', context.get('_t.app', None))
 
     def post_build(self, context):
         self.urlmapper = URLMapper()

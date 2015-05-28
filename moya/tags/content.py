@@ -584,9 +584,10 @@ class IncludeJS(IncludeCSS):
 
 class RenderProxy(object):
 
-    def __init__(self, obj, td):
+    def __init__(self, obj, td, target):
         self.obj = obj
         self.td = td
+        self.target = target
         if hasattr(obj, 'moya_render_targets'):
             self.moya_render_targets = obj.moya_render_targets
         if hasattr(obj, 'html_safe'):
@@ -597,8 +598,12 @@ class RenderProxy(object):
             return self.obj.on_content_insert(context)
 
     def moya_render(self, archive, context, target, options):
-        options['with'] = self.td
-        return self.obj.moya_render(archive, context, target, options)
+        if hasattr(self.obj, 'moya_render'):
+            options['with'] = self.td
+            rendered = self.obj.moya_render(archive, context, self.target or target, options)
+        else:
+            rendered = render_object(self.obj, archive, context, self.target)
+        return rendered
 
 
 class Render(DataSetter, ContentElementMixin):
@@ -637,8 +642,10 @@ class Render(DataSetter, ContentElementMixin):
 
         if not is_renderable(obj) and not is_safe(obj):
             obj = Unsafe(obj)
+
         if content_container is not None:
-            content_container.add_renderable(self._tag_name, RenderProxy(obj, td) if hasattr(obj, 'moya_render') else obj)
+            content_container.add_renderable(self._tag_name, RenderProxy(obj, td, target))
+            #content_container.add_renderable(self._tag_name, RenderProxy(obj, td, target) if hasattr(obj, 'moya_render') else obj)
         else:
             rendered = render_object(obj, self.archive, context, target)
             self.set_context(context, dst, rendered)
