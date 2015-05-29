@@ -62,6 +62,7 @@
                 <case if="column.type == 'string'" />
                 <if test="column.choices">
                     <get-element name="${column.choices}" from="${model.app.name}" dst="choices_element" />
+
                     <forms:select label="${str:column.label or title:column.name}"
                         name="${column.name}"
                         help="${str:column.help}"
@@ -129,13 +130,26 @@
                 <case if="column.type in ['integer', 'big-integer', 'small-integer']"/>
                 <if test="column.choices">
                     <get-enum enum="${column.choices}" from="${model.app.name}" dst="choice_enum" />
+                    <forms:radio-group label="${str:column.label or title:column.name}"
+                        name="${column.name}"
+                        help="${str:column.help}"
+                        initial="object[column.dbname]">
+                        <forms:radio on="" if="column.null"> --- not set --- </forms:radio>
+                        <moya:for src="choices:choice_enum" dst="choice_value,choice_label">
+                            <forms:radio on="${choice_value}">${choice_label}</forms:radio>
+                        </moya:for>
+
+                    </forms:radio-group>
+
+                    <!--
                     <forms:select label="${str:column.label or title:column.name}"
                         name="${column.name}"
                         help="${str:column.help}"
                         adapt="int:value"
                         initial="str:object[column.name]">
-                    <forms:add-choices choices="choices:choice_enum"/>
+                        <forms:add-choices choices="choices:choice_enum"/>
                     </forms:select>
+                -->
                 </if>
                 <else>
                     <forms:input label="${str:column.label or title:column.name}"

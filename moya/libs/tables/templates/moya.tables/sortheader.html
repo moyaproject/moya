@@ -1,6 +1,6 @@
 {%- with sort=.request.GET.sort, order=.request.GET.order -%}
 {%- with active=sort == name, reverse_order = order == 'asc' ? 'desc' : 'asc' -%}
-<th class="moya-tables-sortable{% if active %} sort-active{% if order == 'desc' %} sort-desc{% else %} sort-asc{% endif %}{% endif %}">
+<th {% attrib class=['moya-tables-sortable', active ? 'sort-active': None, order=='desc' ? 'sort-desc': 'sort-asc', class, 'moya-tables-align-' + align] %}>
     {%- if active -%}
     <a title="Click to reverse sort order" href="?${qsupdate:(sort=name, order=reverse_order)}">{% children %}</a>
     {%- else -%}
