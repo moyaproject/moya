@@ -22,6 +22,7 @@ Updated bootstrap to v3.3.4
 Added method parameter to <forms:form> and <forms:get> tag
 Added 'hide' parameter to table <header> tag to dynamically hide columns
 Added 'fail' attribute to forms
+Added 'align' parameter to tables
 
 0.5.12
 ------
