@@ -249,6 +249,7 @@ class Form(AttributeExposer):
                                           'raw_data',
                                           'error',
                                           'errors',
+                                          'fail',
                                           'fields',
                                           'legend',
                                           'ok',
@@ -365,7 +366,11 @@ class Form(AttributeExposer):
 
     @property
     def ok(self):
-        return self.validated and not self.errors and not self.error
+        return bool(self.validated and not self.errors and not self.error)
+
+    @property
+    def fail(self):
+        return bool(self.errors or self.error)
 
     @property
     def fields(self):

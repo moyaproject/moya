@@ -10,6 +10,11 @@
         <title>Log In</title>
         <section name="body">
             <node template="login_container.html">
+                <w:info if=".user">
+                    <markdown>
+                        You are currently signed in as **${.user.username}**
+                    </markdown>
+                </w:info>
                 <render src="form"/>
             </node>
         </section>
@@ -26,40 +31,47 @@
     <content libname="content.forgot_password" extends="#content.base">
         <title>Forgotten Password</title>
         <section name="body">
-            <if test="not reset_password">
-                <w:info if="not form.errors">
-                    <markdown>Enter your email address below and we will email you a link to reset your password</markdown>
-                </w:info>
-                <render src="form"/>
-            </if>
-            <w:success if="reset_password">
-                <markdown>
-We have sent an email to **${reset_password.user.email}** with instructions how to reset your password.
+            <node template="login_container.html">
+                <if test="not reset_password">
+                    <w:info if="not form.errors">
+                        <markdown>Enter your email address below and we will email you a link to reset your password</markdown>
+                    </w:info>
+                    <render src="form"/>
+                </if>
+                <w:success if="reset_password">
+                    <markdown>
+    We have sent an email to **${reset_password.user.email}** with instructions how to reset your password.
 
-If you don't receive this email within a few minutes, please check your *spam* folder.
-                </markdown>
-            </w:success>
+    If you don't receive this email within a few minutes, please check your *spam* folder.
+                    </markdown>
+                </w:success>
+            </node>
         </section>
     </content>
 
     <content libname="content.reset_password" extends="#content.base">
         <title>Reset Password</title>
         <section name="body">
-            <w:danger if="badtoken">
-                <markdown>
-**Reset token not found**!
+            <node template="login_container.html">
+                <w:danger if="badtoken">
+                    <markdown>
+    **Reset token not found**!
 
-The link may have been used, or has expired. You can request a new password reset [here](${forgot_password_url}).
-                </markdown>
-            </w:danger>
-            <render src="form" if="not success and not badtoken"/>
-            <w:success if="success">
-                <markdown>
-**Your password has been reset!**
+    The link may have been used, or has expired. You can request a new password reset [here](${forgot_password_url}).
+                    </markdown>
+                </w:danger>
+                <render src="form" if="not success and not badtoken"/>
+                <if test="success">
+                    <w:success if="success">
+                        <markdown>
+        **Your password has been reset!**
 
-You may now [log in](${login_url}) with your new password.
-                </markdown>
-            </w:success>
+        You may now log in with your new password.
+                        </markdown>
+                    </w:success>
+                    <w:button-link url="${login_url}" class="btn btn-primary">Log In</w:button-link>
+                </if>
+            </node>
         </section>
     </content>
 

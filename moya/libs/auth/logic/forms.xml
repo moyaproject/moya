@@ -29,14 +29,14 @@
     </form>
 
     <form libname="form.forgot_password" style="horizontal" xmlns="http://moyaproject.com/forms">
-        <input label="Email address" name="email" maxlength="300" required="yes"/>
-        <submit-button name="login" text="Send Password Reset" />
+        <input label="Email" name="email" maxlength="300" required="yes"/>
+        <submit-button name="login" text="Send password reset" />
         <validate-field field="email">
             <fail if="not isemail:value">Please enter your email address here.</fail>
         </validate-field>
     </form>
 
-    <form libname="form.reset_password" legend="Reset Password" style="horizontal" xmlns="http://moyaproject.com/forms">
+    <form libname="form.reset_password" legend="Reset Password" style="basic" xmlns="http://moyaproject.com/forms">
         <hidden-input label="Reset Token" name="token" maxlength="50" initial="token" />
         <password label="New Password" name="password" maxlength="256" required="yes" />
         <password label="Confirm Password" name="password2" maxlength="256" required="yes" />
