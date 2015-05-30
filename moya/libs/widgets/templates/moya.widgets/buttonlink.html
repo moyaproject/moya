@@ -4,5 +4,5 @@
     {% children %}
 </a>
 {%- else %}
-<a href="${html:url}" {% attrib class=class %}>{% children %}</a>
+<a href="${html:url}" {% attrib class=[class, size!='md' ? 'btn-' + size : None] %}>{% children %}</a>
 {% endif %}

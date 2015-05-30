@@ -18,6 +18,8 @@
     <!-- exists purely to check the database -->
     <model xmlns="http://moyaproject.com/db" name="Check" libname="Check"/>
 
+    <view libname="view.debug" template="debug_view.html" />
+
     <view libname="view.intro" content="#content.intro"/>
 
 	<view libname="view.code" template="code.html">
