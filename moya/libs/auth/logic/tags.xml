@@ -61,10 +61,19 @@
     <tag name="login" synopsis="log in a user with username/password">
         <doc>Check credentials and login a user</doc>
         <signature>
-            <attribute name="username" type="expression" required="yes"/>
+            <attribute name="username" type="expression" required="yes">
+                A username or email address
+            </attribute>
             <attribute name="password" type="expression" required="yes"/>
         </signature>
-        <db:get model="#User" let:username="username" dst="user" />
+
+        <db:get model="#User" let:email="username" dst="user" if="'@' in username"/>
+        <catch exception="db.multiple-results">
+            <throw exception="moya.auth.multiple-emails"
+                msg="multiple users with that email adddress" />
+        </catch>
+
+        <db:get model="#User" let:username="username" dst="user" if="not user"/>
 
         <throw exception="moya.auth.no-user" msg="no user of that name"
             if="not user" let:username="username"/>

@@ -52,10 +52,13 @@
                     <redirect-to url="${form.data.fwd or '/'}" />
                 </try>
                 <catch exception="moya.auth.no-user,moya.auth.password-fail">
-                    <forms:error src="form">No user with those credentials</forms:error>
+                    <forms:error src="form">No user with those credentials.</forms:error>
                 </catch>
                 <catch exception="moya.auth.forbidden.*">
-                    <forms:error src="form">Sorry, you can't log in at this time</forms:error>
+                    <forms:error src="form">Sorry, you can't log in at this time.</forms:error>
+                </catch>
+                <catch exception="moya.auth.multiple-emails">
+                    <forms:error src="form">Multiple users with that email address, please enter a username.</forms:error>
                 </catch>
                 <catch exception="moya.auth.*">
                     <forms:error src="form">The server was unable to log you in at this time. Please try again later.</forms:error>
