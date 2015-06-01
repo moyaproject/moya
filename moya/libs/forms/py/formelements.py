@@ -60,6 +60,7 @@ class Field(Node):
                  initial,
                  required,
                  visible,
+                 hidelabel=False,
                  default=None,
                  multiple=False,
                  template=None,
@@ -70,6 +71,7 @@ class Field(Node):
                  **params):
         self.app = app
         self.label = label
+        self.hidelabel = hidelabel
         self.name = name
         self.fieldname = fieldname
         self.src = src
@@ -975,6 +977,7 @@ class FieldElement(LogicElement):
 
     name = Attribute("Field name", required=False, default=None)
     label = Attribute("Label", required=False)
+    hidelabel = Attribute("Hide label?", type="boolean", required=False, default=False)
     src = Attribute("Source object index", default=None)
     dst = Attribute("Destination object index", default=None)
     initial = Attribute("Initial value", type="expression", required=False, default=None)
@@ -982,7 +985,7 @@ class FieldElement(LogicElement):
     help = Attribute("Help text", required=False, default=None)
     inlinehelp = Attribute("Help text", required=False, default=None)
     template = Attribute("Template", type="template", required=False, default=None)
-    visible = Attribute("Visible", type="boolean", required=False, default=True)
+    visible = Attribute("Visible?", type="boolean", required=False, default=True)
     style = Attribute("Override style", required=False, default=None)
     maxlength = Attribute("Maximum length", required=False, default=None)
     adapt = Attribute("Function to adapt field before applying", type="function", default="value", evaldefault=True)

@@ -23,6 +23,7 @@ Added method parameter to <forms:form> and <forms:get> tag
 Added 'hide' parameter to table <header> tag to dynamically hide columns
 Added 'fail' attribute to forms
 Added 'align' parameter to tables
+Added 'hidelabel' parameter to form fields
 
 0.5.12
 ------

@@ -1,6 +1,6 @@
 {%- for field in self.children %}
 {%- if field.is_form_field and field.visible %}
-    {% if field.label %}<label for="${field.id}">${field.label}</label>{% endif %}
+    {% if field.label %}<label {% attrib class=[field.hidelabel ? 'sr-only': None] %} for="${field.id}">${field.label}</label>{% endif %}
     {% render field set style="simple", template=field.template %}
 {%- else %}
     {% render field set style="simple", template=field.template %}

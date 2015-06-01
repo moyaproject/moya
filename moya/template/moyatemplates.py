@@ -1080,7 +1080,8 @@ class AttribNode(Node):
                 continue
             if isinstance(v, list):
                 v = " ".join(item for item in v if item)
-            attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
+            if v:
+                attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
         if not attribs_text:
             return ""
         return " " + " ".join(attribs_text)

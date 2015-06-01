@@ -10,7 +10,7 @@
     {%- if field.visible %}
         <p{% if field.errors %} class="has-error"{% endif %}>
             {%- if field.label %}
-            <label for="${field.id}">${field.label}</label>
+            <label {% attrib class=[field.hidelabel ? 'sr-only': None] %} for="${field.id}">${field.label}</label>
             {%- endif %}
             {%- render field set style="simple" -%}
             {% include "common/helperror.html" from "moya.forms" %}
