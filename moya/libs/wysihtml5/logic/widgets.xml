@@ -53,6 +53,8 @@
         <include-js path="js/parser_rules/advanced.js" />
         <include-css path="css/moya_editor.css" />
         <include-css path="css/content.css" />
+        <include-css path="css/font-awesome.min.css" from="moya.fontawesome"
+            if=".app.settings.use_fontawesome.bool and .libs['moya.fontawesome']" />
         <media-url path="css/content.css" dst="css_url" />
         <let widget_id=".content.id" />
         <js>

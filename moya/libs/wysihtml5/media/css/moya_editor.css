@@ -39,7 +39,7 @@
 
 .moya-editor > .moya-editor-toolbar .moya-editor-buttons a.btn
 {
-
+    background-image:none;
 	background-color:#f4f4f4;
 	border:1px solid #e9e9e9;
 }
@@ -198,4 +198,9 @@
 .moya-editor i.moya-editor-icon-view
 {
 	background-image:url(../images/icons/tag.png);
+}
+
+.moya-editor-fa a.btn.wysihtml5-command-active
+{
+    opacity:.6;
 }
