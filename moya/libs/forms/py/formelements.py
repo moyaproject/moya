@@ -959,7 +959,7 @@ class FormElement(LogicElement):
     method = Attribute("Form method", default="post", choices=['get', 'post'])
     enctype = Attribute("Form encoding type", default=None)
     extends = Attribute("Extend another form", default=None)
-    _class = Attribute("Additional CSS class", required=False, default=None)
+    _class = Attribute("CSS class override", required=False, default=None)
     csrf = Attribute("Enable csrf protection?", type="boolean", default=True)
 
     class Meta:
@@ -1089,6 +1089,7 @@ class SubmitButton(FieldElement):
     fieldname = Attribute("Field name", required=False, default="submit-button")
     name = Attribute("Field name", required=False)
     _class = Attribute("Extra class(es)", required=False, default=None)
+    visual = Attribute("Button style", required=False, default="default")
     text = Attribute("Text on button", required=False, default="Submit")
     clicked = Attribute("Value when button is clicked", default=None, required=False)
 

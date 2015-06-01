@@ -62,7 +62,8 @@
             <attribute name="url" required="no" />
             <attribute name="with" required="no" type="expression"/>
             <attribute name="query" required="no" type="expression"/>
-            <attribute name="class" required="no" default="btn btn-default"/>
+            <attribute name="class" required="no" default=""/>
+            <attribute name="visual" required="no" default="default"/>
             <attribute name="icon" required="no"/>
             <attribute name="size" required="no" choices="sm,md,lg" default="md" />
         </signature>

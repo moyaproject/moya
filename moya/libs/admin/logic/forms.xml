@@ -13,7 +13,7 @@
         <moya:if test="not object_pks">
             <w:info>No objects to delete!</w:info>
             <actions>
-                <html:a class="btn btn-info" href="${back_url}">Back</html:a>
+                <w:button-link url="${back_url}">Back</w:button-link>
             </actions>
         </moya:if>
         <moya:else>
@@ -24,8 +24,8 @@
     		<hidden-input name="back_url" initial="back_url" />
     		<moya:node template="objectlist.html" let:objects="objects"/>
     		<actions>
-    			<submit-button class="btn-primary" name="delete" text="Delete" />
-    			<html:a class="btn btn-info" href="${html:back_url}">Cancel</html:a>
+    			<submit-button visual="warning" name="delete" text="Delete" />
+    			<w:button-link url="${back_url}">Cancel</w:button-link>
     		</actions>
         </moya:else>
 	</form>
@@ -381,14 +381,14 @@
 
     <forms:form libname="form.edit" legend="Edit ${object}" style="horizontal" extends="#form.object" class="moya-admin-form">
         <forms:actions>
-            <forms:submit-button text="Save changes" />
+            <forms:submit-button text="Save changes" visual="primary"/>
             <w:button-link url=".">Reset</w:button-link>
         </forms:actions>
     </forms:form>
 
     <forms:form libname="form.new" legend="New ${model.title}" extends="#form.object" class="moya-admin-form">
         <forms:actions>
-            <forms:submit-button text="Create" />
+            <forms:submit-button text="Create" visual="primary"/>
         </forms:actions>
     </forms:form>
 

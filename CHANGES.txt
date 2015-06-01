@@ -24,6 +24,7 @@ Added 'hide' parameter to table <header> tag to dynamically hide columns
 Added 'fail' attribute to forms
 Added 'align' parameter to tables
 Added 'hidelabel' parameter to form fields
+Added 'visual' parameter to submit-button and button-link
 
 0.5.12
 ------
