@@ -9,6 +9,8 @@ from ..render import render_object
 from ..template.rendercontainer import RenderContainer
 from ..mail import Email
 
+import premailer
+
 import logging
 log = logging.getLogger('moya.email')
 
@@ -69,9 +71,10 @@ class HTML(LogicElement, ContentElementMixin):
     template = Attribute("Template path", type="template", required=False)
     content = Attribute("Content Element", required=False, type="elementref")
     from_ = Attribute("From email", required=False, default=None, name="from")
+    _premailer = Attribute("Post process html email?", required=False, default=False, type="boolean")
 
     def logic(self, context):
-        template, content = self.get_parameters(context, 'template', 'content')
+        template, content, _premailer = self.get_parameters(context, 'template', 'content', 'premailer')
         app = self.get_app(context)
         email = context['email']
         if template:
@@ -84,6 +87,8 @@ class HTML(LogicElement, ContentElementMixin):
                 yield defer
             content = context['.content']
             html = render_object(content, self.archive, context, "html")
+        if _premailer:
+            html = premailer.transform(html)
         email.html = html
 
 

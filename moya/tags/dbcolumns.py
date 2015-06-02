@@ -26,6 +26,7 @@ from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.types import TypeDecorator, TEXT, DATETIME, DATE
 import json
 from datetime import datetime, date
+from decimal import Decimal
 
 
 class JSONDict(dict):
@@ -351,6 +352,9 @@ class DecimalColumn(MoyaDBColumn):
         self.precision = precision
         self.scale = scale
         super(DecimalColumn, self).__init__(type, name, *args, **kwargs)
+
+    def adapt(self, value):
+        return Decimal(value)
 
     def get_sa_type(self):
         return self.dbtype(precision=self.precision,

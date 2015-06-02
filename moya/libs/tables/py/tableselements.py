@@ -243,6 +243,7 @@ class Cell(LogicElement):
     template = Attribute("Template", required=False, default="cell.html")
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    hide = Attribute("Hide this cell?", type="boolean", required=False, default=False)
 
     class Meta:
         text_nodes = "text"
@@ -252,8 +253,10 @@ class Cell(LogicElement):
         params = self.get_parameters(context)
         content = context['.content']
         td = {'class': params['class'], 'align': context['align']}
+
         with content.template_node('cell', app.resolve_template(params.template), td):
-            yield logic.DeferNodeContents(self)
+            if not params.hide:
+                yield logic.DeferNodeContents(self)
 
 
 # class Header(Cell):

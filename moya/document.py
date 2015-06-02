@@ -357,7 +357,6 @@ class Document(object):
                 element_ref = "{}#{}".format(app.name, name)
         return self.get_element(element_ref, app=app)
 
-
     def qualify_element_ref(self, element_ref, app=None, lib=None):
         if element_ref.find('#', 1) != -1:
             return element_ref

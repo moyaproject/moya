@@ -211,7 +211,6 @@ class ExpressionDate(date, interface.Proxy):
             else:
                 return ExpressionDate(d.year, d.month - 1, 1)
 
-
         @property
         def leap(self):
             return calendar.isleap(self.year)

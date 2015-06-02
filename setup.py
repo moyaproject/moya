@@ -55,6 +55,7 @@ setup(name='moya',
                         'commonmark',
                         'requests',
                         'lxml',
-                        'colorama'],
+                        'colorama',
+                        'premailer'],
       setup_requires=["setuptools_git >= 0.3"]
       )
