@@ -14,7 +14,7 @@
             <group>
                 <input name="username" label="" type="text" maxlength="30" required="yes" placeholder="username"/>
                 <password name="password" label="" maxlength="30" required="yes" placeholder="password"/>
-                <submit-button name="login" text="Sign In" class="btn-block btn-primary"/>
+                <submit-button name="login" text="Sign In" visual="primary" block="yes"/>
             </group>
         </w:well>
 

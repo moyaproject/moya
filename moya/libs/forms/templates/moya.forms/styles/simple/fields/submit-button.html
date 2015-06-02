@@ -1,5 +1,5 @@
 {% singleline %}
 <button type="submit" {% attrib name=field.name, value=field.clicked %}
-{% attrib class=[field.class ? field.class : 'btn btn-' + field.visual] %}
+{% attrib class=[field.block ? 'btn-block' : None, field.class ? field.class : 'btn btn-' + field.visual] %}
 {% if field.disabled %} disabled{% endif %}>{% if field.text %}${field.text}{% endif %}</button>
 {% endsingleline %}

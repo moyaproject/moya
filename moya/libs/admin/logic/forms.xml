@@ -37,6 +37,10 @@
         </forms:adapt-field>
     </macro>
 
+    <filter name="label" value="name">
+        <return value="title:name"/>
+    </filter>
+
 	<forms:form libname="form.object" legend="Edit ${object}" style="horizontal">
 		<for src="model.columns" dst="column">
 
@@ -44,7 +48,7 @@
 
                 <case if="column.type == 'timezone'"/>
                 <get-timezone-groups dst="tzchoices" />
-                <forms:select label="${str:column.label or title:column.name}"
+                <forms:select label="${str:column.label or column.name|'label'}"
                     name="${column.name}"
                     help="${str:column.help}"
                     initial="object[column.dbname]">
@@ -63,7 +67,7 @@
                 <if test="column.choices">
                     <get-element name="${column.choices}" from="${model.app.name}" dst="choices_element" />
 
-                    <forms:select label="${str:column.label or title:column.name}"
+                    <forms:select label="${str:column.label or column.name|'label'}"
                         name="${column.name}"
                         help="${str:column.help}"
                         initial="object[column.dbname]">
@@ -77,7 +81,7 @@
                     </forms:validate-field>
                 </if>
                 <else>
-				    <forms:input label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+				    <forms:input label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}"
 				        initial="str:object[column.name]" maxlength="${column.length}"
                         required="not column.blank"/>
                 </else>
@@ -85,7 +89,7 @@
 
 
                 <case if="column.type=='string-map'"/>
-                <forms:text-area label="${str:column.label or title:column.name}"
+                <forms:text-area label="${str:column.label or column.name|'label'}"
                                 name="${column.name}"
                                 help="${str:column.help}"
                                 required="not column.blank"
@@ -108,7 +112,7 @@
                 <else>
                     <if test="column.markup == 'html'">
                       <forms:field name="${column.name}"
-                            label="${column.label or title:column.name}"
+                            label="${column.label or column.name|'label'}"
                              required="not column.blank"
                              initial="str:object[column.name]"
                              maxlength="${column.length}">
@@ -116,7 +120,7 @@
                         </forms:field>
                     </if>
                     <else>
-                        <forms:text-area label="${str:column.label or title:column.name}"
+                        <forms:text-area label="${str:column.label or column.name|'label'}"
                             name="${column.name}"
                             help="${str:column.help}"
                             required="not column.blank"
@@ -130,7 +134,7 @@
                 <case if="column.type in ['integer', 'big-integer', 'small-integer']"/>
                 <if test="column.choices">
                     <get-enum enum="${column.choices}" from="${model.app.name}" dst="choice_enum" />
-                    <forms:radio-group label="${str:column.label or title:column.name}"
+                    <forms:radio-group label="${str:column.label or column.name|'label'}"
                         name="${column.name}"
                         help="${str:column.help}"
                         initial="object[column.dbname]">
@@ -138,7 +142,6 @@
                         <moya:for src="choices:choice_enum" dst="choice_value,choice_label">
                             <forms:radio on="${choice_value}">${choice_label}</forms:radio>
                         </moya:for>
-
                     </forms:radio-group>
 
                     <!--
@@ -152,7 +155,7 @@
                 -->
                 </if>
                 <else>
-                    <forms:input label="${str:column.label or title:column.name}"
+                    <forms:input label="${str:column.label or column.name|'label'}"
                         name="${column.name}"
                         help="${str:column.help}"
                         type="number"
@@ -171,7 +174,7 @@
                 </forms:adapt-field>
 
                 <case if="column.type=='decimal'"/>
-                <forms:input label="${str:column.label or title:column.name}"
+                <forms:input label="${str:column.label or column.name|'label'}"
                     name="${column.name}"
                     help="${str:column.help}"
                     initial="str:object[column.name]"
@@ -189,7 +192,7 @@
                 </forms:adapt-field>
 
                 <case if="column.type=='float'"/>
-                <forms:input label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}" type="number"
+                <forms:input label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}" type="number"
                     initial="str:object[column.name]"
                     adapt="float:value"
                     required="not column.blank" />
@@ -204,14 +207,14 @@
                 </forms:adapt-field>
 
 			    <case if="column.type=='boolean'"/>
-				<forms:checkbox label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+				<forms:checkbox label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}"
 					initial="object[column.name] ? 'on' : 'off'" adapt="value == 'on'" on="on"
                     required="not column.blank"/>
 
 
 			    <case if="column.type=='datetime'"/>
 				<forms:input template="/moya.admin/datetimeinput.html"
-                    class="datetime" label="${str:column.label or title:column.name}" name="${column.name}"
+                    class="datetime" label="${str:column.label or column.name|'label'}" name="${column.name}"
                     help="${str:column.help}" initial="object[column.name]['isoformat'] or None"
                     adapt="datetime:value"
                     required="not column.blank"/>
@@ -227,7 +230,7 @@
 
                 <case if="column.type=='date'"/>
                 <forms:input template="/moya.admin/dateinput.html"
-                    class="date" label="${str:column.label or title:column.name}" name="${column.name}"
+                    class="date" label="${str:column.label or column.name|'label'}" name="${column.name}"
                     help="${str:column.help}" initial="object[column.name]['isoformat']"
                     adapt="datetime:value"
                     required="not column.blank"/>
@@ -240,7 +243,7 @@
                     <get-element name="${column.picker}" from="${model.app.name}" dst="picker_table"/>
                     <let selected="object[column.name] ? [object[column.name]['id']] : []"/>
 
-                    <forms:field label="${str:column.label or title:column.name}" name="${column.dbname}"
+                    <forms:field label="${str:column.label or column.name|'label'}" name="${column.dbname}"
                         required="not column.blank"
                         help="${str:column.help}"
                         adapt="fromjson:value">
@@ -283,7 +286,7 @@
                     <db:query src="related" filter="${column.options}" dst="related" if="column.options"
                         from="${column.ref_model.app.name}"/>
                     <db:query src="related" dst="related" orderby="${column.orderby}" if="column.orderby" />
-                    <forms:select label="${str:column.label or title:column.name}" name="${column.name}" help="${str:column.help}"
+                    <forms:select label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}"
                         initial="object[column.dbname]" required="not column.blank">
                         <forms:option value=""> --- not set --- </forms:option>
                         <for src="related" dst="obj">
@@ -319,7 +322,7 @@
                 <db:new-query model="relationship.ref_model" dst="selected"/>
                 <db:query src="selected" filter="relationship_id in related" columns="relationship_id" dst="selected" flat="yes" collect="list"/>
 
-                <forms:field label="${str:relationship.label or title:relationship.name}"
+                <forms:field label="${str:relationship.label or relationship.name|'label'}"
                     name="${relationship.name}" help="${str:relationship.help}"
                     adapt="fromjson:value or []">
 
@@ -358,7 +361,7 @@
 
                 <let options="collectids:object[relationship.name]"/>
 
-                <forms:check-select label="${str:relationship.label or title:relationship.name}"
+                <forms:check-select label="${str:relationship.label or relationship.name|'label'}"
                     name="${relationship.name}" help="${str:relationship.help}"
                     initial="options" dst="${relationship.name}">
                     <for src="related" dst="obj">

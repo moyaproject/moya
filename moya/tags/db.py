@@ -2635,7 +2635,7 @@ class Atomic(DBContextElement):
             session.begin_nested()
             try:
                 yield DeferNodeContents(self)
-            except:
+            except Exception as e:
                 session.rollback()
                 raise
             else:
