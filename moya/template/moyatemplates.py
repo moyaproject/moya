@@ -1656,6 +1656,7 @@ class Template(object):
                     node.add_child(text)
             else:
                 tag_name, _, extra = text.strip().partition(' ')
+                tag_name = tag_name.replace('-', '')
                 if tag_name.startswith("end"):
                     closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()

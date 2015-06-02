@@ -106,9 +106,9 @@ class Email(object):
         if self.replyto is not None:
             msg['Reply-To'] = self.replyto
         if self.text is not None:
-            msg.attach(MIMEText(self.text, 'plain'))
+            msg.attach(MIMEText(self.text, 'plain', 'utf-8'))
         if self.html is not None:
-            msg.attach(MIMEText(self.html, 'html'))
+            msg.attach(MIMEText(self.html, 'html', 'utf-8'))
         return msg.as_string()
 
 
@@ -144,13 +144,13 @@ class MailServer(object):
         except SMTPException as e:
             raise MoyaException("email.error", text_type(e))
         except socket_error as e:
-            raise MoyaException("email.connectionrefused", text_type(e))
+            raise MoyaException("email.connection-refused", text_type(e))
 
         if self.username:
             try:
                 smtp.login(self.username, self.password)
             except smtp.SMTPExcetion as e:
-                raise MoyaException("email.authfail", text_type(e))
+                raise MoyaException("email.auth-fail", text_type(e))
             finally:
                 smtp.quit()
         return smtp
