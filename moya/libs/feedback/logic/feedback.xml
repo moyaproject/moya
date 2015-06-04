@@ -38,7 +38,7 @@
             </moya:else>
         </select>
         <text-area name="message" label="Your feedback" class="input-block-level" rows="8" required="yes"/>
-        <submit-button text="Send" class="btn-primary" />
+        <submit-button text="Send" />
         <validate-field field="email">
             <fail if="'@' not in value or '.' not in value">
                 Please enter a valid email address

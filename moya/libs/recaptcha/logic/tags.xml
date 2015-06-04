@@ -8,10 +8,10 @@
             Verify the response from a re-captcha.
         </doc>
         <signature>
-            <attribute name="response" required="yes" type="expression">
+            <attribute name="response">
                 The response value (g-recaptcha-response from form)
             </attribute>
-            <attribute name="secretkey" required="no" default="">
+            <attribute name="secretkey" type="text" default="">
                 Optionally override secretkey from settings.
             </attribute>
         </signature>

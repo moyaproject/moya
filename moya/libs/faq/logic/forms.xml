@@ -26,14 +26,14 @@
         </validate-field>
     </form>
     <form xmlns="http://moyaproject.com/forms" extends="#form.faqbase" libname="form.editfaq" legend="Edit Question" >
-        <submit-button class="btn-primary" name="submit" text="Update"/>
+        <submit-button visual="primary" name="submit" text="Update"/>
     </form>
 
     <form libname="form.deletefaq" legend="Delete Question" xmlns="http://moyaproject.com/forms">
         <w:dialog>
             <moya:markdown>Are you sure you wish to delete question *${faq.question}*?</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button visual="primary" name="delete" text="Delete" clicked="delete" />
                 <submit-button name="cancel" text="Cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>

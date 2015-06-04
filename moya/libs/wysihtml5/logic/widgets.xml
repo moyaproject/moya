@@ -42,7 +42,7 @@
     	    <attribute name="rbuttons" type="commalist" default="view">
                 A list of buttons on the right hand side.
             </attribute>
-            <attribute name="name" default="">
+            <attribute name="name" default="" type="text">
                 The name attribute of the textarea.
             </attribute>
             <attribute name="breaks" default="no" type="boolean">

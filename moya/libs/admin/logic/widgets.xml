@@ -55,20 +55,20 @@
 
     <widget name="foreign-key-select" undocumented="yes" template="widgets/foreign_key_select.html">
         <signature>
-            <attribute name="object" type="expression"/>
+            <attribute name="object"/>
         </signature>
     </widget>
 
     <tag name="render-table" undocumented="yes">
         <doc>Render an Admin table</doc>
         <signature>
-            <attribute name="table" type="expression" required="yes" />
-            <attribute name="columns" type="expression" required="yes"/>
-            <attribute name="page_size" type="expression" required="yes" />
-            <attribute name="page_no" type="expression" required="yes" />
-            <attribute name="action_url" type="expression" required="yes" />
-            <attribute name="back_url" type="expression" required="no" />
-            <attribute name="search" type="expression" required="no" />
+            <attribute name="table"/>
+            <attribute name="columns"/>
+            <attribute name="page_size"/>
+            <attribute name="page_no"/>
+            <attribute name="action_url"/>
+            <attribute name="back_url" required="no" />
+            <attribute name="search" required="no" />
             <attribute name="template" type="template" required="no" default="widgets/table.html" />
             <attribute name="picker" type="boolean" required="no" default="no" />
             <attribute name="options" type="expression" required="no" />
@@ -130,24 +130,24 @@
     <widget name="column" template="widgets/table/column.html" synopsis="define a column in an admin view">
         <doc>Define a column in a database view"</doc>
     	<signature>
-    		<attribute name="title"/>
-            <attribute name="sort" />
-            <attribute name="link" type="expression" default="no" />
+    		<attribute name="title" type="text" required="no"/>
+            <attribute name="sort" type="text" required="no"/>
+            <attribute name="link" default="no" />
     	</signature>
     </widget>
 
     <widget name="breadcrumbs" template="widgets/breadcrumbs.html" undocumented="yes">
         <signature>
-            <attribute name="title"/>
-            <attribute name="module" type="expression" default="None"/>
-            <attribute name="appname" />
+            <attribute name="title" type="text"/>
+            <attribute name="module" default="None"/>
+            <attribute name="appname" type="text" />
         </signature>
     </widget>
 
     <widget name="crumb" template="widgets/crumb.html" undocumented="yes">
         <signature>
-            <attribute name="text"/>
-            <attribute name="url"/>
+            <attribute name="text" type="text" required="no"/>
+            <attribute name="url" type="text" required="no"/>
         </signature>
     </widget>
 
@@ -159,27 +159,27 @@
 
     <widget name="relationship" template="widgets/relationship.html" undocumented="yes">
         <signature>
-            <attribute name="related" type="expression"/>
+            <attribute name="related"/>
         </signature>
     </widget>
 
     <widget name="picker" template="widgets/picker.html" undocumented="yes">
         <signature>
-            <attribute name="url" required="yes" type="expression"/>
-            <attribute name="id" required="yes" type="expression"/>
-            <attribute name="selected" required="yes" type="expression" />
-            <attribute name="fieldname" required="yes" type="expression" />
-            <attribute name="value" required="no" type="expression" />
+            <attribute name="url" />
+            <attribute name="id" />
+            <attribute name="selected"/>
+            <attribute name="fieldname"/>
+            <attribute name="value" required="no"/>
         </signature>
     </widget>
 
     <widget name="picker-single" template="widgets/picker_single.html" undocumented="yes">
         <signature>
-            <attribute name="url" required="yes" type="expression"/>
-            <attribute name="id" required="yes" type="expression"/>
-            <attribute name="selected" required="yes" type="expression" />
-            <attribute name="fieldname" required="yes" type="expression" />
-            <attribute name="value" required="no" type="expression" />
+            <attribute name="url"/>
+            <attribute name="id"/>
+            <attribute name="selected"/>
+            <attribute name="fieldname"/>
+            <attribute name="value" required="no"/>
         </signature>
     </widget>
 

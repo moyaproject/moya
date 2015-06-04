@@ -5,10 +5,10 @@
     <tag name="get-counts" synopsis="get comment counts">
         <doc>Get comment counts</doc>
         <signature>
-            <attribute name="namespace" required="yes">
+            <attribute name="namespace" type="text">
                 A comment namespace
             </attribute>
-            <attribute name="topics" type="expression" default="None">
+            <attribute name="topics" default="None">
                 A sequence of object IDs
             </attribute>
         </signature>
@@ -28,10 +28,10 @@
     <tag name="get-count" synopsis="get number of comments">
         <doc>Get comment count for a single topic.</doc>
         <signature>
-            <attribute name="namespace" required="yes">
+            <attribute name="namespace" type="text">
                 A comment namespace
             </attribute>
-            <attribute name="topic" required="yes">
+            <attribute name="topic" type="text">
                 An object id
             </attribute>
         </signature>

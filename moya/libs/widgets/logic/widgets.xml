@@ -40,13 +40,13 @@
     <widget name="link" template="link.html" let="params" synopsis="renders a link">
         <doc>Renders a link.</doc>
         <signature>
-            <attribute name="name" type="text"/>
+            <attribute name="name" type="text" required="no"/>
             <attribute name="app" type="text" required="no" default="" />
-            <attribute name="url" required="no" />
-            <attribute name="with" required="no" type="expression"/>
-            <attribute name="query" required="no" type="expression"/>
-            <attribute name="class" required="no" />
-            <attribute name="icon" required="no"/>
+            <attribute name="url" required="no" type="text"/>
+            <attribute name="with" required="no" />
+            <attribute name="query" required="no"/>
+            <attribute name="class" required="no" type="text" />
+            <attribute name="icon" required="no" type="text"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
@@ -59,13 +59,13 @@
         <signature>
             <attribute name="name" type="text" default=""/>
             <attribute name="app" type="text" required="no"/>
-            <attribute name="url" required="no" />
-            <attribute name="with" required="no" type="expression"/>
-            <attribute name="query" required="no" type="expression"/>
-            <attribute name="class" required="no" default=""/>
-            <attribute name="visual" required="no" default="default"/>
-            <attribute name="icon" required="no"/>
-            <attribute name="size" required="no" choices="sm,md,lg" default="md" />
+            <attribute name="url" required="no" type="text"/>
+            <attribute name="with" required="no" />
+            <attribute name="query" required="no" />
+            <attribute name="class" required="no" default="" type="text"/>
+            <attribute name="visual" required="no" default="default" type="text"/>
+            <attribute name="icon" required="no" type="text"/>
+            <attribute name="size" required="no" choices="sm,md,lg" default="md" type="text"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
@@ -79,7 +79,7 @@
     <widget name="url" template="url.html" synopsis="renders a hyperlinked URL">
         <doc>Renders a URL with a link.</doc>
         <signature>
-            <attribute name="url" required="no" />
+            <attribute name="url" required="no" type="text"/>
         </signature>
     </widget>
 
@@ -112,7 +112,7 @@
             <attribute name="src" type="index">
                 Sequence to paginate.
             </attribute>
-            <attribute name="dst" default="object">
+            <attribute name="dst" default="object" type="text">
                 The name to give to each item in the sequence.
             </attribute>
             <attribute name="pagesize" type="expression" default="10">
@@ -124,7 +124,7 @@
             <attribute name="auto" type="boolean" default="yes" required="no">
                 If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.
             </attribute>
-            <attribute name="fragment" required="no">
+            <attribute name="fragment" required="no" type="text">
                 Option fragment to add to links.
             </attribute>
         </signature>
@@ -145,17 +145,17 @@
 
     <widget name="tab-panel" template="tabpanel/panel.html" synopsis="tab panel container" container="yes">
         <signature>
-            <attribute name="id" required="no" default=""/>
-            <attribute name="active"/>
-            <attribute name="class" required="no">Additional class(es)</attribute>
+            <attribute name="id" required="no" default="" type="text"/>
+            <attribute name="active" type="text"/>
+            <attribute name="class" required="no" type="text">Additional class(es)</attribute>
         </signature>
     </widget>
 
     <widget name="tab" template="tabpanel/tab.html" synopsis="individial tab" container="yes">
         <signature>
-            <attribute name="id" required="yes"/>
-            <attribute name="title" required="yes"/>
-            <attribute name="icon" required="no">
+            <attribute name="id" type="text"/>
+            <attribute name="title" type="text"/>
+            <attribute name="icon" required="no" type="text">
                 Icon class
             </attribute>
         </signature>
@@ -177,7 +177,7 @@
 
     <widget name="option" template="option.html" synopsis="option in a select">
         <signature>
-            <attribute name="value" required="yes"/>
+            <attribute name="value" type="text"/>
         </signature>
     </widget>
 
@@ -190,9 +190,9 @@
     <widget name="search-input" template="search-input.html">
         <doc>A search input with cancel button</doc>
         <signature>
-            <attribute name="value" required="no" type="expression"/>
-            <attribute name="name" required="no" default="q"/>
-            <attribute name="placeholder" default="search" />
+            <attribute name="value" required="no"/>
+            <attribute name="name" required="no" default="q" type="text"/>
+            <attribute name="placeholder" default="search" type="text"/>
         </signature>
     </widget>
 </moya>

@@ -187,6 +187,8 @@ class Tag(ElementBase):
             for signature in self.children("signature"):
                 for attribute_tag in signature.children("attribute"):
                     param_map = attribute_tag.get_all_parameters(context)
+                    if attribute_tag.has_parameter('default') and not attribute_tag.has_parameter('required'):
+                        param_map['required'] = False
                     attribute = Attribute(attribute_tag.doc,
                                           map_to=param_map.get('name'),
                                           evaldefault=True,
@@ -200,6 +202,7 @@ class Tag(ElementBase):
         if 'lazy' not in attributes:
             attributes['lazy'] = Attribute("Enable lazy evaluation", name="lazy", type="boolean", map_to="lazy", default=False)
         attributes['from'] = Attribute("Application", name="from", type="application", map_to="from", default=None)
+
         doc = None
         for doc_tag in self.children("doc"):
             doc = doc_tag.text.strip()
@@ -277,6 +280,8 @@ class DataTag(ElementBase):
         for signature in self.children("signature"):
             for attribute_tag in signature.children("attribute"):
                 param_map = attribute_tag.get_all_parameters(context)
+                if attribute_tag.has_parameter('default') and not attribute_tag.has_parameter('required'):
+                    param_map['required'] = False
                 attribute = Attribute(attribute_tag.doc,
                                       map_to=param_map.get('name'),
                                       evaldefault=True,

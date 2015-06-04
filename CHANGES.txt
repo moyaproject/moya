@@ -26,6 +26,7 @@ Added 'align' parameter to tables
 Added 'hidelabel' parameter to form fields
 Added 'visual' parameter to submit-button and button-link
 Added 'hide' parameter to table cells
+Change <attribute> tag to be type 'expression' by default
 
 0.5.12
 ------

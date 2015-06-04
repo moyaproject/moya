@@ -12,7 +12,7 @@ from ..console import Console
 from ..content import Content, Section, IncludePath
 from ..tools import url_join
 from ..context.missing import is_missing
-from ..markup import Markup
+from ..markup import Markup, get_installed_markups
 from ..template import Template as MoyaTemplate
 from ..compat import string_types, text_type
 
@@ -689,7 +689,7 @@ class RenderAll(DataSetter, ContentElementMixin):
 
 class Template(RenderBase):
 
-    markup = Attribute("Markup", required=False, default="html", choices=["bbcode", "html"])
+    markup = Attribute("Markup", required=False, default="html", choices=get_installed_markups)
 
     def finalize(self, context):
         self.template = MoyaTemplate(self.text, self._location)

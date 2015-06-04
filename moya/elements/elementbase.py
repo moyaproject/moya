@@ -74,13 +74,19 @@ class Attribute(object):
         self.evaldefault = evaldefault
         self.oneof = oneof
         self.synopsis = synopsis
-        self.choices = choices
+        self._choices = choices
         self.translate = translate or self.type.translate
         self.missing = missing
         self.empty = empty
         self.enum = None
         #if translate is not None:
         #    self.translate = translate
+
+    @property
+    def choices(self):
+        if callable(self._choices):
+            return self._choices()
+        return self._choices
 
     def __getstate__(self):
         state = self.__dict__.copy()

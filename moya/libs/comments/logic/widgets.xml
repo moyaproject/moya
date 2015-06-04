@@ -6,10 +6,10 @@
     <widget name="comments" template="widgets/comments.html" synopsis="enable comments">
         <doc>Render comments on a page.</doc>
         <signature>
-            <attribute name="namespace" required="yes"/>
-            <attribute name="topic" required="yes"/>
-            <attribute name="url" required="no" />
-            <attribute name="markup" required="no" default="bbcode" />
+            <attribute name="namespace" type="text"/>
+            <attribute name="topic" type="text"/>
+            <attribute name="url" required="no" type="text"/>
+            <attribute name="markup" required="no" default="bbcode" type="text"/>
         </signature>
 
         <include-css path="css/comments.css" />

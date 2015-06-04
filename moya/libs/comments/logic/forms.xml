@@ -40,7 +40,7 @@
         </field>
 
         <actions>
-            <submit-button text="Post Comment" class="btn-primary"/>
+            <submit-button text="Post Comment" visual="primary"/>
         </actions>
 
         <field name="Options">
@@ -83,7 +83,7 @@
         <hidden-input name="url" initial="url" />
 
         <html:p><moya:render src="message"/></html:p>
-        <submit-button class="btn-primary" name="confirmed" text="${button}" clicked="delete" />
+        <submit-button visual="primary" name="confirmed" text="${button}" clicked="delete" />
         <submit-button name="cancel" text="Cancel" clicked="cancel" />
     </form>
 
@@ -92,7 +92,7 @@
         <html:p>Are you sure you want to unsubscribe ${subscription.email} from this comment thread?</html:p>
         <checkbox name="all" text="Unsubscribe from all comment threads" />
         <actions>
-            <submit-button text="Unsubscribe" class="btn btn-primary" />
+            <submit-button text="Unsubscribe" visual="primary" />
         </actions>
     </form>
 

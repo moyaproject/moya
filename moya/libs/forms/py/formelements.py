@@ -1089,7 +1089,7 @@ class SubmitButton(FieldElement):
     fieldname = Attribute("Field name", required=False, default="submit-button")
     name = Attribute("Field name", required=False)
     _class = Attribute("Extra class(es)", required=False, default=None)
-    visual = Attribute("Button style", required=False, default="default")
+    visual = Attribute("Button style", required=False, default="primary")
     block = Attribute("Block level?", required=False, default=False)
     text = Attribute("Text on button", required=False, default="Submit")
     clicked = Attribute("Value when button is clicked", default=None, required=False)

@@ -6,13 +6,13 @@
     <widget name="post" template="widgets/post.html" undocumented="yes">
         <doc>Render a blog post</doc>
         <signature>
-            <attribute name="post" type="index" />
-            <attribute name="slug" type="index" />
+            <attribute name="post" type="index" required="no"/>
+            <attribute name="slug" type="index" required="no"/>
             <attribute name="linktitle" type="boolean" default="yes" />
             <attribute name="solo" type="boolean" default="no" />
             <attribute name="newer" type="index" default="None"/>
             <attribute name="older" type="index" default="None"/>
-            <attribute name="numcomments" type="expression" default="0" />
+            <attribute name="numcomments" default="0" />
         </signature>
         <include-css path="css/blog.css" />
         <db:get-required model="#Post" dst="post" let:slug="slug" let:published="yes" if="not post" />

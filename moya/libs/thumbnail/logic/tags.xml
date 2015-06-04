@@ -31,16 +31,16 @@ The code inside the processor transforms that image. The new image is then writt
 
             ]]></doc>
         <signature>
-            <attribute name="name" required="yes">
+            <attribute name="name" required="yes" type="text">
                 An identifier used in the thumbnail generation
             </attribute>
             <attribute name="version" type="integer" required="no" default="1">
                 A version number of the processor
             </attribute>
-            <attribute name="format" default="jpeg" choices="jpeg,png">
+            <attribute name="format" default="jpeg" choices="jpeg,png" type="text">
                 Image format for the thumbnail
             </attribute>
-            <attribute name="quality" default="80" type="expression" required="no">
+            <attribute name="quality" default="80" type="integer" required="no" >
                 The quality of jpeg thumbnails (max 100)
             </attribute>
         </signature>

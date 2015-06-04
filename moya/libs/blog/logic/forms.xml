@@ -22,8 +22,8 @@
 
     <form extends="#form.post" libname="form.newpost" legend="New Post" xmlns="http://moyaproject.com/forms">
         <actions>
-            <submit-button class="btn-primary" name="action" clicked="create" text="Create"/>
-            <submit-button class="btn-info" name="action" clicked="publish" text="Create &amp; Publish"/>
+            <submit-button visual="primary" name="action" clicked="create" text="Create"/>
+            <submit-button visual="info" name="action" clicked="publish" text="Create &amp; Publish"/>
         </actions>
         <validate-field field="slug">
             <db:get model="#Post" let:slug="value" dst="post"/>
@@ -38,7 +38,7 @@
 
     <form extends="#form.post" libname="form.editpost" legend="Edit Post" xmlns="http://moyaproject.com/forms">
         <actions>
-            <submit-button class="btn-primary" name="submit" text="Edit Post"/>
+            <submit-button visual="primary" name="submit" text="Edit Post"/>
             <html:a class="btn" href="${cancel_url}">Cancel</html:a>
         </actions>
     </form>
@@ -47,8 +47,8 @@
         <w:dialog>
             <moya:markdown>Are you sure you wish to delete post *${post.title}*?</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
-                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+                <submit-button visual="primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>
     </form>
@@ -59,8 +59,8 @@
             <moya:markdown>Are you sure you wish to publish post *${post.title}*?</moya:markdown>
             <moya:markdown>The URL will be **${posturl}**</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="publish" text="Publish" clicked="publish" />
-                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+                <submit-button visual="primary" name="publish" text="Publish" clicked="publish" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>
     </form>
@@ -71,7 +71,7 @@
             <moya:markdown>Are you sure you wish to hide post *${post.title}*?</moya:markdown>
             <moya:markdown>Hidden posts will be visible to admin only</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="hide" text="Hide" clicked="publish" />
+                <submit-button visual="primary" name="hide" text="Hide" clicked="publish" />
                 <submit-button class="btn" name="cancel" text="cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>

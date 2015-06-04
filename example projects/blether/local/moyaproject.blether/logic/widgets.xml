@@ -5,7 +5,7 @@
 
     <widget name="blether" template="widgets/blether.html">
         <signature>
-            <attribute name="blether" type="expression" />
+            <attribute name="blether"/>
         </signature>
         <include-css path="css/moyablether.css"/>
     </widget>

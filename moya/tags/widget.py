@@ -150,6 +150,8 @@ class Widget(ElementBase):
         for signature in self.children("signature"):
             for attribute_tag in signature.children("attribute"):
                 param_map = attribute_tag.get_all_parameters(context)
+                if attribute_tag.has_parameter('default') and not attribute_tag.has_parameter('required'):
+                    param_map['required'] = False
                 description = attribute_tag.doc
                 name = param_map.pop('name')
                 attribute = Attribute(description, name=name, evaldefault=True, **param_map)
@@ -224,9 +226,10 @@ class AttributeTag(ElementBase):
     class Meta:
         logic_skip = True
         tag_name = "attribute"
+
     name = Attribute("Name of the attribute", required=True)
-    type = Attribute("Type of the attribute", required=False, choices=attributetypes.valid_types)
-    required = Attribute("Required", type="boolean", required=False, default=False)
+    type = Attribute("Type of the attribute", required=False, default="expression", choices=attributetypes.valid_types)
+    required = Attribute("Required", type="boolean", required=False, default=True)
     default = Attribute("Default", required=False, default=None)
     metavar = Attribute("Metavar (identifier used in documentation)", required=False)
     missing = Attribute("Are missing values allowed?", type="boolean", default=True, required=False)
@@ -264,7 +267,7 @@ class ArgumentTag(ElementBase):
         tag_name = "argument"
 
     name = Attribute("Name of the attribute", required=True)
-    required = Attribute("Is this argument required?", type="boolean", default=False)
+    required = Attribute("Is this argument required?", type="boolean", default=True)
     check = Attribute("A boolean expression that the attribute must satisfy", type="function", default=None)
     default = Attribute("A value to use if the argument is not supplied", type="function", default=None)
 

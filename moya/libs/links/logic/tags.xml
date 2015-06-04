@@ -8,13 +8,13 @@
             Defines a link. These tags may appear anywhere in the project, and can be extracted with the [tag links]get[/tag] tag.
         </doc>
     	<signature>
-    		<attribute name="purpose" default="navigation">The purpose of the link</attribute>
-    		<attribute name="url" default="">An absolute URL</attribute>
-    		<attribute name="text" required="yes">Text to go in the URL</attribute>
-    		<attribute name="name" required="no" default="">Name of the URL to look up</attribute>
-            <attribute name="from" required="no">Library or Application if looking up URL</attribute>
-            <attribute name="with" required="no" type="expression" default="{}">Any route variables</attribute>
-            <attribute name="query" required="no" type="expression" default="{}">Query string data</attribute>
+    		<attribute name="purpose" default="navigation" type="text">The purpose of the link</attribute>
+    		<attribute name="url" default="" type="text">An absolute URL</attribute>
+    		<attribute name="text" required="yes" type="text">Text to go in the URL</attribute>
+    		<attribute name="name" required="no" default="" type="text">Name of the URL to look up</attribute>
+            <attribute name="from" required="no" type="text">Library or Application if looking up URL</attribute>
+            <attribute name="with" required="no" default="{}">Any route variables</attribute>
+            <attribute name="query" required="no" default="{}">Query string data</attribute>
     	</signature>
     </data-tag>
 
@@ -23,7 +23,7 @@
             Gathers links from [tag links]link[/tag] tags.
         </doc>
     	<signature>
-    		<attribute name="purpose" default="navigation">Gather tags with the 'purpose' attribute set to this value</attribute>
+    		<attribute name="purpose" default="navigation" type="text">Gather tags with the 'purpose' attribute set to this value</attribute>
     	</signature>
 
     	<get-data tag="link" ns="http://moyaproject.com/links" dst="links_data" />

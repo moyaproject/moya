@@ -16,8 +16,8 @@
         <w:dialog>
             <moya:markdown>Please confirm you would like to follow **${user.username}**</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="follow" text="Follow" clicked="follow" />
-                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+                <submit-button visual="primary" name="follow" text="Follow" clicked="follow" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>
     </form>
@@ -26,8 +26,8 @@
         <w:dialog>
             <moya:markdown>Please confirm you would like to *un-follow* **${user.username}**</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="unfollow" text="Un-Follow" clicked="unfollow" />
-                <submit-button class="btn" name="cancel" text="Cancel" clicked="cancel" />
+                <submit-button visual="primary" name="unfollow" text="Un-Follow" clicked="unfollow" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
             </w:dialog-buttons>
         </w:dialog>
     </form>

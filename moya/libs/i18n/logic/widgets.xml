@@ -4,20 +4,20 @@
 
     <widget name="langicon" template="widgets/flag.html">
         <signature>
-            <attribute name="lang" />
+            <attribute name="lang" type="text" />
         </signature>
     </widget>
 
     <widget name="langswitch" template="widgets/langswitch.html">
     	<signature>
-    		<attribute name="languages" type="commalist" required="yes"/>
+    		<attribute name="languages" type="commalist"/>
     	</signature>
     </widget>
 
     <widget name="translate-attribute" template="widgets/translatable_attribute.html">
         <signature>
-            <attribute name="sometext"/>
-            <attribute name="force_translate"/>
+            <attribute name="sometext" type="text"/>
+            <attribute name="force_translate" type="text"/>
         </signature>
     </widget>
 

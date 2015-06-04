@@ -4,10 +4,10 @@
 
     <widget name="recaptcha" template="widgets/recaptcha.html" synopsis="render a reCAPTCHA widget">
         <signature>
-            <attribute name="sitekey" required="no" default="">
+            <attribute name="sitekey" required="no" default="" type="text">
                 Optional override of site key from settings
             </attribute>
-            <attribute name="theme" required="no" default="light" choices="light,dark" />
+            <attribute name="theme" required="no" default="light" choices="light,dark" type="text"/>
         </signature>
         <include-js url="https://www.google.com/recaptcha/api.js" />
         <let sitekey=".app.settings.sitekey" if="not sitekey" />

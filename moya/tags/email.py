@@ -68,9 +68,12 @@ class HTML(LogicElement, ContentElementMixin):
     class Help:
         synopsis = "add HTML to an email"
 
+    class Meta:
+        one_of = [('template', 'content')]
+
     template = Attribute("Template path", type="template", required=False)
-    content = Attribute("Content Element", required=False, type="elementref")
-    from_ = Attribute("From email", required=False, default=None, name="from")
+    content = Attribute("Content element", required=False, type="elementref")
+    #from_ = Attribute("From email", required=False, default=None, name="from")
     _premailer = Attribute("Post process html email?", required=False, default=False, type="boolean")
 
     def logic(self, context):
@@ -85,10 +88,15 @@ class HTML(LogicElement, ContentElementMixin):
         else:
             for defer in self.generate_content(context, content, app, td=email.data):
                 yield defer
-            content = context['.content']
+            content = context['_content']
             html = render_object(content, self.archive, context, "html")
         if _premailer:
-            html = premailer.transform(html)
+            try:
+                html = premailer.transform(html)
+            except Exception:
+                log.exception('premailer transform failed')
+                self.throw('email.premailer-fail',
+                           msg="failed to post-process html for email, please see logs")
         email.html = html
 
 

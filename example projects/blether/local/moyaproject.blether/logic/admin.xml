@@ -18,7 +18,7 @@
         model="#Blether"
         search="#Blether.text contains q">
         <column title="ID" sort="id" link="yes">${object}</column>
-        <column title="user" sort="user">${object.user.username}</column>
+        <column title="user" sort="#Blether.timeline.user.username">${object.timeline.user}</column>
         <column title="Text" sort="text">${object.text}</column>
         <column title="Blethered On" sort="posted_time">${localize:object.posted_time}</column>
     </table>
