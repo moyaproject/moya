@@ -286,10 +286,11 @@ class ArgumentValidator(object):
         self.defaults = OrderedDict()
         for arg in element.children():
             if arg._element_type != (namespaces.default, 'argument'):
-                raise errors.ElementError("must contain <argument> tags", element=element)
+                raise errors.ElementError("must contain <argument> tags only", element=element)
             name, required, check, default = arg.get_parameters(context, 'name', 'required', 'check', 'default')
-            if default is not None:
+            if arg.has_parameter('default'):
                 self.defaults[name] = default
+                required = False
             self.arg_names.add(name)
             if required:
                 self.required.append(name)

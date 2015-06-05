@@ -43,9 +43,8 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_
         else:
             fs = OSFS(fs)
 
-    if isinstance(settings_path, text_type):
+    if isinstance(settings_path, string_types):
         settings_path = [settings_path]
-
     if archive is None:
         archive = Archive(fs)
     context = Context()
