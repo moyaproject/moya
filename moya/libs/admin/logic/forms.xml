@@ -251,7 +251,7 @@
                         <get-url name="admin_table_picker_single" dst="picker_url"
                             let:appname="picker_table.app.name" let:table="picker_table.params.slug"
                             let:field="field.name"
-                            query="{'model':model.name,
+                            query="{'model':model.ref,
                                     'pk': object.id,
                                     'field':field.name,
                                     'app':model.app.name,
@@ -329,7 +329,7 @@
                     <get-url name="admin_table_picker" dst="picker_url"
                         let:appname="picker_table.app.name" let:table="picker_table.params.slug"
                         let:field="field.name"
-                        query="{'model':model.name,
+                        query="{'model':model.ref,
                                 'pk': object.id,
                                 'field':field.name,
                                 'app':model.app.name,

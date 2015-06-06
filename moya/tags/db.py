@@ -29,7 +29,7 @@ from json import loads
 from collections import namedtuple
 from random import choice
 import uuid
-import weakref
+from datetime import datetime
 
 from sqlalchemy import (Table,
                         Column,
@@ -277,8 +277,8 @@ class TableClassBase(object):
                     value._instance = self
             except Exception as e:
                 pass
-            #if isinstance(value, datetime):
-            #    return ExpressionDateTime.from_datetime(value)
+            if isinstance(value, datetime):
+                return ExpressionDateTime.from_datetime(value)
             return value
 
     def __setitem__(self, key, value):
@@ -342,6 +342,7 @@ class ModelProxy(object):
         self._model = model
         self.name = model.name
         self.title = model.title
+        self.ref = app.qualify_ref(model.ref)
 
         self.app = app
         columns = self.columns = []
@@ -469,6 +470,7 @@ class DBModel(DBElement):
         if name is None:
             name = self.libname.lower()
 
+        self.ref = self.document.qualify_element_ref(self.libid)
         if _repr is None:
             _repr = name + " #${id}"
         self.name = name

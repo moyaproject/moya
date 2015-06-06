@@ -49,7 +49,7 @@
 
     <model name="Group" libname="Group" xmlns="http://moyaproject.com/db"
         repr="Group ${user ? '(personal group) ' + prettylist:collect:[permissions, 'name'] : name}"
-        template="model/group.html">
+        template="objects/group.html">
     	<unique-together>
 	    	<foreign-key name="user" model="#User" null="yes" blank="yes" help="" picker="#admintable.users"/>
 	    	<string name="name" length="30" null="yes"/>

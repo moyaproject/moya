@@ -67,6 +67,12 @@ class Application(object):
             app = self
         return archive.get_element('#' + name, app=app)
 
+    def qualify_ref(self, ref):
+        """qualify an element reference with this app name"""
+        if '#' in ref:
+            return "{}#{}".format(self.name, ref.split('#', 1)[-1])
+        return ref
+
     def get_media_directory(self, media):
         return self.media.get(media, '')
 

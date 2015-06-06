@@ -74,7 +74,7 @@
         <get-url name="admin_table_picker" dst="table_url" with='.url'/>
 
         <if test=".request.GET.pk and .request.GET.show == 'selected'">
-            <db:get model="#${.request.GET.model}"
+            <db:get model="${.request.GET.model}"
                 from="${.request.GET.app}"
                 let:id=".request.GET.pk" dst="object" />
             <let objects="object[.request.GET.field]" />
@@ -103,7 +103,7 @@
         <get-url name="admin_table_picker" dst="table_url" with='.url'/>
 
         <if test=".request.GET.pk and .request.GET.show == 'selected'">
-            <db:get model="#${.request.GET.model}"
+            <db:get model="${.request.GET.model}"
                 from="${.request.GET.app}"
                 let:id=".request.GET.pk" dst="object" />
             <let objects="[{'id':object[field]}]" />
