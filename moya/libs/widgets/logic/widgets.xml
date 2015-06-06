@@ -66,6 +66,7 @@
             <attribute name="visual" required="no" default="default" type="text"/>
             <attribute name="icon" required="no" type="text"/>
             <attribute name="size" required="no" choices="sm,md,lg" default="md" type="text"/>
+            <attribute name="block" type="boolean" default="no" />
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>

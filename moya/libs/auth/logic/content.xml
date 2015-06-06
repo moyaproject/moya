@@ -69,7 +69,7 @@
         You may now log in with your new password.
                         </markdown>
                     </w:success>
-                    <w:button-link url="${login_url}" class="btn btn-primary">Log In</w:button-link>
+                    <w:button-link url="${login_url}" visual="primary">Log In</w:button-link>
                 </if>
             </node>
         </section>

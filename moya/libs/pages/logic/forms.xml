@@ -20,7 +20,7 @@
     </form>
 
     <form extends="#form.page" libname="form.newpage" legend="New Page" style="horizontal" xmlns="http://moyaproject.com/forms">
-        <submit-button class="btn-primary" name="submit" text="Create Page"/>
+        <submit-button name="submit" text="Create Page"/>
         <validate-field field="name">
             <db:get model="#Page" let:name="value" dst="page" />
             <fail if="page">
@@ -31,7 +31,7 @@
 
     <form extends="#form.page" libname="form.editpage" legend="Edit Page" style="horizontal" xmlns="http://moyaproject.com/forms">
         <actions>
-            <submit-button class="btn-primary" name="submit" text="Update"/>
+            <submit-button name="submit" text="Update"/>
             <moya:let pagename="page.name" />
             <html:a class="btn btn-link" href="${.appurls.showpage}">Cancel</html:a>
         </actions>
@@ -41,7 +41,7 @@
         <w:dialog>
             <moya:markdown>Are you sure you wish to delete page *${page.name}*?</moya:markdown>
             <w:dialog-buttons>
-                <submit-button class="btn-primary" name="delete" text="Delete" clicked="delete" />
+                <submit-button name="delete" text="Delete" clicked="delete" />
                 <submit-button text="Cancel" />
             </w:dialog-buttons>
         </w:dialog>
