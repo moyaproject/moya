@@ -46,7 +46,7 @@ class TemplateError(Exception):
         self.lineno = lineno
         self.start = start
         self.end = end
-        self.code = code
+        self._code = code
         self.raw_path = raw_path
         self.diagnosis = diagnosis
         super(TemplateError, self).__init__()

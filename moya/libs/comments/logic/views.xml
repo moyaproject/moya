@@ -68,7 +68,7 @@ If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.p
                            let:commentobject="comment.commentobject"
                            let:subscription="sub"
                            let:comment="comment"
-                           dst="email" fail_silently="False"/>
+                           dst="email" failsilently="no"/>
             </for>
         </if>
         <else>

@@ -6,8 +6,9 @@ from .compat import text_type
 
 class MoyaFilterBase(object):
 
-    def __init__(self, value_name="value"):
+    def __init__(self, value_name="value", allow_missing=False):
         self._value_name = value_name
+        self.allow_missing = allow_missing
         super(MoyaFilterBase, self).__init__()
 
     def get_value_name(self):
@@ -17,6 +18,8 @@ class MoyaFilterBase(object):
         return BoundFilter(app, self)
 
     def __moyafilter__(self, context, app, value, **params):
+        if not self.allow_missing and is_missing(value):
+            raise ValueError("{} doesn't accept a missing value (left hand side is {!r})".format(self, value))
         params[self.get_value_name()] = value
         filter_call = self.lib.archive.get_callable(self.element_ref, app=app)
         value = filter_call(context, **params)
@@ -43,19 +46,19 @@ class BoundFilter(MoyaFilterBase):
 
 
 class MoyaFilter(MoyaFilterBase):
-    def __init__(self, lib, filter_element, value_name):
+    def __init__(self, lib, filter_element, value_name, allow_missing=False):
         self.lib = lib
         self.element_ref = filter_element
-        super(MoyaFilter, self).__init__(value_name)
+        super(MoyaFilter, self).__init__(value_name, allow_missing=allow_missing)
 
     def __repr__(self):
         return "<filter '{}'>".format(self.element_ref)
 
 
 class MoyaFilterExpression(MoyaFilterBase):
-    def __init__(self, exp, value_name):
+    def __init__(self, exp, value_name, allow_missing=False):
         self.exp = exp
-        super(MoyaFilterExpression, self).__init__(value_name)
+        super(MoyaFilterExpression, self).__init__(value_name, allow_missing=allow_missing)
 
     def __repr__(self):
         return "<filter '{}'>".format(text_type(self.exp))
@@ -79,6 +82,6 @@ class MoyaFilterParams(object):
         return repr(self.filter)
 
     def __moyafilter__(self, context, app, value, **params):
-        if is_missing(value):
-            return value
+        #if is_missing(value):
+        #    return value
         return self.filter.__moyafilter__(context, app, value, **self.params)

@@ -28,12 +28,14 @@ class Filter(LogicElement):
     name = Attribute("Filter name", required=True)
     value = Attribute("Value name", default="value", required=False)
     expression = Attribute("Expression", type="function", required=False, default=None)
+    missing = Attribute("Allow missing values?", type="boolean", default=False, required=False)
 
     def lib_finalize(self, context):
         expression = self.expression(context)
         value_name = self.value(context)
+        allow_missing = self.missing(context)
         if expression is not None:
-            _filter = MoyaFilterExpression(expression, value_name)
+            _filter = MoyaFilterExpression(expression, value_name, allow_missing=allow_missing)
         else:
-            _filter = MoyaFilter(self.lib, self.libid, value_name)
+            _filter = MoyaFilter(self.lib, self.libid, value_name, allow_missing=allow_missing)
         self.lib.register_filter(self.name(context), _filter)

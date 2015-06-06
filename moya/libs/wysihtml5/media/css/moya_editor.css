@@ -18,6 +18,11 @@
     /* text-decoration: underline !important; */
 }
 
+.moya-editor-fa .btn-toolbar
+{
+    margin-bottom:8px;
+}
+
 .moya-editor > .moya-editor-toolbar .moya-editor-buttons
 {
 

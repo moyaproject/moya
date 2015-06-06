@@ -170,10 +170,10 @@ class Send(Get):
     dst = Attribute("Destination to store exception object", type="reference", required=False)
     src = Attribute("Source email", type="index", default=None)
     smtp = Attribute("SMTP server", default='')
-    fail_silently = Attribute("Should mail exceptions be ignored?", type="boolean", default=True)
+    failsilently = Attribute("Should mail exceptions be ignored?", type="boolean", default=True)
 
     def logic(self, context):
-        fail_silently = self.fail_silently(context)
+        fail_silently = self.failsilently(context)
         _email = self.src(context)
         if _email is None:
             email = self.get_email(context)

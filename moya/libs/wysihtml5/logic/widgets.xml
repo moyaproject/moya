@@ -48,6 +48,9 @@
             <attribute name="breaks" default="no" type="boolean">
                 Use line breaks?
             </attribute>
+            <attribute name="placeholder" type="text" default="">
+                Placeholder text to display in empty editor
+            </attribute>
         </signature>
         <include-js path="js/wysihtml5-0.4.0pre.min.js" />
         <include-js path="js/parser_rules/advanced.js" />
@@ -63,7 +66,8 @@
         			toolbar: "${widget_id}-toolbar",
         			parserRules: wysihtml5ParserRules,
                     useLineBreaks: ${breaks ? 'true' : 'false'},
-        			stylesheets: ["${css_url}"]
+        			stylesheets: ["${css_url}"],
+                    placeholderText: "${placeholder}" || undefined
         		});
         	});
         </js>

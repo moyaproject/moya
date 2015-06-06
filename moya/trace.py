@@ -210,7 +210,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
                                   cols=node.location[1:],
                                   format="moyatemplate")
                     traceback.add_frame(frame)
-        frame = Frame(exc.code,
+        frame = Frame(exc._code,
                       exc.path,
                       exc.lineno,
                       raw_location=getattr(exc, 'raw_path', None),
@@ -228,7 +228,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     elif isinstance(exc, TemplateError):
         traceback.error_type = "Template Error"
-        frame = Frame(exc.code,
+        frame = Frame(exc._code,
                       exc.path,
                       raw_location=exc.raw_path,
                       lineno=exc.lineno,

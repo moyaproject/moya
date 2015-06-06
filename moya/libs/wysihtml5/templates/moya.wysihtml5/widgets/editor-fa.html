@@ -20,7 +20,7 @@
 
             </a>
             {% elif button in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7'] %}
-            <a class="btn btn-default btn-sm fa fa-header" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="${button}" title="Insert header" tabindex="-1">
+            <a class="btn btn-default btn-sm fa fa-header" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="${button}" title="Header level ${button.1}" tabindex="-1">
             ${button.1}
             </a>
             {%- elif button == 'ul' %}
@@ -71,12 +71,10 @@
 {%- enddef %}
 <div class="moya-editor moya-editor-fa">
     <div id="${widget_id}-toolbar" class="moya-editor-toolbar-fa">
-        <p>
         <div class="btn-toolbar">
             {% if rbuttons %}{% call "buttons" with buttons=rbuttons, class="pull-right" %}{% end %}
             {% if buttons %}{% call "buttons" with buttons=buttons, class="pull-left" %}{% end %}
         </div>
-        </p>
         <div class="moya-editor-dialog moya-editor-image-dialog" data-wysihtml5-dialog="insertImage" style="display:none;">
 
             <input class="form-control input-sm" data-wysihtml5-dialog-field="src" placeholder="Enter an image URL" class="text">
