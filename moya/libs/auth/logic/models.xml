@@ -1,6 +1,6 @@
 <moya xmlns="http://moyaproject.com" xmlns:moya="http://moyaproject.com">
 
-    <model name="UserBase" libname="UserBase" abstract="yes" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="model/user.html">
+    <model name="UserBase" libname="UserBase" abstract="yes" xmlns="http://moyaproject.com/db" repr="${username} #${id}" template="objects/user.html">
 
         <string name="username" label="Username" length="30" blank="no" unique="yes" index="yes" />
         <boolean name="active" label="Login is enabled?" default="yes" />
@@ -24,7 +24,7 @@
     </model>
 
 	<model name="User" libname="User" extends="#UserBase" xmlns="http://moyaproject.com/db"
-        repr="${username} #${id}" template="model/user.html"/>
+        repr="${username} #${id}" template="objects/user.html"/>
 
 	<model name="GroupMembership" libname="GroupMembership" xmlns="http://moyaproject.com/db" repr="${user} in ${group}">
 		<foreign-key model="#User" name="user" null="no"/>
