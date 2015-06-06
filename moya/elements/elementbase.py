@@ -140,6 +140,8 @@ class _Parameters(object):
         if not lazy:
             for name in self.__attr_values:
                 self.__cache[name] = self.__attr_values[name](self.__context)
+            self.__context = None
+
 
     def __getattr__(self, name):
         if name not in self.__cache:
@@ -463,6 +465,9 @@ class ElementBaseType(object):
             except errors.BadValueError as e:
                 self.throw("bad-value.attribute", "Attribute '{}' -- {}".format(name, text_type(e)))
         return [make_param(n) for n in names]
+
+    def get_parameters_nonlazy(self, context):
+        return _Parameters(self._attr_values, context, lazy=False)
 
     def get_parameter(self, context, name):
         return self.get_parameters(context, name)[0]

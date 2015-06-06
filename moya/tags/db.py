@@ -29,6 +29,7 @@ from json import loads
 from collections import namedtuple
 from random import choice
 import uuid
+import weakref
 
 from sqlalchemy import (Table,
                         Column,
@@ -739,7 +740,8 @@ class _ForeignKey(DBElement):
     picker = Attribute("Picker table for admin view", required=False)
 
     def document_finalize(self, context):
-        params = self.get_parameters(context)
+        params = self.get_parameters_nonlazy(context)
+        del context
         self.name = name = params.name
         model = self.get_ancestor((self.xmlns, "model"))
         ref_model_ref = params.model
@@ -784,7 +786,8 @@ class OneToOne(_ForeignKey):
         synopsis = "create a one to one relationship"
 
     def document_finalize(self, context):
-        params = self.get_parameters(context)
+        params = self.get_parameters_nonlazy(context)
+        del context
         self.name = name = params.name
         self.model = model = self.get_ancestor((self.xmlns, "model"))
         ref_model_ref = params.model
@@ -849,7 +852,7 @@ class Relationship(DBElement):
                                     diagnosis=diagnosis.format(ref_libid=ref_libid, libid=model.libid))
 
     def document_finalize(self, context):
-        params = self.get_parameters(context)
+        params = self.get_parameters_nonlazy(context)
         model = self.get_ancestor((self.xmlns, "model"))
         orderby = self.orderby(context)
 
@@ -909,7 +912,8 @@ class ManyToMany(DBElement, DBMixin):
         pass
 
     def document_finalize(self, context):
-        params = self.get_parameters(context)
+        params = self.get_parameters_nonlazy(context)
+        del context
         model = self.get_ancestor((self.xmlns, "model"))
         self.ref_model_ref = ref_model_ref = params.model
         backref_name = params.backref
