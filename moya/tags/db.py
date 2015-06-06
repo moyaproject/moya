@@ -741,7 +741,6 @@ class _ForeignKey(DBElement):
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
-        del context
         self.name = name = params.name
         model = self.get_ancestor((self.xmlns, "model"))
         ref_model_ref = params.model
@@ -913,7 +912,6 @@ class ManyToMany(DBElement, DBMixin):
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
-        del context
         model = self.get_ancestor((self.xmlns, "model"))
         self.ref_model_ref = ref_model_ref = params.model
         backref_name = params.backref
