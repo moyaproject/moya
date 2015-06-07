@@ -113,7 +113,6 @@ class ContentElementMixin(object):
             new_elements = []
             merge = 'replace'
             for ref, _merge in elements:
-                print(ref, _merge)
                 if _merge != 'inherit':
                     merge = _merge
                 if merge == 'replace':
