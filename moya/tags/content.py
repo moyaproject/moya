@@ -16,6 +16,8 @@ from ..markup import Markup, get_installed_markups
 from ..template import Template as MoyaTemplate
 from ..compat import string_types, text_type
 
+from collections import defaultdict
+
 
 class Renderable(object):
     moya_render_targets = ["html"]
@@ -102,9 +104,44 @@ class ContentElementMixin(object):
                 finally:
                     self.pop_content_frame(context)
 
+        sections = defaultdict(list)
+
+        for _content in merge_content:
+            for k, v in _content._section_elements.items():
+                sections[k].extend(v)
+        for section, elements in list(sections.items()):
+            new_elements = []
+            merge = 'replace'
+            for ref, _merge in elements:
+                print(ref, _merge)
+                if _merge != 'inherit':
+                    merge = _merge
+                if merge == 'replace':
+                    del new_elements[:]
+                new_elements.append((ref, merge))
+            sections[section][:] = new_elements
+
         content = merge_content[0]
         for extended_content in merge_content[1:]:
             content.merge(extended_content)
+
+        for section, elements in sections.items():
+            for ref, merge in elements:
+                app, section_el = self.archive.get_element(ref)
+                self.push_content_frame(context, content)
+                try:
+                    self.push_defer(context, app)
+                    try:
+                        for el in section_el.generate(context, content, app, merge):
+                            yield el
+                    finally:
+                        self.pop_defer(context)
+                finally:
+                    self.pop_content_frame(context)
+
+        #content = merge_content[0]
+        #for extended_content in merge_content[1:]:
+        #    content.merge(extended_content)
         if content.template is None:
             content.template = app.default_template
         if not content.template:
@@ -233,10 +270,27 @@ class SectionElement(LogicElement, ContentElementMixin):
         name, template = self.get_parameters(context, 'name', 'template')
         content = self.get_content(context)
         app = self.get_app(context)
-        content.new_section(name, app.resolve_template(template), merge=self._merge)
+        ref = app.qualify_ref(self.libid)
+        content.add_section_element(name, ref, self._merge)
 
+    def generate(self, context, content, app, merge):
+        name = self.name(context)
+        template = self.template(context)
+        content.new_section(name, app.resolve_template(template), merge=merge)
         with content.section(name):
             yield logic.DeferNodeContents(self)
+
+
+    # def logic(self, context):
+    #     name = self.name(context)
+    #     name, template = self.get_parameters(context, 'name', 'template')
+    #     content = self.get_content(context)
+    #     app = self.get_app(context)
+    #     content.new_section(name, app.resolve_template(template), merge=self._merge)
+
+    #     with content.section(name):
+    #         yield logic.DeferNodeContents(self)
+
 
     def post_build(self, context):
         self._merge = self.merge(context)

@@ -12,6 +12,7 @@ from .tools import unique
 from contextlib import contextmanager
 from collections import defaultdict
 from pprint import pprint
+from collections import namedtuple
 
 
 @implements_to_string
@@ -86,6 +87,7 @@ class Content(interface.AttributeExposer):
             self.template = app.resolve_template(template)
         self.td = td or {}
         self._include = defaultdict(RenderList)
+        self._section_elements = defaultdict(list)
         self.sections = OrderedDict()
         self.section_stack = [self.new_section("body", "base.html")]
         super(Content, self).__init__()
@@ -100,6 +102,9 @@ class Content(interface.AttributeExposer):
     def id(self):
         section = self.current_section
         return "{}_{}".format(section.name, section.id)
+
+    def add_section_element(self, name, ref, merge):
+        self._section_elements[name].append((ref, merge))
 
     def include(self, include_type, path):
         include_list = self._include[include_type]

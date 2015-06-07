@@ -142,7 +142,6 @@ class _Parameters(object):
                 self.__cache[name] = self.__attr_values[name](self.__context)
             self.__context = None
 
-
     def __getattr__(self, name):
         if name not in self.__cache:
             self.__cache[name] = self.__attr_values[name](self.__context)

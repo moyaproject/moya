@@ -37,7 +37,7 @@ Hello, World!
     synopsis = Attribute("Command synopsis, displayed when you list commands")
 
     class Meta:
-        skip_logic = True
+        logic_skip = True
 
     def document_finalize(self, context):
         self._synopsis = self.synopsis(context)
@@ -125,7 +125,7 @@ class Arg(ElementBase):
     type = Attribute("Type of argument", choices=["string", 'integer', 'float'], default="string")
 
     class Meta:
-        skip_logic = True
+        logic_skip = True
 
 
 class Option(ElementBase):
@@ -153,4 +153,4 @@ class Option(ElementBase):
     type = Attribute("Type of argument", choices=["string", 'integer', 'float'], default="string")
 
     class Meta:
-        skip_logic = True
+        logic_skip = True

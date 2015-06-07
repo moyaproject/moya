@@ -42,7 +42,7 @@
 		<datetime name="expire_date" label="Expires"/>
 	</model>
 
-    <model name="Permission" libname="Permission" xmlns="http://moyaproject.com/db" repr="Permission '${name}'" template="model/permission.html">
+    <model name="Permission" libname="Permission" xmlns="http://moyaproject.com/db" repr="Permission '${name}'" template="objects/permission.html">
         <string name="name" null="no" blank="no" length="30" unique="yes"/>
         <text name="description" null="no" default=""/>
     </model>
