@@ -10,16 +10,16 @@
         <img class="gravatar" alt="gravatar" src="//www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
         {%- endif %}
 
-        <div class="text">
-            <div class="author">
+        <div class="text panel panel-default">
+            <div class="panel-heading">
                 {%- if comment.commenter_url %}
                 <a href="${comment.commenter_url}" class="name">${comment.user.display_name or comment.commenter_name}</a>
                 {%- else %}
                 <span class="name">${comment.user.display_name or comment.commenter_name}</span>
                 {%- endif %}
-                <span class="time">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
+                <span class="time pull-right">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
             </div>
-            <div class="content">
+            <div class="panel-body">
                 {% markup comment.text as (commentobject.markup or 'text') %}
 
                 {%- if commentobject.allow_new %}

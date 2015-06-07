@@ -67,6 +67,7 @@
     color:#666;
 }
 
+/*
 .moya-comments-container .moya-comments .moya-comment .text:before
 {
     content:"";
@@ -79,6 +80,7 @@
     margin-top:2px;
     background-image:url(../images/commentarrow.png);
 }
+*/
 
 .moya-comments-container
 {
@@ -103,13 +105,13 @@
 {
     clear:both;
     min-height:80px;
-    color:#333;
-    padding-bottom:8px;
+    /*color:#333;*/
+    /*padding-bottom:8px;*/
 }
 
 .moya-comments-container .moya-comments .moya-comment
 {
-    border-radius:6px;
+    /*border-radius:6px;*/
 }
 
 
@@ -124,19 +126,21 @@
     display:inline-block;
     float:left;
     padding:2px;
-    border:1px solid #e7e7e7;
+    /*border:1px solid #e7e7e7;*/
     border-radius:5px;
-    background-color:#fff;
-    margin:-2px 8px 0px 0px;
+    /*background-color:#fff;*/
+    /*margin:-2px 8px 0px 0px;*/
 }
 
 .moya-comments-container .moya-comments .text
 {
-    margin-left:54px;
-    margin-bottom:0.5em;
+    margin-left:48px;
+    margin-bottom:10px;
+    /*
     border-radius:6px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    */
 }
 
 .moya-comments-container .moya-comments .text .content
@@ -166,7 +170,7 @@
 
 .moya-comments-container .moya-comments .moya-comment .moya-comment
 {
-    margin-left:54px;
+    margin-left:48px;
 }
 
 .moya-comments-container form.moya-comment-reply-form label

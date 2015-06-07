@@ -3,7 +3,8 @@
       xmlns:let="http://moyaproject.com/let"
       xmlns:moya="http://moyaproject.com"
       xmlns:html="http://moyaproject.com/html"
-      xmlns:recaptcha="http://moyaproject.com/recaptcha">
+      xmlns:recaptcha="http://moyaproject.com/recaptcha"
+      xmlns:w="http://moyaproject.com/widgets">
 
     <form libname="form.comment" xmlns="http://moyaproject.com/forms">
         <hidden-input name="namespace" />
@@ -82,9 +83,13 @@
         <hidden-input name="action" initial="action" />
         <hidden-input name="url" initial="url" />
 
-        <html:p><moya:render src="message"/></html:p>
-        <submit-button visual="primary" name="confirmed" text="${button}" clicked="delete" />
-        <submit-button name="cancel" text="Cancel" clicked="cancel" />
+        <w:dialog>
+            <html:p><moya:render src="message" if="message"/></html:p>
+            <w:dialog-buttons>
+                <submit-button visual="success" name="confirmed" text="${button}" clicked="delete" />
+                <submit-button name="cancel" text="Cancel" clicked="cancel" />
+            </w:dialog-buttons>
+        </w:dialog>
     </form>
 
     <form action="." libname="form.unsubscribe" legend="Unsubscribe" style="simple"
