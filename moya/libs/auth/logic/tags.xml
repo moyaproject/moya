@@ -194,7 +194,7 @@
             <attribute name="user" required="no">A user object</attribute>
             <attribute name="group">The name of a group</attribute>
         </signature>
-        <db:get-existing model="#Group" let:name="group" dst="group" />
+        <db:get-exist model="#Group" let:name="group" dst="group" />
         <append src="user.groups" value="group" />
     </tag>
 </moya>

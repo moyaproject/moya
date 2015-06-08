@@ -1493,6 +1493,7 @@ class GetOrCreate(DBDataSetter):
     initial = Attribute("Object with initial values", required=False, default=None, type="expression")
     _from = Attribute("Application", type="application", default=None)
     filter = Attribute("Filter expression", type="dbexpression", required=False, default=None)
+    forupdate = Attribute("Issue a select FOR UPDATE?", type="boolean", required=False, default=False)
 
     @wrap_db_errors
     def logic(self, context):
@@ -1515,6 +1516,8 @@ class GetOrCreate(DBDataSetter):
         #         for k, v in let_map.items()]
         query = Get._get_attributes_query(self, context, table_class, let_map)
         qs = dbsession.query(table_class).filter(*query)
+        if params.forupdate:
+            qs = qs.with_for_update()
 
         if filter is not None:
             qs = qs.filter(filter)
@@ -1687,6 +1690,7 @@ class Get(DBDataSetter):
     _from = Attribute("Application", type="application", default=None)
     filter = Attribute("Filter expression", type="dbexpression", required=False, default=None)
     src = Attribute("query set to restrict search", type="expression", required=False, default=None)
+    forupdate = Attribute("Issue a select FOR UPDATE?", type="boolean", required=False, default=False)
 
     @classmethod
     def _get_attributes_query(cls, element, context, table_class, let_map):
@@ -1753,6 +1757,9 @@ For example **let:{k}="name or 'anonymous'"**
             #     qs = src
         else:
             qs = dbsession.query(table_class).filter(*query)
+
+        if params.forupdate:
+            qs = qs.with_for_update()
 
         if filter is not None:
             qs = qs.filter(filter)
@@ -1878,7 +1885,7 @@ class GetRequired(Get):
             raise logic.EndLogic(http.RespondWith(status))
 
 
-class GetExisting(Get):
+class GetExist(Get):
     """Gets an object from the db, or throws a [c]moya.db.does-not-exist[/c] exception if it doesn't exist"""
 
     xmlns = namespaces.db
@@ -2163,6 +2170,7 @@ class Query(DBDataSetter):
     action = Attribute("Action to perform on query", default=None, required=False, choices=['delete', 'count', 'exists'])
     join = Attribute("Join expressions", type="dbexpression", required=False, default=None)
     groupby = Attribute("Group by column(s)", type="commalist", required=False, default=None)
+    forupdate = Attribute("Issue a select FOR UPDATE?", type="boolean", required=False, default=False)
 
     @classmethod
     def _get_order(cls, archive, context, table_class, orderby, reverse=False, app=None):
@@ -2260,6 +2268,9 @@ class Query(DBDataSetter):
                 qs = dbsession.query(table_class)
             else:
                 qs = dbsession.query()
+
+        if params.forupdate:
+            qs = qs.with_for_update()
 
         if params.columns is not None:
             columns = params.columns.eval(self.archive, context, app=app)
