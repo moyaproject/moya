@@ -120,16 +120,20 @@ class MultiWSGIApplication(object):
                 self.sites.add(server.domains, name=server.name)
 
     def __call__(self, environ, start_response):
-        domain = environ['SERVER_NAME']
-        with self._lock:
-            site_match = self.sites.match(domain)
-            if site_match is None:
-                return self.not_found()
-            server_name = site_match.data['name']
-            if self.reload_required(server_name):
-                self.reload(server_name)
-            server = self.servers[server_name]
-        return server.application(environ, start_response)
+        try:
+            domain = environ['SERVER_NAME']
+            with self._lock:
+                site_match = self.sites.match(domain)
+                if site_match is None:
+                    return self.not_found()
+                server_name = site_match['name']
+                if self.reload_required(server_name):
+                    self.reload(server_name)
+                server = self.servers[server_name]
+            return server.application(environ, start_response)
+        except:
+            log.exception('error in multiwsgi MultiWSGIApplication.__call__')
+            raise
 
 
 class Service(MultiWSGIApplication):

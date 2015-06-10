@@ -104,10 +104,11 @@ class SiteInstance(AttributeExposer):
         self.user_timezone = _as_bool(get('user_timezone', 'no'))
         self.append_slash = _as_bool(get('append_slash', 'no'))
         self.language = get('language')
+        _locale = get('locale', 'en')
         try:
-            self.locale = LocaleProxy(get('locale'))
+            self.locale = LocaleProxy(_locale)
         except:
-            log.error("unable to get locale '{}', defaulting to 'en'")
+            log.error("unable to get locale '{}', defaulting to 'en'", )
             self.locale = LocaleProxy('en')
         self.datetime_format = get('datetime_format')
         self.time_format = get('time_format')
@@ -139,10 +140,14 @@ class Site(object):
 
     def __init__(self,
                  domain,
-                 insert_order,
-                 site_data,
-                 custom_data):
+                 insert_order=0,
+                 site_data=None,
+                 custom_data=None):
         self.domain = domain
+        if site_data is None:
+            site_data = {}
+        if custom_data is None:
+            custom_data = None
 
         if 'priority' in site_data:
             try:
@@ -252,7 +257,8 @@ class Sites(object):
             domains = domains.split(',')
         for domain in domains:
             domain = domain.strip()
-            site = Site(domain, data=data)
+            site = Site(domain, self._order, custom_data=data)
+            self._order += 1
             self._sites.append(site)
 
     def _match(self, domain):
@@ -263,11 +269,13 @@ class Sites(object):
                 return SiteMatch(site, site_data, custom_data)
         return None
 
-    def match(self, context, domain):
+    def match(self, domain, context=None):
         site_match = self._match(domain)
         if site_match is None:
             return None
         site, site_data, custom_data = site_match
+        if context is None:
+            return custom_data
         sub = context.sub
         with context.data_frame(site_data):
             new_site_data = {k: sub(v) for k, v in site_data.items()}

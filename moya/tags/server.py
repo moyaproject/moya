@@ -602,7 +602,7 @@ class Server(LogicElement):
         if ':' in domain:
             domain = domain.split(':', 1)[0]
 
-        site_instance = archive.sites.match(context, domain)
+        site_instance = archive.sites.match(domain, context=context)
 
         if site_instance is None:
             log.error('no site matching domain "{domain}", consider adding [site:{domain}] to settings'.format(domain=domain))
