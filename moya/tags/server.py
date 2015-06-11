@@ -312,7 +312,7 @@ class GetFqURL(GetURL):
     def qualify(self, context, url):
         base = self.base(context)
         if base is None:
-            base = context['.request.host_url']
+            base = context['.sys.site.host'] or context['.request.host_url']
         url = base + url
         return url
 
