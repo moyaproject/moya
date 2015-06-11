@@ -39,7 +39,7 @@ class SettingsContainer(OrderedDict):
             if section_name in settings:
                 settings[section_name].update(section)
             else:
-                settings[section_name] = settings
+                settings[section_name] = section
 
     @classmethod
     def read(cls, fs, path, master=None):
@@ -83,7 +83,7 @@ class SettingsContainer(OrderedDict):
         return settings
 
     @classmethod
-    def read_os(self, path):
+    def read_os(cls, path):
         visited = []
         settings_stack = []
         while 1:
@@ -102,7 +102,7 @@ class SettingsContainer(OrderedDict):
                 break
         settings_stack = settings_stack[::-1]
         settings = settings_stack[0]
-        s = self.__class__(settings_stack[0])
+        s = cls.__class__(settings_stack[0])
         for s in settings_stack[1:]:
             for section_name, section in s.items():
                 if section_name in settings:

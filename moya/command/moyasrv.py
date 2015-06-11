@@ -38,6 +38,7 @@ class MoyaSrv(object):
         list_parser = subparsers.add_parser('list',
                                             help="list projects",
                                             description="list enabled projects")
+        list_parser
 
         where_parser = subparsers.add_parser('where',
                                              help='find project directory',
