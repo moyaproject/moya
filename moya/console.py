@@ -472,6 +472,8 @@ class Console(object):
         else:
             self.terminal_width = width or 80
         self.unicode_borders = self.terminal_colors and not WIN
+        if not self.terminal_width:
+            self.terminal_width = 80
 
     @property
     def width(self):
@@ -489,7 +491,7 @@ class Console(object):
         with self._lock:
             if self.is_terminal():
                 w, h = getTerminalSize()
-                self.terminal_width = w
+                self.terminal_width = w or 80
 
     def get_text(self):
         assert isinstance(self.out, _TextOut)
