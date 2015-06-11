@@ -299,6 +299,8 @@ To list all available commands for a given application, omit the libname:
 
         ret = None
         try:
+            context.root['server'] = application.server
+            archive.populate_context(context)
             with pilot.manage(context):
                 if self.args.breakpoint:
                     ret = archive.debug_call(element_ref,
