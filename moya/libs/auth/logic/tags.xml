@@ -126,6 +126,7 @@
             <attribute name="password" required="no"/>
             <attribute name="first_name" required="no" default=""/>
             <attribute name="last_name" required="no" default=""/>
+            <attribute name="email_validated" required="no" default="no" />
         </signature>
         <call macro="#hashpassword" dst="password" let:password="password"/>
 
@@ -142,6 +143,7 @@
                 let:first_name="first_name"
                 let:last_name="last_name"
                 let:password="password or None"
+                let:email_validated="email_validated"
                 dst="newuser" />
             <catch exception="db.integrity-error">
                 <throw exception="moya.auth.duplicate-username" msg="Can't create user - username exists"/>
