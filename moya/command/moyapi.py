@@ -513,7 +513,7 @@ Find, install and manage Moya libraries
 
         releases = self.call('package.list-releases', package=version_spec.name)['releases']
 
-        releases.sort(key=lambda r: versioning.VersionSpec(r['version']))
+        releases.sort(key=lambda r: versioning.Version(r['version']))
         table = []
         for release in releases:
             if version_spec.comparisons and release['version'] not in version_spec:
