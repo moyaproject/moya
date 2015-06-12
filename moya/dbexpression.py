@@ -25,7 +25,6 @@ from pyparsing import (Word,
 ParserElement.enablePackrat()
 
 from sqlalchemy import and_, or_, func
-from sqlalchemy.orm import aliased
 
 import operator
 import re
@@ -102,6 +101,9 @@ class ExpressionModifiers(object):
 
     def max(self, context, v):
         return func.max(v)
+
+    def lower(self, context, v):
+        return func.lower(v)
 
 
 class EvalModifierOp(object):
@@ -272,6 +274,13 @@ class EvalComparisonOp(object):
     def match_re(cls, a, b):
         return bool(b.match(a))
 
+    @classmethod
+    def escape_like(cls, like, _should_escape="\\%_".__contains__):
+        """escape LIKE comparisons"""
+        if not isinstance(like, text_type):
+            return like
+        return ''.join("\\" + c if _should_escape(c) else c for c in like)
+
     def in_(context, a, b):
         if hasattr(b, '__moyadbsubselect__'):
             sub_b = b.__moyadbsubselect__(context)
@@ -300,6 +309,19 @@ class EvalComparisonOp(object):
         except:
             raise DBEvalError("value {} is an invalid operand for the 'contains' operator".format(to_expression(context, b)))
 
+    def icontains_(context, a, b):
+        if not isinstance(b, text_type):
+            raise DBEvalError("icontains right hand side should be a string, not {}".format(context.to_expr(b)))
+
+        b = "%{}%".format(EvalComparisonOp.escape_like(b))
+        return qs(a).like(b)
+
+    def ieq(context, a, b):
+        if not isinstance(b, text_type):
+            raise DBEvalError("case insensitive equality operator (~=) right hand side should be a string, not {}".format(context.to_expr(b)))
+
+        return qs(a).ilike(EvalComparisonOp.escape_like(b), escape='\\')
+
     opMap = {
         "<": lambda c, a, b: qs(a) < qs(b),
         "lt": lambda c, a, b: qs(a) < qs(b),
@@ -312,13 +334,17 @@ class EvalComparisonOp(object):
         "!=": lambda c, a, b: qs(a) != qs(b),
         "==": lambda c, a, b: qs(a) == qs(b),
         'like': lambda c, a, b: qs(a).like(qs(b)),
-        #"~=" : lambda a, b: unicode(a).lower() == unicode(b).lower(),
+        'ilike': lambda c, a, b: qs(a).ilike(qs(b)),
+
+        #"~=": lambda c, a, b: qs(a).ilike(qs(EvalComparisonOp.escape_like(b)), escape='\\'),
+        "~=": ieq,
         "^=": lambda c, a, b: qs(a).startswith(qs(b)),
         "$=": lambda c, a, b: qs(a).endswith(qs(b)),
         "in": in_,
         "not in": notin_,
         "contains": contains_,
-        "icontains": lambda c, a, b: qs(a).like('%' + b + '%')
+        "icontains": icontains_,
+        #"icontains": lambda c, a, b: qs(a).like('%' + EvalComparisonOp.escape_like(b) + '%', escape='\\')
     }
 
     def __init__(self, tokens):
@@ -405,7 +431,7 @@ model_reference.setParseAction(EvalModelReference)
 
 comparisonop = (oneOf("< <= > >= != == ~= ^= $=") |
                 (Literal('not in') + WordEnd()) |
-                (oneOf("in lt lte gt gte matches contains icontains like") + WordEnd()))
+                (oneOf("in lt lte gt gte matches contains icontains like ilike") + WordEnd()))
 
 
 logicopOR = Literal('or') + WordEnd()
