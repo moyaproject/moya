@@ -29,7 +29,7 @@
     </table>
 </div>
 
-<p>System Settings (stored in <strong>.sys.site</strong>)</p>
+<h4>System Settings (stored in <strong>.sys.site</strong>)</h4>
 <div class="well">
     <table class="table table-condensed">
         <thead>
@@ -45,6 +45,27 @@
                 <td>${debug:v}</td>
             </tr>
             {%- endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<h4>Session Information</h4>
+<div class="well">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>key</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in sorted:items:.session %}
+            <tr>
+                <td>${key}</td>
+                <td>${debug:value}</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
