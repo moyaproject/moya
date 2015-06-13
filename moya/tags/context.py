@@ -1364,8 +1364,8 @@ class Pop(DataSetter):
         """
 
     src = Attribute("Source", type="expression")
-    dst = Attribute("Destination", type="reference")
-    key = Attribute("Key", required=False)
+    dst = Attribute("Destination", type="reference", required=False, default=None)
+    key = Attribute("Key", type="expression", required=False)
 
     def logic(self, context):
         src, dst, key = self.get_parameters(context, 'src', 'dst', 'key')
@@ -1381,7 +1381,8 @@ class Pop(DataSetter):
             self.throw('pop.fail',
                        'unable to pop from src')
 
-        self.set_context(context, dst, value)
+        if dst is not None:
+            self.set_context(context, dst, value)
 
 
 class Echo(ContextElementBase):

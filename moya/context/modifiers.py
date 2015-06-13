@@ -27,7 +27,6 @@ from ..reader import ReaderError
 from ..render import render_object
 from .. import connectivity
 from .. import moyajson
-from .. import pilot
 
 from fs.path import (basename,
                      pathjoin,
