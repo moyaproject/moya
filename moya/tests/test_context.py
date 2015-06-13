@@ -306,11 +306,16 @@ class TestContext(unittest.TestCase):
                  ('[1,2,3,[4,5,6,[7,8,9]]]', [1, 2, 3, [4, 5, 6, [7, 8, 9]]]),
                  ('[1]', [1]),
                  ('[]', []),
+                 ("d:'5'", 5),
+                 ("d:'5' + 1", 6),
+                 ("d:'5' + d:'1'", 6),
+                 ('debug:d:5', "d:'5'")
                  ]
 
         for expression, result in tests:
-            print(expression)
+            print(expression, result)
             expression_result = c.eval(expression)
+            print("\t", expression_result)
             self.assertEqual(expression_result, result)
             #expression_result_callable = c.compile(expression)
             #self.assertEqual(expression_result_callable(), result)

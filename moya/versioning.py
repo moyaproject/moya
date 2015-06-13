@@ -33,11 +33,10 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from moya.interface import AttributeExposer
-from moya.compat import text_type, implements_to_string
+from moya.compat import text_type, implements_to_string, zip_longest
 
 
 import re
-from itertools import izip_longest
 
 
 _re_version = re.compile(r'^([\d\.]+)(?:\-([0-9A-Za-z-\.]+))?$')
@@ -137,7 +136,7 @@ class Version(AttributeExposer):
     @classmethod
     def _cmp_seq(cls, v1, v2):
         """Compares a version sequence, padded with zeros to be the same size"""
-        for a, b in izip_longest(v1, v2, fillvalue=0):
+        for a, b in zip_longest(v1, v2, fillvalue=0):
             # If types are different, treat them as text
             if type(a) != type(b):
                 a = text_type(a)
