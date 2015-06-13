@@ -112,12 +112,12 @@ class ContentElementMixin(object):
         for section, elements in list(sections.items()):
             new_elements = []
             merge = 'replace'
-            for ref, _merge in elements:
+            for _app, _element, _merge in elements:
                 if _merge != 'inherit':
                     merge = _merge
                 if merge == 'replace':
                     del new_elements[:]
-                new_elements.append((ref, merge))
+                new_elements.append((_app, _element, merge))
             sections[section][:] = new_elements
 
         content = merge_content[0]
@@ -125,8 +125,7 @@ class ContentElementMixin(object):
             content.merge(extended_content)
 
         for section, elements in sections.items():
-            for ref, merge in elements:
-                app, section_el = self.archive.get_element(ref)
+            for app, section_el, merge in elements:
                 self.push_content_frame(context, content)
                 try:
                     self.push_defer(context, app)
@@ -138,9 +137,6 @@ class ContentElementMixin(object):
                 finally:
                     self.pop_content_frame(context)
 
-        #content = merge_content[0]
-        #for extended_content in merge_content[1:]:
-        #    content.merge(extended_content)
         if content.template is None:
             content.template = app.default_template
         if not content.template:
@@ -269,8 +265,10 @@ class SectionElement(LogicElement, ContentElementMixin):
         name, template = self.get_parameters(context, 'name', 'template')
         content = self.get_content(context)
         app = self.get_app(context)
-        ref = app.qualify_ref(self.libid)
-        content.add_section_element(name, ref, self._merge)
+        #print(self.libid)
+        #ref = app.qualify_ref(self.libid)
+        #ref = self.libid
+        content.add_section_element(name, app, self, self._merge)
 
     def generate(self, context, content, app, merge):
         name = self.name(context)

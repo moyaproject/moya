@@ -8,6 +8,7 @@ import re
 import unicodedata
 
 _re_html = re.compile(r'<.*?>|\&.*?\;', re.UNICODE | re.DOTALL)
+_re_link = re.compile(r'((?:http://|https://|mailto:)[\@\w\.\/]+)', re.UNICODE)
 
 
 def escape(text):
@@ -49,11 +50,44 @@ def linebreaks(text):
     return html
 
 
+def linkify(text):
+    def make_link(link):
+        if link.startswith('http://') or link.startswith('https://'):
+            if link.endswith('.'):
+                return '<a href="{}" rel="nofollow">{}</a>.'.format(link[:-1], escape(link[:-1]))
+            else:
+                return '<a href="{}" rel="nofollow">{}</a>'.format(link, escape(link))
+        else:
+            email = escape(link.partition(':')[-1])
+            if email.endswith('.'):
+                return '<a href="mailto:{0}">{0}</a>.'.format(email[:-1])
+            else:
+                return '<a href="mailto:{0}">{0}</a>'.format(email)
+
+    lines = []
+    for line in text.splitlines():
+        tokens = []
+        pos = 0
+        for match in _re_link.finditer(line):
+            text = match.group(0)
+            start, end = match.span(0)
+            if start > pos:
+                tokens.append(escape(line[pos:start]))
+            tokens.append(make_link(text))
+            pos = end
+        if pos < len(line):
+            tokens.append(escape(line[pos:]))
+        lines.append(''.join(tokens))
+
+    return "<br>".join(lines)
+
+
 if __name__ == "__main__":
     print(escape("10 > 5 < 8 & foo"))
 
     print(summarize('Hello <a href="#">test</a> werwer'))
 
+    print(linkify("My homepage is http://willmcgugan.com/asdd.\nmailto://willmcgugan@gmail.com yadda yadda mailto:willmcgugan@gmail.com "))
     # from moya.tools import timer, MultiReplace
 
     # replace = MultiReplace({'&': '&amp;', '<' : '&lt;', '>' : '&gt;', '"': '&quote;', "'": "&#39"})

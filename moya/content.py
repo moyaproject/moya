@@ -12,7 +12,6 @@ from .tools import unique
 from contextlib import contextmanager
 from collections import defaultdict
 from pprint import pprint
-from collections import namedtuple
 
 
 @implements_to_string
@@ -103,8 +102,8 @@ class Content(interface.AttributeExposer):
         section = self.current_section
         return "{}_{}".format(section.name, section.id)
 
-    def add_section_element(self, name, ref, merge):
-        self._section_elements[name].append((ref, merge))
+    def add_section_element(self, name, app, element, merge):
+        self._section_elements[name].append((app, element, merge))
 
     def include(self, include_type, path):
         include_list = self._include[include_type]

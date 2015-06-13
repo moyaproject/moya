@@ -30,6 +30,7 @@ Change <attribute> tag to be type 'expression' by default
 Added 'forupdate' attribute to db:get/query
 Fixed ~= db expression operator
 Added option to re-send email verification email
+Added linkify option to text markup
 
 0.5.12
 ------

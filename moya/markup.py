@@ -72,7 +72,10 @@ class TextMarkup(MarkupBase):
     name = "text"
 
     def process_html(self, text, target, options):
-        return HTML(html.escape(text).replace('\n', '<br>'))
+        if options.get('linkify', False):
+            return HTML(html.linkify(text))
+        else:
+            return HTML(html.escape(text).replace('\n', '<br>'))
 
 
 class HTMLMarkup(MarkupBase):
