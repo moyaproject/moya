@@ -8,8 +8,11 @@
 <p>You are <em>not</em> currently signed in</p>
 {% endif %}
 
-<h3>${.sys.site}</h3>
-<p>Site data (stored in <strong>.site</strong>)</p>
+<h3 class="lead">${.sys.site}</h3>
+
+<h4>Site Data <small>stored in <strong>.site</strong></small></h4>
+
+
 <div class="well">
     <table class="table table-condensed">
         <thead>
@@ -29,7 +32,7 @@
     </table>
 </div>
 
-<h4>System Settings (stored in <strong>.sys.site</strong>)</h4>
+<h4>System Settings <small>stored in <strong>.sys.site</strong></small></h4>
 <div class="well">
     <table class="table table-condensed">
         <thead>
@@ -49,8 +52,7 @@
     </table>
 </div>
 
-
-<h4>Session Information</h4>
+<h4>Session Information <small>stored in <b>.session</b></small></h4>
 <div class="well">
     <table class="table table-condensed">
         <thead>
@@ -60,10 +62,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in sorted:items:.session %}
+            {% for k, v in sorted:items:.session %}
             <tr>
-                <td>${key}</td>
-                <td>${debug:value}</td>
+                <td>${k}</td>
+                <td>${debug:v}</td>
             </tr>
             {% endfor %}
         </tbody>
