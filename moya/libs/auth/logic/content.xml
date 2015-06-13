@@ -2,7 +2,8 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:admin="http://moyaproject.com/admin"
       xmlns:w="http://moyaproject.com/widgets"
-      xmlns:html="http://moyaproject.com/html">
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:let="http://moyaproject.com/let">
 
     <content libname="content.base" template="base.html" />
 
@@ -15,6 +16,18 @@
                         You are currently signed in as **${.user.username}**
                     </markdown>
                 </w:info>
+                <if test=".libs['moya.signup'] and validate_email">
+                    <w:well>
+                        <markdown>
+                            We sent you an email with a link to verify your email address.
+
+                            If you didn't receive the email, please check your spam folder, or click the button below to re-send.
+                        </markdown>
+                        <w:button-link name="send_validate_email" app="moya.signup" let:username="form.data.username">
+                            Send Again
+                        </w:button-link>
+                    </w:well>
+                </if>
                 <render src="form"/>
             </node>
         </section>

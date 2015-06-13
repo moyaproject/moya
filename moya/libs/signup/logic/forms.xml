@@ -38,7 +38,7 @@
             <fail if="len:value lt 3">
                 Username should be at least 3 characters
             </fail>
-            <db:get model="auth#User" filter="#User.username ~= value" dst="user"/>
+            <db:get model="auth#User" let:username="value" dst="user"/>
             <fail if="user">
                 Username exist, please pick another
             </fail>
@@ -69,4 +69,8 @@
         </validate-field>
     </form>
 
+    <form libname="form.send_validate" legend="Please validate your email address" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <input label="Username" class="input-xlarge" name="username" type="text" dst="newuser.email" initial="username" required="yes" />
+        <submit-button text="Send Email" />
+    </form>
 </moya>

@@ -73,7 +73,7 @@
                 msg="multiple users with that email adddress" />
         </catch>
 
-        <db:get model="#User" filter="#User.username ~= username" dst="user" if="not user"/>
+        <db:get model="#User" let:username="username" dst="user" if="not user"/>
 
         <throw exception="moya.auth.no-user" msg="no user of that name"
             if="not user" let:username="username"/>
@@ -131,7 +131,7 @@
         <call macro="#hashpassword" dst="password" let:password="password"/>
 
         <db:atomic>
-            <db:get model="#User" filter="#User.username ~= username" dst="users" />
+            <db:get model="#User" let:username="username" dst="users" />
             <throw
                 exception="moya.auth.duplicate-username"
                 msg="Can't create user, username exists"

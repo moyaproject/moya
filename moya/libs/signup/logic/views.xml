@@ -7,6 +7,7 @@
 
     <mountpoint>
         <url route="/" methods="GET,POST" view="#view.signup" name="signup" />
+        <url route="/send-validate-email/{username}/" view="#view.send_validate_email" name="send_validate_email" />
         <url route="/validate/" methods="GET" view="#view.validate_email" name="validate_email" />
     </mountpoint>
 
@@ -56,7 +57,34 @@
                 <break/>
             </for>
         </if>
+    </view>
 
+    <view libname="view.send_validate_email" content="#content.send_validate_email">
+        <forms:get form="#form.send_validate" let:username=".url.username" dst="form" />
+        <forms:validate src="form">
+            <db:get model="moya.auth#User" let:username="form.data.username" dst="user"/>
+            <if test="not user">
+                <forms:error src="form">
+                    No account with that username. Please check for typos.
+                </forms:error>
+                <done/>
+            </if>
+            <db:atomic>
+                <attempt times="3" catch="db.*">
+                    <db:get-or-create
+                        model="#ValidateEmail" dst="validate_email"
+                        let:user="user"
+                        let:email="user.email"  />
+                </attempt>
+                <email:send email="#email.validate_email"
+                    to="${user.email}"
+                    let:name="user.first_name"
+                    let:token="validate_email.token"
+                    let:project_title=".settings.project_title"
+                    let:site_url=".request.host_url" />
+                <let success="yes" />
+            </db:atomic>
+        </forms:validate>
     </view>
 
 </moya>

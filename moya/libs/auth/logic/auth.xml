@@ -15,7 +15,6 @@
 
     <mountpoint name="middleware">
         <middleware route="/{*}" methods="GET,POST" macro="middleware.add_user_to_context" />
-        <!-- <middleware route="/*" methods="GET,POST" macro="middleware.response_middleware" stage="response" /> -->
         <url route="/{*}" handler="forbidden">
             <redirect name="login" query="fwd=.request.path" />
         </url>
@@ -53,6 +52,10 @@
                 </try>
                 <catch exception="moya.auth.no-user,moya.auth.password-fail">
                     <forms:error src="form">No user with those credentials.</forms:error>
+                </catch>
+                <catch exception="moya.auth.forbidden.not-validated">
+                    <forms:error src="form">A validated email is required.</forms:error>
+                    <let validate_email="yes"/>
                 </catch>
                 <catch exception="moya.auth.forbidden.*">
                     <forms:error src="form">Sorry, you can't log in at this time.</forms:error>
