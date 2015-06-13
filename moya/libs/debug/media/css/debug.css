@@ -21,3 +21,8 @@
 .moya-console .console-foreground-magenta { color:pink; }
 .moya-console .console-foreground-cyan { color:acqua; }
 .moya-console .console-foreground-white { color:white; }
+
+.well
+{
+    overflow:auto;
+}
