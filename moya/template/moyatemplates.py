@@ -1380,7 +1380,7 @@ class MarkupNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = text_type(self.markup_expression.eval(context))
+        markup = text_type(self.markup_expression.eval(context) or '')
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
         markup_renderable = Markup(markup, markup_type)

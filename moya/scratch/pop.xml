@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let">
+
+    <macro docname="main">
+        <dict dst="d">
+            <let-str foo="bar" baz="egg"/>
+        </dict>
+        <echo obj="d"/>
+        <pop src="d" key="'foo'"/>
+        <echo obj="d"/>
+    </macro>
+
+</moya>

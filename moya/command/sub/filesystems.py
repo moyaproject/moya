@@ -15,6 +15,91 @@ from fs.mountfs import MountFS
 import os
 
 
+def _ls(console, file_paths, dir_paths, format_long=False):
+    """Cannibalized from pyfileystem"""
+
+    dirs = frozenset(dir_paths)
+    paths = sorted(file_paths + dir_paths, key=lambda p: p.lower())
+
+    def columnize(paths, num_columns):
+        col_height = (len(paths) + num_columns - 1) / num_columns
+        columns = [[] for _ in range(num_columns)]
+        col_no = 0
+        col_pos = 0
+        for path in paths:
+            columns[col_no].append(path)
+            col_pos += 1
+            if col_pos >= col_height:
+                col_no += 1
+                col_pos = 0
+
+        padded_columns = []
+
+        def wrap(path):
+            return (path in dirs, path.ljust(max_width))
+
+        for column in columns:
+            if column:
+                max_width = max([len(path) for path in column])
+            else:
+                max_width = 1
+            max_width = min(max_width, terminal_width)
+            padded_columns.append([wrap(path) for path in column])
+
+        return padded_columns
+
+    def condense_columns(columns):
+        max_column_height = max([len(col) for col in columns])
+        lines = [[] for _ in range(max_column_height)]
+        for column in columns:
+            for line, (isdir, path) in zip(lines, column):
+                line.append((isdir, path))
+        for line in lines:
+            for i, (isdir, path) in enumerate(line):
+                if isdir:
+                    console(path, bold=True, fg="blue")
+                else:
+                    console(path)
+                if i < len(line) - 1:
+                    console('  ')
+            console.nl()
+
+    if format_long:
+        for path in paths:
+            if path in dirs:
+                console(path, bold=True, fg="blue")
+            else:
+                console(path)
+            console.nl()
+
+    else:
+        terminal_width = console.width
+        path_widths = [len(path) for path in paths]
+        smallest_paths = min(path_widths)
+        num_paths = len(paths)
+
+        num_cols = min(terminal_width // (smallest_paths + 2), num_paths)
+        while num_cols:
+            col_height = (num_paths + num_cols - 1) // num_cols
+            line_width = 0
+            for col_no in range(num_cols):
+                try:
+                    col_width = max(path_widths[col_no * col_height: (col_no + 1) * col_height])
+                except ValueError:
+                    continue
+                line_width += col_width
+                if line_width > terminal_width:
+                    break
+                line_width += 2
+            else:
+                if line_width - 1 <= terminal_width:
+                    break
+            num_cols -= 1
+        num_cols = max(1, num_cols)
+        columns = columnize(paths, num_cols)
+        condense_columns(columns)
+
+
 class FS(SubCommand):
     """Manage project filesystems"""
     help = "manage project fsfilesystems"
@@ -74,11 +159,11 @@ class FS(SubCommand):
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            for path in fs.opendir(args.listdir).listdir():
-                if fs.isdir(path):
-                    self.console(path, fg="cyan", bold=True).nl()
-                else:
-                    self.console(path).nl()
+
+            dir_fs = fs.opendir(args.listdir)
+            file_paths = dir_fs.listdir(files_only=True)
+            dir_paths = dir_fs.listdir(dirs_only=True)
+            _ls(self.console, file_paths, dir_paths)
 
         elif args.cat:
             if fs is None:

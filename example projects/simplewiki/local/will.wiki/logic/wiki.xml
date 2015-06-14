@@ -4,9 +4,7 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:forms="http://moyaproject.com/forms">
 
-
-    <mountpoint name="main">
-        <!-- A simple default view to start you off -->
+    <mountpoint>
         <url route="/{slug}/" view="#view.wikipage" name="wikipage"/>
         <url route="/{slug}/edit/" view="#view.wikipage.edit" name="wikipage_edit" />
     </mountpoint>

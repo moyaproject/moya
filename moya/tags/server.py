@@ -21,8 +21,6 @@ from ..tags.content import ContentElementMixin
 from ..tools import get_return
 from .. import syntax
 from ..timezone import Timezone
-from ..settings import SettingsContainer, SettingContainer
-from ..context.errors import SubstitutionError
 from ..context.tools import to_expression, set_dynamic
 from ..sites import LocaleProxy
 from ..compat import text_type, itervalues, py2bytes, iteritems
@@ -45,9 +43,10 @@ startup_log = logging.getLogger('moya.startup')
 
 
 class Mountpoint(LogicElement):
-    """A [i]mountpoint[/i] defines a collection of URL routes which map URLs on to moya code.
+    """
+    A [i]mountpoint[/i] defines a collection of URL *routes* which map incoming requests on to moya code.
 
-    An app will typically have at least one mountpoint with [c]name="main"[/c] (the default) which is used when the app is mounted. Moya will check each enclosed <url> in turn until it finds a route which matches the url.
+    An app will typically have at least one mountpoint with [c]name="main"[/c] (the default) which is used when the app is mounted. Moya will check each enclosed <url> in turn until it finds a route which matches.
 
     An app may contain multiple mountpoints, which can be [i]mounted[/i] separately.
 
@@ -74,7 +73,9 @@ class Mountpoint(LogicElement):
 
 
 class URL(LogicElement):
-    """Add a URL route to a mountpoint."""
+    """
+    Add a URL route to a [tag]mountpoint[/tag].
+    """
 
     class Help:
         synopsis = """add a url to a mountpoint"""
