@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms">
+
+
+    <mountpoint name="main">
+        <!-- A simple default view to start you off -->
+        <url route="/{slug}/" view="#view.wikipage" name="wikipage"/>
+        <url route="/{slug}/edit/" view="#view.wikipage.edit" name="wikipage_edit" />
+    </mountpoint>
+
+    <db:model libname="WikiPage">
+        <db:string name="slug" null="no" length="100" />
+        <db:string name="title" null="no" length="100" default="New Page"/>
+        <db:text name="content" null="yes" />
+    </db:model>
+
+    <view libname="view.wikipage" template="wikipage.html">
+        <db:get-or-create
+            model="#WikiPage"
+            dst="wikipage"
+            let:slug=".url.slug" />
+    </view>
+
+    <forms:form libname="form.wikipage.edit" legend="Edit Page" style="horizontal">
+        <forms:input name="title" label="Title" required="yes"/>
+        <forms:text-area name="content" label="Page Content"/>
+        <forms:submit-button text="Update" />
+    </forms:form>
+
+    <view libname="view.wikipage.edit" template="wikipage_edit.html">
+        <db:get-or-create
+            model="#WikiPage"
+            dst="wikipage"
+            let:slug=".url.slug" />
+        <forms:get form="#form.wikipage.edit" src="wikipage" dst="form" />
+        <forms:validate src="form">
+            <forms:apply src="form" dst="wikipage" />
+            <redirect name="wikipage" let:slug="wikipage.slug" />
+        </forms:validate>
+    </view>
+
+</moya>

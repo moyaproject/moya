@@ -138,7 +138,7 @@ class CallableElement(ContextElementBase):
         return True
 
     def logic(self, context):
-        call = self.push_call(context, {'args': self.args}, app=self.app)
+        call = self.push_call(context, {'args': self.args} if self.args else {}, app=self.app)
         call.update(self.kwargs)
         try:
             for node in self.element.run(context):

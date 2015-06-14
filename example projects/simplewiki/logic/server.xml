@@ -1,0 +1,56 @@
+<moya xmlns="http://moyaproject.com">
+
+    <!-- Initialize a server -->
+    <server docname="main">
+
+        <!-- Import libraries for use in your project -->
+        <import py="moya.libs.debug" if=".debug"/>
+        <import py="moya.libs.auth"/>
+        <import py="moya.libs.session"/>
+        <import py="moya.libs.signup"/>
+        <import py="moya.libs.admin"/>
+        <import py="moya.libs.static"/>
+        <import py="moya.libs.favicon"/>
+        <import py="moya.libs.welcome"/>
+        <import py="moya.libs.links"/>
+        <import py="moya.libs.bootstrap"/>
+        <import py="moya.libs.forms"/>
+        <import py="moya.libs.widgets"/>
+        <import py="moya.libs.comments"/>
+        <import py="moya.libs.pages"/>
+        <import py="moya.libs.feedback"/>
+        <import py="moya.libs.jsonrpc"/>
+        <import py="moya.libs.wysihtml5"/>
+        <import py="moya.libs.recaptcha"/>
+
+        <!-- The 'site' library, for non reusable content -->
+        <import location="./site" priority="10"/>
+        <install name="site" lib="site.simple-wiki" mount="/"/>
+
+        <!-- Install applications (instances of a library) -->
+        <install name="forms" lib="moya.forms"/>
+        <install name="widgets" lib="moya.widgets"/>
+        <install name="auth" lib="moya.auth" mount="/auth/"/>
+        <mount app="auth" mountpoint="middleware" url="/"/>
+        <install name="session" lib="moya.session" mount="/"/>
+        <install name="signup" lib="moya.signup" mount="/signup/"/>
+        <install name="admin" lib="moya.admin" mount="/admin/"/>
+        <install name="media" lib="moya.static" mount="/static/"/>
+        <install name="debug" lib="moya.debug" mount="/debug/" if=".debug"/>
+        <install name="bootstrap" lib="moya.twitter.bootstrap"/>
+        <install name="welcome" lib="moya.welcome" mount="/"/>
+        <install name="links" lib="moya.links"/>
+        <install name="favicon" lib="moya.favicon" mount="/"/>
+        <install name="comments" lib="moya.comments" mount="/comments/"/>
+        <install name="pages" lib="moya.pages" mount="/"/>
+        <install name="feedback" lib="moya.feedback" mount="/feedback/"/>
+        <install name="wysihtml5" lib="moya.wysihtml5"/>
+        <install name="recaptcha" lib="moya.google.recaptcha"/>
+
+    <!--Added by 'moya start library'-->
+<import location="./local/will.wiki"/>
+<install name="wiki" lib="will.wiki" mount="/wiki/"/>
+
+</server>
+
+</moya>

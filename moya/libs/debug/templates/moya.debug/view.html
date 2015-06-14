@@ -11,7 +11,12 @@
 More dedug information <a href="{% url 'intro' %}">here</a>.
 </p>
 
-<p>The following is stored in <tt>.url</tt></p>
-{% inspect .url %}
+<h3>Template Data</h3>
+<p>The following template variables may be used&hellip;</p>
+
+{% for k, v in sorted:items:$$ %}
+<h4>${k} <small>${debug:v}</small></h4>
+{% inspect v %}
+{% endfor %}
 
 {% endblock %}
