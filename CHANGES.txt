@@ -1,3 +1,9 @@
+0.5.14
+------
+
+Added simple wiki to example projects
+Improved formatting of moya fs --ls
+
 0.5.13
 ------
 

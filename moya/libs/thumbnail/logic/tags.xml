@@ -48,7 +48,9 @@ The code inside the processor transforms that image. The new image is then writt
 
     <filter name="thumbnail_url">
         <get-data-item
-            tag="processor" ns="http://moyaproject.com/thumbnail"
+            tag="processor"
+            ns="http://moyaproject.com/thumbnail"
+            from="${from}"
             dst="p"
             let:name="processor"/>
         <str dst="filename">${processor}.${p.version}.${p.format}</str>

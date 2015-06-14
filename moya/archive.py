@@ -631,10 +631,13 @@ class Archive(object):
                 for e in self.data_tags.get(tag_type, [])
                 if e.check(context)]
 
-    def get_data_item(self, context, namespace, tag_name, filter_map):
+    def get_data_item(self, context, namespace, tag_name, filter_map, lib=None):
         """Get data from a data tag"""
         tag_type = (namespace, tag_name)
         for e in self.data_tags.get(tag_type, []):
+            if lib is not None:
+                if e.lib != lib:
+                    continue
             data = e.get_all_data_parameters(context)
             if all(filter_map[k] == data.get(k, Ellipsis)
                    for k, v in filter_map.items()):

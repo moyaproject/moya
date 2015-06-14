@@ -53,7 +53,7 @@ class FindElements(DataSetter):
         if ns is None:
             ns = self.lib.namespace
         let_map = self.get_let_map(context)
-        elements = [ElementProxy(context, app, el)
+        elements = [ElementProxy(context, None, el)
                     for el in self.archive.get_elements_by_type(ns, tag)]
 
         if let_map:
@@ -242,19 +242,19 @@ class GetDataItem(DataSetter):
         synopsis = "get data from a single custom tag"
 
     tag = Attribute("Element type")
-    ns = Attribute("XML namespace", default=None)
+    ns = Attribute("XML namespace", default=None, required=True)
     dst = Attribute("Destination", type="reference", default=None)
     _from = Attribute("Application", type="application", required=False, default=None)
 
     def logic(self, context):
-        ns, tag, dst = self.get_parameters(context, 'ns', 'tag', 'dst')
-        if ns is None:
-            app = self.get_app(context, check=False)
-            if app is None:
-                self.throw("get-data.namespace-missing",
-                           "Couldn't detect namespace (set 'ns' or 'from' attribute)")
-            ns = app.lib.namespace
-        data = self.archive.get_data_item(context, ns, tag, self.get_let_map(context))
+        ns, tag, dst, _from = self.get_parameters(context, 'ns', 'tag', 'dst', 'from')
+
+        lib = None
+        app = self.archive.find_app(_from)
+        if app is not None:
+            lib = app.lib
+
+        data = self.archive.get_data_item(context, ns, tag, self.get_let_map(context), lib=lib)
         self.set_context(context, dst, data)
 
 

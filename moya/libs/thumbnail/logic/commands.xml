@@ -29,11 +29,12 @@
             <option name="overwrite" help="overwrite existing thumbnails" action="store_true" />
         </signature>
         <let thumb_dir=".app.settings.thumb_dir" />
+
         <if test="not thumbnails">
             <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
             <map src="thumbnail_elements" value="element_ref" dst="thumbnails" />
         </if>
-        <let types="['jpg','.jpeg','png']" />
+        <let types="['jpg','jpeg','png']" />
 
         <list dst="failed" />
         <fs:walk fs="uploads" dst="files"
@@ -42,7 +43,7 @@
         <for src="thumbnails" dst="thumbnail">
             <echo>Writing thumbnails for ${thumbnail}</echo>
             <progress src="files" dst="path" msg="generating ${basename:path}">
-                <tn:generate thumbnails="${thumbnail}" path="${path}" overwrite="args.overwrite"/>
+                <tn:generate thumbnails="${thumbnail}" path="path" overwrite="args.overwrite"/>
                 <catch exception="moya.image.*" dst="error">
                     <append src="failed" value="[path, error.msg]"/>
                 </catch>
