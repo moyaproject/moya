@@ -438,7 +438,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
             console.table([[Cell("Moya Library Wizard", bold=True, fg="green", center=True)],
                           ["""This will ask you a few questions, then create a new library in your Moya project based on your answers.
 
-Default values are shown in grey (simply hit return to accept defaults). Some defaults may be taken from your ".bashrc" file, if it exists.
+Default values are shown in grey (simply hit return to accept defaults). Some defaults may be taken from your ".moyarc" file, if it exists.
 """]])
         author = self.get_author_details()
         library = {}
