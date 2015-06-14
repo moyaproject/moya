@@ -25,14 +25,18 @@
             Generate thumbnails for all images in a filesystem.
         </doc>
         <signature>
-            <arg name="thumbnails" help="Thumbail tag to process" metavar="ELEMENT>" nargs="*"/>
+            <arg name="thumbnails" help="Thumbail tag to process" metavar="ELEMENT" nargs="*"/>
             <option name="overwrite" help="overwrite existing thumbnails" action="store_true" />
         </signature>
-        <let thumb_dir=".app.settings.thumb_dir" />
+        <let thumb_dir=".app.settings.thumb_dir" thumbnails="args.thumbnails"/>
 
         <if test="not thumbnails">
             <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
-            <map src="thumbnail_elements" value="element_ref" dst="thumbnails" />
+            <echo style="white">One or more of the following thumbnail tags is required:</echo>
+            <for src="thumbnail_elements" dst="te">
+                <echo>  ${te.element_ref}</echo>
+            </for>
+            <exit/>
         </if>
         <let types="['jpg','jpeg','png']" />
 
@@ -41,7 +45,7 @@
             dirs="name != thumb_dir"
             files="lower:ext:name in types" />
         <for src="thumbnails" dst="thumbnail">
-            <echo>Writing thumbnails for ${thumbnail}</echo>
+            <echo style="bold blue">Writing thumbnails for ${thumbnail}</echo>
             <progress src="files" dst="path" msg="generating ${basename:path}">
                 <tn:generate thumbnails="${thumbnail}" path="path" overwrite="args.overwrite"/>
                 <catch exception="moya.image.*" dst="error">
