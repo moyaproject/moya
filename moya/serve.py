@@ -8,6 +8,7 @@ from moya.tools import datetime_to_epoch, md5_hexdigest
 from moya import logic
 
 from fs.path import basename
+from fs.errors import FSError
 
 from datetime import datetime
 import mimetypes
