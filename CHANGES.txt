@@ -2,6 +2,7 @@
 ------
 
 Added head_as_get option to site (enabled by default) that treats HEAD requests as GET requests
+Change to make Moya return a 'method not allowed' response for non GET/POST/HEAD requests with no handler
 
 0.5.14
 ------

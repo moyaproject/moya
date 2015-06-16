@@ -23,6 +23,7 @@ class LogHighlighter(ConsoleHighlighter):
         "get": "bold magenta",
         "head": "bold cyan",
         "post": "bold blue",
+        "method": "bold",
         "errorresponse": "bold red",
         "responsecode": "not dim",
         "path": "bold blue",
@@ -46,9 +47,14 @@ class LogHighlighter(ConsoleHighlighter):
 
         r'(?P<request>\".*?\") (?:(?P<errorresponse>[45]\S+)|(?P<responsecode>\S+))',
 
+        r'(?P<method>\"(?:OPTIONS|DELETE|TRACE|CONNECT) .*?\")',
+
         r'(?P<get>\"GET .*?\")',
         r'(?P<head>\"HEAD .*?\")',
         r'(?P<post>\"POST .*?\")',
+
+
+
         r'(?P<url>https{0,1}://[a-zA-Z0-9\.\%\:\/\-]*)[\s\'\"$]?',
         r'(?P<parenthesis>\(.*?\))'
 

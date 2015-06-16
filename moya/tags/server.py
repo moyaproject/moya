@@ -706,7 +706,7 @@ class Server(LogicElement):
         # Run main views
         root['urltrace'] = root['_urltrace'] = []
         context.safe_delete('._callstack', '.call')
-        status_code = StatusCode.not_found
+
         response = None
         try:
             for result in self._dispatch_mapper(archive, context, self.urlmapper, url, method, breakpoint=breakpoint):
@@ -734,6 +734,11 @@ class Server(LogicElement):
                     response = MoyaResponse(status=StatusCode.temporary_redirect,
                                             location=url + '/')
                     return response
+
+        if request.method in ['GET', 'POST', 'HEAD']:
+            status_code = StatusCode.not_found
+        else:
+            status_code = StatusCode.method_not_allowed
 
         # No response returned, handle 404
         return self.dispatch_handler(archive,
