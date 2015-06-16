@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -36,10 +37,11 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "src": {
-                "default_display": "\"form\"",
+                "default_display": "form",
                 "name": "src",
                 "missing": true,
                 "default": "form",
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "index",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

@@ -9,7 +9,7 @@
                 "name": "column",
                 "lib": "moya.admin",
                 "namespace_slug": "moyaproject_dot_com_admin",
-                "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 111)",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 130)",
                 "doc": "Define a column in a database view\"",
                 "prev_tag": "table",
                 "namespace": "http://moyaproject.com/admin",
@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "link": {
@@ -37,6 +38,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -48,6 +50,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -59,6 +62,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "title": {
@@ -70,6 +74,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -84,6 +89,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -106,9 +112,34 @@
                         "missing": true,
                         "default": null,
                         "doc": "",
-                        "required": true,
+                        "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "view": {
+                        "default_display": null,
+                        "name": "view",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "slug": {
+                        "default_display": null,
+                        "name": "slug",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "title": {
@@ -120,6 +151,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -134,6 +166,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -159,6 +192,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "title": {
@@ -170,6 +204,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "description": {
@@ -181,6 +216,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "slug": {
@@ -192,6 +228,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -206,6 +243,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -214,7 +252,7 @@
                 "name": "table",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_admin",
-                "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 24)",
+                "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 26)",
                 "doc": "An admin table",
                 "prev_tag": "module",
                 "namespace": "http://moyaproject.com/admin",
@@ -228,8 +266,9 @@
                         "default": null,
                         "doc": "",
                         "required": false,
-                        "type": "text",
+                        "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "description": {
@@ -241,6 +280,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "title": {
@@ -252,6 +292,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "order": {
@@ -263,6 +304,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -274,6 +316,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -285,6 +328,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -293,9 +337,10 @@
                         "missing": true,
                         "default": "",
                         "doc": "",
-                        "required": false,
+                        "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "slug": {
@@ -307,6 +352,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -321,6 +367,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

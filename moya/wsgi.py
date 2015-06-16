@@ -261,6 +261,7 @@ class WSGIApplication(object):
         """Get a response object"""
         fire = self.archive.fire
 
+
         fire(context, "request.start", app=None, sender=None, data={'request': request})
 
         with pilot.manage_request(request, context):
@@ -306,6 +307,7 @@ class WSGIApplication(object):
                     response.headers[k.encode('utf-8')] = v.encode('utf-8')
 
         fire(context, "request.response", data={'request': request, 'response': response})
+
         return response
 
     def __call__(self,
@@ -324,6 +326,9 @@ class WSGIApplication(object):
         start_clock = clock()
         context = Context()
         request = MoyaRequest(environ)
+
+        handle_head = request.method == 'HEAD'
+
         response = self.get_response(request, context)
         taken = time() - start
         clock_taken = clock() - start_clock
@@ -338,7 +343,10 @@ class WSGIApplication(object):
                          response.status_int,
                          response.content_length,
                          taken_ms)
-        yield response.body
+
+        if not handle_head:
+            yield response.body
+
         self.archive.fire(context,
                           "request.end",
                           data={'response': response})

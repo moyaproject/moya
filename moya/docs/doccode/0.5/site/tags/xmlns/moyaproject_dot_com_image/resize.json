@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "nearest",
                     "bilinear",
@@ -41,6 +42,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "width": {
@@ -52,6 +54,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "height": {
@@ -63,6 +66,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -77,6 +81,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

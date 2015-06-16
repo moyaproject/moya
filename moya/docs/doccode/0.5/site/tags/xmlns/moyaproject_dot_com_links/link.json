@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "text": {
@@ -58,6 +61,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "purpose": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "query": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "with": {
@@ -91,6 +97,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -105,6 +112,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

@@ -1,3 +1,8 @@
+0.5.15
+------
+
+Added head_as_get option to site (enabled by default) that treats HEAD requests as GET requests
+
 0.5.14
 ------
 

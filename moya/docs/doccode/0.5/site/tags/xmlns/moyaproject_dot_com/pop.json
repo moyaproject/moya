@@ -25,17 +25,19 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "key": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "key",
                 "missing": true,
                 "default": null,
                 "doc": "Key",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -50,6 +52,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

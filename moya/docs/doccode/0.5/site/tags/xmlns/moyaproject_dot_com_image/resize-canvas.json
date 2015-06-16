@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "width": {
@@ -36,6 +37,7 @@
                 "required": true,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "image": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "height": {
@@ -58,6 +61,7 @@
                 "required": true,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

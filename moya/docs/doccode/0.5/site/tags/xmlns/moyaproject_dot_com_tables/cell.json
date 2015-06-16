@@ -16,6 +16,18 @@
         "synopsis": "a cell in a table",
         "tag_name": "cell",
         "params": {
+            "hide": {
+                "default_display": "no",
+                "name": "hide",
+                "missing": true,
+                "default": false,
+                "doc": "Hide this cell?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "from": {
                 "default_display": "\"moya.tables\"",
                 "name": "from",
@@ -25,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "class": {
@@ -36,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -47,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

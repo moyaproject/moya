@@ -86,6 +86,7 @@ class SiteInstance(AttributeExposer):
                                    'timezone',
                                    'user_timezone',
                                    'append_slash',
+                                   'head_as_get',
                                    'language',
                                    'locale',
                                    'datetime_format',
@@ -104,6 +105,7 @@ class SiteInstance(AttributeExposer):
         self.timezone = get('timezone')
         self.user_timezone = _as_bool(get('user_timezone', 'no'))
         self.append_slash = _as_bool(get('append_slash', 'no'))
+        self.head_as_get = _as_bool(get('head_as_get', 'yes'))
         self.language = get('language')
         _locale = get('locale', 'en')
         try:

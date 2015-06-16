@@ -10,7 +10,7 @@
         "name": "column",
         "lib": "moya.admin",
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 111)",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 130)",
         "doc": "Define a column in a database view\"",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "define a column in an admin view",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "link": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "title": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "type": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "markdown",
                     "bbcode",
@@ -57,6 +59,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -68,6 +71,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -79,6 +83,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

@@ -10,7 +10,7 @@
         "name": "get-permissions",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 5)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 6)",
         "doc": "Get list of permissions for a given user",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "query user permissions",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "lazy": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "user": {
@@ -55,9 +58,10 @@
                 "missing": true,
                 "default": null,
                 "doc": "A User object",
-                "required": false,
+                "required": true,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

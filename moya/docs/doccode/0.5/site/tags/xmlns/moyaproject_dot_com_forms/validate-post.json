@@ -27,6 +27,7 @@
                 "required": false,
                 "type": "index",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "csrf": {
@@ -38,6 +39,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -49,6 +51,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

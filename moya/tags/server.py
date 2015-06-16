@@ -534,8 +534,8 @@ class Server(LogicElement):
         return response
 
     def render_response(self, archive, context, obj, status=StatusCode.ok):
-        result = render_object(obj, archive, context, "html")
         response = Response(charset=py2bytes('utf8'), status=int(status))
+        result = render_object(obj, archive, context, "html")
         response.text = text_type(result)
         return self.process_response(context, response)
 
@@ -550,8 +550,8 @@ class Server(LogicElement):
                                          request,
                                          result.status)
         if not isinstance(result, Response):
-            html = render_object(result, archive, context, "html")
             response = MoyaResponse(charset=py2bytes('utf8'), status=status)
+            html = render_object(result, archive, context, "html")
             response.text = html
         else:
             response = result
@@ -667,8 +667,8 @@ class Server(LogicElement):
         """Dispatch a request to the server and return a response object."""
         url = request.path_info
         method = request.method
-        self._populate_context(archive, context, request)
 
+        self._populate_context(archive, context, request)
         site = self.set_site(archive, context, request)
         if site is None:
             # No site match, return a 404
@@ -676,7 +676,15 @@ class Server(LogicElement):
                                          context,
                                          request,
                                          StatusCode.not_found)
+
         root = context.root
+        if site.head_as_get and request.method == 'HEAD':
+            # Tread HEAD requests as GET requests
+            request = request.copy()
+            request.method = 'GET'
+            root['request'] = request
+            method = "GET"
+
         root['locale'] = site.locale
         context.set_lazy('.tz',
                          self._get_tz,
@@ -702,7 +710,6 @@ class Server(LogicElement):
         response = None
         try:
             for result in self._dispatch_mapper(archive, context, self.urlmapper, url, method, breakpoint=breakpoint):
-
                 response = self._dispatch_result(archive, context, request, result)
                 if response:
                     response = response_middleware(response)
@@ -757,7 +764,7 @@ class Server(LogicElement):
                 try:
                     moya_trace = trace.build(context, None, None, error, exc_info, request)
                 except Exception as e:
-                    #import traceback; traceback.print_exc(e)
+                    # import traceback; traceback.print_exc(e)
                     raise
         try:
             url = request.path_info
@@ -767,8 +774,8 @@ class Server(LogicElement):
                     return self._dispatch_result(archive, context, request, result, status=status)
         except Exception as e:
             log.exception('error in dispatch_handler')
-            #from traceback import print_exc
-            #print_exc()
+            # from traceback import print_exc
+            # print_exc()
             if status != StatusCode.internal_error:
                 return self.handle_error(archive, context, request, e, sys.exc_info())
             error2 = e
@@ -793,7 +800,7 @@ class Server(LogicElement):
                             '_funccalls',
                             '._for',
                             '_for_stack')
-        #pilot.context = context
+        # pilot.context = context
 
         # No handlers have been defined for this status code
         # We'll look for a template named <status code>.html and render that
@@ -815,9 +822,9 @@ class Server(LogicElement):
             pass
         except Exception as e:
             log.error('unable to render %s (%s)', template_filename, text_type(e))
-            #import traceback
-            #traceback.print_exc(e)
-            #print(e)
+            # import traceback
+            # traceback.print_exc(e)
+            # print(e)
             pass
 
         # Render a very basic response

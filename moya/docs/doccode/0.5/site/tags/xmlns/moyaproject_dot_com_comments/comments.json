@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "markup": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "namespace": {
@@ -58,6 +61,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "topic": {
@@ -69,6 +73,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

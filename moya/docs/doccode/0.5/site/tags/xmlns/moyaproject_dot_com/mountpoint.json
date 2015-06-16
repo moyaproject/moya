@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/server.py",
-        "doc": "A [i]mountpoint[/i] defines a collection of URL routes which map URLs on to moya code.\n\n    An app will typically have at least one mountpoint with [c]name=\"main\"[/c] (the default) which is used when the app is mounted. Moya will check each enclosed <url> in turn until it finds a route which matches the url.\n\n    An app may contain multiple mountpoints, which can be [i]mounted[/i] separately.\n\n",
+        "doc": "\nA [i]mountpoint[/i] defines a collection of URL *routes* which map incoming requests on to moya code.\n\nAn app will typically have at least one mountpoint with [c]name=\"main\"[/c] (the default) which is used when the app is mounted. Moya will check each enclosed <url> in turn until it finds a route which matches.\n\nAn app may contain multiple mountpoints, which can be [i]mounted[/i] separately.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a collection of url routes",
         "tag_name": "mountpoint",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -39,6 +40,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

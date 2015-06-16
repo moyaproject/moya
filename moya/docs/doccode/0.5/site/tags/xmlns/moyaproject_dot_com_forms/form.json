@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "class": {
@@ -43,11 +45,27 @@
                 "name": "class",
                 "missing": true,
                 "default": null,
-                "doc": "Additional CSS class",
+                "doc": "CSS class override",
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
+            },
+            "method": {
+                "default_display": "\"post\"",
+                "name": "method",
+                "missing": true,
+                "default": "post",
+                "doc": "Form method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "get",
+                    "post"
+                ]
             },
             "extends": {
                 "default_display": "",
@@ -58,6 +76,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "csrf": {
@@ -69,6 +88,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "action": {
@@ -80,6 +100,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "legend": {
@@ -91,6 +112,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "enctype": {
@@ -102,6 +124,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -116,6 +139,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

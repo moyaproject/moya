@@ -16,6 +16,18 @@
         "synopsis": "Get an object from the database, or create it if it doesn't exist.",
         "tag_name": "get-or-create",
         "params": {
+            "forupdate": {
+                "default_display": "no",
+                "name": "forupdate",
+                "missing": true,
+                "default": false,
+                "doc": "Issue a select FOR UPDATE?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "from": {
                 "default_display": "",
                 "name": "from",
@@ -25,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "created": {
@@ -36,6 +49,7 @@
                 "required": false,
                 "type": "index",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "initial": {
@@ -47,6 +61,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "db": {
@@ -58,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "filter": {
@@ -69,6 +85,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "model": {
@@ -80,10 +97,11 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
-        "example": "\n            <db:getcreate model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\" />\n        ",
+        "example": "\n            <db:get-or-create model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\" />\n        ",
         "inherited_params": {
             "dst": {
                 "default_display": "",
@@ -94,6 +112,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -105,6 +124,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -116,6 +136,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

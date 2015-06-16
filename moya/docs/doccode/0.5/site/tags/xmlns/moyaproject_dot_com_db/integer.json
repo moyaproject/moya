@@ -15,7 +15,20 @@
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a field that stores an integer",
         "tag_name": "integer",
-        "params": {},
+        "params": {
+            "choices": {
+                "default_display": "",
+                "name": "choices",
+                "missing": true,
+                "default": null,
+                "doc": "A reference to an enum",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
         "example": "\n        <integer label=\"Comment count\" name=\"count\" default=\"0\" null=\"no\"/>\n        ",
         "inherited_params": {
             "index": {
@@ -27,6 +40,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "unique": {
@@ -38,6 +52,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "null": {
@@ -49,6 +64,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "help": {
@@ -60,6 +76,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "default": {
@@ -71,6 +88,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "primary": {
@@ -82,6 +100,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "label": {
@@ -93,6 +112,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "blank": {
@@ -104,6 +124,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "formfield": {
@@ -115,6 +136,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -126,6 +148,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

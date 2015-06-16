@@ -27,6 +27,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "search": {
@@ -38,6 +39,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "model": {
@@ -49,6 +51,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "backref": {
@@ -60,6 +63,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -71,6 +75,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

@@ -25,17 +25,19 @@
                 "required": true,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "choices": {
-                "default_display": "None",
+                "default_display": "",
                 "name": "choices",
                 "missing": true,
                 "default": null,
-                "doc": "A sequence of possible choices",
+                "doc": "A reference to a choices tag",
                 "required": false,
-                "type": "expression",
+                "type": "element reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -50,6 +52,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "unique": {
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "null": {
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "help": {
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "default": {
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "primary": {
@@ -105,6 +112,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "label": {
@@ -116,6 +124,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "blank": {
@@ -127,6 +136,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "formfield": {
@@ -138,6 +148,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -149,6 +160,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

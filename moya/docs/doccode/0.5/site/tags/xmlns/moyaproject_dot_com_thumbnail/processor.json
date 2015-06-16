@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "quality": {
@@ -34,8 +35,9 @@
                 "default": "80",
                 "doc": "The quality of jpeg thumbnails (max 100)",
                 "required": false,
-                "type": "expression",
+                "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -47,6 +49,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "format": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "jpeg",
                     "png"
@@ -75,6 +79,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

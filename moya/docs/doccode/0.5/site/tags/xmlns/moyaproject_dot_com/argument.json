@@ -16,15 +16,28 @@
         "synopsis": "define an argument to a macro",
         "tag_name": "argument",
         "params": {
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "A value to use if the argument is not supplied",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "required": {
-                "default_display": "no",
+                "default_display": "yes",
                 "name": "required",
                 "missing": true,
-                "default": false,
+                "default": true,
                 "doc": "Is this argument required?",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "check": {
@@ -36,6 +49,7 @@
                 "required": false,
                 "type": "function",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -47,6 +61,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

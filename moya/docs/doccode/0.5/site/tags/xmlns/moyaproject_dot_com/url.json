@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/server.py",
-        "doc": "Add a URL route to a mountpoint.",
+        "doc": "\nAdd a URL route to a [tag]mountpoint[/tag].\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "add a url to a mountpoint",
         "tag_name": "url",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "mount": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "handler": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "mountpoint": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "view": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "route": {
@@ -80,6 +85,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -91,6 +97,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -105,6 +112,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

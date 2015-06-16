@@ -10,7 +10,7 @@
         "name": "add-permission",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 154)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 180)",
         "doc": "Add a permission to a group or user",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "add a permission to a group or user",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "group": {
@@ -34,8 +35,9 @@
                 "default": null,
                 "doc": "A group name",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "permission": {
@@ -45,8 +47,9 @@
                 "default": null,
                 "doc": "Permission name",
                 "required": true,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "user": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

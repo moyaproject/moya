@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -40,6 +41,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -67,6 +69,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -78,6 +81,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -89,6 +93,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -100,6 +105,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -111,6 +117,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -122,6 +129,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -133,6 +141,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -144,6 +153,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -155,6 +165,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -166,6 +177,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -193,6 +205,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -204,6 +217,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -215,6 +229,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -226,6 +241,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -237,6 +253,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -248,6 +265,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -259,6 +277,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -270,6 +289,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -281,6 +301,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -292,6 +313,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -317,6 +339,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -328,6 +351,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -339,6 +363,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -350,6 +375,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -364,6 +390,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -389,6 +416,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -403,6 +431,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -428,6 +457,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -442,6 +472,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -467,6 +498,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -478,6 +510,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -489,6 +522,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "obj": {
@@ -500,6 +534,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -514,6 +549,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -525,6 +561,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -536,6 +573,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -561,6 +599,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -575,6 +614,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -586,6 +626,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -597,6 +638,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -608,6 +650,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -619,6 +662,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -630,6 +674,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -641,6 +686,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -652,6 +698,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -663,6 +710,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -674,6 +722,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -687,7 +736,7 @@
                 "prev_tag": "date",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "datetime",
-                "next_tag": "delete",
+                "next_tag": "decimal",
                 "synopsis": "a field that stores a date and time",
                 "params": {
                     "auto": {
@@ -699,6 +748,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -713,6 +763,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -724,6 +775,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -735,6 +787,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -746,6 +799,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -757,6 +811,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -768,6 +823,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -779,6 +835,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -790,6 +847,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -801,6 +859,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -812,6 +871,168 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "decimal",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_db",
+                "defined": "/home/will/projects/moya/moya/tags/db.py",
+                "doc": "Defines a fixed precision number field in a <model>. Use this field element for currency.",
+                "prev_tag": "datetime",
+                "namespace": "http://moyaproject.com/db",
+                "tag_name": "decimal",
+                "next_tag": "delete",
+                "synopsis": "a fix precision number",
+                "params": {
+                    "scale": {
+                        "default_display": "8",
+                        "name": "scale",
+                        "missing": true,
+                        "default": 8,
+                        "doc": "number of digits after the decimal point",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "precision": {
+                        "default_display": "36",
+                        "name": "precision",
+                        "missing": true,
+                        "default": 36,
+                        "doc": "number of digits",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n            <decimal name=\"balance\" precision=\"12\" scale=\"2\" />\n        ",
+                "inherited_params": {
+                    "index": {
+                        "default_display": "no",
+                        "name": "index",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Create index",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "unique": {
+                        "default_display": "no",
+                        "name": "unique",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Impose unique constraint",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "null": {
+                        "default_display": "no",
+                        "name": "null",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Allow null?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "help": {
+                        "default_display": "",
+                        "name": "help",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Additional help text for use in object forms",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "default": {
+                        "default_display": "",
+                        "name": "default",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Default value",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "primary": {
+                        "default_display": "",
+                        "name": "primary",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Use as primary key",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "label": {
+                        "default_display": "",
+                        "name": "label",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Short description of field purpose",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "blank": {
+                        "default_display": "yes",
+                        "name": "blank",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Allow blank?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "formfield": {
+                        "default_display": "",
+                        "name": "formfield",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Macro to create a form field, used in admin",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Name of the element",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -822,7 +1043,7 @@
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
                 "doc": "Delete an object from the database.",
-                "prev_tag": "datetime",
+                "prev_tag": "decimal",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "delete",
                 "next_tag": "delete-all",
@@ -837,6 +1058,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -848,6 +1070,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -862,6 +1085,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -887,6 +1111,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -898,6 +1123,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -912,6 +1138,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -939,6 +1166,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -950,6 +1178,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -961,6 +1190,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -972,6 +1202,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -983,6 +1214,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -994,6 +1226,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1005,6 +1238,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -1016,6 +1250,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -1027,6 +1262,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1038,6 +1274,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1063,6 +1300,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "index": {
@@ -1074,6 +1312,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "ondelete": {
@@ -1085,6 +1324,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "CASCADE",
                             "SET NULL"
@@ -1099,6 +1339,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1110,6 +1351,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -1121,6 +1363,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "picker": {
@@ -1132,6 +1375,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -1143,6 +1387,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1154,6 +1399,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -1165,6 +1411,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1176,6 +1423,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backref": {
@@ -1187,6 +1435,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "options": {
@@ -1198,6 +1447,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1209,6 +1459,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1238,6 +1489,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -1249,6 +1501,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -1260,6 +1513,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1271,6 +1525,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -1282,6 +1537,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -1293,6 +1549,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1304,6 +1561,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -1315,6 +1573,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -1326,6 +1585,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1337,6 +1597,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1362,6 +1623,31 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "query set to restrict search",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -1373,6 +1659,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -1384,6 +1671,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -1395,6 +1683,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1406,6 +1695,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -1417,6 +1707,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1431,6 +1722,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1442,6 +1734,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1453,6 +1746,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1466,7 +1760,7 @@
                 "prev_tag": "get",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "get-column",
-                "next_tag": "get-existing",
+                "next_tag": "get-exist",
                 "synopsis": "get a column from a model",
                 "params": {
                     "model": {
@@ -1478,6 +1772,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -1489,6 +1784,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1500,6 +1796,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -1511,6 +1808,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1525,6 +1823,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1536,6 +1835,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1547,19 +1847,20 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
             },
             {
-                "name": "get-existing",
+                "name": "get-exist",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
                 "doc": "Gets an object from the db, or throws a [c]moya.db.does-not-exist[/c] exception if it doesn't exist",
                 "prev_tag": "get-column",
                 "namespace": "http://moyaproject.com/db",
-                "tag_name": "get-existing",
+                "tag_name": "get-exist",
                 "next_tag": "get-one",
                 "synopsis": "get an object in the database.",
                 "params": {},
@@ -1574,6 +1875,31 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "query set to restrict search",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -1585,6 +1911,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1596,6 +1923,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -1607,6 +1935,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1618,6 +1947,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -1629,6 +1959,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1640,6 +1971,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -1651,6 +1983,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1662,6 +1995,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1672,13 +2006,13 @@
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
                 "doc": "\nLike [tag db]get[/tag], but will throw a [c]db.multiple-results[/c] if there are more than one result, or [c]db.no-result[/c] if there are no results.\n\n",
-                "prev_tag": "get-existing",
+                "prev_tag": "get-exist",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "get-one",
                 "next_tag": "get-or-create",
-                "synopsis": "get an object in the database.",
+                "synopsis": "get precisely one matching object",
                 "params": {},
-                "example": "\n            <db:getrequired model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
+                "example": null,
                 "inherited_params": {
                     "orderby": {
                         "default_display": "",
@@ -1689,6 +2023,31 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "query set to restrict search",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -1700,6 +2059,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1711,6 +2071,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -1722,6 +2083,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1733,6 +2095,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -1744,6 +2107,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1755,6 +2119,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -1766,6 +2131,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1777,6 +2143,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1793,6 +2160,18 @@
                 "next_tag": "get-required",
                 "synopsis": "Get an object from the database, or create it if it doesn't exist.",
                 "params": {
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "from": {
                         "default_display": "",
                         "name": "from",
@@ -1802,6 +2181,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "created": {
@@ -1813,6 +2193,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -1824,6 +2205,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -1835,6 +2217,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -1846,6 +2229,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1857,10 +2241,11 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
-                "example": "\n            <db:getcreate model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\" />\n        ",
+                "example": "\n            <db:get-or-create model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\" />\n        ",
                 "inherited_params": {
                     "dst": {
                         "default_display": "",
@@ -1871,6 +2256,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1882,6 +2268,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1893,6 +2280,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1918,6 +2306,7 @@
                         "required": false,
                         "type": "http status code",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1932,6 +2321,31 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "src": {
+                        "default_display": "None",
+                        "name": "src",
+                        "missing": true,
+                        "default": null,
+                        "doc": "query set to restrict search",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -1943,6 +2357,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1954,6 +2369,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -1965,6 +2381,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1976,6 +2393,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -1987,6 +2405,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -1998,6 +2417,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -2009,6 +2429,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2020,6 +2441,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2045,6 +2467,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -2056,6 +2479,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -2067,6 +2491,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -2078,6 +2503,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -2089,6 +2515,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2103,6 +2530,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2130,6 +2558,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -2141,6 +2570,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -2152,6 +2582,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -2163,6 +2594,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "modelobj": {
@@ -2174,6 +2606,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2185,6 +2618,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2210,6 +2644,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -2221,6 +2656,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2235,6 +2671,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -2246,6 +2683,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2257,6 +2695,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2272,7 +2711,20 @@
                 "tag_name": "integer",
                 "next_tag": "many-to-many",
                 "synopsis": "a field that stores an integer",
-                "params": {},
+                "params": {
+                    "choices": {
+                        "default_display": "",
+                        "name": "choices",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A reference to an enum",
+                        "required": false,
+                        "type": "element reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
                 "example": "\n        <integer label=\"Comment count\" name=\"count\" default=\"0\" null=\"no\"/>\n        ",
                 "inherited_params": {
                     "index": {
@@ -2284,6 +2736,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -2295,6 +2748,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -2306,6 +2760,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2317,6 +2772,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -2328,6 +2784,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -2339,6 +2796,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2350,6 +2808,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -2361,6 +2820,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -2372,6 +2832,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2383,6 +2844,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2408,6 +2870,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "picker": {
@@ -2419,6 +2882,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -2430,6 +2894,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2441,6 +2906,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backlabel": {
@@ -2452,6 +2918,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "search": {
@@ -2463,6 +2930,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2474,6 +2942,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "keys": {
@@ -2485,6 +2954,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "through": {
@@ -2496,6 +2966,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backpicker": {
@@ -2507,6 +2978,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -2518,6 +2990,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backref": {
@@ -2529,6 +3002,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "options": {
@@ -2540,6 +3014,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2551,6 +3026,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2578,6 +3054,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "title": {
@@ -2589,6 +3066,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "abstract": {
@@ -2600,6 +3078,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -2611,6 +3090,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "repr": {
@@ -2622,6 +3102,7 @@
                         "required": false,
                         "type": "raw",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "extends": {
@@ -2633,6 +3114,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -2644,6 +3126,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2671,6 +3154,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -2682,6 +3166,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -2693,6 +3178,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2707,6 +3193,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -2718,6 +3205,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2729,6 +3217,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2742,7 +3231,7 @@
                 "prev_tag": "new-query",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "one-to-one",
-                "next_tag": "query",
+                "next_tag": "property",
                 "synopsis": "create a one to one relationship",
                 "params": {},
                 "example": null,
@@ -2756,6 +3245,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "index": {
@@ -2767,6 +3257,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "ondelete": {
@@ -2778,6 +3269,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "CASCADE",
                             "SET NULL"
@@ -2792,6 +3284,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2803,6 +3296,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -2814,6 +3308,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "picker": {
@@ -2825,6 +3320,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -2836,6 +3332,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2847,6 +3344,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -2858,6 +3356,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -2869,6 +3368,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backref": {
@@ -2880,6 +3380,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "options": {
@@ -2891,6 +3392,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2902,9 +3404,50 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
+            },
+            {
+                "name": "property",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_db",
+                "defined": "/home/will/projects/moya/moya/tags/db.py",
+                "doc": "Add a property to a db object",
+                "prev_tag": "one-to-one",
+                "namespace": "http://moyaproject.com/db",
+                "tag_name": "property",
+                "next_tag": "query",
+                "synopsis": "add a property to a database object",
+                "params": {
+                    "expression": {
+                        "default_display": "",
+                        "name": "expression",
+                        "missing": true,
+                        "default": null,
+                        "doc": "expression using database object",
+                        "required": false,
+                        "type": "function",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Property name",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {}
             },
             {
                 "name": "query",
@@ -2912,7 +3455,7 @@
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
                 "doc": "Query the database. Will return a query set object that may be iterated over by default, unless [c]'collect'[/c] is specified.",
-                "prev_tag": "one-to-one",
+                "prev_tag": "property",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "query",
                 "next_tag": "relationship",
@@ -2927,6 +3470,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "flat": {
@@ -2938,6 +3482,19 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "forupdate": {
+                        "default_display": "no",
+                        "name": "forupdate",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Issue a select FOR UPDATE?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -2949,6 +3506,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "reverse": {
@@ -2960,6 +3518,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
@@ -2971,6 +3530,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": "QUERYSET",
+                        "empty": true,
                         "choices": null
                     },
                     "distinct": {
@@ -2982,6 +3542,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "collectkey": {
@@ -2993,6 +3554,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -3004,6 +3566,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxresults": {
@@ -3015,6 +3578,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filter": {
@@ -3026,6 +3590,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "collect": {
@@ -3037,6 +3602,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "list",
                             "set",
@@ -3053,6 +3619,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "delete",
                             "count",
@@ -3068,6 +3635,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -3079,6 +3647,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": "ELEMENTREF",
+                        "empty": true,
                         "choices": null
                     },
                     "start": {
@@ -3090,6 +3659,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "groupby": {
@@ -3101,6 +3671,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "columns": {
@@ -3112,6 +3683,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3126,6 +3698,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -3137,6 +3710,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3148,6 +3722,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3175,6 +3750,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "search": {
@@ -3186,6 +3762,7 @@
                         "required": false,
                         "type": "database expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "model": {
@@ -3197,6 +3774,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "backref": {
@@ -3208,6 +3786,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -3219,6 +3798,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3246,6 +3826,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3260,6 +3841,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3287,6 +3869,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -3298,6 +3881,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -3309,6 +3893,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -3320,6 +3905,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -3331,6 +3917,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -3342,6 +3929,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -3353,6 +3941,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -3364,6 +3953,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -3375,6 +3965,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -3386,6 +3977,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3411,6 +4003,7 @@
                         "required": true,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
@@ -3422,6 +4015,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": "QUERYSET",
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -3433,6 +4027,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "reverse": {
@@ -3444,6 +4039,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3458,6 +4054,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -3469,6 +4066,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3480,6 +4078,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3505,6 +4104,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
@@ -3516,6 +4116,7 @@
                         "required": true,
                         "type": "reference",
                         "metavar": "QUERYSET",
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -3527,6 +4128,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "reverse": {
@@ -3538,6 +4140,19 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "columns": {
+                        "default_display": "None",
+                        "name": "columns",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Sort columns",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3552,6 +4167,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -3563,6 +4179,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3574,6 +4191,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3599,6 +4217,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "db": {
@@ -3610,6 +4229,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3624,6 +4244,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -3635,6 +4256,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3646,6 +4268,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3671,17 +4294,19 @@
                         "required": true,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "choices": {
-                        "default_display": "None",
+                        "default_display": "",
                         "name": "choices",
                         "missing": true,
                         "default": null,
-                        "doc": "A sequence of possible choices",
+                        "doc": "A reference to a choices tag",
                         "required": false,
-                        "type": "expression",
+                        "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3696,6 +4321,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -3707,6 +4333,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -3718,6 +4345,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -3729,6 +4357,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -3740,6 +4369,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -3751,6 +4381,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -3762,6 +4393,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -3773,6 +4405,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -3784,6 +4417,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -3795,6 +4429,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3822,6 +4457,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -3833,6 +4469,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -3844,6 +4481,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -3855,6 +4493,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -3866,6 +4505,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -3877,6 +4517,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -3888,6 +4529,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -3899,6 +4541,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -3910,6 +4553,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -3921,6 +4565,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3946,6 +4591,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3960,6 +4606,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -3971,6 +4618,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -3982,6 +4630,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -3993,6 +4642,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -4004,6 +4654,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -4015,6 +4666,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -4026,6 +4678,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -4037,6 +4690,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -4048,6 +4702,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -4059,6 +4714,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -4084,6 +4740,7 @@
                         "required": true,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "choices": {
@@ -5889,6 +6546,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -5903,6 +6561,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -5914,6 +6573,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -5925,6 +6585,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -5936,6 +6597,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -5947,6 +6609,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -5958,6 +6621,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -5969,6 +6633,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -5980,6 +6645,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -5991,6 +6657,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -6002,6 +6669,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -6027,6 +6695,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lowercase": {
@@ -6038,6 +6707,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "uppercase": {
@@ -6049,6 +6719,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "punctuation": {
@@ -6060,6 +6731,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "length": {
@@ -6071,6 +6743,7 @@
                         "required": true,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "characters": {
@@ -6082,6 +6755,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "size": {
@@ -6093,6 +6767,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -6107,6 +6782,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -6118,6 +6794,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -6129,6 +6806,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -6140,6 +6818,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -6151,6 +6830,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -6162,6 +6842,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -6173,6 +6854,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -6184,6 +6866,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -6195,6 +6878,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -6206,6 +6890,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -6231,6 +6916,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -6245,6 +6931,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -6270,6 +6957,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -6284,6 +6972,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -6301,15 +6990,44 @@
                 "synopsis": "update fields in a query",
                 "params": {
                     "src": {
-                        "default_display": "",
+                        "default_display": "None",
                         "name": "src",
                         "missing": true,
                         "default": null,
                         "doc": "Queryset",
                         "required": true,
-                        "type": "index",
+                        "type": "expression",
                         "metavar": "QUERYSET",
+                        "empty": true,
                         "choices": null
+                    },
+                    "db": {
+                        "default_display": "\"_default\"",
+                        "name": "db",
+                        "missing": true,
+                        "default": "_default",
+                        "doc": "Database",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "synchronize": {
+                        "default_display": "\"fetch\"",
+                        "name": "synchronize",
+                        "missing": true,
+                        "default": "fetch",
+                        "doc": "Synchronize session strategy",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "none",
+                            "fetch",
+                            "evaulate"
+                        ]
                     }
                 },
                 "example": "\n        <db:query model=\"#Vote\" filter=\"#Vote.topic=='moya'\" dst=\"votes\"/>\n        <db:update src=\"votes\" let:topic=\"#Vote.score + 1\" />\n        ",
@@ -6323,6 +7041,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -6334,6 +7053,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -6345,6 +7065,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -6369,6 +7090,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "version": {
@@ -6380,23 +7102,36 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "1",
-                            "2",
                             "3",
                             "4",
                             "5"
                         ]
                     },
-                    "namespace": {
-                        "default_display": "\"dns\"",
-                        "name": "namespace",
+                    "nsname": {
+                        "default_display": "\"http://moyaproject.org\"",
+                        "name": "nsname",
                         "missing": true,
-                        "default": "dns",
+                        "default": "http://moyaproject.org",
+                        "doc": "Name in namespace (if using variant 3 or 5)",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "nstype": {
+                        "default_display": "\"url\"",
+                        "name": "nstype",
+                        "missing": true,
+                        "default": "url",
                         "doc": "Namespace (if using variant 3 or 5)",
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "dns",
                             "url",
@@ -6416,6 +7151,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "unique": {
@@ -6427,6 +7163,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "null": {
@@ -6438,6 +7175,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -6449,6 +7187,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "default": {
@@ -6460,6 +7199,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "primary": {
@@ -6471,6 +7211,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -6482,6 +7223,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "blank": {
@@ -6493,6 +7235,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "formfield": {
@@ -6504,6 +7247,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -6515,6 +7259,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

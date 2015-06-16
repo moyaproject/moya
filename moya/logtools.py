@@ -21,6 +21,7 @@ class LogHighlighter(ConsoleHighlighter):
         "string_single": "green",
         "string_double": "green",
         "get": "bold magenta",
+        "head": "bold cyan",
         "post": "bold blue",
         "errorresponse": "bold red",
         "responsecode": "not dim",
@@ -46,6 +47,7 @@ class LogHighlighter(ConsoleHighlighter):
         r'(?P<request>\".*?\") (?:(?P<errorresponse>[45]\S+)|(?P<responsecode>\S+))',
 
         r'(?P<get>\"GET .*?\")',
+        r'(?P<head>\"HEAD .*?\")',
         r'(?P<post>\"POST .*?\")',
         r'(?P<url>https{0,1}://[a-zA-Z0-9\.\%\:\/\-]*)[\s\'\"$]?',
         r'(?P<parenthesis>\(.*?\))'

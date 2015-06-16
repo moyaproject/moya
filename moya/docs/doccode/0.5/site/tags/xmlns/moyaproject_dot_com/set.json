@@ -16,7 +16,7 @@
         "synopsis": "create a set object",
         "tag_name": "set",
         "params": {},
-        "example": "\n        <list dst=\"hobbits\">\n            <str>Sam</str>\n            <str>Bilbo</str>\n            <str>Frodo</str>\n            <str>Bilbo</str>\n            <str>Sam</str>\n        </list>\n        <!-- Will display 3, because duplicates are removed -->\n        <echo>There are ${len:hobbits} in the set.</echo>\n\n        ",
+        "example": "\n        <set dst=\"hobbits\">\n            <str>Sam</str>\n            <str>Bilbo</str>\n            <str>Frodo</str>\n            <str>Bilbo</str>\n            <str>Sam</str>\n        </set>\n        <!-- Will display 3, because duplicates are removed -->\n        <echo>There are ${len:hobbits} in the set.</echo>\n\n        ",
         "inherited_params": {
             "dst": {
                 "default_display": "",
@@ -27,6 +27,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -38,6 +39,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -49,6 +51,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

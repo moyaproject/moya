@@ -10,7 +10,7 @@
         "name": "table",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 24)",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 26)",
         "doc": "An admin table",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "define a table view in the admin interface",
@@ -23,8 +23,9 @@
                 "default": null,
                 "doc": "",
                 "required": false,
-                "type": "text",
+                "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "description": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "title": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "order": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "filter": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "template path",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "model": {
@@ -88,9 +94,10 @@
                 "missing": true,
                 "default": "",
                 "doc": "",
-                "required": false,
+                "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "slug": {
@@ -102,6 +109,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -116,6 +124,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

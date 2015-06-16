@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "ifexists": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "template path",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "withscope": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

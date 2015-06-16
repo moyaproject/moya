@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "uppercase": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "lowercase": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "punctuation": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "size": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -105,6 +112,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

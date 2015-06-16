@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/config.py",
-        "doc": "Define and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.\n\n    It is generally preferably to use an enumeration over hard-coded numbers; it makes code easier to read and maintain.\n\n",
+        "doc": "\nDefine and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.\n\nYou can retrieve an enumeration object with the [tag]get-enum[/tag] tag.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "map numbers on to identifiers",
         "tag_name": "enum",
@@ -21,14 +21,27 @@
                 "name": "start",
                 "missing": true,
                 "default": 1,
-                "doc": "Starting ID if not specified in <enumvalue>",
+                "doc": "Starting ID if not specified in <value>",
                 "required": false,
-                "type": "expression",
+                "type": "integer",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Identifier for enum",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
-        "example": "\n        <enum libname=\"enum.jsonrpc.errors\">\n            <value id=\"1\" label=\"not_logged_in\" description=\"You must be logged in to do that\" />\n            <value label=\"invalid_score\" description=\"Score must be -1, 0 or +1\"/>\n            <value label=\"unknown_link\" description=\"Link object was not found\"/>\n        </enum>\n        ",
+        "example": "\n        <enum libname=\"enum.jsonrpc.errors\">\n            <value id=\"1\" name=\"not_logged_in\" description=\"You must be logged in to do that\" />\n            <value name=\"invalid_score\" description=\"Score must be -1, 0 or +1\"/>\n            <value name=\"unknown_link\" description=\"Link object was not found\"/>\n        </enum>\n        ",
         "inherited_params": {}
     },
     "id": "xmlns.http://moyaproject.com.enum"

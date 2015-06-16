@@ -21,21 +21,11 @@
                 "name": "content",
                 "missing": true,
                 "default": null,
-                "doc": "Content Element",
+                "doc": "Content element",
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
-                "choices": null
-            },
-            "from": {
-                "default_display": "",
-                "name": "from",
-                "missing": true,
-                "default": null,
-                "doc": "From email",
-                "required": false,
-                "type": "text",
-                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -47,6 +37,19 @@
                 "required": false,
                 "type": "template path",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "premailer": {
+                "default_display": "no",
+                "name": "premailer",
+                "missing": true,
+                "default": false,
+                "doc": "Post process html email?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

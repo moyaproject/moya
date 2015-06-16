@@ -10,7 +10,7 @@
         "name": "dialog-buttons",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 83)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 88)",
         "doc": "",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "container for dialog buttons",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -50,6 +52,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

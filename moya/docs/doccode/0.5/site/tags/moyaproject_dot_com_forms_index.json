@@ -28,6 +28,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -53,6 +54,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -67,6 +69,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -92,6 +95,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -106,6 +110,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -131,6 +136,7 @@
                         "required": false,
                         "type": "comma list",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -142,10 +148,11 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
-                        "default_display": "\"form\"",
+                        "default_display": "form",
                         "name": "src",
                         "missing": true,
                         "default": "form",
@@ -153,6 +160,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -167,6 +175,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -192,6 +201,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -206,6 +216,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -231,6 +242,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
@@ -242,6 +254,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -256,6 +269,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -281,6 +295,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -292,6 +307,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "choices": {
@@ -303,6 +319,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -317,6 +334,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -328,17 +346,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -350,6 +370,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -361,6 +382,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -372,6 +394,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -383,6 +406,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -394,6 +418,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -405,6 +430,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -412,10 +450,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -427,6 +466,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -438,6 +478,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -449,6 +490,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -460,6 +514,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -471,6 +526,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -496,6 +552,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -507,6 +564,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "text": {
@@ -518,6 +576,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -532,6 +591,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -543,17 +603,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -565,6 +627,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -576,6 +639,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -587,6 +651,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -598,6 +663,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -609,6 +675,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -620,6 +687,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -627,10 +707,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -642,6 +723,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -653,6 +735,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -664,6 +747,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -675,6 +771,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -686,6 +783,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -711,6 +809,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "src": {
@@ -722,6 +821,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -736,6 +836,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -763,6 +864,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -788,6 +890,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -802,6 +905,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -813,17 +917,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -835,6 +941,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -846,6 +953,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -857,6 +965,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -868,6 +977,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -879,6 +989,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -890,6 +1001,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -897,10 +1021,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -912,6 +1037,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -923,6 +1049,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -934,6 +1061,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -945,6 +1085,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -956,6 +1097,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -981,6 +1123,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -992,6 +1135,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -999,11 +1143,27 @@
                         "name": "class",
                         "missing": true,
                         "default": null,
-                        "doc": "Additional CSS class",
+                        "doc": "CSS class override",
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
+                    },
+                    "method": {
+                        "default_display": "\"post\"",
+                        "name": "method",
+                        "missing": true,
+                        "default": "post",
+                        "doc": "Form method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "get",
+                            "post"
+                        ]
                     },
                     "extends": {
                         "default_display": "",
@@ -1014,6 +1174,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "csrf": {
@@ -1025,6 +1186,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "action": {
@@ -1036,6 +1198,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "legend": {
@@ -1047,6 +1210,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "enctype": {
@@ -1058,6 +1222,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1072,6 +1237,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1085,7 +1251,7 @@
                 "prev_tag": "form",
                 "namespace": "http://moyaproject.com/forms",
                 "tag_name": "get",
-                "next_tag": "hidden-input",
+                "next_tag": "group",
                 "synopsis": "get a form",
                 "params": {
                     "src": {
@@ -1095,8 +1261,9 @@
                         "default": null,
                         "doc": "Source object to fill in fields",
                         "required": false,
-                        "type": "text",
+                        "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -1108,6 +1275,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "form": {
@@ -1119,6 +1287,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "bind": {
@@ -1130,50 +1299,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
-                        "choices": null
-                    },
-                    "dst": {
-                        "default_display": "",
-                        "name": "dst",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Destination to store form",
-                        "required": true,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "template": {
-                        "default_display": "",
-                        "name": "template",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Override form template",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "blank": {
-                        "default_display": "no",
-                        "name": "blank",
-                        "missing": true,
-                        "default": false,
-                        "doc": "Blank form?",
-                        "required": false,
-                        "type": "boolean",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "action": {
-                        "default_display": "",
-                        "name": "action",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Form action",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "withscope": {
@@ -1185,10 +1311,127 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override form template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "blank": {
+                        "default_display": "no",
+                        "name": "blank",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Blank form?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "action": {
+                        "default_display": "",
+                        "name": "action",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Form action",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "method": {
+                        "default_display": "\"post\"",
+                        "name": "method",
+                        "missing": true,
+                        "default": "post",
+                        "doc": "Form method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "get",
+                            "post"
+                        ]
                     }
                 },
                 "example": "\n        <forms:get form=\"#form.login\" dst=\"form\" />\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "group",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_forms",
+                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "doc": "Renders a group of form elements",
+                "prev_tag": "get",
+                "namespace": "http://moyaproject.com/forms",
+                "tag_name": "group",
+                "next_tag": "hidden-input",
+                "synopsis": "render a group of form elements",
+                "params": {
+                    "style": {
+                        "default_display": "",
+                        "name": "style",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Style for child fields",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
                 "inherited_params": {
                     "if": {
                         "default_display": "yes",
@@ -1199,6 +1442,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1209,7 +1453,7 @@
                 "namespace_slug": "moyaproject_dot_com_forms",
                 "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a hidden input to a form.\n\n",
-                "prev_tag": "get",
+                "prev_tag": "group",
                 "namespace": "http://moyaproject.com/forms",
                 "tag_name": "hidden-input",
                 "next_tag": "input",
@@ -1224,6 +1468,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1238,6 +1483,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -1249,17 +1495,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1271,6 +1519,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1282,6 +1531,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -1293,6 +1543,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1304,6 +1555,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -1315,6 +1567,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1326,6 +1579,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -1333,10 +1599,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -1348,6 +1615,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -1359,6 +1627,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -1370,6 +1639,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -1381,6 +1663,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1392,6 +1675,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1417,6 +1701,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -1428,6 +1713,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -1439,6 +1725,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "type": {
@@ -1450,6 +1737,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1464,6 +1752,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -1475,17 +1764,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1497,6 +1788,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1508,6 +1800,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -1519,6 +1812,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1530,6 +1824,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -1541,6 +1836,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1552,6 +1848,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -1559,10 +1868,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -1574,6 +1884,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -1585,6 +1896,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -1596,6 +1908,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -1607,6 +1932,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1618,6 +1944,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1643,6 +1970,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1657,6 +1985,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1682,6 +2011,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "selected": {
@@ -1693,6 +2023,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "group": {
@@ -1704,6 +2035,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1715,6 +2047,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "value": {
@@ -1726,6 +2059,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1740,6 +2074,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1765,6 +2100,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -1776,6 +2112,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -1787,6 +2124,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1801,6 +2139,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -1812,17 +2151,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -1834,6 +2175,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -1845,6 +2187,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -1856,6 +2199,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -1867,6 +2211,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -1878,6 +2223,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -1889,6 +2235,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -1896,10 +2255,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -1911,6 +2271,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -1922,6 +2283,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -1933,6 +2295,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -1944,6 +2319,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -1955,6 +2331,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1980,6 +2357,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -1991,6 +2369,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "text": {
@@ -2002,6 +2381,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2016,6 +2396,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -2027,17 +2408,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2049,6 +2432,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2060,6 +2444,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -2071,6 +2456,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -2082,6 +2468,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -2093,6 +2480,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2104,6 +2492,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -2111,10 +2512,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -2126,6 +2528,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -2137,6 +2540,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -2148,6 +2552,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -2159,6 +2576,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2170,6 +2588,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2195,6 +2614,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2209,6 +2629,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -2220,17 +2641,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2242,6 +2665,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2253,6 +2677,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -2264,6 +2689,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -2275,6 +2701,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -2286,6 +2713,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2297,6 +2725,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -2304,10 +2745,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -2319,6 +2761,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -2330,6 +2773,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -2341,6 +2785,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -2352,6 +2809,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2363,6 +2821,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2388,6 +2847,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2402,6 +2862,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2427,6 +2888,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -2438,6 +2900,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -2449,6 +2912,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "choices": {
@@ -2460,6 +2924,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2474,6 +2939,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -2485,17 +2951,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2507,6 +2975,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2518,6 +2987,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -2529,6 +2999,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -2540,6 +3011,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -2551,6 +3023,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2562,6 +3035,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -2569,10 +3055,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -2584,6 +3071,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -2595,6 +3083,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -2606,6 +3095,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -2617,6 +3119,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2628,6 +3131,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2644,17 +3148,6 @@
                 "next_tag": "text-area",
                 "synopsis": "add a submit button in a form",
                 "params": {
-                    "fieldname": {
-                        "default_display": "\"submit-button\"",
-                        "name": "fieldname",
-                        "missing": true,
-                        "default": "submit-button",
-                        "doc": "Field name",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
                     "clicked": {
                         "default_display": "",
                         "name": "clicked",
@@ -2664,17 +3157,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
-                        "choices": null
-                    },
-                    "class": {
-                        "default_display": "",
-                        "name": "class",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Extra class(es)",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "text": {
@@ -2686,6 +3169,55 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "visual": {
+                        "default_display": "\"primary\"",
+                        "name": "visual",
+                        "missing": true,
+                        "default": "primary",
+                        "doc": "Button style",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fieldname": {
+                        "default_display": "\"submit-button\"",
+                        "name": "fieldname",
+                        "missing": true,
+                        "default": "submit-button",
+                        "doc": "Field name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Extra class(es)",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "block": {
+                        "default_display": "",
+                        "name": "block",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Block level?",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2700,6 +3232,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -2711,17 +3244,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2733,6 +3268,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2744,6 +3280,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -2755,6 +3292,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -2766,6 +3304,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -2777,6 +3316,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -2788,6 +3328,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -2795,10 +3348,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -2810,6 +3364,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -2821,6 +3376,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -2832,6 +3388,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -2843,6 +3412,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -2854,6 +3424,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -2879,6 +3450,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -2890,6 +3462,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -2901,6 +3474,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -2915,6 +3489,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -2926,17 +3501,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -2948,6 +3525,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -2959,6 +3537,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -2970,6 +3549,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -2981,6 +3561,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -2992,6 +3573,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -3003,6 +3585,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -3010,10 +3605,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -3025,6 +3621,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -3036,6 +3633,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -3047,6 +3645,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -3058,6 +3669,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3069,6 +3681,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3094,6 +3707,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fieldname": {
@@ -3105,6 +3719,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -3116,6 +3731,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "type": {
@@ -3127,6 +3743,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3141,6 +3758,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "style": {
@@ -3152,17 +3770,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "",
-                        "name": "required",
+                    "hidelabel": {
+                        "default_display": "no",
+                        "name": "hidelabel",
                         "missing": true,
-                        "default": null,
-                        "doc": "Is a value required for this field?",
+                        "default": false,
+                        "doc": "Hide label?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "help": {
@@ -3174,6 +3794,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -3185,6 +3806,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "process": {
@@ -3196,6 +3818,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -3207,6 +3830,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "initial": {
@@ -3218,6 +3842,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "label": {
@@ -3229,6 +3854,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "disabled": {
+                        "default_display": "no",
+                        "name": "disabled",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Disabled control?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "visible": {
@@ -3236,10 +3874,11 @@
                         "name": "visible",
                         "missing": true,
                         "default": true,
-                        "doc": "Visible",
+                        "doc": "Visible?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "adapt": {
@@ -3251,6 +3890,7 @@
                         "required": false,
                         "type": "function",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -3262,6 +3902,7 @@
                         "required": false,
                         "type": "template path",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "maxlength": {
@@ -3273,6 +3914,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "",
+                        "name": "required",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Is a value required for this field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "inlinehelp": {
@@ -3284,6 +3938,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3295,6 +3950,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3320,6 +3976,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "csrf": {
@@ -3331,6 +3988,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3345,6 +4003,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3370,6 +4029,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -3384,6 +4044,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -3410,6 +4071,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "csrf": {
@@ -3421,6 +4083,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -3432,6 +4095,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

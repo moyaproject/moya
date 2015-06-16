@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "calls",
                     "cumulative",
@@ -51,6 +52,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -65,6 +67,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

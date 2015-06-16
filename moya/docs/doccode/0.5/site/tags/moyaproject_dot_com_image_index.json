@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -40,6 +41,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -51,6 +53,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -76,6 +79,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "image": {
@@ -87,6 +91,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -101,6 +106,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -128,6 +134,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -139,6 +146,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "file": {
@@ -150,6 +158,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "path": {
@@ -161,6 +170,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fsobj": {
@@ -172,6 +182,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -183,6 +194,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -208,6 +220,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "mode": {
@@ -219,6 +232,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "size": {
@@ -230,6 +244,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -244,6 +259,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -255,6 +271,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -280,6 +297,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fs": {
@@ -291,6 +309,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fsobj": {
@@ -302,6 +321,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "file": {
@@ -313,6 +333,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -327,6 +348,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "if": {
@@ -338,6 +360,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -363,6 +386,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "nearest",
                             "bilinear",
@@ -379,6 +403,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "width": {
@@ -390,6 +415,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "height": {
@@ -401,6 +427,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -415,6 +442,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -440,6 +468,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "width": {
@@ -451,6 +480,7 @@
                         "required": true,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "image": {
@@ -462,6 +492,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "height": {
@@ -473,6 +504,7 @@
                         "required": true,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -487,6 +519,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -512,6 +545,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "bilinear",
                             "nearest",
@@ -528,6 +562,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "width": {
@@ -539,6 +574,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "height": {
@@ -550,6 +586,7 @@
                         "required": false,
                         "type": "integer",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -564,6 +601,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -589,6 +627,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -603,6 +642,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -628,6 +668,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -642,6 +683,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -666,6 +708,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "format": {
@@ -677,6 +720,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "jpeg",
                             "png",
@@ -692,6 +736,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "filename": {
@@ -703,6 +748,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dirpath": {
@@ -714,6 +760,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "fsobj": {
@@ -725,6 +772,7 @@
                         "required": false,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -739,6 +787,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

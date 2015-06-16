@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "app": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -69,6 +73,19 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "query": {
+                "default_display": null,
+                "name": "query",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "with": {
@@ -80,6 +97,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "class": {
@@ -91,6 +109,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "icon": {
@@ -102,6 +121,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -116,6 +136,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

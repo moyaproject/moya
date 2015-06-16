@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "theme": {
@@ -37,6 +38,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": [
                             "light",
                             "dark"
@@ -51,6 +53,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -62,6 +65,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -76,6 +80,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -100,6 +105,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -111,6 +117,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -122,6 +129,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -133,6 +141,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "response": {
@@ -144,6 +153,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -158,6 +168,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

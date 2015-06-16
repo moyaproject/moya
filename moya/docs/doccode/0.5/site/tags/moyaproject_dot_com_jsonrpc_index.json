@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "data": {
@@ -37,6 +38,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -51,6 +53,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -76,6 +79,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -90,6 +94,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -115,6 +120,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "group": {
@@ -126,6 +132,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "call": {
@@ -137,6 +144,7 @@
                         "required": false,
                         "type": "element reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "description": {
@@ -148,6 +156,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -159,6 +168,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -173,6 +183,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -197,6 +208,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "required": {
@@ -208,6 +220,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "type": {
@@ -219,6 +232,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -230,6 +244,7 @@
                         "required": true,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },

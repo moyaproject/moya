@@ -10,7 +10,7 @@
         "name": "button-link",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 56)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 57)",
         "doc": "Renders a link, styled as a button.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a link styled as a button",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -47,17 +49,31 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "app": {
-                "default_display": "",
+                "default_display": null,
                 "name": "app",
                 "missing": true,
-                "default": "",
+                "default": null,
                 "doc": "",
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "visual": {
+                "default_display": "default",
+                "name": "visual",
+                "missing": true,
+                "default": "default",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -69,7 +85,36 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
+            },
+            "query": {
+                "default_display": null,
+                "name": "query",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "size": {
+                "default_display": "md",
+                "name": "size",
+                "missing": true,
+                "default": "md",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "sm",
+                    "md",
+                    "lg"
+                ]
             },
             "with": {
                 "default_display": null,
@@ -80,17 +125,31 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "class": {
-                "default_display": "btn btn-default",
+                "default_display": "",
                 "name": "class",
                 "missing": true,
-                "default": "btn btn-default",
+                "default": "",
                 "doc": "",
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "block": {
+                "default_display": "no",
+                "name": "block",
+                "missing": true,
+                "default": "no",
+                "doc": "",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "icon": {
@@ -102,6 +161,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -116,6 +176,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

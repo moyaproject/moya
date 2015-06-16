@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "to": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "cc": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -58,6 +61,7 @@
                 "required": true,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "bcc": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "replyto": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "data": {
@@ -91,6 +97,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "email": {
@@ -98,10 +105,11 @@
                 "name": "email",
                 "missing": true,
                 "default": null,
-                "doc": "Destination to store exception object",
+                "doc": "Reference to email tag",
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "subject": {
@@ -113,6 +121,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -127,6 +136,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

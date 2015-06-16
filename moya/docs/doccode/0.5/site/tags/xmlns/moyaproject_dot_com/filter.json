@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "function",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -36,6 +37,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -47,6 +49,19 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "missing": {
+                "default_display": "no",
+                "name": "missing",
+                "missing": true,
+                "default": false,
+                "doc": "Allow missing values?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

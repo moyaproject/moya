@@ -9,7 +9,7 @@
                 "name": "add-permission",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 154)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 180)",
                 "doc": "Add a permission to a group or user",
                 "prev_tag": "set-password",
                 "namespace": "http://moyaproject.com/auth",
@@ -26,6 +26,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "group": {
@@ -35,8 +36,9 @@
                         "default": null,
                         "doc": "A group name",
                         "required": false,
-                        "type": "text",
+                        "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "permission": {
@@ -46,8 +48,9 @@
                         "default": null,
                         "doc": "Permission name",
                         "required": true,
-                        "type": "text",
+                        "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -59,6 +62,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -70,6 +74,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -81,6 +86,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -95,6 +101,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -103,7 +110,7 @@
                 "name": "add-user-to-group",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 173)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 199)",
                 "doc": "Add a user to a group",
                 "prev_tag": "add-permission",
                 "namespace": "http://moyaproject.com/auth",
@@ -118,8 +125,9 @@
                         "default": null,
                         "doc": "The name of a group",
                         "required": true,
-                        "type": "text",
+                        "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -131,6 +139,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -142,6 +151,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -153,6 +163,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -164,6 +175,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -178,6 +190,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -186,7 +199,7 @@
                 "name": "check-password",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 29)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 30)",
                 "doc": "Validate a user's password",
                 "prev_tag": "add-user-to-group",
                 "namespace": "http://moyaproject.com/auth",
@@ -203,6 +216,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "password": {
@@ -214,6 +228,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -225,6 +240,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -236,6 +252,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -247,6 +264,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -261,6 +279,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -269,7 +288,7 @@
                 "name": "get-permissions",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 5)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 6)",
                 "doc": "Get list of permissions for a given user",
                 "prev_tag": "check-password",
                 "namespace": "http://moyaproject.com/auth",
@@ -286,6 +305,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -297,6 +317,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -308,6 +329,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -316,9 +338,10 @@
                         "missing": true,
                         "default": null,
                         "doc": "A User object",
-                        "required": false,
+                        "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -333,6 +356,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -341,7 +365,7 @@
                 "name": "get-user",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 91)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 110)",
                 "doc": "Get currently logged in user (if any)",
                 "prev_tag": "get-permissions",
                 "namespace": "http://moyaproject.com/auth",
@@ -358,6 +382,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -369,6 +394,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -380,6 +406,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -394,6 +421,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -402,23 +430,24 @@
                 "name": "login",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 42)",
-                "doc": "Validate a username and password combination",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 61)",
+                "doc": "Check credentials and login a user",
                 "prev_tag": "get-user",
                 "namespace": "http://moyaproject.com/auth",
                 "tag_name": "login",
-                "next_tag": "logout",
-                "synopsis": "log in a user",
+                "next_tag": "login-user",
+                "synopsis": "log in a user with username/password",
                 "params": {
                     "username": {
                         "default_display": null,
                         "name": "username",
                         "missing": true,
                         "default": null,
-                        "doc": "",
+                        "doc": "A username or email address",
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -430,6 +459,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "password": {
@@ -441,6 +471,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -452,6 +483,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -463,6 +495,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -477,6 +510,84 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "login-user",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 44)",
+                "doc": "Login a give user without checking credentials",
+                "prev_tag": "login",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "login-user",
+                "next_tag": "logout",
+                "synopsis": "log in a user",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -485,9 +596,9 @@
                 "name": "logout",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 76)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 95)",
                 "doc": "Log out the currently logged in user, or a given user",
-                "prev_tag": "login",
+                "prev_tag": "login-user",
                 "namespace": "http://moyaproject.com/auth",
                 "tag_name": "logout",
                 "next_tag": "new-permission",
@@ -502,6 +613,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -513,6 +625,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -524,6 +637,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -535,6 +649,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -549,6 +664,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -557,7 +673,7 @@
                 "name": "new-permission",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 140)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 168)",
                 "doc": "Create a new permission (if it doesn't already exist)",
                 "prev_tag": "logout",
                 "namespace": "http://moyaproject.com/auth",
@@ -574,6 +690,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -585,6 +702,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -596,6 +714,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "description": {
@@ -605,8 +724,9 @@
                         "default": null,
                         "doc": "",
                         "required": false,
-                        "type": "text",
+                        "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -616,8 +736,9 @@
                         "default": null,
                         "doc": "",
                         "required": true,
-                        "type": "text",
+                        "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -632,6 +753,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -640,7 +762,7 @@
                 "name": "new-user",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 102)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 121)",
                 "doc": "Create a user",
                 "prev_tag": "new-permission",
                 "namespace": "http://moyaproject.com/auth",
@@ -648,6 +770,18 @@
                 "next_tag": "set-password",
                 "synopsis": "create a new user",
                 "params": {
+                    "email_validated": {
+                        "default_display": "no",
+                        "name": "email_validated",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "username": {
                         "default_display": null,
                         "name": "username",
@@ -657,50 +791,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
-                        "choices": null
-                    },
-                    "lazy": {
-                        "default_display": "no",
-                        "name": "lazy",
-                        "missing": true,
-                        "default": false,
-                        "doc": "Enable lazy evaluation",
-                        "required": false,
-                        "type": "boolean",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "last_name": {
-                        "default_display": "",
-                        "name": "last_name",
-                        "missing": true,
-                        "default": "",
-                        "doc": "",
-                        "required": false,
-                        "type": "expression",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "from": {
-                        "default_display": "",
-                        "name": "from",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Application",
-                        "required": false,
-                        "type": "application reference",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "dst": {
-                        "default_display": "",
-                        "name": "dst",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Destination",
-                        "required": false,
-                        "type": "reference",
-                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "first_name": {
@@ -712,6 +803,55 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "last_name": {
+                        "default_display": "",
+                        "name": "last_name",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "password": {
@@ -723,6 +863,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "email": {
@@ -734,6 +875,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -748,6 +890,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -756,7 +899,7 @@
                 "name": "set-password",
                 "lib": "moya.auth",
                 "namespace_slug": "moyaproject_dot_com_auth",
-                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 129)",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 157)",
                 "doc": "This will set a users password",
                 "prev_tag": "new-user",
                 "namespace": "http://moyaproject.com/auth",
@@ -772,6 +915,7 @@
                         "required": false,
                         "type": "reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "password": {
@@ -783,6 +927,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -794,6 +939,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "lazy": {
@@ -805,6 +951,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "user": {
@@ -816,6 +963,7 @@
                         "required": true,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -830,6 +978,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

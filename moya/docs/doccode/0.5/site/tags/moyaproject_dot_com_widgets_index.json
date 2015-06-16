@@ -6,16 +6,16 @@
     "data": {
         "tags": [
             {
-                "name": "button-link",
+                "name": "breadcrumbs",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 56)",
-                "doc": "Renders a link, styled as a button.",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 185)",
+                "doc": "Should contain link tags",
                 "prev_tag": "well",
                 "namespace": "http://moyaproject.com/widgets",
-                "tag_name": "button-link",
-                "next_tag": "buttons",
-                "synopsis": "render a link styled as a button",
+                "tag_name": "breadcrumbs",
+                "next_tag": "button-link",
+                "synopsis": "navigation breadcrumbs",
                 "params": {
                     "from": {
                         "default_display": "",
@@ -26,39 +26,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
-                        "choices": null
-                    },
-                    "name": {
-                        "default_display": "",
-                        "name": "name",
-                        "missing": true,
-                        "default": "",
-                        "doc": "",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "url": {
-                        "default_display": null,
-                        "name": "url",
-                        "missing": true,
-                        "default": null,
-                        "doc": "",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "app": {
-                        "default_display": "",
-                        "name": "app",
-                        "missing": true,
-                        "default": "",
-                        "doc": "",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -70,39 +38,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
-                        "choices": null
-                    },
-                    "with": {
-                        "default_display": null,
-                        "name": "with",
-                        "missing": true,
-                        "default": null,
-                        "doc": "",
-                        "required": false,
-                        "type": "expression",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "class": {
-                        "default_display": "btn btn-default",
-                        "name": "class",
-                        "missing": true,
-                        "default": "btn btn-default",
-                        "doc": "",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
-                        "choices": null
-                    },
-                    "icon": {
-                        "default_display": null,
-                        "name": "icon",
-                        "missing": true,
-                        "default": null,
-                        "doc": "",
-                        "required": false,
-                        "type": "text",
-                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -117,6 +53,184 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "button-link",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 57)",
+                "doc": "Renders a link, styled as a button.",
+                "prev_tag": "breadcrumbs",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "button-link",
+                "next_tag": "buttons",
+                "synopsis": "render a link styled as a button",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "url": {
+                        "default_display": null,
+                        "name": "url",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "app": {
+                        "default_display": null,
+                        "name": "app",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "visual": {
+                        "default_display": "default",
+                        "name": "visual",
+                        "missing": true,
+                        "default": "default",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "query": {
+                        "default_display": null,
+                        "name": "query",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "size": {
+                        "default_display": "md",
+                        "name": "size",
+                        "missing": true,
+                        "default": "md",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "sm",
+                            "md",
+                            "lg"
+                        ]
+                    },
+                    "with": {
+                        "default_display": null,
+                        "name": "with",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": "",
+                        "name": "class",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "block": {
+                        "default_display": "no",
+                        "name": "block",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "icon": {
+                        "default_display": null,
+                        "name": "icon",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -125,7 +239,7 @@
                 "name": "buttons",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 72)",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 77)",
                 "doc": "",
                 "prev_tag": "button-link",
                 "namespace": "http://moyaproject.com/widgets",
@@ -142,6 +256,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -153,6 +268,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -167,6 +283,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -192,6 +309,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -203,6 +321,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -217,6 +336,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -242,6 +362,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -253,6 +374,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -267,6 +389,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -275,7 +398,7 @@
                 "name": "dialog",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 82)",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 87)",
                 "doc": "",
                 "prev_tag": "danger",
                 "namespace": "http://moyaproject.com/widgets",
@@ -292,6 +415,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -303,6 +427,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -317,6 +442,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -325,7 +451,7 @@
                 "name": "dialog-buttons",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 83)",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 88)",
                 "doc": "",
                 "prev_tag": "dialog",
                 "namespace": "http://moyaproject.com/widgets",
@@ -342,6 +468,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -353,6 +480,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -367,6 +495,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -392,6 +521,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -403,6 +533,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -417,6 +548,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -442,6 +574,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -453,6 +586,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -467,6 +601,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -492,6 +627,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -503,6 +639,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -517,6 +654,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -542,6 +680,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "name": {
@@ -553,6 +692,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "url": {
@@ -564,6 +704,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "app": {
@@ -575,6 +716,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -586,6 +728,19 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "query": {
+                        "default_display": null,
+                        "name": "query",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "with": {
@@ -597,6 +752,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "class": {
@@ -608,6 +764,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "icon": {
@@ -619,6 +776,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -633,6 +791,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -646,7 +805,7 @@
                 "prev_tag": "link",
                 "namespace": "http://moyaproject.com/widgets",
                 "tag_name": "no-wrap",
-                "next_tag": "paginate",
+                "next_tag": "option",
                 "synopsis": "set no wrap on contents",
                 "params": {
                     "from": {
@@ -658,6 +817,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -669,6 +829,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -683,6 +844,72 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "option",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 179)",
+                "doc": "",
+                "prev_tag": "no-wrap",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "option",
+                "next_tag": "paginate",
+                "synopsis": "option in a select",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": null,
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -691,12 +918,12 @@
                 "name": "paginate",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 106)",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 111)",
                 "doc": "",
-                "prev_tag": "no-wrap",
+                "prev_tag": "option",
                 "namespace": "http://moyaproject.com/widgets",
                 "tag_name": "paginate",
-                "next_tag": "small-well",
+                "next_tag": "search-input",
                 "synopsis": "paginate a list of results",
                 "params": {
                     "src": {
@@ -705,9 +932,10 @@
                         "missing": true,
                         "default": null,
                         "doc": "Sequence to paginate.",
-                        "required": false,
+                        "required": true,
                         "type": "index",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -719,6 +947,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "pagesize": {
@@ -730,6 +959,19 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fragment": {
+                        "default_display": null,
+                        "name": "fragment",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Option fragment to add to links.",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "auto": {
@@ -741,6 +983,7 @@
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "dst": {
@@ -752,6 +995,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -763,6 +1007,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "page": {
@@ -774,6 +1019,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -788,6 +1034,214 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "search-input",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 191)",
+                "doc": "A search input with cancel button",
+                "prev_tag": "paginate",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "search-input",
+                "next_tag": "select",
+                "synopsis": null,
+                "params": {
+                    "placeholder": {
+                        "default_display": "search",
+                        "name": "placeholder",
+                        "missing": true,
+                        "default": "search",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": null,
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "q",
+                        "name": "name",
+                        "missing": true,
+                        "default": "q",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "select",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 167)",
+                "doc": "",
+                "prev_tag": "search-input",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "select",
+                "next_tag": "show-code",
+                "synopsis": "an alternative form select widget",
+                "params": {
+                    "multiple": {
+                        "default_display": "no",
+                        "name": "multiple",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "show-code",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 165)",
+                "doc": "",
+                "prev_tag": "select",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "show-code",
+                "next_tag": "small-well",
+                "synopsis": "render contents as code",
+                "params": {
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -798,7 +1252,7 @@
                 "namespace_slug": "moyaproject_dot_com_widgets",
                 "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 25)",
                 "doc": "Renders a well (highlighted panel) with smaller borders",
-                "prev_tag": "paginate",
+                "prev_tag": "show-code",
                 "namespace": "http://moyaproject.com/widgets",
                 "tag_name": "small-well",
                 "next_tag": "success",
@@ -813,6 +1267,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -824,6 +1279,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -838,6 +1294,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -851,7 +1308,7 @@
                 "prev_tag": "small-well",
                 "namespace": "http://moyaproject.com/widgets",
                 "tag_name": "success",
-                "next_tag": "url",
+                "next_tag": "tab",
                 "synopsis": "success alert",
                 "params": {
                     "from": {
@@ -863,6 +1320,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -874,6 +1332,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -888,6 +1347,185 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "tab",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 155)",
+                "doc": "",
+                "prev_tag": "success",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "tab",
+                "next_tag": "tab-panel",
+                "synopsis": "individial tab",
+                "params": {
+                    "title": {
+                        "default_display": null,
+                        "name": "title",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "id": {
+                        "default_display": null,
+                        "name": "id",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "icon": {
+                        "default_display": null,
+                        "name": "icon",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Icon class",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "tab-panel",
+                "lib": "moya.widgets",
+                "namespace_slug": "moyaproject_dot_com_widgets",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 147)",
+                "doc": "",
+                "prev_tag": "tab",
+                "namespace": "http://moyaproject.com/widgets",
+                "tag_name": "tab-panel",
+                "next_tag": "url",
+                "synopsis": "tab panel container",
+                "params": {
+                    "active": {
+                        "default_display": null,
+                        "name": "active",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "class": {
+                        "default_display": null,
+                        "name": "class",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Additional class(es)",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "id": {
+                        "default_display": "",
+                        "name": "id",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -896,9 +1534,9 @@
                 "name": "url",
                 "lib": "moya.widgets",
                 "namespace_slug": "moyaproject_dot_com_widgets",
-                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 75)",
+                "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 80)",
                 "doc": "Renders a URL with a link.",
-                "prev_tag": "success",
+                "prev_tag": "tab-panel",
                 "namespace": "http://moyaproject.com/widgets",
                 "tag_name": "url",
                 "next_tag": "warning",
@@ -913,6 +1551,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "from": {
@@ -924,6 +1563,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -935,6 +1575,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -949,6 +1590,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -974,6 +1616,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -985,6 +1628,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -999,6 +1643,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }
@@ -1023,6 +1668,7 @@
                         "required": false,
                         "type": "application reference",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     },
                     "template": {
@@ -1034,6 +1680,7 @@
                         "required": false,
                         "type": "text",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 },
@@ -1048,6 +1695,7 @@
                         "required": false,
                         "type": "expression",
                         "metavar": null,
+                        "empty": true,
                         "choices": null
                     }
                 }

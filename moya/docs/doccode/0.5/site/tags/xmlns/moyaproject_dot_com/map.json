@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "function",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "src": {
@@ -36,10 +37,11 @@
                 "required": true,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
-        "example": "\n        <dict dst=\"crew\">\n            <dict let:name=\"john\" let:species=\"human\" />\n            <dict let:name=\"rygel\" let:species=\"hynerian\" />\n            <dict let:name=\"aeryn\" let:species=\"peacekeeper\" />\n        </dict>\n        <map src=\"crew\" dst=\"manifest\"\n            expression=\"sub:'${title:name$} is ${species}'\" />\n        <!-- ['John is human', 'Rygen is hynerian', 'Aeryn is peacekeeper'] -->\n        ",
+        "example": "\n        <list dst=\"crew\">\n            <dict let:name=\"'john'\" let:species=\"'human'\" />\n            <dict let:name=\"'rygel'\" let:species=\"'hynerian'\" />\n            <dict let:name=\"'aeryn'\" let:species=\"'peacekeeper'\" />\n        </list>\n        <map src=\"crew\" dst=\"manifest\"\n            value=\"sub:'${title:name} is ${species}'\" />\n        <!-- ['John is human', 'Rygen is hynerian', 'Aeryn is peacekeeper'] -->\n        ",
         "inherited_params": {
             "dst": {
                 "default_display": "",
@@ -50,6 +52,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -72,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

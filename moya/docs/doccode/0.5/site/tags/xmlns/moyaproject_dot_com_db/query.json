@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "flat": {
@@ -36,6 +37,19 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "forupdate": {
+                "default_display": "no",
+                "name": "forupdate",
+                "missing": true,
+                "default": false,
+                "doc": "Issue a select FOR UPDATE?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -47,6 +61,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "reverse": {
@@ -58,6 +73,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "src": {
@@ -69,6 +85,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": "QUERYSET",
+                "empty": true,
                 "choices": null
             },
             "distinct": {
@@ -80,6 +97,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "collectkey": {
@@ -91,6 +109,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "db": {
@@ -102,6 +121,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "maxresults": {
@@ -113,6 +133,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "filter": {
@@ -124,6 +145,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "collect": {
@@ -135,6 +157,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "list",
                     "set",
@@ -151,6 +174,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "delete",
                     "count",
@@ -166,6 +190,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "model": {
@@ -177,6 +202,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": "ELEMENTREF",
+                "empty": true,
                 "choices": null
             },
             "start": {
@@ -188,6 +214,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "groupby": {
@@ -199,6 +226,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "columns": {
@@ -210,6 +238,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -224,6 +253,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -235,6 +265,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -246,6 +277,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

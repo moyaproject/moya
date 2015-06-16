@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "version spec",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

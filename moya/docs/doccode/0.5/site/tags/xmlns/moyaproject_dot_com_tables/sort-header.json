@@ -16,37 +16,16 @@
         "synopsis": "define a sortable header column in a table",
         "tag_name": "sort-header",
         "params": {
-            "from": {
-                "default_display": "\"moya.tables\"",
-                "name": "from",
+            "hide": {
+                "default_display": "no",
+                "name": "hide",
                 "missing": true,
-                "default": "moya.tables",
-                "doc": "Application",
+                "default": false,
+                "doc": "Hide this column?",
                 "required": false,
-                "type": "application reference",
+                "type": "boolean",
                 "metavar": null,
-                "choices": null
-            },
-            "class": {
-                "default_display": "",
-                "name": "class",
-                "missing": true,
-                "default": null,
-                "doc": "Extra class",
-                "required": false,
-                "type": "text",
-                "metavar": null,
-                "choices": null
-            },
-            "template": {
-                "default_display": "\"sortheader.html\"",
-                "name": "template",
-                "missing": true,
-                "default": "sortheader.html",
-                "doc": "Template",
-                "required": false,
-                "type": "text",
-                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -58,6 +37,59 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "align": {
+                "default_display": "\"left\"",
+                "name": "align",
+                "missing": true,
+                "default": "left",
+                "doc": "Alignment of column",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "left",
+                    "center",
+                    "right"
+                ]
+            },
+            "template": {
+                "default_display": "\"sortheader.html\"",
+                "name": "template",
+                "missing": true,
+                "default": "sortheader.html",
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "\"moya.tables\"",
+                "name": "from",
+                "missing": true,
+                "default": "moya.tables",
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "class": {
+                "default_display": "",
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Extra class",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -72,6 +104,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

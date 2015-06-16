@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/system.py",
-        "doc": "\nCall a system command and get the return code.\n\nCommands may be invoked in one of two ways; either with the [c]args[/c] attribute, which should be a list,\nor with the [c]shell[/c] attribute which should be a string to be passed to the shell. For example, the following\ntwo calls are equivalent:\n\n[code xml]\n<system-call shell=\"ls -al\"/>\n[/code]\n[code xml]\n<system-call args=\"['ls', '-al']\"/>\n[/code]\n\nThe [c]args[/c] form is preferred because [c]shell[/c] is a potential security risk, if you don't escape parameters\nretrieved from a request.\n\nIf the process returns a non-zero error code, then a [c]system-call.process-error[/c] exception is thrown. The [c]info[/c]\nvalue of the exception will contain [c]code[/c] and [c]output[/c].\n\n",
+        "doc": "\nCall a system command and get output.\n\nCommands may be invoked in one of two ways; either with the [c]args[/c] attribute, which should be a list, or with the [c]shell[/c] attribute which should be a string to be passed to the shell. For example, the following two calls are equivalent:\n\n[code xml]\n<system-call shell=\"ls -al\"/>\n[/code]\n[code xml]\n<system-call args=\"['ls', '-al']\"/>\n[/code]\n\nThe [c]args[/c] form is preferred because [c]shell[/c] is a potential security risk; if you don't escape parameters retrieved from a request it may be possible for a malicious use to execute code on your server.\n\nIf the process returns a non-zero error code, then a [c]system-call.process-error[/c] exception is thrown. The [c]info[/c] value of the exception will contain [c]code[/c] and [c]output[/c].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "run a system command",
         "tag_name": "system-call",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "shell": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "args": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "console": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "log": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -105,6 +112,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

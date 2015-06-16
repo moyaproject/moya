@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "mountpoint": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "app": {
@@ -47,6 +49,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -58,17 +61,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
-                "choices": null
-            },
-            "name": {
-                "default_display": "",
-                "name": "name",
-                "missing": true,
-                "default": null,
-                "doc": "Name",
-                "required": false,
-                "type": "text",
-                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

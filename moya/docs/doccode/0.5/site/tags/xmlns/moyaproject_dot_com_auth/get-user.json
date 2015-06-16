@@ -10,7 +10,7 @@
         "name": "get-user",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 91)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 110)",
         "doc": "Get currently logged in user (if any)",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "get current user details",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "lazy": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

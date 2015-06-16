@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -36,6 +37,19 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "text": {
+                "default_display": "yes",
+                "name": "text",
+                "missing": true,
+                "default": true,
+                "doc": "Include text children?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "undocumented": {
@@ -47,6 +61,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "synopsis": {
@@ -58,6 +73,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "let": {
@@ -69,6 +85,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -80,6 +97,7 @@
                 "required": false,
                 "type": "template path",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "ns": {
@@ -91,6 +109,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

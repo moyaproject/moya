@@ -21,10 +21,11 @@
                 "name": "for",
                 "missing": true,
                 "default": null,
-                "doc": "Time",
+                "doc": "Amount of time to sleep for",
                 "required": true,
                 "type": "timespan",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -39,6 +40,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

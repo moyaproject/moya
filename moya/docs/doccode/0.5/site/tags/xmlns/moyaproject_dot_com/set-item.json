@@ -25,6 +25,7 @@
                 "required": true,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -36,6 +37,7 @@
                 "required": true,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "src": {
@@ -47,6 +49,7 @@
                 "required": true,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -61,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

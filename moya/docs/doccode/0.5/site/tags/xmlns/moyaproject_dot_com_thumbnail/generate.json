@@ -10,7 +10,7 @@
         "name": "generate",
         "lib": "moya.thumbnail",
         "namespace_slug": "moyaproject_dot_com_thumbnail",
-        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 61)",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 63)",
         "doc": "Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].",
         "namespace": "http://moyaproject.com/thumbnail",
         "synopsis": "generate thumbnails",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "thumbnails": {
@@ -47,6 +49,7 @@
                 "required": true,
                 "type": "element",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "path": {
@@ -67,8 +71,9 @@
                 "default": null,
                 "doc": "Path to the image to the original image",
                 "required": true,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "overwrite": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -94,6 +100,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

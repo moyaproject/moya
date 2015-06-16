@@ -10,7 +10,7 @@
         "name": "new-permission",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 140)",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 168)",
         "doc": "Create a new permission (if it doesn't already exist)",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "create a new permission",
@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "description": {
@@ -56,8 +59,9 @@
                 "default": null,
                 "doc": "",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -67,8 +71,9 @@
                 "default": null,
                 "doc": "",
                 "required": true,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

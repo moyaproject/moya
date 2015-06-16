@@ -11,11 +11,23 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/system.py",
-        "doc": "\nRun enclosed block in a thread.\n\nThe thread\n\n\n",
+        "doc": "\nRun enclosed block in a thread.\n\nWhen Moya encounters this tag it executes the enclosed code in a new [url \"https://en.wikipedia.org/wiki/Thread_(computing)\"]thread[/url]. The calling thread will jump to the end of the [tag]thread[/tag] tag.\n\nThe enclosed code may return a value (with [tag]return[/tag]), which can be retrieved by the calling thread via it's [c]dst[/c] parameter. If the calling thread references the return value before the thread has returned, it will block until the thread returns.\n\nThis tag is useful in a request when you have some long running action to do, and you don't want to delay returning a response. Here's an example:\n\n[code xml]\n<view libname=\"view.process\" template=\"slowprocess.html\">\n    <thread>\n        <call macro=\"slow\"/>\n    </thread>\n</view>\n[/code]\n\nThis view will render a template and return immediately, while the macro is processing in the background. Note, that the slow macro will have no way of returning anything in the response, but could still send an email or store something in the database to communicate the result to the user.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "run a thread",
         "tag_name": "thread",
         "params": {
+            "scope": {
+                "default_display": "no",
+                "name": "scope",
+                "missing": true,
+                "default": false,
+                "doc": "Use the current scope?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "name": {
                 "default_display": "",
                 "name": "name",
@@ -25,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "timeout": {
@@ -36,6 +49,7 @@
                 "required": false,
                 "type": "timespan",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -50,6 +64,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -61,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -72,6 +88,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

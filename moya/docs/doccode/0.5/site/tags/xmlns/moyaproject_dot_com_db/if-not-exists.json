@@ -27,6 +27,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "db": {
@@ -38,6 +39,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "filter": {
@@ -49,6 +51,7 @@
                 "required": false,
                 "type": "database expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "model": {
@@ -60,6 +63,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "modelobj": {
@@ -71,6 +75,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -82,6 +87,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

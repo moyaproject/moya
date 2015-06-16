@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -36,6 +37,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "headers": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "dict expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "params": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "dict expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "timeout": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "number",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "password": {
@@ -80,6 +85,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "data": {
@@ -91,6 +97,7 @@
                 "required": false,
                 "type": "dict expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "method": {
@@ -102,6 +109,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "get",
                     "post",
@@ -124,6 +132,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -135,6 +144,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -146,6 +156,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

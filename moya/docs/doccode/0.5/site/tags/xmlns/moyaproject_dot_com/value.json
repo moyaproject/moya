@@ -16,17 +16,6 @@
         "synopsis": "a value in an enumeration",
         "tag_name": "value",
         "params": {
-            "label": {
-                "default_display": "",
-                "name": "label",
-                "missing": true,
-                "default": null,
-                "doc": "Enumeration label",
-                "required": true,
-                "type": "text",
-                "metavar": null,
-                "choices": null
-            },
             "group": {
                 "default_display": "\"\"",
                 "name": "group",
@@ -36,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "description": {
@@ -47,6 +37,19 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Value name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "id": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

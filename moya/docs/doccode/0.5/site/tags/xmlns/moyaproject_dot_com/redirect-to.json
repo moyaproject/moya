@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "path": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": "PATH",
+                "empty": true,
                 "choices": null
             },
             "code": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "http status code",
                 "metavar": "HTTPCODE",
+                "empty": true,
                 "choices": null
             },
             "url": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": "URL",
+                "empty": true,
                 "choices": null
             },
             "query": {
@@ -69,6 +73,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": "EXPRESSION",
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

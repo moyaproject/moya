@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "group": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "call": {
@@ -47,6 +49,7 @@
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "description": {
@@ -58,6 +61,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -69,6 +73,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -83,6 +88,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

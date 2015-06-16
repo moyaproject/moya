@@ -27,6 +27,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -38,6 +39,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "file": {
@@ -49,6 +51,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "path": {
@@ -60,6 +63,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "fsobj": {
@@ -71,6 +75,7 @@
                 "required": false,
                 "type": "index",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -82,6 +87,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

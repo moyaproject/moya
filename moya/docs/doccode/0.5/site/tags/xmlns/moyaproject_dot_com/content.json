@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "template path",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -50,6 +52,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

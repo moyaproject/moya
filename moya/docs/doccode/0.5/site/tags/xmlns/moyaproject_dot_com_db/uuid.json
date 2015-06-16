@@ -25,6 +25,7 @@
                 "required": false,
                 "type": "integer",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "version": {
@@ -36,23 +37,36 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "1",
-                    "2",
                     "3",
                     "4",
                     "5"
                 ]
             },
-            "namespace": {
-                "default_display": "\"dns\"",
-                "name": "namespace",
+            "nsname": {
+                "default_display": "\"http://moyaproject.org\"",
+                "name": "nsname",
                 "missing": true,
-                "default": "dns",
+                "default": "http://moyaproject.org",
+                "doc": "Name in namespace (if using variant 3 or 5)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "nstype": {
+                "default_display": "\"url\"",
+                "name": "nstype",
+                "missing": true,
+                "default": "url",
                 "doc": "Namespace (if using variant 3 or 5)",
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "dns",
                     "url",
@@ -72,6 +86,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "unique": {
@@ -83,6 +98,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "null": {
@@ -94,6 +110,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "help": {
@@ -105,6 +122,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "default": {
@@ -116,6 +134,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "primary": {
@@ -127,6 +146,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "label": {
@@ -138,6 +158,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "blank": {
@@ -149,6 +170,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "formfield": {
@@ -160,6 +182,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "name": {
@@ -171,6 +194,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

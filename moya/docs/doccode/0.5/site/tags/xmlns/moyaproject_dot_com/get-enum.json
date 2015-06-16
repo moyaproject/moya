@@ -25,6 +25,19 @@
                 "required": false,
                 "type": "element reference",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": null,
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "from application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -39,6 +52,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -50,6 +64,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -61,6 +76,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

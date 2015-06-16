@@ -25,6 +25,7 @@
                 "required": true,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "missing": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "default": {
@@ -47,17 +49,19 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "required": {
-                "default_display": "no",
+                "default_display": "yes",
                 "name": "required",
                 "missing": true,
-                "default": false,
+                "default": true,
                 "doc": "Required",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "choices": {
@@ -69,17 +73,19 @@
                 "required": false,
                 "type": "comma list",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "type": {
-                "default_display": "",
+                "default_display": "\"expression\"",
                 "name": "type",
                 "missing": true,
-                "default": null,
+                "default": "expression",
                 "doc": "Type of the attribute",
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": [
                     "constant",
                     "text",
@@ -114,6 +120,19 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "empty": {
+                "default_display": "yes",
+                "name": "empty",
+                "missing": true,
+                "default": true,
+                "doc": "Are empty values allowed?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },

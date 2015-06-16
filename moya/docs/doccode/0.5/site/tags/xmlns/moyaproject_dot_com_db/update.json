@@ -17,15 +17,44 @@
         "tag_name": "update",
         "params": {
             "src": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "src",
                 "missing": true,
                 "default": null,
                 "doc": "Queryset",
                 "required": true,
-                "type": "index",
+                "type": "expression",
                 "metavar": "QUERYSET",
+                "empty": true,
                 "choices": null
+            },
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "synchronize": {
+                "default_display": "\"fetch\"",
+                "name": "synchronize",
+                "missing": true,
+                "default": "fetch",
+                "doc": "Synchronize session strategy",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "none",
+                    "fetch",
+                    "evaulate"
+                ]
             }
         },
         "example": "\n        <db:query model=\"#Vote\" filter=\"#Vote.topic=='moya'\" dst=\"votes\"/>\n        <db:update src=\"votes\" let:topic=\"#Vote.score + 1\" />\n        ",
@@ -39,6 +68,7 @@
                 "required": false,
                 "type": "reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "value": {
@@ -50,6 +80,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "if": {
@@ -61,6 +92,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }

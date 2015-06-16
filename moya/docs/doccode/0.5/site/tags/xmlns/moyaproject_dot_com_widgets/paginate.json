@@ -10,7 +10,7 @@
         "name": "paginate",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 106)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 111)",
         "doc": "",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "paginate a list of results",
@@ -22,9 +22,10 @@
                 "missing": true,
                 "default": null,
                 "doc": "Sequence to paginate.",
-                "required": false,
+                "required": true,
                 "type": "index",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "from": {
@@ -36,6 +37,7 @@
                 "required": false,
                 "type": "application reference",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "pagesize": {
@@ -47,6 +49,19 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fragment": {
+                "default_display": null,
+                "name": "fragment",
+                "missing": true,
+                "default": null,
+                "doc": "Option fragment to add to links.",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "auto": {
@@ -58,6 +73,7 @@
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "dst": {
@@ -69,6 +85,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "template": {
@@ -80,6 +97,7 @@
                 "required": false,
                 "type": "text",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             },
             "page": {
@@ -91,6 +109,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         },
@@ -105,6 +124,7 @@
                 "required": false,
                 "type": "expression",
                 "metavar": null,
+                "empty": true,
                 "choices": null
             }
         }
