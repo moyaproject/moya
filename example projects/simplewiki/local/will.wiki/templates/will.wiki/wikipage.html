@@ -5,6 +5,5 @@
     ${wikipage.title}
     <a class="btn btn-primary" href="{% url 'wikipage_edit' with slug=wikipage.slug %}">Edit this page</a>
 </h1>
-
 {% markup wikipage.content as 'markdown' %}
 {% endblock %}

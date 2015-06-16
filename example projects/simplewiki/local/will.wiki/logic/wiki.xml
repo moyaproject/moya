@@ -16,10 +16,7 @@
     </db:model>
 
     <view libname="view.wikipage" template="wikipage.html">
-        <db:get-or-create
-            model="#WikiPage"
-            dst="wikipage"
-            let:slug=".url.slug" />
+        <db:get-or-create model="#WikiPage" let:slug=".url.slug" dst="wikipage"/>
     </view>
 
     <forms:form libname="form.wikipage.edit" legend="Edit Page" style="horizontal">
@@ -29,10 +26,7 @@
     </forms:form>
 
     <view libname="view.wikipage.edit" template="wikipage_edit.html">
-        <db:get-or-create
-            model="#WikiPage"
-            dst="wikipage"
-            let:slug=".url.slug" />
+        <db:get-or-create model="#WikiPage" let:slug=".url.slug" dst="wikipage"/>
         <forms:get form="#form.wikipage.edit" src="wikipage" dst="form" />
         <forms:validate src="form">
             <forms:apply src="form" dst="wikipage" />
