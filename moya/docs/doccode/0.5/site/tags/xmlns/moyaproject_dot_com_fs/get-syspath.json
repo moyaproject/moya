@@ -1,0 +1,97 @@
+{
+    "name": "get-syspath",
+    "doc_namespace": "xmlns.http://moyaproject.com/fs",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-syspath",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_fs",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+        "doc": "\nGet a system path for a path in a filesystem.\n\nA system path (or 'syspath') is a path that maps to the file on the OS filesystem. Not all filesystems can generate syspaths. If Moya is unable to generate a syspath it will throw a [c]get-syspath.no-syspath[/c] exception.\n\n",
+        "namespace": "http://moyaproject.com/fs",
+        "synopsis": "get a system path",
+        "tag_name": "get-syspath",
+        "params": {
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Destination path",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem object",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <fs:get-syspath fs=\"templates\" path=\"index.html\" dst=\"index_template_path\"/>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/fs.get-syspath"
+}

@@ -1,0 +1,97 @@
+{
+    "name": "tab-panel",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "tab-panel",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 147)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "tab panel container",
+        "tag_name": "tab-panel",
+        "params": {
+            "active": {
+                "default_display": null,
+                "name": "active",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "class": {
+                "default_display": null,
+                "name": "class",
+                "missing": true,
+                "default": null,
+                "doc": "Additional class(es)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "id": {
+                "default_display": "",
+                "name": "id",
+                "missing": true,
+                "default": "",
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.tab-panel"
+}

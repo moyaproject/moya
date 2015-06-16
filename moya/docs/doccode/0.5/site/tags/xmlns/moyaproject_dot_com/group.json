@@ -1,0 +1,85 @@
+{
+    "name": "group",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "group",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nGroup a sequence in to a list of values with common keys.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "group a sequence by common keys",
+        "tag_name": "group",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source sequence",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "key": {
+                "default_display": "",
+                "name": "key",
+                "missing": true,
+                "default": null,
+                "doc": "Key",
+                "required": true,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <list dst=\"crew\">\n            <dict let:name=\"'Rygel'\" let:species=\"'hynerian'\" />\n            <dict let:name=\"'Aeryn'\" let:species=\"'peacekeeper'\" />\n            <dict let:name=\"'Jothee'\" let:species=\"'luxan'\" />\n            <dict let:name=\"'D'Argo'\" let:species=\"'luxan'\" />\n        </list>\n        <group src=\"crew\" key=\"species\" value=\"name\" dst=\"by_species\" />\n        <!-- {'hynerian': ['Rygel'], 'peacekeeper': ['Aeryn'], 'luxan': ['Jothee', 'D'Argo']} -->\n\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.group"
+}
