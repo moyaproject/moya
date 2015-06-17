@@ -6,20 +6,13 @@ from ..tags.context import DataSetter
 from .. import logic
 from .. import http
 from .. import serve
-from ..tools import datetime_to_epoch, md5_hexdigest
-from ..context.missing import is_missing
 from .. import errors
 from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
 from ..urlmapper import MissingURLParameter, RouteError
 
-from fs.path import basename
-from fs.errors import FSError
 
-from datetime import datetime
-import mimetypes
-import time
 import json
 
 import logging
@@ -129,7 +122,6 @@ class ServeFile(LogicElement):
 
         req = context.root["request"]
         serve.serve_file(req, fs, path, name=params.name)
-
 
 
 class ServeJSON(LogicElement):
@@ -293,33 +285,13 @@ class Redirect(LogicElement):
         except RouteError as e:
             self.throw('redirect.no-route', text_type(e))
 
-        # url_index = ".urls." + app_name + '.' + urlname
-
-        # with context.data_frame(url_params):
-        #     try:
-        #         url = context[url_index]
-        #     except:
-        #         self.throw('url.missing',
-        #                    "No named URL called '{}' in application '{}'".format(urlname, app_name),
-        #                    diagnosis="Check for typos in the url name. If you want to redirect to a URL in a different application, set the **from** attribute.",
-        #                    name=urlname,
-        #                    app=app)
-        #     if is_missing(url):
-        #         self.throw('url.missing',
-        #                    "No named URL called '{}' in application '{}'".format(urlname, app_name),
-        #                    diagnosis="Check for typos in the url name. If you want to redirect to a URL in a different application, set the **from** attribute.",
-        #                    name=urlname,
-        #                    app=app)
-
-        #     url = text_type(context.get(url_index))
-
         if query:
             qs = urlencode(list(query.items()), True)
             url += '?' + qs
 
         location = url
         if fragment:
-            location = "{}#{}".format(location)
+            location = "{}#{}".format(location, fragment)
 
         self.new_location(context, location)
 

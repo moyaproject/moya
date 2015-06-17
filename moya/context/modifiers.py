@@ -38,9 +38,11 @@ from fs.path import (basename,
 import hashlib
 import urllib
 import copy
+import collections
 from collections import OrderedDict
 from datetime import datetime
 from operator import truth
+from itertools import chain
 import random
 from math import ceil, floor, log
 
@@ -242,6 +244,10 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def choices(self, context, v):
         return getattr(v, 'choices', [])
+
+    def chain(self, context, v):
+        v = v if isinstance(v, collections.Iterable) else [v]
+        return list(chain(*[i if isinstance(i, collections.Iterable) else [i] for i in v]))
 
     def chr(self, context, v):
         try:

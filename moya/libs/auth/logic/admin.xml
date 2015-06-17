@@ -17,7 +17,7 @@
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
-        libname="admintable.users" slug="users" title="Users" model="#User" order="username" description="Users"
+        libname="admintable.users" slug="users" title="Users" model="#User" description="Users"
         search="#User.username == q or #User.first_name icontains q or #User.last_name icontains q or #User.email == q">
         <column title="ID" sort="id">${object.id}</column>
         <column title="Username" sort="username" link="yes">${object.username}</column>
