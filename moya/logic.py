@@ -50,7 +50,7 @@ def _breakpoint_notify(node, suppressed=False):
 
 
 def debugging_notify():
-    _notify("Moya debugger", "Moya was started with --breakpoint")
+    _notify("Moya debugger started", "Moya is now in debug mode, please see the console")
 
 
 def is_debugging():

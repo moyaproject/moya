@@ -134,6 +134,9 @@ class CallableElement(ContextElementBase):
         self.libname = None
         self._docid = None
 
+    def __repr__(self):
+        return "<callable {}>".format(self.element.libid)
+
     def check(self, context):
         return True
 

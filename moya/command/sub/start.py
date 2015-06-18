@@ -131,10 +131,12 @@ class Email(Question):
 
 class Organization(Question):
     text = """What is your organization?"""
+    extra = """This may be your employer, organization or your own name"""
 
 
 class URL(Question):
     text = """What is your homepage URL?"""
+    required = False
 
 
 class DoMount(YesNoQuestion):

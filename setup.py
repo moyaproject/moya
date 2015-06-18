@@ -59,5 +59,8 @@ setup(name='moya',
                         'lxml',
                         'colorama',
                         'premailer'],
+      extras_require={
+          ':sys_platform!="win32"': ["py-notify", "pyinotify"]
+      },
       setup_requires=["setuptools_git >= 0.3"]
       )
