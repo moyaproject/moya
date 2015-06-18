@@ -27,15 +27,20 @@ log = logging.getLogger('moya.runtime')
 debug_lock = RLock()
 
 
-def _notify(title, message):
-    """Show a notification message if pynotify is available"""
+def notify(title, message):
+    """Show a notification message if notify2 is available"""
     try:
-        import pynotify
+        import notify2
     except ImportError:
         return
-    pynotify.init("moya")
-    n = pynotify.Notification(title, message, "dialog-information")
-    n.show()
+    try:
+        if not notify2.is_initted():
+            notify2.init("moya")
+        n = notify2.Notification(title, message, "dialog-information")
+        n.show()
+    except:
+        # Notifications are low priority, don't want to risk breaking the server
+        pass
 
 
 def _breakpoint_notify(node, suppressed=False):
@@ -46,11 +51,12 @@ def _breakpoint_notify(node, suppressed=False):
         log.debug("<breakpoint> %s ignored", message)
     else:
         log.debug("<breakpoint> %s", message)
-        _notify("Moya debugger hit a breakpoint", message)
+        notify("Moya debugger hit a breakpoint", message)
 
 
 def debugging_notify():
-    _notify("Moya debugger started", "Moya is now in debug mode, please see the console")
+    notify("Moya debugger started",
+           "Moya is now in debug mode, please see the console")
 
 
 def is_debugging():

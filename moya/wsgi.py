@@ -11,7 +11,7 @@ from . import tags
 from .tags import cookie
 from .tools import timer, lazystr
 from .logic import debug_lock, is_debugging
-from .logic import _notify
+from .logic import notify
 from .request import MoyaRequest, ReplaceRequest
 from .response import MoyaResponse
 from . import http
@@ -195,7 +195,8 @@ class WSGIApplication(object):
 
         if new_build is None:
             self.rebuild_required = False
-            _notify("Rebuild Failed", error_text or "Unable to build project, see console")
+            notify("Rebuild Failed",
+                   error_text or "Unable to build project, see console")
             return
 
         with self._new_build_lock:
