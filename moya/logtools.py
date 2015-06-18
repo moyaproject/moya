@@ -46,18 +46,14 @@ class LogHighlighter(ConsoleHighlighter):
         r'^\[.*\](?P<critical>:.*?:CRITICAL:)',
 
         r'(?P<request>\".*?\") (?:(?P<errorresponse>[45]\S+)|(?P<responsecode>\S+))',
-
         r'(?P<method>\"(?:OPTIONS|DELETE|TRACE|CONNECT) .*?\")',
 
         r'(?P<get>\"GET .*?\")',
         r'(?P<head>\"HEAD .*?\")',
         r'(?P<post>\"POST .*?\")',
 
-
-
         r'(?P<url>https{0,1}://[a-zA-Z0-9\.\%\:\/\-]*)[\s\'\"$]?',
         r'(?P<parenthesis>\(.*?\))'
-
     ]
 
 
@@ -84,8 +80,12 @@ class MoyaFileHandler(logging.Handler):
 
     def emit(self, record):
         text = self.format(record)
-        with io.open(self._filename, 'at', encoding="utf-8") as f:
-            f.write(text + '\n')
+        try:
+            with io.open(self._filename, 'at', encoding="utf-8") as f:
+                f.write(text + '\n')
+        except IOError:
+            # paranoia
+            pass
 
 
 class LoggerFile(object):
