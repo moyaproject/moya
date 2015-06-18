@@ -69,7 +69,7 @@ class MoyaConsoleHandler(logging.StreamHandler):
 class MoyaFileHandler(logging.Handler):
     """A handler that writes to a file.
 
-    The default FileHanlder keeps the file open, which breaks when Ubuntu rotates the logs. This handler
+    The default FileHandler keeps the file open, which breaks when Ubuntu rotates the logs. This handler
     avoids that issue by closing the file on every emit.
 
     """
