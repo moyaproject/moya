@@ -13,8 +13,10 @@ pre.moya-console
     background-color:#fff;
     color:#002b36;
     white-space:pre;
+    /*
     font-size:11px;
     line-height:1.5em;
+    */
 }
 
 .alert > strong
@@ -154,7 +156,7 @@ pre.format- {}
     An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user ${.user}){% endif %}
 </p>
 
-<pre class="moya-console"><code>{% console-render trace width 100 %}</code></pre>
+<pre class="moya-console"><div width="100em;overflow:auto;"><code>{% console-render trace width 100 %}</code></div></pre>
 </body>
 
 </html>
