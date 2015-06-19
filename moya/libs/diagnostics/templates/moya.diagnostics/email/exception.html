@@ -14,16 +14,18 @@ pre.moya-console
     color:#002b36;
     white-space:pre;
     overflow:auto;
+    width:100em;
     /*
     font-size:11px;
     line-height:1.5em;
     */
 }
 
-pre.moya-console code
+.code-container
 {
-    width:100em;
+    font-family:"Lucida Console", Monaco, monospace;
 }
+
 
 .alert > strong
 {
@@ -162,7 +164,8 @@ pre.format- {}
     An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user ${.user}){% endif %}
 </p>
 
-<pre class="moya-console"><code>{% console-render trace width 100 %}</code></pre>
+<div class="code-container"><pre class="moya-console"><code>{% console-render trace width 100 %}</code></pre></div>
+
 </body>
 
 </html>
