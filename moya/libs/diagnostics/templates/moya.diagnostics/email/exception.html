@@ -151,7 +151,10 @@ pre.format- {}
 </style></head>
 <body>
 <p>
-    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user was ${.user.username}){% endif %}
+<em>${.request.url}</em>
+</p>
+<p>
+    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(${.user}){% endif %}
 </p>
 {% if trace.msg %}
 <p class="text-error">{% markup trace.msg as 'text' %}</p>
