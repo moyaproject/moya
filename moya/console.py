@@ -541,7 +541,7 @@ class Console(object):
             tag = '<span class="{}">'.format(class_attrib)
             self.out.write(tag)
 
-        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(' ', '&nbsp;')
+        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         text = text.replace('\n', '<br>')
         self.out.write(text.encode('utf-8'))
 

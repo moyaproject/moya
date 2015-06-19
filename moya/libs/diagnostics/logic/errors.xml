@@ -22,7 +22,7 @@
         <thread let:to="commalist:.app.settings.admin_email.list" let:data="signal.data">
             <email:send
                 email="#email.exception"
-                subject="${.app.settings.subject} - ${data.trace.msg}"
+                subject="${sub:.app.settings.subject} - ${data.trace.msg}"
                 to="${to}"
                 data="data"
                 failsilently="yes"/>

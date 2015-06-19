@@ -12,9 +12,8 @@ pre.moya-console
     line-height:1.3em;
     background-color:#fff;
     color:#002b36;
-    white-space:nowrap;
-    overflow:scroll;
-    font-size:11px;
+    white-space:pre;
+    font-size:12px;
     line-height:1.5em;
 }
 
@@ -152,16 +151,13 @@ pre.format- {}
 </style></head>
 <body>
 <p>
-<em>${.request.url}</em>
-</p>
-<p>
     An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(${.user}){% endif %}
 </p>
 {% if trace.msg %}
 <p class="text-error">{% markup trace.msg as 'text' %}</p>
 {% endif %}
 
-<pre class="moya-console">{% console-render trace width 120 %}</pre>
+<pre class="moya-console">{% console-render trace width 100 %}</pre>
 </body>
 
 </html>
