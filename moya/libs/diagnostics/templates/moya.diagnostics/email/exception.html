@@ -164,7 +164,20 @@ pre.format- {}
     An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user ${.user}){% endif %}
 </p>
 
+{% if trace.stack %}
+<p class="text-info">Moya trace (most recent call first):</p>
+{% endif %}
+
+{%- for frame in reversed:trace.stack %}
+<div class="frame">
+    <p>${frame.location}</p>
+    <div class="code-container"><pre class="moya-console"><code>{% render html:frame.snippet %}</code></pre></div>
+</div>
+{%- endfor %}
+
+{#
 <div class="code-container"><pre class="moya-console"><code>{% console-render trace width 100 %}</code></pre></div>
+#}
 
 </body>
 
