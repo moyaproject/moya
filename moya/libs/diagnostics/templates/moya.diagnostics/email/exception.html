@@ -229,22 +229,32 @@ pre.format- {}
             color:#999;
         }
 
+        .text-error
+        {
+            color:#cb4b16;
+            font-weight:bold;
+        }
+
 
 </style></head>
 <body>
-{% if trace.moya_exception_type %}
+{%- if trace.moya_exception_type %}
 <h2>${trace.moya_exception_type} <small>unhandled logic exception</small></h2>
-{% else %}
+{%- else %}
 <h2>${trace.error_type}</h2>
-{% endif %}
+{%- endif %}
 
 <p>
     An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user ${.user}){% endif %}
 </p>
 
-{% if trace.stack %}
+{%- if trace.msg %}
+<p class="text-error">{% markup trace.msg as 'text' %}</p>
+{%- endif %}
+
+{%- if trace.stack %}
 <h4>Moya trace (most recent call first):</h4>
-{% endif %}
+{%- endif %}
 
 {%- for frame in reversed:trace.stack %}
 <div class="frame">
