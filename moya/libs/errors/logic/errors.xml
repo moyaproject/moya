@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:moya="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:db="http://moyaproject.com/db"
+    xmlns:forms="http://moyaproject.com/forms"
+    xmlns:w="http://moyaproject.com/widgets"
+    xmlns:html="http://moyaproject.com/html"
+    xmlns:email="http://moyaproject.com/email">
+
+
+    <email libname="email.exception" xmlns="http://moyaproject.com/email"
+        from="${.app.settings.email_from}"
+        subject="${.app.settings.subject}">
+        <html template="email/exception.html" premailer="yes" />
+    </email>
+
+    <handle signal="sys.unhandled-exception">
+        <if test="not strip:.app.settings.admin_email">
+            <log-warn>'admin_email' setting required not given, unable to send error email</log-warn>
+            <done/>
+        </if>
+        <log-info>sending unhandled exception email to ${commalist:.app.settings.admin_email.list}</log-info>
+        <thread let:to="commalist:.app.settings.admin_email.list" let:data="signal.data">
+            <!-- TODO: premailer is really slow for these emails -->
+            <email:send
+                email="#email.exception"
+                to="${to}"
+                data="data"
+                failsilently="yes"/>
+        </thread>
+    </handle>
+
+</moya>
