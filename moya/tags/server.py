@@ -822,9 +822,10 @@ class Server(LogicElement):
             rc['trace2'] = moya_trace2
             rc['moya_error'] = getattr(moya_trace.exception, 'type', None) if moya_trace else None
 
-            archive.fire(context,
-                         "sys.unhandled-exception",
-                         data=rc)
+            if status == 500:
+                archive.fire(context,
+                             "sys.unhandled-exception",
+                             data=rc)
 
             response.text = render_object(rc, archive, context, "html")
             return response

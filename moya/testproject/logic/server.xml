@@ -56,8 +56,8 @@
         <install name="uploads" lib="moya.static" mount="/uploads/" />
         <install name="recaptcha" lib="moya.google.recaptcha" />
 
-        <install name="signup" lib="moya.signup" />
-        <mount app="signup" url="/signup/" name="signup" />
+        <install name="signup" lib="moya.signup" mount="/signup/" />
+
 
         <import location="./site" priority="10" />
         <install name="site" lib="moya.site" mount="/" />

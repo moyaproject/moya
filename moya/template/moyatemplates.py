@@ -376,6 +376,24 @@ class ConsoleNode(Node):
         return ''
 
 
+class ConsoleRenderNode(Node):
+    tag_name = "consolerender"
+    auto_close = True
+
+    def on_create(self, environment, parser):
+        self.expression = parser.expect_expression()
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        from ..console import Console
+        obj = self.expression.eval(context)
+        console = Console(html=True, width=120)
+        console.obj(context, obj)
+        html = console.get_text()
+
+        return html
+
+
 class LoremNode(Node):
     tag_name = "lorem"
     auto_close = True
