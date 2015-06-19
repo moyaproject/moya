@@ -151,11 +151,8 @@ pre.format- {}
 </style></head>
 <body>
 <p>
-    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(${.user}){% endif %}
+    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user ${.user}){% endif %}
 </p>
-{% if trace.msg %}
-<p class="text-error">{% markup trace.msg as 'text' %}</p>
-{% endif %}
 
 <pre class="moya-console">{% console-render trace width 100 %}</pre>
 </body>
