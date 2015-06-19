@@ -22,10 +22,9 @@
 
         <email:send
             email="#email.exception"
-            subject="${sub:.app.settings.subject} ${data.trace.msg}"
+            subject="${sub:.app.settings.subject} ${signal.data.trace.msg}"
             to="${commalist:.app.settings.admin_email.list}"
-            data="signal.data"
-            failsilently="yes"/>
+            data="signal.data"/>
 
     </handle>
 
