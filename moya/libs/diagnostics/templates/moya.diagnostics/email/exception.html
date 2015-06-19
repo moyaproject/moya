@@ -13,7 +13,7 @@ pre.moya-console
     background-color:#fff;
     color:#002b36;
     white-space:pre;
-    font-size:13px;
+    font-size:11px;
     line-height:1.5em;
 }
 
@@ -127,12 +127,10 @@ pre.format- {}
     color:#333 !important;
 }
 
-
 .format-ini .section.sectionname
 {
     font-weight:italic;
 }
-
 
 .format-ini .key
 {
@@ -153,15 +151,13 @@ pre.format- {}
 </style></head>
 <body>
 <p>
-    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong>
+    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong> {% if .user %}(user was ${.user.username}){% endif %}
 </p>
 {% if trace.msg %}
 <p class="text-error">{% markup trace.msg as 'text' %}</p>
 {% endif %}
-{%- if .user %}
-<p>User ${.user}</p>
-{%- endif %}
-<pre class="moya-console">{% console-render trace %}</pre>
+
+<pre class="moya-console">{% console-render trace width 100 %}</pre>
 </body>
 
 </html>

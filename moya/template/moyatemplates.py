@@ -382,15 +382,22 @@ class ConsoleRenderNode(Node):
 
     def on_create(self, environment, parser):
         self.expression = parser.expect_expression()
+        options_map = parser.expect_word_expression_map('width')
+        self.width = options_map.get('width', DefaultExpression(100))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         from ..console import Console
         obj = self.expression.eval(context)
-        console = Console(html=True, width=120)
+        try:
+            width = int(self.width(context))
+        except:
+            self.render_error('width should be an integer')
+        if width < 10:
+            self.render_error('width is too small')
+        console = Console(html=True, width=width)
         console.obj(context, obj)
         html = console.get_text()
-
         return html
 
 
