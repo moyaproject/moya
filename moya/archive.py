@@ -43,7 +43,7 @@ from . import settings
 from fs.opener import fsopendir
 from fs.multifs import MultiFS
 from fs.mountfs import MountFS
-from fs.path import pathjoin, abspath
+from fs.path import pathjoin, abspath, relativefrom
 
 from collections import defaultdict, namedtuple, deque
 import os
@@ -261,6 +261,13 @@ class Archive(object):
             except IOError:
                 self._moyarc = settings.SettingsContainer()
         return self._moyarc
+
+    def get_relative_path(self, path):
+        """Get a relative path from the project base"""
+        base = self.project_fs.getsyspath('/', allow_none=True)
+        if base is None:
+            return path
+        return relativefrom(base, path)
 
     def open_fs(self, fs_url):
         if isinstance(fs_url, text_type):

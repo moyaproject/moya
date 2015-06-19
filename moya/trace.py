@@ -154,11 +154,18 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     add_pytraceback = not getattr(exc, 'hide_py_traceback', False)
     traceback.error_type = getattr(exc, 'error_type', 'internal error')
 
+    base = context.get('.sys.base', '')
+
+    def relativefrom(base, path):
+        if path.startswith(base):
+            path = "./" + path[len(base):]
+        return path
+
     for s in stack:
         e = getattr(s, 'element', None)
         if e and e._code:
             frame = Frame(e._code,
-                          e._location,
+                          relativefrom(base, e._location),
                           e.source_line or 1,
                           obj=text_type(e),
                           libid=e.libid)
@@ -168,7 +175,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     if element is not None and hasattr(element.document, 'structure'):
         frame = Frame(element.document.structure.xml,
-                      element._location,
+                      relativefrom(base, element._location),
                       element.source_line or 1,
                       obj=text_type(element),
                       libid=element.libid)
@@ -178,7 +185,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     elif hasattr(node, '_location') and hasattr(node, 'source_line'):
         if node._code:
             frame = Frame(node._code,
-                          node._location,
+                          relativefrom(base, node._location),
                           node.source_line or 1,
                           obj=text_type(node),
                           libid=node.libid)
@@ -204,14 +211,14 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
                 if 'node' in ts:
                     node = ts['node']
                     frame = Frame(node.code,
-                                  node.template.path,
+                                  relativefrom(base, node.template.path),
                                   node.location[0],
                                   raw_location=node.template.raw_path,
                                   cols=node.location[1:],
                                   format="moyatemplate")
                     traceback.add_frame(frame)
         frame = Frame(exc._code,
-                      exc.path,
+                      relativefrom(base, exc.path),
                       exc.lineno,
                       raw_location=getattr(exc, 'raw_path', None),
                       cols=(exc.start, exc.end),
@@ -229,7 +236,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     elif isinstance(exc, TemplateError):
         traceback.error_type = "Template Error"
         frame = Frame(exc._code,
-                      exc.path,
+                      relativefrom(base, exc.path),
                       raw_location=exc.raw_path,
                       lineno=exc.lineno,
                       cols=(exc.start, exc.end),
@@ -262,7 +269,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
             except:
                 code = None
             frame = Frame(code,
-                          filename,
+                          relativefrom(base, filename),
                           line_number,
                           one_line=False,
                           obj=function_name,

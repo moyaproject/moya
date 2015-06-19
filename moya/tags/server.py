@@ -610,6 +610,7 @@ class Server(LogicElement):
             return None
 
         context.root['sys']['site'] = site_instance
+        context.root['sys']['base'] = archive.project_fs.getsyspath('/', None)
         context.root['site'] = site_instance._data
 
         return site_instance
