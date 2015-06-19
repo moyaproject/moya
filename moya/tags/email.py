@@ -145,7 +145,7 @@ class Get(LogicElement):
             email = Email(data=data)
             email.app = email_app
             email.email_element = email_element
-            email.subject = context.sub(subject)
+            email.subject = subject
             email.set_from(from_)
 
             for addr in emails['to'] or []:
