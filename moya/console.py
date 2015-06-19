@@ -571,7 +571,7 @@ class Console(object):
         #    self.obj(context, text)
         #    return self
         if self.html:
-            return self._html_out(text,
+            return self._html_out(text.replace(' ', '&nbsp;'),
                                   fg=fg,
                                   bg=bg,
                                   bold=bold,

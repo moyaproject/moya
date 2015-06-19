@@ -12,7 +12,7 @@ pre.moya-console
     line-height:1.3em;
     background-color:#fff;
     color:#002b36;
-    white-space:pre;
+    white-space:nowrap;
     font-size:11px;
     line-height:1.5em;
 }
@@ -160,7 +160,7 @@ pre.format- {}
 <p class="text-error">{% markup trace.msg as 'text' %}</p>
 {% endif %}
 
-<pre class="moya-console">{% console-render trace width 100 %}</pre>
+<pre class="moya-console">{% console-render trace width 120 %}</pre>
 </body>
 
 </html>
