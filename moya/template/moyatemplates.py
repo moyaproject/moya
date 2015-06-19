@@ -390,7 +390,7 @@ class ConsoleRenderNode(Node):
         from ..console import Console
         obj = self.expression.eval(context)
         try:
-            width = int(self.width(context))
+            width = int(self.width.eval(context))
         except:
             self.render_error('width should be an integer')
         if width < 10:
