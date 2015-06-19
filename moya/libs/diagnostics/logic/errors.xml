@@ -19,14 +19,14 @@
             <done/>
         </if>
         <log-info>sending unhandled exception email to ${commalist:.app.settings.admin_email.list}</log-info>
-        <thread let:to="commalist:.app.settings.admin_email.list" let:data="signal.data">
-            <email:send
-                email="#email.exception"
-                subject="${sub:.app.settings.subject} ${data.trace.msg}"
-                to="${to}"
-                data="data"
-                failsilently="yes"/>
-        </thread>
+
+        <email:send
+            email="#email.exception"
+            subject="${sub:.app.settings.subject} ${data.trace.msg}"
+            to="${commalist:.app.settings.admin_email.list"
+            data="signal.data"
+            failsilently="yes"/>
+
     </handle>
 
 </moya>
