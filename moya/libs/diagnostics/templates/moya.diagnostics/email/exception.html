@@ -12,9 +12,9 @@ pre.moya-console
     line-height:1.3em;
     background-color:#fff;
     color:#002b36;
-    /*white-space:pre;*/
     overflow:auto;
     width:700px;
+    white-space:normal;
 
 }
 
@@ -230,9 +230,9 @@ pre.format- {}
 </style></head>
 <body>
 {% if trace.moya_exception_type %}
-<h3>${trace.moya_exception_type} <small>unhandled logic exception</small></h3>
+<h2>${trace.moya_exception_type} <small>unhandled logic exception</small></h2>
 {% else %}
-<h3>${trace.error_type} <small>test</small></h3>
+<h2>${trace.error_type}</h2>
 {% endif %}
 
 <p>
