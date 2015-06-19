@@ -1,0 +1,167 @@
+<html>
+<head><style>
+
+body
+{
+    font-family:arial;
+}
+
+pre.moya-console
+{
+    font-family:"Lucida Console", Monaco, monospace;
+    line-height:1.3em;
+    background-color:#fff;
+    color:#002b36;
+    white-space:pre;
+    font-size:13px;
+    line-height:1.5em;
+}
+
+.alert > strong
+{
+    margin-right:.5em;
+}
+
+.moya-console .console-bold { font-weight: bold; }
+.moya-console .console-italic { font-style: italic; }
+.moya-console .console-underline { text-decoration: underline; }
+.moya-console .console-dim {
+    opacity:.5;
+    font-weight:normal !important;
+}
+
+.moya-console .console-bold.console-foreground-yellow { color: #b58900; }
+.moya-console .console-bold.console-foreground-magenta { color: #d33682; }
+.moya-console .console-bold.console-foreground-green { color: #859900; }
+.moya-console .console-bold.console-foreground-blue { color: #268bd2; }
+.moya-console .console-bold.console-foreground-cyan { color: #2aa198 }
+.moya-console .console-bold.console-foreground-red { color: #dc322f; }
+.moya-console .console-bold.console-foreground-black { color: #002b36 }
+.moya-console .console-bold.console-foreground-white { color: #93a1a1 }
+.moya-console .console-foreground-yellow { color: #b58900; }
+.moya-console .console-foreground-magenta { color: #d33682; }
+.moya-console .console-foreground-green { color: #859900 }
+.moya-console .console-foreground-blue { color: #268bd2; }
+.moya-console .console-foreground-cyan { color: #2aa198 }
+.moya-console .console-foreground-red { color: #dc322f; }
+.moya-console .console-foreground-black { color: #002b36 }
+.moya-console .console-foreground-white { color: #93a1a1 }
+.moya-console .console-background-yellow { background-color: #b58900; }
+.moya-console .console-background-magenta { background-color: #d33682; }
+.moya-console .console-background-green { background-color: #859900; }
+.moya-console .console-background-blue { background-color: #268bd2; }
+.moya-console .console-background-cyan { background-color: #2aa198 }
+.moya-console .console-background-red { background-color: #dc322f; }
+.moya-console .console-background-black { background-color: #002b36 }
+.moya-console .console-background-white { background-color: #fdf6e3 }
+
+pre.format- {}
+
+
+.format-xml .comment { color:#586e75; font-style:italic;}
+.format-xml .tag { color:#cb4b16;}
+.format-xml .tag.tagcontent.attrib { color:#268bd2; font-weight:bold;}
+.format-xml .string { color:#268bd2; }
+.format-xml .xmlns { font-weight:bold;}
+.format-xml .tagname, .format-xml .endtagname {color:#cb4b16;font-weight:bold; font-style:italic;}
+.format-xml .tag.tagcontent { color:#b58900; font-style:normal; font-weight:bold;}
+.format-xml .braced {font-weight:bold !important;}
+.format-xml .cdata {color:#777 !important; font-style:normal; font-weight:bold;}
+
+
+.format-xml .sub
+{
+    color:#d33682 !important;
+    background-color:#eee8d5;
+    font-weight:bold;
+}
+
+.format-python {}
+
+.format-python .call { color:#DE935F; }
+.format-python .operator { color:#81A2BE}
+.format-python .keyword { color:#B294BB; font-weight:bold; }
+.format-python .builtin { color:#F0C674; }
+.format-python .string { color:#B5BD68 !important; font-weight:normal !important; font-style:normal !important;}
+.format-python .comment { color:#969896 !important; }
+.format-python .self { font-style:italic; color:#C66;}
+.format-python .number { color:#DE935F; }
+.format-python .brace { color:#EEE; }
+.format-python .decorator {color:#C66;}
+.format-python .constant { color:#DE935F; font-style:italic;}
+.format-python .def {color:#F0C674; font-weight:bold;}
+
+.format-moyatemplate .comment { color:#969896; font-style:italic;}
+.format-moyatemplate .tag { color:#CC6666; font-style:italic; font-weight:bold;}
+.format-moyatemplate .tag.tagcontent.attrib { color:#268bd2; font-weight:bold;}
+.format-moyatemplate .string { color:#B5BD68; }
+.format-moyatemplate .xmlns {font-style:italic; color:#CC6666; font-weight:bold;}
+.format-moyatemplate .tagname, .format-moyatemplate .endtagname {color:#dc322f;font-weight:bold;}
+.format-moyatemplate .tag.tagcontent { color:#b58900; font-style:normal; font-weight:bold;}
+
+
+.format-html .comment { color:#969896; font-style:italic; }
+.format-html .tag { color:#CC6666; font-style:italic; font-weight:bold;}
+.format-html .tag.tagcontent.attrib { color:#F0C674; }
+.format-html .string { color:#B5BD68; }
+.format-html .xmlns {font-style:italic; color:#CC6666; font-weight:bold;}
+
+.format-moyatemplate .templatetag
+{
+    color:#d33682 !important;
+    font-weight:bold !important;
+    background-color:#eee8d5;
+}
+
+.format-moyatemplate .sub
+{
+    background-color:#eee8d5;
+    color:#d33682 !important;
+    font-weight:bold !important;
+}
+
+.format-ini .section
+{
+    font-weight:bold;
+    color:#002b36 !important;
+    color:#333 !important;
+}
+
+
+.format-ini .section.sectionname
+{
+    font-weight:italic;
+}
+
+
+.format-ini .key
+{
+    color:#dc322f;
+}
+
+.format-ini .value
+{
+    color:#268bd2;
+}
+
+.format-ini .comment
+{
+    color:#586e75;
+    font-style:italic;
+}
+
+</style></head>
+<body>
+<p>
+    An error occurred during processing of <strong>${trace.method} ${trace.url}</strong>
+</p>
+{% if trace.msg %}
+<p class="text-error">{% markup trace.msg as 'text' %}</p>
+{% endif %}
+{%- if .user %}
+<p>User ${.user}</p>
+{%- endif %}
+<pre class="moya-console">{% console-render trace %}</pre>
+</body>
+
+</html>
