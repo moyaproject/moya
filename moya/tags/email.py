@@ -26,9 +26,9 @@ class EmailElement(LogicElement):
         synopsis = "define an email"
 
     from_ = Attribute("From email", required=False, default=None, name="from")
-    to = Attribute("To email address", required=False, default=None)
-    cc = Attribute("CC email address", required=False, default=None)
-    bcc = Attribute("BCC email address", required=False, default=None)
+    to = Attribute("To email address", type="commalist", required=False, default=None)
+    cc = Attribute("CC email address", type="commalist", required=False, default=None)
+    bcc = Attribute("BCC email address", type="commalist", required=False, default=None)
     replyto = Attribute("Reply to email address", required=False, default=None)
     subject = Attribute("Email subjects", default=None)
 
@@ -92,7 +92,8 @@ class HTML(LogicElement, ContentElementMixin):
             html = render_object(content, self.archive, context, "html")
         if _premailer:
             try:
-                html = premailer.transform(html)
+                html = premailer.transform(html,
+                                           base_url=context.get('.request.url', None))
             except Exception:
                 log.exception('premailer transform failed')
                 self.throw('email.premailer-fail',
@@ -113,9 +114,9 @@ class Get(LogicElement):
     data = Attribute("Template / content data", type="expression", default=None)
 
     from_ = Attribute("From email", required=False, default=None, name="from", map_to="from")
-    to = Attribute("To email address", required=False, default=None)
-    cc = Attribute("CC email address", required=False, default=None)
-    bcc = Attribute("BCC email address", required=False, default=None)
+    to = Attribute("To email address", type="commalist", required=False, default=None)
+    cc = Attribute("CC email address", type="commalist", required=False, default=None)
+    bcc = Attribute("BCC email address", type="commalist", required=False, default=None)
     replyto = Attribute("Reply to email address", required=False, default=None)
 
     def get_email(self, context):
@@ -133,8 +134,8 @@ class Get(LogicElement):
             app = self.get_app(context)
             email_app, email_element = self.get_element(email_ref, app)
 
-            subject = email_element.subject(context) or subject
-            from_ = email_element.get_parameter(context, 'from') or from_
+            subject = email_element.subject(context) or subject or ""
+            from_ = email_element.get_parameter(context, 'from') or from_ or ""
 
             emails = email_element.get_parameters_map(context, 'from', 'to', 'cc', 'bcc', 'replyto')
             for k, v in self.get_parameters_map(context, 'from', 'to', 'cc', 'bcc', 'replyto').items():
@@ -146,9 +147,14 @@ class Get(LogicElement):
             email.email_element = email_element
             email.subject = context.sub(subject)
             email.set_from(from_)
-            email.add_to(emails['to'])
-            email.add_cc(emails['cc'])
-            email.add_bcc(emails['bcc'])
+
+            for addr in emails['to'] or []:
+                email.add_to(addr)
+            for addr in emails['cc'] or []:
+                email.add_to(addr)
+            for addr in emails['bcc'] or []:
+                email.add_to(addr)
+
             email.replyto = emails['replyto']
             return email
 

@@ -678,8 +678,8 @@ class Server(LogicElement):
                                          StatusCode.not_found)
 
         root = context.root
-        if site.head_as_get and request.method == 'HEAD':
-            # Tread HEAD requests as GET requests
+        if site.head_as_get and method == 'HEAD':
+            # Treat HEAD requests as GET requests
             request = request.copy()
             request.method = 'GET'
             root['request'] = request
@@ -821,6 +821,11 @@ class Server(LogicElement):
             rc['error2'] = error
             rc['trace2'] = moya_trace2
             rc['moya_error'] = getattr(moya_trace.exception, 'type', None) if moya_trace else None
+
+            archive.fire(context,
+                         "sys.unhandled-exception",
+                         data=rc)
+
             response.text = render_object(rc, archive, context, "html")
             return response
         except MissingTemplateError:
