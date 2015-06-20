@@ -50,12 +50,12 @@ class Frame(object):
     @property
     def location(self):
         if self.obj:
-            return 'File "%s", line %s, in %s' % (self._location, self.lineno, self.obj)
+            return 'File "{}", line {}, in {}'.format(self._location, self.lineno, self.obj)
         else:
             if self.cols:
-                return 'File "%s", line %s, col %s' % (self._location, self.lineno, self.cols[0])
+                return 'File "{}", line {}, col {}'.format(self._location, self.lineno, self.cols[0])
             else:
-                return 'File "%s"' % (self._location, self.lineno)
+                return 'File "{}"'.format(self._location)
 
     @property
     def raw_location(self):
@@ -70,8 +70,8 @@ class Frame(object):
                 return self.code
             return syntax.highlight(self.format,
                                     self.code,
-                                    self.lineno - 3,
-                                    self.lineno + 3,
+                                    self.lineno - 4,
+                                    self.lineno + 4,
                                     highlight_lines=[self.lineno],
                                     highlight_range=[self.lineno, self.cols[0], self.cols[1]] if self.cols else None)
         except Exception as e:

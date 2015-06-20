@@ -833,11 +833,10 @@ class Server(LogicElement):
         except MissingTemplateError:
             pass
         except Exception as e:
+            #import traceback
+            #traceback.print_exc(e)
+            #print(e)
             log.error('unable to render %s (%s)', template_filename, text_type(e))
-            # import traceback
-            # traceback.print_exc(e)
-            # print(e)
-            pass
 
         # Render a very basic response
         response = Response(charset=py2bytes("utf8"), status=status)
