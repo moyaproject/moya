@@ -253,6 +253,12 @@ fs = media
 hide =
 dirlist = yes
 index =
+
+[settings:diagnostics]
+email_from =
+admin_email = ${{author.name}} <${{author.email}}>
+subject = [${.request.host}]
+
 @TEXT /moya
 # The presence of this file indicates that this directory is a top-level moya project.
 #
@@ -309,6 +315,7 @@ This folder should contain libraries that are local to the project, i.e. authore
 
         <!-- Import libraries for use in your project -->
         <import py="moya.libs.debug" if=".debug"/>
+        <import py="moya.libs.diagnostics" if="not .debug"/>
         {{%- if project.auth %}}
         <import py="moya.libs.auth" />
         <import py="moya.libs.session" />
@@ -360,6 +367,7 @@ This folder should contain libraries that are local to the project, i.e. authore
         <install name="admin" lib="moya.admin" mount="/admin/" />
         <install name="media" lib="moya.static" mount="/static/" />
         <install name="debug" lib="moya.debug" mount="/debug/" if=".debug"/>
+        <install name="diagnostics" lib="moya.diagnostics" if="not .debug"/>
         <install name="bootstrap" lib="moya.twitter.bootstrap" />
         <install name="welcome" lib="moya.welcome" mount="/" />
         <install name="links" lib="moya.links" />
@@ -368,7 +376,7 @@ This folder should contain libraries that are local to the project, i.e. authore
         <install name="comments" lib="moya.comments" mount="/comments/" />
         {{%- endif %}}
         {{%- if project.pages %}}
-        <install name="pages" lib="moya.pages" mount="/" />
+        <install name="pages" lib="moya.pages" mount="/" urlpriority="-10"/>
         {{%- endif %}}
         {{%- if project.blog %}}
         <install name="blog" lib="moya.blog" mount="/blog/" />

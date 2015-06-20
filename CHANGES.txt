@@ -1,12 +1,13 @@
 0.5.17
 ------
 
-Added moya diagnostics library to email errors
+Added moya diagnostics library to email errors to admin
+Added diagnostics to project template, set page app url priority to -10 so pages are looked up last
 
 0.5.16
 ------
 
-Used notify2 instead of py-notify for debug notifications
+Used pure python notify2 instead of py-notify (C extension) for debug notifications
 Packaging update
 
 0.5.15
