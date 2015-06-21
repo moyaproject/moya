@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.17a"
+VERSION = "0.5.18a"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -60,7 +60,8 @@ setup(name='moya',
                         'colorama',
                         'premailer'],
       extras_require={
-          ':sys_platform!="win32"': ["pyinotify"]
+          ':sys_platform!="win32"': ["pyinotify"],
+          'dev': ['notify2']
       },
       setup_requires=["setuptools_git >= 0.3"]
       )
