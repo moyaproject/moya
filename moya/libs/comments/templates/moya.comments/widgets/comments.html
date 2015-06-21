@@ -43,13 +43,13 @@
         {% children %}
         {%- else %}
         <div class="form-group">
-            <textarea class="form-control input-block-level" name="text" rows="7"></textarea>
+            <textarea class="form-control input-block-level" name="text" rows="7" placeholder="{% trans %}Leave a reply{% end %}"></textarea>
         </div>
         {% endif %}
-        <div class="form-group">
+        <div class="form-group inline">
             <input type="submit" class="btn btn-sm btn-primary" value="Comment" />
             <a class="btn btn-default btn-sm cancel" data-commentid="${comment.id}">{% trans %}Cancel{% end %}</a>
-            <label class="moya-comment-replies checkbox inline">
+            <label class="moya-comment-replies checkbox-inline">
                 <input type="checkbox" name="subscribe" checked="checked">
                 {% trans %}Email me about replies{% end %}
             </label>
@@ -108,7 +108,7 @@
 {%- endif %}
 
 {%- if commentobject.allow_new and not commentobject.hide %}
-<form class="moya-comment-form" method="POST" action="{% url "newcomment" %}">
+<form class="moya-comment-form inline" method="POST" action="{% url "newcomment" %}">
     <input type="hidden" name="_moya_csrf" value="${csrf:'moya.comments#form.comment'}"/>
     <input type="hidden" name="namespace" value="${namespace}" />
     <input type="hidden" name="object" value="${topic}" />
@@ -117,16 +117,20 @@
     <div class="form-group">
         <textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
     </div>
-    <input type="submit" class="btn btn-primary" value="Comment" />
-    <label class="moya-comment-replies checkbox inline" style="white-space:nowrap;">
-        <input type="checkbox" name="subscribe" checked="checked"/> {% trans %}Email me about replies{% end %}
-    </label>
+    <div class="form-group inline">
+        <input type="submit" class="btn btn-primary" value="Comment" />
+        <label class="moya-comment-replies checkbox-inline" style="white-space:nowrap;">
+            <input type="checkbox" name="subscribe" checked="checked"/>
+            {% trans %}Email me about replies{% end %}
+        </label>
+    </div>
+
 </form>
 {%- endif %}
 
 {%- if not commentobject.hide %}
 {%- with numcomments=len:comments %}
-    <span class="text-muted moya-comment-count">
+    <div class="text-muted moya-comment-count clear-fix">
     {% if not commentobject.allow_new %}
     {% trans %}Comments disabled{% end %}
     {% else %}
@@ -138,7 +142,7 @@
         ${numcomments} {% trans %}comments{% end %}
     {%- endif %}
     {%- endif %}
-    </span>
+    </div>
 {%- endwith %}
 
 {%- if comments %}

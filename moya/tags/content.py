@@ -173,6 +173,7 @@ class ContentElement(ContextElementBase):
 
     template = Attribute("Template name", type="template", required=False, default=None)
     extends = Attribute("Extend content element", type="elementref")
+    final = Attribute("Stop extending with this content element?", type="boolean", default=False)
 
     preserve_attributes = ['template', 'extends', '_merge']
 
@@ -187,6 +188,8 @@ class ContentElement(ContextElementBase):
         nodes = [(app, node)]
         extends_ref = node.extends
         while extends_ref:
+            if node.final:
+                break
             element_refs.add(extends_ref)
             node_app, node = self.document.detect_app_element(context, extends_ref, app=app)
             app = node_app or app
@@ -199,11 +202,12 @@ class ContentElement(ContextElementBase):
                                           element=self,
                                           diagnosis="Check the 'extends' attribute in your content tags.")
 
-        base_content = context.get('.sys.site.base_content')
-        if base_content:
-            app, node = self.document.get_element(base_content,
-                                                  lib=node.lib)
-            nodes.append((app, node))
+        if not node.final:
+            base_content = context.get('.sys.site.base_content')
+            if base_content:
+                app, node = self.document.get_element(base_content,
+                                                      lib=node.lib)
+                nodes.append((app, node))
 
         chain = nodes[::-1]
         # for app, node in chain:
@@ -213,6 +217,7 @@ class ContentElement(ContextElementBase):
     def post_build(self, context):
         self.template = self.template(context)
         self.extends = self.extends(context)
+        self.final = self.final(context)
 
 
 class SectionElement(LogicElement, ContentElementMixin):

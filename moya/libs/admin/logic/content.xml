@@ -8,7 +8,7 @@
       xmlns:bootstrap="http://moyaproject.com/bootstrap"
       xmlns:w="http://moyaproject.com/widgets">
 
-    <content libname="content.base" template="base.html">
+    <content libname="content.base" template="base.html" final="yes">
         <include-css path="css/admin.css" />
         <section name="body"/>
     </content>

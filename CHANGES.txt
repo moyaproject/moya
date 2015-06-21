@@ -3,6 +3,7 @@
 
 Added moya diagnostics library to email errors to admin
 Added diagnostics to project template, set page app url priority to -10 so pages are looked up last
+Added 'final' attribute to content
 
 0.5.16
 ------

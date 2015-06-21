@@ -33,7 +33,6 @@
 
 .moya-comments-container .moya-comments
 {
-    /*margin:20px 0px;*/
     font-size:13px;
 }
 
@@ -41,8 +40,7 @@
 {
     font-weight:normal;
     color:#666;
-    display:inline-table;
-    margin-left:32px;
+    margin-left:1em;
 }
 
 .moya-comments-container .moya-comments .moya-comments-container .moya-comments
@@ -67,21 +65,6 @@
     color:#666;
 }
 
-/*
-.moya-comments-container .moya-comments .moya-comment .text:before
-{
-    content:"";
-    display:block;
-    position:relative;
-    float:left;
-    width:12px;
-    height:30px;
-    margin-left:-12px;
-    margin-top:2px;
-    background-image:url(../images/commentarrow.png);
-}
-*/
-
 .moya-comments-container
 {
 
@@ -97,21 +80,18 @@
 
 .moya-comments-container .moya-comment-count
 {
-    display:inline-block;
     margin-top: 1em;
+    clear:both;
 }
 
 .moya-comments-container .moya-comments .moya-comment-body
 {
     clear:both;
     min-height:80px;
-    /*color:#333;*/
-    /*padding-bottom:8px;*/
 }
 
 .moya-comments-container .moya-comments .moya-comment
 {
-    /*border-radius:6px;*/
 }
 
 
@@ -126,21 +106,13 @@
     display:inline-block;
     float:left;
     padding:2px;
-    /*border:1px solid #e7e7e7;*/
     border-radius:5px;
-    /*background-color:#fff;*/
-    /*margin:-2px 8px 0px 0px;*/
 }
 
 .moya-comments-container .moya-comments .text
 {
     margin-left:48px;
     margin-bottom:10px;
-    /*
-    border-radius:6px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    */
 }
 
 .moya-comments-container .moya-comments .text .content
@@ -178,7 +150,7 @@
     font-weight:normal;
     color:#666;
     display:inline-table;
-    margin-left:32px;
+    margin-left:1em;
 }
 
 label.moya-comment-replies
