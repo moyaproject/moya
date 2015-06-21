@@ -11,6 +11,7 @@ from . import namespaces
 from .elements.utils import attr_bool
 from .compat import text_type, implements_to_string, itervalues
 from . import logic
+from .console import Cell
 
 import logging
 startup_log = logging.getLogger('moya.startup')
@@ -234,6 +235,7 @@ def sync_all(archive, console):
 
             for app in apps:
                 progress.update(None, 'syncing {!r}'.format(app))
+                count = 0
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):
 
                     engine_name = model.dbname
@@ -242,13 +244,17 @@ def sync_all(archive, console):
                     else:
                         engine = engines[engine_name]
                     model.create_all(archive, engine, app)
+                    count += 1
                 progress.step()
-                synced.append(app)
+                synced.append((app, count))
 
             progress.update(None, 'sync complete')
     finally:
-        for app in synced:
-            console(text_type(app), bold=True, fg="magenta")(" synced", bold=True, fg="black").nl()
+        table = []
+        for app, count in synced:
+            table.append((Cell(text_type(app), fg="magenta", bold=True), Cell("{}".format(count) if count else "", bold=True)))
+        console.table(table, header_row=["app", "synced"], dividers=True, grid=True)
+
     return 0
 
 
