@@ -44,12 +44,13 @@ class Doc(SubCommand):
                                 help="path to theme files (templates)")
             parser.add_argument('-s', '--source', dest="source", metavar="SOURCE", default=None,
                                 help="path to extracted docs")
+            parser.add_argument(dest="location", default='.', metavar="PATH",
+                                help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
+
 
         build_args(build_parser)
         build_args(view_parser)
 
-        view_parser.add_argument(dest="location", default='.', metavar="PATH",
-                                 help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
 
         build_parser.add_argument('-o', '--output', dest="output", metavar="PATH", default=None,
                                   help="path for documentation output, defaults to ./documentation in project root")
