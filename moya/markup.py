@@ -5,12 +5,24 @@ from __future__ import absolute_import
 from .render import HTML
 from . import html
 from .compat import with_metaclass, implements_to_string, text_type
+from .errors import MarkupError
+
+from operator import attrgetter
 import postmarkup
 import CommonMark
 
 
 def get_installed_markups():
+    """Get a list of identifiers for installed markups"""
     return list(MarkupBaseMeta.markup_registry.keys())
+
+def get_markup_choices():
+    """Get a choices list for installed markups"""
+    choices = [(markup.name, markup.title)
+                for markup in MarkupBaseMeta.markup_registry.values()
+                if markup.title is not None]
+    choices.sort(key=lambda m: m[1].lower(), reverse=True)
+    return choices
 
 
 class MarkupBaseMeta(type):
@@ -27,6 +39,7 @@ class MarkupBaseMeta(type):
 @implements_to_string
 class MarkupBaseType(object):
     __metaclass__ = MarkupBaseMeta
+    title = None
 
     def __init__(self, markup_type, markup_options):
         self.markup_type = markup_type
@@ -50,7 +63,7 @@ class MarkupBaseType(object):
         if hasattr(self, process_method):
             return getattr(self, process_method)(text, target, options)
         else:
-            raise ValueError("Don't know how to render target '{}'".format(target))
+            raise MarkupError("don't know how to render target '{}'".format(target))
 
     def escape(self, text):
         return text_type(text)
@@ -65,11 +78,12 @@ class MarkupBaseType(object):
 
 
 class MarkupBase(with_metaclass(MarkupBaseMeta, MarkupBaseType)):
-    pass
+    title = None
 
 
 class TextMarkup(MarkupBase):
     name = "text"
+    title = "Text (plain, escaped)"
 
     def process_html(self, text, target, options):
         if options.get('linkify', False):
@@ -80,6 +94,7 @@ class TextMarkup(MarkupBase):
 
 class HTMLMarkup(MarkupBase):
     name = "html"
+    title = "HTML (raw unescaped)"
 
     def process_html(self, text, target, options):
         return HTML(text)
@@ -87,6 +102,7 @@ class HTMLMarkup(MarkupBase):
 
 class BBCodeMarkup(MarkupBase):
     name = "bbcode"
+    title = "BBCode (Postmarkup renderer)"
 
     def process_text(self, text, target, options):
         return postmarkup.strip_bbcode(text)
@@ -120,6 +136,7 @@ class SummaryMarkup(MarkupBase):
 
 class MarkdownMarkup(MarkupBase):
     name = "markdown"
+    title = "Markdown (CommonMark variety)"
 
     def create(self, options):
         self.parser = CommonMark.DocParser()
@@ -144,14 +161,14 @@ class Markup(object):
         try:
             self.markup_processor = MarkupBase.get_processor(self.type, markup_options)
         except KeyError:
-            raise ValueError("No markup processor called '{}'".format(self.type))
+            raise MarkupError("no markup processor called '{}'".format(self.type))
 
     @classmethod
     def get_escape(cls, type, markup_options=None):
         try:
             markup_processor = MarkupBase.get_processor(type, markup_options)
         except KeyError:
-            raise ValueError("No markup processor called '{}'".format(type))
+            raise MarkupError("no markup processor called '{}'".format(type))
         return markup_processor.escape
 
     @classmethod
@@ -159,7 +176,7 @@ class Markup(object):
         try:
             markup_processor = MarkupBase.get_processor(type, markup_options)
         except KeyError:
-            raise ValueError("No markup processor called '{}'".format(type))
+            raise MarkupError("no markup processor called '{}'".format(type))
         return context.sub(text, markup_processor.escape)
 
     @classmethod

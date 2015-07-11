@@ -272,9 +272,11 @@ class TableClassBase(object):
             raise KeyError(key)
         else:
             try:
-                rel = self._model.relationships.get(key, None)
-                if rel is not None:
+                if isinstance(value, list):
                     value._instance = self
+                rel = self._model.relationships.get(key, None)
+                # if rel is not None:
+                #     value._instance = self
             except Exception as e:
                 pass
             if isinstance(value, datetime):
@@ -747,6 +749,40 @@ class _ForeignKey(DBElement):
         model = self.get_ancestor((self.xmlns, "model"))
         ref_model_ref = params.model
 
+
+        def get_backref_collection(dbobj, app):
+            class ListCollection(list):
+                def __repr__(self):
+                    return "<ListCollection {}>".format(self._instance)
+
+                @property
+                def table_class(self):
+                    return model.get_table_class(app)
+
+                def __moyaqs__(self, context, dbsession):
+                    qs = dbsession.query(self.table_class)
+                    qs = qs.filter(self.table_class.id==self._instance.id)
+                    return qs
+
+
+                # def __moyadbsubselect__(self, context):
+                #     dbsession = dbobj.get_session(context, model.dbname)
+                #     qs = dbsession.query(getattr(assoc_table.c, left_key))
+                #     qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
+                #     return qs
+
+                # def __moyaqs__(self, context, dbsession):
+                #     qs = dbsession.query(getattr(assoc_table.c, left_key))
+                #     qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
+                #     qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
+                #     return qs
+
+                # def __check_type__(self, obj):
+                #     table_class = model.get_table_class(app)
+                #     return isinstance(obj, table_class)
+
+            return ListCollection
+
         def get_col(app, model):
             try:
                 ref_model = self.document.get_app_element(ref_model_ref, app)
@@ -770,7 +806,8 @@ class _ForeignKey(DBElement):
                                              orderby=params.orderby,
                                              backref=params.backref,
                                              picker=params.picker,
-                                             uselist=True)
+                                             uselist=True,
+                                             backref_collection=get_backref_collection(self, app))
             ref_model.element.add_reference(model.libid)
             return col
 
@@ -2257,7 +2294,9 @@ class Query(DBDataSetter):
             #    qs = src._get_query_set()
             #else:
             #    qs = src
-            table_class = dbobject(params.src).table_class
+            table_class = getattr(dbobject(params.src), 'table_class', None)
+            if table_class is None:
+                raise errors.ElementError('src attribute must be a database object, not {}'.format(context.to_expr(params.src)), element=self)
         else:
             if params.model:
                 try:
@@ -2667,7 +2706,7 @@ class Transaction(DBContextElement):
 
     In the case of nested transactions (a transaction inside a transactions), only the outer-most transaction will actually commit the changes. For more granular control over transactions, the [tag db]atomic[/tag] tag is preferred.
 
-
+2260
     """
 
     class Help:

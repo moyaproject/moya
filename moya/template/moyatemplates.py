@@ -10,7 +10,7 @@ from ..template.enginebase import TemplateEngine
 from ..template.errors import MissingTemplateError, BadTemplateError
 from ..html import escape
 from ..template import errors
-from ..errors import AppError
+from ..errors import AppError, MarkupError
 from ..render import render_object
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
@@ -1408,10 +1408,13 @@ class MarkupNode(Node):
         markup = text_type(self.markup_expression.eval(context) or '')
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
-        markup_renderable = Markup(markup, markup_type)
         options = self.options_expression.eval(context)
 
-        html = render_object(markup_renderable, environment.archive, context, target, options=options)
+        try:
+            markup_renderable = Markup(markup, markup_type)
+            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+        except MarkupError as e:
+            raise self.render_error("unable to render markup ({})".format(e))
         return html
 
 
@@ -1430,9 +1433,12 @@ class MarkupBlockNode(Node):
 
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
-        markup_renderable = Markup(markup, markup_type)
         options = self.options_expression.eval(context)
-        html = render_object(markup_renderable, environment.archive, context, target, options=options)
+        try:
+            markup_renderable = Markup(markup, markup_type)
+            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+        except MarkupError as e:
+            raise self.render_error("unable to render markup ({})".format(e))
         return html
 
 

@@ -1,3 +1,10 @@
+0.5.18
+------
+
+Allows backref collect to be used in 'src' attribute of <query>
+Better markup related errors
+Added <get-markup-type> and  <get-markup-choices>
+
 0.5.17
 ------
 

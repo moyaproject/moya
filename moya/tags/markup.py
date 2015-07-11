@@ -1,4 +1,4 @@
-from ..markup import Markup, get_installed_markups
+from ..markup import Markup, get_installed_markups, get_markup_choices
 from ..elements.elementbase import Attribute
 from ..tags.content import RenderBase
 from ..tags.context import DataSetter
@@ -83,3 +83,23 @@ class Markdown(MarkupTag):
 
     class Help:
         synopsis = "add markdown to content"
+
+
+class GetMarkupTypes(DataSetter):
+    """Get a list of all available Markup processors"""
+
+    class Help:
+        synopsis = "get supported markups"
+
+    def get_value(self, context):
+        return get_installed_markups()
+
+
+class GetMarkupChoices(DataSetter):
+    """Get a list of Markup processor choices, suitable for use in a [tag forms]select[/tag]/"""
+
+    class Help:
+        synopsis = "get supported markups"
+
+    def get_value(self, context):
+        return get_markup_choices()

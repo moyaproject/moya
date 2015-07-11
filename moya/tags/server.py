@@ -142,16 +142,19 @@ class URL(LogicElement):
             _, mount_point = self.get_element(params.mountpoint)
 
         if params.mount:
-            _, element = self.archive.get_element(params.mount, lib=self.lib)
-            mount_point.urlmapper.map(params.route.rstrip('/') + '/*',
-                                      [url_target],
-                                      methods=methods,
-                                      handlers=handlers or None,
-                                      defaults=defaults)
-            mount_point.urlmapper.mount(params.route,
-                                        element.urlmapper,
-                                        name=params.name,
-                                        defaults=defaults)
+            try:
+                _, element = self.archive.get_element(params.mount, lib=self.lib)
+                mount_point.urlmapper.map(params.route.rstrip('/') + '/*',
+                                          [url_target],
+                                          methods=methods,
+                                          handlers=handlers or None,
+                                          defaults=defaults)
+                mount_point.urlmapper.mount(params.route,
+                                            element.urlmapper,
+                                            name=params.name,
+                                            defaults=defaults)
+            except Exception as e:
+                raise errors.ElementError(text_type(e), element=self, diagnosis=getattr(e, 'diagnosis', None))
 
         else:
             try:

@@ -250,7 +250,8 @@ class ForeignKeyColumn(MoyaDBColumn):
                  options=None,
                  backref=None,
                  uselist=True,
-                 picker=None
+                 picker=None,
+                 backref_collection=None,
                  ):
         self.type = type
         self.label = label
@@ -273,6 +274,7 @@ class ForeignKeyColumn(MoyaDBColumn):
         self.backref = backref
         self.uselist = uselist
         self.picker = picker
+        self.backref_collection = backref_collection
 
     def get_dbname(self):
         return self.name + '_id'
@@ -301,14 +303,17 @@ class ForeignKeyColumn(MoyaDBColumn):
 
         def lazy_relationship(app, model):
             if self.backref:
-                _backref = backref(self.backref, uselist=self.uselist)
+                _backref = backref(self.backref,
+                                   uselist=True,
+                                   #lazy="subquery",
+                                   collection_class=self.backref_collection)
             else:
                 _backref = None
             ref_model_table_class = lambda: self.ref_model.element.get_table_class(self.ref_model.app)
             return relationship(ref_model_table_class(),
                                 primaryjoin=lambda: get_join(ref_model_table_class),
                                 remote_side=lambda: ref_model_table_class().id,
-                                backref=_backref,
+                                backref=_backref
                                 )
 
         yield self.name, lazy_relationship

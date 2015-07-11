@@ -300,3 +300,7 @@ class AppMissingError(AppError):
 
 class UnknownAppError(AppError):
     default_message = "No app in the project referenced by '{app}'"
+
+
+class MarkupError(Exception):
+    """Unable to render markup"""
