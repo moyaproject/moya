@@ -23,7 +23,7 @@ _lorem = [
 
 _words = ' '.join(_lorem).replace('.', '').replace(',', '').split(' ')
 
-_sentences = " ".join(p + '. ' for p in ' '.join(_lorem).split('.'))
+_sentences = [p + '. ' for p in ' '.join(_lorem).split('.')]
 
 
 def paragraphs(count, offset=0):

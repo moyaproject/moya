@@ -1,9 +1,44 @@
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
+
 from ..elements.elementbase import ElementBase, Attribute
 from .. import namespaces
-from ..compat import text_type
+from ..compat import text_type, implements_to_string
+from ..errors import ElementError
 
 from operator import itemgetter
+import io
+
+
+@implements_to_string
+class FileReader(object):
+    def __init__(self, element, path):
+        self.element = element
+        self.path = path
+
+    def __call__(self, path):
+        self.path = path
+
+    def __str__(self):
+        return "<filereader '{}'>".format(self.path)
+
+    def __moyarepr__(self, context):
+        return "<filereader '{}'>".format(self.path)
+
+    @property
+    def binary(self):
+        try:
+            with io.open(self.path, 'rb') as f:
+                return f.read()
+        except IOError:
+            raise ElementError('unable to read "{}"'.format(self.path), element=self.element)
+
+    @property
+    def text(self):
+        try:
+            with io.open(self.path, 'rt') as f:
+                return f.read()
+        except IOError:
+            raise ElementError('unable to read "{}"'.format(self.path), element=self.element)
 
 
 class Command(ElementBase):
@@ -68,10 +103,11 @@ Hello, World!
         _signature['alloptions'].sort(key=itemgetter('name'))
 
     _types = {
-        "string": text_type,
-        "int": int,
-        "integer": int,
-        "float": float
+        "string": lambda el: text_type,
+        "int": lambda el: int,
+        "integer": lambda el: int,
+        "float": lambda el: float,
+        "file": lambda el: lambda p: FileReader(el, p)
     }
 
     def update_parser(self, parser, context):
@@ -90,14 +126,14 @@ Hello, World!
                                         dest=params.name,
                                         default=params.default,
                                         help=params.help,
-                                        type=self._types[params.type])
+                                        type=self._types[params.type](self))
             for element in signature.children(element_type='arg'):
                 params = element.get_parameters(context)
                 parser.add_argument(dest=params.name,
                                     nargs=params.nargs,
                                     help=params.help,
                                     metavar=params.metavar,
-                                    type=self._types[params.type])
+                                    type=self._types[params.type](self))
             # for element in signature.children(element_type='switch'):
             #     params = element.get_parameters(context)
             #     parser.add_argument('--' + params.name,
@@ -122,7 +158,7 @@ class Arg(ElementBase):
     nargs = Attribute("Number of arguments to be consumed", default=None)
     help = Attribute("Argument help text", default=None)
     metavar = Attribute("Argument metavar (shown in the help)")
-    type = Attribute("Type of argument", choices=["string", 'integer', 'float'], default="string")
+    type = Attribute("Type of argument", choices=["string", 'integer', 'float', 'file'], default="string")
 
     class Meta:
         logic_skip = True
@@ -150,7 +186,7 @@ class Option(ElementBase):
     default = Attribute("Default", default=None)
     metavar = Attribute("Argument metavar")
     action = Attribute("Action", default=None)
-    type = Attribute("Type of argument", choices=["string", 'integer', 'float'], default="string")
+    type = Attribute("Type of argument", choices=["string", 'integer', 'float', 'file'], default="string")
 
     class Meta:
         logic_skip = True

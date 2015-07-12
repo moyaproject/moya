@@ -750,18 +750,19 @@ class _ForeignKey(DBElement):
         ref_model_ref = params.model
 
 
-        def get_backref_collection(dbobj, app):
+        def get_backref_collection(app, model, name):
             class ListCollection(list):
                 def __repr__(self):
                     return "<ListCollection {}>".format(self._instance)
 
                 @property
                 def table_class(self):
+                    #ref_model = model.document.get_app_element(ref_model_ref, app)
                     return model.get_table_class(app)
 
                 def __moyaqs__(self, context, dbsession):
                     qs = dbsession.query(self.table_class)
-                    qs = qs.filter(self.table_class.id==self._instance.id)
+                    qs = qs.filter(getattr(self.table_class, name + '_id') == getattr(self._instance, "id"))
                     return qs
 
 
@@ -807,7 +808,7 @@ class _ForeignKey(DBElement):
                                              backref=params.backref,
                                              picker=params.picker,
                                              uselist=True,
-                                             backref_collection=get_backref_collection(self, app))
+                                             backref_collection=get_backref_collection(app, model, name))
             ref_model.element.add_reference(model.libid)
             return col
 
@@ -1762,7 +1763,7 @@ class Get(DBDataSetter):
         let_map = self.get_let_map(context).items()
         for k, v in let_map:
             if is_missing(v):
-                diagnosis = '''
+                diagnosis = '''\
 Moya can't except a missing value here. If you intended to use this value (i.e. it wasn't a typo), you should convert it to a non-missing value.
 
 For example **let:{k}="name or 'anonymous'"**

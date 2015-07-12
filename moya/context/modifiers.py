@@ -683,6 +683,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def time(self, context, v):
         return ExpressionTime.from_isoformat(v)
 
+    def ctime(self, context, v):
+        return ExpressionDateTime.from_ctime(v)
+
     def timespan(self, context, v):
         return TimeSpan(v)
 

@@ -384,6 +384,15 @@ class ExpressionDateTime(datetime, interface.Proxy):
             raise
             return None
 
+    @classmethod
+    def from_ctime(cls, s):
+        try:
+            dt = cls.strptime(text_type(s), "%a %b %d %H:%M:%S %Y")
+            return cls.from_datetime(dt)
+        except:
+            return None
+            raise
+
     def __moyarepr__(self, context):
         return "datetime:'{}'".format(self.isoformat())
 

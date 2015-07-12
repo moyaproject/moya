@@ -60,7 +60,7 @@ setup(name='moya',
                         'colorama',
                         'premailer'],
       extras_require={
-          ':sys_platform!="win32"': ["pyinotify"],
+          ':sys_platform=="linux2" or sys_platform=="linux3"': ["pyinotify"],
           'dev': ['notify2']
       },
       setup_requires=["setuptools_git >= 0.3"]

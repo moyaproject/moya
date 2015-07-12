@@ -42,6 +42,7 @@
 			<not-found if="basename:path fnmatches wildcard" />
 		</for>
         <serve-template-fs fs=".app.settings.fs" path="${path}" if="ext:path=='html' and .app.settings.serve_templates.bool"/>
+        <catch exception="render-template-fs.read-fail" />
 		<!-- Serve file if it exists -->
 		<serve-file fs="${fsname}" path="${path}" ifexists="yes"/>
 		<not-found/>
