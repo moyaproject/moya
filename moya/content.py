@@ -398,6 +398,9 @@ class Section(object):
         self.id = 1
         self.merge_method = merge_method
 
+    def __moyarepr__(self, context):
+        return "<section '{}'>".format(self.name)
+
     def new_id(self):
         self.id += 1
         return self.id

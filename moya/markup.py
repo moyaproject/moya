@@ -7,7 +7,6 @@ from . import html
 from .compat import with_metaclass, implements_to_string, text_type
 from .errors import MarkupError
 
-from operator import attrgetter
 import postmarkup
 import CommonMark
 
@@ -16,11 +15,12 @@ def get_installed_markups():
     """Get a list of identifiers for installed markups"""
     return list(MarkupBaseMeta.markup_registry.keys())
 
+
 def get_markup_choices():
     """Get a choices list for installed markups"""
     choices = [(markup.name, markup.title)
-                for markup in MarkupBaseMeta.markup_registry.values()
-                if markup.title is not None]
+               for markup in MarkupBaseMeta.markup_registry.values()
+               if markup.title is not None]
     choices.sort(key=lambda m: m[1].lower(), reverse=True)
     return choices
 
