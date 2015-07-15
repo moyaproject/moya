@@ -21,7 +21,7 @@
             let:object_url="url or .request.path"/>
         <dict default="list" dst="commentgraph"/>
         <db:query model="#Comment" dst="comments"
-            filter="#Comment.commentobject == commentobject"
+            filter="#Comment.commentobject == commentobject" orderby="time"
             collect="dict" collectkey="id" if="commentobject"/>
         <for src="values:comments" dst="comment">
             <append src="commentgraph[comment.parent.id or 'root']" value="comment" />

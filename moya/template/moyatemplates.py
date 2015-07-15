@@ -516,6 +516,17 @@ class EmptyBlockNode(BlockNode):
     auto_close = True
 
 
+# class IfBlockNode(Node):
+#     tag_name = "ifblock"
+
+#     def on_create(self, environment, parser):
+#         self.block_name = parser.expect_word()
+
+#     def render(self, environment, context, template, text_escape):
+#         if template.is_block_extended(environment, self.block_name):
+#             yield iter(self.children)
+
+
 class DefNode(Node):
     tag_name = "def"
 
@@ -1789,18 +1800,28 @@ class Template(object):
             break
         return None
 
-    def get_top_block(self, environment, block_name):
-        template = self
-        top_block = None
-        while 1:
-            top_block = template.blocks.get(block_name, None)
-            if top_block is not None:
-                return top_block
-            if template.extend_template_path:
-                template = environment.get_template(template.extend_template_path)
-            else:
-                break
-        return top_block
+    def is_block_extended(self, environment, name):
+        return False
+        nodes = self.get_render_block(environment, name)
+        if not nodes:
+            return False
+        if len(nodes) == 1 and not nodes[0].children:
+            return False
+        return True
+
+    # Deprecated
+    # def get_top_block(self, environment, block_name):
+    #     template = self
+    #     top_block = None
+    #     while 1:
+    #         top_block = template.blocks.get(block_name, None)
+    #         if top_block is not None:
+    #             return top_block
+    #         if template.extend_template_path:
+    #             template = environment.get_template(template.extend_template_path)
+    #         else:
+    #             break
+    #     return top_block
 
     def push_frame(self, context, data=None):
         """Pushes a new template frame"""
