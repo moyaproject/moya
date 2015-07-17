@@ -83,7 +83,7 @@
             <db:get-column model="${table.params.model}" from="${table.app.name}" name="id" dst="id_column" />
             <let objectids="collectids:objects" />
             <db:query model="${table.params.model}" from="${table.app.name}" filter="id_column in objectids" dst="objects"/>
-            <db:query src="objects" dst="objects" filter="${table.params.filter or ''}" orderby="${table.params.order or '-d'}"/>
+            <db:query src="objects" dst="objects" filter="${table.params.filter or ''}" orderby="${table.params.order or '-id'}"/>
         </if>
         <else>
             <db:query from="${table.app.name}" model="${table.params.model}"  dst="objects"
