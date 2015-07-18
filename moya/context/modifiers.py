@@ -593,6 +593,14 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def reversesorted(self, context, v):
         return sorted(v, reverse=True)
 
+    def sortedkey(self, context, v):
+        try:
+            seq, key = v[0], v[1]
+        except:
+            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
+        return sorted(seq, lambda value: obj_index(value, key), reverse=True)
+
+
     def round(self, context, v):
         try:
             n, r = v
@@ -619,6 +627,13 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def sorted(self, context, v):
         return sorted(v)
+
+    def sortedkey(self, context, v):
+        try:
+            seq, key = v[0], v[1]
+        except:
+            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
+        return sorted(seq, lambda value: obj_index(value, key))
 
     def split(self, context, v):
         split_on = None

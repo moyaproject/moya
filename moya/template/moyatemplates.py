@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import re
 
-from ..context import Context, Expression, TrueExpression, DefaultExpression
+from ..context import Context, Expression, FalseExpression, TrueExpression, DefaultExpression
 from ..context.errors import SubstitutionError
 from ..markup import Markup
 from ..template.enginebase import TemplateEngine
@@ -221,6 +221,27 @@ class TagParser(object):
             words_list = " or ".join("'%s'" % w for w in words)
             self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
         return word
+
+    def expect(self, flags, words):
+        words = list(words)
+        if flags is None:
+            flags = []
+        map = {}
+        while 1:
+            word = self.get_word()
+            if word is None:
+                break
+            if word in flags:
+                map[word] = TrueExpression()
+                flags.remove(word)
+                continue
+            if word not in words:
+                words_list = " or ".join("'%s'" % w for w in words)
+                self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
+            expression = self.expect_expression()
+            map[word] = expression
+            words.remove(word)
+        return map
 
     def expect_word_expression_map(self, *words):
         words = list(words)
@@ -731,11 +752,11 @@ class ForNode(Node):
         assign = match.groups()[0]
         self.sequence = parser.expect_expression()
         self.assign = [t.strip() for t in assign.split(',')]
-        word = parser.expect_word_or_end('if')
-        if word is not None:
-            self.if_expression = parser.expect_expression()
-        else:
-            self.if_expression = TrueExpression(True)
+
+        exp_map = parser.expect(["reverse"], ["if", "sort"])
+        self.if_expression = exp_map.get('if', TrueExpression())
+        self.sort_expression = exp_map.get('sort', None)
+        self.reverse_expression = exp_map.get('reverse', FalseExpression())
 
     def render(self, environment, context, template, text_escape):
         sequence = self.sequence.eval(context)
@@ -745,6 +766,14 @@ class ForNode(Node):
             seq_iter = iter(sequence)
         except:
             seq_iter = self._empty
+
+        if self.sort_expression is not None:
+            reverse = bool(self.reverse_expression.eval(context))
+            sort_function = self.sort_expression.make_function(context=context)
+            seq_iter = iter(sorted((v for v in seq_iter),
+                                    key=sort_function.get_scope_callable(context),
+                                    reverse=reverse))
+
         if_eval = self.if_expression.eval
 
         for_stack = context.set_new('._for_stack', [])

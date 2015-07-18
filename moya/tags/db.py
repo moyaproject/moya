@@ -209,7 +209,7 @@ class TableClassBase(object):
         for k, v in iteritems(kwargs):
             setattr(self, k, adapt(k, v))
         for k, v in moyadb.defaults.items():
-            if not hasattr(self, k):
+            if k not in kwargs:
                 setattr(self, k, v() if callable(v) else v)
         #args = {k: v() if callable(v) else v for k, v in moyadb.defaults.items() if not hasattr(self, k)}
         super(TableClassBase, self).__init__()
@@ -1170,6 +1170,7 @@ class FieldElement(DBElement):
 class _Boolean(FieldElement):
     """Defines a [i]boolean[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.BoolColumn
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a field that is True or False"""
@@ -1181,6 +1182,7 @@ class _Boolean(FieldElement):
 class _Float(FieldElement):
     """Defines a [i]floating point[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.FloatColumn
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a field that stores a floating point number"""
@@ -1195,6 +1197,7 @@ class _Decimal(FieldElement):
 
     precision = Attribute("number of digits", type="integer", default=36)
     scale = Attribute("number of digits after the decimal point", type="integer", default=8)
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a fix precision number"""
@@ -1208,6 +1211,7 @@ class _Integer(FieldElement):
     moya_column = dbcolumns.IntegerColumn
 
     choices = Attribute("A reference to an enum", type="elementref")
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a field that stores an integer"""
@@ -1219,6 +1223,7 @@ class _Integer(FieldElement):
 class _BigInteger(FieldElement):
     """Defines a [i]big integer[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.BigIntegerColumn
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a field that stores a big integer"""
@@ -1227,6 +1232,7 @@ class _BigInteger(FieldElement):
 class _SmallInteger(FieldElement):
     """Defines a [i]small integer[/i] field. Must appear within a <model> tag."""
     moya_column = dbcolumns.SmallIntegerColumn
+    default = Attribute("Default value", default=None, type="expression")
 
     class Help:
         synopsis = """a field that stores a small integer"""

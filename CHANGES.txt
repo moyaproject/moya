@@ -5,6 +5,7 @@ Allows backref collect to be used in 'src' attribute of <query>
 Better markup related errors
 Added <get-markup-type> and  <get-markup-choices>
 Added type='file' to commands, so that commands may read files outside of a FS
+Added sort and reverse to templates forloop
 
 0.5.17
 ------

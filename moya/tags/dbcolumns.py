@@ -165,7 +165,7 @@ class MoyaDBColumn(object):
         self.name = name
         self.null = null
         self.blank = blank
-        if default is not no_default:
+        if default is not no_default and default is not None:
             self.default = self.adapt(default)
         else:
             self.default = default
