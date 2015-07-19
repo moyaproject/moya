@@ -1660,6 +1660,9 @@ class ProgressElement(ContextElementBase):
 
     src = Attribute("Source", required=True, type="expression")
     dst = Attribute("Destination", required=True, type="commalist")
+    filter = Attribute("If given, then only those values which match this condition will cause the enclosed block to execute.",
+                       required=False, type="expression", default=True)
+
     msg = Attribute("Message on progress bar", required=False, default="working...")
     steps = Attribute("Number of steps in the sequence", required=False, type="integer")
 
@@ -1678,7 +1681,10 @@ class ProgressElement(ContextElementBase):
                 self.throw('moya.progress.no-length',
                            "Unable to get length of {!r}".format(objects))
 
-        progress = Progress(console, msg, num_steps=steps)
+        filter = self.filter
+
+        progress = Progress(console, msg, width=20, num_steps=steps)
+        context['.progress'] = progress
         progress.render()
 
         try:
@@ -1686,16 +1692,16 @@ class ProgressElement(ContextElementBase):
         except TypeError:
             self.throw("bad-value.not-iterable", "Source is not iterable")
         else:
+            msg = self.msg(context)
             try:
                 console.show_cursor(False)
                 if len(dst) == 1:
                     dst = dst[0]
                     for obj in iter_objects:
                         context[dst] = obj
-                        progress.step(msg=self.msg(context))
-                        yield DeferNodeContents(self)
-
-
+                        progress.step()
+                        if filter(context):
+                            yield DeferNodeContents(self)
                 else:
                     for obj in iter_objects:
                         try:
@@ -1704,11 +1710,31 @@ class ProgressElement(ContextElementBase):
                         except TypeError:
                             self.throw("bad-value.not-iterable",
                                        "Object in sequence does not support iteration")
-                        yield DeferNodeContents(self)
+                        if filter(context):
+                            yield DeferNodeContents(self)
                         progress.step()
             finally:
                 console.show_cursor(True)
                 progress.done()
+
+
+class ProgressMsg(ContextElementBase):
+    """
+    Set a progress message.
+
+    Must appear inside a [tag]progress[/tag] tag.
+
+    """
+
+    class Help:
+        synopsis = "set a progress message"
+        example = """
+        <progress-msg>reading post ${post}</progress-msg>
+        """
+
+    def logic(self, context):
+        msg = context.sub(self.text)
+        context['.progress.msg'] = msg
 
 
 class Sleep(ContextElementBase):

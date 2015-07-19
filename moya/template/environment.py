@@ -15,7 +15,7 @@ import weakref
 
 
 # Update for backwards incompatible changes, so we don't get old cached templates
-TEMPLATE_VERSION = 2
+TEMPLATE_VERSION = 3
 
 
 class Environment(object):
