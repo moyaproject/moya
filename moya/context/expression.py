@@ -374,7 +374,10 @@ class EvalMultOp(Evaluator):
     ops = {"*": operator.mul,
            "/": operator.truediv,
            "//": operator.floordiv,
-           "%": operator.mod
+           "%": operator.mod,
+           'bitand': operator.and_,
+           'bitor': operator.or_,
+           'bitxor': operator.xor
            }
 
     def build(self, tokens):
@@ -591,7 +594,7 @@ string_operand = string
 
 groupop = Literal(',')
 signop = oneOf('+ -')
-multop = oneOf('* / // %')
+multop = oneOf('* / // % bitand bitor')
 filterop = oneOf('|')
 plusop = oneOf('+ -')
 notop = Literal('not') + WordEnd(word_characters)
