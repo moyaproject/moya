@@ -31,6 +31,7 @@ import time
 from collections import defaultdict
 from datetime import datetime
 from random import choice
+from copy import copy
 
 from time import sleep
 from textwrap import dedent
@@ -885,7 +886,7 @@ class Dict(DataSetter):
 
         """
 
-    default = Attribute("Default object to return if the key isn't in the dict", required=False, default=None, choices=['dict', 'list', 'int', 'float'])
+    default = Attribute("Default return for missing keys", type="expression", required=False, default=None)
     sequence = Attribute("Optional sequence of key / value pairs to initialize the dict", type="expression", required=False)
 
     _default_types = {'dict': OrderedDict,
@@ -895,11 +896,16 @@ class Dict(DataSetter):
 
     def logic(self, context):
         sequence = self.sequence(context)
-        default = self.default(context)
-        if default is None:
-            obj = {}
+        if self.has_parameter('default'):
+            default = self.default(context)
+            obj = defaultdict(lambda: copy(default))
         else:
-            obj = defaultdict(self._default_types[default])
+            obj = {}
+        # default = self.default(context)
+        # if default is None:
+        #     obj = {}
+        # else:
+        #     obj = defaultdict(self._default_types[default])
         obj.update(self.get_let_map(context))
         if sequence:
             obj.update(sequence)
