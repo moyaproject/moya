@@ -164,7 +164,7 @@ class ElementError(MoyaError):
 
 
 class ContentError(ElementError):
-    error_type = "Content error"
+    error_type = "Content Error"
 
 
 class ElementNotFoundError(MoyaError):

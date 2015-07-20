@@ -8,6 +8,7 @@ from .html import escape
 from . import interface
 from .compat import implements_to_string, text_type, string_types, iteritems, iterkeys
 from .tools import unique
+from .errors import ContentError
 
 from contextlib import contextmanager
 from collections import defaultdict
@@ -88,7 +89,8 @@ class Content(interface.AttributeExposer):
         self._include = defaultdict(RenderList)
         self._section_elements = defaultdict(list)
         self.sections = OrderedDict()
-        self.section_stack = [self.new_section("body", "base.html")]
+        #self.section_stack = [self.new_section("body", "base.html")]
+        self.section_stack = []
         super(Content, self).__init__()
 
     def __repr__(self):
@@ -124,7 +126,12 @@ class Content(interface.AttributeExposer):
         try:
             return self.section_stack[-1]
         except IndexError:
-            return None
+            raise ContentError("can't add content outside of a section",
+                               diagnosis="Enclose content tags within a **&lt;section&gt;** tag")
+
+    @property
+    def in_section(self):
+        return bool(self.section_stack)
 
     def __moyaconsole__(self, console):
         for section_name, section in self.sections.items():
@@ -135,7 +142,7 @@ class Content(interface.AttributeExposer):
                 section.__moyaconsole__(console)
 
     def add_td(self, name, value):
-        if self.current_section:
+        if self.in_section:
             self.current_section.add_td(name, value)
         else:
             self.td[name] = value
