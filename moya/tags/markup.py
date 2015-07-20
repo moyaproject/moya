@@ -96,7 +96,7 @@ class GetMarkupTypes(DataSetter):
 
 
 class GetMarkupChoices(DataSetter):
-    """Get a list of Markup processor choices, suitable for use in a [tag forms]select[/tag]/"""
+    """Get a list of Markup processor choices, suitable for use in a [tag forms]select[/tag] tag."""
 
     class Help:
         synopsis = "get supported markups"

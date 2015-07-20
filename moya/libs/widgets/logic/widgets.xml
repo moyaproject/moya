@@ -6,15 +6,19 @@
     <widget name="success" template="success.html" synopsis="success alert">
         <doc>Renders a success message.</doc>
     </widget>
+
     <widget name="info" template="info.html" synopsis="info alert">
         <doc>Renders a message.</doc>
     </widget>
+
     <widget name="danger" template="danger.html" synopsis="danger alert">
         <doc>Renders a danger alert.</doc>
     </widget>
+
     <widget name="warning" template="warning.html" synopsis="warning alert">
         <doc>Renders a warning message.</doc>
     </widget>
+
     <widget name="error" template="error.html" synopsis="error alert">
         <doc>Renders an error message.</doc>
     </widget>
@@ -22,9 +26,11 @@
     <widget name="well" template="well.html" synopsis="render a well" text="no">
         <doc>Renders a well (highlighted panel)</doc>
     </widget>
+
     <widget name="small-well" template="small-well.html" synopsis="render a small well">
         <doc>Renders a well (highlighted panel) with smaller borders</doc>
     </widget>
+
     <widget name="large-well" template="large-well.html" synopsis="render a large well">
         <doc>Renders a well (highlighted panel) with large borders</doc>
     </widget>
@@ -47,6 +53,22 @@
             <attribute name="query" required="no"/>
             <attribute name="class" required="no" type="text" />
             <attribute name="icon" required="no" type="text"/>
+        </signature>
+        <dict dst="url_with"/>
+        <update values="params" src="url_with"/>
+        <update values="with" src="url_with" if="with" />
+        <get-url name="${name}" from="${app or _caller.app.name}" with="url_with" dst="url" if="name and not url"/>
+    </widget>
+
+    <widget name="feed-link" template="feed_link.html" let="params" synopsis="renders a link to a feed">
+        <doc>Renders a link to a RSS feed</doc>
+        <signature>
+            <attribute name="name" type="text" required="no"/>
+            <attribute name="app" type="text" required="no" default="" />
+            <attribute name="url" required="no" type="text"/>
+            <attribute name="with" required="no" />
+            <attribute name="query" required="no"/>
+            <attribute name="rel" type="text" default="alternate"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>

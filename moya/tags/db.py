@@ -214,6 +214,15 @@ class TableClassBase(object):
         #args = {k: v() if callable(v) else v for k, v in moyadb.defaults.items() if not hasattr(self, k)}
         super(TableClassBase, self).__init__()
 
+    @classmethod
+    def get_defaults(cls):
+        """Get a mapping of defaults for this db class"""
+        moyadb = cls._moyadb
+        defaults = {}
+        for k, v in moyadb.defaults.items():
+            if not callable(v):
+                defaults[k] = v
+        return defaults
 
     @classmethod
     def _get_column(cls, column_name, default=None):
@@ -2038,6 +2047,21 @@ class Inspect(DBDataSetter):
         table_class = model.get_table_class(model_app)
         model_proxy = ModelProxy(model, model_app)
         self.set_context(context, params.dst, model_proxy)
+
+
+class GetDefaults(DataSetter):
+    xmlns = namespaces.db
+
+    _from = Attribute("Model app", type="application", required=False, default=None)
+    model = Attribute("Model reference", required=True)
+
+    def get_value(self, context):
+        params = self.get_parameters(context)
+        app = self.get_app(context)
+        model_app, model = self.get_element(params.model, app=app)
+        table_class = model.get_table_class(model_app)
+        return table_class.get_defaults()
+
 
 
 class NewQuery(DBDataSetter):
