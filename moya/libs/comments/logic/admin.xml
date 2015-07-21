@@ -12,6 +12,7 @@
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
+        search="#CommentObject.namespace == q or #CommentObject.object == q"
         libname="table.commentobjects" slug="commentobjects" title="Comment Objects" model="#CommentObject" description="Comment Objects">
         <column title="Comment Object" sort="id" link="yes">Comment Object #${object.id}</column>
         <column title="Namespace" sort="namespace">${object.namespace}</column>
@@ -19,6 +20,7 @@
     </table>
 
     <table xmlns="http://moyaproject.com/admin" order="-time"
+        search="#Comment.commenter_ip == q or #Comment.commenter_name contains q"
         libname="table.comments" slug="comments" title="Comments" model="#Comment" description="User Comments">
         <column title="Comment" sort="id" link="yes">Comment #${object.id}</column>
         <column title="Page" >

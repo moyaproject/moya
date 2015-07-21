@@ -4,6 +4,7 @@
     <div class="panel panel-default">
         <div class="panel-heading admin-table-header">
 
+            {% if table.params.search %}
             <div class="admin-table-group admin-table-search-bar">
 
                 <div class="admin-table-query ">
@@ -23,6 +24,7 @@
                 </div>
 
             </div>
+            {% endif %}
 
             <div class="admin-table-group">
                 <div class="admin-table-search" style="width:50%; float:left; width:160px; margin-right:12px;">

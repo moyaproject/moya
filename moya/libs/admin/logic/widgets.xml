@@ -109,7 +109,7 @@
 
         <let row_template="single ? 'widgets/table/singlerow.html' : 'widgets/table/row.html'"/>
 
-        <node template="${template}" let:action_url="action_url" let:back_url="back_url" let:search="search" let:single="single" let:ids="ids">
+        <node template="${template}" let:table="table" let:action_url="action_url" let:back_url="back_url" let:search="search" let:single="single" let:ids="ids">
             <node template="widgets/table-body.html" let:columns="columns" let:single="single">
                 <for src="render_objects" dst="object" if="render_objects">
                     <get-url name="admin_table_edit" with=".url" let:pk="object.id" dst="edit_url" if="not picker" />

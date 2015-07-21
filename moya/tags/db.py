@@ -2063,7 +2063,6 @@ class GetDefaults(DataSetter):
         return table_class.get_defaults()
 
 
-
 class NewQuery(DBDataSetter):
     """Create a query object dynamically."""
 
