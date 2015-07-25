@@ -7,7 +7,8 @@
     xmlns:db="http://moyaproject.com/db"
     xmlns:w="http://moyaproject.com/widgets"
     xmlns:wysihtml5="http://moyaproject.com/wysihtml5"
-    xmlns:admin="http://moyaproject.com/admin">
+    xmlns:admin="http://moyaproject.com/admin"
+    xmlns:fs="http://moyaproject.com/fs">
 
 	<form libname="form.delete" legend="Delete Objects" style="basic" xmlns="http://moyaproject.com/forms">
         <moya:if test="not object_pks">
@@ -42,6 +43,12 @@
     </filter>
 
 	<forms:form libname="form.object" legend="Edit ${object}" style="horizontal">
+
+        <forms:input type="hidden"
+            visible="no"
+            name="_moya_admin_object_id"
+            initial="object.id" />
+
 		<for src="model.columns" dst="column">
 
             <switch>
@@ -130,6 +137,34 @@
                 </else>
                 <defer to="adapt_null" />
 
+                <case if="column.type == 'upload'"/>
+                <forms:upload
+                    label="${str:column.label or column.name|'label'}"
+                    name="${column.name}"
+                    help="${str:column.help}"
+                    initial="object[column.dbname]"
+                    type="file" />
+
+                <!--
+                <forms:adapt-field field="${column.name}" let:getpath="column.getpath">
+                    <breakpoint />
+                    <call macro="${column.getpath}" dst="path"
+                        from="${model.app.name}"
+                        let:form="form" let:value="value" />
+                    <return value="path"/>
+                </forms:adapt-field>
+            -->
+                <forms:apply-field field="${column.name}" let:getpath="column.getpath" let:column="column">
+                    <breakpoint />
+                    <call macro="${column.getpath}" dst="path"
+                        from="${model.app.name}"
+                        let:object="object"
+                        let:field="value"
+                        let:column="column"/>
+
+                    <fs:set-contents fs="${column.fs}" path="${path}" contents="value" />
+                    <set-item src="object" index="column.dbname" value="path" />
+                </forms:apply-field>
 
                 <case if="column.type in ['integer', 'big-integer', 'small-integer']"/>
                 <if test="column.choices">
@@ -272,10 +307,12 @@
 
                     <forms:apply-field field="${column.name}">
                         <if test="value.added">
-                            <var dst="object[column.dbname]" value="value.added.0"/>
+                            <set-item src="object" index="column.dbname" value="value.added.0"/>
+                            <!-- <var dst="object[column.dbname]" value="value.added.0"/> -->
                         </if>
                         <else>
-                            <var dst="object[column.dbname]" value="None"/>
+                            <set-item src="object" index="column.dbname" value="None"/>
+                            <!-- <var dst="object[column.dbname]" value="None"/> -->
                         </else>
                     </forms:apply-field>
 

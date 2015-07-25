@@ -22,7 +22,7 @@ from ..logic import (DeferNodeContents,
                      MoyaException)
 from ..console import style as console_style
 from ..render import HTML
-from ..compat import zip_longest, raw_input, text_type, string, xrange
+from ..compat import zip_longest, raw_input, text_type, string, xrange, PY3
 
 import json
 import weakref
@@ -37,6 +37,7 @@ from time import sleep
 from textwrap import dedent
 
 import sys
+import locale
 import logging
 log = logging.getLogger('moya.runtime')
 
@@ -2431,7 +2432,10 @@ class Input(DataSetter):
             console(text).flush()
             response = getpass.getpass('')
         else:
-            response = raw_input(text)
+            if PY3:
+                response = input(text)
+            else:
+                response = raw_input(text).decode(sys.stdin.encoding or locale.getpreferredencoding(True))
         if not response:
             response = default
         self.set_context(context,

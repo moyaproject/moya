@@ -387,6 +387,18 @@ class StringColumn(MoyaDBColumn):
         return String(length=self.length, convert_unicode=True)
 
 
+class UploadColumn(MoyaDBColumn):
+    def __init__(self, type, name, length=None, choices=None, fs=None, getpath=None, *args, **kwargs):
+        self.length = length
+        self.choices = choices
+        self.fs = fs
+        self.getpath = getpath
+
+        super(UploadColumn, self).__init__(type, name, *args, **kwargs)
+
+    def get_sa_type(self):
+        return String(length=self.length, convert_unicode=True)
+
 class TimezoneType(TypeDecorator):
     '''Prefixes Unicode values with "PREFIX:" on the way in and
     strips it off on the way out.

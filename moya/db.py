@@ -125,18 +125,22 @@ class DBSession(object):
 
     def enter_transaction(self):
         self._transaction_level += 1
+        #print("ENTER", self._transaction_level)
 
     @wrap_db_errors
     def exit_transaction(self, element=None, exc_type=None, exc_val=None):
         self._transaction_level -= 1
+        #print("EXIT", self._transaction_level)
         if exc_type is None:
-            try:
-                self.session.commit()
-            except:
-                self.session.rollback()
-                raise
+            if self._transaction_level == 0:
+                try:
+                    self.session.commit()
+                except:
+                    self.session.rollback()
+                    raise
         else:
             self.session.rollback()
+            self._transaction_level = 0
 
     def __getattr__(self, key):
         return getattr(self.session, key)

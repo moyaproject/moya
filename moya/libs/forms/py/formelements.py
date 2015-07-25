@@ -1441,7 +1441,9 @@ class AdaptField(LogicElement):
 
     def logic(self, context):
         form = context['_return']
-        form.add_field_adapter(self.field(context), self.get_closure(context))
+        params = self.get_let_map(context)
+        form.add_field_adapter(self.field(context),
+                               self.get_closure(context, extra=params))
 
 
 class ApplyField(LogicElement):
@@ -1460,7 +1462,9 @@ class ApplyField(LogicElement):
 
     def logic(self, context):
         form = context['_return']
-        form.add_field_applyer(self.field(context), self.get_closure(context))
+        params = self.get_let_map(context)
+        form.add_field_applyer(self.field(context),
+                               self.get_closure(context, extra=params))
 
 
 class Fail(LogicElement):

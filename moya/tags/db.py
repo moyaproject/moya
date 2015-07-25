@@ -1261,6 +1261,20 @@ class _String(FieldElement):
     choices = Attribute("A reference to a choices tag", type="elementref")
 
 
+class _Upload(FieldElement):
+    """An upload field"""
+
+    #_non_field_attributes = ['getpath', 'fs']
+
+    class Help:
+        synopsis = """a field to store the path of an uploaded file"""
+
+    moya_column = dbcolumns.UploadColumn
+    fs = Attribute("A filesystem name", required=False, default="uploads")
+    length = Attribute("Length of text", required=False, type="integer", default=200)
+    getpath = Attribute("macro that returns a path, will be called with 'upload' and 'form'", type="elementref", required=False)
+
+
 class Token(FieldElement):
     """A string column containing a randomly generated token. Note, that the string is not [i]guaranteed[/i] to be unique.
     If you want a unique token you will have to implement that logic independently."""

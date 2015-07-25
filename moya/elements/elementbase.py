@@ -927,11 +927,13 @@ class ElementBaseType(object):
         from moya.logic import MoyaException
         raise MoyaException(exc_type, msg, diagnosis=diagnosis, info=info)
 
-    def get_closure(self, context, element=None):
+    def get_closure(self, context, element=None, extra=None):
         """Get element with a snapshot of data in the local context scope"""
         if element is None:
             element = self
         data = {k: v for k, v in context.items('') if not k.startswith('_')}
+        if extra is not None:
+            data.update(extra)
         return Closure(element, data)
 
     def on_logic_exception(self, callstack, exc_node, logic_exception):
