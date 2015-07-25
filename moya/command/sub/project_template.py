@@ -138,12 +138,7 @@ startup = server.xml
 
 [autoreload]
 enabled = no
-extensions = .xml
-             .ini
-             .py
-             .html
-             .txt
-location = ./
+
 
 # -------------------------------------------------------------
 # Sites
