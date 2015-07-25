@@ -306,6 +306,7 @@
                     </forms:validate-field>
 
                     <forms:apply-field field="${column.name}">
+                        <breakpoint />
                         <if test="value.added">
                             <set-item src="object" index="column.dbname" value="value.added.0"/>
                             <!-- <var dst="object[column.dbname]" value="value.added.0"/> -->
