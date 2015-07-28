@@ -349,6 +349,9 @@ class NodeType(object):
                 out_nodes.append(node)
         return out_nodes
 
+    def _parse_tag_name(self, t):
+        return t.strip().partition(' ')[0].replace('-', '')
+
     def finalize(self, environment, template):
         self.children = self._combine_text_nodes(self.children)
 
@@ -482,7 +485,8 @@ class EscapeNode(Node):
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            if text.strip().split(' ', 1)[0] == "endescape":
+            if self._parse_tag_name(text) == "endescape":
+            #if text.strip().split(' ', 1)[0] == "endescape":
                 return False
         self.text.append(token_text)
         return True
@@ -914,6 +918,8 @@ class RenderNode(Node):
                                  options=options)
         except MissingTemplateError as e:
             self.render_error('Missing template: "%s"' % e.path)
+        except errors.TagError as e:
+            self.render_error(text_type(e))
 
 
 class RenderAllNode(Node):
@@ -1337,14 +1343,15 @@ class TransNode(Node):
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            tag = text.strip().split(' ', 1)[0]
+            #tag = text.strip().split(' ', 1)[0]
+            tag = self._parse_tag_name(text)
             if tag in ("endtrans", "end"):
                 return False
             else:
                 if self.number_expression is None:
-                    raise errors.TagError("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute", self)
+                    raise self.render_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute")
                 if tag != 'plural':
-                    raise errors.TagError("{% trans %} tag may not contain other tags, except for {% plural %}", self)
+                    raise self.render_error("{% trans %} tag may not contain other tags, except for {% plural %}")
                 self.plural_clause = True
             return True
         if self.plural_clause:
@@ -1390,7 +1397,7 @@ class DataNode(Node):
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            if text.strip().split(' ', 1)[0] in ("enddata", "end"):
+            if self._parse_tag_name(text) in ("enddata", "end"):
                 return False
         self.text.append(token_text)
         return False
@@ -1686,7 +1693,7 @@ class Template(object):
                     tag = tag[:-1]
                     remove_whitespace = True
 
-                add_token(("tag", (lineno, start, end), tag, token_text))
+                add_token(("tag", (lineno, start, end), tag, token_text.replace('-', '')))
 
                 pos = end
             if pos < len(line):

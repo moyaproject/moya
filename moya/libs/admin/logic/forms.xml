@@ -159,13 +159,11 @@
                 -->
 
                 <forms:apply-field field="${column.name}" let:getpath="column.getpath" let:column="column">
-
                     <call macro="${column.getpath}" dst="path"
                         from="${model.app.name}"
                         let:object="object"
                         let:field="value"
                         let:column="column"/>
-
                     <fs:set-contents fs="${column.fs}" path="${path}" contents="value" />
                     <set-item src="object" index="column.dbname" value="path" />
                 </forms:apply-field>
@@ -282,7 +280,7 @@
                     <get-element name="${column.picker}" from="${model.app.name}" dst="picker_table"/>
                     <let selected="object[column.name] ? [object[column.name]['id']] : []"/>
 
-                    <forms:field label="${str:column.label or column.name|'label'}" name="${column.dbname}"
+                    <forms:field label="${str:column.label or column.name|'label'}" name="${column.name}"
                         required="not column.blank"
                         help="${str:column.help}"
                         adapt="fromjson:value">
@@ -298,7 +296,7 @@
 
                         <admin:foreign-key-select object="object[column.name]">
                             <admin:picker-single url="picker_url" id="field.id" selected="selected"
-                                fieldname="field.name" value="object[field.name]"/>
+                                fieldname="field.name" value="object[field.name]['id']"/>
                         </admin:foreign-key-select>
 
                     </forms:field>
@@ -309,16 +307,11 @@
                         </forms:fail>
                     </forms:validate-field>
 
-                    <forms:apply-field field="${column.name}">
-                        <if test="value.added">
-                            <set-item src="object" index="column.dbname" value="value.added.0"/>
-                            <!-- <var dst="object[column.dbname]" value="value.added.0"/> -->
-                        </if>
-                        <else>
-                            <set-item src="object" index="column.dbname" value="None"/>
-                            <!-- <var dst="object[column.dbname]" value="None"/> -->
-                        </else>
-                    </forms:apply-field>
+                    <forms:adapt-field field="${column.name}">
+                        <return value="None" if="value==''" />
+                        <db:get modelobj="column.ref_model.element" from="${column.ref_model.app.name}" let:id="value" dst="object" />
+                        <return value="object"/>
+                    </forms:adapt-field>>
 
                 </if>
                 <else>
