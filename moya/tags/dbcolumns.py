@@ -388,11 +388,12 @@ class StringColumn(MoyaDBColumn):
 
 
 class UploadColumn(MoyaDBColumn):
-    def __init__(self, type, name, length=None, choices=None, fs=None, getpath=None, *args, **kwargs):
+    def __init__(self, type, name, length=None, choices=None, fs=None, getpath=None, geturl=None, *args, **kwargs):
         self.length = length
         self.choices = choices
         self.fs = fs
         self.getpath = getpath
+        self.geturl = geturl
 
         super(UploadColumn, self).__init__(type, name, *args, **kwargs)
 

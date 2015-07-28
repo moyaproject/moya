@@ -4,7 +4,8 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:admin="http://moyaproject.com/admin"
       xmlns:w="http://moyaproject.com/widgets"
-      xmlns:html="http://moyaproject.com/html">
+      xmlns:html="http://moyaproject.com/html"
+      xmlns:fs="http://moyaproject.com/fs">
     <!-- define your widgets here -->
 
 
@@ -181,6 +182,15 @@
             <attribute name="fieldname"/>
             <attribute name="value" required="no"/>
         </signature>
+    </widget>
+
+    <widget name="upload-file" template="widgets/upload_file.html">
+        <signature>
+            <attribute name="url"/>
+            <attribute name="fs"/>
+            <attribute name="path"/>
+        </signature>
+        <fs:get-size fs="${fs}" path="$path" dst="filesize"/>
     </widget>
 
 </moya>

@@ -35,7 +35,7 @@ class SetContents(LogicElement):
             dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
             dst_fs.setcontents(params.path, params.contents)
         except Exception as e:
-            self.throw("set-contents.fail", "unable to set file contents ({})".format(e))
+            self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
 
 
 class GetSyspath(DataSetter):
@@ -63,12 +63,12 @@ class GetSyspath(DataSetter):
         if self.has_parameter('fsobj'):
             dst_fs = params.fsobj
         else:
-            dst_fs = self.archive.get_filesystem(params.fs)
+            dst_fs = self.archive.lookup_filesystem(self, params.fs)
 
         try:
             syspath = dst_fs.getsyspath(params.path)
         except:
-            self.throw('get-syspath.no-syspath',
+            self.throw('fs.get-syspath.no-syspath',
                        "{!r} can not generate a syspath for '{}'".format(dst_fs, params.path))
         self.set_context(context, self.dst(context), syspath)
 
@@ -89,7 +89,7 @@ class GetMD5(DataSetter):
         if self.has_parameter('fsobj'):
             fs = params.fsobj
         else:
-            fs = self.archive.get_filesystem(params.fs)
+            fs = self.archive.lookup_filesystem(self, params.fs)
 
         m = hashlib.md5()
         try:
@@ -100,9 +100,58 @@ class GetMD5(DataSetter):
                         break
                     m.update(chunk)
         except FSError:
-            self.throw("get-md5.fail", "unable to read file '{}'".format(params.path))
+            self.throw("fs.get-md5.fail", "unable to read file '{}'".format(params.path))
         else:
             return m.hexdigest()
+
+class GetInfo(DataSetter):
+    xmlns = namespaces.fs
+
+    class Help:
+        synopsis = "get an info object for a file"
+
+    fsobj = Attribute("Filesystem object", required=False, default=None)
+    fs = Attribute("Filesystem name", required=False, default=None)
+    path = Attribute("Path of file", type="expression", required=True)
+
+    def get_value(self, context):
+        params = self.get_parameters(context)
+        if self.has_parameter('fsobj'):
+            fs = params.fsobj
+        else:
+            fs = self.archive.lookup_filesystem(self, params.fs)
+
+        try:
+            info = fs.getinfo(params.path)
+        except FSError:
+            self.throw('fs.get-info.fail', "unable to get info for path '{}'".format(params.path))
+        else:
+            return info
+
+
+class GetSize(DataSetter):
+    xmlns = namespaces.fs
+
+    class Help:
+        synopsis = "get the size of a file"
+
+    fsobj = Attribute("Filesystem object", required=False, default=None)
+    fs = Attribute("Filesystem name", required=False, default=None)
+    path = Attribute("Path of file", type="expression", required=True)
+
+    def get_value(self, context):
+        params = self.get_parameters(context)
+        if self.has_parameter('fsobj'):
+            fs = params.fsobj
+        else:
+            fs = self.archive.lookup_filesystem(self, params.fs)
+
+        try:
+            info = fs.getsize(params.path)
+        except FSError:
+            self.throw('fs.get-size.fail', "unable to get info for path '{}'".format(params.path))
+        else:
+            return info
 
 
 class Walk(DataSetter):

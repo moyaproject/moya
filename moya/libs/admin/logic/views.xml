@@ -128,7 +128,6 @@
         <db:get-defaults model="${table.params.model}" from="${.url.appname}" dst="object" />
         <forms:get form="#form.new" dst="form" let:model="model" let:object="object" let:new="yes"/>
         <if-post>
-            <breakpoint />
             <forms:validate src="form">
                 <db:transaction>
                     <db:create model="${table.params.model}" from="${.url.appname}" dst="obj"/>

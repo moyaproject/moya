@@ -1,0 +1,5 @@
+
+<p>
+<a href="${url}">${path}</a> (${filesize:filesize})
+</p>
+<input id="${field.id}" name="${field.name}" type="${field.type or 'file'}" {% attrib class=field.class %}{% if field.disabled %} disabled{% endif %}>

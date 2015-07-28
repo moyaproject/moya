@@ -1272,7 +1272,8 @@ class _Upload(FieldElement):
     moya_column = dbcolumns.UploadColumn
     fs = Attribute("A filesystem name", required=False, default="uploads")
     length = Attribute("Length of text", required=False, type="integer", default=200)
-    getpath = Attribute("macro that returns a path, will be called with 'upload' and 'form'", type="elementref", required=False)
+    getpath = Attribute("Macro that returns a path, will be called with 'upload' and 'form'", type="elementref", required=False)
+    geturl = Attribute("Macro that returns a URL for this upload", type="elementref", required=False)
 
 
 class Token(FieldElement):

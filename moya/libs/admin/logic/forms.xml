@@ -138,24 +138,28 @@
                 <defer to="adapt_null" />
 
                 <case if="column.type == 'upload'"/>
+                <call macro="${column.geturl}" dst="url"
+                        from="${model.app.name}"
+                        let:object="object"
+                        let:field="value"
+                        let:column="column"/>
+                <forms:field
+                    label="${str:column.label or column.name|'label'}"
+                    name="${column.name}"
+                    help="${str:column.help}">
+                    <admin:upload-file url="url" path="object[column.dbname]" fs="column.fs"/>
+                </forms:field>
+                <!--
                 <forms:upload
                     label="${str:column.label or column.name|'label'}"
                     name="${column.name}"
                     help="${str:column.help}"
                     initial="object[column.dbname]"
                     type="file" />
+                -->
 
-                <!--
-                <forms:adapt-field field="${column.name}" let:getpath="column.getpath">
-                    <breakpoint />
-                    <call macro="${column.getpath}" dst="path"
-                        from="${model.app.name}"
-                        let:form="form" let:value="value" />
-                    <return value="path"/>
-                </forms:adapt-field>
-            -->
                 <forms:apply-field field="${column.name}" let:getpath="column.getpath" let:column="column">
-                    <breakpoint />
+
                     <call macro="${column.getpath}" dst="path"
                         from="${model.app.name}"
                         let:object="object"

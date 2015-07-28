@@ -686,6 +686,15 @@ class Archive(object):
     def get_filesystem(self, name):
         return self.filesystems[name]
 
+    def lookup_filesystem(self, element, name):
+        try:
+            return self.filesystems[name]
+        except KeyError:
+            raise element.throw("fs.no-filesystem",
+                                "no filesystem called '{0}'".format(name),
+                                diagnosis="You can view installed filesystems from the command line with **moya fs**")
+
+
     def get_reader(self, name="data"):
         fs = self.get_filesystem(name)
         return DataReader(fs)
