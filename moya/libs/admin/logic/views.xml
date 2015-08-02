@@ -130,10 +130,8 @@
         <if-post>
             <forms:validate src="form">
                 <db:transaction>
-                    <breakpoint />
                     <db:create model="${table.params.model}" from="${.url.appname}" dst="obj"/>
                     <forms:apply src="form" dst="obj" />
-                    <echo obj="obj"/>
                 </db:transaction>
                 <catch exception="db.*" dst="exc">
                     <forms:error>Can't create object: ${exc.msg}</forms:error>

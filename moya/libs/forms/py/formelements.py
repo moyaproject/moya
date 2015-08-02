@@ -389,6 +389,12 @@ class Form(AttributeExposer):
     def data(self):
         return self._data
 
+    def get_data(self, name):
+        value = self.data[name]
+        if isinstance(value, FieldStorage):
+            value = UploadFileProxy(value)
+        return value
+
     @property
     def current_section(self):
         return self
@@ -917,7 +923,7 @@ class Apply(LogicElement):
                                                form=form,
                                                object=dst_obj,
                                                values=form.data,
-                                               value=form.data[field.name]) as call:
+                                               value=form.get_data(field.name)) as call:
                             yield logic.DeferNodeContents(apply_field.element)
 
                 else:
@@ -991,6 +997,7 @@ class FieldElement(LogicElement):
     adapt = Attribute("Function to adapt field before applying", type="function", default="value", evaldefault=True)
     process = Attribute("Function to process src in to a string", type="function", default="str:value", evaldefault=True)
     disabled = Attribute("Disabled control?", type="boolean", required=False, default=False)
+    upload = Attribute("Contains a file upload field?", type="boolean", required=False, default=False)
 
     def __str__(self):
         return "<%s>" % self._tag_name
@@ -1016,8 +1023,13 @@ class FieldElement(LogicElement):
         template = params.pop('template', None)
         style = params.pop('style')
 
+        if params['upload']:
+            enctype = "multipart/form-data"
+        else:
+            enctype = None
+
         field = form.add_field(params,
-                               enctype=self.enctype,
+                               enctype=enctype,
                                default=self.get_default(),
                                style=style,
                                process_value=self.process(context),

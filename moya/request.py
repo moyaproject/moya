@@ -4,6 +4,7 @@ A proxy for a webob request
 """
 
 from __future__ import unicode_literals
+from __future__ import print_function
 
 from .interface import AttributeExposer
 from .compat import implements_to_string
