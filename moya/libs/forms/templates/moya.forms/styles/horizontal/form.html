@@ -1,4 +1,3 @@
-{% inspect dict:form %}
 <form action="${form.action or '.'}" {% attrib method=form.method, enctype=form.enctype %} {% attrib class=['form-horizontal', form.class] %}>
     <fieldset>
     {% if form.legend %}<legend>${form.legend}</legend>{% endif %}

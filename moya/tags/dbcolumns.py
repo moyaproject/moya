@@ -400,6 +400,7 @@ class UploadColumn(MoyaDBColumn):
     def get_sa_type(self):
         return String(length=self.length, convert_unicode=True)
 
+
 class TimezoneType(TypeDecorator):
     '''Prefixes Unicode values with "PREFIX:" on the way in and
     strips it off on the way out.

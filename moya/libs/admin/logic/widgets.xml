@@ -190,7 +190,7 @@
             <attribute name="fs"/>
             <attribute name="path"/>
         </signature>
-        <fs:get-size fs="${fs}" path="$path" dst="filesize"/>
+        <fs:get-size fs="${fs}" path="path" dst="filesize" if="path"/>
     </widget>
 
 </moya>

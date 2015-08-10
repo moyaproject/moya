@@ -10,7 +10,9 @@
     </view>
 
     <macro libname="get_module">
-        <find-element tag="module" let:slug="module or .url.module" dst="module" from="${appname or .url.appname}"/>
+        <let appname=".url.appname" if="not appname"/>
+        <not-found if="appname not in .apps" />
+        <find-element tag="module" let:slug="module or .url.module" dst="module" from="${appname}"/>
         <not-found if="not module" />
         <return-dict let:params="module.params" />
     </macro>

@@ -1275,6 +1275,9 @@ class _Upload(FieldElement):
     getpath = Attribute("Macro that returns a path, will be called with 'upload' and 'form'", type="elementref", required=False)
     geturl = Attribute("Macro that returns a URL for this upload", type="elementref", required=False)
 
+    def get_default(self, context):
+        return None
+
 
 class Token(FieldElement):
     """A string column containing a randomly generated token. Note, that the string is not [i]guaranteed[/i] to be unique.

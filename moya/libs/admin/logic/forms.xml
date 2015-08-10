@@ -142,7 +142,8 @@
                         from="${model.app.name}"
                         let:object="object"
                         let:field="value"
-                        let:column="column"/>
+                        let:column="column"
+                        if="object[column.name]"/>
                 <forms:field
                     upload="yes"
                     label="${str:column.label or column.name|'label'}"

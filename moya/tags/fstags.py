@@ -5,6 +5,7 @@ from .. import namespaces
 from ..elements import Attribute
 from ..elements.elementbase import LogicElement
 from ..tags.context import DataSetter
+from ..compat import text_type
 
 from fs.errors import FSError
 from fs.path import pathjoin, basename, dirname
@@ -141,13 +142,14 @@ class GetSize(DataSetter):
 
     def get_value(self, context):
         params = self.get_parameters(context)
+        path = text_type(params.path)
         if self.has_parameter('fsobj'):
             fs = params.fsobj
         else:
             fs = self.archive.lookup_filesystem(self, params.fs)
 
         try:
-            info = fs.getsize(params.path)
+            info = fs.getsize(path)
         except FSError:
             self.throw('fs.get-size.fail', "unable to get info for path '{}'".format(params.path))
         else:
