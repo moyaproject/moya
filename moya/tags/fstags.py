@@ -31,7 +31,7 @@ class SetContents(LogicElement):
         if self.has_parameter('fsobj'):
             dst_fs = params.fsobj
         else:
-            dst_fs = self.archive.get_filesystem(params.fs)
+            dst_fs = self.archive.lookup_filesystem(self, params.fs)
         try:
             dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
             dst_fs.setcontents(params.path, params.contents)

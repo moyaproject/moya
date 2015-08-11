@@ -133,9 +133,7 @@ def build_lib(location, archive=None, dependancies=None, ignore_errors=False):
 
     with fsopendir(location) as import_fs:
         lib = archive.load_library(import_fs)
-        #lib.finalize()
 
-    #require_libs = lib._cfg.get_list('tests', 'import', '') or []
     if dependancies:
         for require_lib in dependancies:
             if require_lib.startswith('py:'):

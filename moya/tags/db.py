@@ -1270,8 +1270,8 @@ class _Upload(FieldElement):
         synopsis = """a field to store the path of an uploaded file"""
 
     moya_column = dbcolumns.UploadColumn
-    fs = Attribute("A filesystem name", required=False, default="uploads")
     length = Attribute("Length of text", required=False, type="integer", default=200)
+    getfs = Attribute("A macro to get the filesystem to use", required=False, default="elementref")
     getpath = Attribute("Macro that returns a path, will be called with 'upload' and 'form'", type="elementref", required=False)
     geturl = Attribute("Macro that returns a URL for this upload", type="elementref", required=False)
 

@@ -137,28 +137,26 @@
                 </else>
                 <defer to="adapt_null" />
 
+
                 <case if="column.type == 'upload'"/>
                 <call macro="${column.geturl}" dst="url"
-                        from="${model.app.name}"
-                        let:object="object"
-                        let:field="value"
-                        let:column="column"
-                        if="object[column.name]"/>
+                    from="${model.app.name}"
+                    let:object="object"
+                    let:field="value"
+                    let:column="column"
+                    if="object[column.name]"/>
+                <let-str fs="uploads"/>
+                <call macro="${column.getfs}" dst="fs"
+                    from="${model.app.name}"
+                    let:app="model.app"
+                    if="column.getfs"/>
                 <forms:field
                     upload="yes"
                     label="${str:column.label or column.name|'label'}"
                     name="${column.name}"
                     help="${str:column.help}">
-                    <admin:upload-file url="url" path="object[column.dbname]" fs="column.fs"/>
+                    <admin:upload-file url="url" path="object[column.dbname]" fs="fs"/>
                 </forms:field>
-                <!--
-                <forms:upload
-                    label="${str:column.label or column.name|'label'}"
-                    name="${column.name}"
-                    help="${str:column.help}"
-                    initial="object[column.dbname]"
-                    type="file" />
-                -->
 
                 <forms:apply-field field="${column.name}" let:getpath="column.getpath" let:column="column">
                     <call macro="${column.getpath}" dst="path"
@@ -166,7 +164,7 @@
                         let:object="object"
                         let:field="value"
                         let:column="column"/>
-                    <fs:set-contents fs="${column.fs}" path="${path}" contents="value" />
+                    <fs:set-contents fs="${fs}" path="${path}" contents="value" />
                     <set-item src="object" index="column.dbname" value="path" />
                 </forms:apply-field>
 
@@ -182,16 +180,6 @@
                             <forms:radio on="${choice_value}">${choice_label}</forms:radio>
                         </moya:for>
                     </forms:radio-group>
-
-                    <!--
-                    <forms:select label="${str:column.label or title:column.name}"
-                        name="${column.name}"
-                        help="${str:column.help}"
-                        adapt="int:value"
-                        initial="str:object[column.name]">
-                        <forms:add-choices choices="choices:choice_enum"/>
-                    </forms:select>
-                -->
                 </if>
                 <else>
                     <forms:input label="${str:column.label or column.name|'label'}"
