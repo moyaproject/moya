@@ -59,7 +59,7 @@
             <forms:validate src="form">
                 <let filename="form.data.file.filename" />
                 <fs:set-contents fs="uploads" path="${filename}" contents="form.data.file" />
-                <tn:generate thumbnails="#thumbnails.tests" path="${filename}" />
+                <tn:generate thumbnails="#thumbnails.tests" path="filename" />
                 <let success="yes" />
             </forms:validate>
         </if-post>

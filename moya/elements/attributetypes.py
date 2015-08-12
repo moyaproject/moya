@@ -77,6 +77,10 @@ class AttributeTypeBase(object):
             return self.process(self.text)
         return self.process(context.sub(self.text))
 
+    @classmethod
+    def check(self, value):
+        return None
+
     @property
     def value(self):
         if not hasattr(self, '_value'):
@@ -158,6 +162,13 @@ class Number(AttributeType):
         except ValueError:
             self.invalid(text)
 
+    @classmethod
+    def check(cls, value):
+        try:
+            float(value)
+        except:
+            return 'expected a number, not {}'.foramt(value)
+
 
 class Integer(AttributeType):
     type_display = "integer"
@@ -172,6 +183,13 @@ class Integer(AttributeType):
     def display(cls, value):
         if isinstance(value, int_types):
             return text_type(value)
+
+    @classmethod
+    def check(cls, value):
+        try:
+            int(float(value))
+        except:
+            return 'expected an integer, not {}'.foramt(value)
 
 
 class Index(AttributeType):
@@ -224,6 +242,15 @@ class ExpressionAttribute(AttributeType):
     def display(cls, value):
         return to_expression(None, value)
 
+    @classmethod
+    def check(self, value):
+        try:
+            Expression(value).compile()
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
+
 
 class FunctionAttribute(AttributeType):
     type_display = "function"
@@ -236,6 +263,15 @@ class FunctionAttribute(AttributeType):
 
     def __call__(self, context):
         return self.exp.make_function(context)
+
+    @classmethod
+    def check(self, value):
+        try:
+            Expression(value).compile()
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
 
 
 class ApplicationAttribute(AttributeType):
@@ -273,6 +309,16 @@ class DBExpressionAttribute(AttributeType):
         text = context.sub(self.text)
         return DBExpression(text) if text else None
 
+    @classmethod
+    def check(self, value):
+        if '${' not in value:
+            try:
+                DBExpression(value).compile()
+            except Exception as e:
+                return text_type(e)
+            else:
+                return None
+
 
 class Boolean(ExpressionAttribute):
     type_display = "boolean"
@@ -295,6 +341,15 @@ class Boolean(ExpressionAttribute):
     def __call__(self, context):
         return bool(self.exp.eval(context))
 
+    @classmethod
+    def check(self, value):
+        try:
+            Expression(value).compile()
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
+
 
 class DictExpression(ExpressionAttribute):
     type_display = "dict expression"
@@ -310,6 +365,15 @@ class DictExpression(ExpressionAttribute):
             raise BadValueError("must be a dictionary or similar type")
         return d
 
+    @classmethod
+    def check(self, value):
+        try:
+            Expression(value).compile()
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
+
 
 class TimeSpanAttribute(AttributeType):
     type_display = "timespan"
@@ -317,6 +381,15 @@ class TimeSpanAttribute(AttributeType):
 
     def process(self, text):
         return TimeSpan(text)
+
+    @classmethod
+    def check(self, value):
+        try:
+            TimeSpan(value)
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
 
 
 class CommaList(AttributeType):
@@ -352,6 +425,15 @@ class Version(AttributeType):
         text = VersionSpec(self.text)
         return text
 
+    @classmethod
+    def check(self, value):
+        try:
+            VersionSpec(value)
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
+
 
 class HTTPStatus(AttributeType):
     type_display = "http status code"
@@ -367,6 +449,14 @@ class HTTPStatus(AttributeType):
         status = int(status_code)
         return status
 
+    @classmethod
+    def check(self, value):
+        try:
+            StatusCode(value)
+        except Exception as e:
+            return text_type(e)
+        else:
+            return None
 
 if __name__ == "__main__":
 

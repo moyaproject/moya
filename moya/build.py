@@ -35,7 +35,7 @@ def read_config(fs, settings_path="settings.ini"):
     return cfg
 
 
-def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_settings=None):
+def build(fs, settings_path="settings.ini", rebuild=False, archive=None, strict=False, master_settings=None):
     """Build a project"""
     if isinstance(fs, string_types):
         if '://' in fs:
@@ -46,7 +46,7 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, master_
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
     if archive is None:
-        archive = Archive(fs)
+        archive = Archive(fs, strict=strict)
     context = Context()
 
     syspath = fs.getsyspath('/', allow_none=True)
@@ -174,13 +174,18 @@ def build_server(fs,
                  rebuild=False,
                  validate_db=False,
                  breakpoint=False,
+                 strict=False,
                  master_settings=None):
     """Build a server"""
     start = time()
     archive = Archive()
     console = archive.console
     try:
-        archive, context, doc = build(fs, settings_path, rebuild=rebuild, master_settings=master_settings)
+        archive, context, doc = build(fs,
+                                      settings_path,
+                                      rebuild=rebuild,
+                                      strict=strict,
+                                      master_settings=master_settings)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:
@@ -236,7 +241,6 @@ def build_server(fs,
     if failed:
         raise errors.StartupFailedError(error_msg or 'Failed to build project')
 
-   # archive.finalize()
     archive.init_media()
     archive.init_data()
 

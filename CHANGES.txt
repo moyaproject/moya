@@ -8,6 +8,7 @@ Added type='file' to commands, so that commands may read files outside of a FS
 Added sort and reverse to templates forloop
 Added a blog-link tag to widgets
 Added {db}get-defaults to get mapping of defaults for a model
+Implemented strict checks, enabled with [project]/strict setting or runserver --strict
 
 0.5.17
 ------

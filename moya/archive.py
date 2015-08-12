@@ -197,8 +197,9 @@ class Archive(object):
 
     _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
 
-    def __init__(self, project_fs=None, breakpoint=False):
+    def __init__(self, project_fs=None, breakpoint=False, strict=False):
         self.project_fs = project_fs
+        self.strict = strict
         self.registry = ElementRegistry()
         self.libs = {}
         self.apps = OrderedDict()
@@ -219,6 +220,7 @@ class Archive(object):
         self.default_mail_server = None
         self.default_db_engine = None
         self.debug = False
+        self.struct = False
         self.auto_reload = False
         self.known_namespaces = set()
         self.sites = Sites()
@@ -371,7 +373,7 @@ class Archive(object):
                                                     col=None,
                                                     msg=text_type(e))
                         self.failed_documents.append(failed_doc)
-                        #return False
+
                 build_queue.popleft()
 
         if unbuilt:
@@ -395,6 +397,15 @@ class Archive(object):
                 self.failed_documents.append(failed_doc)
             return False
 
+        if self.strict:
+            failed = 0
+            for doc in documents:
+                failed += self.check_attributes(doc)
+            if failed:
+                startup_log.debug('%s %s strict check(s) failed', self, failed)
+            else:
+                startup_log.debug('%s strict checks passed', self)
+
         for doc in documents:
             doc.document_finalize(context)
 
@@ -405,6 +416,24 @@ class Archive(object):
                               (time() - start) * 1000.0)
 
         return True
+
+    def check_attributes(self, doc):
+        failed = 0
+        for element_name, element in doc.elements.items():
+            for k, attribute in element._tag_attributes.items():
+                if k in element._attrs:
+                    attr_text = element._attrs[k]
+                    error = attribute.type.check(attr_text)
+                    if error:
+                        failed += 1
+                        failed_doc = FailedDocument(path=doc.location,
+                                                    code=element._code,
+                                                    line=element.source_line or 0,
+                                                    col=None,
+                                                    msg="error in parameter '{}', {}".format(k, error),
+                                                    diagnosis="this check is performed when [project]/strict is enabled, or with 'moya runserver --strict' switch")
+                        self.failed_documents.append(failed_doc)
+        return failed
 
     def populate_context(self, context):
         from .context.expressiontime import ExpressionDateTime
@@ -752,6 +781,7 @@ class Archive(object):
         self.secret = cfg.get('project', 'secret', '')
         self.preflight = cfg.get_bool('project', 'preflight', False)
         self.debug = cfg.get_bool('project', 'debug')
+        self.strict = self.strict or cfg.get_bool('project', 'strict')
         self.develop = cfg.get_bool('project', 'develop')
         self.log_signals = cfg.get_bool('project', 'log_signals')
         self.debug_echo = cfg.get_bool('project', 'debug_echo')
@@ -771,6 +801,9 @@ class Archive(object):
 
         require_name = ['app', 'smtp', 'db']
         self.auto_reload = cfg.get_bool('autoreload', 'enabled')
+
+        if self.strict:
+            startup_log.debug('strict mode is enabled')
 
         for section_name, section in iteritems(cfg):
             section = SectionWrapper(section_name, section)

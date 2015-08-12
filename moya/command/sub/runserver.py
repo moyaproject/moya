@@ -50,6 +50,8 @@ class Runserver(SubCommand):
                             help="disable auto-reload")
         parser.add_argument('--slow', dest="slow", action="store_true", default=False,
                             help="simulate network latency by inserting delays")
+        parser.add_argument('--strict', dest='strict', action="store_true", default=False,
+                            help="enable 'strict' checking of tag attributes")
         return parser
 
     def run(self):
@@ -63,7 +65,8 @@ class Runserver(SubCommand):
                                       breakpoint_startup=args.breakpoint_startup,
                                       validate_db=not args.novalidate,
                                       disable_autoreload=self.args.noreload,
-                                      simulate_slow_network=self.args.slow)
+                                      simulate_slow_network=self.args.slow,
+                                      strict=self.args.strict)
         application.preflight()
 
         server = make_server(args.host,

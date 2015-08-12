@@ -97,6 +97,7 @@ class WSGIApplication(object):
                  breakpoint_startup=False,
                  validate_db=False,
                  simulate_slow_network=False,
+                 strict=False,
                  master_settings=None):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
@@ -116,7 +117,7 @@ class WSGIApplication(object):
             with fsopendir(self.filesystem_url) as logging_fs:
                 init_logging_fs(logging_fs, logging)
         try:
-            self.build(breakpoint=breakpoint_startup)
+            self.build(breakpoint=breakpoint_startup, strict=strict)
         except Exception as e:
             startup_log.critical(text_type(e))
             raise
@@ -146,13 +147,14 @@ class WSGIApplication(object):
     def __repr__(self):
         return """<wsgiapplication {} {}>""".format(self.settings_path, self.server_ref)
 
-    def build(self, breakpoint=False):
+    def build(self, breakpoint=False, strict=False):
         with timer('startup', output=startup_log.debug):
             build_result = build_server(self.filesystem_url,
                                         self.settings_path,
                                         server_element=self.server_ref,
                                         validate_db=self.validate_db,
                                         breakpoint=breakpoint,
+                                        strict=strict,
                                         master_settings=self.master_settings)
         if build_result is None:
             msg = "Failed to build project"
@@ -187,6 +189,7 @@ class WSGIApplication(object):
             new_build = build_server(self.filesystem_url,
                                      self.settings_path,
                                      server_element=self.server_ref,
+                                     strict=self.archive.strict,
                                      validate_db=True)
         except Exception as e:
             error_text = text_type(e)
@@ -224,6 +227,7 @@ class WSGIApplication(object):
                         preflight_callable(context, app=app)
                     except Exception as e:
                         preflight.append((element, "error", text_type(e)))
+
                 app_preflight.append((app, preflight))
             if report:
                 all_ok = True
