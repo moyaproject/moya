@@ -14,7 +14,7 @@
     </mountpoint>
 
 
-    <tn:thumbnails libname="thumbnails.tests">
+    <tn:thumbnails libname="thumbnails.tests" name="tests">
 
         <tn:processor name="small" version="1">
             <image:resize-to-fit width="80" height="60"/>
@@ -36,6 +36,10 @@
 
         <tn:processor name="fit">
             <image:resize-to-fit width="90" height="300"/>
+        </tn:processor>
+
+        <tn:processor name="auto">
+            <image:resize-to-fit width="400"/>
         </tn:processor>
 
     </tn:thumbnails>

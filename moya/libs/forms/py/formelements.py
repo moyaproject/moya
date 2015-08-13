@@ -1026,7 +1026,7 @@ class FieldElement(LogicElement):
         if params['upload']:
             enctype = "multipart/form-data"
         else:
-            enctype = None
+            enctype = self.enctype
 
         field = form.add_field(params,
                                enctype=enctype,

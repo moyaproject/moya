@@ -82,6 +82,4 @@ class MoyaFilterParams(object):
         return repr(self.filter)
 
     def __moyafilter__(self, context, app, value, **params):
-        #if is_missing(value):
-        #    return value
         return self.filter.__moyafilter__(context, app, value, **self.params)

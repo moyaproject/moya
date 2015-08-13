@@ -10,6 +10,10 @@
 
             This tag should contain one or more [tag thumbnail]processor[/tag] tags.
         </doc>
+        <signature>
+            <attribute name="name" type="text">Name to be used in paths</attribute>
+        </signature>
+
     </data-tag>
 
     <data-tag name="processor" synopsis="define a thumbnail processor">
@@ -46,71 +50,126 @@ The code inside the processor transforms that image. The new image is then writt
         </signature>
     </data-tag>
 
+    <macro libname="get_thumb_path">
+        <doc>Get the path to a thumbnail</doc>
+        <signature>
+            <argument name="path"/>
+            <argument name="processor"/>
+        </signature>
+        <let
+            thumbnails_name="processor.parent.params.name"
+            thumbnail_directory=".app.settings.thumb_dir"
+            thumb_dir="path:dirname:path / thumbnail_directory / thumbnails_name / basename:path" />
+        <str dst="thumb_filename">${slug:basename:path}.${processor.params.name}.${processor.params.version}.${processor.params.format}</str>
+        <let thumb_path="path:thumb_dir / thumb_filename" />
+        <return value="thumb_path"/>
+    </macro>
+
+
     <filter name="thumbnail_url">
-        <get-data-item
+        <doc>
+            Gets the URL to a given thumbnail. Accepts 'processor' name and optional 'app'.
+        </doc>
+
+        <find-element
             tag="processor"
             ns="http://moyaproject.com/thumbnail"
-            from="${from}"
-            dst="p"
+            from="${from or .app.name}"
+            dst="processor"
             let:name="processor"/>
-        <str dst="filename">${processor}.${p.version}.${p.format}</str>
-        <str dst="path">${dirname:value}/${.app.settings.thumb_dir}/${basename:value}/${filename}</str>
+
+        <call macro="#get_thumb_path"
+            let:processor="processor"
+            let:path="value"
+            dst="thumb_path"/>
+
         <return>
-            <get-url name="serve" from="${.app.settings.app_serve}" let:path="path"/>
+            <get-url name="serve" from="${.app.settings.app_serve}" let:path="thumb_path"/>
+        </return>
+    </filter>
+
+
+    <filter name="thumbnail">
+        <doc>Generate (if required) a thumbnail from a path and return the URL. Accepts 'processor' name and optional 'app'.</doc>
+        <return>
+            <tn:render-processor
+                processor="processor"
+                path="value"
+                app="${from or .app.name}"
+                dst="url"/>
         </return>
     </filter>
 
     <tag name="generate" synopsis="generate thumbnails">
-        <doc><![CDATA[
-
-Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].
-
-        ]]></doc>
+        <doc>
+            Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].
+        </doc>
         <signature>
-            <attribute name="thumbnails" required="yes" type="element">
-                A reference to the thumbnail tag
-            </attribute>
-            <attribute name="path" required="yes">
-                Path to the image to the original image
-            </attribute>
-            <attribute name="overwrite" required="no" default="yes" type="boolean">
-                Should existing thumbnails be overwritten?
-            </attribute>
+            <attribute name="thumbnails" type="element">A reference to the thumbnail tag</attribute>
+            <attribute name="path">Path to the image to the original image</attribute>
+            <attribute name="overwrite" required="no" default="yes" type="boolean">Should existing thumbnails be overwritten?</attribute>
         </signature>
 
         <let settings=".app.settings"
             fsname="settings.fs"
-            thumbnail_directory="settings.thumb_dir" />
+            fs=".fs[fsname]"/>
 
-        <let fs=".fs[fsname]" />
-        <let original_image="None" />
+        <image:read fsobj="fs" path="${path}" dst="original_image"/>
 
-        <!-- loop through all the processor -->
+        <!-- loop through all the processors -->
         <for-children element="thumbnails" tag="processor" dst="processor">
-            <!-- build a new path for the thumbs -->
-            <!-- the thumbnail paths can be derived from the original -->
-            <let thumb_dir="path:dirname:path / thumbnail_directory / basename:path" />
-            <str dst="thumb_filename">${processor.params.name}.${processor.params.version}.${processor.params.format}</str>
+            <tn:render-processor
+                processor="processor"
+                app="app"
+                path="path"
+                image="image"
+                overwrite="overwrite"/>
+        </for-children>
+    </tag>
 
-            <!-- Option to skip existing thumbnails -->
-            <if test="not overwrite">
-                <let thumb_path="path:thumb_dir / thumb_filename" />
-                <continue if="thumb_path in fs" />
-            </if>
+    <tag name="render-processor" synopsis="render a thumbnail for a given processor">
+        <signature>
+            <attribute name="processor">Processor element or name of processor</attribute>
+            <attribute name="app" required="no" type="text">Override default app</attribute>
+            <attribute name="path" required="yes">Path of image</attribute>
+            <attribute name="overwrite" required="no" type="boolean" default="no">Overwrite thumbnail if it exists?</attribute>
+            <attribute name="image" required="no">Optional original image (will be loaded automatically if not supplied)</attribute>
+        </signature>
 
+        <let settings=".app.settings"
+            fsname="settings.fs"
+            fs=".fs[fsname]"
+            thumbnail_directory="settings.thumb_dir"
+            oroginal_image="image"/>
+
+        <find-element
+            tag="processor"
+            ns="http://moyaproject.com/thumbnail"
+            from="${app or .app.name}"
+            dst="processor"
+            let:name="processor"
+            if="isstr:processor"/>
+
+        <call macro="#get_thumb_path"
+            let:processor="processor"
+            let:path="path"
+            dst="thumb_path"/>
+
+        <get-url name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
+        <if test="overwrite or thumb_path not in fs">
             <!-- lazy load of the image -->
             <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
-
             <!-- make a copy -->
             <image:copy image="original_image" />
             <!-- call the processor to modify the image in place -->
             <call macro="${processor.element_ref}" let:image="image" />
             <!-- write the thumbnail -->
-            <image:write fsobj="fs" dirpath="${thumb_dir}"
-                filename="${thumb_filename}"
+            <image:write fsobj="fs"
+                dirpath="${dirname:thumb_path}"
+                filename="${basename:thumb_path}"
                 let:quality="processor.params.quality"/>
-        </for-children>
-
+        </if>
+        <return value="url"/>
     </tag>
 
 </moya>

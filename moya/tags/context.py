@@ -2034,6 +2034,44 @@ class While(ContextElementBase):
             yield _defer(self)
 
 
+class Do(ContextElementBase):
+    """Repeat a block of code until a condition becomes true, or a [tag]break[/tag] is reached.
+
+    Not that, unlike [tag]while[/tag] this tag will execute the enclosed block at least once.
+
+    If the [c]until[/c] attribute isn't given, the enclosed block will be executed just once.
+
+    """
+
+    class Help:
+        synopsis = "repeat a block until a condition becomes true"
+        example = """
+
+        <let i="1"/>
+        <do until="i==2">
+            <echo>${i}</echo>
+            <let i="i+1"/>
+        </do>
+        <!-- prints "1" -->
+
+        """
+
+    class Meta:
+        is_loop = True
+
+    until = Attribute("Condition", required=False, type="expression")
+
+    def logic(self, context):
+        if not self.has_parameter('until'):
+            yield DeferNodeContents(self)
+        else:
+            test = self.test
+            while 1:
+                yield DeferNodeContents(self)
+                if test(context):
+                    break
+
+
 class Break(ContextElementBase):
     """This tag will [i]break[/i] a loop such as [tag]while[/tag], [tag]for[/tag]. When Moya encounters this tag, it jumps to the statement after the loop."""
 

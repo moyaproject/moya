@@ -3,9 +3,18 @@ from ..interface import AttributeExposer
 
 
 class ElementProxy(AttributeExposer):
-    __moya_exposed_attributes__ = ["app", "tag", "params", "attributes", "element_ref", "tag_name", "tag_xmlns", "tag_type"]
+    __moya_exposed_attributes__ = ["app",
+                                   "tag",
+                                   "params",
+                                   "attributes",
+                                   "element_ref",
+                                   "tag_name",
+                                   "tag_xmlns",
+                                   "tag_type",
+                                   "parent"]
 
     def __init__(self, context, app, element):
+        self._context = context
         self.app = app
         self.tag = element
         self.attributes = element.get_all_parameters(context)
@@ -17,6 +26,12 @@ class ElementProxy(AttributeExposer):
     @property
     def params(self):
         return self.attributes
+
+    @property
+    def parent(self):
+        if not self.tag.parent:
+            return None
+        return ElementProxy(self._context, self.app, self.tag.parent)
 
     def __moyaelement__(self):
         return self.tag
@@ -42,7 +57,8 @@ class DataElementProxy(AttributeExposer):
                                    "tag_name",
                                    "tag_xmlns",
                                    "tag_type",
-                                   "data"]
+                                   "data",
+                                   "parent"]
 
     def __init__(self, context, app, element, data):
         self.app = app
