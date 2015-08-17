@@ -1,5 +1,5 @@
 include *.py *.xml *.png *.jpg *.ini *.css *.js *.pot *.mo *.po *.json *.txt moya *.ico
-recursive-include moya
+recursive-include moya *
 recursive-exclude moya/docs *
 recursive-exclude moya/benchmark *
 recursive-exclude moya/scratch *
@@ -7,4 +7,5 @@ recursive-exclude production *
 recursive-exclude moya/testproject *
 recursive-exclude "example projects" *
 recursive-exclude tutorial *
+recursive-exclude moya *.sqlite
 
