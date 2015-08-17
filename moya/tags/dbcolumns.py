@@ -304,7 +304,7 @@ class ForeignKeyColumn(MoyaDBColumn):
         def lazy_relationship(app, model):
             if self.backref:
                 _backref = backref(self.backref,
-                                   uselist=True,
+                                   uselist=self.uselist,
                                    #lazy="subquery",
                                    collection_class=self.backref_collection)
             else:

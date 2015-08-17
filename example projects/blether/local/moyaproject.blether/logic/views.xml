@@ -11,6 +11,7 @@
             <db:create model="#Blether" let:text="form.data.text" let:timeline=".user.timeline" />
             <forms:get form="#form.new-blether" dst="form" blank="yes"/>
         </forms:validate>
+        <breakpoint />
         <db:query model="#Blether" dst="blethers" orderby="-posted_time"
             filter="#Blether.timeline.id in .user.timeline.following or #Blether.timeline == .user.timeline" />
     </view>
