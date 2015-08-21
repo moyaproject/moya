@@ -19,7 +19,7 @@ class PyFilter(object):
     def __repr__(self):
         return "<pyfilter '{}'>".format(self.callable.func_name)
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         return self.callable(value)
 
 

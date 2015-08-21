@@ -52,7 +52,7 @@ class Timezone(object):
     def __repr__(self):
         return '<timezone "{}">'.format(self.tz.zone)
 
-    def __moyafilter__(self, context, dt, **params):
+    def __moyafilter__(self, context, dt, params):
         if isinstance(dt, string_types):
             dt = ExpressionDateTime.from_isoformat(dt)
         return self(dt)

@@ -22,7 +22,7 @@ from collections import defaultdict
 
 class _LocationFilter(MoyaFilterBase):
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         tag_index = params['index']
         next_tag = None
         prev_tag = None

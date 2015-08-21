@@ -733,7 +733,7 @@ class BBCode(object):
     def __repr__(self):
         return "<bbcode parser>"
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         data = {'context': context,
                 'docs': context.get('.docs', {}),
                 'urls': context.get('.urls', {})}

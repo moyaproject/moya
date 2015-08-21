@@ -333,7 +333,7 @@ class HTMLFormatter(Formatter):
 
 
 class SyntaxFilter(MoyaFilterBase):
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         lang = params.pop('lang', None)
         value = dedent(remove_padding(text_type(value.strip('\n'))))
         code = highlight(lang, value, line_numbers=False)

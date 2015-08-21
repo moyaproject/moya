@@ -230,6 +230,18 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def any(self, context, v):
         return any(bool(i) for i in v)
 
+    def app(self, context, v):
+        if not isinstance(v, text_type):
+            app = getattr(v, 'name', None)
+        elif '.' in v:
+            archive = context['.app.archive']
+            app = archive.get_app_from_lib_default(v)
+            if app is not None:
+                app = app.name
+        else:
+            app = v
+        return app
+
     def basename(self, context, v):
         return basename(v)
 

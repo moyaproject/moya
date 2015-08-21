@@ -54,12 +54,13 @@ The code inside the processor transforms that image. The new image is then writt
         <doc>Get the path to a thumbnail</doc>
         <signature>
             <argument name="path"/>
+            <argument name="app"/>
             <argument name="processor"/>
         </signature>
         <let
             thumbnails_name="processor.parent.params.name"
             thumbnail_directory=".app.settings.thumb_dir"
-            thumb_dir="path:dirname:path / thumbnail_directory / thumbnails_name / basename:path" />
+            thumb_dir="path:dirname:path / thumbnail_directory / app / basename:path" />
         <str dst="thumb_filename">${slug:basename:path}.${processor.params.name}.${processor.params.version}.${processor.params.format}</str>
         <let thumb_path="path:thumb_dir / thumb_filename" />
         <return value="thumb_path"/>
@@ -71,16 +72,18 @@ The code inside the processor transforms that image. The new image is then writt
             Gets the URL to a given thumbnail. Accepts 'processor' name and optional 'app'.
         </doc>
 
+        <let app_name="app or _caller_app.name"/>
         <find-element
             tag="processor"
             ns="http://moyaproject.com/thumbnail"
-            from="${from or .app.name}"
+            from="app_name"
             dst="processor"
             let:name="processor"/>
 
         <call macro="#get_thumb_path"
             let:processor="processor"
             let:path="value"
+            let:app="app_name"
             dst="thumb_path"/>
 
         <return>
@@ -95,7 +98,7 @@ The code inside the processor transforms that image. The new image is then writt
             <tn:render-processor
                 processor="processor"
                 path="value"
-                app="${_caller_app.name or .app.name}"
+                app="app or _caller_app.name"
                 dst="url"/>
         </return>
     </filter>
@@ -130,7 +133,7 @@ The code inside the processor transforms that image. The new image is then writt
     <tag name="render-processor" synopsis="render a thumbnail for a given processor">
         <signature>
             <attribute name="processor">Processor element or name of processor</attribute>
-            <attribute name="app" required="no" type="text">Override default app</attribute>
+            <attribute name="app" required="yes">Application name</attribute>
             <attribute name="path" required="yes">Path of image</attribute>
             <attribute name="overwrite" required="no" type="boolean" default="no">Overwrite thumbnail if it exists?</attribute>
             <attribute name="image" required="no">Optional original image (will be loaded automatically if not supplied)</attribute>
@@ -158,6 +161,7 @@ The code inside the processor transforms that image. The new image is then writt
         <call macro="#get_thumb_path"
             let:processor="processor"
             let:path="path"
+            let:app="app"
             dst="thumb_path"/>
 
         <get-url name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>

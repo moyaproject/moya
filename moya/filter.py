@@ -17,7 +17,7 @@ class MoyaFilterBase(object):
     def __moyabind__(self, app):
         return BoundFilter(app, self)
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         if not self.allow_missing and is_missing(value):
             raise ValueError("{} doesn't accept a missing value (left hand side is {!r})".format(self, value))
         params[self.get_value_name()] = value
@@ -41,9 +41,9 @@ class BoundFilter(MoyaFilterBase):
     def __repr__(self):
         return "{!r} from '{}'".format(self._filter, self._app.name)
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         params['_caller_app'] = app
-        return self._filter.__moyafilter__(context, self._app, value, **params)
+        return self._filter.__moyafilter__(context, self._app, value, params)
 
 
 class MoyaFilter(MoyaFilterBase):
@@ -64,11 +64,11 @@ class MoyaFilterExpression(MoyaFilterBase):
     def __repr__(self):
         return "<filter '{}'>".format(text_type(self.exp))
 
-    def __moyafilter__(self, context, app, value, **params):
+    def __moyafilter__(self, context, app, value, params):
         if is_missing(value):
             return value
         params[self.get_value_name()] = value
-        return self.exp(context, **params)
+        return self.exp(context, params)
 
     def __moyacall__(self, params):
         return MoyaFilterParams(self, params)
@@ -82,5 +82,5 @@ class MoyaFilterParams(object):
     def __repr__(self):
         return repr(self.filter)
 
-    def __moyafilter__(self, context, app, value, **params):
-        return self.filter.__moyafilter__(context, app, value, **self.params)
+    def __moyafilter__(self, context, app, value, params):
+        return self.filter.__moyafilter__(context, app, value, self.params)
