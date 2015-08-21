@@ -70,7 +70,7 @@
                 <defer to="adapt_null" />
 
 
-                <case if="column.type == 'string'" />
+                <case if="column.type in ['string', 'uuid']" />
                 <if test="column.choices">
                     <get-element name="${column.choices}" from="${model.app.name}" dst="choices_element" />
 

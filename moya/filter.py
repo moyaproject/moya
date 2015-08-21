@@ -30,8 +30,8 @@ class MoyaFilterBase(object):
 
 
 class BoundFilter(MoyaFilterBase):
-    def __init__(self, app, _filter):
-        self.app = app
+    def __init__(self, _app, _filter):
+        self._app = _app
         self._filter = _filter
         super(BoundFilter, self).__init__()
 
@@ -39,10 +39,11 @@ class BoundFilter(MoyaFilterBase):
         return self._filter.get_value_name()
 
     def __repr__(self):
-        return "{!r} from '{}'".format(self._filter, self.app.name)
+        return "{!r} from '{}'".format(self._filter, self._app.name)
 
     def __moyafilter__(self, context, app, value, **params):
-        return self._filter.__moyafilter__(context, self.app, value, **params)
+        params['_caller_app'] = app
+        return self._filter.__moyafilter__(context, self._app, value, **params)
 
 
 class MoyaFilter(MoyaFilterBase):

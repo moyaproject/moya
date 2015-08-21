@@ -95,7 +95,7 @@ The code inside the processor transforms that image. The new image is then writt
             <tn:render-processor
                 processor="processor"
                 path="value"
-                app="${from or .app.name}"
+                app="${_caller_app.name or .app.name}"
                 dst="url"/>
         </return>
     </filter>
@@ -140,15 +140,20 @@ The code inside the processor transforms that image. The new image is then writt
             fsname="settings.fs"
             fs=".fs[fsname]"
             thumbnail_directory="settings.thumb_dir"
-            oroginal_image="image"/>
+            original_image="image"/>
 
-        <find-element
-            tag="processor"
-            ns="http://moyaproject.com/thumbnail"
-            from="${app or .app.name}"
-            dst="processor"
-            let:name="processor"
-            if="isstr:processor"/>
+        <if test="isstr:processor">
+            <let processor_name="processor"/>
+            <find-element
+                tag="processor"
+                ns="http://moyaproject.com/thumbnail"
+                from="${app or .app.name}"
+                dst="processor"
+                let:name="processor_name"/>
+            <throw exception="moya.thumbnail.no-processor"
+                msg="processor '${processor_name}' not found in app ${debug:(app or .app.name)}"
+                if="not processor"/>
+        </if>
 
         <call macro="#get_thumb_path"
             let:processor="processor"
