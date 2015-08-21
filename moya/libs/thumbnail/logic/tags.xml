@@ -94,13 +94,17 @@ The code inside the processor transforms that image. The new image is then writt
 
     <filter name="thumbnail">
         <doc>Generate (if required) a thumbnail from a path and return the URL. Accepts 'processor' name and optional 'app'.</doc>
-        <return>
-            <tn:render-processor
-                processor="processor"
-                path="value"
-                app="app or _caller_app.name"
-                dst="url"/>
-        </return>
+
+        <tn:render-processor
+            processor="processor"
+            path="value"
+            app="app or _caller_app.name"
+            dst="url"/>
+        <catch exception="*">
+            <return value="None"/>
+        </catch>
+
+        <return value="url"/>
     </filter>
 
     <tag name="generate" synopsis="generate thumbnails">

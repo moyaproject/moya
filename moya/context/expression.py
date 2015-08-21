@@ -343,6 +343,8 @@ class EvalBraceOp(Evaluator):
             if brace == '[':
                 if getattr(index, 'moya_missing', False):
                     raise ValueError("unable to look up missing index {!r}".format(index))
+                if hasattr(obj, '__moyacontext__'):
+                    obj = obj.__moyacontext__(context)
                 try:
                     if hasattr(obj, '__getitem__'):
                         obj = obj[index]
@@ -351,7 +353,6 @@ class EvalBraceOp(Evaluator):
                 except Exception:
                     obj = Missing(text_type(index))
             else:
-
                 if isinstance(obj, text_type) and '.filters' in context:
                     obj = context['.filters'].lookup(context.get('.app', None), obj)
 

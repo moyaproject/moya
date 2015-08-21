@@ -1422,7 +1422,7 @@ class _Datetime(FieldElement):
 
     def get_default(self, context):
         if self.auto(context):
-            return lambda: dbobject(ExpressionDateTime.utcnow())
+            return lambda: ExpressionDateTime.utcnow()
 
 
 class _Date(FieldElement):
@@ -1436,7 +1436,7 @@ class _Date(FieldElement):
 
     def get_default(self, context):
         if self.auto(context):
-            return lambda: dbobject(ExpressionDateTime.utcnow().date)
+            return lambda: ExpressionDateTime.utcnow().date
 
 
 # TODO: document

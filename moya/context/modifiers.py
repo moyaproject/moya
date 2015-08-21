@@ -337,6 +337,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def datetime(self, context, v):
         if not v:
             return None
+        if isinstance(v, ExpressionDateTime):
+            return v
         return ExpressionDateTime.from_isoformat(v)
 
     def debug(self, context, v):
