@@ -53,6 +53,7 @@
             <attribute name="query" required="no"/>
             <attribute name="class" required="no" type="text" />
             <attribute name="icon" required="no" type="text"/>
+            <attribute name="target" required="no" type="text"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>
