@@ -240,7 +240,6 @@
 
 
 			    <case if="column.type=='datetime'"/>
-                <breakpoint />
 				<forms:input template="/moya.admin/datetimeinput.html"
                     class="datetime" label="${str:column.label or column.name|'label'}" name="${column.name}"
                     help="${str:column.help}" initial="object[column.name]['isoformat'] or None"

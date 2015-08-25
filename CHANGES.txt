@@ -10,6 +10,8 @@ Added a blog-link tag to widgets
 Added {db}get-defaults to get mapping of defaults for a model
 Implemented strict checks, enabled with [project]/strict setting or runserver --strict
 Added <do> tag
+Enabled use of 'wsgi.file_wrapper' for optimized static file transfers
+Added a __main__.py so "python -m moya" works
 
 0.5.17
 ------
