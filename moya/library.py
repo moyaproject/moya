@@ -182,7 +182,7 @@ class Library(object):
             if recurse:
                 files = sorted(fs.walkfiles(wildcard=wildcard))
             else:
-                files = sorted(fs.listdir(wildcard=wildcard))
+                files = sorted(fs.listdir(wildcard=wildcard, files_only=True))
         else:
             files = sorted(files)
 
