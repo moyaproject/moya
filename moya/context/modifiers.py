@@ -614,7 +614,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
             raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
         return sorted(seq, lambda value: obj_index(value, key), reverse=True)
 
-
     def round(self, context, v):
         try:
             n, r = v
