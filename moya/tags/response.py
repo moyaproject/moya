@@ -135,7 +135,7 @@ class ServeJSON(LogicElement):
 
     def logic(self, context):
         if self.has_parameter('obj'):
-            obj = self.obj(context, context)
+            obj = self.obj(context)
             json_obj = json.dumps(obj, indent=self.indent(context))
         else:
             json_obj = context.sub(self.text)

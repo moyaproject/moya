@@ -1136,6 +1136,7 @@ class AttribNode(Node):
     """Renders a sequence of html attributes from a mapping expression"""
     tag_name = "attrib"
     auto_close = True
+    _prefix = ""
 
     def on_create(self, environment, parser):
         self.attribs_expression = parser.expect_expression()
@@ -1155,7 +1156,18 @@ class AttribNode(Node):
                 attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
         if not attribs_text:
             return ""
-        return " " + " ".join(attribs_text)
+        if self._prefix:
+            prefix = self._prefix
+            return " " + " ".join(prefix + t for t in attribs_text)
+        else:
+            return " " + " ".join(attribs_text)
+
+
+class DataAttribNode(AttribNode):
+    """Renders a sequence of html data attributes from a mapping expression"""
+    tag_name = "dataattrib"
+    auto_close = True
+    _prefix = "data-"
 
 
 class URLEncodeNode(Node):

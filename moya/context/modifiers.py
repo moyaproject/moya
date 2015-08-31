@@ -712,6 +712,23 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def time(self, context, v):
         return ExpressionTime.from_isoformat(v)
 
+    def trim(self, context, v):
+        try:
+            v, maxlength = v
+        except:
+            raise ValueError('trim: requires a collection of [<string>, <max length]')
+
+        s = text_type(v)
+
+        try:
+            maxlength = int(maxlength)
+        except:
+            maxlength = None
+
+        if maxlength is None:
+            return v
+        return s[:maxlength]
+
     def ctime(self, context, v):
         return ExpressionDateTime.from_ctime(v)
 

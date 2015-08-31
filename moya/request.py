@@ -81,6 +81,7 @@ class MoyaRequest(Request, AttributeExposer):
         'application_url',
         'authorization',
         'body',
+        'body_file',
         'cache_control',
         'charset',
         'client_addr',
