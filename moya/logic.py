@@ -13,7 +13,7 @@ from . import trace
 
 import sys
 import logging
-from threading import RLock
+from threading import Lock
 from operator import truth
 
 try:
@@ -24,7 +24,7 @@ except ImportError:
 
 log = logging.getLogger('moya.runtime')
 
-debug_lock = RLock()
+debug_lock = Lock()
 
 if sys.platform == 'darwin':
     try:

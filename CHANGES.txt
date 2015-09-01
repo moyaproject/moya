@@ -14,6 +14,7 @@ Enabled use of 'wsgi.file_wrapper' for optimized static file transfers
 Added a __main__.py so "python -m moya" works
 Added {% data-attrib %} template node
 Used watchdog module for autoreload (to support Mac)
+Implemented notification on Mac
 
 0.5.17
 ------
