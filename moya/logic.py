@@ -26,21 +26,36 @@ log = logging.getLogger('moya.runtime')
 
 debug_lock = RLock()
 
+if sys.platform == 'darwin':
+    try:
+        import pync
+    except ImportError:
+        def notify(title, message):
+            pass
+    else:
+        def notify(title, message):
+            try:
+                pync.Notifier.notify(message, title=title)
+            except:
+                pass
+else:
 
-def notify(title, message):
-    """Show a notification message if notify2 is available"""
     try:
         import notify2
     except ImportError:
-        return
-    try:
-        if not notify2.is_initted():
-            notify2.init("moya")
-        n = notify2.Notification(title, message, "dialog-information")
-        n.show()
-    except:
-        # Notifications are low priority, don't want to risk breaking the server
-        pass
+        def notify(title, message):
+            pass
+    else:
+        def notify(title, message):
+            """Show a notification message if notify2 is available"""
+            try:
+                if not notify2.is_initted():
+                    notify2.init("moya")
+                n = notify2.Notification(title, message, "dialog-information")
+                n.show()
+            except:
+                # Notifications are low priority, don't want to risk breaking the server
+                pass
 
 
 def _breakpoint_notify(node, suppressed=False):

@@ -5,6 +5,7 @@
       xmlns:forms="http://moyaproject.com/forms">
 
     <view libname="view.front" content="#content.front">
+        <breakpoint/>
         <done if="not .user"/>
         <forms:get form="#form.new-blether" dst="form"/>
         <forms:validate src="form">
