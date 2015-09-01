@@ -69,10 +69,15 @@ class Runserver(SubCommand):
                                       strict=self.args.strict)
         application.preflight()
 
-        server = make_server(args.host,
-                             int(args.port),
-                             application,
-                             handler_class=RequestHandler)
+        try:
+            server = make_server(args.host,
+                                 int(args.port),
+                                 application,
+                                 handler_class=RequestHandler)
+        except IOError as e:
+            if e.errno == 98:
+                log.error("couldn't run moya server, another process may be running on port %s", args.port)
+            raise
 
         if self.args.slow:
             log.info('network latency simulation is enabled')

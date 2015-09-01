@@ -58,7 +58,8 @@ setup(name='moya',
                         'requests',
                         'lxml',
                         'colorama',
-                        'premailer'],
+                        'premailer',
+                        'watchdog'],
       extras_require={
           ':sys_platform=="linux2" or sys_platform=="linux3"': ["pyinotify"],
           'dev': ['notify2']

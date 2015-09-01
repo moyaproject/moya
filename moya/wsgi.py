@@ -24,10 +24,8 @@ from webob import Response
 
 from fs.path import splitext
 from fs.opener import fsopendir
-from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
 from fs.errors import FSError
 
-import sys
 import random
 from time import time, clock, sleep
 from threading import RLock
@@ -45,44 +43,114 @@ preflight_log = logging.getLogger("moya.preflight")
 
 #import moya.debugprint
 
-class ReloadChangeWatcher(object):
+# class ReloadChangeWatcher(object):
 
-    def __init__(self, watch_fs, app):
-        self._app = weakref.ref(app)
-        self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
-        self.watching_fs = watch_fs
-        watch_location = watch_fs.desc('/')
-        self.is_win = sys.platform.startswith('win')
-        try:
-            self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
-        except:
-            startup_log.exception('failed to watch "{}" for changes'.format(watch_location))
-            if not self.is_win:
-                startup_log.debug("have you installed 'pyinotify'?")
-        else:
-            startup_log.debug('watching "{}" for changes'.format(watch_location))
+#     def __init__(self, watch_fs, app):
+#         self._app = weakref.ref(app)
+#         self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
+#         self.watching_fs = watch_fs
+#         watch_location = watch_fs.desc('/')
+#         self.is_win = sys.platform.startswith('win')
+#         try:
+#             self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
+#         except UnsupportedError:
+#             startup_log.warning('auto reload is not supported on this platform')
+#         except:
+#             startup_log.exception('failed to watch "{}" for changes'.format(watch_location))
+#             if not self.is_win:
+#                 startup_log.debug("have you installed 'pyinotify'?")
+#         else:
+#             startup_log.debug('watching "{}" for changes'.format(watch_location))
 
-    @property
-    def app(self):
-        return self._app()
+#     @property
+#     def app(self):
+#         return self._app()
 
-    def close(self):
-        self.watching_fs.close()
+#     def close(self):
+#         self.watching_fs.close()
 
-    def on_change(self, event):
-        if self.app is None or not hasattr(self.app, 'archive'):
-            return
-        ext = splitext(event.path)[1].lower()
-        if ext not in self.watch_types:
-            return
+#     def on_change(self, event):
+#         if self.app is None or not hasattr(self.app, 'archive'):
+#             return
+#         ext = splitext(event.path)[1].lower()
+#         if ext not in self.watch_types:
+#             return
 
-        if not self.is_win:
-            if isinstance(event, MODIFIED) and not event.closed:
+#         if not self.is_win:
+#             if isinstance(event, MODIFIED) and not event.closed:
+#                 return
+
+#         if not self.app.rebuild_required:
+#             log.info("detected modification to project, rebuild will occur on next request")
+#         self.app.rebuild_required = True
+
+
+try:
+    import watchdog
+    import watchdog.events
+    import watchdog.observers
+except ImportError:
+    watchdog = None
+
+
+if watchdog:
+
+    class ReloadChangeWatcher(watchdog.events.FileSystemEventHandler):
+
+        def __init__(self, watch_fs, app):
+            self._app = weakref.ref(app)
+            self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
+            self.watching_fs = watch_fs
+            self.observer = None
+            try:
+                path = self.watching_fs.getsyspath('/')
+            except FSError:
+                startup_log.warning('auto reload not available on this filesystem')
+            else:
+                try:
+                    observer = watchdog.observers.Observer()
+                    observer.schedule(self, path, recursive=True)
+                    observer.start()
+                    self.observer = observer
+                except:
+                    startup_log.exception('failed to watch "{}" for changes'.format(path))
+                else:
+                    startup_log.debug('watching "{}" for changes'.format(path))
+
+            super(ReloadChangeWatcher, self).__init__()
+
+        def on_any_event(self, event):
+            ext = splitext(event.src_path)[1].lower()
+            if ext not in self.watch_types:
                 return
 
-        if not self.app.rebuild_required:
-            log.info("detected modification to project, rebuild will occur on next request")
-        self.app.rebuild_required = True
+            if not self.app.rebuild_required:
+                log.info("detected modification to project, rebuild will occur on next request")
+                self.app.rebuild_required = True
+
+        @property
+        def app(self):
+            return self._app()
+
+        def close(self):
+            if self.observer is not None:
+                try:
+                    self.observer.stop()
+                    # No need to join since we are exiting the process
+                    # self.observer.join()
+                except:
+                    pass
+            self.watching_fs.close()
+
+else:
+
+    class ReloadChangeWatcher(object):
+        def __init__(self, watch_fs, app):
+            startup_log.warning("'watchdog' module could not be imported, autoreload is disabled")
+            startup_log.warning("you might be able to fix this with 'pip install watchdog'")
+
+        def close(self):
+            pass
 
 
 class WSGIApplication(object):
@@ -126,7 +194,7 @@ class WSGIApplication(object):
             try:
                 location = self.archive.project_fs.getsyspath('/')
             except FSError:
-                log.warning('project filesystem has no syspath, disabling autorealod')
+                log.warning('project filesystem has no syspath, disabling autoreload')
             else:
                 watch_location = os.path.join(location, self.archive.cfg.get('autoreload', 'location', ''))
                 self.watcher = ReloadChangeWatcher(fsopendir(watch_location), self)
