@@ -386,7 +386,7 @@ class WSGIApplication(object):
                  start_response):
         """Build the request"""
 
-        if not is_debugging() and self.rebuild_required:
+        if self.rebuild_required and not is_debugging():
             with debug_lock:
                 self.do_rebuild()
 
