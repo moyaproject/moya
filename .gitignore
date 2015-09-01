@@ -10,3 +10,4 @@
 .eggs
 .tox
 build/
+.DS_Store

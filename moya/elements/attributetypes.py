@@ -164,10 +164,11 @@ class Number(AttributeType):
 
     @classmethod
     def check(cls, value):
-        try:
-            float(value)
-        except:
-            return 'expected a number, not {}'.foramt(value)
+        if '${' not in value:
+            try:
+                float(value)
+            except:
+                return 'expected a number, not {}'.format(value)
 
 
 class Integer(AttributeType):
@@ -186,10 +187,11 @@ class Integer(AttributeType):
 
     @classmethod
     def check(cls, value):
-        try:
-            int(float(value))
-        except:
-            return 'expected an integer, not {}'.foramt(value)
+        if '${' not in value:
+            try:
+                int(float(value))
+            except:
+                return 'expected an integer, not {}'.format(value)
 
 
 class Index(AttributeType):
@@ -384,12 +386,13 @@ class TimeSpanAttribute(AttributeType):
 
     @classmethod
     def check(self, value):
-        try:
-            TimeSpan(value)
-        except Exception as e:
-            return text_type(e)
-        else:
-            return None
+        if '${' not in value:
+            try:
+                TimeSpan(value)
+            except Exception as e:
+                return text_type(e)
+            else:
+                return None
 
 
 class CommaList(AttributeType):
