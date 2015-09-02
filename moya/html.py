@@ -9,6 +9,7 @@ import unicodedata
 
 _re_html = re.compile(r'<.*?>|\&.*?\;', re.UNICODE | re.DOTALL)
 _re_link = re.compile(r'((?:http://|https://|mailto:)[\@\w\.\/]+)', re.UNICODE)
+_re_spaceless = re.compile(r'>\s+<')
 
 
 def escape(text):
@@ -27,6 +28,11 @@ def textilize(s):
     """Remove markup from html"""
     s = s.replace("<p>", " ").replace('&nbsp;', ' ')
     return _re_html.sub("", s)
+
+
+def spaceless(s, _re=_re_spaceless):
+    """Remove spaces between tags"""
+    return _re.sub("><", s)
 
 
 def summarize(s, max_size=100):
@@ -83,6 +89,9 @@ def linkify(text):
 
 
 if __name__ == "__main__":
+
+    print(spaceless("<b>   <i>   aasd </i>   </b>"))
+
     print(escape("10 > 5 < 8 & foo"))
 
     print(summarize('Hello <a href="#">test</a> werwer'))

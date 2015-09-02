@@ -15,6 +15,7 @@ Added a __main__.py so "python -m moya" works
 Added {% data-attrib %} template node
 Used watchdog module for autoreload (to support Mac)
 Implemented notification on Mac
+Added {% spaceless %} template tag
 
 0.5.17
 ------

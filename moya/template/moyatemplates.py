@@ -8,7 +8,7 @@ from ..context.errors import SubstitutionError
 from ..markup import Markup
 from ..template.enginebase import TemplateEngine
 from ..template.errors import MissingTemplateError, BadTemplateError
-from ..html import escape
+from ..html import escape, spaceless
 from ..template import errors
 from ..errors import AppError, MarkupError
 from ..render import render_object
@@ -1247,6 +1247,15 @@ class SingleLineNode(Node):
     def render(self, environment, context, template, text_escape):
         text = template.render_nodes(self.children, environment, context, text_escape)
         return ''.join(text.splitlines())
+
+
+class SpacelessNode(Node):
+    """Remove whitespace between tags."""
+    tag_name = "spaceless"
+
+    def render(self, environment, context, template, text_escape):
+        text = template.render_nodes(self.children, environment, context, text_escape)
+        return spaceless(text)
 
 
 class VerbatimNode(Node):
