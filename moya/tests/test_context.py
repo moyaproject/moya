@@ -188,6 +188,18 @@ class TestContext(unittest.TestCase):
         c['word2'] = c['word']
         c['lt'] = "less than"
 
+        class ChoiceTest(object):
+            def __init__(self):
+                self.choices = []
+
+        c['choicetest'] = ChoiceTest()
+
+        class Obj(object):
+            def __init__(self, id):
+                self.id = id
+
+        c['objects'] = [Obj(1), Obj(2), Obj(3)]
+
         tests = [('1', 1),
                  ('123', 123),
                  ('"1"', "1"),
@@ -309,7 +321,21 @@ class TestContext(unittest.TestCase):
                  ("d:'5'", 5),
                  ("d:'5' + 1", 6),
                  ("d:'5' + d:'1'", 6),
-                 ('debug:d:5', "d:'5'")
+                 ('debug:d:5', "d:'5'"),
+                 ('filesize:1024', '1.0kB'),
+                 ('abs:-3.14', 3.14),
+                 ('basename:"/foo/bar/baz"', "baz"),
+                 ('bool:""', False),
+                 ('capitalize:"hello"', 'Hello'),
+                 ('ceil:3.14', 4),
+                 ('choices:choicetest', []),
+                 ('chain:[[1, 2], [3, 4]]', [1, 2, 3, 4]),
+                 ('chr:65', 'A'),
+                 ("collect:[['hello', 'world'], 0]", ['h', 'w']),
+                 ("sorted:items:collectmap:[['hello', 'world'], 0]", [('h', 'hello'), ('w', 'world')]),
+                 ("collectids:objects", [1, 2, 3]),
+                 ("commalist:['hello', 'world']", "hello,world"),
+                 ("commaspacelist:['hello', 'world']", "hello, world"),
                  ]
 
         for expression, result in tests:
