@@ -1151,7 +1151,7 @@ class AttribNode(Node):
             if is_missing(v) or v is None:
                 continue
             if isinstance(v, list):
-                v = " ".join(item for item in v if item)
+                v = " ".join(text_type(item) for item in v if item)
             if v:
                 attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
         if not attribs_text:
