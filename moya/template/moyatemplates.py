@@ -1205,7 +1205,10 @@ class IncludeNode(Node):
         app = self.from_expression.eval(context) or self.get_app(context)
         if environment.archive is not None:
             path = environment.archive.resolve_template_path(path, app)
-        template = environment.get_template(path)
+        try:
+            template = environment.get_template(path)
+        except MissingTemplateError as e:
+            self.render_error('unable to include missing template "{}"'.format(e.path))
         return template.render(context, environment)
 
 
