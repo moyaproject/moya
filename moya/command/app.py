@@ -161,11 +161,15 @@ To list all available commands for a given application, omit the libname:
         except IOError:
             self.moyarc = settings.SettingsContainer()
 
-        if len(sys.argv) > 1 and sys.argv[1].count('#') == 1:
-            return self.project_invoke(sys.argv[1])
+        encoding = sys.stdin.encoding
+        argv = [(v.decode(encoding) if not isinstance(v, text_type) else v)
+                for v in sys.argv]
 
-        if len(sys.argv) > 1 and sys.argv[1] in SUBCOMMANDS:
-            importlib.import_module('.' + sys.argv[1], 'moya.command.sub')
+        if len(argv) > 1 and argv[1].count('#') == 1:
+            return self.project_invoke(argv[1])
+
+        if len(argv) > 1 and argv[1] in SUBCOMMANDS:
+            importlib.import_module('.' + argv[1], 'moya.command.sub')
         else:
             for name in SUBCOMMANDS:
                 importlib.import_module('.' + name, 'moya.command.sub')
@@ -173,10 +177,8 @@ To list all available commands for a given application, omit the libname:
         self.make_subcommands()
 
         parser = self.get_argparse()
-        argv = [(v.decode(sys.getdefaultencoding()) if not isinstance(v, text_type) else v)
-                for v in sys.argv[1:]]
 
-        self.args = parser.parse_args(argv)
+        self.args = parser.parse_args(argv[1:])
 
         if self.args.subcommand is None:
             parser.print_usage()
