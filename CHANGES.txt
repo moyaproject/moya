@@ -1,3 +1,8 @@
+0.5.19
+------
+
+Required version 1.3 of babel, because 2.0 breaks on Windows
+
 0.5.18
 ------
 

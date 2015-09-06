@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.19a1"
+VERSION = "0.5.20a1"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -48,7 +48,7 @@ setup(name='moya',
                         'pygments',
                         'fs >= 0.5.1',
                         'iso8601',
-                        'babel',
+                        'babel==1.3',
                         'postmarkup',
                         'polib',
                         'pillow',
