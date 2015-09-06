@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import print_function
 
 from lxml import etree
 element_fromstring = etree.fromstring
@@ -89,7 +90,8 @@ class Parser(object):
         try:
             root = etree.parse(io.BytesIO(self.xml), parser).getroot()
         except Exception as e:
-            raise errors.ParseError(text_type(e),
+            error = getattr(e, 'msg', None) or text_type(e)
+            raise errors.ParseError("XML failed to parse ({})".format(error),
                                     path=location,
                                     position=getattr(e, 'position', (1, 1)),
                                     code=xml)

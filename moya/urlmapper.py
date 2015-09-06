@@ -98,7 +98,11 @@ class URLProxy(object):
             return obj[name]
         if name not in obj.named_routes:
             raise KeyError(name)
-        return URLProxy(self.mapper, self.path + [name])
+        proxy = URLProxy(self.mapper, self.path + [name])
+        obj = proxy.evaluate()
+        if isinstance(obj, text_type):
+            return obj
+        return proxy
 
     def __moyacall__(self, params):
         self.bound = params
