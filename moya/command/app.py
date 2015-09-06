@@ -285,8 +285,13 @@ To list all available commands for a given application, omit the libname:
 
         try:
             app, command_element = archive.get_app_element(element_ref)
+        except errors.UnknownAppError:
+            appname = element_ref.partition('#')[0]
+            self.error("No app called '{}' -- try 'moya apps' to list available applications".format(appname))
+            return -1
         except ElementNotFoundError:
-            self.error("Command '%s' not found" % element_ref)
+            appname = element_ref.partition('#')[0]
+            self.error("Command '{}' not found -- try 'moya {}#' to list available commands ".format(element_ref, appname))
             return -1
         synopsis = command_element.synopsis(context)
 
