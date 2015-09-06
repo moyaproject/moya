@@ -13,6 +13,7 @@ from .console import Cell
 from .elements.help import help
 from . import namespaces
 from .tools import extract_namespace
+from .compat import text_type
 
 
 def winpdb():
@@ -170,7 +171,8 @@ class MoyaCmdDebugger(Cmd):
         Cmd.__init__(self)
 
     def default(self, line):
-        line = line.decode(sys.stdin.encoding)
+        if not isinstance(line, text_type):
+            line = line.decode(sys.stdin.encoding)
         self.usercmd = line
         global _previous_command
         _previous_command = line
