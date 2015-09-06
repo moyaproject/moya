@@ -269,7 +269,7 @@ To list all available commands for a given application, omit the libname:
             try:
                 app = archive.find_app(app_name)
             except errors.UnknownAppError:
-                self.error("No app installed in the project with the name '%s'" % app_name)
+                self.error("No app called '%s' -- try 'moya apps'" % app_name)
                 return -1
             commands = []
             for element in app.lib.get_elements_by_type('command'):
