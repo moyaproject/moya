@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.21a1"
+VERSION = "0.5.22a1"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -46,7 +46,7 @@ setup(name='moya',
                         'sqlalchemy',
                         'pytz',
                         'pygments',
-                        'fs >= 0.5.1',
+                        'fs >= 0.5.3',
                         'iso8601',
                         'babel==1.3',
                         'postmarkup',
