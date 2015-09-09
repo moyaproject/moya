@@ -685,6 +685,8 @@ class DBModel(DBElement):
         event.listen(table_class, 'after_insert', make_listener('db.post-insert'))
         event.listen(table_class, 'before_update', make_listener('db.pre-update'))
         event.listen(table_class, 'after_update', make_listener('db.post-update'))
+        event.listen(table_class, 'before_delete', make_listener('db.pre-delete'))
+        event.listen(table_class, 'after_delete', make_listener('db.post-delete'))
 
     def create_all(self, archive, engine, app):
         self.metadata.create_all(engine.engine)

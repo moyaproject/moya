@@ -38,6 +38,31 @@ class SetContents(LogicElement):
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
 
+class RemoveFile(LogicElement):
+    """Delete a file from a filesystem"""
+    xmlns = namespaces.fs
+
+    class Help:
+        synopsis = "delete a file"
+
+    fsobj = Attribute("Filesystem object", required=False, default=None)
+    fs = Attribute("Filesystem name", required=False, default=None)
+    path = Attribute("Destination path", required=True)
+    ifexists = Attribute("Only remove if the file exists?", type="boolean", required=False)
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        if self.has_parameter('fsobj'):
+            dst_fs = params.fsobj
+        else:
+            dst_fs = self.archive.lookup_filesystem(self, params.fs)
+        if params.ifexists and dst_fs.isfile(params.path):
+            return
+        try:
+            dst_fs.remove(params.path)
+        except Exception as e:
+            self.throw("fs.remove-file.fail",
+                       "unable to remove '{}' ({})".format(params.path, e))
 
 class GetSyspath(DataSetter):
     """
