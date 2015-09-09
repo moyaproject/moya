@@ -133,6 +133,19 @@ class EvalVariable(Evaluator):
         return context[self.value]
 
 
+class EvalLiteralIndex(Evaluator):
+    def build(self, tokens):
+        self.scope = tokens[0][0].eval
+        self.indices = [dataindex.parse(t[1:]) for t in tokens[0][1:]]
+
+    def eval(self, context):
+        obj = self.scope(context)
+        for index in self.indices:
+            with context.data_frame(obj):
+                obj = context[index]
+        return obj
+
+
 @implements_to_string
 class EvalRegExp(Evaluator):
     """Class to evaluate a parsed variable"""
@@ -641,6 +654,8 @@ index = Group(('[') + expr + Suppress(']'))
 
 braceop = callop | index
 
+literalindex = Regex(r'\.([a-zA-Z0-9\._]+)');
+
 operand = (timespan |
            real_operand |
            integer_operand |
@@ -675,6 +690,8 @@ expr << operatorPrecedence(operand, [
 
 
     (braceop, 1, opAssoc.LEFT, EvalBraceOp),
+    (literalindex, 1, opAssoc.LEFT, EvalLiteralIndex),
+
     (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
 
     (formatop, 2, opAssoc.LEFT, EvalFormatOp),

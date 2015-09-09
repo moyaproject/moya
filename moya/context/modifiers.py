@@ -562,8 +562,21 @@ class ExpressionModifiers(ExpressionModifiersBase):
                 pass
         else:
             v = text_type(v)
-        a, _, b = v.partition(split_on)
-        return a, b
+        a, b, c = v.partition(split_on)
+        return a, b, c
+
+    def rpartition(self, context, v):
+        split_on = ' '
+        if isinstance(v, list):
+            try:
+                split_on = text_type(v[1])
+                v = text_type(v[0])
+            except IndexError:
+                pass
+        else:
+            v = text_type(v)
+        a, b, c = v.rpartition(split_on)
+        return a, b, c
 
     def path(self, context, v):
         return Path(v)

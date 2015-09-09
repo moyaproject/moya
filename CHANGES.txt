@@ -1,3 +1,8 @@
+0.5.22
+------
+
+Added extended indexes to expressions "foo".0 means the same as "foo"[0] 
+
 0.5.21
 ------
 
