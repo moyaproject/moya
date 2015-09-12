@@ -19,6 +19,7 @@ from ..context.expressiontime import (TimeSpan,
                                       ExpressionDateTime,
                                       ExpressionDate,
                                       ExpressionTime)
+from .color import Color
 from ..containers import QueryData
 from ..context.tools import to_expression
 from ..context.missing import Missing
@@ -285,6 +286,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def collectids(self, context, v, _lookup_key=ExpressionModifiersBase._lookup_key):
         return [_item for _item in (_lookup_key(item, 'id', Ellipsis) for item in v) if _item is not Ellipsis]
+
+    def color(sefl, context, v):
+        return Color.construct(context, v)
 
     def commalist(self, context, v):
         return ",".join(text_type(s) for s in v)
