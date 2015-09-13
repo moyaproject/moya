@@ -303,8 +303,8 @@ class Color(AttributeExposer):
         mr = self.__moyarepr__(pilot.context)
         console.text(mr, bold=True)
         console.text(link, fg="cyan", underline=True)
-        keys = OrderedDict((k, getattr(self, k)) for k in self.__moya_exposed_attributes__)
-        console.obj(pilot.context, keys)
+        # keys = OrderedDict((k, getattr(self, k)) for k in self.__moya_exposed_attributes__)
+        # console.obj(pilot.context, keys)
 
     def __str__(self):
         return self.html
