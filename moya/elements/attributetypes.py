@@ -5,6 +5,7 @@ from ..versioning import VersionSpec
 from ..context import Expression, TrueExpression, FalseExpression, dataindex
 from ..dbexpression import DBExpression
 from ..context.expressiontime import TimeSpan
+from ..context.color import Color as ExpressionColor
 from ..context.tools import to_expression
 from ..elements.elementproxy import ElementProxy
 from ..http import StatusCode
@@ -192,6 +193,22 @@ class Integer(AttributeType):
                 int(float(value))
             except:
                 return 'expected an integer, not {}'.format(value)
+
+
+class Color(AttributeType):
+    type_display = "color"
+
+    def __call__(self, context):
+        return ExpressionColor.parse(context.sub(self.text))
+
+
+    @classmethod
+    def check(cls, value):
+        if '${' not in value:
+            try:
+                ExpressionColor.parse(value)
+            except Exception as e:
+                return text_type(e)
 
 
 class Index(AttributeType):

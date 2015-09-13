@@ -301,16 +301,17 @@ class ResizeCanvas(LogicElement):
         synopsis = "resize the image canvas"
 
     image = Attribute("Image to show", type="expression", default="image", evaldefault=True)
-    width = Attribute("New width", type="integer", required=True, default=None,)
-    height = Attribute("New height", type="integer", required=True, default=None)
-    color = Attribute("Background color", default="#000000")
+    width = Attribute("New width", type="integer", required=True)
+    height = Attribute("New height", type="integer", required=True)
+    color = Attribute("Background color", type="color", default="#000000")
 
     def logic(self, context):
-        params = self.get_parameters(context)
-        img = params.image._img
-        w = params.width
-        h = params.height
-        new_img = Image.new(img.mode, (int(w), int(h)), params.color)
+        image, w, h, color = self.get_parameters(context, 'image', 'width', 'height', 'color')
+        img = image._img
+        mode = img.mode
+        if color.a != 1:
+            mode = 'RGBA'
+        new_img = Image.new(mode, (w, h), color.as_pillow_tuple())
 
         iw, ih = img.size
 
@@ -318,7 +319,7 @@ class ResizeCanvas(LogicElement):
         y = (h - ih) // 2
 
         new_img.paste(img, (x, y))
-        params.image.replace(new_img)
+        image.replace(new_img)
 
 
 class Square(LogicElement):

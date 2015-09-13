@@ -166,6 +166,8 @@ HTML_COLORS = {
     "rebeccapurple": "#663399"
 }
 
+HTML_COLORS['transparent'] = "rgba(0,0,0,0)"
+
 
 @implements_to_string
 class Color(AttributeExposer):
@@ -215,7 +217,7 @@ class Color(AttributeExposer):
     def parse(cls, txt):
         txt = txt.strip().lower()
         if txt in HTML_COLORS:
-            return cls.parse_hex(HTML_COLORS[txt])
+            return cls.parse(HTML_COLORS[txt])
         elif txt.startswith('#'):
             return cls.parse_hex(txt)
         elif txt.startswith('rgba'):
@@ -258,6 +260,12 @@ class Color(AttributeExposer):
 
     def __moyarepr__(self, context):
         return "color:'{}'".format(self.html)
+
+    def as_pillow_tuple(self):
+        if self.a == 1:
+            return (int(self.r), int(self.g), int(self.b))
+        else:
+            return (int(self.r), int(self.g), int(self.b), int(self.a * 255.0))
 
     @property
     def html(self):
