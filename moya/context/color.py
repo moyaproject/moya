@@ -166,6 +166,7 @@ HTML_COLORS = {
     "rebeccapurple": "#663399"
 }
 
+# Add 'special' colors
 HTML_COLORS['transparent'] = "rgba(0,0,0,0)"
 
 
@@ -175,10 +176,13 @@ class Color(AttributeExposer):
 
     __moya_exposed_attributes__ = [
         "r", "g", "b", "a",
-        "html", "hex", "rgb", "rgba"
+        "html", "hex", "rgb", "rgba",
+        "name",
+        "opaque", "saturated"
     ]
 
     _re_hex = re.compile(r'^\#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})$')
+    _re_hex_short = re.compile(r'^\#([a-fA-F0-9]{1})([a-fA-F0-9]{1})([a-fA-F0-9]{1})$')
     _re_rgb = re.compile(r'rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)')
     _re_rgba = re.compile(r'rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([0-9\.]+)\s*\)')
 
@@ -197,6 +201,9 @@ class Color(AttributeExposer):
             return obj.copy()
         if isinstance(obj, text_type):
             return cls.parse(obj)
+        if isinstance(obj, (float, int)):
+            return cls(obj, obj, obj)
+
         try:
             r, g, b, a = obj
         except:
@@ -217,7 +224,7 @@ class Color(AttributeExposer):
     def parse(cls, txt):
         txt = txt.strip().lower()
         if txt in HTML_COLORS:
-            return cls.parse(HTML_COLORS[txt])
+            return HTML_COLORS[txt]
         elif txt.startswith('#'):
             return cls.parse_hex(txt)
         elif txt.startswith('rgba'):
@@ -229,11 +236,16 @@ class Color(AttributeExposer):
 
     @classmethod
     def parse_hex(cls, hex):
-        match = cls._re_hex.match(hex)
-        if match is None:
-            raise ValueError('not valid hex color')
-        r, g, b = [int(c, 16) for c in match.groups()]
-        return cls(r, g, b)
+        match = cls._re_hex_short.match(hex)
+        if match is not None:
+            r, g, b = [int(c + c, 16) for c in match.groups()]
+            return cls(r, g, b)
+        else:
+            match = cls._re_hex.match(hex)
+            if match is None:
+                raise ValueError('not valid hex color')
+            r, g, b = [int(c, 16) for c in match.groups()]
+            return cls(r, g, b)
 
     @classmethod
     def parse_rgb(cls, rgb):
@@ -256,10 +268,13 @@ class Color(AttributeExposer):
         return self.html
 
     def __repr__(self):
-        return "Color({!r}, {!r}, {!r}, {!r})".format(self.rgba)
+        return "Color({!r}, {!r}, {!r}, {!r})".format(*self._rgba)
 
     def __moyarepr__(self, context):
-        return "color:'{}'".format(self.html)
+        return "color:[{:g}, {:g}, {:g}, {:g}]".format(self._r, self._g, self._b, self._a)
+
+    def __hash__(self):
+        return hash((self._r, self._g, self._b, self._a))
 
     def as_pillow_tuple(self):
         if self.a == 1:
@@ -294,34 +309,70 @@ class Color(AttributeExposer):
     def _rgba(self):
         return [int(self.r), int(self.g), int(self.b), self.a]
 
-    def _get_r(self):
+    @property
+    def opaque(self):
+        return Color(self._r, self._g, self._b, 1.0)
+
+    @property
+    def saturated(self):
+        return Color(self.r, self.g, self.b, self.a)
+
+    @property
+    def r(self):
         return min(255.0, max(0.0, self._r))
 
-    def _set_r(self, r):
-        self._r = float(r)
-    r = property(_get_r, _set_r)
-
-    def _get_g(self):
+    @property
+    def g(self):
         return min(255.0, max(0.0, self._g))
 
-    def _set_g(self, g):
-        self._g = float(g)
-    g = property(_get_g, _set_g)
-
-    def _get_b(self):
+    @property
+    def b(self):
         return min(255.0, max(0.0, self._b))
 
-    def _set_b(self, b):
-        self._b = float(b)
-    b = property(_get_b, _set_b)
-
-    def _get_a(self):
+    @property
+    def a(self):
         return min(1.0, max(0.0, self._a))
 
-    def _set_a(self, a):
-        self._a = float(a)
-    a = property(_get_a, _set_a)
+    @property
+    def name(self):
+        return HTML_COLORS_REVERSE.get(self, None)
 
+    def __eq__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError('can only compare a color to another color')
+        return self._r == other._r and self._g == other._g and self._b == other._b and self._a == other._a
+
+    def __add__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError('can only add another color to a color')
+        r, g, b, a = self._rgba
+        _r, _b, _g, _a = other._rgba
+        return Color(r + _r, g + _g, b + _b, a)
+
+    def __sub__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError('can only subtract another color from a color')
+        r, g, b, a = self._rgba
+        _r, _b, _g, _a = other._rgba
+        return Color(r - _r, g - _g, b - _b, a)
+
+    def __mul__(self, other):
+        if isinstance(other, float):
+            r, g, b, a = self._rgba
+            return Color(r * other, g * other, b * other, a)
+        if not isinstance(other, Color):
+            raise ValueError('can only multiple a color by a number or other color')
+        r, g, b, a = self._rgba
+        _r, _g, _b, _a = other._rgba
+        return Color(r * _r, g * _g, b * _b, a)
+
+    def __div__(self, other):
+        raise NotImplementedError("can't divide a color")
+
+HTML_COLORS = {k: Color.parse(v) for k, v in HTML_COLORS.items()}
+HTML_COLORS_REVERSE = {v:k for k, v in HTML_COLORS.items()}
+
+print(HTML_COLORS.values())
 
 if __name__ == "__main__":
     print(unicode(Color(20, 255, 0)))
