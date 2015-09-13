@@ -10,6 +10,7 @@ from .settings import SettingsContainer
 from .filesystems import FSWrapper
 from .compat import text_type, string_types, iteritems
 from .tools import textual_list
+from . import pilot
 
 from fs.opener import fsopendir
 from fs.osfs import OSFS
@@ -221,7 +222,8 @@ def build_server(fs,
     error_msg = None
     docs_location = archive.cfg.get('project', 'location')
     try:
-        server.startup(archive, context, fs.opendir(docs_location), breakpoint=breakpoint)
+        with pilot.manage_request(None, context):
+            server.startup(archive, context, fs.opendir(docs_location), breakpoint=breakpoint)
     except errors.StartupFailedError as error:
         error_msg = text_type(error)
         #raise

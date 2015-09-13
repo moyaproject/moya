@@ -12,6 +12,8 @@ from __future__ import print_function
 from ..compat import text_type, implements_to_string
 from ..interface import AttributeExposer
 
+from collections import OrderedDict
+import colorsys
 import re
 
 # Borrowed from https://github.com/bahamas10/css-color-names/blob/master/css-color-names.json
@@ -176,15 +178,18 @@ class Color(AttributeExposer):
 
     __moya_exposed_attributes__ = [
         "r", "g", "b", "a",
-        "html", "hex", "rgb", "rgba",
+        "rgb", "rgba", "hsl", "hsla",
+        "html", "hex",
         "name",
         "opaque", "saturated"
     ]
 
     _re_hex = re.compile(r'^\#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})$')
     _re_hex_short = re.compile(r'^\#([a-fA-F0-9]{1})([a-fA-F0-9]{1})([a-fA-F0-9]{1})$')
-    _re_rgb = re.compile(r'rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)')
-    _re_rgba = re.compile(r'rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([0-9\.]+)\s*\)')
+    _re_rgb = re.compile(r'rgb\(\s*([0-9\.]+)\s*,\s*([0-9\.]+)\s*,\s*([0-9\.]+)\s*\)')
+    _re_rgba = re.compile(r'rgba\(\s*([0-9\.]+)\s*,\s*([0-9\.]+)\s*,\s*([0-9\.]+)\s*,\s*([0-9\.]+)\s*\)')
+    _re_hsl = re.compile(r'hsl\(\s*([0-9\.]+)\s*,\s*([0-9\.]+)\%\s*,\s*([0-9\.]+)\%\s*\)')
+    _re_hsla = re.compile(r'hsla\(\s*([0-9\.]+)\s*,\s*([0-9\.]+)\%\s*,\s*([0-9\.]+)\%\s*,\s*([0-9\.]+)\s*\)')
 
     def __init__(self, r, g, b, a=1.0):
         self._r = float(r)
@@ -231,6 +236,10 @@ class Color(AttributeExposer):
             return cls.parse_rgba(txt)
         elif txt.startswith('rgb'):
             return cls.parse_rgb(txt)
+        elif txt.startswith('hsla'):
+            return cls.parse_hsla(txt)
+        elif txt.startswith('hsl'):
+            return cls.parse_hsl(txt)
         else:
             raise ValueError("unable to parse '{}' as a color".format(txt))
 
@@ -264,11 +273,44 @@ class Color(AttributeExposer):
         a = float(match.groups()[3])
         return cls(r, g, b, a)
 
+    @classmethod
+    def parse_hsl(cls, hsl):
+        match = cls._re_hsl.match(hsl)
+        if match is None:
+            raise ValueError('not a valid hsl color')
+        h, s, l = [float(c) for c in match.groups()]
+        h = h / 360.0
+        l = l / 100.0
+        s = s / 100.0
+        r, g, b = colorsys.hls_to_rgb(h, l, s)
+        return cls(r * 255.0, g * 255.0, b * 255.0)
+
+    @classmethod
+    def parse_hsla(cls, hsla):
+        match = cls._re_hsla.match(hsla)
+        if match is None:
+            raise ValueError('not a valid hsla color')
+        h, s, l, a = [float(c) for c in match.groups()]
+        h = h / 360.0
+        l = l / 100.0
+        s = s / 100.0
+        r, g, b = colorsys.hls_to_rgb(h, l, s)
+        return cls(r * 255.0, g * 255.0, b * 255.0, a * 255.0)
+
+    def __moyaconsole__(self, console):
+        from moya import pilot
+        link = "http://www.color-hex.com/color/{}".format(self.hex.lower()[1:])
+        mr = self.__moyarepr__(pilot.context)
+        console.text(mr, bold=True)
+        console.text(link, fg="cyan", underline=True)
+        keys = OrderedDict((k, getattr(self, k)) for k in self.__moya_exposed_attributes__)
+        console.obj(pilot.context, keys)
+
     def __str__(self):
         return self.html
 
     def __repr__(self):
-        return "Color({!r}, {!r}, {!r}, {!r})".format(*self._rgba)
+        return "Color({!r}, {!r}, {!r}, {!r})".format(self._r, self._g, self._b, self._a)
 
     def __moyarepr__(self, context):
         return "color:[{:g}, {:g}, {:g}, {:g}]".format(self._r, self._g, self._b, self._a)
@@ -295,11 +337,21 @@ class Color(AttributeExposer):
 
     @property
     def rgb(self):
-        return "rgba({},{},{})".format(*self._rgb)
+        return "rgb({},{},{})".format(*self._rgb)
 
     @property
     def rgba(self):
         return "rgba({},{},{},{:g})".format(*self._rgba)
+
+    @property
+    def hsl(self):
+        h, l, s = colorsys.rgb_to_hls(self.r / 255.0, self.g / 255.0, self.b / 255.0)
+        return "hsl({:g},{:g}%,{:g}%)".format(h * 360.0, s * 100.0, l * 100.0)
+
+    @property
+    def hsla(self):
+        h, l, s = colorsys.rgb_to_hls(self.r / 255.0, self.g / 255.0, self.b / 255.0)
+        return "hsla({:g},{:g}%,{:g}%,{:g})".format(h * 360.0, s * 100.0, l * 100.0, self.a)
 
     @property
     def _rgb(self):
@@ -370,9 +422,8 @@ class Color(AttributeExposer):
         raise NotImplementedError("can't divide a color")
 
 HTML_COLORS = {k: Color.parse(v) for k, v in HTML_COLORS.items()}
-HTML_COLORS_REVERSE = {v:k for k, v in HTML_COLORS.items()}
+HTML_COLORS_REVERSE = {v: k for k, v in HTML_COLORS.items()}
 
-print(HTML_COLORS.values())
 
 if __name__ == "__main__":
     print(unicode(Color(20, 255, 0)))
@@ -386,3 +437,8 @@ if __name__ == "__main__":
 
     print(Color.parse('tomato'))
     print(Color.parse('white'))
+
+    print(Color.parse('hsl(200, 50%, 10%)'))
+    print(Color.parse('hsla(200, 50%, 10%, 0.5)'))
+
+    print(Color.parse('hsl(120, 100%, 50%)'))
