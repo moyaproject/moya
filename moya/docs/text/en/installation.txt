@@ -11,15 +11,23 @@ Moya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue 
 Moya requires [url http://lxml.de]lxml[/url]. Probably the simplest way to install lxml is via your package manager:
 
 [code]
-$ sudo apt-get install python-lxml
+sudo apt-get install python-lxml
 [/code]
 
 [aside]If you are using Python 3, install [b]python3-lxml[/b][/aside]
 
+If your package manager doesn't offer lxml, you will need to install libxml2 and libxslt:
+
+[code]
+sudo apt-get install libxml2-dev libxslt-dev python-dev
+[/code]
+
+See the official [url http://lxml.de/installation.html#requirements]documentation on installing lxml[/url] if you have any problems.
+
 You can then install Moya with the following:
 
 [code]
-$ sudo pip install moya
+sudo pip install moya
 [/code]
 
 [h1]Windows[/h1]
@@ -34,7 +42,19 @@ If you get errors about lxml not installing, you may need to install lxml separa
 
 [h1]OSX[/h1]
 
-Moya has only been tested on Linux / Window so far.
+If you have a Python environment set up, then the following command will install Moya:
+
+[code]
+pip install moya
+[/code]
+
+If you don't have Python + Pip set up, you can install them via Homebrew. Follow the official [url http://brew.sh/]instructions[/url] to install Homebrew. Then run the following to install Python + Pip + Moya:
+
+[code]
+brew install python
+pip install pip -U
+pip install moya
+[/code]
 
 [h1]Installing from Source[/h1]
 

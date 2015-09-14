@@ -9,8 +9,6 @@ from ..render import render_object
 from ..template.rendercontainer import RenderContainer
 from ..mail import Email
 
-import premailer
-
 import logging
 log = logging.getLogger('moya.email')
 
@@ -91,6 +89,9 @@ class HTML(LogicElement, ContentElementMixin):
             content = context['_content']
             html = render_object(content, self.archive, context, "html")
         if _premailer:
+            # premailer is slow to import, particularly on rpi
+            # Do it at runtime to avoid delaying startup
+            import premailer
             try:
                 html = premailer.transform(html,
                                            base_url=context.get('.request.url', None))
