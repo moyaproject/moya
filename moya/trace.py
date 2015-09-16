@@ -100,6 +100,8 @@ class Traceback(object):
 
     @property
     def console_error(self):
+        if hasattr(self.exc, '__moyaconsole__') and getattr(self.exc.__moyaconsole__, 'is_default_error_message', False):
+            return None
         console = Console(html=True)
         console.obj(None, self.exc)
         return console.get_text()

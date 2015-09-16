@@ -330,7 +330,7 @@ def wrap_element_error(f):
             raise
         except Exception as e:
             #import traceback; traceback.print_exc(e)
-            raise errors.ElementError(text_type(e), self)
+            raise errors.ElementError(text_type(e), self, diagnosis=getattr(e, 'diagnosis', None))
     return deco
 
 

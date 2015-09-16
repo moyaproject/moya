@@ -883,7 +883,7 @@ class ConsoleRender(RenderBase):
 
     def logic(self, context):
         obj = self.obj(context)
-        c = Console(nocolors=False, text=False, width=120, html=True)
+        c = Console(nocolors=False, text=False, width=120, html=True, unicode_borders=False)
         text = c.obj(context, obj).get_text()
         html = '<div class="moya-console">{}</div>'.format(text)
         context['.content'].add_renderable(repr(obj), HTML(html))

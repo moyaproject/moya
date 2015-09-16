@@ -62,6 +62,7 @@ class MoyaError(Exception):
 
     def __moyaconsole__(self, console):
         console.text(text_type(self))
+    __moyaconsole__.is_default_error_message = True
 
     # def __unicode__(self):
     #     if self.fmt is None:
@@ -179,17 +180,26 @@ class ElementNotFoundError(MoyaError):
         self.elementref = elementref
         self.app = app
         self.lib = lib
+        diagnosis = None
         if msg is None:
+            if not self.elementref.startswith('#'):
+                diagnosis = """\
+Did you mean **"#{elementref}"** ?
+
+Without the '#' symbol, Moya will look for the element with **docname="{elementref}"** in the current *file*.
+
+Add a # if you meant to reference an element in the current *application*.
+""".format(elementref=self.elementref)
             if app or lib:
                 msg = "unable to reference element '{elementref}' in {obj}".format(elementref=self.elementref,
-                                                                         obj=self.app or self.lib)
+                                                                         obj=self.app or self.lib,)
             else:
                 msg = "unable to reference element '{elementref}'".format(elementref=self.elementref)
         else:
             msg = msg.replace('{', '{{').replace('}', '}}')
         if reason is not None:
             msg = "{} ({})".format(msg, reason)
-        super(ElementNotFoundError, self).__init__(msg, elementref=elementref)
+        super(ElementNotFoundError, self).__init__(msg, elementref=elementref, diagnosis=diagnosis)
 
     # def get_message(self):
     #     if not (self.app or self.lib):

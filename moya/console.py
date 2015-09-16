@@ -444,16 +444,17 @@ class Console(object):
 
     _lock = RLock()
 
-    def __init__(self, out=None, nocolors=False, text=False, width=None, html=False):
+    def __init__(self, out=None, nocolors=False, text=False, width=None, html=False, unicode_borders=True):
         #self._lock = RLock()
+        self.unicode_borders = unicode_borders
         if html:
             self.html = True
             self.encoding = 'utf-8'
             self.out = _TextOut()
-            self.unicode_borders = True
             self.terminal_width = width or 120
             return
         if text:
+            self.unicode_borders = False
             nocolors = True
             out = _TextOut()
         self.out = out or sys.stdout
