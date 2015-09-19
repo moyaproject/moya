@@ -333,7 +333,10 @@ class Color(AttributeExposer):
 
     @property
     def hex(self):
-        return "#{:02X}{:02X}{:02X}".format(*self._rgb)
+        if any((c % 17 for c in self._rgb)):
+            return "#{:02X}{:02X}{:02X}".format(*self._rgb)
+        else:
+            return "#{:0X}{:0X}{:0X}".format(*(c // 17 for c in self._rgb))
 
     @property
     def rgb(self):
