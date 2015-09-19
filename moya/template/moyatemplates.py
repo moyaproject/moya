@@ -1459,8 +1459,7 @@ class LetNode(Node):
         try:
             context.update_base(let)
         except:
-            raise
-            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {}".format(context.to_expr(let)))
+            self.render_error("{{% let %}} was unable to add {} to the template context".format(context.to_expr(let)))
         return ''
 
 
