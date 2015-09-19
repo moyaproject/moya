@@ -146,6 +146,10 @@ def set_dynamic(context):
     context.set_dynamic('.clock', lambda c: ExpressionDateTime.moya_utcnow())
     context.set_counter('.counter')
     context.set_dynamic('.app', get_app_from_callstack)
+    theme_fs = context.get('.fs.themes', None)
+    if theme_fs:
+        from ..theme import Theme
+        context.set_dynamic('.theme', Theme.loader(theme_fs))
 
 
 if __name__ == "__main__":

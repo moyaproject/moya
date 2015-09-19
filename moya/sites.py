@@ -94,7 +94,9 @@ class SiteInstance(AttributeExposer):
                                    'date_format',
                                    'timespan_format',
                                    'translations',
-                                   'host']
+                                   'host',
+                                   'theme'
+                                   ]
 
     def __init__(self, site, site_data, custom_data, _as_bool=lambda t: t.strip().lower() in ('yes', 'true')):
         self._site = site
@@ -119,6 +121,7 @@ class SiteInstance(AttributeExposer):
         self.timespan_format = get('timespan_format')
         self.translations = gettext.NullTranslations()
         self.host = get('host')
+        self.theme = get('theme')
 
     def __str__(self):
         return '''<site "{}">'''.format(self._site.domain)
@@ -223,7 +226,8 @@ class Sites(object):
                   ("date_format", 'medium'),
                   ("time_format", 'medium'),
                   ("timespan_format", 'medium'),
-                  ("host", "${.request.host_url}")]
+                  ("host", "${.request.host_url}"),
+                  ("theme", "default")]
 
     def __init__(self):
         self._defaults = {}

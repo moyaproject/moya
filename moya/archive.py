@@ -39,6 +39,7 @@ from .reader import DataReader
 from .context.tools import to_expression
 from . import logtools
 from . import settings
+from .theme import Theme
 
 from fs.opener import fsopendir
 from fs.multifs import MultiFS
@@ -715,6 +716,9 @@ class Archive(object):
     def get_filesystem(self, name):
         return self.filesystems[name]
 
+    def has_filesystem(self, name):
+        return name in self.filesystems
+
     def lookup_filesystem(self, element, name):
         try:
             return self.filesystems[name]
@@ -899,6 +903,12 @@ class Archive(object):
             elif what == "site":
                 if name:
                     self.sites.add_from_section(name, section)
+
+            elif what == "themes":
+                location = section["location"]
+                theme_fs = self.open_fs(location)
+                self.add_filesystem('themes', theme_fs)
+                startup_log.debug("added theme filesystem '%s'", location)
 
             else:
                 startup_log.warn("unknown settings section: [%s]", section_name)
