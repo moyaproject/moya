@@ -1152,8 +1152,9 @@ class AttribNode(Node):
                 continue
             if isinstance(v, list):
                 v = " ".join(text_type(item) for item in v if item)
+            v = text_type(v)
             if v:
-                attribs_text.append('{}="{}"'.format(escape(k), escape(text_type(v))))
+                attribs_text.append('{}="{}"'.format(escape(k), escape(v)))
         if not attribs_text:
             return ""
         if self._prefix:

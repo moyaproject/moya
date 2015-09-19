@@ -319,21 +319,21 @@ class Color(AttributeExposer):
         return hash((self._r, self._g, self._b, self._a))
 
     def as_pillow_tuple(self):
-        if self.a == 1:
+        if self.a == 1.0:
             return (int(self.r), int(self.g), int(self.b))
         else:
             return (int(self.r), int(self.g), int(self.b), int(self.a * 255.0))
 
     @property
     def html(self):
-        if self.a == 1:
+        if self.a == 1.0:
             return self.hex
         else:
             return self.rgba
 
     @property
     def hex(self):
-        if any((c % 17 for c in self._rgb)):
+        if any(c % 17 for c in self._rgb):
             return "#{:02X}{:02X}{:02X}".format(*self._rgb)
         else:
             return "#{:0X}{:0X}{:0X}".format(*(c // 17 for c in self._rgb))
@@ -412,7 +412,7 @@ class Color(AttributeExposer):
         return Color(r - _r, g - _g, b - _b, a)
 
     def __mul__(self, other):
-        if isinstance(other, float):
+        if isinstance(other, (float, int)):
             r, g, b, a = self._rgba
             return Color(r * other, g * other, b * other, a)
         if not isinstance(other, Color):
