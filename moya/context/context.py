@@ -701,6 +701,12 @@ class Context(object):
         for k, v in map.items():
             self[k] = v
 
+    def update_base(self, map):
+        """Update the base (first) scope"""
+        obj = self.current_frame.scopes[0].obj
+        for k, v in map.items():
+            obj[k] = v
+
     @synchronize
     def set(self, index, value):
         """Set a value"""

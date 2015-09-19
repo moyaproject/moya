@@ -1455,11 +1455,12 @@ class LetNode(Node):
     def render(self, environment, context, template, text_escape):
         let = self.let_expression.eval(context)
         if not hasattr(let, 'items'):
-            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let))
+            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {}".format(context.to_expr(let)))
         try:
-            context.update(let)
+            context.update_base(let)
         except:
-            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {!r}".format(let))
+            raise
+            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {}".format(context.to_expr(let)))
         return ''
 
 
