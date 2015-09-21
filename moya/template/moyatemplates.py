@@ -11,7 +11,7 @@ from ..template.errors import MissingTemplateError, BadTemplateError
 from ..html import escape, spaceless
 from ..template import errors
 from ..errors import AppError, MarkupError
-from ..render import render_object
+from ..render import render_object, Safe
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
 from ..application import Application
@@ -100,7 +100,6 @@ class MoyaTemplateEngine(TemplateEngine):
                     if not hasattr(e, 'template_stack'):
                         e.template_stack = base_context['.__t_stack'][:]
                     raise
-
 
 @implements_to_string
 class _TemplateFrame(object):
@@ -775,15 +774,13 @@ class ForNode(Node):
             reverse = bool(self.reverse_expression.eval(context))
             sort_function = self.sort_expression.make_function(context=context)
             seq_iter = iter(sorted((v for v in seq_iter),
-                                    key=sort_function.get_scope_callable(context),
-                                    reverse=reverse))
+                                   key=sort_function.get_scope_callable(context),
+                                   reverse=reverse))
 
         if_eval = self.if_expression.eval
 
         for_stack = context.set_new('._for_stack', [])
-
-        forloop = {'first': True,
-                   'last': False}
+        forloop = {'first': True, 'last': False}
         for_scope = {'forloop': forloop}
         for_stack.append(for_scope)
 
@@ -1950,6 +1947,13 @@ class Template(object):
                                      raw_path=current_node.template.raw_path,
                                      original=e,
                                      code=current_node.template.source)
+        finally:
+            while stack:
+                node = pop()
+                try:
+                    node.close()
+                except:
+                    pass
 
     @classmethod
     def _sub_escape(cls, text, _text_type=text_type, _hasattr=hasattr):
@@ -1961,6 +1965,12 @@ class Template(object):
         self.parse(environment)
         stack = [self.get_root_node(environment)]
         return self._render_nodes(stack, environment, context, self._sub_escape)
+
+    # def moya_render(self, archive, context, target, options):
+    #     rendered = self.render(context)
+    #     if target == "html":
+    #         return Safe(rendered)
+    #     return rendered
 
 
 if __name__ == "__main__":

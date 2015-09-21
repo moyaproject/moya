@@ -238,152 +238,157 @@ def _logic_loop(context,
     breakpoints_enabled = debugging
     skip = None
 
-    while node_stack:
-        try:
-            node = pop_stack()
-            if isinstance(node, SkipNext):
-                skip = node.element_types
-                continue
-            if isinstance(node, ElementBase):
-                if node._meta.logic_skip:
+    try:
+        while node_stack:
+            try:
+                node = pop_stack()
+                if isinstance(node, SkipNext):
+                    skip = node.element_types
                     continue
-                if skip and node._element_type in skip:
-                    continue
-                if debugging and debug_hook and not getattr(node, '_debug_skip', False):
-                    debugging, breakpoints_enabled = debug_hook(node)
-                if not node._ignore_skip:
-                    skip = None
-                if node.check(context):
-                    result = node.logic(context)
-                    if result:
-                        push_stack(NodeGenerator(node, result))
-            else:
-                next_node = next(node, None)
-                if next_node:
-                    push_stack(node)
-                    push_stack(next_node)
-
-        except MoyaException as moya_exception:
-            callstack = context.get('._callstack', [])[:]
-            exc_node = node
-            exc_type = moya_exception.type
-
-            while node_stack:
-                enode = getattr(node, 'node', node)
-                if isinstance(enode, ElementBase):
-                    if enode._meta.trap_exceptions:
-                        if hasattr(enode, 'on_exception'):
-                            new_node = enode.on_exception(context, moya_exception)
-                            if new_node is not None:
-                                push_stack(new_node)
-                            break
-                        moya_trace = trace.build(context,
-                                                 callstack,
-                                                 exc_node,
-                                                 moya_exception,
-                                                 sys.exc_info(),
-                                                 context.get('.request', None))
-                        try:
-                            node.throw(LogicError(moya_exception, moya_trace))
-                        except StopIteration:
-                            close_generator(node)
-                            node = pop_stack()
-                        break
-                    for sibling in enode.younger_siblings_of_type(("http://moyaproject.com", 'catch')):
-                        if sibling.check_exception_type(context, exc_type):
-                            close_generator(node)
-
-                            # new
-                            node = pop_stack()
-                            sibling.set_exception(context, moya_exception)
-
-                            push_stack(SkipNext(("http://moyaproject.com", "else"),
-                                                ("http://moyaproject.com", "elif")))
-                            push_stack(DeferNodeContents(sibling))
-                            break
-                    else:
-                        close_generator(node)
-                        node = pop_stack()
+                if isinstance(node, ElementBase):
+                    if node._meta.logic_skip:
                         continue
-                    break
+                    if skip and node._element_type in skip:
+                        continue
+                    if debugging and debug_hook and not getattr(node, '_debug_skip', False):
+                        debugging, breakpoints_enabled = debug_hook(node)
+                    if not node._ignore_skip:
+                        skip = None
+                    if node.check(context):
+                        result = node.logic(context)
+                        if result:
+                            push_stack(NodeGenerator(node, result))
+                else:
+                    next_node = next(node, None)
+                    if next_node:
+                        push_stack(node)
+                        push_stack(next_node)
 
-                close_generator(node)
-                node = pop_stack()
-            else:
+            except MoyaException as moya_exception:
+                callstack = context.get('._callstack', [])[:]
+                exc_node = node
+                exc_type = moya_exception.type
+
+                while node_stack:
+                    enode = getattr(node, 'node', node)
+                    if isinstance(enode, ElementBase):
+                        if enode._meta.trap_exceptions:
+                            if hasattr(enode, 'on_exception'):
+                                new_node = enode.on_exception(context, moya_exception)
+                                if new_node is not None:
+                                    push_stack(new_node)
+                                break
+                            moya_trace = trace.build(context,
+                                                     callstack,
+                                                     exc_node,
+                                                     moya_exception,
+                                                     sys.exc_info(),
+                                                     context.get('.request', None))
+                            try:
+                                node.throw(LogicError(moya_exception, moya_trace))
+                            except StopIteration:
+                                close_generator(node)
+                                node = pop_stack()
+                            break
+                        for sibling in enode.younger_siblings_of_type(("http://moyaproject.com", 'catch')):
+                            if sibling.check_exception_type(context, exc_type):
+                                close_generator(node)
+
+                                # new
+                                node = pop_stack()
+                                sibling.set_exception(context, moya_exception)
+
+                                push_stack(SkipNext(("http://moyaproject.com", "else"),
+                                                    ("http://moyaproject.com", "elif")))
+                                push_stack(DeferNodeContents(sibling))
+                                break
+                        else:
+                            close_generator(node)
+                            node = pop_stack()
+                            continue
+                        break
+
+                    close_generator(node)
+                    node = pop_stack()
+                else:
+                    if on_exception:
+                        on_exception(callstack, exc_node, moya_exception)
+                    request = context.get('.request', None)
+                    moya_trace = trace.build(context,
+                                             callstack,
+                                             exc_node,
+                                             moya_exception,
+                                             sys.exc_info(),
+                                             request)
+                    raise LogicError(moya_exception, moya_trace)
+
+            except BreakLoop:
+                while node_stack:
+                    node = pop_stack()
+                    close_generator(node)
+                    if node._meta.is_loop or node._meta.is_call:
+                        break
+                else:
+                    # TODO: raise fatal error
+                    pass
+
+            except ContinueLoop:
+                while node_stack:
+                    node = pop_stack()
+                    if node._meta.is_loop or node._meta.is_call:
+                        push_stack(node)
+                        break
+                    close_generator(node)
+                else:
+                    # TODO: raise fatal error
+                    pass
+
+            except EndLogic as end_logic:
+                while node_stack:
+                    node = pop_stack()
+                    if not node_stack:
+                        break
+                    close_generator(node)
+                node.node._return_value = end_logic.return_value
+                next(node, None)
+
+            except Unwind:
+                while node_stack:
+                    node = pop_stack()
+                    if node._meta.is_call:
+                        push_stack(node)
+                        break
+                    close_generator(node)
+
+            except DebugBreak:
+                if breakpoints_enabled:
+                    debugging = True
+                    continue
+                # if debugging and breakpoints_enabled:
+                #    _breakpoint_notify(node)
+                raise
+
+            except StartupFailedError:
+                raise
+
+            except SystemExit:
+                raise
+
+            except Exception as logic_exception:
+                # Dump exception
+                # import traceback; traceback.print_exc(logic_exception)
+                # raise
                 if on_exception:
-                    on_exception(callstack, exc_node, moya_exception)
+                    on_exception(node_stack, node, logic_exception)
                 request = context.get('.request', None)
-                moya_trace = trace.build(context,
-                                         callstack,
-                                         exc_node,
-                                         moya_exception,
-                                         sys.exc_info(),
-                                         request)
-                raise LogicError(moya_exception, moya_trace)
-
-        except BreakLoop:
-            while node_stack:
-                node = pop_stack()
-                close_generator(node)
-                if node._meta.is_loop or node._meta.is_call:
-                    break
-            else:
-                # TODO: raise fatal error
-                pass
-
-        except ContinueLoop:
-            while node_stack:
-                node = pop_stack()
-                if node._meta.is_loop or node._meta.is_call:
-                    push_stack(node)
-                    break
-                close_generator(node)
-            else:
-                # TODO: raise fatal error
-                pass
-
-        except EndLogic as end_logic:
-            while node_stack:
-                node = pop_stack()
-                if not node_stack:
-                    break
-                close_generator(node)
-            node.node._return_value = end_logic.return_value
-            next(node, None)
-
-        except Unwind:
-            while node_stack:
-                node = pop_stack()
-                if node._meta.is_call:
-                    push_stack(node)
-                    break
-                close_generator(node)
-
-        except DebugBreak:
-            if breakpoints_enabled:
-                debugging = True
-                continue
-            # if debugging and breakpoints_enabled:
-            #    _breakpoint_notify(node)
-            raise
-
-        except StartupFailedError:
-            raise
-
-        except SystemExit:
-            raise
-
-        except Exception as logic_exception:
-            # Dump exception
-            # import traceback; traceback.print_exc(logic_exception)
-            # raise
-            if on_exception:
-                on_exception(node_stack, node, logic_exception)
-            request = context.get('.request', None)
-            callstack = context.get('._callstack', [])[:]
-            moya_trace = trace.build(context, None, node, logic_exception, sys.exc_info(), request)
-            exc_node = node
-            raise LogicError(logic_exception, moya_trace)
+                callstack = context.get('._callstack', [])[:]
+                moya_trace = trace.build(context, None, node, logic_exception, sys.exc_info(), request)
+                exc_node = node
+                raise LogicError(logic_exception, moya_trace)
+    finally:
+        while node_stack:
+            node = pop_stack()
+            close_generator(node)
 
 
 def run_logic(archive, context, root_node):

@@ -228,6 +228,8 @@ class Color(AttributeExposer):
     @classmethod
     def parse(cls, txt):
         txt = txt.strip().lower()
+        if txt == 'inherit':
+            return 'inherit'
         if txt in HTML_COLORS:
             return HTML_COLORS[txt]
         elif txt.startswith('#'):

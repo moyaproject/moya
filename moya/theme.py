@@ -1,14 +1,45 @@
-from . import settings
+
 from .context.context import Context
-from .context.color import Color
 from .compat import text_type
 
-from copy import copy
 import json
-
-
+import hashlib
 import logging
 log = logging.getLogger('moya.runtine')
+
+
+DEFAULT = """
+{
+    "_moya":
+    {
+        "note": "internal default"
+    },
+    "colors":
+    {
+        "text":
+        {
+            "fg": "black",
+            "bg": "white"
+        },
+        "highlight":
+        {
+            "fg": "black",
+            "bg": "wheat"
+        },
+        "selected":
+        {
+            "fg": "white",
+            "bg": "blue"
+        },
+        "border":
+        {
+            "normal": "inherit",
+            "focused": "inherit"
+        }
+    }
+
+}
+"""
 
 
 class Theme(object):
@@ -21,9 +52,6 @@ class Theme(object):
         def load(context):
             name = context.get('.sys.site.theme', 'default')
 
-            if name in cls._cache:
-                return copy(cls._cache[name])
-
             path = "{}.json".format(name)
             try:
                 theme = cls.read(fs, path, context=context)
@@ -32,12 +60,30 @@ class Theme(object):
 
                 if name != 'default':
                     return load('default')
+
+                log.error("unable to load 'default' theme")
                 theme = None
 
-            cls._cache[name] = theme
             return theme
 
         return load
+
+    @classmethod
+    def dummy_loader(cls, context):
+        """Called when theme is not enabled"""
+        log.warning('theme is not set -- add a theme value to your site settings')
+        theme_json = DEFAULT
+        hasher = hashlib.md5()
+        hasher.update(theme_json)
+        theme_hash = hasher.hexdigest()
+
+        theme_data = json.loads(theme_json)
+
+        theme_data['_moya'] = {
+            "path": None,
+            "hash": theme_hash
+        }
+        return theme_data
 
     @classmethod
     def read(cls, fs, path, context=None):
@@ -45,18 +91,17 @@ class Theme(object):
         if context is None:
             context = Context()
 
+        hasher = hashlib.md5()
         with fs.open(path, 'rb') as f:
-            theme_data = json.load(f)
+            theme_json = f.read()
+            hasher.update(theme_json)
+            theme_hash = hasher.hexdigest()
 
-        # if 'colors' in theme_data:
-        #     colors = {}
-        #     for name, _color in theme_data['colors'].items():
-        #         try:
-        #             color = Color.parse(_color)
-        #         except ValueError:
-        #             log.error("failed to parse color '%s' from theme file '%s'", _color, path)
-        #         else:
-        #             colors[name] = color
-        #     theme_data['colors'].update(colors)
+            theme_data = json.loads(theme_json)
+
+            theme_data['_moya'] = {
+                "path": path,
+                "hash": theme_hash
+            }
 
         return theme_data

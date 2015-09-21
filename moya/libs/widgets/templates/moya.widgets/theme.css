@@ -1,0 +1,38 @@
+{% inspect .theme %}
+
+{%- with theme=.theme %}
+{%- cache key theme._moya.hash for 1h %}
+
+{%- with colors=.theme.colors %}
+.moya-colors-text
+{
+    color: ${color:colors.text.fg};
+    background-color: ${color:colors.text.bg};
+}
+
+.moya-colors-highlight
+{
+    color: ${color:colors.highlight.fg};
+    background-color: ${color:colors.highlight.bg};
+}
+
+.moya-colors-selected
+{
+    color: ${color:colors.selected.fg};
+    background-color: ${color:colors.selected.bg};
+}
+
+.moya-colors-border
+{
+    border-color: ${color:colors.border.normal};
+}
+
+.moya-colors-border-focused
+{
+    border-color: ${color:colors.border.focused};
+}
+
+{%- end-with %}
+
+{%- end-cache %}
+{%- end-with %}

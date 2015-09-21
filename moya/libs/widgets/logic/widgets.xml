@@ -3,6 +3,12 @@
       xmlns:forms="http://moyaproject.com/forms"
       xmlns:html="http://moyaproject.com/html">
 
+    <tag name="add-theme-style" synopsis="add theme style">
+        <doc>Adds a script tag with styles generated from .theme</doc>
+        <render-template template="theme.css" dst="style"/>
+        <css>${style}</css>
+    </tag>
+
     <widget name="success" template="success.html" synopsis="success alert">
         <doc>Renders a success message.</doc>
     </widget>

@@ -10,7 +10,7 @@ from .. import errors
 from ..html import escape
 from ..console import Console
 from ..content import Content, Section, IncludePath
-from ..tools import url_join
+from ..tools import url_join, silent_iter
 from ..context.missing import is_missing
 from ..markup import Markup, get_installed_markups
 from ..template import Template as MoyaTemplate
@@ -221,7 +221,8 @@ class ContentElement(ContextElementBase):
 
 
 class SectionElement(LogicElement, ContentElementMixin):
-    """Defines a section container for content. A [i]section[/i] is a top level container for content, and is used to break up the content in to function groups, which may be rendered independently. For example, here is a content definition with two sections; 'body' and 'sidebar':
+    """
+    Defines a section container for content. A [i]section[/i] is a top level container for content, and is used to break up the content in to function groups, which may be rendered independently. For example, here is a content definition with two sections; 'body' and 'sidebar':
 
     [code xml]
     <content libname="content.front" template="front.html">
@@ -247,8 +248,6 @@ class SectionElement(LogicElement, ContentElementMixin):
         </body>
     </html>
     [/code]
-
-
     """
 
     class Help:
@@ -262,18 +261,15 @@ class SectionElement(LogicElement, ContentElementMixin):
 
     class Meta:
         tag_name = "section"
-        #logic_skip = True
-        #text_nodes = "text"
 
     def logic(self, context):
         name = self.name(context)
         name, template = self.get_parameters(context, 'name', 'template')
         content = self.get_content(context)
         app = self.get_app(context)
-        #print(self.libid)
-        #ref = app.qualify_ref(self.libid)
-        #ref = self.libid
         content.add_section_element(name, app, self, self._merge)
+        #with content.section(name):
+        #    yield logic.DeferNodeContents(self)
 
     def generate(self, context, content, app, merge):
         name = self.name(context)
@@ -282,20 +278,46 @@ class SectionElement(LogicElement, ContentElementMixin):
         with content.section(name):
             yield logic.DeferNodeContents(self)
 
-
-    # def logic(self, context):
-    #     name = self.name(context)
-    #     name, template = self.get_parameters(context, 'name', 'template')
-    #     content = self.get_content(context)
-    #     app = self.get_app(context)
-    #     content.new_section(name, app.resolve_template(template), merge=self._merge)
-
-    #     with content.section(name):
-    #         yield logic.DeferNodeContents(self)
-
-
     def post_build(self, context):
         self._merge = self.merge(context)
+
+
+def make_default_section(name):
+    _name = name
+
+    class _Section(SectionElement):
+        """
+        Define a content [tag]section[/tag] called '{name}'.
+
+        This is a shortcut for the following:
+        [code xml]
+        <section name="{name}">
+            <!-- content tags here... -->
+        </section>
+        [/code]
+        """
+
+        class Help:
+            synopsis = "add a '{}' content section".format(_name)
+
+        class Meta:
+            tag_name = "section-" + _name
+
+        name = Attribute("The name of the section", required=False, default=_name)
+
+    _Section.__doc__ = _Section.__doc__.format(name=_name)
+
+    return _Section
+
+SectionHead = make_default_section('head')
+SectionHead = make_default_section('css')
+SectionHead = make_default_section('includecss')
+SectionHead = make_default_section('js')
+SectionHead = make_default_section('jsfoot')
+SectionHead = make_default_section('includejs')
+SectionHead = make_default_section('body')
+SectionHead = make_default_section('content')
+SectionHead = make_default_section('footer')
 
 
 class Node(LogicElement, ContentElementMixin):
@@ -430,7 +452,7 @@ class RenderContent(DataSetter, ContentElementMixin):
             td.update(kwargs)
         kwargs.update(let)
 
-        for defer in self.generate_content(context, content, app, td=td):
+        for defer in silent_iter(self.generate_content(context, content, app, td=td)):
             yield defer
 
         content_obj = context['_content']
@@ -483,7 +505,7 @@ class ServeContent(LogicElement, ContentElementMixin):
             td.update(kwargs)
         td.update(let)
 
-        for defer in self.generate_content(context, content, app, td=td):
+        for defer in silent_iter(self.generate_content(context, content, app, td=td)):
             yield defer
         context.copy('_content', '_return')
 
@@ -862,7 +884,7 @@ class CSS(RenderBase):
     def logic(self, context):
         section = self.section(context)
         css = context.sub(self.text)
-        html = """<style type="text/css">%s</style>\n""" % css
+        html = """<style type="text/css">\n%s\n</style>\n""" % css.strip()
         context['.content'].get_section(section).add_renderable(self._tag_name, HTML(html))
 
 

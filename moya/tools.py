@@ -19,6 +19,20 @@ from .compat import zip_longest, iteritems, xrange, text_type, PY3, implements_t
 _re_xml_namespace = re.compile(r'^\{(.*?)\}(.*)$', re.UNICODE)
 
 
+def silent_iter(seq):
+    return seq
+
+    # i = iter(seq)
+    # try:
+    #     while 1:
+    #         yield next(i)
+    # except GeneratorExit:
+    #     i.close()
+    # except:
+    #     i.close()
+    #     raise
+
+
 def extract_namespace(tag_name, default='http://moyaproject.com'):
     """Extracts namespace and tag name in Clark's notation"""
     match = _re_xml_namespace.match(tag_name)

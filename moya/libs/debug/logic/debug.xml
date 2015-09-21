@@ -59,7 +59,7 @@
         <let app=".app" />
 	</view>
 
-	<content libname="content.intro" template="intro.html">
+	<content libname="content.intro" template="intro.html" final="yes">
 		<title>Moya Debug</title>
         <let app=".app" />
 		<section name="body">
