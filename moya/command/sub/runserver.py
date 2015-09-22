@@ -3,7 +3,7 @@ from __future__ import print_function
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
-from ...compat import text_type, socketserver
+from ...compat import socketserver
 
 from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
@@ -30,6 +30,10 @@ class RequestHandler(WSGIRequestHandler):
 
 class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
     daemon_threads = True
+
+
+class ForkingWSGIServer(socketserver.ForkingMixIn, WSGIServer):
+    pass
 
 
 class Runserver(SubCommand):
@@ -59,6 +63,16 @@ class Runserver(SubCommand):
                             help="simulate network latency by inserting delays")
         parser.add_argument('--strict', dest='strict', action="store_true", default=False,
                             help="enable 'strict' checking of tag attributes")
+        parser.add_argument('--enable-threading', dest='usethreads', action="store_true",
+                            help='enable multi-threaded server')
+
+
+        # TODO: better forking dev server
+        # Disabled because the default implementation doesn't use process pooling which,
+        # doesn't allow Moya to cache anything
+
+        # parser.add_argument('--enable-forking', dest='usefork', action="store_true",
+        #                     help='enable forking server')
         return parser
 
     def run(self):
@@ -77,10 +91,19 @@ class Runserver(SubCommand):
         application.preflight()
 
         try:
+
+            server_class = WSGIServer
+            if args.usethreads:
+                server_class = ThreadedWSGIServer
+                log.info('using multi threaded server')
+            # elif args.usefork:
+            #     server_class = ForkingWSGIServer
+            #     log.info('using forking server')
+
             server = make_server(args.host,
                                  int(args.port),
                                  application,
-                                 server_class=ThreadedWSGIServer,
+                                 server_class=server_class,
                                  handler_class=RequestHandler)
         except IOError as e:
             if e.errno == 98:

@@ -293,7 +293,6 @@ class TemplateNode(Node):
             return repr(self.template)
         else:
             return "<template-node '{}' '{}'>".format(self.name, self.template)
-            #return 'TemplateNode("%s", "%s")' % (self.name, self.template)
 
     __repr__ = __str__
 

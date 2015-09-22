@@ -1,5 +1,3 @@
-{% inspect .theme %}
-
 {%- with theme=.theme %}
 {%- cache key theme._moya.hash for 1h %}
 
