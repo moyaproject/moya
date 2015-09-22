@@ -46,12 +46,14 @@ if PY2:
     from itertools import izip_longest as zip_longest
     #import cookie
     from urllib import urlopen
+    import SocketServer as socketserver
 else:
     from urllib.parse import urlparse, parse_qs, urlunparse
     from urllib.parse import urlencode, quote
     from itertools import zip_longest
     #from http import cookies as cookie
     from urllib.request import urlopen
+    import socketserver
 
 
 if PY2:

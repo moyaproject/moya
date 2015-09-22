@@ -11,7 +11,9 @@ from logging import handlers
 MemoryHandler = handlers.MemoryHandler
 
 import fs.path
+from fs.errors import FSError
 
+import sys
 from os.path import abspath, join, dirname, normpath
 
 
@@ -52,7 +54,7 @@ def init_logging_fs(logging_fs, path, disable_existing_loggers=True):
         try:
             with logging_fs.open(path, 'rt') as ini_file:
                 s = iniparse.parse(ini_file)
-        except IOError:
+        except FSError:
             raise errors.LoggingSettingsError('unable to read logging settings file "{}"'.format(path))
         ini_stack.append(s)
         if "extends" in s['']:
@@ -173,7 +175,10 @@ def _init_logging(path, ini_stack, disable_existing_loggers=True):
                 kass = _resolve(klass)
             args = get(section_name, "args")
             args = eval(args, vars(logging))
-            h = kass(*args)
+            try:
+                h = kass(*args)
+            except Exception as e:
+                raise errors.LoggingSettingsError("error constructing logger '{}' with args {!r} ({})".format(kass, args, e))
             if "level" in opts:
                 level = get(section_name, "level")
                 h.setLevel(_logging_level_names[level])

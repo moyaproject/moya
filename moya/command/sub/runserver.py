@@ -3,8 +3,11 @@ from __future__ import print_function
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
+from ...compat import text_type, socketserver
 
-from wsgiref.simple_server import WSGIRequestHandler, make_server
+from wsgiref.simple_server import (WSGIServer,
+                                   WSGIRequestHandler,
+                                   make_server)
 
 import sys
 import logging
@@ -23,6 +26,10 @@ class RequestHandler(WSGIRequestHandler):
     # Disable simple_server's logging to stdout
     def log_message(self, format, *args):
         pass
+
+
+class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    daemon_threads = True
 
 
 class Runserver(SubCommand):
@@ -73,6 +80,7 @@ class Runserver(SubCommand):
             server = make_server(args.host,
                                  int(args.port),
                                  application,
+                                 server_class=ThreadedWSGIServer,
                                  handler_class=RequestHandler)
         except IOError as e:
             if e.errno == 98:
