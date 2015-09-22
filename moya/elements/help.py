@@ -42,6 +42,7 @@ def help(archive, console, tagname):
         console(bbcode.render_console(tag._tag_doc, max_length=console.width)).nl()
 
     details = [(Cell("name", bold=True), tagname),
+               (Cell('synopsis', bold=True), getattr(tag.Help, 'synopsis', None) if hasattr(tag, 'Help') else ''),
                (Cell("namespace", bold=True), xmlns),
                (Cell("defined", bold=True), getattr(tag, '_definition', '?'))
                ]

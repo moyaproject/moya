@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from .render import render_object, HTML, RenderList
+from .render import render_object, HTML, RenderList, is_renderable
 from .containers import OrderedDict
 from .html import escape
 from . import interface
@@ -289,7 +289,11 @@ class TemplateNode(Node):
         self.td['self'] = self
 
     def __str__(self):
-        return 'TemplateNode("%s", "%s")' % (self.name, self.template)
+        if is_renderable(self.template):
+            return repr(self.template)
+        else:
+            return "<template-node '{}' '{}'>".format(self.name, self.template)
+            #return 'TemplateNode("%s", "%s")' % (self.name, self.template)
 
     __repr__ = __str__
 
@@ -332,6 +336,12 @@ class TemplateNode(Node):
         if 'with' in options:
             td = td.copy()
             td.update(options['with'])
+
+        if self.template is None:
+            return ''
+
+        if is_renderable(self.template):
+            return render_object(self.template, archive, context, target, options)
 
         if isinstance(self.template, string_types):
             html = engine.render(self.template, td, base_context=context, app=self.app)

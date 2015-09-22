@@ -147,9 +147,11 @@ def set_dynamic(context):
     context.set_counter('.counter')
     context.set_dynamic('.app', get_app_from_callstack)
     theme_fs = context.get('.fs.themes', None)
+    from ..theme import Theme
     if theme_fs:
-        from ..theme import Theme
-        context.set_dynamic('.theme', Theme.loader(theme_fs))
+        context.set_lazy('.theme', Theme.loader(theme_fs), context)
+    else:
+        context.set_lazy('.theme', Theme.dummy_loader, context)
 
 
 if __name__ == "__main__":

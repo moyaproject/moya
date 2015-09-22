@@ -3,11 +3,14 @@
 
 Added extended indexes to expressions "foo".0 means the same as "foo"[0]
 Made test server multi-threaded
+Added theme system in .theme
+Fixed generator exceptions ignored warnings
+Set a default internal theme
 
 0.5.21
 ------
 
-Updated fs dependancy
+Updated fs dependency
 
 0.5.20
 ------

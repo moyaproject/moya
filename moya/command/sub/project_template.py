@@ -134,6 +134,9 @@ location = ./logic
 # Path to logic file containing server
 startup = server.xml
 
+[themes]
+location = ./themes
+
 [debug]
 
 [autoreload]
@@ -154,6 +157,8 @@ timezone = ${{timezone}}
 user_timezone = yes
 # Append a slash to urls that 404
 append_slash = yes
+# set which theme file to read
+theme = default
 
 # Settings for the development server
 [site:127.0.0.1,localhost]
@@ -253,6 +258,42 @@ index =
 email_from =
 admin_email = ${{author.name}} <${{author.email}}>
 subject = [${.request.host}]
+
+
+@WRAPTEXT /themes/readme.txt
+The file(s) in this directory store theme settings.
+
+These settings are used to customize colors and other values for a given site.
+
+Moya loads the JSON file from the 'theme' value in the matching [site] section in the project settings file. You can then refer to the theme data as '.theme'.
+
+@TEXT /themes/default.json
+{
+    "colors":
+    {
+        "text":
+        {
+            "fg": "#333",
+            "bg": "white"
+        },
+        "highlight":
+        {
+            "fg": "#333",
+            "bg": "#eee"
+        },
+        "selected":
+        {
+            "fg": "#fff",
+            "bg": "#337ab7"
+        },
+        "border":
+        {
+            "normal": "#ccc",
+            "focused": "#ddd"
+        }
+    }
+
+}
 
 @TEXT /moya
 # The presence of this file indicates that this directory is a top-level moya project.
