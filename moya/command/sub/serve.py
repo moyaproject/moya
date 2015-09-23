@@ -1,14 +1,16 @@
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...loggingconf import init_logging
-from ...compat import PY2
+from ...compat import PY2, socketserver
 
 from fs.opener import fsopendir
 import os.path
 from os.path import join as pathjoin
 
 import sys
-from wsgiref.simple_server import WSGIRequestHandler, make_server
+from wsgiref.simple_server import (WSGIServer,
+                                   WSGIRequestHandler,
+                                   make_server)
 
 
 if PY2:
@@ -19,6 +21,10 @@ else:
 
 import logging
 log = logging.getLogger('moya.runtime')
+
+
+class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    daemon_threads = True
 
 
 class RequestHandler(WSGIRequestHandler):
@@ -62,6 +68,7 @@ class Serve(SubCommand):
         server = make_server(args.host,
                              int(args.port),
                              application,
+                             server_class=ThreadedWSGIServer,
                              handler_class=RequestHandler)
         log.info("server started on http://{}:{}".format(args.host, args.port))
 
