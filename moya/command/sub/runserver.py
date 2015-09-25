@@ -63,13 +63,12 @@ class Runserver(SubCommand):
                             help="simulate network latency by inserting delays")
         parser.add_argument('--strict', dest='strict', action="store_true", default=False,
                             help="enable 'strict' checking of tag attributes")
-        parser.add_argument('--enable-threading', dest='usethreads', action="store_true",
+        parser.add_argument('--enable-threading', dest='usethreads', action="store_true", default=False,
                             help='enable multi-threaded server')
 
-
         # TODO: better forking dev server
-        # Disabled because the default implementation doesn't use process pooling which,
-        # doesn't allow Moya to cache anything
+        # Disabled because the default implementation doesn't use process pooling,
+        # which prevents Moya from caching anything in memory
 
         # parser.add_argument('--enable-forking', dest='usefork', action="store_true",
         #                     help='enable forking server')
