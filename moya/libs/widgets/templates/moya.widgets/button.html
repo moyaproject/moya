@@ -1,0 +1,3 @@
+<button {% attrib name=name %} {% attrib class=(class or ['btn', 'btn-'+visual, block and 'btn-block', size ? 'btn-' + size : None]) %}>
+    {% if icon %}<i class="glyphicon glyphicon-${icon}"></i>{% endif %} {% children %}
+</button>
