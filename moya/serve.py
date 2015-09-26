@@ -19,7 +19,7 @@ from . import __version__
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
-def serve_file(req, fs, path, name=None):
+def serve_file(req, fs, path, filename=None):
     """Serve a static file"""
     res = MoyaResponse()
     mime_type, encoding = mimetypes.guess_type(basename(path))
@@ -53,8 +53,8 @@ def serve_file(req, fs, path, name=None):
         res.last_modified = mtime
         res.etag = "{}-{}-{}".format(mtime, file_size, md5_hexdigest(path))
         res.server = SERVER_NAME
-        if name is not None:
-            res.content_disposition = 'attachment; filename="{}"'.format(name)
+        if filename is not None:
+            res.content_disposition = 'attachment; filename="{}"'.format(filename)
 
         # Detect 304 not-modified
         status304 = False

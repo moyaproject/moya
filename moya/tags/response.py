@@ -102,7 +102,7 @@ class ServeFile(LogicElement):
     fsobj = Attribute("Filesystem object", type="Index")
     fs = Attribute("Filesystem name")
     ifexists = Attribute("Only serve a response if the file exists", type="boolean")
-    name = Attribute("Name of the file", required=False, default=None)
+    filename = Attribute("Name of the file being serve", required=False, default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -121,7 +121,7 @@ class ServeFile(LogicElement):
             return
 
         req = context.root["request"]
-        serve.serve_file(req, fs, path, name=params.name)
+        serve.serve_file(req, fs, path, filename=params.filename)
 
 
 class ServeJSON(LogicElement):
