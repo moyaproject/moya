@@ -418,6 +418,13 @@ class ElementBaseType(object):
     def tag_name(self):
         return self._tag_name
 
+    @property
+    def moya_name(self):
+        ns = self.xmlns
+        if ns.startswith('http://moyaproject.com/'):
+            ns = ns[len('http://moyaproject.com/'):]
+        return "{{{}}}{}".format(ns, self.tag_name)
+
     def get_app(self, context, app_attribute='from', check=True):
         app = None
         if self.supports_parameter(app_attribute):
@@ -513,14 +520,18 @@ class ElementBaseType(object):
 
         if not getattr(self._meta, 'all_attributes', False) and not self._tag_attributes_set.issuperset(attrs_keys_set):
             unknown_attrs = sorted(attrs_keys_set - self._tag_attributes_set)
-            diagnosis = None
+            diagnosis = ''
             if len(unknown_attrs) == 1:
                 msg = "{} is not a valid attribute on this tag"
                 nearest = nearest_word(unknown_attrs[0], self._tag_attributes_set)
                 if nearest is not None:
                     diagnosis = "Did you mean '{}'?".format(nearest)
+                else:
+                    diagnosis = "Valid attributes on this tag are {}".format(textual_list(sorted(self._tag_attributes_set)))
             else:
-                msg = "{} are not valid attributes on this tag"
+                msg = "Attributes {} are not valid on this tag"
+
+            diagnosis += '\n\nrun the following for more information:\n\n**$ moya help {}**'.format(self.moya_name)
 
             raise errors.ElementError(msg.format(textual_list(unknown_attrs, 'and')), element=self, diagnosis=diagnosis)
 

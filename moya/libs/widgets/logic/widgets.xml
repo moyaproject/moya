@@ -106,6 +106,17 @@
     <widget name="buttons" template="buttons.html" synopsis="renders enclosed links as buttons">
     </widget>
 
+    <widget name="button" template="button.html" synopsis="render a simple button">
+        <signature>
+            <attribute name="name" type="text" default=""/>
+            <attribute name="visual" required="no" default="default" type="text"/>
+            <attribute name="class" required="no" default="" type="text"/>
+            <attribute name="icon" required="no" type="text"/>
+            <attribute name="size" required="no" choices="sm,md,lg" default="md" type="text"/>
+            <attribute name="block" type="boolean" default="no" />
+        </signature>
+    </widget>
+
     <widget name="url" template="url.html" synopsis="renders a hyperlinked URL">
         <doc>Renders a URL with a link.</doc>
         <signature>

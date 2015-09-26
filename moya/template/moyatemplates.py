@@ -1778,7 +1778,7 @@ class Template(object):
                             diagnosis = "Check for typos."
                         else:
                             diagnosis = "Did you mean {{% {} %}} ?".format(nearest)
-                        raise errors.UnknownTagError("No such tag, {{% {} %}}".format(tag_name),
+                        raise errors.UnknownTagError("No such template tag, {{% {} %}}".format(tag_name),
                                                      node.template.path,
                                                      lineno + 1,
                                                      pos + 1,
