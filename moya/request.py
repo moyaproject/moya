@@ -12,6 +12,7 @@ from .console import Cell
 
 from webob import Request
 
+import os
 from cgi import FieldStorage
 
 
@@ -50,15 +51,15 @@ class _MultiProxy(object):
 
 class UploadFileProxy(AttributeExposer):
 
-    __moya_exposed_attributes__ = ['filename']
+    __moya_exposed_attributes__ = ['filename', 'size']
 
     def __init__(self, field_storage):
         self.field_storage = field_storage
-        self.file = field_storage.file
-        self.read = field_storage.file.read
-        self.seek = field_storage.file.seek
-        self.tell = field_storage.file.seek
-        self.readline = field_storage.file.seek
+        file = self.file = field_storage.file
+        self.read = file.read
+        self.seek = file.seek
+        self.tell = file.tell
+        self.readline = file.readline
         self.filename = field_storage.filename
 
     def __moyafile__(self):
@@ -66,6 +67,20 @@ class UploadFileProxy(AttributeExposer):
 
     def __repr__(self):
         return '<upload "{}">'.format(self.filename)
+
+    @property
+    def size(self):
+        if hasattr(self.file, 'fileno'):
+            size = os.fstat(self.file.fileno()).st_size
+        else:
+            pos = self.tell()
+            size = None
+            try:
+                self.seek(0, os.SEEK_END)
+                size = self.tell()
+            finally:
+                self.seek(pos)
+        return size
 
 
 class MoyaRequest(Request, AttributeExposer):
