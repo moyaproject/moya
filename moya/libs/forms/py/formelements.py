@@ -339,7 +339,8 @@ class Form(AttributeExposer):
         if not self.csrf:
             return
         if context['.user'] and context['.request.method'] in ('POST', 'PUT', 'DELETE'):
-            csrf = context['.request.POST._moya_csrf']
+            csrf = self.raw_data['_moya_csrf']
+            #csrf = context['.request.POST._moya_csrf']
             if csrf != self.csrf_token:
                 request = context['.request']
                 if request:
@@ -353,7 +354,8 @@ class Form(AttributeExposer):
             return True
         context = self.context
         if context['.user'] and context['.request.method'] in ('POST', 'PUT', 'DELETE'):
-            csrf = context['.request.POST._moya_csrf']
+            csrf = self.raw_data['_moya_csrf']
+            #csrf = context['.request.POST._moya_csrf']
             if csrf != self.csrf_token:
                 request = context['.request']
                 if request:
@@ -892,7 +894,7 @@ class Apply(LogicElement):
         """
 
     src = Attribute("form", type="index", default="form", evaldefault=True)
-    dst = Attribute("Destination object", type="reference", default=None)
+    dst = Attribute("Destination object", type="reference", required=True, default=None)
     fields = Attribute("fields to apply", type="commalist", default=None)
 
     def logic(self, context):

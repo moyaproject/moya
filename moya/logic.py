@@ -238,6 +238,12 @@ def _logic_loop(context,
     breakpoints_enabled = debugging
     skip = None
 
+    do_finalize = True
+    def finalize_stack():
+        while node_stack:
+            node = pop_stack()
+            close_generator(node)
+
     try:
         while node_stack:
             try:
@@ -366,6 +372,7 @@ def _logic_loop(context,
                     continue
                 # if debugging and breakpoints_enabled:
                 #    _breakpoint_notify(node)
+                do_finalize = False
                 raise
 
             except StartupFailedError:
@@ -386,9 +393,8 @@ def _logic_loop(context,
                 exc_node = node
                 raise LogicError(logic_exception, moya_trace)
     finally:
-        while node_stack:
-            node = pop_stack()
-            close_generator(node)
+        if do_finalize:
+            finalize_stack()
 
 
 def run_logic(archive, context, root_node):

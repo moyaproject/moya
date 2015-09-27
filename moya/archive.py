@@ -39,7 +39,6 @@ from .reader import DataReader
 from .context.tools import to_expression
 from . import logtools
 from . import settings
-from .theme import Theme
 
 from fs.opener import fsopendir
 from fs.multifs import MultiFS
@@ -148,11 +147,13 @@ class CallableElement(ContextElementBase):
             for node in self.element.run(context):
                 yield node
         finally:
-            try:
-                call = self.pop_call(context)
-            except:
-                # TODO: Why is this required?
-                pass
+            call = self.pop_call(context)
+            # try:
+            #     call = self.pop_call(context)
+            # except:
+            #     raise
+            #     # TODO: Why is this required?
+            #     pass
 
         if self._return_value is None:
             self._return_value = call.get('_return')
@@ -160,6 +161,9 @@ class CallableElement(ContextElementBase):
             self._return_value = self._return_value.get_return_value()
 
     def __call__(self, context, *args, **kwargs):
+        return self.call(context, args, kwargs)
+
+    def call(self, context, args, kwargs):
         self.args = args
         self.kwargs = kwargs
         if self.breakpoint and not self.archive.suppress_breakpoints:

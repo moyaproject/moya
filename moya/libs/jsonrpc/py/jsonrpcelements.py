@@ -66,10 +66,18 @@ class MissingParam(ParamError):
 class InvalidParam(ParamError):
     def __init__(self, param, value):
         value_type = _get_type_name(value)
-        msg = "parameter '{}' should be a {}, not a {}".format(param.name,
-                                                               param.type,
-                                                               value_type)
+        msg = "parameter '{}' should be type {}, not type {}".format(param.name,
+                                                                     param.type,
+                                                                     value_type)
         super(InvalidParam, self).__init__(msg)
+
+
+class InvalidParamDefault(ParamError):
+    def __init__(self, param):
+        msg = "unable to parse parameter '{}' default ({}) as type {}".format(param.name,
+                                                                              param.default,
+                                                                              param.type)
+        super(InvalidParamDefault, self).__init__(msg)
 
 
 class Param(object):
@@ -87,7 +95,7 @@ class Param(object):
     def __repr__(self):
         return "<{name} ({type})>".format(**vars(self))
 
-    def process(self, params):
+    def process(self, context, params):
         if self.type not in self.valid_param_types:
             raise ValueError("not a valid parameter type")
         try:
@@ -95,8 +103,17 @@ class Param(object):
         except KeyError:
             if self.required:
                 raise MissingParam("'{}' is a required parameter".format(self.name))
-            return self.default
+            return self.make_default(context)
         return getattr(self, 'check_' + self.type)(value)
+
+    def make_default(self, context):
+        try:
+            if self.type == "string":
+                return context.sub(self.default)
+            else:
+                return context.eval(self.default)
+        except:
+            raise InvalidParamDefault(self)
 
     def check_string(self, value):
         if not isinstance(value, string_types):
@@ -150,10 +167,10 @@ class Method(object):
     def __repr__(self):
         return "<method \"{}\" {}>".format(self.name, self.element.libid)
 
-    def process_params(self, req_params):
+    def process_params(self, context, req_params):
         processed_params = {}
         for param in self.params:
-            processed_params[param.name] = param.process(req_params)
+            processed_params[param.name] = param.process(context, req_params)
         return processed_params
 
 
@@ -409,7 +426,7 @@ class Interface(LogicElement):
                           lazystr(to_expression, context, params, 80))
 
                 try:
-                    params = response.method.process_params(params)
+                    params = response.method.process_params(context, params)
                 except ParamError as e:
                     response = ErrorResponse(ErrorCode.invalid_params,
                                              text_type(e),
@@ -422,7 +439,7 @@ class Interface(LogicElement):
                     try:
                         return_value = self.archive.call(element.libid, context, app, **params)
                     except Exception as e:
-                        if isinstance(e.original, MoyaException):
+                        if isinstance(getattr(e, 'original', None), MoyaException):
                             moya_exc = e.original
                             if moya_exc.type == "jsonrpc.error":
                                 return RPCErrorReturn(moya_exc.info['code'],
@@ -655,6 +672,9 @@ class MethodTag(LogicElement):
     group = Attribute("Method group", required=False, default=None)
     description = Attribute("Brief description of method", required=False, default='')
     call = Attribute("Macro to call for functionality", type="elementref", required=False, default=None)
+
+    def run(self, context):
+        yield logic.DeferNodeContents(self)
 
     def lib_finalize(self, context):
         (interface,
