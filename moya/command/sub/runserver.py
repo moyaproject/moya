@@ -45,7 +45,7 @@ class Runserver(SubCommand):
                             help="location of the Moya server code")
         parser.add_argument("-i", '--ini', dest="settings", default=None, metavar="SETTINGSPATH",
                             help="path to project settings file")
-        parser.add_argument("--server", dest="server", default="main", metavar="SERVERREF",
+        parser.add_argument("-s", "--server", dest="server", default="main", metavar="SERVERREF",
                             help="server element to use")
         parser.add_argument("-H", "--host", dest="host", default="127.0.0.1",
                             help="IP address to bind to")
@@ -53,17 +53,17 @@ class Runserver(SubCommand):
                             help="port to listen on")
         parser.add_argument("-b", "--breakpoint", dest="breakpoint", action="store_true", default=False,
                             help="enter debug mode on every view")
-        parser.add_argument('--no-validate', dest="novalidate", action="store_true", default=False,
+        parser.add_argument("--no-validate", dest="novalidate", action="store_true", default=False,
                             help="don't validate database models before running server")
-        parser.add_argument('--breakpoint-startup', dest="breakpoint_startup", action="store_true", default=False,
+        parser.add_argument("--breakpoint-startup", dest="breakpoint_startup", action="store_true", default=False,
                             help="debug startup process")
-        parser.add_argument('--no-reload', dest="noreload", action="store_true", default=False,
+        parser.add_argument("--no-reload", dest="noreload", action="store_true", default=False,
                             help="disable auto-reload")
-        parser.add_argument('--slow', dest="slow", action="store_true", default=False,
+        parser.add_argument("--slow", dest="slow", action="store_true", default=False,
                             help="simulate network latency by inserting delays")
-        parser.add_argument('--strict', dest='strict', action="store_true", default=False,
+        parser.add_argument("--strict", dest='strict', action="store_true", default=False,
                             help="enable 'strict' checking of tag attributes")
-        parser.add_argument('--enable-threading', dest='usethreads', action="store_true", default=False,
+        parser.add_argument("-t", "--use-threads", dest='usethreads', action="store_true", default=False,
                             help='enable multi-threaded server')
 
         # TODO: better forking dev server

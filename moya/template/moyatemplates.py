@@ -1142,7 +1142,7 @@ class AttribNode(Node):
     def render(self, environment, context, template, text_escape):
         attribs = self.attribs_expression.eval(context)
         if not hasattr(attribs, 'items'):
-            self.render_error('attribs tag requires a mapping')
+            self.render_error('attribs tag requires a dictionary-like object (not {})'.format(context.to_expr(attribs)))
         attribs_text = []
         for k, v in attribs.items():
             if is_missing(v) or v is None:
@@ -1180,7 +1180,7 @@ class URLEncodeNode(Node):
     def render(self, environment, context, template, text_escape):
         attribs = self.attribs_expression.eval(context)
         if not hasattr(attribs, 'items'):
-            self.render_error('urlencode tag requires a mapping')
+            self.render_error('urlencode tag requires a dictionary like object (not {})'.format(context.to_expr(attribs)))
         encoded_url = urlencode(attribs)
         if PY2:
             encoded_url = encoded_url.decode('ascii')
