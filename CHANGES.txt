@@ -6,6 +6,7 @@ Made test server multi-threaded
 Added theme system in .theme
 Fixed generator exceptions ignored warnings
 Set a default internal theme
+Added <image:gaussian-blur>
 
 0.5.21
 ------

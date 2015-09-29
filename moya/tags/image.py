@@ -8,7 +8,7 @@ from ..compat import implements_to_string
 
 from fs.path import basename, pathjoin
 
-from PIL import Image
+from PIL import Image, ImageFilter
 
 import logging
 log = logging.getLogger('moya.image')
@@ -368,6 +368,23 @@ class Crop(LogicElement):
             y = (img.size[1] - h) // 2
         elif len(size) == 4:
             x, y, w, h = size
+        else:
+            self.throw('bad-value.box-invalid',
+                       "parameter 'box' should be  sequence of 2 or 4 parameters (not {})".format(context.to_expr(size)))
 
         box = x, y, w, h
         params.image.replace(img.crop(box))
+
+
+class GaussianBlur(LogicElement):
+    """Guasian blur an image"""
+    xmlns = namespaces.image
+
+    image = Attribute("Image to show", type="expression", default="image", evaldefault=True)
+    radius = Attribute("Radius of blur", type="integer", default=2)
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        img = params.image._img
+        new_image = img.filter(ImageFilter.GaussianBlur(radius=params.radius))
+        params.image.replace(new_image)

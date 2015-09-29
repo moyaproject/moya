@@ -4,11 +4,9 @@
 
 {%- if filename %}
 
-{%- for thumb in ['small', 'square', 'width200', 'fitsquare', 'fit'] %}
-<img src="${filename | "thumbnail_url"(processor=thumb)}">
+{%- for thumb in ['small', 'square', 'width200', 'fitsquare', 'fit', 'blur'] %}
+<img src="${filename | "thumbnail"(processor=thumb)}">
 {%- endfor %}
-
-<img src="${filename | 'thumbnail'(processor='auto')}">
 
 {%- endif %}
 

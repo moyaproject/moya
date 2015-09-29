@@ -42,6 +42,11 @@
             <image:resize-to-fit width="400"/>
         </tn:processor>
 
+        <tn:processor name="blur" version="4">
+            <image:resize-to-fit width="600"/>
+            <image:gaussian-blur radius="10"/>
+        </tn:processor>
+
     </tn:thumbnails>
 
     <form xmlns="http://moyaproject.com/forms" docname="form.upload" style="horizontal" legend="Thumbnail Test">

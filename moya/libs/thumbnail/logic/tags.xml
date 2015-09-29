@@ -76,7 +76,7 @@ The code inside the processor transforms that image. The new image is then writt
         <find-element
             tag="processor"
             ns="http://moyaproject.com/thumbnail"
-            from="app_name"
+            from="${app_name}"
             dst="processor"
             let:name="processor"/>
 
