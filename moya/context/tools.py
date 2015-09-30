@@ -157,7 +157,7 @@ STRING_ENCODE = {
     '\v': '\\v',
     "'": "\\'",
     '"': '\\"',
-    '\\\\': '\\'
+    '\\': '\\\\'
 }
 
 STRING_DECODE = {v: k for k, v in STRING_ENCODE.items()}
