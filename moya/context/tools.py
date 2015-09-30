@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from ..compat import text_type, number_types, iteritems, PY2
+from ..compat import text_type, number_types, iteritems
 from ..context.missing import MoyaAttributeError
 
-import codecs
 import re
 
 
@@ -37,6 +36,7 @@ def get_moya_attribute(context, obj, key, default=None):
         return getattr(obj, key, default)
     except Exception as e:
         return MoyaAttributeError(text_type(e))
+
 
 def yield_join(seq, join=", "):
     """Iterate over a sequence, inserting join text between values"""
@@ -167,11 +167,14 @@ _decode_string = ('|'.join(re.escape(c) for c in STRING_DECODE.keys()))
 _re_encode_string = re.compile(_encode_string)
 _re_decode_string = re.compile(_decode_string)
 
+
 def encode_string(s, _re_sub=_re_encode_string.sub, _replace=STRING_ENCODE.__getitem__):
     return _re_sub(lambda match: _replace(match.group(0)), s)
 
+
 def quote_string(s):
     return "'{}'".format(encode_string(s))
+
 
 def decode_string(s, _re_sub=_re_decode_string.sub, _replace=STRING_DECODE.__getitem__):
     return _re_sub(lambda match: _replace(match.group(0)), s)
