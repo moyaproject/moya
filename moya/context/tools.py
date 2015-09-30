@@ -5,6 +5,7 @@ from ..compat import text_type, number_types, iteritems, PY2
 from ..context.missing import MoyaAttributeError
 
 import codecs
+import re
 
 
 def obj_index(obj, key):
@@ -36,14 +37,6 @@ def get_moya_attribute(context, obj, key, default=None):
         return getattr(obj, key, default)
     except Exception as e:
         return MoyaAttributeError(text_type(e))
-
-
-def quote_string(obj):
-    s = codecs.encode(obj, 'unicode_escape')
-    if not PY2:
-        s = s.decode('utf-8')
-    return "'{}'".format(s.replace("'", "\\'"))
-
 
 def yield_join(seq, join=", "):
     """Iterate over a sequence, inserting join text between values"""
@@ -154,14 +147,66 @@ def set_dynamic(context):
         context.set_lazy('.theme', Theme.dummy_loader, context)
 
 
-if __name__ == "__main__":
-    from moya.context import Context
-    c = Context()
-    c['foo'] = [range(10)] * 10000
-    c['bar'] = [{'a': "Hello world!", 'b': range(5)}] * 10000
+STRING_ENCODE = {
+    '\a': '\\a',
+    '\b': '\\b',
+    '\f': '\\f',
+    '\n': '\\n',
+    '\r': '\\r',
+    '\t': '\\t',
+    '\v': '\\v',
+    "'": "\\'",
+    '"': '\\"',
+    '\\\\': '\\'
+}
 
-    print(c.to_expr(c['foo']))
-    print(c.to_expr(c['bar']))
+STRING_DECODE = {v: k for k, v in STRING_ENCODE.items()}
+
+_encode_string = ('|'.join(re.escape(c) for c in STRING_ENCODE.keys()))
+_decode_string = ('|'.join(re.escape(c) for c in STRING_DECODE.keys()))
+_re_encode_string = re.compile(_encode_string)
+_re_decode_string = re.compile(_decode_string)
+
+def encode_string(s, _re_sub=_re_encode_string.sub, _replace=STRING_ENCODE.__getitem__):
+    return _re_sub(lambda match: _replace(match.group(0)), s)
+
+def quote_string(s):
+    return "'{}'".format(encode_string(s))
+
+def decode_string(s, _re_sub=_re_decode_string.sub, _replace=STRING_DECODE.__getitem__):
+    return _re_sub(lambda match: _replace(match.group(0)), s)
+
+
+if __name__ == "__main__":
+
+    tests = [
+        "test",
+        "hello\nworld",
+        "you can \"quote me\" on that"
+    ]
+
+    for t in tests:
+        print()
+        print(repr(t))
+
+        enc = encode_string(t)
+
+        print(repr(enc))
+
+        dec = decode_string(enc)
+
+        print(repr(dec))
+
+
+
+# if __name__ == "__main__":
+#     from moya.context import Context
+#     c = Context()
+#     c['foo'] = [range(10)] * 10000
+#     c['bar'] = [{'a': "Hello world!", 'b': range(5)}] * 10000
+#
+#     print(c.to_expr(c['foo']))
+#     print(c.to_expr(c['bar']))
 
 # if __name__ == "__main__":
 #     from moya.context.expressionrange import *

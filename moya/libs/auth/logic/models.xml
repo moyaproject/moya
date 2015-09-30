@@ -20,6 +20,7 @@
             options="#Group.user == None or #Group.user == object" orderby="username" />
         <property name="display_name" expression="first_name ? joinspace:[first_name, last_name] : username" />
         <property name="full_name" expression="first_name ? joinspace:[first_name, last_name] : None" />
+        <property name="display_name_detail" expression="full_name ? sub:'${full_name} (${username})' : username" />
         <!-- <property name="display_name" expression="'hello'" /> -->
     </model>
 

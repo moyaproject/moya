@@ -27,7 +27,7 @@ from ..context import dataindex
 from ..context.dataindex import parse as parseindex
 from ..context.expressiontime import TimeSpan
 from ..context.expressionrange import ExpressionRange
-from ..context.tools import to_expression
+from ..context.tools import to_expression, decode_string
 from ..context.missing import Missing
 from ..moyaexceptions import throw
 from ..compat import implements_to_string, text_type, string_types
@@ -36,7 +36,6 @@ from ..moyaexceptions import MoyaException
 
 import operator
 import re
-import codecs
 from operator import truth
 from fnmatch import fnmatchcase
 
@@ -212,11 +211,21 @@ class EvalReal(Evaluator):
         return self.value
 
 
+class EvalTripleString(Evaluator):
+    """Class to evaluate a triple quoted string"""
+
+    def build(self, tokens, _decode=decode_string):
+        self.value = _decode(tokens[0][3:-3])
+
+    def eval(self, context):
+        return self.value
+
+
 class EvalString(Evaluator):
     """Class to evaluate a string"""
 
-    def build(self, tokens):
-        self.value = codecs.decode(tokens[0], 'unicode_escape')
+    def build(self, tokens, _decode=decode_string):
+        self.value = _decode(tokens[0][1:-1])
 
     def eval(self, context):
         return self.value
@@ -591,10 +600,12 @@ variable = Regex(r'([a-zA-Z0-9\._]+)')
 explicit_variable = '$' + Regex(r'([a-zA-Z0-9\._]+)')
 current_scope = Literal('$$')
 
-string = (QuotedString("'''", escChar=None, unquoteResults=True) |
-          QuotedString('"""', escChar=None, unquoteResults=True) |
-          QuotedString('"', escChar="\\", unquoteResults=True) |
-          QuotedString('\'', escChar="\\", unquoteResults=True))
+triple_string = (QuotedString("'''", escChar=None, unquoteResults=False) |
+                 QuotedString('"""', escChar=None, unquoteResults=False))
+
+string = (QuotedString('"', escChar='\\', unquoteResults=False) |
+          QuotedString("'", escChar="\\", unquoteResults=False))
+
 regexp = QuotedString('/', escChar=None)
 timespan = Combine(Word(nums) + oneOf('ms s m h d'))
 
@@ -604,6 +615,7 @@ explicit_variable_operand = explicit_variable
 integer_operand = integer
 real_operand = real
 number_operand = real | integer
+triple_string_operand = triple_string
 string_operand = string
 
 groupop = Literal(',')
@@ -622,6 +634,7 @@ variable_operand.setParseAction(EvalVariable)
 explicit_variable_operand.setParseAction(EvalExplicitVariable)
 integer_operand.setParseAction(EvalInteger)
 real_operand.setParseAction(EvalReal)
+triple_string.setParseAction(EvalTripleString)
 string_operand.setParseAction(EvalString)
 constant.setParseAction(EvalConstant)
 regexp.setParseAction(EvalRegExp)
@@ -659,6 +672,7 @@ literalindex = Regex(r'\.([a-zA-Z0-9\._]+)');
 operand = (timespan |
            real_operand |
            integer_operand |
+           triple_string_operand |
            string_operand |
            regexp |
            constant |

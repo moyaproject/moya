@@ -336,6 +336,7 @@ class TestContext(unittest.TestCase):
                  ("collectids:objects", [1, 2, 3]),
                  ("commalist:['hello', 'world']", "hello,world"),
                  ("commaspacelist:['hello', 'world']", "hello, world"),
+                 ("'hello\\nworld'", "hello\nworld")
                  ]
 
         for expression, result in tests:
