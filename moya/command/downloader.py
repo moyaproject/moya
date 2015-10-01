@@ -56,8 +56,8 @@ def download(url,
 
     console.show_cursor(False)
     try:
-        progress_width = 20
-        progress = Progress(console, 'downloading {}'.format(filename), width=progress_width)
+        progress_width = 24
+        progress = Progress(console, '{}'.format(filename), width=progress_width)
         progress.update(0, msg=msg)
         try:
             response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
@@ -84,7 +84,7 @@ def download(url,
                     bytes_read += len(data)
 
                     bytes_per_second = int(float(bytes_read) / (time() - start))
-                    speed = "downloading {} {}/s".format(filename, _filesize(bytes_per_second))
+                    speed = "{filename}".format(filename=filename, speed=(_filesize(bytes_per_second) + "/s").ljust(16))
 
                     progress.step(len(data), msg=speed)
         finally:

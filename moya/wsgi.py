@@ -40,51 +40,6 @@ request_log = logging.getLogger("moya.request")
 startup_log = logging.getLogger("moya.startup")
 preflight_log = logging.getLogger("moya.preflight")
 
-
-#import moya.debugprint
-
-# class ReloadChangeWatcher(object):
-
-#     def __init__(self, watch_fs, app):
-#         self._app = weakref.ref(app)
-#         self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
-#         self.watching_fs = watch_fs
-#         watch_location = watch_fs.desc('/')
-#         self.is_win = sys.platform.startswith('win')
-#         try:
-#             self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
-#         except UnsupportedError:
-#             startup_log.warning('auto reload is not supported on this platform')
-#         except:
-#             startup_log.exception('failed to watch "{}" for changes'.format(watch_location))
-#             if not self.is_win:
-#                 startup_log.debug("have you installed 'pyinotify'?")
-#         else:
-#             startup_log.debug('watching "{}" for changes'.format(watch_location))
-
-#     @property
-#     def app(self):
-#         return self._app()
-
-#     def close(self):
-#         self.watching_fs.close()
-
-#     def on_change(self, event):
-#         if self.app is None or not hasattr(self.app, 'archive'):
-#             return
-#         ext = splitext(event.path)[1].lower()
-#         if ext not in self.watch_types:
-#             return
-
-#         if not self.is_win:
-#             if isinstance(event, MODIFIED) and not event.closed:
-#                 return
-
-#         if not self.app.rebuild_required:
-#             log.info("detected modification to project, rebuild will occur on next request")
-#         self.app.rebuild_required = True
-
-
 try:
     import watchdog
     import watchdog.events
@@ -92,9 +47,7 @@ try:
 except ImportError:
     watchdog = None
 
-
 if watchdog:
-
     class ReloadChangeWatcher(watchdog.events.FileSystemEventHandler):
 
         def __init__(self, watch_fs, app):
@@ -143,7 +96,6 @@ if watchdog:
             self.watching_fs.close()
 
 else:
-
     class ReloadChangeWatcher(object):
         def __init__(self, watch_fs, app):
             startup_log.warning("'watchdog' module could not be imported, autoreload is disabled")
@@ -208,9 +160,6 @@ class WSGIApplication(object):
     def close(self):
         if self.watcher is not None:
             self.watcher.close()
-
-    # def __del__(self):
-    #     pass
 
     def __repr__(self):
         return """<wsgiapplication {} {}>""".format(self.settings_path, self.server_ref)

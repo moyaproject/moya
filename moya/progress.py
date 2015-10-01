@@ -54,7 +54,7 @@ class Progress(object):
         num_bars = int(self.complete * self.width)
         bars = '=' * num_bars
         bars = bars.ljust(self.width, ' ')
-        out = "{indent}[{bars}] {progress}".format(indent=self.indent,
+        out = "{indent}{progress} [{bars}]".format(indent=self.indent,
                                                    bars=bars,
                                                    progress=progress)
         if self.msg:
