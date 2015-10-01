@@ -107,6 +107,18 @@ else:
     next_method_name = "__next__"
 
 
+if PY2:
+    cmp = cmp
+else:
+    def cmp(a, b):
+        if a < b:
+            return -1
+        elif a == b:
+            return 0
+        else:
+            return +1
+
+
 class string(object):
     lowercase = 'abcdefghijklmnopqrstuvwxyz'
     uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

@@ -33,7 +33,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from moya.interface import AttributeExposer
-from moya.compat import text_type, implements_to_string, zip_longest
+from moya.compat import text_type, implements_to_string, zip_longest, cmp
 
 
 import re

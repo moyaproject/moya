@@ -18,24 +18,6 @@
         <title>Tests</title>
         <section name="body">
 
-            <w:select>
-                <w:option value="1">Option1</w:option>
-                <w:option value="2">Another Option</w:option>
-                <w:option value="3">Yadda Yadda</w:option>
-                <w:option value="4">Option1</w:option>
-                <w:option value="5">Another Option</w:option>
-                <w:option value="6">Yadda Yadda</w:option>
-                <w:option value="7">Option1</w:option>
-                <w:option value="8">Another Option</w:option>
-                <w:option value="9">Yadda Yadda</w:option>
-                <w:option value="10">Option1</w:option>
-                <w:option value="11">Another Option</w:option>
-                <w:option value="12">Yadda Yadda</w:option>
-                <w:option value="13">Option1</w:option>
-                <w:option value="14">Another Option</w:option>
-                <w:option value="15">Yadda Yadda</w:option>
-            </w:select>
-
             <w:tab-panel id="testtabs" active="tab1">
                 <w:tab id="tab1" title="Tab One">
                     <markdown>This is in Tab 1</markdown>

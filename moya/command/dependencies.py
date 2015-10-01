@@ -34,11 +34,16 @@ def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
         visited.add(package)
 
         package_select = rpc.call('package.select', package=package)
-        name_version = "{} v{}".format(package_select['name'], package_select['version'])
+
+        if dependancy and package_select['version'] is None:
+            console.text("dependency '{}'' has no installation candidate".format(package), fg="red")
+            continue
+
+        name_version = "{} {}".format(package_select['name'], package_select['version'])
         if dependancy:
-            console.text("selected {} (dependency)".format(name_version))
+            console.text("selected {} (dependency)".format(name_version), italic=True)
         else:
-            console.text("selected {}".format(name_version))
+            console.text("selected {}".format(name_version), italic=True)
         name = package_select['name']
 
         requirements[name] = (app_name, mount, package_select)
@@ -50,13 +55,17 @@ def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
         lib_settings_response = requests.get(lib_ini_url, verify=False)
         lib_settings = settings.SettingsContainer.read_from_file(io.StringIO(lib_settings_response.text))
 
+        def make_app_name(dep):
+            long_name = versioning.VersionSpec(dep).name
+            return long_name.split('.', 1)[-1].replace('.', '')
+
         if 'requires' in lib_settings:
             for dep in lib_settings.get_list('requires', 'install', ''):
-                app_name = dep.split('.')[-1]
+                app_name = make_app_name(dep)
                 package_stack.append((app_name, None, dep))
                 dependancy = True
             for dep in lib_settings.get_list('requires', 'mount', ''):
-                app_name = dep.split('.')[-1]
+                app_name = make_app_name(dep)
                 package_stack.append((app_name, "/{}/".format(app_name), dep))
 
     return requirements
