@@ -151,43 +151,48 @@ class Import(LogicElement):
             location = dirname(abspath(module.__file__))
             absolute = True
 
-        if '::/' in location:
-            import_fs = fsopendir(location)
-        else:
-            if absolute:
+        try:
+
+            if '::/' in location:
                 import_fs = fsopendir(location)
             else:
-                project_fs = context['fs']
-                try:
-                    if project_fs.hassyspath('/'):
-                        project_path = project_fs.getsyspath('/')
-                        import_path = pathjoin(project_path, location)
-                        import_fs = fsopendir(import_path)
-                    else:
-                        import_fs = context['fs'].opendir(location)
-                except FSError as e:
-                    self.throw("import.fail",
-                               "unable to import library from {}".format(location),
-                               diagnosis=text_type(e))
-        lib = archive.load_library(import_fs,
-                                   priority=priority,
-                                   template_priority=template_priority,
-                                   long_name=name,
-                                   rebuild=context.root.get('_rebuild', False))
-        if lib.failed_documents:
-            if _location is not None:
-                msg = "Failed to load library '{}' from location '{}'"
-                raise errors.StartupFailedError(msg.format(name or lib.long_name, _location))
-            elif py:
-                msg = "Failed to load library '{}' from Python module '{}'"
-                raise errors.StartupFailedError(msg.format(name or lib.long_name, py))
-            else:
-                raise errors.StartupFailedError("Failed to load library '{}'".format(name or lib.long_name))
-        startup_log.debug("%s imported %.1fms", lib, (time() - start) * 1000.0)
-        if lib.priority:
-            startup_log.debug("%s priority is %s", lib, lib.priority)
-        if lib.template_priority:
-            startup_log.debug("%s template priority is %s", lib, lib.template_priority)
+                if absolute:
+                    import_fs = fsopendir(location)
+                else:
+                    project_fs = context['fs']
+                    try:
+                        if project_fs.hassyspath('/'):
+                            project_path = project_fs.getsyspath('/')
+                            import_path = pathjoin(project_path, location)
+                            import_fs = fsopendir(import_path)
+                        else:
+                            import_fs = context['fs'].opendir(location)
+                    except FSError as e:
+                        self.throw("import.fail",
+                                   "unable to import library from {}".format(location),
+                                   diagnosis=text_type(e))
+            lib = archive.load_library(import_fs,
+                                       priority=priority,
+                                       template_priority=template_priority,
+                                       long_name=name,
+                                       rebuild=context.root.get('_rebuild', False))
+            if lib.failed_documents:
+                if _location is not None:
+                    msg = "Failed to load library '{}' from location '{}'"
+                    raise errors.StartupFailedError(msg.format(name or lib.long_name, _location))
+                elif py:
+                    msg = "Failed to load library '{}' from Python module '{}'"
+                    raise errors.StartupFailedError(msg.format(name or lib.long_name, py))
+                else:
+                    raise errors.StartupFailedError("Failed to load library '{}'".format(name or lib.long_name))
+            startup_log.debug("%s imported %.1fms", lib, (time() - start) * 1000.0)
+            if lib.priority:
+                startup_log.debug("%s priority is %s", lib, lib.priority)
+            if lib.template_priority:
+                startup_log.debug("%s template priority is %s", lib, lib.template_priority)
+        except Exception as e:
+            if not self.archive.test_build:
+                raise
 
 
 class Install(LogicElement):
@@ -214,37 +219,43 @@ class Install(LogicElement):
         try:
             self.archive.build_libs()
         except Exception as e:
-            raise
+            if not self.archive.test_build:
+                raise
+
         try:
-            app = archive.create_app(params.name, params.lib)
-        except errors.ArchiveError as e:
-            raise errors.ElementError(text_type(e))
-        if app.lib.failed_documents:
-            raise errors.StartupFailedError("Unable to import lib '%s'" % params.lib)
-
-        if params.mount:
-            server = self.get_ancestor('server')
             try:
-                mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint", "name", params.mountpoint)
-            except errors.ElementNotFoundError:
-                return
-                raise errors.StartupFailedError("No mountpoint called '{0}' in {1}".format(params.mountpoint, app.lib))
-            app.mounts.append((params.mountpoint, params.mount))
-            server.urlmapper.mount(params.mount,
-                                   mountpoint.urlmapper,
-                                   defaults={'app': app.name},
-                                   name=params.name,
-                                   priority=params.urlpriority)
+                app = archive.create_app(params.name, params.lib)
+            except errors.ArchiveError as e:
+                raise errors.ElementError(text_type(e))
+            if app.lib.failed_documents:
+                raise errors.StartupFailedError("Unable to import lib '%s'" % params.lib)
 
-            for stage, urlmapper in iteritems(server.middleware):
-                urlmapper.mount(params.mount,
-                                mountpoint.middleware[stage],
-                                defaults={'app': app.name},
-                                name=params.name,
-                                priority=params.urlpriority)
-            startup_log.debug("%s installed, mounted on %s", app, tools.normalize_url_path(params.mount))
-        else:
-            startup_log.debug("%s installed", app)
+            if params.mount:
+                server = self.get_ancestor('server')
+                try:
+                    mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint", "name", params.mountpoint)
+                except errors.ElementNotFoundError:
+                    return
+                    raise errors.StartupFailedError("No mountpoint called '{0}' in {1}".format(params.mountpoint, app.lib))
+                app.mounts.append((params.mountpoint, params.mount))
+                server.urlmapper.mount(params.mount,
+                                       mountpoint.urlmapper,
+                                       defaults={'app': app.name},
+                                       name=params.name,
+                                       priority=params.urlpriority)
+
+                for stage, urlmapper in iteritems(server.middleware):
+                    urlmapper.mount(params.mount,
+                                    mountpoint.middleware[stage],
+                                    defaults={'app': app.name},
+                                    name=params.name,
+                                    priority=params.urlpriority)
+                startup_log.debug("%s installed, mounted on %s", app, tools.normalize_url_path(params.mount))
+            else:
+                startup_log.debug("%s installed", app)
+        except:
+            if not self.archive.test_build:
+                raise
 
 
 class Log(LogicElement):

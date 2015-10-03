@@ -749,7 +749,7 @@ Find, install and manage Moya libraries
         """Check if packages are already installed"""
         if not (self.args.force or self.args.download):
             try:
-                application = WSGIApplication(self.location, self.args.settings, disable_autoreload=True)
+                application = WSGIApplication(self.location, self.args.settings, disable_autoreload=True, test_build=True)
                 archive = application.archive
                 if archive is None:
                     raise CommandError('unable to load project, use the --force switch to force installation')

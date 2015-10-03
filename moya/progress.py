@@ -6,9 +6,11 @@ from __future__ import unicode_literals
 from __future__ import division
 
 
+from time import sleep
+
 class Progress(object):
     """Renders a progress bar to the console"""
-    def __init__(self, console, msg, num_steps=100, width=12, indent=''):
+    def __init__(self, console, msg, num_steps=100, width=12, indent='', vanish=False):
         self.console = console
         self.msg = msg
         self.num_steps = num_steps
@@ -17,6 +19,7 @@ class Progress(object):
         self._step = 0
         self.width = width
         self.indent = indent
+        self.vanish = vanish
 
     def set_num_steps(self, num_steps):
         self.num_steps = num_steps
@@ -70,10 +73,15 @@ class Progress(object):
     def done(self, msg=None):
         if msg is not None:
             self.msg = msg
-        if not self.console.is_terminal():
-            self.console.text(self.msg)
+        if self.vanish:
+            self.render()
+            sleep(0.1)
+            self.console(len(self.msg) * ' ')('\r')
         else:
-            self.render(line_end='\n')
+            if not self.console.is_terminal():
+                self.console.text(self.msg)
+            else:
+                self.render(line_end='\n')
 
 
 class ProgressContext(object):

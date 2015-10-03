@@ -118,7 +118,8 @@ class WSGIApplication(object):
                  validate_db=False,
                  simulate_slow_network=False,
                  strict=False,
-                 master_settings=None):
+                 master_settings=None,
+                 test_build=False):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -132,6 +133,7 @@ class WSGIApplication(object):
         self._self = weakref.ref(self, self.on_close)
         self.simulate_slow_network = simulate_slow_network
         self.master_settings = master_settings
+        self.test_build = test_build
 
         if logging is not None:
             with fsopendir(self.filesystem_url) as logging_fs:
@@ -172,7 +174,8 @@ class WSGIApplication(object):
                                         validate_db=self.validate_db,
                                         breakpoint=breakpoint,
                                         strict=strict,
-                                        master_settings=self.master_settings)
+                                        master_settings=self.master_settings,
+                                        test_build=self.test_build)
         if build_result is None:
             msg = "Failed to build project"
             raise errors.StartupFailedError(msg)

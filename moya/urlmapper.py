@@ -100,8 +100,8 @@ class URLProxy(object):
             raise KeyError(name)
         proxy = URLProxy(self.mapper, self.path + [name])
         obj = proxy.evaluate()
-        if isinstance(obj, text_type):
-            return obj
+        #if isinstance(obj, text_type):
+        #    return obj
         return proxy
 
     def __moyacall__(self, params):

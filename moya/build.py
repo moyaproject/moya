@@ -36,7 +36,13 @@ def read_config(fs, settings_path="settings.ini"):
     return cfg
 
 
-def build(fs, settings_path="settings.ini", rebuild=False, archive=None, strict=False, master_settings=None):
+def build(fs,
+          settings_path="settings.ini",
+          rebuild=False,
+          archive=None,
+          strict=False,
+          master_settings=None,
+          test_build=False):
     """Build a project"""
     if isinstance(fs, string_types):
         if '://' in fs:
@@ -47,7 +53,7 @@ def build(fs, settings_path="settings.ini", rebuild=False, archive=None, strict=
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
     if archive is None:
-        archive = Archive(fs, strict=strict)
+        archive = Archive(fs, strict=strict, test_build=test_build)
     context = Context()
 
     syspath = fs.getsyspath('/', allow_none=True)
@@ -176,7 +182,8 @@ def build_server(fs,
                  validate_db=False,
                  breakpoint=False,
                  strict=False,
-                 master_settings=None):
+                 master_settings=None,
+                 test_build=False):
     """Build a server"""
     start = time()
     archive = Archive()
@@ -186,7 +193,8 @@ def build_server(fs,
                                       settings_path,
                                       rebuild=rebuild,
                                       strict=strict,
-                                      master_settings=master_settings)
+                                      master_settings=master_settings,
+                                      test_build=test_build)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:

@@ -202,9 +202,10 @@ class Archive(object):
 
     _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
 
-    def __init__(self, project_fs=None, breakpoint=False, strict=False):
+    def __init__(self, project_fs=None, breakpoint=False, strict=False, test_build=False):
         self.project_fs = project_fs
         self.strict = strict
+        self.test_build = test_build
         self.registry = ElementRegistry()
         self.libs = {}
         self.apps = OrderedDict()
@@ -300,6 +301,10 @@ class Archive(object):
         return console
 
     def build_libs(self, ignore_errors=False):
+
+        if self.test_build:
+            ignore_errors = True
+
         libs = [lib for lib in itervalues(self.libs) if not lib.built]
         if not libs:
             return

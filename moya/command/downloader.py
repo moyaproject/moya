@@ -57,7 +57,7 @@ def download(url,
     console.show_cursor(False)
     try:
         progress_width = 24
-        progress = Progress(console, '{}'.format(filename), width=progress_width)
+        progress = Progress(console, '{}'.format(filename), width=progress_width, vanish=False)
         progress.update(0, msg=msg)
         try:
             response = requests.get(url, stream=True, auth=auth, verify=verify_ssl)
