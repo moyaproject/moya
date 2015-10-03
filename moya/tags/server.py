@@ -233,6 +233,8 @@ class Mount(LogicElement):
     priority = Attribute("Priority (highest priority is checked first)", type="integer", required=False, default=0)
 
     def logic(self, context):
+        if self.archive.test_build:
+            return
         self.archive.build_libs()
         params = self.get_parameters(context)
         app = self.archive.find_app(params.app)
