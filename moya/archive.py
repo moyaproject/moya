@@ -966,12 +966,17 @@ class Archive(object):
         """Get a URL to media in a given app"""
         if url_index is None:
             url_index = context.inc('._media_url_index')
+        if not self.media_urls:
+            return None
         url_no = url_index % len(self.media_urls)
         if app is None:
             return url_join(self.media_urls[url_no] or '', path)
         return url_join(self.media_urls[url_no] or '',
                         app.get_media_directory(media),
                         path)
+    @property
+    def is_media_enabled(self):
+        return bool(self.media_urls)
 
     def get_element(self, element_ref, app=None, lib=None):
         """Gets an element from a reference"""

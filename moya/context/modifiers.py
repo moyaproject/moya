@@ -18,7 +18,8 @@ from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
 from ..context.expressiontime import (TimeSpan,
                                       ExpressionDateTime,
                                       ExpressionDate,
-                                      ExpressionTime)
+                                      ExpressionTime,
+                                      epoch_to_datetime)
 from .color import Color
 from ..containers import QueryData
 from ..context.tools import to_expression
@@ -386,6 +387,14 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return enumerate(v, start=1)
         except:
             return []
+
+    def epoch(self, context, v):
+        try:
+            v = float(v)
+        except ValueError:
+            raise ValueError('unable to convert {} to a number'.format(context.to_expr(v)))
+        dt = epoch_to_datetime(v)
+        return ExpressionDateTime.from_datetime(dt)
 
     def eval(self, context, v):
         from .expression import Expression

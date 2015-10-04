@@ -13,8 +13,10 @@
     <link href="{% media 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->
+    {% if .libs['moya.favicon'] %}
     <link rel="icon" href="{% media 'favicon.png' from 'moya.favicon' %}">
-
+    {% endif %}
+    
     <style>
       .moya-admin-menu
       {

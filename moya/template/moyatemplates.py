@@ -1094,6 +1094,10 @@ class MediaNode(Node):
     def render(self, environment, context, template, text_escape):
         media = 'media'
 
+        if not environment.archive.is_media_enabled:
+            self.render_error("Media is not enabled",
+                              diagnosis="check [media] section in settings")
+
         path = text_type(self.path_expression.eval(context))
         if self.index_expression is not None:
             media_url_index = self.index_expression.eval(context)
