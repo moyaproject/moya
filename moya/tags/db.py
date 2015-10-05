@@ -293,7 +293,10 @@ class TableClassBase(object):
             return value
 
     def __setitem__(self, key, value):
-        setattr(self, key, dbobject(value))
+        try:
+            setattr(self, key, dbobject(value))
+        except:
+            raise ValueError("invalid data type for attribute '{}'".format(key))
         return self
 
     def keys(self):
@@ -1515,13 +1518,14 @@ class Create(DBDataSetter):
         fields = {k: dbobject(v) for k, v in obj.items()}
         fields.update({k: dbobject(v) for k, v in self.get_let_map(context, check_missing=True).items()})
 
-        dst = None
-        if params.dst is not None:
-            dst = self.set_context(context, params.dst, fields)
-            with context.scope(dst):
-                yield DeferNodeContents(self)
+        with context.data_scope(fields):
+            yield DeferNodeContents(self)
 
         value = table_class(**fields)
+
+        if params.dst is not None:
+            self.set_context(context, params.dst, value)
+
         signal_params = {'object': value, 'model': model.libid, 'app': app}
         self.archive.fire(context,
                           'db.pre-create',
@@ -1544,9 +1548,6 @@ class Create(DBDataSetter):
                           element_app,
                           model.libid,
                           signal_params)
-
-        if dst is not None:
-            context[dst] = value
 
 
 class GetOrCreate(DBDataSetter):

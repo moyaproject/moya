@@ -7,6 +7,7 @@ Added theme system in .theme
 Fixed generator exceptions ignored warnings
 Set a default internal theme
 Added <image:gaussian-blur>
+Added ability of <handle> tag to take more than one sender
 
 0.5.21
 ------

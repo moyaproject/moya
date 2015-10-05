@@ -331,17 +331,24 @@ class DataSetterBase(ContextElementBase):
         return self.default
 
     def set_context(self, context, dst, value):
-        if dst is None:
-            obj = context.obj
-            append = getattr(obj, 'append', None)
-            if append is not None:
-                append(value)
-                return text_type(len(obj) - 1)
+        try:
+            if dst is None:
+                obj = context.obj
+                append = getattr(obj, 'append', None)
+                if append is not None:
+                    append(value)
+                    return text_type(len(obj) - 1)
+                else:
+                    return dst
             else:
+                context[dst] = value
                 return dst
-        else:
-            context[dst] = value
-            return dst
+        except ValueError as e:
+            msg = "unable to set '{key}' to {value} ({e})"
+            msg = msg.format(key=context.to_expr(dst),
+                             value=context.to_expr(value),
+                             e=text_type(e))
+            self.throw('let.fail', msg)
 
     def logic(self, context):
         self.set_context(context,

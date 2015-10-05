@@ -305,7 +305,6 @@
 
                 </if>
                 <else>
-
                     <db:new-query model="column.ref_model" from="${column.ref_model.app.name}" dst="related" />
                     <db:query src="related" filter="${column.options}" dst="related" if="column.options"
                         from="${column.ref_model.app.name}"/>

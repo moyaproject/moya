@@ -16,7 +16,7 @@
     {% if .libs['moya.favicon'] %}
     <link rel="icon" href="{% media 'favicon.png' from 'moya.favicon' %}">
     {% endif %}
-    
+
     <style>
       .moya-admin-menu
       {
@@ -90,7 +90,7 @@
                 </ul>
                 {%- endif %}
             {%- endblock %}
-            {%- if ._dbsessions %}
+            {%- if ._dbsessions and .libs['moya.auth'] %}
             <p class="navbar-text pull-right">
                 {%- if .user %}
                 <span class="glyphicon glyphicon-user"></span>

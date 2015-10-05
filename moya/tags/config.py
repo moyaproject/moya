@@ -548,16 +548,19 @@ class Handle(LogicElement):
         """
 
     signal = Attribute("Signal name to handle. Multiple names may be specified to handle more than one signal.""", type="commalist", required=True)
-    sender = Attribute("Only handle the signal(s) if sent from this element.", default=None)
+    sender = Attribute("Only handle the signal(s) if sent from this element(s).", type="commalist", default=None)
 
     def lib_finalize(self, context):
         sender, signals = self.get_parameters(context, 'sender', 'signal')
+        senders = []
         if sender:
-            sender = self.document.qualify_element_ref(sender, lib=self.lib)
-            app, element = self.get_element(sender)
-            sender = element.libid
+            for _sender in sender:
+                sender = self.document.qualify_element_ref(_sender, lib=self.lib)
+                app, element = self.get_element(sender)
+                senders.append(element.libid)
         for signal in signals:
-            self.archive.signals.add_handler(signal, self.libid, sender)
+            for sender in senders:
+                self.archive.signals.add_handler(signal, self.libid, sender)
 
 
 class Fire(LogicElement):
