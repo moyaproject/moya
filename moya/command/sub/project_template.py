@@ -160,16 +160,17 @@ append_slash = yes
 # set which theme file to read
 theme = default
 
+# Catch all domains for a production server
+[site:{*domain}]
+priority = -1
+data-server = production
+data-url = ${.request.host_url}
+
 # Settings for the development server
 [site:127.0.0.1,localhost]
 data-domain = localhost
 data-server = dev
 data-url = http://localhost:8000
-
-# Catch all domains for a production server
-[site:{*domain}]
-data-server = production
-data-url = ${.request.host_url}
 
 # An example of how to manage subdomains
 #[site:${subdomain}.example.org]

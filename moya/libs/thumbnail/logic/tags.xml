@@ -146,6 +146,7 @@ The code inside the processor transforms that image. The new image is then writt
         <let settings=".app.settings"
             fsname="settings.fs"
             fs=".fs[fsname]"
+            thumb_fs=".fs[settings.thumb_fs or fsname]"
             thumbnail_directory="settings.thumb_dir"
             original_image="image"/>
 
@@ -169,7 +170,7 @@ The code inside the processor transforms that image. The new image is then writt
             dst="thumb_path"/>
 
         <get-url name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
-        <if test="overwrite or thumb_path not in fs">
+        <if test="overwrite or thumb_path not in thumb_fs">
             <!-- lazy load of the image -->
             <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
             <!-- make a copy -->
@@ -177,7 +178,7 @@ The code inside the processor transforms that image. The new image is then writt
             <!-- call the processor to modify the image in place -->
             <call macro="${processor.element_ref}" let:image="image" />
             <!-- write the thumbnail -->
-            <image:write fsobj="fs"
+            <image:write fsobj="thumb_fs"
                 dirpath="${dirname:thumb_path}"
                 filename="${basename:thumb_path}"
                 let:quality="processor.params.quality"/>

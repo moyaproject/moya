@@ -130,7 +130,7 @@ class ServeJSON(LogicElement):
     class Help:
         synopsis = """serve an object as JSON"""
 
-    obj = Attribute("Object to build JSON from", type="index", required=False, default=None, missing=False)
+    obj = Attribute("Object to build JSON from", type="expression", required=False, default=None, missing=False)
     indent = Attribute("Indent to make JSON more readable", required=False, default=4)
 
     def logic(self, context):

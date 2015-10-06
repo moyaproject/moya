@@ -12,6 +12,7 @@ import re
 from collections import namedtuple
 import logging
 log = logging.getLogger('moya.runtime')
+startup_log = logging.getLogger('moya.startup')
 
 
 SiteMatch = namedtuple("SiteMatch", ["site", "site_data", "custom_data"])
@@ -157,10 +158,11 @@ class Site(object):
             custom_data = None
 
         if 'priority' in site_data:
+            _priority = site_data['priority']
             try:
-                priority = int(site_data.get('priority'))
-            except:
-                log.error('priority in site section should should be an integer')
+                priority = int(_priority)
+            except ValueError:
+                startup_log.error("priority in site section should should be an integer (not '{}')".format(_priority))
         else:
             priority = 0
         self.order = (priority, insert_order)

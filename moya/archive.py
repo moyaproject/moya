@@ -44,6 +44,7 @@ from fs.opener import fsopendir
 from fs.multifs import MultiFS
 from fs.mountfs import MountFS
 from fs.path import pathjoin, abspath, relativefrom
+from fs.errors import FSError
 
 from collections import defaultdict, namedtuple, deque
 import os
@@ -277,12 +278,15 @@ class Archive(object):
             return path
         return relativefrom(base, path)
 
-    def open_fs(self, fs_url):
+    def open_fs(self, fs_url, create=False):
         if isinstance(fs_url, text_type):
             if '://' in fs_url:
-                fs = fsopendir(fs_url)
+                fs = fsopendir(fs_url, create_dir=create)
             else:
-                fs = self.project_fs.opendir(fs_url)
+                if create:
+                    fs = self.project_fs.makeopendir(fs_url, recusrive=True)
+                else:
+                    fs = self.project_fs.opendir(fs_url)
         else:
             fs = fs_url
         return fs
@@ -716,8 +720,11 @@ class Archive(object):
                 data.append((app, _elements))
         return data
 
-    def add_filesystem(self, name, fs):
-        add_fs = self.open_fs(fs)
+    def add_filesystem(self, name, fs, create=False):
+        try:
+            add_fs = self.open_fs(fs, create=create)
+        except FSError as e:
+            raise errors.StartupFailedError("unable to open filesystem '{name}' ({e})".format(name=name, e=text_type(e)))
         self.filesystems[name] = add_fs
         startup_log.debug("%s fs added as '%s'", add_fs, name)
         return fs
@@ -735,7 +742,6 @@ class Archive(object):
             raise element.throw("fs.no-filesystem",
                                 "no filesystem called '{0}'".format(name),
                                 diagnosis="You can view installed filesystems from the command line with **moya fs**")
-
 
     def get_reader(self, name="data"):
         fs = self.get_filesystem(name)
@@ -850,7 +856,8 @@ class Archive(object):
 
             elif what == "fs":
                 location = section.get("location")
-                self.add_filesystem(name, location)
+                create = section.get_bool('create', False)
+                self.add_filesystem(name, location, create=create)
 
             elif what == "data":
                 location = section.get("location")
@@ -974,8 +981,10 @@ class Archive(object):
         return url_join(self.media_urls[url_no] or '',
                         app.get_media_directory(media),
                         path)
+
     @property
     def is_media_enabled(self):
+        """Check if the media system is enabled"""
         return bool(self.media_urls)
 
     def get_element(self, element_ref, app=None, lib=None):
