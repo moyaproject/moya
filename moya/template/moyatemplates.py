@@ -166,7 +166,10 @@ class TagParser(object):
         if self.text.lstrip().startswith('('):
             self.text = self.text.split('(', 1)[1]
             brackets = True
-        expression, text = Expression.scan(self.text)
+        try:
+            expression, text = Expression.scan(self.text)
+        except Exception as e:
+            self.syntax_error("expression error ({})".format(text_type(e)))
         if brackets:
             text = text.lstrip()
             if not text.startswith(')'):
