@@ -169,7 +169,7 @@ class Number(AttributeType):
             try:
                 float(value)
             except:
-                return 'expected a number, not {}'.format(value)
+                return 'expected a number, not "{}"'.format(value)
 
 
 class Integer(AttributeType):
@@ -192,7 +192,7 @@ class Integer(AttributeType):
             try:
                 int(float(value))
             except:
-                return 'expected an integer, not {}'.format(value)
+                return 'expected an integer, not "{}"'.format(value)
 
 
 class Color(AttributeType):
@@ -200,7 +200,6 @@ class Color(AttributeType):
 
     def __call__(self, context):
         return ExpressionColor.parse(context.sub(self.text))
-
 
     @classmethod
     def check(cls, value):

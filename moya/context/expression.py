@@ -33,6 +33,7 @@ from ..moyaexceptions import throw
 from ..compat import implements_to_string, text_type, string_types
 from ..context.modifiers import ExpressionModifiers
 from ..moyaexceptions import MoyaException
+from ..errors import LogicError
 
 import operator
 import re
@@ -796,7 +797,7 @@ class Expression(object):
         try:
             obj = self._eval(context)
             return obj.__moyacontext__(context) if hasattr(obj, '__moyacontext__') else obj
-        except (ExpressionError, MoyaException):
+        except (ExpressionError, MoyaException, LogicError):
             raise
         except ArithmeticError as e:
             if isinstance(e, ZeroDivisionError):
