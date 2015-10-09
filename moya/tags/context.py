@@ -2477,10 +2477,13 @@ class Input(DataSetter):
             console(text).flush()
             response = getpass.getpass('')
         else:
-            if PY3:
-                response = input(text)
-            else:
-                response = raw_input(text).decode(sys.stdin.encoding or locale.getpreferredencoding(True))
+            try:
+                if PY3:
+                    response = input(text)
+                else:
+                    response = raw_input(text).decode(sys.stdin.encoding or locale.getpreferredencoding(True))
+            except EOFError:
+                self.throw('input.eof', 'User hit Ctrl+D')
         if not response:
             response = default
         self.set_context(context,
@@ -2506,7 +2509,10 @@ class Ask(DataSetter):
     default = False
 
     def logic(self, context):
-        response = raw_input("%s (Y/N) " % (self.text.strip() or ''))
+        try:
+            response = raw_input("%s (Y/N) " % (self.text.strip() or ''))
+        except EOFError:
+            self.throw('ask.eof', 'User hit Ctrl+D')
         response_bool = response.strip().lower() in ('yes', 'y')
         self.set_context(context,
                          self.dst(context),

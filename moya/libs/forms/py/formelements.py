@@ -790,6 +790,7 @@ class Validate(LogicElement):
 
     class Meta:
         is_call = True
+        is_loop = True
 
     class Help:
         synopsis = "validate a form"
