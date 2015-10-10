@@ -144,6 +144,10 @@ class URL(LogicElement):
         if params.mount:
             try:
                 _, element = self.archive.get_element(params.mount, lib=self.lib)
+
+                if not hasattr(element, 'urlmapper'):
+                    raise ValueError("element {} is not mountable".format(element))
+
                 mount_point.urlmapper.map(params.route.rstrip('/') + '/*',
                                           [url_target],
                                           methods=methods,

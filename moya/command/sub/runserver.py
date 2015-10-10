@@ -65,6 +65,8 @@ class Runserver(SubCommand):
                             help="enable 'strict' checking of tag attributes")
         parser.add_argument("-t", "--use-threads", dest='usethreads', action="store_true", default=False,
                             help='enable multi-threaded server')
+        parser.add_argument('-d', '--develop', dest="develop", action="store_true", default=False,
+                            help="enable develop mode for debugging Moya server")
 
         # TODO: better forking dev server
         # Disabled because the default implementation doesn't use process pooling,
@@ -86,7 +88,8 @@ class Runserver(SubCommand):
                                       validate_db=not args.novalidate,
                                       disable_autoreload=self.args.noreload,
                                       simulate_slow_network=self.args.slow,
-                                      strict=self.args.strict)
+                                      strict=self.args.strict,
+                                      develop=self.args.develop)
         application.preflight()
 
         try:

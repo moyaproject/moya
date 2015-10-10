@@ -42,7 +42,8 @@ def build(fs,
           archive=None,
           strict=False,
           master_settings=None,
-          test_build=False):
+          test_build=False,
+          develop=False):
     """Build a project"""
     if isinstance(fs, string_types):
         if '://' in fs:
@@ -53,7 +54,7 @@ def build(fs,
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
     if archive is None:
-        archive = Archive(fs, strict=strict, test_build=test_build)
+        archive = Archive(fs, strict=strict, test_build=test_build, develop=develop)
     context = Context()
 
     syspath = fs.getsyspath('/', allow_none=True)
@@ -183,7 +184,8 @@ def build_server(fs,
                  breakpoint=False,
                  strict=False,
                  master_settings=None,
-                 test_build=False):
+                 test_build=False,
+                 develop=False):
     """Build a server"""
     start = time()
     archive = Archive()
@@ -194,7 +196,8 @@ def build_server(fs,
                                       rebuild=rebuild,
                                       strict=strict,
                                       master_settings=master_settings,
-                                      test_build=test_build)
+                                      test_build=test_build,
+                                      develop=develop)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:

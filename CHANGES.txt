@@ -9,6 +9,8 @@ Set a default internal theme
 Added <image:gaussian-blur>
 Added ability of <handle> tag to take more than one sender
 Added create setting for filesystems
+Added moya init command
+Added --develop switch to moya runserver
 
 0.5.21
 ------

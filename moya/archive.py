@@ -203,10 +203,11 @@ class Archive(object):
 
     _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
 
-    def __init__(self, project_fs=None, breakpoint=False, strict=False, test_build=False):
+    def __init__(self, project_fs=None, breakpoint=False, strict=False, test_build=False, develop=False):
         self.project_fs = project_fs
         self.strict = strict
         self.test_build = test_build
+        self.develop = develop
         self.registry = ElementRegistry()
         self.libs = {}
         self.apps = OrderedDict()
@@ -801,7 +802,7 @@ class Archive(object):
         self.preflight = cfg.get_bool('project', 'preflight', False)
         self.debug = cfg.get_bool('project', 'debug')
         self.strict = self.strict or cfg.get_bool('project', 'strict')
-        self.develop = cfg.get_bool('project', 'develop')
+        self.develop = self.develop or cfg.get_bool('project', 'develop')
         self.log_signals = cfg.get_bool('project', 'log_signals')
         self.debug_echo = cfg.get_bool('project', 'debug_echo')
 
@@ -823,6 +824,8 @@ class Archive(object):
 
         if self.strict:
             startup_log.debug('strict mode is enabled')
+        if self.develop:
+            startup_log.debug('develop mode is enabled')
 
         for section_name, section in iteritems(cfg):
             section = SectionWrapper(section_name, section)
