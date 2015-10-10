@@ -188,6 +188,7 @@ To list all available commands for a given application, omit the libname:
         subcommand.args = self.args
         subcommand.console = self.console
         subcommand.moyarc = self.moyarc
+        subcommand.moya_command = self
 
         try:
             return subcommand.run()
@@ -209,7 +210,7 @@ To list all available commands for a given application, omit the libname:
 
             return -1
 
-    def project_invoke(self, element_ref):
+    def project_invoke(self, element_ref, application=None, root_vars=None):
 
         parser = argparse.ArgumentParser(prog=self.__class__.__name__.lower() + " " + element_ref,
                                          description="Call command %s in moya project" % element_ref,
@@ -249,13 +250,14 @@ To list all available commands for a given application, omit the libname:
         from .. import pilot
         from ..wsgi import WSGIApplication
 
-        try:
-            application = WSGIApplication(self.location_fs,
-                                          self.get_settings(),
-                                          disable_autoreload=True)
-        except Exception as e:
-            self.console.exception(e)
-            return -1
+        if application is None:
+            try:
+                application = WSGIApplication(self.location_fs,
+                                              self.get_settings(),
+                                              disable_autoreload=True)
+            except Exception as e:
+                self.console.exception(e)
+                return -1
         archive = application.archive
 
         context = Context()
@@ -263,6 +265,9 @@ To list all available commands for a given application, omit the libname:
         set_dynamic(context)
         # Ignore console settings for commands
         context['.console'] = self.console
+
+        if root_vars is not None:
+            context.root.update(root_vars)
 
         if element_ref.endswith('#'):
             app_name = element_ref[:-1]
@@ -329,6 +334,7 @@ To list all available commands for a given application, omit the libname:
 
         except KeyboardInterrupt:
             self.console.nl().div('user exit')
+            ret = -2
 
         except Exception as e:
             if hasattr(e, '__moyaconsole__'):
@@ -339,6 +345,7 @@ To list all available commands for a given application, omit the libname:
                 self.console.exception(e, tb=self.args.debug)
                 if self.args.debug:
                     self.console.div()
+            ret = -2
 
         # except Exception, e:
         #     if self.args.debug:

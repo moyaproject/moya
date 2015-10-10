@@ -2472,10 +2472,9 @@ class Input(DataSetter):
             text += " ({})".format(default)
         if text:
             text += ' '
+        console = context.root['console']
         if self.password(context):
-            console = context.root['console']
-            console(text).flush()
-            response = getpass.getpass('')
+            response = getpass.getpass(text)
         else:
             try:
                 if PY3:

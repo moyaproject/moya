@@ -214,7 +214,7 @@ def rollback_sessions(context):
     return count
 
 
-def sync_all(archive, console):
+def sync_all(archive, console, summary=True):
     if validate_all(archive, console) != 0:
         return -1
     engines = archive.database_engines
@@ -252,12 +252,13 @@ def sync_all(archive, console):
                 progress.step()
                 synced.append((app, count))
 
-            progress.update(None, 'sync complete')
+            progress.update(None, 'db sync complete')
     finally:
-        table = []
-        for app, count in synced:
-            table.append((Cell(text_type(app), fg="magenta", bold=True), Cell("{}".format(count) if count else "", bold=True)))
-        console.table(table, header_row=["app", "synced"], dividers=True, grid=True)
+        if summary:
+            table = []
+            for app, count in synced:
+                table.append((Cell(text_type(app), fg="magenta", bold=True), Cell("{}".format(count) if count else "", bold=True)))
+            console.table(table, header_row=["app", "synced"], dividers=True, grid=True)
 
     return 0
 

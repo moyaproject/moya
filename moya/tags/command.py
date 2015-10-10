@@ -70,6 +70,8 @@ Hello, World!
 
     _element_class = "command"
     synopsis = Attribute("Command synopsis, displayed when you list commands")
+    init = Attribute("Run this command as part of the init process?", type="boolean", default=False)
+    priority = Attribute("Priority for init process (higher piority commands will be run first)", type="integer", default=0)
 
     class Meta:
         logic_skip = True
@@ -77,6 +79,8 @@ Hello, World!
     def document_finalize(self, context):
         self._synopsis = self.synopsis(context)
         self._doc = None
+        self._init = self.init(context)
+        self._priority = self.priority(context)
         for doc in self.get_children(element_type=(namespaces.default, 'doc')):
             self._doc = doc.text
         self._signature = _signature = {'options': [],

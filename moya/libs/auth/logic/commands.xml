@@ -146,10 +146,10 @@
         <echo if="count gt args.max and args.max">Showing first ${args.max} of ${count} users (see --max option)</echo>
     </command>
 
-    <command libname="cmd.init" synopsis="create default groups/permissions and a superuser">
+    <command libname="cmd.init" synopsis="create default groups/permissions and a superuser" init="yes" priority="10">
         <doc>Run this once to initialize the auth system</doc>
         <echo>This will create a super user and default groups/permissions.</echo>
-        <echo>You should run this once to initialize.</echo>
+        <echo if="not .init">You should run this once to initialize.</echo>
 
         <input dst="username" default="superuser">Username of 'super' user:</input>
         <input dst="password" password="yes">Super user's password:</input>

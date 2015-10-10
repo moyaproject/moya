@@ -18,4 +18,5 @@ __all__ = ['call',
            'libs',
            'apps',
            'syntax',
-           'new']
+           'new',
+           'init']
