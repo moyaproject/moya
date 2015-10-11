@@ -92,7 +92,7 @@ class TextMarkup(MarkupBase):
     name = "text"
     title = "Text (plain, escaped)"
 
-    def process_html(self, text, target, options):
+    def process_html(self, archive, context, text, target, options):
         if options.get('linkify', False):
             return HTML(html.linkify(text))
         else:
@@ -103,7 +103,7 @@ class HTMLMarkup(MarkupBase):
     name = "html"
     title = "HTML (raw unescaped)"
 
-    def process_html(self, text, target, options):
+    def process_html(self, archive, context, text, target, options):
         return HTML(text)
 
 
