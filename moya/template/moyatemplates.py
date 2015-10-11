@@ -62,6 +62,8 @@ class MoyaTemplateEngine(TemplateEngine):
 
     def render(self, paths, data, base_context=None, app=None, **tdata):
 
+        if isinstance(paths, Template):
+            return self.render_template(paths, data, base_context=base_context, **tdata)
         if paths is None:
             paths = []
         if isinstance(paths, string_types):

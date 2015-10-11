@@ -2,14 +2,21 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from .render import HTML
+from .render import HTML, render_object
 from . import html
 from .compat import with_metaclass, implements_to_string, text_type
-from .errors import MarkupError
+from .console import Console
+from .errors import MarkupError, LogicError
+from .content import Content
+from .context.dataindex import makeindex
 
 import postmarkup
 import CommonMark
+import io
+from bs4 import BeautifulSoup
 
+import logging
+log = logging.getLogger('moya.runtime')
 
 def get_installed_markups():
     """Get a list of identifiers for installed markups"""
@@ -57,23 +64,23 @@ class MarkupBaseType(object):
         markup_class = MarkupBaseMeta.markup_registry[name]
         return markup_class(name, markup_options)
 
-    def process(self, text, target, options):
+    def process(self, archive, context, text, target, options):
         target = text_type(target or 'text')
         process_method = "process_" + target
         if hasattr(self, process_method):
-            return getattr(self, process_method)(text, target, options)
+            return getattr(self, process_method)(archive, context, text, target, options)
         else:
             raise MarkupError("don't know how to render target '{}'".format(target))
 
     def escape(self, text):
         return text_type(text)
 
-    def process_text(self, text, target, options):
-        html_markup = self.process_html(text, target, options)
+    def process_text(self, archive, context, text, target, options):
+        html_markup = self.process_html(archive, context, text, target, options)
         return html.textilize(html_markup)
 
     def moya_render(self, archive, context, target, options):
-        rendered = self.process(self.source, target, options)
+        rendered = self.process(archive, context, self.source, target, options)
         return rendered
 
 
@@ -104,10 +111,10 @@ class BBCodeMarkup(MarkupBase):
     name = "bbcode"
     title = "BBCode (Postmarkup renderer)"
 
-    def process_text(self, text, target, options):
+    def process_text(self, archive, context, text, target, options):
         return postmarkup.strip_bbcode(text)
 
-    def process_html(self, text, target, options):
+    def process_html(self, archive, context, text, target, options):
         html = postmarkup.render_bbcode(text)
         return HTML(html)
 
@@ -130,7 +137,7 @@ class BBCodeMarkup(MarkupBase):
 class SummaryMarkup(MarkupBase):
     name = "summary"
 
-    def process_html(self, text, target, options):
+    def process_html(self, archive, context, text, target, options):
         return HTML(html.summarize(text, max_size=options.get('length', 100)))
 
 
@@ -142,10 +149,47 @@ class MarkdownMarkup(MarkupBase):
         self.parser = CommonMark.DocParser()
         self.renderer = CommonMark.HTMLRenderer()
 
-    def process_html(self, text, target, options):
+    def process_html(self, archive, context, text, target, options):
         ast = self.parser.parse(text)
         html = HTML(self.renderer.render(ast))
         return html
+
+
+class MoyaMarkup(MarkupBase):
+    name = "moya"
+    title = "Moya Markup (render Moya tags in html)"
+
+    def create(self, options):
+        from .template import Template
+        self.template = Template('<b>moya</b>{% render sections._widget %}')
+
+    def process_html(self, archive, context, text, target, options):
+        soup = BeautifulSoup(text, 'html.parser')
+        for el in soup.find_all('moya-render'):
+
+            insert_ref = el.attrs['insert']
+            params = el.attrs.copy()
+            params.pop('insert')
+
+            app = context.get('.app', None)
+            try:
+                replace_markup = archive.call(insert_ref, context, app, **params)
+            except LogicError as e:
+                from moya import pilot
+                if context['.debug']:
+                    c = Console(text=True)
+                    c.obj(context, e)
+                    replace_markup = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(html.escape(c.get_text()))
+                else:
+                    replace_markup = "<!-- insert failed, see logs -->"
+                pilot.console.obj(context, e)
+            except Exception as e:
+                log.exception('insert markup failed')
+                replace_markup = "<!-- insert failed, see logs -->"
+
+            new_el = BeautifulSoup(replace_markup, 'html.parser')
+            el.replace_with(new_el)
+        return HTML(text_type(soup))
 
 
 @implements_to_string
@@ -184,10 +228,11 @@ class Markup(object):
         return name in MarkupBaseMeta.markup_registry
 
     def __str__(self):
+        return self.source
         return self.markup_processor.process(self.source, "text", None)
 
     def moya_render(self, archive, context, target, options):
-        return self.markup_processor.process(self.source, target, options)
+        return self.markup_processor.process(archive, context, self.source, target, options)
 
-    def process(self, target="html", **options):
-        return self.markup_processor.process(self.source, target, options)
+    def process(self, archive, context, target="html", **options):
+        return self.markup_processor.process(archive, context, self.source, target, options)

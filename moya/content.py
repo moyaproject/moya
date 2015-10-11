@@ -84,7 +84,10 @@ class Content(interface.AttributeExposer):
         self.app = app
         self.template = template
         if app and template:
-            self.template = app.resolve_template(template)
+            if isinstance(template, text_type):
+                self.template = app.resolve_template(template)
+            else:
+                self.template = template
         self.td = td or {}
         self._include = defaultdict(RenderList)
         self._section_elements = defaultdict(list)
@@ -226,11 +229,16 @@ class Content(interface.AttributeExposer):
         engine = archive.get_template_engine('moya')
         td = self.td.copy()
         td.update(sections=self.sections, include=self._include)
-        template = self.app.resolve_template(self.template)
+
+        if isinstance(self.template, text_type):
+            template = self.app.resolve_template(self.template)
+        else:
+            template = self.template
         rendered = engine.render(template,
                                  td,
                                  base_context=context,
                                  app=self.app)
+    
         return HTML(rendered)
 
     def print_tree(self):

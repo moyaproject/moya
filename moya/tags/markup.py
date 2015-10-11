@@ -1,7 +1,7 @@
 from ..markup import Markup, get_installed_markups, get_markup_choices
 from ..elements.elementbase import Attribute
 from ..tags.content import RenderBase
-from ..tags.context import DataSetter
+from ..tags.context import DataSetter, LogicElement
 from ..compat import text_type
 
 from textwrap import dedent
@@ -65,7 +65,7 @@ class ProcessMarkup(DataSetter):
         source_text = self.src(context) if self.has_parameter('src') else self.text
         text = self.src(context) or Markup.sub(type, context, source_text, options)
         markup = Markup(text, type, options)
-        result = markup.process()
+        result = markup.process(self.archive, context)
         self.set_context(context, self.dst(context), result)
 
 
@@ -103,3 +103,13 @@ class GetMarkupChoices(DataSetter):
 
     def get_value(self, context):
         return get_markup_choices()
+
+
+class MarkupInsert(LogicElement):
+    """A callable invokef from Moya maarkup"""
+
+    class Help:
+        synopsis = "insert code from markup"
+
+    class Meta:
+        is_call = True
