@@ -6,7 +6,7 @@ from .render import HTML, render_object
 from . import html
 from .compat import with_metaclass, implements_to_string, text_type
 from .console import Console
-from .errors import MarkupError, LogicError
+from .errors import MarkupError, LogicError, ElementNotFoundError
 from .content import Content
 from .context.dataindex import makeindex
 
@@ -27,7 +27,7 @@ def get_markup_choices():
     """Get a choices list for installed markups"""
     choices = [(markup.name, markup.title)
                for markup in MarkupBaseMeta.markup_registry.values()
-               if markup.title is not None]
+               if markup.choice and markup.title is not None]
     choices.sort(key=lambda m: m[1].lower(), reverse=True)
     return choices
 
@@ -47,6 +47,7 @@ class MarkupBaseMeta(type):
 class MarkupBaseType(object):
     __metaclass__ = MarkupBaseMeta
     title = None
+    choice = False
 
     def __init__(self, markup_type, markup_options):
         self.markup_type = markup_type
@@ -85,7 +86,8 @@ class MarkupBaseType(object):
 
 
 class MarkupBase(with_metaclass(MarkupBaseMeta, MarkupBaseType)):
-    title = None
+    title = None  # Human readable title text
+    choice = True  # True if the markup should be included in list in the UI
 
 
 class TextMarkup(MarkupBase):
@@ -119,21 +121,6 @@ class BBCodeMarkup(MarkupBase):
         return HTML(html)
 
 
-# class MarkdownMarkup(MarkupBase):
-#     name = "markdown"
-
-#     def create(self, options):
-#         if 'output_format' not in options:
-#             options['output_format'] = 'html5'
-#         self.markdown = markdown.Markdown(**options)
-
-#     def escape(self, text):
-#         return html.escape(text)
-
-#     def process_html(self, text, target, options):
-#         return HTML(self.markdown.convert(text))
-
-
 class SummaryMarkup(MarkupBase):
     name = "summary"
 
@@ -157,7 +144,8 @@ class MarkdownMarkup(MarkupBase):
 
 class MoyaMarkup(MarkupBase):
     name = "moya"
-    title = "Moya Markup (render Moya tags in html)"
+    title = "Raw HTML + moya psuedo tags"
+    choice = False
 
     def create(self, options):
         from .template import Template
@@ -165,15 +153,42 @@ class MoyaMarkup(MarkupBase):
 
     def process_html(self, archive, context, text, target, options):
         soup = BeautifulSoup(text, 'html.parser')
-        for el in soup.find_all('moya-render'):
+        for el in soup.find_all('moya'):
 
             insert_ref = el.attrs['insert']
-            params = el.attrs.copy()
-            params.pop('insert')
+            params = {k.split('-', 1)[-1]: v for k, v in el.attrs.items()
+                      if k.startswith('data-')}
 
             app = context.get('.app', None)
+
             try:
-                replace_markup = archive.call(insert_ref, context, app, **params)
+                _app, insert_el = archive.get_element(insert_ref, app=app)
+            except ElementNotFoundError as e:
+                log.warning("markup insert element '{}' was not found".format(insert_ref))
+                if context['.debug']:
+                    c = Console(text=True)
+                    c.obj(context, e)
+                    replace_markup = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(html.escape(c.get_text()))
+                else:
+                    replace_markup = "<!-- insert failed, see logs -->"
+                new_el = BeautifulSoup(replace_markup, 'html.parser')
+                el.replace_with(new_el)
+                continue
+
+            if not getattr(insert_el, '_moya_markup_insert', False):
+                msg = '{} is not safe for markup insertion'.format(html.escape(insert_el))
+                log.warning(msg)
+                if context['.debug']:
+                    new_el = BeautifulSoup('<pre class="moya-insert-error"><code>{}</code></pre>'.format(msg), 'html.parser')
+                else:
+                    new_el = BeautifulSoup('<!-- insert invalid -->', 'html.parser')
+                el.replace_with(new_el)
+                continue
+
+            insert_callable = archive.get_callable_from_element(insert_el, app=_app)
+
+            try:
+                replace_markup = insert_callable(context, **params)
             except LogicError as e:
                 from moya import pilot
                 if context['.debug']:

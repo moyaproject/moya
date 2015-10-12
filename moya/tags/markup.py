@@ -107,6 +107,7 @@ class GetMarkupChoices(DataSetter):
 
 class MarkupInsert(LogicElement):
     """A callable invokef from Moya maarkup"""
+    _moya_markup_insert = True
 
     class Help:
         synopsis = "insert code from markup"
