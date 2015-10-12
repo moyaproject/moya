@@ -166,7 +166,7 @@ $(function(){
                     <td>${attribute.doc}</td>
                     <td>${attribute.type}</td>
                     <td>${attribute.required ? "Yes" : "No"}</td>
-                    <td><tt>${attribute.default or ''}</tt></td>
+                    <td><tt>{% if not attribute.required %}${json:attribute.default}{% endif %}</tt></td>
                 </tr>
                 {%- endfor %}
             </tbody>

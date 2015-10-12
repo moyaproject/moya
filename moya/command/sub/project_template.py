@@ -540,7 +540,7 @@ See http://moyaproject.com/gettingstarted/ for more information.
         <!-- An example of a simple remote method -->
         <rpc:method name="greet" description="Renders a greeting">
             <doc>This method will greet you, using the name of your choice</doc>
-            <rpc:parameter name="who" type="string" default="World" required="no">
+            <rpc:parameter name="who" type="string" default="'World'" required="no">
                 This parameter should be the name of the person you wish to greet. If not given, the name will default to "World"
             </rpc:parameter>
             <rpc:error code="name_too_long" if="len:who gt 10" data="errortext='What were you thinking?',foo='bar'">

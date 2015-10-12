@@ -103,20 +103,21 @@ class Param(object):
         except KeyError:
             if self.required:
                 raise MissingParam("'{}' is a required parameter".format(self.name))
-            return self.make_default(context)
+            #return self.make_default(context)
+            return self.default
         return getattr(self, 'check_' + self.type)(value)
 
     def check(self, value):
         return getattr(self, 'check_' + self.type)(value)
 
-    def make_default(self, context):
-        try:
-            if self.type == "string":
-                return context.sub(self.default)
-            else:
-                return context.eval(self.default)
-        except:
-            raise InvalidParamDefault(self)
+    # def make_default(self, context):
+    #     try:
+    #         if self.type == "string":
+    #             return context.sub(self.default)
+    #         else:
+    #             return context.eval(self.default)
+    #     except:
+    #         raise InvalidParamDefault(self)
 
     def check_string(self, value):
         if not isinstance(value, string_types):
@@ -635,8 +636,8 @@ class ParameterTag(ElementBase):
 
     name = Attribute("Name of the parameter", required=True)
     type = Attribute("Parameter type (number, string, bool, list, object, anything)", required=False, default="anything")
-    default = Attribute("Default value", required=False)
-    required = Attribute("Required?", type="boolean", required=False, default=False)
+    default = Attribute("Default value", type="expression", required=False)
+    required = Attribute("Required?", type="boolean", required=False, default=True)
 
     def finalize(self, context):
         type = self.type(context)
@@ -720,20 +721,20 @@ class MethodTag(LogicElement):
                                                   'type',
                                                   'default',
                                                   'required')
-            if not self.has_parameter('default'):
-                required = True
+            if param_tag.has_parameter('default'):
+                required = False
             doc = context.sub(param_tag.text.strip())
             _param = params[param_name] = Param(param_name,
                                                 _type,
                                                 default=default,
                                                 required=required,
                                                 doc=doc)
-            if not required:
-                try:
-                    _param.check(default)
-                except InvalidParam:
-                    raise errors.ElementError("value {} is an invalid default for type '{}'".format(context.to_expr(default), _type),
-                                              element=param_tag)
+            # if not required:
+            #     try:
+            #         _param.make_default(context)
+            #     except InvalidParamDefault:
+            #         raise errors.ElementError("default '{}' is invalid for type '{}'".format(default, _type),
+            #                                   element=param_tag)
 
         doc = self.get_child('doc')
         if doc is not None:
