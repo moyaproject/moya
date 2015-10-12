@@ -153,36 +153,52 @@ class MoyaMarkup(MarkupBase):
 
     def process_html(self, archive, context, text, target, options):
         soup = BeautifulSoup(text, 'html.parser')
+        escape = html.escape
+
+        console = context['.console']
+
+        def write_error(el, msg, exc=None):
+            if exc is not None and context['.debug']:
+                c = Console(text=True)
+                c.obj(context, exc)
+                _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(c.get_text()))
+            else:
+                _html = "<!-- {} -->".format(escape(msg))
+            log.warning(msg)
+            console.obj(context, exc)
+            new_el = BeautifulSoup(_html, 'html.parser')
+            el.replace_with(new_el)
+
         for el in soup.find_all('moya'):
 
-            insert_ref = el.attrs['insert']
+            try:
+                insert_ref = el.attrs['insert']
+            except IndexError:
+                write_error(el, "no 'insert' attribute in <moya> markup tag")
+
+            app = None
+            app_name = insert_ref.get('app', None)
+            if app_name is None:
+                app = archive.get_app(app_name)
+                if app is None:
+                    write_error(el, "no app called '{}'".format(app_name))
+                    continue
+
+            # Get data params
             params = {k.split('-', 1)[-1]: v for k, v in el.attrs.items()
                       if k.startswith('data-')}
 
-            app = context.get('.app', None)
+            app = app or context.get('.app', None)
 
             try:
                 _app, insert_el = archive.get_element(insert_ref, app=app)
             except ElementNotFoundError as e:
-                log.warning("markup insert element '{}' was not found".format(insert_ref))
-                if context['.debug']:
-                    c = Console(text=True)
-                    c.obj(context, e)
-                    replace_markup = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(html.escape(c.get_text()))
-                else:
-                    replace_markup = "<!-- insert failed, see logs -->"
-                new_el = BeautifulSoup(replace_markup, 'html.parser')
-                el.replace_with(new_el)
+                write_error(el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
                 continue
 
             if not getattr(insert_el, '_moya_markup_insert', False):
                 msg = '{} is not safe for markup insertion'.format(html.escape(insert_el))
-                log.warning(msg)
-                if context['.debug']:
-                    new_el = BeautifulSoup('<pre class="moya-insert-error"><code>{}</code></pre>'.format(msg), 'html.parser')
-                else:
-                    new_el = BeautifulSoup('<!-- insert invalid -->', 'html.parser')
-                el.replace_with(new_el)
+                write_error(el, msg)
                 continue
 
             insert_callable = archive.get_callable_from_element(insert_el, app=_app)
@@ -190,17 +206,11 @@ class MoyaMarkup(MarkupBase):
             try:
                 replace_markup = insert_callable(context, **params)
             except LogicError as e:
-                from moya import pilot
-                if context['.debug']:
-                    c = Console(text=True)
-                    c.obj(context, e)
-                    replace_markup = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(html.escape(c.get_text()))
-                else:
-                    replace_markup = "<!-- insert failed, see logs -->"
-                pilot.console.obj(context, e)
+                write_error(el, "markup insert failed due to logic error, see logs", exc=e)
+                continue
             except Exception as e:
-                log.exception('insert markup failed')
-                replace_markup = "<!-- insert failed, see logs -->"
+                write_error(el, "markup insert failed, see logs", exc=e)
+                continue
 
             new_el = BeautifulSoup(replace_markup, 'html.parser')
             el.replace_with(new_el)
