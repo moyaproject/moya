@@ -256,9 +256,10 @@ class Form(AttributeExposer):
                                           'legend',
                                           'ok',
                                           'style',
-                                          'validated'])
+                                          'validated',
+                                          'html_id'])
 
-    def __init__(self, element, context, app, style, template, action, method, enctype, csrf=True, _class=None):
+    def __init__(self, element, context, app, style, template, action, method, enctype, csrf=True, _class=None, html_id=None):
         super(Form, self).__init__()
         self.element = element
         self.context = context
@@ -270,6 +271,7 @@ class Form(AttributeExposer):
         self.enctype = enctype
         self.csrf = csrf
         setattr(self, 'class', _class)
+        self.html_id = html_id
 
         self._fields = OrderedDict()
         self.bound = False
@@ -642,6 +644,7 @@ class Get(DataSetter):
     method = Attribute("Form method", required=False, default="post", choices=['get', 'post'])
     withscope = Attribute("Use current scope?", default=False, type="boolean")
     blank = Attribute("Blank form?", default=False, type="boolean")
+    _id = Attribute("Override HTML id attribute", type="text", default=None)
 
     def logic(self, context):
         (bind,
@@ -653,7 +656,8 @@ class Get(DataSetter):
          action,
          method,
          withscope,
-         blank) = self.get_parameters(context,
+         blank,
+         _id) = self.get_parameters(context,
                                       'bind',
                                       'form',
                                       'src',
@@ -663,7 +667,8 @@ class Get(DataSetter):
                                       'action',
                                       'method',
                                       'withscope',
-                                      'blank')
+                                      'blank',
+                                      'id')
         if withscope:
             scope = context['.call']
         call = self.push_funccall(context)
@@ -693,17 +698,20 @@ class Get(DataSetter):
              form_method,
              _class,
              enctype,
-             csrf) = form_element.get_parameters(context,
+             csrf,
+             form_id) = form_element.get_parameters(context,
                                                  'style',
                                                  'template',
                                                  'action',
                                                  'method',
                                                  'class',
                                                  'enctype',
-                                                 'csrf')
+                                                 'csrf',
+                                                 'id')
             style = style or form_style
             template = template or form_template
             action = action or form_action
+            html_id = _id or form_id
             if not self.has_parameter('method'):
                 method = form_method
             if action is None:
@@ -718,7 +726,8 @@ class Get(DataSetter):
                                              method=method,
                                              enctype=enctype,
                                              _class=_class,
-                                             csrf=csrf)
+                                             csrf=csrf,
+                                             html_id=html_id)
             context['_content'] = form
 
             extends = [form_element]
@@ -970,6 +979,7 @@ class FormElement(LogicElement):
     extends = Attribute("Extend another form", default=None)
     _class = Attribute("CSS class override", required=False, default=None)
     csrf = Attribute("Enable csrf protection?", type="boolean", default=True)
+    _id = Attribute("Form HTML id", type="text", default=None)
 
     class Meta:
         tag_name = "form"

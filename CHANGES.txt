@@ -11,6 +11,7 @@ Added ability of <handle> tag to take more than one sender
 Added create setting for filesystems
 Added moya init command
 Added --develop switch to moya runserver
+Added id attribute to forms to set html ID
 
 0.5.21
 ------

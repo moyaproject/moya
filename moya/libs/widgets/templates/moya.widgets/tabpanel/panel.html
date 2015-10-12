@@ -11,7 +11,7 @@
     </ul>
     <div class="tab-content">
     {%- for child in self.children if not isstr:child %}
-    {% render child with active=self.active ? self.active==child.id : forloop.first, panel_id=self.id %}
+    {% render child with active=(self.active ? self.active==child.id : forloop.first), panel_id=self.id %}
     {%- endfor %}
     </div>
 </div>

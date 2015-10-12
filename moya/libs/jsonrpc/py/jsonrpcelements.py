@@ -74,9 +74,9 @@ class InvalidParam(ParamError):
 
 class InvalidParamDefault(ParamError):
     def __init__(self, param):
-        msg = "unable to parse parameter '{}' default ({}) as type {}".format(param.name,
-                                                                              param.default,
-                                                                              param.type)
+        msg = "unable to convert default value ({default}) on  parameter '{name}' to type {type}"
+        msg = msg.format(name=param.name, default=param.default, type=param.type)
+        diagnosis = """The default value set on an <rpc:parameter> must match the 'type' attribute."""
         super(InvalidParamDefault, self).__init__(msg)
 
 
@@ -104,6 +104,9 @@ class Param(object):
             if self.required:
                 raise MissingParam("'{}' is a required parameter".format(self.name))
             return self.make_default(context)
+        return getattr(self, 'check_' + self.type)(value)
+
+    def check(self, value):
         return getattr(self, 'check_' + self.type)(value)
 
     def make_default(self, context):
@@ -717,12 +720,20 @@ class MethodTag(LogicElement):
                                                   'type',
                                                   'default',
                                                   'required')
+            if not self.has_parameter('default'):
+                required = True
             doc = context.sub(param_tag.text.strip())
-            params[param_name] = Param(param_name,
-                                       _type,
-                                       default=default,
-                                       required=required,
-                                       doc=doc)
+            _param = params[param_name] = Param(param_name,
+                                                _type,
+                                                default=default,
+                                                required=required,
+                                                doc=doc)
+            if not required:
+                try:
+                    _param.check(default)
+                except InvalidParam:
+                    raise errors.ElementError("value {} is an invalid default for type '{}'".format(context.to_expr(default), _type),
+                                              element=param_tag)
 
         doc = self.get_child('doc')
         if doc is not None:

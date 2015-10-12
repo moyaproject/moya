@@ -1,4 +1,4 @@
-<form action="${form.action or '.'}" {% attrib enctype=form.enctype, class=form.class, method=form.method %}>
+<form action="${form.action or '.'}" {% attrib id=form.html_id, enctype=form.enctype, class=form.class, method=form.method %}>
     {% if form.legend %}<legend>${form.legend}</legend>{% endif %}
     {%- if form.error %}
     <div class="alert alert-error">${form.error}</div>

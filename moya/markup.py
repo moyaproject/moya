@@ -177,7 +177,7 @@ class MoyaMarkup(MarkupBase):
                 write_error(el, "no 'insert' attribute in <moya> markup tag")
 
             app = None
-            app_name = insert_ref.get('app', None)
+            app_name = el.attrs.get('app', None)
             if app_name is None:
                 app = archive.get_app(app_name)
                 if app is None:
