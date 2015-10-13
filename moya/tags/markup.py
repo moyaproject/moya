@@ -50,7 +50,7 @@ class MarkupTag(RenderBase):
 class ProcessMarkup(DataSetter):
     """Process a given markup in to text"""
 
-    type = Attribute("Markup type", required=False, default="bbcode", choices=get_installed_markups())
+    type = Attribute("Markup type", required=False, default="bbcode")
     src = Attribute("Markup source", required=False, default=None, type="expression")
     dst = Attribute("Destination", type="reference", default=None)
 
