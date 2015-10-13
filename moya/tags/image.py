@@ -9,6 +9,10 @@ from ..compat import implements_to_string
 from fs.path import basename, pathjoin
 
 from PIL import Image, ImageFilter
+try:
+    from PIL import ExifTags
+except ImportError:
+    ExifTags = None
 
 import logging
 log = logging.getLogger('moya.image')
@@ -23,11 +27,11 @@ class MoyaImage(object):
         self.filename = filename
 
     def __str__(self):
-        w, h = self.size
+        w, h = self._img.size
         return "<image '{}' {}x{} {}>".format(self.filename, w, h, self.mode)
 
     def __repr__(self):
-        w, h = self.size
+        w, h = self._img.size
         return "<image '{}' {}x{} {}>".format(self.filename, w, h, self.mode)
 
     def replace(self, img):
@@ -39,7 +43,8 @@ class MoyaImage(object):
 
     @property
     def size(self):
-        return self._img.size
+        w, h = self._img.size
+        return {'width': w, 'height': h}
 
     @property
     def mode(self):
@@ -48,6 +53,24 @@ class MoyaImage(object):
     @property
     def info(self):
         return self._img.info
+
+    @property
+    def exif(self):
+        self._img.load()
+        _exif = self._img._getexif()
+        if _exif is None:
+            return {}
+
+        if ExifTags:
+            exif = {
+                ExifTags.TAGS[k]: v
+                for k, v in self._img._getexif().items()
+                if k in ExifTags.TAGS
+            }
+        else:
+            exif = {}
+
+        return exif
 
 
 class Read(DataSetterBase):
@@ -72,6 +95,8 @@ class Read(DataSetterBase):
             try:
                 fp.seek(0)
                 img = Image.open(fp)
+                img.load()
+                fp.seek(0)
             except Exception as e:
                 self.throw("image.read-fail", "Failed to read image from file ({})".format(e))
         else:

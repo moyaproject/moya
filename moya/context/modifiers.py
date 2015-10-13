@@ -37,6 +37,7 @@ from fs.path import (basename,
                      splitext)
 
 
+import uuid
 import hashlib
 import urllib
 import copy
@@ -56,6 +57,30 @@ class Path(text_type):
 
     def __rtruediv__(self, other):
         return Path(pathjoin(self, text_type(other)))
+
+
+def make_uuid(context, version, nstype="url", nsname=None):
+
+    _namespace_map = {
+        "dns": uuid.NAMESPACE_DNS,
+        "url": uuid.NAMESPACE_URL,
+        "oid": uuid.NAMESPACE_OID,
+        "x500": uuid.NAMESPACE_X500
+    }
+    namespace = _namespace_map.get(nstype, uuid.NAMESPACE_URL)
+    if nsname is None and namespace == uuid.NAMESPACE_URL:
+        namespace = context['.request.host_url']
+
+    if version == 1:
+        _uuid = uuid.uuid1()
+    elif version == 3:
+        _uuid = uuid.uuid3(namespace, nsname)
+    elif version == 4:
+        _uuid = uuid.uuid4()
+    elif version == 5:
+        _uuid = uuid.uuid5(namespace, nsname)
+
+    return text_type(_uuid)
 
 
 class ExpressionModifiersBase(object):
@@ -424,7 +449,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def floor(self, context, v):
         return floor(float(v))
 
-    def fromjson(self, context, v):
+    def parsejson(self, context, v):
         try:
             return moyajson.loads(v)
         except:
@@ -577,6 +602,13 @@ class ExpressionModifiers(ExpressionModifiersBase):
             v = text_type(v)
         a, b, c = v.partition(split_on)
         return a, b, c
+
+    def parsedatetime(self, context, v):
+        try:
+            date_string, _format = v
+        except ValueError:
+            return ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
+        return ExpressionDateTime.parse(date_string, _format)
 
     def rpartition(self, context, v):
         split_on = ' '
@@ -808,6 +840,24 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def urlquote(self, context, v):
         return urllib.quote(text_type(v))
+
+    def uuid(self, context, v):
+        if v in (1, 4):
+            return make_uuid(context, v)
+        else:
+            try:
+                if len(v) == 2:
+                    version, nsname = v
+                    nstype = 'url'
+                elif len(v) == 3:
+                    version, nstype, nsname = v
+                else:
+                    raise ValueError('uuid: modifier requires 1-3 values')
+            except (TypeError, ValueError):
+                raise ValueError('invalid params for uuid: modifier')
+            if version not in (3, 5):
+                raise ValueError('uuid: modifer uuid type must be 1, 2, 4, or 5')
+            return make_uuid(context, version, nstype=nstype, nsname=nsname)
 
     def validfloat(self, context, v):
         return self._validfloat(context, v)

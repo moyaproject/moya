@@ -18,7 +18,8 @@ import iso8601
 from babel.dates import (format_datetime,
                          format_date,
                          format_time,
-                         format_timedelta)
+                         format_timedelta,
+                         parse_pattern)
 
 import calendar
 from time import mktime
@@ -381,7 +382,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             dt = iso8601.parse_date(s)
             return cls.from_datetime(dt)
         except:
-            raise
+            #raise
             return None
 
     @classmethod
@@ -392,6 +393,15 @@ class ExpressionDateTime(datetime, interface.Proxy):
         except:
             return None
             raise
+
+    @classmethod
+    def parse(cls, t, pattern):
+        try:
+            dt = datetime.strptime(t, pattern)
+            return cls.from_datetime(dt)
+        except:
+            raise
+            return None
 
     def __moyarepr__(self, context):
         return "datetime:'{}'".format(self.isoformat())

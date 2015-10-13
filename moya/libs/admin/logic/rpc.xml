@@ -50,6 +50,21 @@
             <rpc:parameter name="field" type="string">field name</rpc:parameter>
         </rpc:method>
 
+        <rpc:method name="get_server_time" description="get server local time">
+            <let t=".now.local"/>
+            <return-dict
+                let:html5_date="t.html5_date"
+                let:html5_time="t.html5_time"
+                let:display="localize:.now"
+                let:tz=".sys.site.timezone"
+                let:year="t.year"
+                let:month="t.month"
+                let:day="t.day"
+                let:hour="t.hour"
+                let:minute="t.minute"
+                let:second="t.second"/>
+        </rpc:method>
+
     </rpc:interface>
 
     <macro libname="rpc.search">

@@ -73,10 +73,11 @@ class InvalidParam(ParamError):
 
 
 class InvalidParamDefault(ParamError):
+    diagnosis = """The default value set on an <rpc:parameter> must match the 'type' attribute."""
+
     def __init__(self, param):
         msg = "unable to convert default value ({default}) on  parameter '{name}' to type {type}"
         msg = msg.format(name=param.name, default=param.default, type=param.type)
-        diagnosis = """The default value set on an <rpc:parameter> must match the 'type' attribute."""
         super(InvalidParamDefault, self).__init__(msg)
 
 
