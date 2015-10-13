@@ -1,0 +1,5 @@
+{% if reply %}
+<textarea placeholder="{% trans %}Leave a reply{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
+{% else %}
+<textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
+{% endif %}

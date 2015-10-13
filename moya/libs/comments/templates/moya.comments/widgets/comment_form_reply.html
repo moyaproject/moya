@@ -1,0 +1,24 @@
+<form style="display:none" name="${comment.id}" class="moya-comment-reply-form" method="POST" action="{% url "newcomment" %}">
+    <input type="hidden" name="_moya_csrf" value="${csrf:'moya.comments#form.comment'}"/>
+    <input type="hidden" name="namespace" value="${namespace}" />
+    <input type="hidden" name="object" value="${topic}" />
+    <input type="hidden" name="object_url" value="${.request.path}" />
+    <input type="hidden" name="format" value="text" />
+    <input type="hidden" name="parentid" value="${comment.id}" />
+
+    {%- if self.children %}
+    {% children %}
+    {%- else %}
+    <div class="form-group">
+        {% with reply=yes %}{% include "widgets/comment_editor.html" %}{% end-with %}
+    </div>
+    {% endif %}
+    <div class="form-group inline">
+        <input type="submit" class="btn btn-sm btn-primary" value="Comment" />
+        <a class="btn btn-default btn-sm cancel" data-commentid="${comment.id}">{% trans %}Cancel{% end %}</a>
+        <label class="moya-comment-replies checkbox-inline">
+            <input type="checkbox" name="subscribe" checked="checked">
+            {% trans %}Email me about replies{% end %}
+        </label>
+    </div>
+</form>

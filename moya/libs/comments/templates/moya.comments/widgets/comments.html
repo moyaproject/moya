@@ -31,30 +31,7 @@
         </div>
     </div>
     {%- if commentobject.allow_new %}
-    <form style="display:none" name="${comment.id}" class="moya-comment-reply-form" method="POST" action="{% url "newcomment" %}">
-        <input type="hidden" name="_moya_csrf" value="${csrf:'moya.comments#form.comment'}"/>
-        <input type="hidden" name="namespace" value="${namespace}" />
-        <input type="hidden" name="object" value="${topic}" />
-        <input type="hidden" name="object_url" value="${.request.path}" />
-        <input type="hidden" name="format" value="text" />
-        <input type="hidden" name="parentid" value="${comment.id}" />
-
-        {%- if self.children %}
-        {% children %}
-        {%- else %}
-        <div class="form-group">
-            <textarea class="form-control input-block-level" name="text" rows="7" placeholder="{% trans %}Leave a reply{% end %}"></textarea>
-        </div>
-        {% endif %}
-        <div class="form-group inline">
-            <input type="submit" class="btn btn-sm btn-primary" value="Comment" />
-            <a class="btn btn-default btn-sm cancel" data-commentid="${comment.id}">{% trans %}Cancel{% end %}</a>
-            <label class="moya-comment-replies checkbox-inline">
-                <input type="checkbox" name="subscribe" checked="checked">
-                {% trans %}Email me about replies{% end %}
-            </label>
-        </div>
-    </form>
+    {% include "widgets/comment_form_reply.html" %}
     {%- endif %}
     {%- if commentgraph[comment.id] %}
     <div class="moya-comments">
@@ -108,24 +85,7 @@
 {%- endif %}
 
 {%- if commentobject.allow_new and not commentobject.hide %}
-<form class="moya-comment-form inline" method="POST" action="{% url "newcomment" %}">
-    <input type="hidden" name="_moya_csrf" value="${csrf:'moya.comments#form.comment'}"/>
-    <input type="hidden" name="namespace" value="${namespace}" />
-    <input type="hidden" name="object" value="${topic}" />
-    <input type="hidden" name="object_url" value="${.request.path}" />
-
-    <div class="form-group">
-        <textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
-    </div>
-    <div class="form-group inline">
-        <input type="submit" class="btn btn-primary" value="Comment" />
-        <label class="moya-comment-replies checkbox-inline" style="white-space:nowrap;">
-            <input type="checkbox" name="subscribe" checked="checked"/>
-            {% trans %}Email me about replies{% end %}
-        </label>
-    </div>
-
-</form>
+{% include "widgets/comment_form_new.html" %}
 {%- endif %}
 
 {%- if not commentobject.hide %}

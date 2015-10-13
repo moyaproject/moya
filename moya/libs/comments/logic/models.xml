@@ -5,6 +5,7 @@
     <choices libname="choices.markup">
         <choice value="text" label="Text"/>
         <choice value="bbcode" label="BBCode"/>
+        <choice value="markdown" label="Markdown"/>
         <choice value="html" label="HTML"/>
     </choices>
 

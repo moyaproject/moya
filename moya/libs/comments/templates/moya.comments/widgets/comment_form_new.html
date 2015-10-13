@@ -1,0 +1,17 @@
+<form class="moya-comment-form inline" method="POST" action="{% url "newcomment" %}">
+    <input type="hidden" name="_moya_csrf" value="${csrf:'moya.comments#form.comment'}"/>
+    <input type="hidden" name="namespace" value="${namespace}" />
+    <input type="hidden" name="object" value="${topic}" />
+    <input type="hidden" name="object_url" value="${.request.path}" />
+
+    <div class="form-group">
+        {% include "widgets/comment_editor.html" %}
+    </div>
+    <div class="form-group inline">
+        <input type="submit" class="btn btn-primary" value="Comment" />
+        <label class="moya-comment-replies checkbox-inline" style="white-space:nowrap;">
+            <input type="checkbox" name="subscribe" checked="checked"/>
+            {% trans %}Email me about replies{% end %}
+        </label>
+    </div>
+</form>
