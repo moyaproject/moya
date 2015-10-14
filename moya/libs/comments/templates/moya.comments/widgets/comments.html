@@ -20,7 +20,7 @@
                 <span class="time pull-right">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
             </div>
             <div class="panel-body">
-                {% markup comment.text as (comment.format or commentobject.markup or 'text') %}
+                {% include "widgets/comment_markup.html" %}
 
                 {%- if commentobject.allow_new %}
                 <div class="moya-comment-actions">

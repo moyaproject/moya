@@ -166,7 +166,7 @@ class MoyaMarkup(MarkupBase):
                 _html = "<!-- {} -->".format(escape(msg))
             log.warning(msg)
             console.obj(context, exc)
-            new_el = BeautifulSoup(_html, 'html.parser')
+            new_el = BeautifulSoup(_html, 'lxml')
             el.replace_with(new_el)
 
         for el in soup.find_all('moya'):
@@ -212,7 +212,7 @@ class MoyaMarkup(MarkupBase):
                 write_error(el, "markup insert failed, see logs", exc=e)
                 continue
 
-            new_el = BeautifulSoup(replace_markup, 'html.parser')
+            new_el = BeautifulSoup(replace_markup, 'lxml')
             el.replace_with(new_el)
         return HTML(text_type(soup))
 

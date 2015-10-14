@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from decimal import Decimal
-
 from ..versioning import Version, VersionSpec
 from ..url import URL, get_domain
 from ..compat import (text_type,
@@ -36,12 +34,12 @@ from fs.path import (basename,
                      dirname,
                      splitext)
 
-
 import uuid
 import hashlib
 import urllib
 import copy
 import collections
+from decimal import Decimal
 from collections import OrderedDict
 from datetime import datetime
 from operator import truth

@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import re
-
 from ..context import Context, Expression, FalseExpression, TrueExpression, DefaultExpression
 from ..context.errors import SubstitutionError
 from ..markup import Markup
@@ -11,7 +9,7 @@ from ..template.errors import MissingTemplateError, BadTemplateError
 from ..html import escape, spaceless
 from ..template import errors
 from ..errors import AppError, MarkupError
-from ..render import render_object, Safe
+from ..render import render_object
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
 from ..application import Application
@@ -22,11 +20,17 @@ from ..compat import urlencode, PY2
 from . import lorem
 
 from fs.path import pathjoin, dirname
+import bleach
 
+import re
+from copy import deepcopy
 from collections import defaultdict, namedtuple
 from itertools import chain
 from operator import truth
 import json
+
+import logging
+log = logging.getLogger('moya.template')
 
 TranslatableText = namedtuple("TranslatableText",
                               ["text",
@@ -1518,6 +1522,111 @@ class MarkupBlockNode(Node):
         except MarkupError as e:
             raise self.render_error("unable to render markup ({})".format(e))
         return html
+
+
+class SanitizeNode(Node):
+    tag_name = "sanitize"
+
+    _rules = {
+        "tags":
+        [
+            'a',
+            'abbr',
+            'acronym',
+            'b',
+            'blockquote',
+            'pre',
+            'code',
+            'em',
+            'i',
+            'li',
+            'ol',
+            'strong',
+            'ul'
+        ],
+        "attributes":
+        {
+            'a': ['href', 'title'],
+            'abbr': ['title'],
+            'acronym': ['title']
+        },
+        "styles":
+        [
+        ],
+        "strip": False,
+        "strip_comments": True
+    }
+
+    def on_create(self, environment, parser):
+        exp_map = parser.expect_word_expression_map('rules', 'tags', 'attributes', 'styles', 'strip', 'strip_comments')
+        self.rules_expression = exp_map.get('rules', DefaultExpression(None))
+        self.tags_expression = exp_map.get('tags', DefaultExpression(None))
+        self.attributes_expression = exp_map.get('attributes', DefaultExpression(None))
+        self.styles_expression = exp_map.get('styles', DefaultExpression(None))
+        self.values_expression = exp_map.get('values', DefaultExpression(None))
+        self.strip_expression = exp_map.get('strip', DefaultExpression(None))
+        self.strip_comments_expression = exp_map.get('strip_comments', DefaultExpression(None))
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        markup = template.render_nodes(self.children, environment, context, text_escape)
+        rules = self.rules_expression.eval(context)
+        if rules is None:
+            rules = self._rules
+        rules = deepcopy(rules)
+
+        tags = self.tags_expression.eval(context)
+        attributes = self.attributes_expression.eval(context)
+        styles = self.styles_expression.eval(context)
+        values = self.styles_expression.eval(context)
+        strip = self.strip_expression.eval(context)
+        strip_comments = self.strip_comments_expression.eval(context)
+
+        if tags is not None:
+            rules['tags'] = tags
+        if attributes is not None:
+            rules['attributes'] = attributes
+        if styles is not None:
+            rules['styles'] = styles
+        if strip is not None:
+            rules['strip'] = bool(strip)
+        if strip_comments is not None:
+            rules['strip_comments'] = bool(strip_comments)
+        if values is not None:
+            rules['values'] = values
+
+        def make_checker(tag, attributes, values):
+
+            _attributes = attributes[:]
+            _values = values
+
+            def check_value(name, value):
+                for attr in _attributes:
+                    if name == attr:
+                        if attr in _values:
+                            if value not in _values[attr]:
+                                return False
+                        return True
+                return False
+            return check_value
+
+        if "attributes" in rules and 'values' in rules:
+            for tag, _attributes in list(rules["attributes"].items()):
+                rules["attributes"][tag] = make_checker(tag, _attributes, rules['values'])
+
+        if rules is None:
+            clean_markup = bleach.clean(markup)
+        else:
+            if not isinstance(rules, dict):
+                self.render_error("rules must be a mapping object, not {}".format(context.to_expr(rules)))
+            try:
+                clean_rules = {k: v for k, v in rules.items() if k in ['attributes', 'tags', 'styles', 'strip', 'strip_comments']}
+                clean_markup = bleach.clean(markup, **clean_rules)
+            except Exception as e:
+                log.exception('{% sanitize %} template tag failed')
+                self.render_error('failed to clean markup ({})'.format(e))
+
+        return clean_markup
 
 
 class SummarizeNode(Node):

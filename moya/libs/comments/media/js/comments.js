@@ -22,6 +22,9 @@
             $text.keyup(function(){
                 check_button();
             });
+            $text.change(function(){
+               check_button();
+           });
             check_button();
         });
 

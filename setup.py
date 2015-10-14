@@ -59,7 +59,9 @@ setup(name='moya',
                         'lxml',
                         'colorama',
                         'premailer',
-                        'watchdog'],
+                        'watchdog',
+                        'bleach',
+                        'bs4'],
       extras_require={
           ':sys_platform=="linux2" or sys_platform=="linux3"': ["pyinotify"],
           'dev': ['notify2']
