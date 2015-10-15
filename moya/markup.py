@@ -2,24 +2,23 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from .render import HTML, render_object
+from .render import HTML
 from . import html
 from .compat import with_metaclass, implements_to_string, text_type
 from .console import Console
 from .errors import MarkupError, LogicError, ElementNotFoundError
-from .content import Content
-from .context.dataindex import makeindex
+
 
 import postmarkup
 import CommonMark
 
 from lxml.cssselect import CSSSelector
 from lxml.etree import tostring
-from lxml.html import fromstring
+from lxml.html import fromstring, fragment_fromstring
 
-import io
 import logging
 log = logging.getLogger('moya.runtime')
+
 
 def get_installed_markups():
     """Get a list of identifiers for installed markups"""
@@ -158,9 +157,10 @@ class MoyaMarkup(MarkupBase):
 
     def process_html(self, archive, context, text, target, options):
         #soup = BeautifulSoup(text, 'html.parser')
-        soup = fromstring(text)
+        soup = fragment_fromstring(text, create_parent=True)
         escape = html.escape
-
+        print(HTML(text))
+        # return HTML(text)
         console = context['.console']
 
         def write_error(el, msg, exc=None):
@@ -220,7 +220,8 @@ class MoyaMarkup(MarkupBase):
 
             new_el = fromstring(replace_markup)
             el.getparent().replace(el, new_el)
-        return HTML(tostring(soup))
+
+        return HTML("".join(tostring(e) for e in soup.getchildren()))
 
 
 @implements_to_string

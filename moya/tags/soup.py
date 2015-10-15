@@ -8,7 +8,7 @@ from .. import namespaces
 
 from lxml.cssselect import CSSSelector
 from lxml.etree import tostring
-from lxml.html import fromstring
+from lxml.html import fromstring, fragment_fromstring
 
 
 class Strain(DataSetter):
@@ -35,12 +35,16 @@ class Strain(DataSetter):
 
     def logic(self, context):
         select, html = self.get_parameters(context, 'select', 'src')
+
+        if not html:
+            self.set_context(context, self.dst(context), '')
+            return
         try:
             selector = CSSSelector(select)
         except Exception as e:
             self.throw('soup.bad-selector', text_type(e))
 
-        html_root = fromstring(html)
+        html_root = fragment_fromstring(html)
 
         (append,
          replace,
@@ -70,11 +74,11 @@ class Strain(DataSetter):
             count += 1
 
             if append is not None:
-                el.append(fromstring(append))
+                el.append(fragment_fromstring(append))
             if replace is not None:
-                el.getparent().replace(el, fromstring(replace))
+                el.getparent().replace(el, fragment_fromstring(replace))
             if prepend is not None:
-                el.insert(0, fromstring(prepend))
+                el.insert(0, fragment_fromstring(prepend))
             if remove:
                 el.getparent().remove(el)
 
@@ -110,6 +114,10 @@ class Extract(DataSetter):
                                      'src',
                                      'filter',
                                      'max')
+
+        if not html:
+            self.set_result(context, [])
+            return
 
         try:
             selector = CSSSelector(select)
