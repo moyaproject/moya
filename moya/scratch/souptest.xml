@@ -1,0 +1,44 @@
+<moya xmlns="http://moyaproject.com" xmlns:soup="http://moyaproject.com/soup">
+
+    <macro docname="main">
+        <str dst="html"><![CDATA[
+<div>
+<h1>Header</h1>
+
+<p>
+This is the <em>first</em> paragraph
+</p>
+
+<p class="middle">
+This is the second paragraph. Yadda yaddaa.
+</p>
+
+<p>Last paragraph</p>
+</div>
+
+        ]]></str>
+
+        <str dst="replace"><![CDATA[
+            <a href="#">read more</a>
+        ]]></str>
+
+
+
+
+        <soup:strain src="html" select="p" append="replace" dst="html" filter="class=='middle'"/>
+        <echo>* ${html}</echo>
+
+
+        <soup:extract-list src="html" select="p" dst="html" max="3" />
+
+        <echo obj="html"/>
+
+        <echo obj="striptags:join:html"/>
+
+
+
+
+    </macro>
+
+
+</moya>
