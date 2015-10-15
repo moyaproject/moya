@@ -182,7 +182,7 @@ class ElementNotFoundError(MoyaError):
         self.lib = lib
         diagnosis = None
         if msg is None:
-            if not self.elementref.startswith('#'):
+            if '#' not in self.elementref:
                 diagnosis = """\
 Did you mean **"#{elementref}"** ?
 

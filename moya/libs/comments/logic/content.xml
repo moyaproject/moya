@@ -48,4 +48,17 @@
             <render src="form" />
         </section>
     </content>
+
+    <content libname="content.anoncomment" template="base.html">
+        <title>New Comment</title>
+        <section name="body">
+            <html:div class="alert alert-warning">
+                <markdown>**Please enter the following details to post your comment**
+
+If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.pendingcomment}) to post with your saved details.
+</markdown>
+            </html:div>
+            <render src="form" />
+        </section>
+    </content>
 </moya>

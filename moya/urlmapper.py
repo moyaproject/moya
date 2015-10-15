@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from . import pilot
 from .containers import LRUCache
 from .syntax import highlight
-from .compat import implements_to_string, text_type, iteritems
+from .compat import implements_to_string, implements_bool, text_type, iteritems
 from .console import ConsoleHighlighter
 from .context.tools import to_expression
 
@@ -73,6 +73,7 @@ RouteMatch = namedtuple("RouteMatch", ["data", "target", "name"])
 
 
 @implements_to_string
+@implements_bool
 class URLProxy(object):
 
     def __init__(self, mapper, path=None):
@@ -99,7 +100,7 @@ class URLProxy(object):
         if name not in obj.named_routes:
             raise KeyError(name)
         proxy = URLProxy(self.mapper, self.path + [name])
-        obj = proxy.evaluate()
+        #obj = proxy.evaluate()
         #if isinstance(obj, text_type):
         #    return obj
         return proxy
@@ -149,6 +150,7 @@ class URLProxy(object):
             return k in obj
         return k in obj.named_routes
 
+    # This class is a bit schitzo; it can behave like a list or a string
     def __bool__(self):
         obj = self.evaluate()
         if isinstance(obj, text_type):

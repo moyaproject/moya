@@ -740,7 +740,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def strip(self, context, v):
         return text_type(v).strip()
 
-    def striphtml(self, context, v):
+    def striptags(self, context, v):
         v = text_type(v)
         return textilize(v)
 

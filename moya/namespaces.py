@@ -20,6 +20,7 @@ links = "http://moyaproject.com/links"
 preflight = "http://moyaproject.com/preflight"
 recaptcha = "http://moyaproject.com/recaptcha"
 run = default
+soup = "http://moyaproject.com/soup"
 tables = "http://moyaproject.com/tables"
 test = "http://moyaproject.com/test"
 thumbnail = "http://moyaproject.com/thumbnail"
@@ -73,6 +74,9 @@ namespace_docs = {
     """,
     "http://moyaproject.com/recaptcha": """
         Tags defined in [link recaptcha]Moya Google Recaptcha[/link].
+    """,
+    "http://moyaproject.com/soup": """
+        Tags for processing HTML tags.
     """,
     "http://moyaproject.com/tables": """
         Tags used to create [link tables]table[/link] content.

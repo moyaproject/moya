@@ -765,10 +765,10 @@ class Function(object):
         return call
 
     def get_scope_callable(self, context):
-        def call(scope):
+        def callscope(scope):
             with context.data_scope(scope):
                 return self.expression.eval(context)
-        return call
+        return callscope
 
 
 @implements_to_string

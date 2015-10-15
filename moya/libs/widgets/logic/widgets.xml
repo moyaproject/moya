@@ -186,7 +186,7 @@
 
     <widget name="tab-panel" template="tabpanel/panel.html" synopsis="tab panel container" container="yes">
         <signature>
-            <attribute name="id" required="no" default="'panel'" type="text"/>
+            <attribute name="id" required="no" default="panel" type="text"/>
             <attribute name="active" type="text"/>
             <attribute name="class" required="no" type="text">Additional class(es)</attribute>
         </signature>

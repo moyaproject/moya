@@ -18,19 +18,6 @@
         <url route="/subscription/{comment_object_id}/" methods="GET,POST" view="#view.subscription" name="subscription" />
     </mountpoint>
 
-    <content libname="content.anoncomment" template="base.html">
-        <title>New Comment</title>
-        <section name="body">
-            <html:div class="alert alert-warning">
-                <markdown>**Please enter the following details to post your comment**
-
-If you have a user account, please [Log In](${.urls.auth.login}?fwd=${.appurls.pendingcomment}) to post with your saved details.
-</markdown>
-            </html:div>
-            <render src="form" />
-        </section>
-    </content>
-
     <view libname="view.newcomment">
         <forms:get form="#form.anoncomment" dst="form"/>
         <serve-content content="#content.anoncomment" let:form="form"/>

@@ -259,7 +259,7 @@ class Form(AttributeExposer):
                                           'validated',
                                           'html_id'])
 
-    def __init__(self, element, context, app, style, template, action, method, enctype, csrf=True, _class=None, html_id=None):
+    def __init__(self, element, context, app, style, template, action, method, enctype, csrf=True, _class=None, html_id=None, legend=None):
         super(Form, self).__init__()
         self.element = element
         self.context = context
@@ -283,7 +283,7 @@ class Form(AttributeExposer):
         self.id = make_id()
         self.current_field_id = 1
 
-        self.legend = element.legend(context)
+        self.legend = element.legend(context) if legend is None else legend
 
         self.root = RootFormRenderable(self, template)
         self.current_node = self.root
@@ -645,6 +645,7 @@ class Get(DataSetter):
     withscope = Attribute("Use current scope?", default=False, type="boolean")
     blank = Attribute("Blank form?", default=False, type="boolean")
     _id = Attribute("Override HTML id attribute", type="text", default=None)
+    legend = Attribute("Override form Legend", type="text", default=None)
 
     def logic(self, context):
         (bind,
@@ -657,18 +658,20 @@ class Get(DataSetter):
          method,
          withscope,
          blank,
-         _id) = self.get_parameters(context,
-                                      'bind',
-                                      'form',
-                                      'src',
-                                      'dst',
-                                      'style',
-                                      'template',
-                                      'action',
-                                      'method',
-                                      'withscope',
-                                      'blank',
-                                      'id')
+         _id,
+         legend) = self.get_parameters(context,
+                                       'bind',
+                                       'form',
+                                       'src',
+                                       'dst',
+                                       'style',
+                                       'template',
+                                       'action',
+                                       'method',
+                                       'withscope',
+                                       'blank',
+                                       'id',
+                                       'legend')
         if withscope:
             scope = context['.call']
         call = self.push_funccall(context)
@@ -700,14 +703,14 @@ class Get(DataSetter):
              enctype,
              csrf,
              form_id) = form_element.get_parameters(context,
-                                                 'style',
-                                                 'template',
-                                                 'action',
-                                                 'method',
-                                                 'class',
-                                                 'enctype',
-                                                 'csrf',
-                                                 'id')
+                                                    'style',
+                                                    'template',
+                                                    'action',
+                                                    'method',
+                                                    'class',
+                                                    'enctype',
+                                                    'csrf',
+                                                    'id')
             style = style or form_style
             template = template or form_template
             action = action or form_action
@@ -727,7 +730,8 @@ class Get(DataSetter):
                                              enctype=enctype,
                                              _class=_class,
                                              csrf=csrf,
-                                             html_id=html_id)
+                                             html_id=html_id,
+                                             legend=legend)
             context['_content'] = form
 
             extends = [form_element]
