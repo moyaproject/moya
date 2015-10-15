@@ -3,6 +3,7 @@ from __future__ import print_function
 
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter
+from ..compat import text_type
 from .. import namespaces
 
 from lxml.cssselect import CSSSelector
@@ -34,7 +35,10 @@ class Strain(DataSetter):
 
     def logic(self, context):
         select, html = self.get_parameters(context, 'select', 'src')
-        selector = CSSSelector(select)
+        try:
+            selector = CSSSelector(select)
+        except Exception as e:
+            self.throw('soup.bad-selector', text_type(e))
 
         html_root = fromstring(html)
 
@@ -75,9 +79,9 @@ class Strain(DataSetter):
                 el.getparent().remove(el)
 
         if unwrap:
-            result_markup = "".join(tostring(child) for child in html_root.getchildren())
+            result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
         else:
-            result_markup = tostring(html_root)
+            result_markup = tostring(html_root).decode('utf-8')
 
         self.set_context(context, self.dst(context), result_markup)
 
@@ -107,7 +111,10 @@ class Extract(DataSetter):
                                      'filter',
                                      'max')
 
-        selector = CSSSelector(select)
+        try:
+            selector = CSSSelector(select)
+        except Exception as e:
+            self.throw('soup.bad-selector', text_type(e))
         html_root = fromstring(html)
 
         if self.has_parameter('filter'):
@@ -129,7 +136,7 @@ class Extract(DataSetter):
         self.set_result(context, elements)
 
     def set_result(self, context, elements):
-        result_markup = "".join(tostring(el) for el in elements)
+        result_markup = "".join(tostring(el).decode('utf-8') for el in elements)
         self.set_context(context, self.dst(context), result_markup)
 
 

@@ -1524,6 +1524,25 @@ class MarkupBlockNode(Node):
         return html
 
 
+class ReplaceNode(Node):
+    tag_name = "replace"
+
+    def on_create(self, environment, parser):
+        exp_map = parser.expect_word_expression_map('with', 'if')
+        self.with_expression = exp_map.get('with', None)
+        self.if_expression = exp_map.get('if', DefaultExpression(True))
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        markup = template.render_nodes(self.children, environment, context, text_escape)
+        if self.if_expression.eval(context):
+            filter_function = self.with_expression.make_function(context)
+            replace_markup = filter_function(context, contents=markup)
+        else:
+            replace_markup = markup
+        return replace_markup
+
+
 class SanitizeNode(Node):
     tag_name = "sanitize"
 

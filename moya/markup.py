@@ -12,9 +12,12 @@ from .context.dataindex import makeindex
 
 import postmarkup
 import CommonMark
-import io
-from bs4 import BeautifulSoup
 
+from lxml.cssselect import CSSSelector
+from lxml.etree import tostring
+from lxml.html import fromstring
+
+import io
 import logging
 log = logging.getLogger('moya.runtime')
 
@@ -147,12 +150,15 @@ class MoyaMarkup(MarkupBase):
     title = "Raw HTML + moya psuedo tags"
     choice = False
 
+    _selector = CSSSelector('moya')
+
     def create(self, options):
         from .template import Template
         self.template = Template('<b>moya</b>{% render sections._widget %}')
 
     def process_html(self, archive, context, text, target, options):
-        soup = BeautifulSoup(text, 'html.parser')
+        #soup = BeautifulSoup(text, 'html.parser')
+        soup = fromstring(text)
         escape = html.escape
 
         console = context['.console']
@@ -166,18 +172,18 @@ class MoyaMarkup(MarkupBase):
                 _html = "<!-- {} -->".format(escape(msg))
             log.warning(msg)
             console.obj(context, exc)
-            new_el = BeautifulSoup(_html, 'lxml')
-            el.replace_with(new_el)
+            new_el = fromstring(_html)
+            el.getparent().replace(el, new_el)
 
-        for el in soup.find_all('moya'):
+        for el in self._selector(soup):
 
             try:
-                insert_ref = el.attrs['insert']
+                insert_ref = el.attrib['insert']
             except IndexError:
                 write_error(el, "no 'insert' attribute in <moya> markup tag")
 
             app = None
-            app_name = el.attrs.get('app', None)
+            app_name = el.attrib.get('app', None)
             if app_name is None:
                 app = archive.get_app(app_name)
                 if app is None:
@@ -185,7 +191,7 @@ class MoyaMarkup(MarkupBase):
                     continue
 
             # Get data params
-            params = {k.split('-', 1)[-1]: v for k, v in el.attrs.items()
+            params = {k.split('-', 1)[-1]: v for k, v in el.attrib.items()
                       if k.startswith('data-')}
 
             app = app or context.get('.app', None)
@@ -212,9 +218,9 @@ class MoyaMarkup(MarkupBase):
                 write_error(el, "markup insert failed, see logs", exc=e)
                 continue
 
-            new_el = BeautifulSoup(replace_markup, 'lxml')
-            el.replace_with(new_el)
-        return HTML(text_type(soup))
+            new_el = fromstring(replace_markup)
+            el.getparent().replace(el, new_el)
+        return HTML(tostring(soup))
 
 
 @implements_to_string

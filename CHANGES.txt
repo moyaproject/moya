@@ -14,6 +14,7 @@ Added --develop switch to moya runserver
 Added id attribute to forms to set html ID
 Changed RPC default to use expressions only, rather than both string and expressions
 Added {% sanitize %} template tag
+Added {% insert %} tag
 
 0.5.21
 ------
