@@ -7,8 +7,7 @@ from ..compat import text_type
 from .. import namespaces
 
 from lxml.cssselect import CSSSelector
-from lxml.etree import tostring
-from lxml.html import fromstring, fragment_fromstring
+from lxml.html import tostring, fromstring, fragment_fromstring
 
 
 class Strain(DataSetter):
@@ -28,13 +27,14 @@ class Strain(DataSetter):
     prepend = Attribute("markup to prepend", type="expression", required=False, default=None)
     replace = Attribute("markup to replace", type="expression", required=False, default=None)
     remove = Attribute("Remove matched element?", type="boolean", required=False)
-    unwrap = Attribute("Remove outer tag", type="boolean", default=False, required=False)
+#    unwrap = Attribute("Remove outer tag", type="boolean", default=False, required=False)
 
     filter = Attribute("Filter by attributes", type="function", required=False, default=None)
     _max = Attribute("Maximum number of tags to match", type="integer", required=False, default=None)
 
     def logic(self, context):
         select, html = self.get_parameters(context, 'select', 'src')
+        let_map = self.get_let_map(context)
 
         if not html:
             self.set_context(context, self.dst(context), '')
@@ -44,20 +44,18 @@ class Strain(DataSetter):
         except Exception as e:
             self.throw('soup.bad-selector', text_type(e))
 
-        html_root = fragment_fromstring(html)
+        html_root = fragment_fromstring(html, create_parent=True)
 
         (append,
          replace,
          prepend,
          remove,
-         _max,
-         unwrap) = self.get_parameters(context,
-                                       'append',
-                                       'replace',
-                                       'prepend',
-                                       'remove',
-                                       'max',
-                                       'unwrap')
+         _max) = self.get_parameters(context,
+                                     'append',
+                                     'replace',
+                                     'prepend',
+                                     'remove',
+                                     'max')
 
         if self.has_parameter('filter'):
             filter_func = self.filter(context).get_scope_callable(context)
@@ -73,6 +71,14 @@ class Strain(DataSetter):
                 break
             count += 1
 
+            if let_map:
+                attrib = el.attrib
+                for k, v in let_map.items():
+                    if v is None:
+                        del attrib[k]
+                    else:
+                        attrib[k] = text_type(v)
+
             if append is not None:
                 el.append(fragment_fromstring(append))
             if replace is not None:
@@ -82,10 +88,11 @@ class Strain(DataSetter):
             if remove:
                 el.getparent().remove(el)
 
-        if unwrap:
-            result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
-        else:
-            result_markup = tostring(html_root).decode('utf-8')
+        result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
+        # if unwrap:
+        #     result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
+        # else:
+        #     result_markup = tostring(html_root).decode('utf-8')
 
         self.set_context(context, self.dst(context), result_markup)
 

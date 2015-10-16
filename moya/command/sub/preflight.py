@@ -53,15 +53,16 @@ class Preflight(SubCommand):
                 errors = Cell(totals["error"], **style(totals["error"]))
                 warnings = Cell(totals["warning"], **style(totals["warning"]))
                 fails = Cell(totals["fail"], **style(totals["fail"]))
-                table.append([app.name, warnings, errors, fails, "\n".join(all_text)])
+                skipped = Cell(totals["skip"] or '')
+                table.append([app.name, warnings, fails, errors, skipped, "\n".join(all_text)])
 
-        self.console.table(table, header_row=["app", "warnings", "errors", "fails", "info"])
+        self.console.table(table, header_row=["app", "warnings", "fails", "errors", "skip", "info"])
 
         results = []
-        for status in ("warning", "error", "fail"):
+        for status in ("warning", "fail", "error"):
             results.append("{} {}(s)".format(all_totals[status], status))
 
-        if sum(all_totals.values()):
+        if all_totals['warning'] + all_totals['fail'] + all_totals['error']:
             self.console.text(", ".join(results), fg="red", bold=True)
         else:
             self.console.text(", ".join(results), fg="green", bold=True)

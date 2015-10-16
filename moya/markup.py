@@ -13,8 +13,7 @@ import postmarkup
 import CommonMark
 
 from lxml.cssselect import CSSSelector
-from lxml.etree import tostring
-from lxml.html import fromstring, fragment_fromstring
+from lxml.html import tostring, fromstring, fragment_fromstring
 
 import logging
 log = logging.getLogger('moya.runtime')
@@ -159,7 +158,7 @@ class MoyaMarkup(MarkupBase):
         #soup = BeautifulSoup(text, 'html.parser')
         soup = fragment_fromstring(text, create_parent=True)
         escape = html.escape
-        print(HTML(text))
+
         # return HTML(text)
         console = context['.console']
 

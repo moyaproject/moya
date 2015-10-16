@@ -22,4 +22,10 @@
         <return value="isbool:response.json.success and response.json.success" />
     </tag>
 
+    <tag name="check">
+        <doc>Check the setting exists</doc>
+        <throw exception="recaptcha.nokey" if="not strip:.app.settings.sitekey"
+            msg="'sitekey' value is missing from recaptcha settings"/>
+    </tag>
+
 </moya>

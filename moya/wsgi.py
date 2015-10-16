@@ -246,12 +246,19 @@ class WSGIApplication(object):
                     context = Context({"preflight": preflight})
                     self.archive.populate_context(context)
                     self.populate_context(context)
+                    context['.app'] = app
+
+                    if not element.check(context):
+                        preflight.append((element, "skip", ''))
+                        continue
+
                     try:
                         preflight_callable(context, app=app)
                     except Exception as e:
                         preflight.append((element, "error", text_type(e)))
 
                 app_preflight.append((app, preflight))
+
             if report:
                 all_ok = True
                 for app, checks in app_preflight:
@@ -271,7 +278,7 @@ class WSGIApplication(object):
                                     preflight_log.critical('%s', line)
 
                     results = []
-                    for status in ("warning", "fail", "error"):
+                    for status in ("warning", "fail", "error", "skip"):
                         if totals[status]:
                             results.append("{} {}(s)".format(totals[status], status))
                             all_ok = False

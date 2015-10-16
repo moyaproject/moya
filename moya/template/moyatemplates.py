@@ -1577,7 +1577,7 @@ class SanitizeNode(Node):
     }
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('rules', 'tags', 'attributes', 'styles', 'strip', 'strip_comments')
+        exp_map = parser.expect_word_expression_map('rules', 'tags', 'attributes', 'styles', 'strip', 'strip_comments', 'if')
         self.rules_expression = exp_map.get('rules', DefaultExpression(None))
         self.tags_expression = exp_map.get('tags', DefaultExpression(None))
         self.attributes_expression = exp_map.get('attributes', DefaultExpression(None))
@@ -1585,10 +1585,15 @@ class SanitizeNode(Node):
         self.values_expression = exp_map.get('values', DefaultExpression(None))
         self.strip_expression = exp_map.get('strip', DefaultExpression(None))
         self.strip_comments_expression = exp_map.get('strip_comments', DefaultExpression(None))
+        self.if_expression = exp_map.get('if', DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = template.render_nodes(self.children, environment, context, text_escape)
+
+        if not self.if_expression.eval(context):
+            return markup
+
         rules = self.rules_expression.eval(context)
         if rules is None:
             rules = self._rules
