@@ -278,10 +278,11 @@ class WSGIApplication(object):
                                     preflight_log.critical('%s', line)
 
                     results = []
-                    for status in ("warning", "fail", "error", "skip"):
+                    for status in ("warning", "fail", "error"):
                         if totals[status]:
                             results.append("{} {}(s)".format(totals[status], status))
-                            all_ok = False
+                            if status != 'skip':
+                                all_ok = False
                     if results:
                         preflight_log.info("%s in %s", ", ".join(results), app)
 
