@@ -1207,11 +1207,15 @@ class IncludeNode(Node):
 
     def on_create(self, environment, parser):
         self.path_expression = parser.expect_expression()
-        expression_map = parser.expect_word_expression_map("from")
+        expression_map = parser.expect_word_expression_map("from", "if")
         self.from_expression = expression_map.get('from', DefaultExpression(None))
+        self.if_expression = expression_map.get('if', DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
+        if not self.if_expression.eval(context):
+            return ''
+
         path = self.path_expression.eval(context)
         app = self.from_expression.eval(context) or self.get_app(context)
         if environment.archive is not None:
@@ -1523,24 +1527,31 @@ class MarkupBlockNode(Node):
             raise self.render_error("unable to render markup ({})".format(e))
         return html
 
-
-class ReplaceNode(Node):
-    tag_name = "replace"
+class ExtractNode(Node):
+    tag_name = "extract"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('with', 'if')
-        self.with_expression = exp_map.get('with', None)
+        exp_map = parser.expect_word_expression_map('as', 'replace', 'if')
+        self.as_expression = exp_map.get('as', None)
+        self.replace_expression = exp_map.get('replace', None)
         self.if_expression = exp_map.get('if', DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = template.render_nodes(self.children, environment, context, text_escape)
+        extract_name = None
+        if self.as_expression is not None:
+            extract_name = self.as_expression.eval(context)
+            if not isinstance(extract_name, text_type):
+                self.render_error("name should be a string, not ({})".format(context.to_expr(extract_name)))
         if self.if_expression.eval(context):
-            filter_function = self.with_expression.make_function(context)
+            if extract_name is not None:
+                context[extract_name] = markup
+            filter_function = self.replace_expression.make_function(context)
             replace_markup = filter_function(context, contents=markup)
         else:
             replace_markup = markup
-        return replace_markup
+        return text_escape(replace_markup)
 
 
 class SanitizeNode(Node):

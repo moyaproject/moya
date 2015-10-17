@@ -11,7 +11,7 @@ from ..compat import (text_type,
                       unichr,
                       urlencode)
 from ..html import slugify, textilize, linebreaks
-from ..render import HTML
+from ..render import HTML, Safe
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
 from ..context.expressiontime import (TimeSpan,
                                       ExpressionDateTime,
@@ -681,6 +681,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def rstrip(self, context, v):
         return text_type(v).rstrip()
+
+    def safe(self, context, v):
+        return Safe(v)
 
     def seqlast(self, context, v):
         return self._seqlast(v, context)

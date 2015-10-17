@@ -168,3 +168,18 @@ class ExtractList(Extract):
     def set_result(self, context, elements):
         result = [tostring(el) for el in elements]
         self.set_context(context, self.dst(context), result)
+
+
+class ExtractAttrs(Extract):
+    """
+    Extract attributes from HTML tags
+
+    """
+    xmlns = namespaces.soup
+
+    class Help:
+        synopsis = "extract attributes from HTML tags"
+
+    def set_result(self, context, elements):
+        result = [el.attrib for el in elements]
+        self.set_context(context, self.dst(context), result)
