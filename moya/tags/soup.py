@@ -34,6 +34,11 @@ class Strain(DataSetter):
 
     def logic(self, context):
         select, html = self.get_parameters(context, 'select', 'src')
+
+        if not html.strip():
+            self.set_context(context, self.dst(context), '')
+            return
+
         let_map = self.get_let_map(context)
 
         if not html:
@@ -89,11 +94,6 @@ class Strain(DataSetter):
                 el.getparent().remove(el)
 
         result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
-        # if unwrap:
-        #     result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
-        # else:
-        #     result_markup = tostring(html_root).decode('utf-8')
-
         self.set_context(context, self.dst(context), result_markup)
 
 
@@ -112,7 +112,6 @@ class Extract(DataSetter):
     _max = Attribute("Maximum number of tags to match", type="integer", required=False, default=None)
 
     def logic(self, context):
-
         (select,
          html,
          filter,
@@ -122,7 +121,7 @@ class Extract(DataSetter):
                                      'filter',
                                      'max')
 
-        if not html:
+        if not html.strip():
             self.set_result(context, [])
             return
 
