@@ -9,6 +9,8 @@ from .. import namespaces
 from lxml.cssselect import CSSSelector
 from lxml.html import tostring, fromstring, fragment_fromstring
 
+import json
+
 
 class Strain(DataSetter):
     """
@@ -182,3 +184,35 @@ class ExtractAttrs(Extract):
     def set_result(self, context, elements):
         result = [el.attrib for el in elements]
         self.set_context(context, self.dst(context), result)
+
+
+class ExtractData(Extract):
+    """
+    Extract HTML5 data- attributes
+
+    """
+    xmlns = namespaces.soup
+
+    raw = Attribute("return raw data (without attempting JSON decode)?", type="boolean", default=False)
+
+    class Help:
+        synopsis = "extract HTML5 data attributes from HTML"
+
+    def set_result(self, context, elements):
+        all_data = []
+        raw = self.raw(context)
+
+        def make_data(v):
+            try:
+                data = json.loads(v)
+            except:
+                data = v
+            return data
+        for el in elements:
+            if raw:
+                data = {k.partition('-')[-1]: v for k, v in el.attrib.items() if k.startswith('data-')}
+            else:
+                data = {k.partition('-')[-1]: make_data(v) for k, v in el.attrib.items() if k.startswith('data-')}
+
+            all_data.append(data)
+        self.set_context(context, self.dst(context), all_data)

@@ -2388,7 +2388,12 @@ class Query(DBDataSetter):
             qs = qs.group_by(*group_by)
 
         if filter is not None:
-            qs = qs.filter(filter)
+            try:
+                qs = qs.filter(filter)
+            except Exception as e:
+                self.throw('db.filter-failed',
+                           'unable to apply filter to queryset',
+                           diagnosis="Moya's db engine reported the following:\n\n**{}**".format(e))
             qs = exp_context.process_qs(qs)
 
         if table_class is not None:

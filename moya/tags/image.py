@@ -293,6 +293,40 @@ class ResizeToFit(LogicElement):
         params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
 
 
+class ZoomToFit(LogicElement):
+    """Resize image to given dimensions, cropping if necessary."""
+
+    xmlns = namespaces.image
+
+    class Help:
+        synopsis = "resize an image to fit in new dimensions, with cropping"
+
+    image = Attribute("Image to show", type="expression", default="image", evaldefault=True)
+    width = Attribute("New width", type="integer", required=True)
+    height = Attribute("New height", type="integer", required=True)
+    resample = Attribute("Method for resampling", default="antialias", choices=_resample_methods.keys())
+
+    def logic(self, context):
+        params = self.get_parameters(context)
+        image = params.image._img
+
+        aspect = image.size[0] / image.size[1]
+        if image.size[0] > image.size[1]:
+            new_size = int(params.height * aspect), params.height
+        else:
+            new_size = params.width, int(params.width / aspect)
+
+        img = image.resize(new_size, _resample_methods[params.resample])
+
+        w = params.width
+        h = params.height
+        x = (img.size[0] - w) // 2
+        y = (img.size[1] - h) // 2
+
+        box = x, y, x + w, y + h
+        params.image.replace(img.crop(box))
+
+
 class Resize(LogicElement):
     """Resize an image to new dimensions."""
     xmlns = namespaces.image
@@ -397,7 +431,7 @@ class Crop(LogicElement):
             self.throw('bad-value.box-invalid',
                        "parameter 'box' should be  sequence of 2 or 4 parameters (not {})".format(context.to_expr(size)))
 
-        box = x, y, w, h
+        box = x, y, x + w, y + h
         params.image.replace(img.crop(box))
 
 
