@@ -20,6 +20,7 @@ class MoyaFilterBase(object):
     def __moyafilter__(self, context, app, value, params):
         if not self.allow_missing and is_missing(value):
             raise ValueError("{} doesn't accept a missing value (left hand side is {!r})".format(self, value))
+
         params[self.get_value_name()] = value
         filter_call = self.lib.archive.get_callable(self.element_ref, app=app)
         value = filter_call(context, **params)
@@ -33,23 +34,27 @@ class BoundFilter(MoyaFilterBase):
     def __init__(self, _app, _filter):
         self._app = _app
         self._filter = _filter
+        self.validator = _filter.validator
         super(BoundFilter, self).__init__()
 
     def get_value_name(self):
         return self._filter.get_value_name()
 
     def __repr__(self):
-        return "{!r} from '{}'".format(self._filter, self._app.name)
+        return "{!r} (app is '{}')".format(self._filter, self._app.name)
 
     def __moyafilter__(self, context, app, value, params):
         params['_caller_app'] = app
+        if self.validator is not None:
+            self.validator.check(context, params, self)
         return self._filter.__moyafilter__(context, self._app, value, params)
 
 
 class MoyaFilter(MoyaFilterBase):
-    def __init__(self, lib, filter_element, value_name, allow_missing=False):
+    def __init__(self, lib, filter_element, value_name, allow_missing=False, validator=None):
         self.lib = lib
         self.element_ref = filter_element
+        self.validator = validator
         super(MoyaFilter, self).__init__(value_name, allow_missing=allow_missing)
 
     def __repr__(self):
@@ -83,4 +88,6 @@ class MoyaFilterParams(object):
         return repr(self.filter)
 
     def __moyafilter__(self, context, app, value, params):
+        #if self.filter.validator is not None:
+        #    self.filter.validator.check(context, params)
         return self.filter.__moyafilter__(context, app, value, self.params)

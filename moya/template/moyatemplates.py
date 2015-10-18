@@ -2093,7 +2093,7 @@ class Template(object):
                                      original=e.original,
                                      code=current_node.template.source)
         except Exception as e:
-            raise
+            # raise
             raise errors.RenderError("render error",
                                      current_node.template.path,
                                      *current_node.location,

@@ -13,6 +13,7 @@ from .. import errors
 from .. import namespaces
 
 from collections import OrderedDict
+import weakref
 
 
 class WidgetBase(LogicElement):
@@ -286,7 +287,7 @@ class ArgumentValidator(object):
         self.defaults = OrderedDict()
         for arg in element.children():
             if arg._element_type != (namespaces.default, 'argument'):
-                raise errors.ElementError("must contain <argument> tags only", element=element)
+                raise errors.ElementError("{} signature must contain <argument> tags only".format(element.parent), element=element)
             name, required, check, default = arg.get_parameters(context, 'name', 'required', 'check', 'default')
             if arg.has_parameter('default'):
                 self.defaults[name] = default
@@ -304,6 +305,25 @@ class ArgumentValidator(object):
             return "<validator {}>".format(textual_list(self.arg_names))
         else:
             return "<validator>"
+
+    def check(self, context, arg_map, checked_object):
+        for k, default in self.defaults.items():
+            if k not in arg_map:
+                arg_map[k] = default(context)
+
+        if not self.arg_names.issuperset(arg_map.keys()):
+            for k in self.arg_names:
+                if k not in arg_map:
+                    raise ValueError("'{}' is a required argument to {}".format(k, checked_object))
+
+        for name, check in self.checks:
+            try:
+                result = check.call(context, arg_map)
+            except Exception as e:
+                raise ValueError("check failed for argument '{}' with error '{}'".format(name, e))
+            if not result:
+                raise ValueError("{value} is not a valid value for argument {name}".format(name=name,
+                                                                                           value=to_expression(context, arg_map[name])))
 
     def validate(self, context, element, arg_map):
         for k, default in self.defaults.items():
@@ -374,9 +394,14 @@ class Signature(ElementBase):
     class Meta:
         logic_skip = True
 
+    def get_validator(self, context):
+        return ArgumentValidator(context, self)
+
     def finalize(self, context):
-        if self.parent._element_type == (namespaces.default, 'macro'):
+        if self.parent._element_type in ((namespaces.default, 'macro'), (namespaces.default, 'Filter')):
             self.validator = ArgumentValidator(context, self)
+        else:
+            self.validator = None
 
 
 class Doc(ElementBase):

@@ -20,6 +20,7 @@ Added inline attribute to radio-group
 Added <extract-data>
 Added <zoom-to-fit>
 Added <admin-only>
+Implemented signature validator for filters
 
 0.5.21
 ------

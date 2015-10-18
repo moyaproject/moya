@@ -799,7 +799,7 @@ class Server(LogicElement):
                 moya_trace2 = trace.build(context, None, None, error2, sys.exc_info(), request)
 
         if error is not None:
-            log.error('unhandled exception ({})'.format(error))
+            log.error('unhandled exception ({})'.format(text_type(error).lstrip()))
             try:
                 context['.console'].obj(context, moya_trace)
             except:
