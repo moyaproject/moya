@@ -193,6 +193,26 @@ class Forbidden(LogicElement):
         raise logic.EndLogic(http.RespondForbidden())
 
 
+class AdminOnly(LogicElement):
+    """
+    Respond with a forbidden response if the user is not admin.
+
+    This tag is a shortcut for the following:
+
+    [code xml]
+    <forbidden if="not .permissions.admin"/>
+    [/code]
+
+    """
+
+    class Help:
+        synopsis = "return a forbidden response if the user is not admin"
+
+    def logic(self, context):
+        if not context['.permissions.admin']:
+            raise logic.EndLogic(http.RespondForbidden())
+
+
 class RedirectTo(LogicElement):
     """Redirect to new location."""
 

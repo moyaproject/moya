@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.22a1"
+VERSION = "0.5.22a4"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -61,7 +61,7 @@ setup(name='moya',
                         'premailer',
                         'watchdog',
                         'bleach',
-                        'bs4'],
+                        'beautifulsoup4'],
       extras_require={
           ':sys_platform=="linux2" or sys_platform=="linux3"': ["pyinotify"],
           'dev': ['notify2']

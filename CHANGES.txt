@@ -19,6 +19,7 @@ Added <extract-attrs> to soup
 Added inline attribute to radio-group
 Added <extract-data>
 Added <zoom-to-fit>
+Added <admin-only>
 
 0.5.21
 ------
