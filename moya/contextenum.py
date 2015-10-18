@@ -113,7 +113,7 @@ class ContextEnum(object):
 
     @property
     def choices(self):
-        return [(e.id, e.label) for e in self]
+        return [(e.id, e.description or e.label) for e in self]
 
     def keys(self):
         return [int(value) for value in self._values] + [text_type(value) for value in self._values]

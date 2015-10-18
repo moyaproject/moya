@@ -2,7 +2,7 @@
 {%- if group %}
 {%- endif %}
     {%- for value, text in choices %}
-    <div class="radio">
+    <div {% attrib class=field.inline ? 'radio-inline' : 'radio' %}>
         <label>{% if field.disabled %} disabled{% endif %}
             <input type="radio" name="${field.name}" value="${value}" {% if value instr field.values %} checked="checked"{% endif %}{% if field.disabled %} disabled{% endif %}/> ${text}
         </label>

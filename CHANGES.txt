@@ -16,6 +16,7 @@ Changed RPC default to use expressions only, rather than both string and express
 Added {% sanitize %} template tag
 Added {% extract %} tag
 Added <extract-attrs> to soup
+Added inline attribute to radio-group
 
 0.5.21
 ------

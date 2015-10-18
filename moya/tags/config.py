@@ -378,7 +378,10 @@ class Choices(ElementBase):
         self.choices = choices = []
         append = choices.append
         for choice in self.get_children('choice'):
-            append(choice.get_parameters(context, 'value', 'label'))
+            value, label = choice.get_parameters(context, 'value', 'label')
+            if not label:
+                label = context.sub(choice.text)
+            append((value, label))
 
 
 class Choice(ElementBase):

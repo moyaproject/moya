@@ -1260,6 +1260,8 @@ class RadioGroup(FieldElement):
     """
 
     fieldname = Attribute("Field name", required=False, default="radio-group")
+    choices = Attribute("Possible choices", type="expression", required=False, default=None)
+    inline = Attribute("Display inline?", type="boolean", required=False, default=False)
 
     class Help:
         synopsis = "add a radio group to a form"
@@ -1271,11 +1273,28 @@ class RadioGroup(FieldElement):
         </radio-group>
         """
 
+    @classmethod
+    def add_choices(cls, select, select_choices):
+        for group, choices in select_choices:
+            if choices:
+                if isinstance(choices, text_type):
+                    select.add_option(group, choices)
+                else:
+                    for choice, choice_label in choices:
+                        select.add_option(choice, choice_label, group=group)
+
     def logic(self, context):
         form = context['_return']
         params = self.get_field_parameters(context)
         template = params.pop('template', None)
-        renderable = context['_radiogroup'] = form.add_field(params, template=template)
+        renderable = context['_radiogroup'] = form.add_field(params,
+                                                             template=template)
+
+        select_choices = self.choices(context)
+
+        if select_choices:
+            self.add_choices(renderable, select_choices)
+
         yield logic.DeferNodeContents(self)
         del context['_radiogroup']
         context['.content'].add_renderable(self._tag_name, renderable)
