@@ -696,8 +696,10 @@ class Console(object):
                 highlight_columns = (colno - 1, colno)
             else:
                 highlight_columns = None
+            _lineno = max(0, lineno - extralines)
+
             self.snippet(code,
-                         (lineno - extralines, lineno + extralines + 1),
+                         (_lineno, _lineno + extralines * 2 + 1),
                          highlight_line=lineno,
                          highlight_columns=highlight_columns,
                          line_numbers=True)
@@ -711,8 +713,9 @@ class Console(object):
                 highlight_columns = (colno - 1, colno if endcolno is None else endcolno)
             else:
                 highlight_columns = None
+            _lineno = max(0, lineno - extralines)
             self.snippet(code,
-                         (lineno - extralines, lineno + extralines + 1),
+                         (_lineno, _lineno + extralines * 2 + 1),
                          highlight_line=lineno,
                          highlight_columns=highlight_columns,
                          highlighter=TemplateHighlighter,

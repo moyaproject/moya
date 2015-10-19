@@ -8,7 +8,7 @@ from ..template.enginebase import TemplateEngine
 from ..template.errors import MissingTemplateError, BadTemplateError
 from ..html import escape, spaceless
 from ..template import errors
-from ..errors import AppError, MarkupError
+from ..errors import AppError, MarkupError, LogicError
 from ..render import render_object
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
@@ -106,6 +106,7 @@ class MoyaTemplateEngine(TemplateEngine):
                     if not hasattr(e, 'template_stack'):
                         e.template_stack = base_context['.__t_stack'][:]
                     raise
+
 
 @implements_to_string
 class _TemplateFrame(object):
@@ -283,6 +284,14 @@ class TagParser(object):
         return self.text.strip()
 
 
+class NodeRenderError(Exception):
+    def __init__(self, node, msg, original=None, diagnosis=None):
+        self.node = node
+        self.msg = msg
+        self.original = original
+        self.diagnosis = diagnosis
+
+
 class NodeType(object):
     tag_name = ""
     is_clause = False
@@ -324,13 +333,14 @@ class NodeType(object):
         return False
 
     def render_error(self, msg, original=None, diagnosis=None):
-        raise errors.RenderError(msg,
-                                 self.template.path,
-                                 *self.location,
-                                 raw_path=self.template.raw_path,
-                                 code=self.code,
-                                 original=original,
-                                 diagnosis=diagnosis)
+        raise NodeRenderError(self, msg, original=original, diagnosis=diagnosis)
+        # raise errors.RenderError(msg,
+        #                          self.template.path,
+        #                          *self.location,
+        #                          raw_path=self.template.raw_path,
+        #                          code=self.code,
+        #                          original=original,
+        #                          diagnosis=diagnosis)
 
     def on_create(self, environment, parser):
         pass
@@ -923,9 +933,9 @@ class RenderNode(Node):
                                  target=target,
                                  options=options)
         except MissingTemplateError as e:
-            self.render_error('Missing template: "%s"' % e.path)
+            self.render_error('Missing template: "%s"' % e.path, original=e)
         except errors.TagError as e:
-            self.render_error(text_type(e))
+            self.render_error(text_type(e), original=e)
 
 
 class RenderAllNode(Node):
@@ -1044,7 +1054,9 @@ class URLNode(Node):
                 try:
                     app = environment.archive.detect_app(context, _in)
                 except Exception as e:
-                    raise self.render_error(text_type(e), original=e, diagnosis="Check the 'from' attribute for typos.")
+                    raise self.render_error(text_type(e),
+                                            original=e,
+                                            diagnosis="Check the 'from' attribute for typos.")
         else:
             app = self.template_app(environment.archive, context.get('._t.app', None))
             if app is None:
@@ -1214,7 +1226,7 @@ class IncludeNode(Node):
 
     def render(self, environment, context, template, text_escape):
         if not self.if_expression.eval(context):
-            return ''
+            return
 
         path = self.path_expression.eval(context)
         app = self.from_expression.eval(context) or self.get_app(context)
@@ -1223,8 +1235,8 @@ class IncludeNode(Node):
         try:
             template = environment.get_template(path)
         except MissingTemplateError as e:
-            self.render_error('unable to include missing template "{}"'.format(e.path))
-        return template.render(context, environment)
+            self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
+        yield template.render(context, environment)
 
 
 class InsertNode(Node):
@@ -1527,6 +1539,7 @@ class MarkupBlockNode(Node):
             raise self.render_error("unable to render markup ({})".format(e))
         return html
 
+
 class ExtractNode(Node):
     tag_name = "extract"
 
@@ -1713,6 +1726,30 @@ class SummarizeNode(Node):
 
 
 TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])
+
+
+class NodeGenerator(object):
+    def __init__(self, gen, node):
+        self._gen = gen
+        self.node = node
+
+    def __next__(self):
+        return self._gen.__next__()
+
+    def next(self):
+        return self._gen.next()
+
+    def __iter__(self):
+        return self._gen.__iter__()
+
+    def close(self):
+        return self._gen.close()
+
+    def throw(self, *args, **kwargs):
+        return self._gen.throw(*args, **kwargs)
+
+    def send(self, *args, **kwargs):
+        return self._gen.send(*args, **kwargs)
 
 
 class Template(object):
@@ -2073,17 +2110,67 @@ class Template(object):
                     output_text(node)
                 elif isinstance(node, Node):
                     current_node = node
-                    push(node.render(environment, context, self, sub_escape))
+                    _node = node.render(environment, context, self, sub_escape)
+                    if not isinstance(_node, text_type):
+                        _node = NodeGenerator(_node, node)
+                    push(_node)
                 else:
                     new_node = next(node, None)
                     if new_node is not None:
                         push(node)
                         push(new_node)
             return ''.join(output)
-        except (errors.TagError, errors.TemplateError) as e:
-            raise
+
+        #except (errors.TagError, errors.TemplateError) as e:
+        #    raise
+        # except LogicError:
+        #     raise
+
+        except LogicError as e:
+            print("LogicError")
+            raise errors.RenderError(text_type(e),
+                                     current_node.template.path,
+                                     *current_node.location,
+                                     raw_path=current_node.template.raw_path,
+                                     original=e,
+                                     diagnosis=getattr(e, 'diagnosis', None),
+                                     code=current_node.template.source,
+                                     template_stack=e.moya_trace.stack)
+
+        except NodeRenderError as e:
+            print("Node render error", repr(e))
+            print (e.node.location)
+            raise errors.RenderError(e.msg,
+                                     e.node.template.path,
+                                     *e.node.location,
+                                     raw_path=e.node.template.raw_path,
+                                     original=e.original,
+                                     diagnosis=e.diagnosis,
+                                     code=e.node.template.source,
+                                     template_stack=stack[:])
+
+        except errors.TemplateError as e:
+            print("RenderError", stack)
+            e.add_template_frames(stack[:])
+            raise e
+
+        # except errors.TemplateError as e:
+        #     print("template error", type(e))
+        #     # e.template_stack + stack[:]
+        #     # raise e
+        #     raise errors.RenderError(text_type(e),
+        #                              current_node.template.path,
+        #                              *current_node.location,
+        #                              raw_path=current_node.template.raw_path,
+        #                              original=e,
+        #                              diagnosis=getattr(e, 'diagnosis', None),
+        #                              code=current_node.template.source,
+        #                              template_stack=stack[:] + e.template_stack)
+
         except SubstitutionError as e:
+            print("Substitution", repr(e), repr(current_node), repr(current_node.text))
             lineno, start, end = current_node.location
+            print(lineno, start, end)
             raise errors.RenderError(text_type(e),
                                      current_node.template.path,
                                      lineno + 1,
@@ -2091,15 +2178,29 @@ class Template(object):
                                      start + e.end,
                                      raw_path=current_node.template.raw_path,
                                      original=e.original,
-                                     code=current_node.template.source)
+                                     code=current_node.template.source,
+                                     template_stack=stack[:])
+
+
+            # raise errors.RenderError(text_type(e),
+            #                          current_node.template.path,
+            #                          *current_node.location,
+            #                          raw_path=current_node.template.raw_path,
+            #                          original=e,
+            #                          diagnosis=getattr(e, 'diagnosis', None),
+            #                          code=current_node.template.source,
+            #                          template_stack=e.template_stack + stack[:])
+
         except Exception as e:
-            # raise
-            raise errors.RenderError("render error",
+            print("Exception", repr(e), current_node.template.raw_path)
+            raise errors.RenderError(text_type(e),
                                      current_node.template.path,
                                      *current_node.location,
                                      raw_path=current_node.template.raw_path,
                                      original=e,
-                                     code=current_node.template.source)
+                                     diagnosis=getattr(e, 'diagnosis', None),
+                                     code=current_node.template.source,
+                                     template_stack=stack[:])
         finally:
             while stack:
                 node = pop()

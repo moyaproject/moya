@@ -68,10 +68,12 @@ class Frame(object):
                 return ''
             if self.one_line:
                 return self.code
+            lineno = max(0, self.lineno - 5)
+
             return syntax.highlight(self.format,
                                     self.code,
-                                    self.lineno - 4,
-                                    self.lineno + 4,
+                                    lineno,
+                                    lineno + 10,
                                     highlight_lines=[self.lineno],
                                     highlight_range=[self.lineno, self.cols[0], self.cols[1]] if self.cols else None)
         except Exception as e:
@@ -86,8 +88,7 @@ class Traceback(object):
         self.url = url
         self.method = method
         self.handler = handler
-        self.moyastack = []
-        self.pystack = []
+        self.stack = []
         self.exception = None
         self.tb = None
         self.error_message = None
@@ -107,14 +108,7 @@ class Traceback(object):
         return console.get_text()
 
     def add_frame(self, frame):
-        self.moyastack.append(frame)
-
-    def add_pyframe(self, frame):
-        self.pystack.append(frame)
-
-    @property
-    def stack(self):
-        return self.moyastack + self.pystack
+        self.stack.append(frame)
 
     def __str__(self):
         console = Console(text=True)
@@ -122,14 +116,14 @@ class Traceback(object):
         return console.get_text()
 
     def __moyaconsole__(self, console):
-        stack = (self.moyastack)
+        stack = self.stack
         console.div("Logic Error", bold=True, fg="red")
         for frame in stack:
             console.text(frame.location)
             if frame.one_line:
                 console.text("    " + frame.code)
             elif frame.code:
-                console.xmlsnippet(frame.code, frame.lineno, extralines=2)
+                console.xmlsnippet(frame.code, frame.lineno, extralines=3)
         if self.tb:
             console.nl()
             console.exception(self.tb, tb=True)
@@ -208,17 +202,17 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     elif isinstance(exc, RenderError):
         traceback.error_type = "Template Render Error"
-        if hasattr(exc, 'template_stack'):
-            for ts in exc.template_stack[:-1]:
-                if 'node' in ts:
-                    node = ts['node']
-                    frame = Frame(node.code,
-                                  relativefrom(base, node.template.path),
-                                  node.location[0],
-                                  raw_location=node.template.raw_path,
-                                  cols=node.location[1:],
-                                  format="moyatemplate")
-                    traceback.add_frame(frame)
+        # if hasattr(exc, 'template_stack'):
+        #     for ts in exc.template_stack[:-1]:
+        #         if 'node' in ts:
+        #             node = ts['node']
+        #             frame = Frame(node.code,
+        #                           relativefrom(base, node.template.path),
+        #                           node.location[0],
+        #                           raw_location=node.template.raw_path,
+        #                           cols=node.location[1:],
+        #                           format="moyatemplate")
+        #             traceback.add_frame(frame)
         frame = Frame(exc._code,
                       relativefrom(base, exc.path),
                       exc.lineno,
@@ -250,6 +244,17 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     traceback.msg = text_type(exc)
     traceback.diagnosis = traceback.diagnosis or getattr(exc, 'diagnosis', None)
 
+    # Append any captured logic errors
+    while hasattr(exc, 'original'):
+        exc = exc.original
+
+        if hasattr(exc, 'extend_moya_trace'):
+            exc.extend_moya_trace(context, traceback)
+        else:
+            trace = getattr(exc, 'moya_trace', None)
+            if trace is not None:
+                traceback.stack.extend(trace.stack)
+
     if context.get('.develop', False):
         add_pytraceback = True
     if add_pytraceback and exc_info and py_traceback:
@@ -276,7 +281,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
                           one_line=False,
                           obj=function_name,
                           format="python")
-            traceback.add_pyframe(frame)
+            traceback.add_frame(frame)
             traceback.msg = text_type(exc)
         if traceback.diagnosis is None:
             traceback.diagnosis = _PYTHON_ERROR_TEXT

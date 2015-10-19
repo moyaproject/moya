@@ -40,7 +40,7 @@ class RecursiveTemplateError(Exception):
 
 @implements_to_string
 class TemplateError(Exception):
-    def __init__(self, msg, path, lineno, start, end, code=None, raw_path=None, diagnosis=None):
+    def __init__(self, msg, path, lineno, start, end, code=None, raw_path=None, diagnosis=None, original=None, template_stack=None):
         self.msg = msg
         self.path = path
         self.lineno = lineno
@@ -49,6 +49,9 @@ class TemplateError(Exception):
         self._code = code
         self.raw_path = raw_path
         self.diagnosis = diagnosis
+        self.original = original
+        self.template_stack = template_stack or []
+        self.frames = []
         super(TemplateError, self).__init__()
 
     def __str__(self):
@@ -59,6 +62,61 @@ class TemplateError(Exception):
 
     def get_moya_error(self):
         return 'File "%s", line %s: %s' % (self.path, self.lineno, self.msg)
+
+    def add_template_frames(self, template_stack):
+        from ..trace import Frame
+        from .moyatemplates import Node
+        for node in self.template_stack:
+            print(node)
+            node = getattr(node, 'node', node)
+            if not isinstance(node, Node):
+                continue
+            if node.tag_name != 'root':
+                frame = Frame(node.code,
+                              node.template.path,
+                              node.location[0],
+                              raw_location=node.template.raw_path,
+                              cols=node.location[1:],
+                              format="moyatemplate")
+
+                self.frames.append(frame)
+
+    def add_frames(self, frames):
+        self.frames.extend(frames)
+
+    def extend_moya_trace(self, context, traceback):
+        traceback.stack.append(self.frames)
+        # from ..trace import Frame
+        # from .moyatemplates import Node
+        # base = context.get('.sys.base', '')
+        # exc = self
+
+        # def relativefrom(base, path):
+        #     if path.startswith(base):
+        #         path = "./" + path[len(base):]
+        #     return path
+
+        # for node in self.template_stack:
+        #     node = getattr(node, 'node', node)
+        #     if not isinstance(node, Node):
+        #         continue
+        #     if node.tag_name != 'root':
+        #         frame = Frame(node.code,
+        #                       relativefrom(base, node.template.path),
+        #                       node.location[0],
+        #                       raw_location=node.template.raw_path,
+        #                       cols=node.location[1:],
+        #                       format="moyatemplate")
+
+        #         traceback.stack.append(frame)
+
+        # frame = Frame(exc._code,
+        #               relativefrom(base, exc.path),
+        #               exc.lineno,
+        #               raw_location=getattr(exc, 'raw_path', None),
+        #               cols=(exc.start, exc.end),
+        #               format="moyatemplate")
+        # traceback.stack.append(frame)
 
 
 class TokenizeError(TemplateError):
@@ -104,10 +162,12 @@ class TagError(Exception):
 
 
 class RenderError(TemplateError):
-    def __init__(self, msg, path, lineno, start, end, code=None, original=None, raw_path=None, diagnosis=None):
-        super(RenderError, self).__init__(msg, path, lineno, start, end, code=code, raw_path=raw_path)
-        self.original = original
-        self.diagnosis = diagnosis
+    pass
+
+    # def __init__(self, msg, path, lineno, start, end, code=None, original=None, raw_path=None, diagnosis=None):
+    #     super(RenderError, self).__init__(msg, path, lineno, start, end, code=code, raw_path=raw_path)
+    #     self.original = original
+    #     self.diagnosis = diagnosis
 
 
 # class ExpressionError(RenderError):
