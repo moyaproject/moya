@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from .elements import ElementBase
 from .context.missing import is_missing
 from .context.errors import SubstitutionError
-from .template.errors import RenderError, TemplateError
+from .template.errors import TemplateError
 from .console import Console, ConsoleHighlighter
 from .context.expression import ExpressionError
 from .errors import LogicError, StartupFailedError
@@ -456,7 +456,7 @@ def moya_traceback(stack, node, exc, console, message="Logic Error"):
     if isinstance(exc, MoyaException):
         console.nl()("unhandled exception: ", fg="red", bold=True)('{}'.format(exc.type), fg="magenta", bold=True)(" ")('"{}"'.format(exc.msg), fg="green").nl()
 
-    elif isinstance(exc, RenderError):
+    elif isinstance(exc, TemplateError):
         file_line = 'File \"%s\", line %s, col %s' % (exc.path, exc.lineno, exc.start)
         console(ErrorLineHighlighter.highlight(file_line)).nl()
         console.templatesnippet(exc._code,
@@ -470,14 +470,14 @@ def moya_traceback(stack, node, exc, console, message="Logic Error"):
         else:
             console.nl()
             console.exception(exc, tb=True)
-    elif isinstance(exc, TemplateError):
-        console('File "%s", line %s, col %s' % (exc.path, exc.lineno, exc.start)).nl()
-        console.templatesnippet(exc._code,
-                                lineno=exc.lineno,
-                                colno=exc.start,
-                                endcolno=exc.end,
-                                extralines=2)
-        console.exception(exc, tb=False)
+    # elif isinstance(exc, TemplateError):
+    #     console('File "%s", line %s, col %s' % (exc.path, exc.lineno, exc.start)).nl()
+    #     console.templatesnippet(exc._code,
+    #                             lineno=exc.lineno,
+    #                             colno=exc.start,
+    #                             endcolno=exc.end,
+    #                             extralines=2)
+    #     console.exception(exc, tb=False)
     else:
         if isinstance(exc, (ExpressionError, SubstitutionError)):
             console.exception(exc, tb=False)

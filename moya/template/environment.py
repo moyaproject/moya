@@ -21,7 +21,7 @@ TEMPLATE_VERSION = 7
 class Environment(object):
     name = "moya"
 
-    def __init__(self, template_fs, archive, cache=None):
+    def __init__(self, template_fs, archive=None, cache=None):
         if isinstance(template_fs, string_types):
             template_fs = fsopendir(template_fs)
         self.template_fs = template_fs
@@ -35,6 +35,10 @@ class Environment(object):
             self.cache = cache
         self.templates = {}
         self._caches = {}
+
+    @classmethod
+    def make_default(self):
+        return Environment(fsopendir('mem://'))
 
     @property
     def archive(self):

@@ -5,12 +5,11 @@ from __future__ import print_function
 from . import syntax
 from .console import Console, Cell
 from .template.errors import (TagError,
-                              RenderError,
                               TemplateError,
                               MissingTemplateError)
 from .context.expression import ExpressionError
 from .context.errors import SubstitutionError
-from .logic import MoyaException
+from .moyaexceptions import MoyaException
 from .compat import implements_to_string, text_type
 
 import io
@@ -46,6 +45,9 @@ class Frame(object):
         self.format = format
         self.libid = libid
         self._raw_location = raw_location
+
+    def __repr__(self):
+        return "<frame '{}'>".format(self.location)
 
     @property
     def location(self):
@@ -135,6 +137,7 @@ class Traceback(object):
 
 
 def build(context, stack, node, exc, exc_info, request, py_traceback=True):
+
     add_pytraceback = True
     if node is not None:
         node = getattr(node, 'node', node)
@@ -200,8 +203,8 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
         traceback.error_type = "Substitution Error"
         add_pytraceback = False
 
-    elif isinstance(exc, RenderError):
-        traceback.error_type = "Template Render Error"
+    elif isinstance(exc, TemplateError):
+        traceback.error_type = "Template Error"
         # if hasattr(exc, 'template_stack'):
         #     for ts in exc.template_stack[:-1]:
         #         if 'node' in ts:
@@ -221,13 +224,13 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
                       format="moyatemplate")
         traceback.add_frame(frame)
         add_pytraceback = False
-        if exc.original:
-            exc = exc.original
-            if isinstance(exc, (TagError,
-                                ExpressionError,
-                                SubstitutionError,
-                                MissingTemplateError)):
-                add_pytraceback = False
+        # if exc.original:
+        #     exc = exc.original
+        #     if isinstance(exc, (TagError,
+        #                         ExpressionError,
+        #                         SubstitutionError,
+        #                         MissingTemplateError)):
+        #         add_pytraceback = False
 
     elif isinstance(exc, TemplateError):
         traceback.error_type = "Template Error"
@@ -244,16 +247,22 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     traceback.msg = text_type(exc)
     traceback.diagnosis = traceback.diagnosis or getattr(exc, 'diagnosis', None)
 
-    # Append any captured logic errors
-    while hasattr(exc, 'original'):
-        exc = exc.original
 
-        if hasattr(exc, 'extend_moya_trace'):
-            exc.extend_moya_trace(context, traceback)
-        else:
-            trace = getattr(exc, 'moya_trace', None)
-            if trace is not None:
-                traceback.stack.extend(trace.stack)
+    if hasattr(exc, 'get_moya_frames'):
+        mf = exc.get_moya_frames()
+        traceback.stack[0:0] = mf
+
+    # #Append any captured logic errors
+    # while hasattr(exc, 'original'):
+    #     exc = exc.original
+    #
+    #     if hasattr(exc, 'get_moya_frames'):
+    #         mf = exc.get_moya_frames()
+    #         traceback.stack[0:0] = mf
+    #     else:
+    #         trace = getattr(exc, 'moya_trace', None)
+    #         if trace is not None:
+    #             traceback.stack.extend(trace.stack)
 
     if context.get('.develop', False):
         add_pytraceback = True

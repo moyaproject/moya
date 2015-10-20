@@ -3,6 +3,7 @@ from __future__ import print_function
 
 from ..context import Context, Expression, FalseExpression, TrueExpression, DefaultExpression
 from ..context.errors import SubstitutionError
+from .. import interface
 from ..markup import Markup
 from ..template.enginebase import TemplateEngine
 from ..template.errors import MissingTemplateError, BadTemplateError
@@ -80,8 +81,6 @@ class MoyaTemplateEngine(TemplateEngine):
                 continue
             try:
                 template = self.env.get_template(path)
-            except BadTemplateError:
-                raise
             except MissingTemplateError:
                 continue
             else:
@@ -89,35 +88,54 @@ class MoyaTemplateEngine(TemplateEngine):
         if template is None:
             raise MissingTemplateError(paths[-1])
 
-        return self.render_template(template, data, base_context=base_context, app=app, **tdata)
+        return self.render_template(template,
+                                    data,
+                                    base_context=base_context,
+                                    app=app,
+                                    **tdata)
 
     def render_template(self, template, data, base_context=None, **tdata):
         if base_context is None:
             base_context = Context()
 
-        if '_t' in base_context:
-            tdata = base_context['_t'].copy().update(tdata)
+        data = data.copy()
+        data.update(tdata)
+        app = tdata.pop('app')
+        # if '_t' in base_context:
+        #     tdata = base_context['_t'].copy().update(tdata)
+        #
+        # with base_context.root_stack('_t', tdata):
+        #with template.frame(base_context, data, app=app):
+        return template.render(data,
+                               context=base_context,
+                               environment=self.env,
+                               app=app)
 
-        with base_context.root_stack('_t', tdata):
-            with template.frame(base_context, data):
-                try:
-                    return template.render(base_context, self.env)
-                except Exception as e:
-                    if not hasattr(e, 'template_stack'):
-                        e.template_stack = base_context['.__t_stack'][:]
-                    raise
+
+class _TemplateStackFrame(interface.AttributeExposer):
+    __moya_exposed_attributes__ = ['app', 'data']
+    def __init__(self, stack, app, data=None):
+        self.stack = stack
+        self.app = app
+        self.data = data or {}
 
 
 @implements_to_string
-class _TemplateFrame(object):
+class _TemplateFrameContextManager(object):
 
-    def __init__(self, template, context, data):
+    def __init__(self, template, context, data, app=None):
         self.template = template
         self.context = context
         self.data = data
+        self.app = app
+        self.stack = []
 
     def __enter__(self):
-        self.template.push_frame(self.context, self.data)
+        self.template.push_frame(self.context,
+                                 self.stack,
+                                 self.app,
+                                 data=self.data)
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.template.pop_frame(self.context)
@@ -158,12 +176,11 @@ class TagParser(object):
     def __bool__(self):
         return truth(self.text.strip())
 
-    def syntax_error(self, msg):
+    def syntax_error(self, msg, diagnosis=None):
         raise errors.TagSyntaxError(msg,
-                                    self.node.template.path,
+                                    self.node,
                                     *self.node.location,
-                                    raw_path=self.node.template.raw_path,
-                                    code=self.node.code)
+                                    diagnosis=diagnosis)
 
     def consume(self, count):
         self.text = self.text[count:]
@@ -334,13 +351,6 @@ class NodeType(object):
 
     def render_error(self, msg, original=None, diagnosis=None):
         raise NodeRenderError(self, msg, original=original, diagnosis=diagnosis)
-        # raise errors.RenderError(msg,
-        #                          self.template.path,
-        #                          *self.location,
-        #                          raw_path=self.template.raw_path,
-        #                          code=self.code,
-        #                          original=original,
-        #                          diagnosis=diagnosis)
 
     def on_create(self, environment, parser):
         pass
@@ -557,17 +567,6 @@ class BlockNode(Node):
 class EmptyBlockNode(BlockNode):
     tag_name = "emptyblock"
     auto_close = True
-
-
-# class IfBlockNode(Node):
-#     tag_name = "ifblock"
-
-#     def on_create(self, environment, parser):
-#         self.block_name = parser.expect_word()
-
-#     def render(self, environment, context, template, text_escape):
-#         if template.is_block_extended(environment, self.block_name):
-#             yield iter(self.children)
 
 
 class DefNode(Node):
@@ -1054,13 +1053,13 @@ class URLNode(Node):
                 try:
                     app = environment.archive.detect_app(context, _in)
                 except Exception as e:
-                    raise self.render_error(text_type(e),
-                                            original=e,
-                                            diagnosis="Check the 'from' attribute for typos.")
+                    self.render_error(text_type(e),
+                                      original=e,
+                                      diagnosis="Check the 'from' attribute for typos.")
         else:
             app = self.template_app(environment.archive, context.get('._t.app', None))
             if app is None:
-                diagnosis = '''You can specify the app with an 'from' clause, e.g {{% url "post" from "blog" %}}'''
+                diagnosis = '''You can specify the app with an 'from' clause, e.g {% url "post" from "blog" %}'''
                 self.render_error("Could not detect app to get url",
                                   diagnosis=diagnosis)
 
@@ -1147,8 +1146,8 @@ class MediaNode(Node):
             app = self.template_app(environment.archive, context.get('._t.app', None))
             if app is None:
                 diagnosis = '''You can specify the app with an 'from' clause, e.g {{% media "post" from "blog" %}}'''
-                raise self.render_error("Could not detect app to get media url",
-                                        diagnosis=diagnosis)
+                self.render_error("Could not detect app to get media url",
+                                  diagnosis=diagnosis)
 
         media_path = environment.archive.get_media_url(context, app, media, path, url_index=media_url_index)
         return media_path
@@ -1236,7 +1235,9 @@ class IncludeNode(Node):
             template = environment.get_template(path)
         except MissingTemplateError as e:
             self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
-        yield template.render(context, environment)
+        yield template.render(context=context,
+                              environment=environment,
+                              app=app)
 
 
 class InsertNode(Node):
@@ -1400,9 +1401,9 @@ class TransNode(Node):
                 return False
             else:
                 if self.number_expression is None:
-                    raise self.render_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute")
+                    self.render_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute")
                 if tag != 'plural':
-                    raise self.render_error("{% trans %} tag may not contain other tags, except for {% plural %}")
+                    self.render_error("{% trans %} tag may not contain other tags, except for {% plural %}")
                 self.plural_clause = True
             return True
         if self.plural_clause:
@@ -1512,7 +1513,7 @@ class MarkupNode(Node):
             markup_renderable = Markup(markup, markup_type)
             html = render_object(markup_renderable, environment.archive, context, target, options=options)
         except MarkupError as e:
-            raise self.render_error("unable to render markup ({})".format(e))
+            self.render_error("unable to render markup ({})".format(e))
         return html
 
 
@@ -1536,7 +1537,7 @@ class MarkupBlockNode(Node):
             markup_renderable = Markup(markup, markup_type)
             html = render_object(markup_renderable, environment.archive, context, target, options=options)
         except MarkupError as e:
-            raise self.render_error("unable to render markup ({})".format(e))
+            self.render_error("unable to render markup ({})".format(e))
         return html
 
 
@@ -1697,41 +1698,33 @@ class SummarizeNode(Node):
         return html
 
 
-# TODO: Is this required?
-
-# class FilterNode(Node):
-#     tag_name = "filter"
-
-#     def on_create(self, parameter, parser):
-#         self.get_filter = parser.expect_expression()
-#         parser.expect_end()
-
-#     def render(self, environment, context, template, text_escape):
-#         app = self.template_app(environment.archive, context.get('._t.app', None))
-#         filter_obj = self.get_filter.eval(context)
-
-#         if isinstance(filter_obj, text_type) and '.filters' in context:
-#             try:
-#                 filter_obj = context['.filters'].lookup(app, filter_obj)
-#             except Exception as e:
-#                 self.render_error(text_type(e))
-
-#         value = template.render_nodes(self.children, environment, context, text_type)
-
-#         moya_filter = getattr(filter_obj, '__moyafilter__', None)
-#         if moya_filter is None:
-#             self.render_error("value {} is not a valid filter".format(context.to_expr(filter_obj)))
-#         result = moya_filter(context, app, value)
-#         return result
-
-
 TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])
 
 
 class NodeGenerator(object):
-    def __init__(self, gen, node):
-        self._gen = gen
+    __slots__ = ['node', '_gen']
+    def __init__(self, node, gen):
         self.node = node
+        self._gen = gen
+
+    @classmethod
+    def create(cls,
+               node,
+               environment,
+               context,
+               template,
+               text_escape,
+               _text_type=text_type,
+               _isinstance=isinstance):
+        if _isinstance(node, _text_type):
+            return node
+        gen = node.render(environment,
+                          context,
+                          template,
+                          text_escape)
+        if _isinstance(gen, _text_type):
+            return gen
+        return cls(node, gen)
 
     def __next__(self):
         return self._gen.__next__()
@@ -1883,12 +1876,9 @@ class Template(object):
                 if end_comment:
                     comment -= 1
                     if comment < 0:
-                        raise errors.UnmatchedCommentError("Unbalanced end comment",
-                                                           self.path,
-                                                           lineno + 1, start + 1, end,
-                                                           raw_path=self.raw_path,
-                                                           diagnosis="Check that there is a corresponding {# for every #}",
-                                                           code=self.source)
+                        raise errors.UnmatchedComment("Unbalanced end comment",
+                                                      lineno + 1, start + 1, end,
+                                                      diagnosis="Check that there is a corresponding {# for every #}")
                     pos = end
                     continue
                 if comment:
@@ -1914,15 +1904,15 @@ class Template(object):
                     remove_whitespace = add_text((lineno, pos, len(line) - pos), text, text, remove_whitespace)
                 pos = len(line)
         if comment:
-            raise errors.UnmatchedCommentError("End of comment expected before end of template",
-                                               self.path,
-                                               lineno + 1, start + 1, len(line),
-                                               raw_path=self.raw_path,
-                                               diagnosis="Check that there is a corresponding {# for every #}",
-                                               code=self.source)
+            raise errors.UnmatchedComment("End of comment expected before end of template",
+                                          lineno + 1, start + 1, len(line),
+                                          diagnosis="Check that there is a corresponding {# for every #}")
         return tokens
 
-    def parse(self, environment):
+    def parse(self, environment=None):
+        if environment is None:
+            from .environment import Environment
+            environment = Environment.make_default()
         if self.parsed:
             return self.root_node
         self.root_node = node = RootNode(self, 'root', '', (0, 0, 0))
@@ -1951,13 +1941,10 @@ class Template(object):
                     closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()
                     if closing_tag and closing_tag != closed_tag.name:
-                        raise errors.UnmatchedTagError("End tag, '%s', doesn't match %r" % (closing_tag, closed_tag),
-                                                       node.template.path,
-                                                       lineno + 1,
-                                                       pos + 1,
-                                                       endpos,
-                                                       raw_path=node.template.raw_path,
-                                                       code=node.template.source)
+                        raise errors.UnmatchedTag("End tag, {{% {} %}}, doesn't match {}".format(closing_tag, closed_tag),
+                                                  node,
+                                                  lineno + 1, pos + 1, endpos,
+                                                  diagnosis="The {{% {close} %}} tag requires a corresponding {{% end-{close} %}}".format(close=closing_tag))
                     node.finalize(environment, self)
                     node = node_stack[-1]
                 else:
@@ -1968,14 +1955,10 @@ class Template(object):
                             diagnosis = "Check for typos."
                         else:
                             diagnosis = "Did you mean {{% {} %}} ?".format(nearest)
-                        raise errors.UnknownTagError("No such template tag, {{% {} %}}".format(tag_name),
-                                                     node.template.path,
-                                                     lineno + 1,
-                                                     pos + 1,
-                                                     endpos,
-                                                     raw_path=node.template.raw_path,
-                                                     code=node.template.source,
-                                                     diagnosis=diagnosis)
+                        raise errors.UnknownTag("No such template tag, {{% {} %}}".format(tag_name),
+                                                node,
+                                                lineno + 1, pos + 1, endpos,
+                                                diagnosis=diagnosis)
                     new_node = new_node_class(self,
                                               tag_name,
                                               extra,
@@ -2001,11 +1984,9 @@ class Template(object):
         while template._extend.path:
             template = environment.get_template(template._extend.path)
             if template.raw_path in visited:
-                raise errors.RecursiveExtendsError("Recursive extends directive detected (in '{}')".format(template.raw_path),
-                                                   self.path,
-                                                   *self.extend_node.location,
-                                                   raw_path=self.raw_path,
-                                                   code=self.extend_node.code)
+                raise errors.RecursiveExtends("Recursive extends directive detected (in '{}')".format(template.raw_path),
+                                              node=self.extend_node,
+                                              *self.extend_node.location)
             visited.add(template.raw_path)
 
         self.valid = True
@@ -2048,49 +2029,47 @@ class Template(object):
             break
         return None
 
-    def is_block_extended(self, environment, name):
-        return False
-        nodes = self.get_render_block(environment, name)
-        if not nodes:
-            return False
-        if len(nodes) == 1 and not nodes[0].children:
-            return False
-        return True
+    # def push_frame(self, context, data=None):
+    #     """Pushes a new template frame"""
+    #     if data is None:
+    #         data = {}
+    #     td = context.set_new('._td', [])
+    #     td.append(data)
+    #     context['.td'] = data
+    #     context.push_frame('.td')
+    #     return data
+    #
+    # def pop_frame(self, context):
+    #     context['._td'].pop()
+    #     try:
+    #         context['.td'] = context['_td'][-1]
+    #     except:
+    #         context.safe_delete('.td')
+    #     context.pop_frame()
 
-    # Deprecated
-    # def get_top_block(self, environment, block_name):
-    #     template = self
-    #     top_block = None
-    #     while 1:
-    #         top_block = template.blocks.get(block_name, None)
-    #         if top_block is not None:
-    #             return top_block
-    #         if template.extend_template_path:
-    #             template = environment.get_template(template.extend_template_path)
-    #         else:
-    #             break
-    #     return top_block
-
-    def push_frame(self, context, data=None):
-        """Pushes a new template frame"""
-        if data is None:
-            data = {}
-        td = context.set_new('._td', [])
-        td.append(data)
-        context['.td'] = data
+    def push_frame(seld, context, stack, app, data=None):
+        t_stack = context.set_new_call('._t_stack', list)
+        stack_frame = _TemplateStackFrame(stack, app, data=data)
+        t_stack.append(stack_frame)
+        context['._t'] = stack_frame
+        context['.td'] = stack_frame.data
         context.push_frame('.td')
-        return data
 
     def pop_frame(self, context):
-        context['._td'].pop()
+        t_stack = context['._t_stack']
+        t_stack.pop()
         try:
-            context['.td'] = context['_td'][-1]
-        except:
+            last_stack = t_stack[-1]
+            context['.td'] = last_stack.data
+            context['._t'] = last_stack
+        except IndexError:
             context.safe_delete('.td')
         context.pop_frame()
 
-    def frame(self, context, data=None):
-        return _TemplateFrame(self, context, data)
+    def frame(self, context, data=None, app=None):
+        if app is None:
+            app = context.get('._t.app', None)
+        return _TemplateFrameContextManager(self, context, data, app=app)
 
     def render_nodes(self, nodes, environment, context, sub_escape):
         stack = nodes[::-1]
@@ -2102,6 +2081,7 @@ class Template(object):
         pop = stack.pop
         push = stack.append
         current_node = None
+        node_generator = NodeGenerator.create
 
         try:
             while stack:
@@ -2110,10 +2090,7 @@ class Template(object):
                     output_text(node)
                 elif isinstance(node, Node):
                     current_node = node
-                    _node = node.render(environment, context, self, sub_escape)
-                    if not isinstance(_node, text_type):
-                        _node = NodeGenerator(_node, node)
-                    push(_node)
+                    push(node_generator(node, environment, context, self, sub_escape))
                 else:
                     new_node = next(node, None)
                     if new_node is not None:
@@ -2121,93 +2098,39 @@ class Template(object):
                         push(new_node)
             return ''.join(output)
 
-        #except (errors.TagError, errors.TemplateError) as e:
-        #    raise
-        # except LogicError:
-        #     raise
+        except errors.TemplateError:
+            # Template errors should 'bubble up'
+            raise
 
-        except LogicError as e:
-            print("LogicError")
-            raise errors.RenderError(text_type(e),
-                                     current_node.template.path,
-                                     *current_node.location,
-                                     raw_path=current_node.template.raw_path,
-                                     original=e,
-                                     diagnosis=getattr(e, 'diagnosis', None),
-                                     code=current_node.template.source,
-                                     template_stack=e.moya_trace.stack)
+        except Exception as exc:
+            self.on_error(context, current_node, exc)
 
-        except NodeRenderError as e:
-            print("Node render error", repr(e))
-            print (e.node.location)
-            raise errors.RenderError(e.msg,
-                                     e.node.template.path,
-                                     *e.node.location,
-                                     raw_path=e.node.template.raw_path,
-                                     original=e.original,
-                                     diagnosis=e.diagnosis,
-                                     code=e.node.template.source,
-                                     template_stack=stack[:])
-
-        except errors.TemplateError as e:
-            print("RenderError", stack)
-            e.add_template_frames(stack[:])
-            raise e
-
-        # except errors.TemplateError as e:
-        #     print("template error", type(e))
-        #     # e.template_stack + stack[:]
-        #     # raise e
-        #     raise errors.RenderError(text_type(e),
-        #                              current_node.template.path,
-        #                              *current_node.location,
-        #                              raw_path=current_node.template.raw_path,
-        #                              original=e,
-        #                              diagnosis=getattr(e, 'diagnosis', None),
-        #                              code=current_node.template.source,
-        #                              template_stack=stack[:] + e.template_stack)
-
-        except SubstitutionError as e:
-            print("Substitution", repr(e), repr(current_node), repr(current_node.text))
-            lineno, start, end = current_node.location
-            print(lineno, start, end)
-            raise errors.RenderError(text_type(e),
-                                     current_node.template.path,
-                                     lineno + 1,
-                                     start + e.start + 1,
-                                     start + e.end,
-                                     raw_path=current_node.template.raw_path,
-                                     original=e.original,
-                                     code=current_node.template.source,
-                                     template_stack=stack[:])
-
-
-            # raise errors.RenderError(text_type(e),
-            #                          current_node.template.path,
-            #                          *current_node.location,
-            #                          raw_path=current_node.template.raw_path,
-            #                          original=e,
-            #                          diagnosis=getattr(e, 'diagnosis', None),
-            #                          code=current_node.template.source,
-            #                          template_stack=e.template_stack + stack[:])
-
-        except Exception as e:
-            print("Exception", repr(e), current_node.template.raw_path)
-            raise errors.RenderError(text_type(e),
-                                     current_node.template.path,
-                                     *current_node.location,
-                                     raw_path=current_node.template.raw_path,
-                                     original=e,
-                                     diagnosis=getattr(e, 'diagnosis', None),
-                                     code=current_node.template.source,
-                                     template_stack=stack[:])
         finally:
-            while stack:
-                node = pop()
-                try:
-                    node.close()
-                except:
-                    pass
+            self._finalize_stack(stack)
+
+    def on_error(self, context, current_node, exc):
+        from ..trace import Frame
+
+        frames = []
+        if hasattr(exc, 'get_moya_frames'):
+            frames.append(exc.get_moya_frames())
+
+        raise errors.TemplateError(text_type(exc),
+                                   current_node.template.path,
+                                   *current_node.location,
+                                   raw_path=current_node.template.raw_path,
+                                   original=exc,
+                                   diagnosis=getattr(exc, 'diagnosis', None),
+                                   code=current_node.template.source)
+
+    def _finalize_stack(self, stack):
+        pop = stack.pop
+        while stack:
+            node = pop()
+            try:
+                node.close()
+            except:
+                pass
 
     @classmethod
     def _sub_escape(cls, text, _text_type=text_type, _hasattr=hasattr):
@@ -2215,16 +2138,22 @@ class Template(object):
             return _text_type(text)
         return _text_type('' if text is None else text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", "&#39;")
 
-    def render(self, context, environment=None):
-        self.parse(environment)
-        stack = [self.get_root_node(environment)]
-        return self._render_nodes(stack, environment, context, self._sub_escape)
+    def render(self, data=None, context=None, environment=None, app=None):
+        if environment is None:
+            from .environment import Environment
+            environment = Environment.make_default()
+        if context is None:
+            context = Context()
 
-    # def moya_render(self, archive, context, target, options):
-    #     rendered = self.render(context)
-    #     if target == "html":
-    #         return Safe(rendered)
-    #     return rendered
+        # TODO: Parse errors
+        self.parse(environment)
+
+        with self.frame(context, data=data, app=app) as frame:
+            frame.stack.append(self.get_root_node(environment))
+            return self._render_nodes(frame.stack,
+                                      environment,
+                                      context,
+                                      self._sub_escape)
 
 
 if __name__ == "__main__":
