@@ -40,19 +40,14 @@ class RecursiveTemplateError(Exception):
 
 @implements_to_string
 class TemplateError(Exception):
-    def __init__(self, msg, path, lineno, start, end,
-                code=None,
-                raw_path=None,
-                diagnosis=None,
-                original=None,
-                trace_frames=None):
+    hide_py_traceback = True
+
+    def __init__(self,
+                 msg,
+                 diagnosis=None,
+                 original=None,
+                 trace_frames=None):
         self.msg = msg
-        self.path = path
-        self.lineno = lineno
-        self.start = start
-        self.end = end
-        self._code = code
-        self.raw_path = raw_path
         self.diagnosis = diagnosis
         self.original = original
         self.trace_frames = trace_frames or []

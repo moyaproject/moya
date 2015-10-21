@@ -205,43 +205,17 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     elif isinstance(exc, TemplateError):
         traceback.error_type = "Template Error"
-        # if hasattr(exc, 'template_stack'):
-        #     for ts in exc.template_stack[:-1]:
-        #         if 'node' in ts:
-        #             node = ts['node']
-        #             frame = Frame(node.code,
-        #                           relativefrom(base, node.template.path),
-        #                           node.location[0],
-        #                           raw_location=node.template.raw_path,
-        #                           cols=node.location[1:],
-        #                           format="moyatemplate")
-        #             traceback.add_frame(frame)
-        frame = Frame(exc._code,
-                      relativefrom(base, exc.path),
-                      exc.lineno,
-                      raw_location=getattr(exc, 'raw_path', None),
-                      cols=(exc.start, exc.end),
-                      format="moyatemplate")
-        traceback.add_frame(frame)
-        add_pytraceback = False
-        # if exc.original:
-        #     exc = exc.original
-        #     if isinstance(exc, (TagError,
-        #                         ExpressionError,
-        #                         SubstitutionError,
-        #                         MissingTemplateError)):
-        #         add_pytraceback = False
 
-    elif isinstance(exc, TemplateError):
-        traceback.error_type = "Template Error"
-        frame = Frame(exc._code,
-                      relativefrom(base, exc.path),
-                      raw_location=exc.raw_path,
-                      lineno=exc.lineno,
-                      cols=(exc.start, exc.end),
-                      format="moyatemplate")
-        traceback.add_frame(frame)
-        add_pytraceback = False
+
+        # frame = Frame(exc._code,
+        #               relativefrom(base, exc.path),
+        #               exc.lineno,
+        #               raw_location=getattr(exc, 'raw_path', None),
+        #               cols=(exc.start, exc.end),
+        #               format="moyatemplate")
+        # traceback.add_frame(frame)
+        # add_pytraceback = False
+
 
     traceback.exception = exc
     traceback.msg = text_type(exc)

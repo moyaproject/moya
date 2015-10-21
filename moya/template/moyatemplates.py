@@ -918,7 +918,7 @@ class RenderNode(Node):
     def render(self, environment, context, template, text_escape):
         render_obj = self.render_expression.eval(context)
         if is_missing(render_obj):
-            return ''
+            return
         options = self.options_expression.eval(context)
         target = self.target_expression.eval(context)
         with_ = self.with_expression.eval(context)
@@ -926,7 +926,7 @@ class RenderNode(Node):
             options['with'] = with_
         options['unique'] = self.unique
         try:
-            return render_object(render_obj,
+            yield render_object(render_obj,
                                  environment.archive,
                                  context,
                                  target=target,
@@ -1707,8 +1707,18 @@ class NodeGenerator(object):
         self.node = node
         self._gen = gen
 
+    def __repr__(self):
+        return "<node-generator {!r} {!r}>".format(self.node, self._gen)
+
     @classmethod
-    def create(cls,
+    def create(cls, node, new_node, _isinstance=isinstance, _iter=iter):
+        if _isinstance(new_node, (text_type, Node)):
+            return new_node
+        if hasattr(node, '__iter__'):
+            return cls(getattr(node, 'node', node), new_node)
+
+    @classmethod
+    def render(cls,
                node,
                environment,
                context,
@@ -1716,8 +1726,6 @@ class NodeGenerator(object):
                text_escape,
                _text_type=text_type,
                _isinstance=isinstance):
-        if _isinstance(node, _text_type):
-            return node
         gen = node.render(environment,
                           context,
                           template,
@@ -2081,6 +2089,7 @@ class Template(object):
         pop = stack.pop
         push = stack.append
         current_node = None
+        node_render = NodeGenerator.render
         node_generator = NodeGenerator.create
 
         try:
@@ -2090,12 +2099,12 @@ class Template(object):
                     output_text(node)
                 elif isinstance(node, Node):
                     current_node = node
-                    push(node_generator(node, environment, context, self, sub_escape))
+                    push(node_render(node, environment, context, self, sub_escape))
                 else:
                     new_node = next(node, None)
                     if new_node is not None:
                         push(node)
-                        push(new_node)
+                        push(node_generator(node, new_node))
             return ''.join(output)
 
         except errors.TemplateError:
@@ -2112,16 +2121,43 @@ class Template(object):
         from ..trace import Frame
 
         frames = []
+
+        t_stack = context.get('._t_stack', [])
+        for frame in reversed(t_stack):
+            print()
+            for f in frame.stack:
+                print("    {!r}".format(f))
+            for _node in frame.stack:
+                if isinstance(_node, NodeGenerator):
+                    node = _node.node
+                else:
+                    node = _node
+                if not isinstance(node, Node):
+                    continue
+                if node.tag_name != 'root':
+                    frame = Frame(node.template.source,
+                                  node.template.path,
+                                  node.location[0],
+                                  cols=node.location[1:],
+                                  format='moyatemplate')
+                    frames.append(frame)
+
+        if current_node:
+            error_frame = Frame(current_node.template.source,
+                                current_node.template.path,
+                                current_node.location[0],
+                                cols=current_node.location[1:],
+                                format='moyatemplate')
+            frames.append(error_frame)
+
         if hasattr(exc, 'get_moya_frames'):
-            frames.append(exc.get_moya_frames())
+            frames.extend(exc.get_moya_frames())
+
 
         raise errors.TemplateError(text_type(exc),
-                                   current_node.template.path,
-                                   *current_node.location,
-                                   raw_path=current_node.template.raw_path,
                                    original=exc,
                                    diagnosis=getattr(exc, 'diagnosis', None),
-                                   code=current_node.template.source)
+                                   trace_frames=frames)
 
     def _finalize_stack(self, stack):
         pop = stack.pop
@@ -2148,8 +2184,11 @@ class Template(object):
         # TODO: Parse errors
         self.parse(environment)
 
+        root = self.get_root_node(environment)
+
         with self.frame(context, data=data, app=app) as frame:
-            frame.stack.append(self.get_root_node(environment))
+            #root_gen = NodeGenerator.create(root, environment, context, self, self._sub_escape)
+            frame.stack.append(root)
             return self._render_nodes(frame.stack,
                                       environment,
                                       context,
