@@ -118,6 +118,7 @@ class _TemplateStackFrame(interface.AttributeExposer):
         self.stack = stack
         self.app = app
         self.data = data or {}
+        self.current_node = None
 
 
 @implements_to_string
@@ -321,16 +322,11 @@ class NodeType(object):
         self.extra = extra
         self.location = location
         self.lib = lib
-
         self.children = []
 
     @property
     def code(self):
         return getattr(self.template, 'source', None)
-
-    # @property
-    # def template_lib(self):
-    #     return self.template.raw_path.lstrip('/').split('/', 1)[0]
 
     def template_app(self, archive, default):
         if self.lib is None:
@@ -396,6 +392,15 @@ class NodeType(object):
 
     def get_app(self, context):
         return context.get('._t.app', None)
+
+    # def render_nodes(self, nodes, environment, context, sub_escape):
+    #     stack = nodes[::-1]
+    #     return self._render_nodes(stack, environment, context, sub_escape)
+
+    def render_block(self, context, environment, template, text_escape):
+        with template.frame(context, data=context['.td'], app=context['._t.app']) as frame:
+            frame.stack.extend(self.children[::-1])
+            return template._render_frame(frame, environment, context, text_escape)
 
 
 class Node(with_metaclass(NodeMeta, NodeType)):
@@ -1276,7 +1281,7 @@ class SingleLineNode(Node):
     tag_name = "singleline"
 
     def render(self, environment, context, template, text_escape):
-        text = template.render_nodes(self.children, environment, context, text_escape)
+        text = self.render_block(context, environment, template, text_escape)
         return ''.join(text.splitlines())
 
 
@@ -1285,7 +1290,7 @@ class SpacelessNode(Node):
     tag_name = "spaceless"
 
     def render(self, environment, context, template, text_escape):
-        text = template.render_nodes(self.children, environment, context, text_escape)
+        text = self.render_block(context, environment, template, text_escape)
         return spaceless(text)
 
 
@@ -1352,10 +1357,7 @@ class CacheNode(Node):
         if cached_html is not None:
             return cached_html
 
-        html = template.render_nodes(self.children,
-                                     environment,
-                                     context,
-                                     text_escape)
+        html = self.render_block(context, environment, template, text_escape)
 
         for_timespan = self.for_expression.eval(context)
         if for_timespan is None:
@@ -1528,7 +1530,7 @@ class MarkupBlockNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = template.render_nodes(self.children, environment, context, text_escape)
+        markup = self.render_block(context, environment, template, text_escape)
 
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
@@ -1552,7 +1554,7 @@ class ExtractNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = template.render_nodes(self.children, environment, context, text_escape)
+        markup = self.render_block(context, environment, template, text_escape)
         extract_name = None
         if self.as_expression is not None:
             extract_name = self.as_expression.eval(context)
@@ -1614,7 +1616,7 @@ class SanitizeNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = template.render_nodes(self.children, environment, context, text_escape)
+        markup = self.render_block(context, environment, template, text_escape)
 
         if not self.if_expression.eval(context):
             return markup
@@ -1687,7 +1689,7 @@ class SummarizeNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = template.render_nodes(self.children, environment, context, text_escape)
+        markup = self.render_block(context, environment, template, text_escape)
 
         target = "html"
         markup_type = "summary"
@@ -1714,8 +1716,7 @@ class NodeGenerator(object):
     def create(cls, node, new_node, _isinstance=isinstance, _iter=iter):
         if _isinstance(new_node, (text_type, Node)):
             return new_node
-        if hasattr(node, '__iter__'):
-            return cls(getattr(node, 'node', node), new_node)
+        return cls(node, new_node)
 
     @classmethod
     def render(cls,
@@ -2037,25 +2038,7 @@ class Template(object):
             break
         return None
 
-    # def push_frame(self, context, data=None):
-    #     """Pushes a new template frame"""
-    #     if data is None:
-    #         data = {}
-    #     td = context.set_new('._td', [])
-    #     td.append(data)
-    #     context['.td'] = data
-    #     context.push_frame('.td')
-    #     return data
-    #
-    # def pop_frame(self, context):
-    #     context['._td'].pop()
-    #     try:
-    #         context['.td'] = context['_td'][-1]
-    #     except:
-    #         context.safe_delete('.td')
-    #     context.pop_frame()
-
-    def push_frame(seld, context, stack, app, data=None):
+    def push_frame(self, context, stack, app, data=None):
         t_stack = context.set_new_call('._t_stack', list)
         stack_frame = _TemplateStackFrame(stack, app, data=data)
         t_stack.append(stack_frame)
@@ -2079,31 +2062,28 @@ class Template(object):
             app = context.get('._t.app', None)
         return _TemplateFrameContextManager(self, context, data, app=app)
 
-    def render_nodes(self, nodes, environment, context, sub_escape):
-        stack = nodes[::-1]
-        return self._render_nodes(stack, environment, context, sub_escape)
-
-    def _render_nodes(self, stack, environment, context, sub_escape):
+    def _render_frame(self, frame, environment, context, sub_escape):
         output = []
         output_text = output.append
-        pop = stack.pop
-        push = stack.append
-        current_node = None
+
         node_render = NodeGenerator.render
         node_generator = NodeGenerator.create
+        stack = frame.stack
+        pop = stack.pop
+        push = stack.append
 
         try:
             while stack:
-                node = pop()
+                frame.current_node = node = pop()
                 if isinstance(node, text_type):
                     output_text(node)
                 elif isinstance(node, Node):
-                    current_node = node
                     push(node_render(node, environment, context, self, sub_escape))
                 else:
                     new_node = next(node, None)
                     if new_node is not None:
                         push(node)
+                        #push(new_node)
                         push(node_generator(node, new_node))
             return ''.join(output)
 
@@ -2112,26 +2092,23 @@ class Template(object):
             raise
 
         except Exception as exc:
-            self.on_error(context, current_node, exc)
+            self.on_error(context, frame.current_node, exc)
 
         finally:
             self._finalize_stack(stack)
 
     def on_error(self, context, current_node, exc):
+
         from ..trace import Frame
-
         frames = []
-
-        t_stack = context.get('._t_stack', [])
-        for frame in reversed(t_stack):
+        t_stack = context['._t_stack']
+        for t in t_stack:
             print()
-            for f in frame.stack:
-                print("    {!r}".format(f))
-            for _node in frame.stack:
-                if isinstance(_node, NodeGenerator):
-                    node = _node.node
-                else:
-                    node = _node
+            for s in t.stack:
+                print(s)
+        for frame in t_stack:
+            for _node in chain(frame.stack, [frame.current_node]):
+                node = _node.node if isinstance(_node, NodeGenerator) else _node
                 if not isinstance(node, Node):
                     continue
                 if node.tag_name != 'root':
@@ -2142,17 +2119,16 @@ class Template(object):
                                   format='moyatemplate')
                     frames.append(frame)
 
-        if current_node:
-            error_frame = Frame(current_node.template.source,
-                                current_node.template.path,
-                                current_node.location[0],
-                                cols=current_node.location[1:],
-                                format='moyatemplate')
-            frames.append(error_frame)
+        # if current_node:
+        #     error_frame = Frame(current_node.template.source,
+        #                         current_node.template.path,
+        #                         current_node.location[0],
+        #                         cols=current_node.location[1:],
+        #                         format='moyatemplate')
+        #     frames.append(error_frame)
 
         if hasattr(exc, 'get_moya_frames'):
             frames.extend(exc.get_moya_frames())
-
 
         raise errors.TemplateError(text_type(exc),
                                    original=exc,
@@ -2185,14 +2161,9 @@ class Template(object):
         self.parse(environment)
 
         root = self.get_root_node(environment)
-
         with self.frame(context, data=data, app=app) as frame:
-            #root_gen = NodeGenerator.create(root, environment, context, self, self._sub_escape)
             frame.stack.append(root)
-            return self._render_nodes(frame.stack,
-                                      environment,
-                                      context,
-                                      self._sub_escape)
+            return self._render_frame(frame, environment, context, self._sub_escape)
 
 
 if __name__ == "__main__":
