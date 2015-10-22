@@ -721,7 +721,7 @@ class Context(object):
             obj, final = _lookup(index)
             try:
                 (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
-            except Exception as e:
+            except Exception:
                 raise ContextKeyError(self, index)
 
     @synchronize

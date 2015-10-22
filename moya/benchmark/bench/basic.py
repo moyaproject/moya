@@ -106,9 +106,12 @@ def django(dirname, verbose=False):
     try:
         from django.conf import settings
         settings.configure(TEMPLATE_DIRS=[os.path.join(dirname, 'templates')])
+        from django.core.wsgi import get_wsgi_application
+        application = get_wsgi_application()
     except ImportError:
         print('Django not installed, skipping')
         return lambda: None
+
     from django import template, templatetags
     from django.template import loader
     templatetags.__path__.append(os.path.join(dirname, 'templatetags'))

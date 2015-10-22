@@ -618,7 +618,7 @@ class CallNode(Node):
                 break
 
         if node is None:
-            self.render_error("Template function '%s' has not yet been defined" % call_name)
+            self.render_error("template function '%s' has not yet been defined" % call_name)
         if self.with_expression is not None:
             with_values = self.with_expression.eval(context)
             if not isinstance(with_values, (list, tuple)):
@@ -629,7 +629,7 @@ class CallNode(Node):
                 if hasattr(value, 'items'):
                     with_frame.update(value)
                 else:
-                    self.render_error("with takes a key/value pair or a mapping (not %r)" % value)
+                    self.render_error("{% with %} takes a key/value pair or a mapping (not %r)" % value)
 
             if self.only:
                 with template.frame(context, with_frame):
@@ -890,10 +890,10 @@ class ExtendsNode(Node):
         else:
             path = pathjoin(base_path, path)
 
-        try:
-            environment.get_template(path)
-        except errors.MissingTemplateError as e:
-            self.render_error(text_type(e))
+        #try:
+        environment.get_template(path)
+        #except errors.MissingTemplateError as e:
+        #    self.render_error(text_type(e))
         self.template.extend(path, self, lib)
         parser.expect_end()
 
@@ -1926,7 +1926,7 @@ class Template(object):
 
     def parse(self, environment):
         try:
-            root_node = self._parse(environment=None)
+            root_node = self._parse(environment=environment)
         except errors.TokenizerError as e:
             frame = TraceFrame(self.source,
                                self.path,
@@ -2102,13 +2102,11 @@ class Template(object):
         yield stack_frame
         t_stack.pop()
 
-
-    def _render_frame(self, frame, environment, context, sub_escape):
+    def _render_frame(self, frame, environment, context, sub_escape, _isinstance=isinstance, _next=next, _text_type=text_type, _Node=Node):
         output = []
         output_text = output.append
 
         node_render = NodeGenerator.render
-        node_generator = NodeGenerator.create
         stack = frame.stack
         pop = stack.pop
         push = stack.append
@@ -2116,17 +2114,17 @@ class Template(object):
         try:
             while stack:
                 node = pop()
-                if isinstance(node, text_type):
+                if _isinstance(node, _text_type):
                     output_text(node)
-                elif isinstance(node, Node):
+                elif _isinstance(node, _Node):
                     frame.current_node = node
                     push(node_render(node, environment, context, self, sub_escape))
                 else:
-                    new_node = next(node, None)
+                    new_node = _next(node, None)
                     if new_node is not None:
                         push(node)
-                        #push(new_node)
-                        push(node_generator(node, new_node))
+                        push(new_node)
+                        #push(node_generator(node, new_node))
             return ''.join(output)
 
         except errors.TemplateError:
