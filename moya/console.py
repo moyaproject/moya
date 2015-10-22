@@ -1094,12 +1094,12 @@ class Console(object):
 
                         if highlight_columns:
                             col_start, col_end = highlight_columns
-                            line.add_span(col_start, col_end, underline=True)
+                            line.add_span(col_start, col_end, fg="red", underline=True)
 
                         self(number, fg="blue", bold=True)(line).nl()
                     else:
                         number = text_type(line_no).rjust(max_number_length) + ' '
-                        self(number, dim=True, fg="blue")(line).nl()
+                        self(number, fg="blue")(line).nl()
             else:
                 for line in lines:
                     self(line).nl()
