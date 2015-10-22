@@ -237,8 +237,12 @@ def _logic_loop(context,
     pop_stack = node_stack.pop
     breakpoints_enabled = debugging
     skip = None
+    _NodeGenerator = NodeGenerator
+    _SkipNext = SkipNext
+    _ElementBase = ElementBase
 
     do_finalize = True
+
     def finalize_stack():
         while node_stack:
             node = pop_stack()
@@ -248,10 +252,10 @@ def _logic_loop(context,
         while node_stack:
             try:
                 node = pop_stack()
-                if isinstance(node, SkipNext):
+                if isinstance(node, _SkipNext):
                     skip = node.element_types
                     continue
-                if isinstance(node, ElementBase):
+                if isinstance(node, _ElementBase):
                     if node._meta.logic_skip:
                         continue
                     if skip and node._element_type in skip:
@@ -263,7 +267,7 @@ def _logic_loop(context,
                     if node.check(context):
                         result = node.logic(context)
                         if result:
-                            push_stack(NodeGenerator(node, result))
+                            push_stack(_NodeGenerator(node, result))
                 else:
                     next_node = next(node, None)
                     if next_node:
@@ -591,7 +595,7 @@ def run_logic_debug(archive, context, node, node_stack):
 
         if not error_analysis:
             where(node)
-        while True:
+        while 1:
             if isinstance(node, ElementBase):
                 if node.document.lib:
                     if not node.libname:
