@@ -100,17 +100,29 @@ class RecursiveExtends(NodeError):
     pass
 
 
-class TokenizeError(Exception):
-    pass
-
-
-class UnmatchedComment(TokenizeError):
+@implements_to_string
+class TokenizerError(Exception):
     def __init__(self, msg, lineno, start, end, diagnosis=None):
         self.msg = msg
         self.lineno = lineno
         self.start = start
         self.end = end
         self.diagnosis = diagnosis
+
+    def __str__(self):
+        return self.msg
+
+
+class UnmatchedComment(TokenizerError):
+    pass
+#
+# class UnmatchedComment(TokenizeError):
+#     def __init__(self, msg, lineno, start, end, diagnosis=None):
+#         self.msg = msg
+#         self.lineno = lineno
+#         self.start = start
+#         self.end = end
+#         self.diagnosis = diagnosis
 
 @implements_to_string
 class TagError(Exception):

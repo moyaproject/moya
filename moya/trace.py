@@ -11,6 +11,7 @@ from .context.expression import ExpressionError
 from .context.errors import SubstitutionError
 from .moyaexceptions import MoyaException
 from .compat import implements_to_string, text_type
+from .traceframe import Frame
 
 import io
 import sys
@@ -22,71 +23,6 @@ _PYTHON_ERROR_TEXT = """A Python Exception may indicate either a bug in a Python
 
 Consider reporting this to the Moya developers."""
 
-
-class Frame(object):
-    def __init__(self,
-                 code,
-                 location,
-                 lineno,
-                 path=None,
-                 obj=None,
-                 cols=None,
-                 one_line=False,
-                 code_start=1,
-                 libid=None,
-                 format="xml",
-                 raw_location=None):
-        self.code = code
-        self._location = location
-        self.lineno = lineno
-        self.obj = obj
-        self.cols = cols
-        self.one_line = one_line
-        self.code_start = code_start
-        self.format = format
-        self.libid = libid
-        self._raw_location = raw_location
-
-    def __repr__(self):
-        return "<frame '{}'>".format(self.location)
-
-    @property
-    def location(self):
-        location = self._location
-        homedir = os.environ.get('HOME', None)
-        if homedir and location.startswith(homedir + '/'):
-            location = '~/' + location[len(homedir) + 1:]
-        if self.obj:
-            return 'File "{}", line {}, in {}'.format(location, self.lineno, self.obj)
-        else:
-            if self.cols:
-                return 'File "{}", line {}, col {}'.format(location, self.lineno, self.cols[0])
-            else:
-                return 'File "{}"'.format(location)
-
-    @property
-    def raw_location(self):
-        return self._raw_location or self._location
-
-    @property
-    def snippet(self):
-        try:
-            if not self.code:
-                return ''
-            if self.one_line:
-                return self.code
-            lineno = max(0, self.lineno - 5)
-
-            return syntax.highlight(self.format,
-                                    self.code,
-                                    lineno,
-                                    lineno + 10,
-                                    highlight_lines=[self.lineno],
-                                    highlight_range=[self.lineno, self.cols[0], self.cols[1]] if self.cols else None)
-        except Exception as e:
-            raise
-            from traceback import print_exc
-            print_exc(e)
 
 
 @implements_to_string
@@ -221,37 +157,14 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     elif isinstance(exc, TemplateError):
         traceback.error_type = "Template Error"
 
-
-        # frame = Frame(exc._code,
-        #               relativefrom(base, exc.path),
-        #               exc.lineno,
-        #               raw_location=getattr(exc, 'raw_path', None),
-        #               cols=(exc.start, exc.end),
-        #               format="moyatemplate")
-        # traceback.add_frame(frame)
-        # add_pytraceback = False
-
-
     traceback.exception = exc
     traceback.msg = text_type(exc)
     traceback.diagnosis = traceback.diagnosis or getattr(exc, 'diagnosis', None)
-
 
     if hasattr(exc, 'get_moya_frames'):
         mf = exc.get_moya_frames()
         traceback.stack[0:0] = mf
 
-    # #Append any captured logic errors
-    # while hasattr(exc, 'original'):
-    #     exc = exc.original
-    #
-    #     if hasattr(exc, 'get_moya_frames'):
-    #         mf = exc.get_moya_frames()
-    #         traceback.stack[0:0] = mf
-    #     else:
-    #         trace = getattr(exc, 'moya_trace', None)
-    #         if trace is not None:
-    #             traceback.stack.extend(trace.stack)
 
     if context.get('.develop', False):
         add_pytraceback = True

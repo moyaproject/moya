@@ -6,7 +6,7 @@ from ..context.errors import SubstitutionError
 from .. import interface
 from ..markup import Markup
 from ..template.enginebase import TemplateEngine
-from ..template.errors import MissingTemplateError, BadTemplateError
+from . import errors
 from ..html import escape, spaceless
 from ..template import errors
 from ..errors import AppError, MarkupError, LogicError
@@ -19,6 +19,7 @@ from ..tools import make_cache_key, nearest_word
 from .. import tools
 from ..compat import urlencode, PY2
 from . import lorem
+from ..traceframe import Frame as TraceFrame
 
 from fs.path import pathjoin, dirname
 import bleach
@@ -61,7 +62,7 @@ class MoyaTemplateEngine(TemplateEngine):
         """Check if a template exists"""
         try:
             self.env.check_template(path)
-        except MissingTemplateError:
+        except errors.MissingTemplateError:
             return False
         else:
             return True
@@ -82,12 +83,12 @@ class MoyaTemplateEngine(TemplateEngine):
                 continue
             try:
                 template = self.env.get_template(path)
-            except MissingTemplateError:
+            except errors.MissingTemplateError:
                 continue
             else:
                 break
         if template is None:
-            raise MissingTemplateError(paths[-1])
+            raise errors.MissingTemplateError(paths[-1])
 
         return self.render_template(template,
                                     data,
@@ -891,7 +892,7 @@ class ExtendsNode(Node):
 
         try:
             environment.get_template(path)
-        except MissingTemplateError as e:
+        except errors.MissingTemplateError as e:
             self.render_error(text_type(e))
         self.template.extend(path, self, lib)
         parser.expect_end()
@@ -938,7 +939,7 @@ class RenderNode(Node):
                                  context,
                                  target=target,
                                  options=options)
-        except MissingTemplateError as e:
+        except errors.MissingTemplateError as e:
             self.render_error('Missing template: "%s"' % e.path, original=e)
         except errors.TagError as e:
             self.render_error(text_type(e), original=e)
@@ -1240,7 +1241,7 @@ class IncludeNode(Node):
             path = environment.archive.resolve_template_path(path, app)
         try:
             template = environment.get_template(path)
-        except MissingTemplateError as e:
+        except errors.MissingTemplateError as e:
             self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
         with template.block(context, self) as frame:
             frame.stack.append(template.get_root_node(environment))
@@ -1923,7 +1924,31 @@ class Template(object):
                                           diagnosis="Check that there is a corresponding {# for every #}")
         return tokens
 
-    def parse(self, environment=None):
+    def parse(self, environment):
+        try:
+            root_node = self._parse(environment=None)
+        except errors.TokenizerError as e:
+            frame = TraceFrame(self.source,
+                               self.path,
+                               e.lineno,
+                               cols=(e.start, e.end),
+                               format='moyatemplate')
+            raise errors.TemplateError(e.msg,
+                                       diagnosis=e.diagnosis,
+                                       trace_frames=[frame])
+        except errors.NodeError as e:
+            frame = TraceFrame(self.source,
+                               self.path,
+                               e.lineno,
+                               cols=(e.start, e.end),
+                               format='moyatemplate')
+            raise errors.TemplateError(e.msg,
+                                       diagnosis=e.diagnosis,
+                                       trace_frames=[frame])
+        else:
+            return root_node
+
+    def _parse(self, environment=None):
         if environment is None:
             from .environment import Environment
             environment = Environment.make_default()
@@ -2115,8 +2140,6 @@ class Template(object):
             self._finalize_stack(stack)
 
     def on_error(self, context, current_node, exc):
-
-        from ..trace import Frame
         frames = []
         t_stack = context['._t_stack']
         base = context.get('.sys.base', '')
@@ -2135,12 +2158,12 @@ class Template(object):
                 if not isinstance(node, Node):
                     continue
                 if node.tag_name != 'root' and node is not last_node:
-                    frame = Frame(node.template.source,
-                                  node.template.path,
-                                  node.location[0],
-                                  raw_location=relativefrom(base, node.template.raw_path),
-                                  cols=node.location[1:],
-                                  format='moyatemplate')
+                    frame = TraceFrame(node.template.source,
+                                       node.template.path,
+                                       node.location[0],
+                                       raw_location=relativefrom(base, node.template.raw_path),
+                                       cols=node.location[1:],
+                                       format='moyatemplate')
                     frames.append(frame)
                 last_node = node
 
@@ -2153,29 +2176,29 @@ class Template(object):
         if isinstance(exc, SubstitutionError):
             node = t_stack[-1].current_node
             lineno, start, end = node.location
-            frame = Frame(node.template.source,
-                          node.template.path,
-                          lineno + 1,
-                          raw_location=relativefrom(base, node.template.raw_path),
-                          cols=(start + exc.start + 1, start + exc.end),
-                          format='moyatemplate')
+            frame = TraceFrame(node.template.source,
+                               node.template.path,
+                               lineno + 1,
+                               raw_location=relativefrom(base, node.template.raw_path),
+                               cols=(start + exc.start + 1, start + exc.end),
+                               format='moyatemplate')
             frames.append(frame)
 
         elif isinstance(exc, NodeRenderError):
-            frame = Frame(exc.node.template.source,
-                          exc.node.template.path,
-                          exc.node.location[0],
-                          raw_location=relativefrom(base, exc.node.template.raw_path),
-                          cols=exc.node.location[1:],
-                          format='moyatemplate')
+            frame = TraceFrame(exc.node.template.source,
+                               exc.node.template.path,
+                               exc.node.location[0],
+                               raw_location=relativefrom(base, exc.node.template.raw_path),
+                               cols=exc.node.location[1:],
+                               format='moyatemplate')
             frames.append(frame)
         else:
-            frame = Frame(recent_node.template.source,
-                          recent_node.template.path,
-                          recent_node.location[0],
-                          raw_location=relativefrom(base, recent_node.template.raw_path),
-                          cols=recent_node.location[1:],
-                          format='moyatemplate')
+            frame = TraceFrame(recent_node.template.source,
+                               recent_node.template.path,
+                               recent_node.location[0],
+                               raw_location=relativefrom(base, recent_node.template.raw_path),
+                               cols=recent_node.location[1:],
+                               format='moyatemplate')
             frames.append(frame)
 
         raise errors.TemplateError(error_msg,
@@ -2205,7 +2228,6 @@ class Template(object):
         if context is None:
             context = Context()
 
-        # TODO: Parse errors
         self.parse(environment)
 
         root = self.get_root_node(environment)
