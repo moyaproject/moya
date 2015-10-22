@@ -2161,9 +2161,6 @@ class Template(object):
                     frames.append(frame)
                 last_node = node
 
-        if hasattr(exc, 'get_moya_frames'):
-            frames.extend(exc.get_moya_frames())
-
         error_msg = text_type(exc)
         diagnosis = None
 
@@ -2194,6 +2191,9 @@ class Template(object):
                                cols=recent_node.location[1:],
                                format='moyatemplate')
             frames.append(frame)
+
+        if hasattr(exc, 'get_moya_frames'):
+            frames.extend(exc.get_moya_frames())
 
         raise errors.TemplateError(error_msg,
                                    original=exc,
