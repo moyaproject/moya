@@ -34,6 +34,7 @@ from ..compat import implements_to_string, text_type, string_types
 from ..context.modifiers import ExpressionModifiers
 from ..moyaexceptions import MoyaException
 from ..errors import LogicError
+from operator import methodcaller
 
 import operator
 import re
@@ -127,10 +128,14 @@ class EvalVariable(Evaluator):
     """Class to evaluate a parsed variable"""
     def build(self, tokens):
         self.key = tokens[0]
-        self.value = dataindex.parse(self.key)
+        self._index = index = dataindex.parse(self.key)
+        if index.from_root or len(index) > 1:
+            self._getter = methodcaller('__getitem__', self._index)
+        else:
+            self._getter = methodcaller('get_simple', self.key)
 
     def eval(self, context):
-        return context[self.value]
+        return self._getter(context)
 
 
 class EvalLiteralIndex(Evaluator):
@@ -597,6 +602,7 @@ real = Combine(Word(nums) + "." + Word(nums))
 constant = oneOf('True False None yes no') + WordEnd(word_characters)
 
 # TODO: expand on variable regex
+simple_variable = Regex(r'([a-zA-Z0-9_]+)')
 variable = Regex(r'([a-zA-Z0-9\._]+)')
 explicit_variable = '$' + Regex(r'([a-zA-Z0-9\._]+)')
 current_scope = Literal('$$')
@@ -612,6 +618,7 @@ timespan = Combine(Word(nums) + oneOf('ms s m h d'))
 
 current_scope_operand = current_scope
 variable_operand = variable
+#simple_variable_operand = simple_variable
 explicit_variable_operand = explicit_variable
 integer_operand = integer
 real_operand = real

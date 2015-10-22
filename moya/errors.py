@@ -19,6 +19,9 @@ class LogicError(Exception):
     def diagnosis(self):
         return getattr(self.original, 'diagnosis', None)
 
+    def get_moya_frames(self):
+        return self.moya_trace.stack
+
     def __moyaconsole__(self, console):
         self.moya_trace.__moyaconsole__(console)
 

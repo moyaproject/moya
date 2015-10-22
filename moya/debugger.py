@@ -119,8 +119,7 @@ class MoyaCmdDebugger(Cmd):
         (
             "watch",
             """
-            When followed by an expression, it will be added to the watch list (a table of expressions and their results).
-            When given without an argument, the watch list will be reset.
+            When followed by an expression, it will be added to the watch list (a table of expressions and their results). When given without an argument, the watch list will be reset.
             """
         ),
         (
@@ -197,8 +196,11 @@ class MoyaCmdDebugger(Cmd):
         table = [(Cell("Command", bold=True), Cell("Description", bold=True))]
         command_help = sorted(self.command_help, key=lambda h: h[0])
 
-        for command, desc in command_help:
+        def format_desc(desc):
+            lines = [l.strip() for l in desc.splitlines() if l.strip()]
+            return "\n".join(lines)
+        for i, (command, desc) in enumerate(command_help):
             table.append([Cell(command, bold=True, fg="green"),
-                          Cell(desc.strip() + '\n')])
+                          Cell(format_desc(desc))])
         self.console.table(table, header=True)
         return False
