@@ -851,6 +851,19 @@ class Context(object):
             return default
         return Missing(index)
 
+    def get_simple(self, index):
+        """Get a single index key"""
+        objs = [scope.obj for scope in self._stack._current_frame]
+        for obj in objs:
+            try:
+                val = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(index)
+            except (TypeError, KeyError, IndexError, AttributeError):
+                continue
+            if hasattr(val, '__moyacontext__'):
+                return val.__moyacontext__(self)
+            return val
+        return Missing(index)
+
     def get_first(self, default=None, *indices):
         """Return the first index present, or return a default"""
         get = self.get

@@ -71,7 +71,7 @@ class XMLHighlighter(ConsoleHighlighter):
         "substitution": "bold magenta",
         "templatetag": "bold magenta",
         "braced": "bold",
-        "comment": "dim white italic"
+        "comment": "dim black italic not bold"
     }
 
     highlights = [
@@ -91,17 +91,26 @@ class TemplateHighlighter(ConsoleHighlighter):
         "attr": "cyan not bold",
         "string": "yellow",
         "substitution": "bold magenta",
-        "templatetag": "bold black",
+        "templatetag": "bold",
         "comment": "dim white italic"
     }
 
     highlights = [
+        r'(?P<templatetag>\{\%.*?\%\})',
         r'(?P<tag>\<.*?\>)',
         r'(?P<attr>\s\S*?=\".*?\")',
         r'(?P<string>\".*?\")',
         r'(?P<substitution>\$\{.*?\})',
-        r'(?P<templatetag>\{\%.*?\%\})',
         r'(?P<comment>\<\!\-\-.*?\-\-\>)',
+    ]
+
+
+class PythonHighlighter(ConsoleHighlighter):
+    styles = {
+        "comment": "dim white italic",
+        "string": "yellow"
+    }
+    highlights = [
     ]
 
 
@@ -705,6 +714,27 @@ class Console(object):
                          line_numbers=True)
         return self
 
+    def pysnippet(self, code, lineno=1, colno=None, extralines=3, line_numbers=True):
+        """Render a snippet of xml, with a highlighted line"""
+        with self._lock:
+            if not code:
+                return
+            if colno is not None:
+                highlight_columns = (colno - 1, colno)
+            else:
+                highlight_columns = None
+            _lineno = max(0, lineno - extralines)
+
+            highlighter = PythonHighlighter()
+
+            self.snippet(code,
+                         (_lineno, _lineno + extralines * 2 + 1),
+                         highlight_line=lineno,
+                         highlight_columns=highlight_columns,
+                         line_numbers=True,
+                         highlighter=highlighter)
+        return self
+
     def templatesnippet(self, code, lineno=1, colno=None, endcolno=None, extralines=3, line_numbers=True):
         with self._lock:
             if not code:
@@ -1053,16 +1083,23 @@ class Console(object):
                 for i, line in enumerate(lines):
                     line_no = i + start
                     if highlight_line is not None and highlight_line == line_no:
-                        number = ("*" + text_type(line_no)).rjust(max_number_length, ' ') + ' '
+                        if self.terminal_colors:
+                            if self.unicode_borders:
+                                indicator = "\u2022"
+                            else:
+                                indicator = "*"
+                        else:
+                            indicator = "*"
+                        number = (indicator + text_type(line_no)).rjust(max_number_length, ' ') + ' '
 
                         if highlight_columns:
                             col_start, col_end = highlight_columns
-                            line.add_span(col_start, col_end, bold=True, fg="white", bg="red")
+                            line.add_span(col_start, col_end, underline=True)
 
-                        self(number, bold=True)(line).nl()
+                        self(number, fg="blue", bold=True)(line).nl()
                     else:
                         number = text_type(line_no).rjust(max_number_length) + ' '
-                        self(number, bold=True, fg="black")(line).nl()
+                        self(number, dim=True, fg="blue")(line).nl()
             else:
                 for line in lines:
                     self(line).nl()

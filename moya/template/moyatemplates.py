@@ -28,6 +28,7 @@ from copy import deepcopy
 from collections import defaultdict, namedtuple
 from itertools import chain
 from operator import truth
+import contextlib
 import json
 
 import logging
@@ -114,10 +115,10 @@ class MoyaTemplateEngine(TemplateEngine):
 
 class _TemplateStackFrame(interface.AttributeExposer):
     __moya_exposed_attributes__ = ['app', 'data']
-    def __init__(self, stack, app, data=None):
-        self.stack = stack
+    def __init__(self, app, data=None):
         self.app = app
         self.data = data or {}
+        self.stack = []
         self.current_node = None
 
 
@@ -129,14 +130,12 @@ class _TemplateFrameContextManager(object):
         self.context = context
         self.data = data
         self.app = app
-        self.stack = []
 
     def __enter__(self):
-        self.template.push_frame(self.context,
-                                 self.stack,
-                                 self.app,
-                                 data=self.data)
-        return self
+        stack_frame = self.template.push_frame(self.context,
+                                               self.app,
+                                               data=self.data)
+        return stack_frame
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.template.pop_frame(self.context)
@@ -397,9 +396,10 @@ class NodeType(object):
     #     stack = nodes[::-1]
     #     return self._render_nodes(stack, environment, context, sub_escape)
 
-    def render_block(self, context, environment, template, text_escape):
-        with template.frame(context, data=context['.td'], app=context['._t.app']) as frame:
-            frame.stack.extend(self.children[::-1])
+    def render_contents(self, environment, context, template, text_escape):
+        # with template.frame(context, data=context['.td'], app=context['._t.app']) as frame:
+        #     frame.current_node = None
+        with template.block(context, self) as frame:
             return template._render_frame(frame, environment, context, text_escape)
 
 
@@ -566,6 +566,8 @@ class BlockNode(Node):
 
     def render(self, environment, context, template, text_escape):
         nodes = template.get_render_block(environment, self.block_name)
+        #with template.block(context, self):
+        #with template.block(context, self) as frame:
         yield chain.from_iterable(node.children for node in nodes)
 
 
@@ -642,7 +644,7 @@ class CallNode(Node):
                     scopes.pop()
         else:
             if self.only:
-                with template.frame(context):
+                with template.block(context, self):
                     yield iter(node.children)
             else:
                 yield iter(node.children)
@@ -1240,9 +1242,12 @@ class IncludeNode(Node):
             template = environment.get_template(path)
         except MissingTemplateError as e:
             self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
-        yield template.render(context=context,
-                              environment=environment,
-                              app=app)
+        with template.block(context, self) as frame:
+            frame.stack.append(template.get_root_node(environment))
+            yield template._render_frame(frame, environment, context, text_escape)
+        # yield template.render(context=context,
+        #                       environment=environment,
+        #                       app=app)
 
 
 class InsertNode(Node):
@@ -1281,7 +1286,7 @@ class SingleLineNode(Node):
     tag_name = "singleline"
 
     def render(self, environment, context, template, text_escape):
-        text = self.render_block(context, environment, template, text_escape)
+        text = self.render_contents(environment, context, template, text_escape)
         return ''.join(text.splitlines())
 
 
@@ -1290,7 +1295,7 @@ class SpacelessNode(Node):
     tag_name = "spaceless"
 
     def render(self, environment, context, template, text_escape):
-        text = self.render_block(context, environment, template, text_escape)
+        text = self.render_contents(environment, context, template, text_escape)
         return spaceless(text)
 
 
@@ -1357,7 +1362,7 @@ class CacheNode(Node):
         if cached_html is not None:
             return cached_html
 
-        html = self.render_block(context, environment, template, text_escape)
+        html = self.render_contents(environment, context, template, text_escape)
 
         for_timespan = self.for_expression.eval(context)
         if for_timespan is None:
@@ -1530,7 +1535,7 @@ class MarkupBlockNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = self.render_block(context, environment, template, text_escape)
+        markup = self.render_contents(environment, context, template, text_escape)
 
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
@@ -1554,7 +1559,7 @@ class ExtractNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = self.render_block(context, environment, template, text_escape)
+        markup = self.render_contents(environment, context, template, text_escape)
         extract_name = None
         if self.as_expression is not None:
             extract_name = self.as_expression.eval(context)
@@ -1616,7 +1621,7 @@ class SanitizeNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = self.render_block(context, environment, template, text_escape)
+        markup = self.render_contents(environment, context, template, text_escape)
 
         if not self.if_expression.eval(context):
             return markup
@@ -1689,7 +1694,7 @@ class SummarizeNode(Node):
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = self.render_block(context, environment, template, text_escape)
+        markup = self.render_contents(environment, context, template, text_escape)
 
         target = "html"
         markup_type = "summary"
@@ -2038,13 +2043,14 @@ class Template(object):
             break
         return None
 
-    def push_frame(self, context, stack, app, data=None):
+    def push_frame(self, context, app, data=None):
         t_stack = context.set_new_call('._t_stack', list)
-        stack_frame = _TemplateStackFrame(stack, app, data=data)
+        stack_frame = _TemplateStackFrame(app, data=data)
         t_stack.append(stack_frame)
         context['._t'] = stack_frame
         context['.td'] = stack_frame.data
         context.push_frame('.td')
+        return stack_frame
 
     def pop_frame(self, context):
         t_stack = context['._t_stack']
@@ -2062,6 +2068,16 @@ class Template(object):
             app = context.get('._t.app', None)
         return _TemplateFrameContextManager(self, context, data, app=app)
 
+    @contextlib.contextmanager
+    def block(self, context, node):
+        t_stack = context.set_new_call('._t_stack', list)
+        stack_frame = _TemplateStackFrame(node.get_app(context))
+        stack_frame.stack.append(NodeGenerator.create(node, iter(node.children)))
+        t_stack.append(stack_frame)
+        yield stack_frame
+        t_stack.pop()
+
+
     def _render_frame(self, frame, environment, context, sub_escape):
         output = []
         output_text = output.append
@@ -2074,10 +2090,11 @@ class Template(object):
 
         try:
             while stack:
-                frame.current_node = node = pop()
+                node = pop()
                 if isinstance(node, text_type):
                     output_text(node)
                 elif isinstance(node, Node):
+                    frame.current_node = node
                     push(node_render(node, environment, context, self, sub_escape))
                 else:
                     new_node = next(node, None)
@@ -2102,37 +2119,68 @@ class Template(object):
         from ..trace import Frame
         frames = []
         t_stack = context['._t_stack']
-        for t in t_stack:
-            print()
-            for s in t.stack:
-                print(s)
-        for frame in t_stack:
-            for _node in chain(frame.stack, [frame.current_node]):
+        base = context.get('.sys.base', '')
+
+        recent_node = current_node
+
+        def relativefrom(base, path):
+            if path.startswith(base):
+                path = "./" + path[len(base):]
+            return path
+
+        last_node = None
+        for i, frame in enumerate(t_stack):
+            for _node in chain(frame.stack, [frame.current_node] if (i!=len(t_stack) - 1) else []):
                 node = _node.node if isinstance(_node, NodeGenerator) else _node
                 if not isinstance(node, Node):
                     continue
-                if node.tag_name != 'root':
+                if node.tag_name != 'root' and node is not last_node:
                     frame = Frame(node.template.source,
                                   node.template.path,
                                   node.location[0],
+                                  raw_location=relativefrom(base, node.template.raw_path),
                                   cols=node.location[1:],
                                   format='moyatemplate')
                     frames.append(frame)
-
-        # if current_node:
-        #     error_frame = Frame(current_node.template.source,
-        #                         current_node.template.path,
-        #                         current_node.location[0],
-        #                         cols=current_node.location[1:],
-        #                         format='moyatemplate')
-        #     frames.append(error_frame)
+                last_node = node
 
         if hasattr(exc, 'get_moya_frames'):
             frames.extend(exc.get_moya_frames())
 
-        raise errors.TemplateError(text_type(exc),
+        error_msg = text_type(exc)
+        diagnosis = None
+
+        if isinstance(exc, SubstitutionError):
+            node = t_stack[-1].current_node
+            lineno, start, end = node.location
+            frame = Frame(node.template.source,
+                          node.template.path,
+                          lineno + 1,
+                          raw_location=relativefrom(base, node.template.raw_path),
+                          cols=(start + exc.start + 1, start + exc.end),
+                          format='moyatemplate')
+            frames.append(frame)
+
+        elif isinstance(exc, NodeRenderError):
+            frame = Frame(exc.node.template.source,
+                          exc.node.template.path,
+                          exc.node.location[0],
+                          raw_location=relativefrom(base, exc.node.template.raw_path),
+                          cols=exc.node.location[1:],
+                          format='moyatemplate')
+            frames.append(frame)
+        else:
+            frame = Frame(recent_node.template.source,
+                          recent_node.template.path,
+                          recent_node.location[0],
+                          raw_location=relativefrom(base, recent_node.template.raw_path),
+                          cols=recent_node.location[1:],
+                          format='moyatemplate')
+            frames.append(frame)
+
+        raise errors.TemplateError(error_msg,
                                    original=exc,
-                                   diagnosis=getattr(exc, 'diagnosis', None),
+                                   diagnosis=diagnosis,
                                    trace_frames=frames)
 
     def _finalize_stack(self, stack):

@@ -520,7 +520,7 @@ def run_logic_debug(archive, context, node, node_stack):
         console("In file \"%s\"" % node._location).nl()
         try:
             if node._code:
-                console.snippet(node._code, highlight_line=node.source_line)
+                console.snippet(node._code, highlight_line=node.source_line).nl()
         except:
             raise
             console.text("can't display code for this location", italic=True)
@@ -535,7 +535,7 @@ def run_logic_debug(archive, context, node, node_stack):
         console.div()
         console("In file \"%s\"" % node._location).nl()
         if node._code:
-            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines)
+            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines).nl()
         show_watches()
 
     def show_watches():
@@ -564,10 +564,10 @@ def run_logic_debug(archive, context, node, node_stack):
             e = getattr(s, 'element', None)
             if e and e._code:
                 console('File \"%s\", in %s' % (e._location, e)).nl()
-                console.xmlsnippet(e._code, e.source_line or 0, extralines=extralines)
+                console.xmlsnippet(e._code, e.source_line or 0, extralines=extralines).nl()
         if hasattr(node, '_location'):
             console('File \"%s\", in %s' % (node._location, node)).nl()
-            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines)
+            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines).nl()
 
     def show_exception(stack, node, exc):
         moya_traceback(context.get('._callstack', []), node, exc, console)
