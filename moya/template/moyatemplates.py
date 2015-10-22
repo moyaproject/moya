@@ -8,8 +8,7 @@ from ..markup import Markup
 from ..template.enginebase import TemplateEngine
 from . import errors
 from ..html import escape, spaceless
-from ..template import errors
-from ..errors import AppError, MarkupError, LogicError
+from ..errors import AppError, MarkupError
 from ..render import render_object
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
@@ -103,11 +102,6 @@ class MoyaTemplateEngine(TemplateEngine):
         data = data.copy()
         data.update(tdata)
         app = tdata.pop('app')
-        # if '_t' in base_context:
-        #     tdata = base_context['_t'].copy().update(tdata)
-        #
-        # with base_context.root_stack('_t', tdata):
-        #with template.frame(base_context, data, app=app):
         return template.render(data,
                                context=base_context,
                                environment=self.env,
@@ -115,7 +109,9 @@ class MoyaTemplateEngine(TemplateEngine):
 
 
 class _TemplateStackFrame(interface.AttributeExposer):
+    #__slots__ = ['app', 'data', 'stack', 'current_node']
     __moya_exposed_attributes__ = ['app', 'data']
+
     def __init__(self, app, data=None):
         self.app = app
         self.data = data or {}
@@ -1710,7 +1706,8 @@ TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])
 
 
 class NodeGenerator(object):
-    __slots__ = ['node', '_gen']
+    #__slots__ = ['node', '_gen']
+
     def __init__(self, node, gen):
         self.node = node
         self._gen = gen
@@ -2124,7 +2121,6 @@ class Template(object):
                     if new_node is not None:
                         push(node)
                         push(new_node)
-                        #push(node_generator(node, new_node))
             return ''.join(output)
 
         except errors.TemplateError:
@@ -2151,7 +2147,7 @@ class Template(object):
 
         last_node = None
         for i, frame in enumerate(t_stack):
-            for _node in chain(frame.stack, [frame.current_node] if (i!=len(t_stack) - 1) else []):
+            for _node in chain(frame.stack, [frame.current_node] if (i != len(t_stack) - 1) else []):
                 node = _node.node if isinstance(_node, NodeGenerator) else _node
                 if not isinstance(node, Node):
                     continue
