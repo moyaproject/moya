@@ -178,7 +178,7 @@
                         help="${str:column.help}"
                         initial="object[column.dbname]">
                         <forms:radio on="" if="column.null"> --- not set --- </forms:radio>
-                        <moya:for src="choices:choice_enum" dst="choice_value,choice_label">
+                        <moya:for src="intchoices:choice_enum" dst="choice_value,choice_label">
                             <forms:radio on="${choice_value}">${choice_label}</forms:radio>
                         </moya:for>
                     </forms:radio-group>

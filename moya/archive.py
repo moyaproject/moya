@@ -285,7 +285,7 @@ class Archive(object):
                 fs = fsopendir(fs_url, create_dir=create)
             else:
                 if create:
-                    fs = self.project_fs.makeopendir(fs_url, recusrive=True)
+                    fs = self.project_fs.makeopendir(fs_url, recursive=True)
                 else:
                     fs = self.project_fs.opendir(fs_url)
         else:

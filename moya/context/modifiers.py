@@ -282,6 +282,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def choices(self, context, v):
         return getattr(v, 'choices', [])
 
+    def intchoices(self, context, v):
+        return getattr(v, 'intchoces', [])
+
     def chain(self, context, v):
         v = v if isinstance(v, collections.Iterable) else [v]
         return list(chain(*[i if isinstance(i, collections.Iterable) else [i] for i in v]))
