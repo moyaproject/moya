@@ -209,6 +209,7 @@ class DocumentNode(object):
         element._build(context, self.text or '', attrs, self.translatable_attrs)
         element._document = weakref.ref(document)
 
+        element._let_exp = None  # Cache for let expressions
         element._let = self.attrs.get(namespaces.let, None)
         self.element = element
 

@@ -2638,7 +2638,7 @@ class Update(DBDataSetter):
         params = self.get_parameters(context)
         dbsession = self.get_session(context, params.db)
         qs = self._qs(context, dbsession, self.src(context))
-        let = self.get_let_map(context, lambda l: DBExpression(l).eval(self.archive, context))
+        let = self.get_let_map_eval(context, lambda l: DBExpression(l).eval(self.archive, context))
         sync = params.synchronize
         if sync == 'none':
             sync = None

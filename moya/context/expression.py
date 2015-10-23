@@ -1,3 +1,11 @@
+"""
+Parse and evaluate Moya expresssions
+
+This module contains some quite shocking micro-optimizations to offset the extra work when compared to Python expressions.
+
+The optimizations were guided by the mandel.xml benchmark which has improved by many orders of magnitude since the first version.
+
+"""
 from __future__ import unicode_literals
 from __future__ import division
 from __future__ import print_function
@@ -118,10 +126,12 @@ class EvalConstant(Evaluator):
 
     def build(self, tokens):
         self.key = tokens[0]
-        self.value = self.constants[self.key]
+        value = self.value = self.constants[self.key]
+        self.eval = lambda context: value
 
-    def eval(self, context):
-        return self.value
+
+    # def eval(self, context):
+    #     return self.value
 
 
 class EvalVariable(Evaluator):
@@ -130,12 +140,12 @@ class EvalVariable(Evaluator):
         self.key = tokens[0]
         self._index = index = dataindex.parse(self.key)
         if index.from_root or len(index) > 1:
-            self._getter = methodcaller('__getitem__', self._index)
+            self.eval = methodcaller('__getitem__', self._index)
         else:
-            self._getter = methodcaller('get_simple', self.key)
+            self.eval = methodcaller('get_simple', self.key)
 
-    def eval(self, context):
-        return self._getter(context)
+    #def eval(self, context):
+    #    return self._getter(context)
 
 
 class EvalLiteralIndex(Evaluator):
@@ -181,8 +191,7 @@ class EvalTimespan(Evaluator):
     def eval(self, context):
         return self.ts
 
-
-class EvalCurrentScope(EvalVariable):
+class EvalCurrentScope(Evaluator):
     """Class to eval the current scope"""
 
     def eval(self, context):
@@ -190,51 +199,55 @@ class EvalCurrentScope(EvalVariable):
         #return context.capture_scope()
 
 
-class EvalExplicitVariable(EvalVariable):
+class EvalExplicitVariable(Evaluator):
     """Class to evaluate a parsed constant or explicit variable (beginning with $)"""
     def build(self, tokens):
-        self.value = parseindex(tokens[1])
+        self.index = parseindex(tokens[1])
 
     def eval(self, context):
-        return context[self.value]
+        return context[self.index]
 
 
 class EvalInteger(Evaluator):
     """Class to evaluate an integer value"""
     def build(self, tokens):
-        self.value = int(tokens[0])
+        value = self.value = int(tokens[0])
+        self.eval = lambda context: value
 
-    def eval(self, context):
-        return self.value
+    #def eval(self, context):
+    #    return self.value
 
 
 class EvalReal(Evaluator):
     """Class to evaluate a real number value"""
     def build(self, tokens):
-        self.value = float(tokens[0])
+        value = self.value = float(tokens[0])
+        self.eval = lambda context: value
 
-    def eval(self, context):
-        return self.value
+    #def eval(self, context):
+    #    return self.value
 
 
 class EvalTripleString(Evaluator):
     """Class to evaluate a triple quoted string"""
 
     def build(self, tokens, _decode=decode_string):
-        self.value = _decode(tokens[0][3:-3])
+        value = self.value = _decode(tokens[0][3:-3])
+        self.eval = lambda context: value
 
-    def eval(self, context):
-        return self.value
+    # def eval(self, context):
+    #     return self.value
 
 
 class EvalString(Evaluator):
     """Class to evaluate a string"""
 
     def build(self, tokens, _decode=decode_string):
-        self.value = _decode(tokens[0][1:-1])
+        value = self.value = _decode(tokens[0][1:-1])
+        self.eval = lambda context: value
 
-    def eval(self, context):
-        return self.value
+    #def eval(self, context):
+    #    return self.value
 
 
 class EvalSignOp(Evaluator):
@@ -255,10 +268,11 @@ class EvalNotOp(Evaluator):
     """Class to evaluate expressions with logical NOT"""
     def build(self, tokens):
         sign, value = tokens[0]
-        self._eval = value.eval
+        _eval = self._eval = value.eval
+        self.eval = lambda context: not _eval(context)
 
-    def eval(self, context):
-        return not self._eval(context)
+    # def eval(self, context):
+    #     return not self._eval(context)
 
 
 class EvalList(Evaluator):
@@ -323,14 +337,16 @@ class EvalModifierOp(Evaluator):
 
         _filter, value = tokens[0]
         self.value = value
-        self._eval = value.eval
+        _eval = self._eval = value.eval
         try:
-            self.filter_func = getattr(self.modifiers, _filter[:-1])
+            filter_func = self.filter_func = getattr(self.modifiers, _filter[:-1])
         except AttributeError:
             raise ValueError("unknown modifier '%s'" % _filter)
 
-    def eval(self, context):
-        return self.filter_func(context, self._eval(context))
+        self.eval = lambda context: filter_func(context, _eval(context))
+
+    # def eval(self, context):
+    #     return self.filter_func(context, self._eval(context))
 
 
 class EvalFilterOp(Evaluator):
@@ -411,15 +427,27 @@ class EvalMultOp(Evaluator):
 
     def build(self, tokens):
         self.value = tokens[0]
-        self._eval = self.value[0].eval
+        _eval = self._eval = self.value[0].eval
         ops = self.ops
-        self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
+        operator_eval = self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
 
-    def eval(self, context):
-        prod = self._eval(context)
-        for op_func, _eval in self.operator_eval:
-            prod = op_func(prod, _eval(context))
-        return prod
+
+        if len(self.operator_eval) == 1:
+            op_func, rhs_eval = self.operator_eval[0]
+            self.eval = lambda context: op_func(_eval(context), rhs_eval(context))
+        else:
+            def eval(context):
+                prod = _eval(context)
+                for op_func, rhs_eval in operator_eval:
+                    prod = op_func(prod, rhs_eval(context))
+                return prod
+            self.eval = eval
+
+    # def eval(self, context):
+    #     prod = self._eval(context)
+    #     for op_func, _eval in self.operator_eval:
+    #         prod = op_func(prod, _eval(context))
+    #     return prod
 
 
 class EvalAddOp(Evaluator):
@@ -430,15 +458,26 @@ class EvalAddOp(Evaluator):
 
     def build(self, tokens):
         self.value = tokens[0]
-        self._eval = self.value[0].eval
+        _eval = self._eval = self.value[0].eval
         ops = self.ops
-        self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
+        operator_eval = self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
 
-    def eval(self, context):
-        sum = self._eval(context)
-        for op_func, _eval in self.operator_eval:
-            sum = op_func(sum, _eval(context))
-        return sum
+        if len(self.operator_eval) == 1:
+            op_func, rhs_eval = self.operator_eval[0]
+            self.eval = lambda context: op_func(_eval(context), rhs_eval(context))
+        else:
+            def eval(context):
+                prod = _eval(context)
+                for op_func, rhs_eval in operator_eval:
+                    prod = op_func(prod, rhs_eval(context))
+                return prod
+            self.eval = eval
+
+    # def eval(self, context):
+    #     sum = self._eval(context)
+    #     for op_func, _eval in self.operator_eval:
+    #         sum = op_func(sum, _eval(context))
+    #     return sum
 
 
 class EvalRangeOp(Evaluator):
@@ -675,7 +714,7 @@ index = Group(('[') + expr + Suppress(']'))
 
 braceop = callop | index
 
-literalindex = Regex(r'\.([a-zA-Z0-9\._]+)');
+literalindex = Regex(r'\.([a-zA-Z0-9\._]+)')
 
 operand = (timespan |
            real_operand |
@@ -800,10 +839,10 @@ class Expression(object):
         self._eval = self.compiled_exp[0].eval
         return self
 
-    def eval(self, context):
+    def eval(self, context, _hasattr=hasattr):
         try:
             obj = self._eval(context)
-            return obj.__moyacontext__(context) if hasattr(obj, '__moyacontext__') else obj
+            return obj.__moyacontext__(context) if _hasattr(obj, '__moyacontext__') else obj
         except (ExpressionError, MoyaException, LogicError):
             raise
         except ArithmeticError as e:

@@ -932,17 +932,17 @@ class Context(object):
                 if hasattr(obj, final):
                     delattr(obj, final)
 
-    def eval(self, expression):
+    def eval(self, expression, _isinstance=isinstance, _string_types=string_types):
         """Evaluate an expression, can be either a string or an expression compiled with `compile`"""
-        if isinstance(expression, string_types):
+        if _isinstance(expression, _string_types):
             return Expression(expression).eval(self)
-        return expression.eval()
+        return expression.eval(self)
 
     def subeval(self, s):
         expression = self.sub(s)
         if isinstance(expression, string_types):
             return Expression(expression).eval(self)
-        return expression.eval()
+        return expression.eval(self)
 
     @synchronize
     def keys(self, index=''):

@@ -8,6 +8,7 @@ from .. import errors
 from ..document import Document
 from ..elements.elementbasemeta import ElementBaseMeta
 
+from ..context.expression import Expression
 from ..elements import attributetypes
 from ..elements.elementproxy import ElementProxy
 from ..tools import textual_list, format_element_type, nearest_word
@@ -448,8 +449,22 @@ class ElementBaseType(object):
     def get_proxy(self, context, app):
         return ElementProxy(context, app, self)
 
-    def get_let_map(self, context, eval=None, check_missing=False):
+    def get_let_map(self, context, check_missing=False):
         """Gets and evaluates attributes set with the item namespace"""
+        if self._let:
+            if self._let_exp is None:
+                self._let_exp = {k: Expression(v).eval for k, v in self._let.items()}
+            let_map = {k: v(context) for k, v in self._let_exp.items()}
+            if check_missing:
+                for k, v in iteritems(let_map):
+                    if getattr(v, 'moya_missing', False):
+                        raise errors.ElementError("let:{} must not be missing (it is {!r})".format(k, v))
+            return let_map
+        else:
+            return {}
+
+    def get_let_map_eval(self, context, eval, check_missing=False):
+        """Gets and evaluates attributes set with the item namespace, with an alternative eval"""
         if self._let:
             eval = eval or context.eval
             let_map = {k: eval(v) for k, v in self._let.items()}
