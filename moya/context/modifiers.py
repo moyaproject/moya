@@ -283,7 +283,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return getattr(v, 'choices', [])
 
     def intchoices(self, context, v):
-        return getattr(v, 'intchoces', [])
+        return getattr(v, 'intchoices', [])
 
     def chain(self, context, v):
         v = v if isinstance(v, collections.Iterable) else [v]

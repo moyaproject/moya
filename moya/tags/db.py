@@ -316,8 +316,12 @@ class TableClassBase(object):
 
     def __repr__(self):
         r = self._repr
-        with pilot.context.data_scope(self):
-            return "<{}>".format(pilot.context.sub(r))
+        try:
+            with pilot.context.data_scope(self):
+                return "<{}>".format(pilot.context.sub(r))
+        except Exception as e:
+            log.error("%s", e)
+            return r
 
 
 class MoyaDB(object):
@@ -537,6 +541,7 @@ class DBModel(DBElement):
                 try:
                     model._build_model(app)
                 except Exception as e:
+                    raise
                     if hasattr(e, 'element'):
                         validate_fails.append([model, app, e.element, text_type(e)])
                     else:
@@ -627,13 +632,18 @@ class DBModel(DBElement):
         if self.abstract:
             return
         if self.get_db() is None:
-            raise errors.StartupFailedError("Can't build model for {}, no database defined".format(self.libid))
+            raise errors.StartupFailedError("can't build model for {}; no database defined".format(self.libid))
 
         app_name = app.name
         app_name = self.get_table_name(app)
         if app_name in self.table_map:
             return
         table_name = self.get_table_name(app)
+
+        table_names = self.get_db().table_names
+        if table_name in table_names:
+            raise errors.StartupFailedError("can't build model for {}; duplicate table name '{}'".format(self.libid, table_name))
+        table_names.add(table_name)
 
         app_columns = []
         columns = []
@@ -653,6 +663,7 @@ class DBModel(DBElement):
             sa_columns += ext.constraints
 
         table = Table(table_name, self.metadata, *sa_columns)
+
         table_class = make_table_class(self, self.name, columns, app, table)
         table_class._repr = self._repr
 

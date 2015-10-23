@@ -13,7 +13,6 @@ class Frame(object):
                  obj=None,
                  cols=None,
                  one_line=False,
-                 code_start=1,
                  libid=None,
                  format="xml",
                  raw_location=None):
@@ -23,7 +22,6 @@ class Frame(object):
         self.obj = obj
         self.cols = cols
         self.one_line = one_line
-        self.code_start = code_start
         self.format = format
         self.libid = libid
         self._raw_location = raw_location

@@ -31,6 +31,7 @@ class DBEngine(object):
         self.default = default
         self.Session = sessionmaker(bind=engine)  # expire_on_commit
         self.metadata = MetaData()
+        self.table_names = set()
 
     def get_session(self):
         return DBSession(self.Session, self.engine)

@@ -13,6 +13,8 @@ from .moyaexceptions import MoyaException
 from .compat import implements_to_string, text_type
 from .traceframe import Frame
 
+from os.path import abspath
+
 import io
 import sys
 import os
@@ -64,7 +66,7 @@ class Traceback(object):
         for frame in stack:
             console.wraptext(frame.location)
             if frame.one_line:
-                console.text("    " + frame.code)
+                console.pysnippet("\n" * (frame.lineno - 1) + frame.code, frame.lineno, extralines=0)
             elif frame.code:
                 if frame.format == 'xml':
                     console.xmlsnippet(frame.code, frame.lineno, extralines=3)
@@ -107,7 +109,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     base = context.get('.sys.base', '')
 
     def relativefrom(base, path):
-        if path.startswith(base):
+        if base and path.startswith(base):
             path = "./" + path[len(base):]
         return path
 
@@ -175,21 +177,26 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
         pyframes = pytraceback.extract_tb(tb)
 
+
         for i, f in enumerate(reversed(pyframes)):
             if f[2] == 'logic':
                 pyframes = pyframes[len(pyframes) - i - 1:]
                 break
 
         for (filename, line_number, function_name, text) in pyframes:
+            one_line = False
             try:
                 with io.open(filename, 'rt') as f:
                     code = f.read()
             except:
-                code = None
+                code = text
+                one_line = True
+
+            code_path = relativefrom(base, filename)
             frame = Frame(code,
-                          relativefrom(base, filename),
+                          code_path,
                           line_number,
-                          one_line=False,
+                          one_line=one_line,
                           obj=function_name,
                           format="python")
             traceback.add_frame(frame)
