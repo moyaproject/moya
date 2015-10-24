@@ -1099,7 +1099,7 @@ class Console(object):
                         self(number, fg="blue", bold=True)(line).nl()
                     else:
                         number = text_type(line_no).rjust(max_number_length) + ' '
-                        self(number, fg="blue")(line).nl()
+                        self(number, fg="blue", dim=True)(line).nl()
             else:
                 for line in lines:
                     self(line).nl()

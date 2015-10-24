@@ -871,8 +871,12 @@ class Validate(LogicElement):
 
         form.validated = True
         if form.ok:
-            yield logic.DeferNodeContents(self)
-            yield logic.SkipNext((namespaces.default, "else"))
+            with self.call(context, app, **context.obj) as call:
+                yield logic.DeferNodeContents(self)
+                yield logic.SkipNext((namespaces.default, "else"))
+            if call.has_return:
+                context['_return'] = call.return_value
+                raise logic.Unwind()
 
 
 class ValidatePost(Validate):
@@ -950,10 +954,10 @@ class Apply(LogicElement):
                             try:
                                 context[field_dst] = value
                             except Exception as e:
-                                diagnosis_msg = "Check you are setting this field to an appropriate value."
+                                diagnosis_msg = "The following error was reported: {error}.\n\nCheck you are setting this field to an appropriate value."
                                 self.throw('moya.forms.apply-fail',
-                                           "unable to set field '{}' to {}".format(dst, context.to_expr(value)),
-                                           diagnosis=diagnosis_msg,
+                                           "unable to set field '{}' to {}".format(field_dst, context.to_expr(value)),
+                                           diagnosis=diagnosis_msg.format(error=e),
                                            info={'field': field.name, 'error': text_type(e)})
 
 
@@ -1463,6 +1467,9 @@ class ValidateField(LogicElement):
 
     field = Attribute("Field name", required=True, default=None)
 
+    class Meta:
+        is_call = True
+
     class Help:
         synopsis = "validate a field in a form"
         example = """
@@ -1483,6 +1490,9 @@ class AdaptField(LogicElement):
     xmlns = namespaces.forms
 
     field = Attribute("Field name", required=True, default=None)
+
+    class Meta:
+        is_call = True
 
     class Help:
         synopsis = "adapt a field in a form"
