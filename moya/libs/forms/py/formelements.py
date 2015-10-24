@@ -1491,9 +1491,6 @@ class AdaptField(LogicElement):
 
     field = Attribute("Field name", required=True, default=None)
 
-    class Meta:
-        is_call = True
-
     class Help:
         synopsis = "adapt a field in a form"
 
