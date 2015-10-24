@@ -164,7 +164,7 @@ class MoyaMarkup(MarkupBase):
 
         def write_error(el, msg, exc=None):
             if exc is not None and context['.debug']:
-                c = Console(text=True)
+                c = Console(text=True, width=120)
                 c.obj(context, exc)
                 _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(c.get_text()))
             else:
@@ -192,6 +192,7 @@ class MoyaMarkup(MarkupBase):
             # Get data params
             params = {k.split('-', 1)[-1]: v for k, v in el.attrib.items()
                       if k.startswith('data-')}
+            params.update(options)
 
             app = app or context.get('.app', None)
 
