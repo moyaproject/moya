@@ -148,6 +148,8 @@ class no_default(object):
 
 class MoyaDBColumn(object):
     """Contains information used to create an sqlalchemy column, and its associated abstraction"""
+    allow_extend = True
+
     def __init__(self,
                  type,
                  name,
@@ -187,7 +189,7 @@ class MoyaDBColumn(object):
     def dbname(self):
         return self.get_dbname()
 
-    def get_sa_columns(self):
+    def get_sa_columns(self, model):
         kwargs = dict(primary_key=self.primary,
                       nullable=self.null,
                       index=self.index,
@@ -214,12 +216,14 @@ class MoyaDBColumn(object):
 class PKColumn(MoyaDBColumn):
     """Primary key column"""
     dbtype = Integer
+    allow_extend = False
 
     def adapt(self, value):
         return int(value)
 
-    def get_sa_columns(self):
-        sequence_name = "%s_id_seq" % self.name
+    def get_sa_columns(self, model):
+        #sequence_name = "{}_{}_id_seq".format(model.name, self.name)
+        sequence_name = "{}_id_seq".format(self.name)
         kwargs = dict(primary_key=self.primary,
                       nullable=self.null)
         if self.default is not no_default:
@@ -228,7 +232,6 @@ class PKColumn(MoyaDBColumn):
                      self.get_sa_type(),
                      Sequence(sequence_name),
                      **kwargs)
-
 
 class ForeignKeyColumn(MoyaDBColumn):
 
@@ -279,7 +282,7 @@ class ForeignKeyColumn(MoyaDBColumn):
     def get_dbname(self):
         return self.name + '_id'
 
-    def get_sa_columns(self):
+    def get_sa_columns(self, model):
         kwargs = dict(primary_key=self.primary,
                       nullable=self.null,
                       index=self.index,
@@ -469,4 +472,3 @@ class StringMapColumn(MoyaDBColumn):
 
 class GenericKeyColumn(MoyaDBColumn):
     dbtype = GenericKeyObject
-

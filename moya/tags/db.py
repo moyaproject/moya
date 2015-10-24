@@ -329,7 +329,7 @@ class MoyaDB(object):
         columns = [col(app, model) if callable(col) else col for col in columns]
         self.moya_columns = columns
         self.moya_columns_map = dict((col.name, col) for col in columns)
-        sa_columns = sum((list(col.get_sa_columns())
+        sa_columns = sum((list(col.get_sa_columns(model))
                          for col in columns),
                          [])
         self.sa_columns = dict((col.name, col) for col in sa_columns)
@@ -617,6 +617,7 @@ class DBModel(DBElement):
             model = extend_model
 
         definitions = []
+        names = set()
         for app, model in reversed(extends_chain):
             definition = ExtendedDefinition(model.columns,
                                             model.properties,
@@ -651,12 +652,16 @@ class DBModel(DBElement):
 
         definitions = self._get_extended_definition(app)
 
+        names = set()
         for definition_app, ext in definitions:
-            app_columns += [(definition_app, col(app, self) if callable(col) else col)
+            columns = [(definition_app, col(app, self) if callable(col) else col)
                             for col in ext.columns]
+            columns = [(_, c) for _, c in columns if c.name not in names]
+            names.update(c.name for _, c in columns)
+            app_columns.extend(columns)
 
         columns = [col for _, col in app_columns]
-        sa_columns = sum((list(col.get_sa_columns())
+        sa_columns = sum((list(col.get_sa_columns(self))
                           for col in columns), [])
 
         for definition_app, ext in definitions:
@@ -1613,7 +1618,7 @@ class GetOrCreate(DBDataSetter):
         if value is None:
             created = True
             obj = params.initial or {}
-            fields = {k: dbobject(v) for k, v in obj.items()}
+            fields = {k: dbobject(v) for k, v in obj.items() if k != 'id'}
             fields.update({k: dbobject(v) for k, v in let_map.items()})
 
             value = table_class(**fields)
