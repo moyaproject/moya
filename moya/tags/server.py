@@ -728,6 +728,7 @@ class Server(LogicElement):
         finally:
             for thread in context.get('._threads', []):
                 thread.wait()
+            context.safe_delete('._threads')
 
         root['_urltrace'] = []
 

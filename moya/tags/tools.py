@@ -39,9 +39,9 @@ class Timer(LogicElement):
             taken_clock = clock() - start_clock
             taken = time() - start
             if ms:
-                result = ("{}: {:.2f}ms {:.2f}ms".format(msg, taken * 1000, taken_clock * 1000))
+                result = ("{}: clock {:.2f}ms; cpu {:.2f}ms".format(msg, taken * 1000, taken_clock * 1000))
             else:
-                result = ("{}: {:.2f}s {:.2f}s".format(msg, taken, taken_clock))
+                result = ("{}: clock {:.2f}s; cpu {:.2f}s".format(msg, taken, taken_clock))
             if to_console:
                 context['.console'].text(result)
             else:

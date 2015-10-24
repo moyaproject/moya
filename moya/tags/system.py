@@ -149,6 +149,7 @@ class WaitOnThreads(LogicElement):
     def logic(self, context):
         for thread in context.get('._threads', []):
             thread.wait()
+        context.safe_delete('._threads')
 
 
 class SystemCall(DataSetter):

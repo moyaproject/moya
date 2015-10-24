@@ -4,22 +4,6 @@
       xmlns:fs="http://moyaproject.com/fs"
       xmlns:tn="http://moyaproject.com/thumbnail">
 
-
-    <!--
-    <command libname="cmd.test" synopsis="test images">
-        <timer msg="image process" ms="yes">
-            <image:read fs="static" path="images/moya.jpg"/>
-            <image:crop box="[0,0,50,50]" />
-            <image:resize-canvas width="300" height="200" color="#00ff00" />
-            <image:square />
-            <image:write fs="static" filename="thumb.jpg" let:quality="90"/>
-        </timer>
-        <echo obj="image"/>
-        <echo>${image}</echo>
-
-    </command>
--->
-
     <command libname="cmd.generate" synopsis="Generate thumbnails for images">
         <doc>
             Generate thumbnails for all images in a filesystem.
@@ -44,21 +28,23 @@
         <fs:walk fs="uploads" dst="files"
             dirs="name != thumb_dir"
             files="lower:ext:name in types" />
+        <let count="len:files" />
         <for src="thumbnails" dst="thumbnail">
             <echo style="bold blue">Writing thumbnails for ${thumbnail}</echo>
-            <progress src="files" dst="path" msg="generating ${basename:path}">
-                <tn:generate thumbnails="${thumbnail}" path="path" overwrite="args.overwrite"/>
-                <catch exception="moya.image.*" dst="error">
-                    <append src="failed" value="[path, error.msg]"/>
-                </catch>
-            </progress>
+            <timer console="yes">
+                <progress src="list:enumerate:files" dst="i,path" msg="generating ${basename:path}">
+                    <progress-msg>${i+1} of ${count}</progress-msg>
+                    <tn:generate thumbnails="${thumbnail}" path="path" overwrite="args.overwrite"/>
+                    <catch exception="image.*,moya.thumbnail.*" dst="error">
+                        <append src="failed" value="[path, error.msg]"/>
+                    </catch>
+                </progress>
+            </timer>
         </for>
         <if test="failed">
-            <echo>Failed to read the following files:</echo>
+            <echo>Failed to process the following files:</echo>
             <echo table="failed" header="path,error" />
         </if>
-
     </command>
-
 
 </moya>
