@@ -324,6 +324,8 @@ To list all available commands for a given application, omit the libname:
                                        context,
                                        app,
                                        args=vars(args))
+                for thread in context.get('._threads', []):
+                    thread.wait()
                 db.commit_sessions(context)
 
         # except LogicError, logic_error:

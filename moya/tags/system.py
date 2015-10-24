@@ -13,7 +13,7 @@ log = logging.getLogger('moya.runtime')
 from ..context import Context
 from ..compat import iteritems
 from ..elements.elementbase import Attribute
-from ..tags.context import DataSetter
+from ..tags.context import DataSetter, LogicElement
 from ..import db
 from ..__init__ import pilot
 
@@ -35,10 +35,14 @@ class MoyaThread(Thread):
         return "<thread {} '{}'>".format(self.libid, self.name)
 
     def run(self):
+        archive = self.element.archive
         with pilot.manage(self.context):
             try:
                 try:
-                    self._result = self.element.archive.call(self.element.libid, self.context, self.app, **self.data)
+                    self._result = archive.call_params(self.element.libid,
+                                                       self.context,
+                                                       self.app,
+                                                       self.data)
                 except Exception as e:
                     self.context['.console'].obj(self.context, e)
                     self._error = e
@@ -46,6 +50,9 @@ class MoyaThread(Thread):
                 dbsessions = self.context['._dbsessions']
                 if dbsessions:
                     db.commit_sessions(self.context)
+
+    def wait(self):
+        self.join(self.join_timeout)
 
     def __moyacontext__(self, context):
 
@@ -96,6 +103,7 @@ class ThreadElement(DataSetter):
     name = Attribute("Name of thread", required=False, default=None)
     scope = Attribute("Use the current scope?", type="boolean", default=False)
     timeout = Attribute("Maximum time to wait for thread to complete", type="timespan", default=None)
+    join = Attribute("Join threads before end of request?", type="boolean", default=False)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -121,8 +129,26 @@ class ThreadElement(DataSetter):
                                  thread_context,
                                  data=data,
                                  join_timeout=params.timeout)
+        if params.join:
+            context.set_new_call('._threads', list).append(moya_thread)
         moya_thread.start()
         self.set_context(context, params.dst, moya_thread)
+
+
+class WaitOnThreads(LogicElement):
+    """
+    Wait for threads to complete.
+
+    This tag will will for all [tag]tread[/tag] tags with [c]join[/c] set to [c]yes[/c] to complete.
+
+    """
+
+    class Help:
+        synopsis = "wait threads to complete"
+
+    def logic(self, context):
+        for thread in context.get('._threads', []):
+            thread.wait()
 
 
 class SystemCall(DataSetter):

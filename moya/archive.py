@@ -1115,6 +1115,10 @@ class Archive(object):
         _callable = self.get_callable(element_ref, app=app)
         return _callable(context, *args, **kwargs)
 
+    def call_params(self, element_ref, context, app, params):
+        _callable = self.get_callable(element_ref, app=app)
+        return _callable(context, **params)
+
     def debug_call(self, element_ref, context, app, *args, **kwargs):
         _callable = self.get_callable(element_ref, app=app, breakpoint=True)
         return _callable(context, *args, **kwargs)

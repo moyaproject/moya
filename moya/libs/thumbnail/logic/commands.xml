@@ -32,7 +32,7 @@
 
         <if test="not thumbnails">
             <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
-            <echo style="white">One or more of the following thumbnail tags is required:</echo>
+            <echo>One or more of the following thumbnail tags is required:</echo>
             <for src="thumbnail_elements" dst="te">
                 <echo>  ${te.element_ref}</echo>
             </for>
@@ -62,4 +62,3 @@
 
 
 </moya>
-

@@ -725,6 +725,10 @@ class Server(LogicElement):
             db.rollback_sessions(context)
             return self.handle_error(archive, context, request, e, sys.exc_info())
 
+        finally:
+            for thread in context.get('._threads', []):
+                thread.wait()
+
         root['_urltrace'] = []
 
         # Append slash and redirect if url doesn't end in a slash
