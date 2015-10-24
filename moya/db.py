@@ -194,6 +194,7 @@ def commit_sessions(context):
     for dbsession in context['._dbsessions'].values():
         if dbsession.session:
             try:
+                # db_log.debug('committing %s', dbsession)
                 dbsession.session.commit()
             except:
                 db_log.exception('error committing session')
@@ -207,6 +208,7 @@ def rollback_sessions(context):
     for dbsession in context['._dbsessions'].values():
         if dbsession.session:
             try:
+                # db_log.debug('rolling back %s', dbsession)
                 dbsession.session.rollback()
             except:
                 db_log.exception('error rolling back session')
