@@ -795,6 +795,9 @@ class _ForeignKey(DBElement):
                     qs = qs.filter(getattr(self.table_class, name + '_id') == getattr(self._instance, "id"))
                     return qs
 
+                def _get_query_set(self):
+                    # Not a query set, but a list of id works
+                    return [getattr(i, 'id') for i in self if hasattr(i, 'id')]
 
                 # def __moyadbsubselect__(self, context):
                 #     dbsession = dbobj.get_session(context, model.dbname)
