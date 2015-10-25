@@ -533,6 +533,7 @@ class EscapeNode(Node):
 
 
 class _EscapeCodeWrap(Node):
+    """Shim to escape all html from a node"""
     def __init__(self, node):
         self._node = node
 
@@ -541,7 +542,7 @@ class _EscapeCodeWrap(Node):
 
     def render(self, environment, context, template, text_escape):
         for c in self._node.render(environment, context, template, text_escape):
-            yield text_escape(c)
+            yield escape(c)
 
 
 class CodeNode(Node):
@@ -549,7 +550,8 @@ class CodeNode(Node):
     tag_name = "code"
 
     def render(self, environment, context, template, text_escape):
-        yield iter(child if isinstance(child, text_type) else _EscapeCodeWrap(child) for child in self.children)
+        yield iter(child if isinstance(child, text_type) else _EscapeCodeWrap(child)
+                   for child in self.children)
 
 
 class RootNode(Node):
