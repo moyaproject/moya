@@ -298,12 +298,16 @@ class TagParser(object):
         return self.text.strip()
 
 
+@implements_to_string
 class NodeRenderError(Exception):
     def __init__(self, node, msg, original=None, diagnosis=None):
         self.node = node
         self.msg = msg
         self.original = original
         self.diagnosis = diagnosis
+
+    def __str__(self):
+        return self.msg
 
 
 class NodeType(object):
