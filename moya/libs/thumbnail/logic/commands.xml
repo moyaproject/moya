@@ -11,8 +11,14 @@
         <signature>
             <arg name="thumbnails" help="Thumbail tag to process" metavar="ELEMENT" nargs="*"/>
             <option name="overwrite" help="overwrite existing thumbnails" action="store_true" />
+            <option name="all" help="process all thumbnails" action="store_true" />
         </signature>
         <let thumb_dir=".app.settings.thumb_dir" thumbnails="args.thumbnails"/>
+
+        <if test="args.all">
+            <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
+            <let thumbnails="collect:[thumbnail_elements, 'element_ref']"/>
+        </if>
 
         <if test="not thumbnails">
             <find-elements tag="thumbnails" ns="http://moyaproject.com/thumbnail" from="${.app.name}" dst="thumbnail_elements"/>
