@@ -6,7 +6,7 @@ from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
 
-from fs.path import basename, pathjoin
+from fs.path import basename, pathjoin, splitext
 
 from PIL import Image, ImageFilter
 try:
@@ -165,7 +165,7 @@ class Write(LogicElement):
     image = Attribute("Image to write", type="expression", default="image", evaldefault=True, missing=False)
     dirpath = Attribute("Directory to write image", required=False, default="/")
     filename = Attribute("Image filename", required=True)
-    fsobj = Attribute("FS", type="Index")
+    fsobj = Attribute("FS", type="expression")
     fs = Attribute("FS name")
     format = Attribute("Image format", default=None, choices=['jpeg', 'png', 'gif'])
 
@@ -184,12 +184,17 @@ class Write(LogicElement):
         path = pathjoin(params.dirpath, params.filename)
 
         img = params.image._img
+        img_format = params.format or splitext(params.filename or '')[-1].lstrip('.') or 'jpeg'
+
+        if img_format == 'jpeg':
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
 
         save_params = self.get_let_map(context)
         try:
             with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
                 with dir_fs.open(params.filename, 'wb') as f:
-                    img.save(f, params.format, **save_params)
+                    img.save(f, img_format, **save_params)
         except Exception as e:
             self.throw('image.write-fail', "Failed to write {} to '{}' in {} ({})".format(params.image, path, fs, e))
 
