@@ -948,9 +948,12 @@ class ElementBaseType(object):
     def __moyaconsole__(self, console):
         console.xml(text_type(self))
 
-    def throw(self, exc_type, msg, diagnosis=None, **info):
+    def throw(self, exc_type, msg, info=None, diagnosis=None, **kwargs):
         """Throw a Moya exception"""
         from moya.logic import MoyaException
+        if info is None:
+            info = {}
+        info.update(kwargs)
         raise MoyaException(exc_type, msg, diagnosis=diagnosis, info=info)
 
     def get_closure(self, context, element=None, extra=None):

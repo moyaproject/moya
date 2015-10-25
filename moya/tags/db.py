@@ -55,6 +55,13 @@ ExtendedDefinition = namedtuple('ExtendedDefinition', ['columns',
                                                        'constraints'])
 
 
+class AdaptValueError(ValueError):
+    def __init__(self, msg, k, v):
+        super(AdaptValueError, self).__init__(msg)
+        self.k = k
+        self.v = v
+
+
 @implements_to_string
 class DBValidationError(Exception):
 
@@ -207,7 +214,10 @@ class TableClassBase(object):
         adapt = moyadb.adapt
         #args = moyadb.defaults.copy()
         for k, v in iteritems(kwargs):
-            setattr(self, k, adapt(k, v))
+            try:
+                setattr(self, k, adapt(k, v))
+            except Exception as e:
+                raise AdaptValueError("unable to adapt field '{}' to {}".format(k, v), k, v)
         for k, v in moyadb.defaults.items():
             if k not in kwargs:
                 setattr(self, k, v() if callable(v) else v)
@@ -1544,7 +1554,18 @@ class Create(DBDataSetter):
         with context.data_scope(fields):
             yield DeferNodeContents(self)
 
-        value = table_class(**fields)
+        try:
+            value = table_class(**fields)
+        except AdaptValueError as e:
+            self.throw('db.create-fail',
+                        "unable to set field '{}' to {}".format(e.k, context.to_expr(e.v)),
+                        fields,
+                        diagnosis="Check the field supports the data type you are setting")
+        except Exception as e:
+            self.throw('db.create-fail',
+                        "unable to create a new {} object ({})".format(model, e),
+                        fields,
+                        diagnosis="Check the field supports the data type you are setting")
 
         if params.dst is not None:
             self.set_context(context, params.dst, value)
@@ -1574,13 +1595,20 @@ class Create(DBDataSetter):
 
 
 class GetOrCreate(DBDataSetter):
-    """Get an object from the db if it exists, create it if it doesn't"""
+    """
+    Get an object from the db if it exists, create it if it doesn't.
+
+    If the object is create, the code in the enclosed block is executed.
+
+    """
 
     class Help:
-        synopsis = """Get an object from the database, or create it if it doesn't exist."""
+        synopsis = """get an object from the database, or create it if it doesn't exist."""
         example = """
             <db:get-or-create model="#Permission" let:name="'admin'"
-                let:description="'User may perform administration tasks'" />
+                let:description="'User may perform administration tasks'">
+                <echo>New permission was created.
+            </db:get-or-create>
         """
 
     model = Attribute("Model element reference", type="text", required=True)
@@ -1629,6 +1657,7 @@ class GetOrCreate(DBDataSetter):
             fields.update({k: dbobject(v) for k, v in let_map.items()})
 
             value = table_class(**fields)
+
             signal_params = {'object': value,
                              'model': model.libid,
                              'app': app}
@@ -1656,6 +1685,9 @@ class GetOrCreate(DBDataSetter):
         dst = self.set_context(context, dst, value)
         if params.created:
             context[params.created] = created
+
+        if created:
+            yield logic.DeferNodeContents(self)
 
 
 # TODO: is this used?

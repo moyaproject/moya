@@ -1117,14 +1117,14 @@ class Console(object):
                     return self
 
             if isinstance(obj, string_types):
-                self.text(context.to_expr(obj), **kwargs)
+                self.text(context.to_expr(obj, max_size=1000), **kwargs)
             elif isinstance(obj, dict):
                 table = []
                 for k, v in obj.items():
-                    table.append([k, context.to_expr(v)])
+                    table.append([k, context.to_expr(v, max_size=1000)])
                 self.table(table, header_row=["key", "value"])
             elif isinstance(obj, (list, tuple)):
-                table = [(i, context.to_expr(v)) for i, v in enumerate(obj)]
+                table = [(i, context.to_expr(v, max_size=1000)) for i, v in enumerate(obj)]
                 self.table(table, header_row=["index", "value"])
             elif isinstance(obj, bool):
                 if obj:
@@ -1132,7 +1132,7 @@ class Console(object):
                 else:
                     self.text("False", bold=True, fg="red")
             else:
-                self.text(context.to_expr(obj), **kwargs)
+                self.text(context.to_expr(obj, max_size=1000), **kwargs)
             return self
 
     def show_cursor(self, show=True):
