@@ -773,6 +773,8 @@ class _ForeignKey(DBElement):
     backref = Attribute("Back reference", required=False, default=None)
     picker = Attribute("Picker table for admin view", required=False)
 
+    cascade = Attribute("Cascade behaviour of backref", type="text", default=None)
+
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
         self.name = name = params.name
@@ -840,6 +842,7 @@ class _ForeignKey(DBElement):
                                              orderby=params.orderby,
                                              backref=params.backref,
                                              picker=params.picker,
+                                             cascade=params.cascade,
                                              uselist=True,
                                              backref_collection=get_backref_collection(app, model, name))
             ref_model.element.add_reference(model.libid)
@@ -1536,6 +1539,7 @@ class Create(DBDataSetter):
         obj = params.obj or {}
         fields = {k: dbobject(v) for k, v in obj.items()}
         fields.update({k: dbobject(v) for k, v in self.get_let_map(context, check_missing=True).items()})
+        fields.pop('id', None)
 
         with context.data_scope(fields):
             yield DeferNodeContents(self)

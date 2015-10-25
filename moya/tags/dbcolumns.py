@@ -249,6 +249,7 @@ class ForeignKeyColumn(MoyaDBColumn):
                  index=False,
                  unique=False,
                  ondelete="CASCADE",
+                 cascade=None,
                  orderby=None,
                  options=None,
                  backref=None,
@@ -272,6 +273,7 @@ class ForeignKeyColumn(MoyaDBColumn):
         self.index = index
         self.unique = unique
         self.ondelete = "CASCADE"
+        self.cascade = cascade
         self.orderby = orderby
         self.options = options
         self.backref = backref
@@ -309,6 +311,7 @@ class ForeignKeyColumn(MoyaDBColumn):
                 _backref = backref(self.backref,
                                    uselist=self.uselist,
                                    #lazy="subquery",
+                                   cascade=self.cascade,
                                    collection_class=self.backref_collection)
             else:
                 _backref = None
@@ -325,7 +328,6 @@ class ForeignKeyColumn(MoyaDBColumn):
         ref_model_table_class = self.ref_model.element.get_table_class(self.ref_model.app)
         tc = aliased(ref_model_table_class)
         return tc, (tc, getattr(node, self.name))
-        #return ref_model_table_class, getattr(node, self.name)
 
 
 class BoolColumn(MoyaDBColumn):
