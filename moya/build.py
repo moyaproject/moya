@@ -14,6 +14,7 @@ from . import pilot
 
 from fs.opener import fsopendir
 from fs.osfs import OSFS
+from fs.multifs import MultiFS
 
 from time import time
 from collections import namedtuple
@@ -53,9 +54,7 @@ def build(fs,
 
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
-    if archive is None:
-        archive = Archive(fs, strict=strict, test_build=test_build, develop=develop)
-    context = Context()
+
 
     syspath = fs.getsyspath('/', allow_none=True)
 
@@ -65,29 +64,32 @@ def build(fs,
         os.chdir(syspath)
 
     try:
+        log.debug("reading settings from {}".format(textual_list(settings_path)))
+        cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
+
+        if 'customize' in cfg:
+            customize_location = cfg.get('customize', 'location')
+            if customize_location:
+                settings_path = cfg.get('customize', "settings", 'settings.ini')
+                startup_log.info("customizing '%s'", customize_location)
+                customize_fs = fsopendir(cfg.get('customize', 'location'))
+
+                cfg = SettingsContainer.read(customize_fs, settings_path, master=cfg)
+
+                overlay_fs = MultiFS()
+                overlay_fs.addfs('project', fs)
+                overlay_fs.addfs('custom', customize_fs, write=True)
+                fs = overlay_fs
+
+        if archive is None:
+            archive = Archive(fs, strict=strict, test_build=test_build, develop=develop)
+        context = Context()
+        archive.cfg = cfg
+
         root = context.root
         root['libs'] = archive.libs
         root['apps'] = archive.apps
         root['fs'] = FSWrapper(fs)
-
-        log.debug("reading settings from {}".format(textual_list(settings_path)))
-        cfg = archive.cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
-
-        # if 'customize' in cfg:
-        #     customize_location = cfg.get('customize', 'location')
-        #     if customize_location:
-        #         settings_path = cfg.get('customize', "settings", 'settings.ini')
-        #         startup_log.info("customizing '%s'", customize_location)
-        #         customize_fs = fsopendir(cfg.get('customize', 'location'))
-        #         build_result = build(customize_fs,
-        #                              settings_path=settings_path,
-        #                              rebuild=rebuild,
-        #                              archive=None,
-        #                              strict=strict,
-        #                              master_settings=master_settings,
-        #                              test_build=test_build,
-        #                              develop=develop)
-        #         return build_result
 
         root['settings'] = SettingsContainer.from_dict(archive.cfg['settings'])
         startup_path = archive.cfg.get('project', 'startup')

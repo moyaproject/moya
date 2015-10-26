@@ -228,6 +228,8 @@ class FS(SubCommand):
                 copydir(src_fs, dst_fs)
             else:
                 with fs.open(src, 'rb') as read_f:
+                    if os.path.isdir(dst):
+                        dst = os.path.join(dst, os.path.basename(src))
                     with open(dst, 'wb') as write_f:
                         while 1:
                             chunk = read_f.read(16384)

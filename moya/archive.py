@@ -529,7 +529,7 @@ class Archive(object):
                 try:
                     template_priority = int(lib.templates_info.get('priority', '0'))
                 except ValueError:
-                    startup_log.error("{} Invalid value for [templates]/priority, assuming 0".format(lib))
+                    startup_log.error("{} invalid value for [templates]/priority, assuming 0".format(lib))
                     template_priority = 0
             lib.template_priority = template_priority
             if '://' in fs_url:
@@ -727,7 +727,8 @@ class Archive(object):
         except FSError as e:
             raise errors.StartupFailedError("unable to open filesystem '{name}' ({e})".format(name=name, e=text_type(e)))
         self.filesystems[name] = add_fs
-        startup_log.debug("%s fs added as '%s'", add_fs, name)
+        #startup_log.debug("%s fs added as '%s'", add_fs, name)
+        startup_log.debug("<%s '%s'> filesystem added", type(add_fs).__name__.lower(), name)
         return fs
 
     def get_filesystem(self, name):
@@ -787,7 +788,7 @@ class Archive(object):
         templates_fs = self.filesystems.get("templates")
         fs = self.open_fs(location)
         templates_fs.addfs(name, fs, priority=priority)
-        startup_log.debug("%s added to templates filesystem, priority %s", fs, priority)
+        startup_log.debug("added templates filesystem, priority %s", priority)
 
     def get_template_engine(self, engine="moya"):
         return self.template_engines[engine]
@@ -836,9 +837,9 @@ class Archive(object):
                 name = None
 
             if what in require_name and not name:
-                raise errors.StartupFailedError('Name/text required in project settings [{section}:]'.format(section=what))
+                raise errors.StartupFailedError('name required in section, [{section}:?]'.format(section=what))
 
-            if what in ('project', 'debug', 'autoreload', 'console', ''):
+            if what in ('project', 'debug', 'autoreload', 'console', 'customize', ''):
                 continue
 
             if what == "settings":
@@ -930,7 +931,7 @@ class Archive(object):
                 startup_log.debug("added theme filesystem '%s'", location)
 
             else:
-                startup_log.warn("unknown settings section: [%s]", section_name)
+                startup_log.warn("unknown settings section, [%s]", section_name)
 
         self.init_template_engine('moya', {})
 
