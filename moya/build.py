@@ -71,7 +71,24 @@ def build(fs,
         root['fs'] = FSWrapper(fs)
 
         log.debug("reading settings from {}".format(textual_list(settings_path)))
-        archive.cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
+        cfg = archive.cfg = SettingsContainer.read(fs, settings_path, master=master_settings)
+
+        # if 'customize' in cfg:
+        #     customize_location = cfg.get('customize', 'location')
+        #     if customize_location:
+        #         settings_path = cfg.get('customize', "settings", 'settings.ini')
+        #         startup_log.info("customizing '%s'", customize_location)
+        #         customize_fs = fsopendir(cfg.get('customize', 'location'))
+        #         build_result = build(customize_fs,
+        #                              settings_path=settings_path,
+        #                              rebuild=rebuild,
+        #                              archive=None,
+        #                              strict=strict,
+        #                              master_settings=master_settings,
+        #                              test_build=test_build,
+        #                              develop=develop)
+        #         return build_result
+
         root['settings'] = SettingsContainer.from_dict(archive.cfg['settings'])
         startup_path = archive.cfg.get('project', 'startup')
         docs_location = archive.cfg.get('project', 'location')
@@ -89,7 +106,7 @@ def build(fs,
 
         archive.build(doc, fs=fs)
 
-        return archive, context, doc
+        return fs, archive, context, doc
 
     finally:
         os.chdir(cwd)
@@ -190,14 +207,18 @@ def build_server(fs,
     start = time()
     archive = Archive()
     console = archive.console
+    project_fs = None
     try:
-        archive, context, doc = build(fs,
-                                      settings_path,
-                                      rebuild=rebuild,
-                                      strict=strict,
-                                      master_settings=master_settings,
-                                      test_build=test_build,
-                                      develop=develop)
+        (project_fs,
+         archive,
+         context,
+         doc) = build(fs,
+                      settings_path,
+                      rebuild=rebuild,
+                      strict=strict,
+                      master_settings=master_settings,
+                      test_build=test_build,
+                      develop=develop)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:
@@ -219,12 +240,13 @@ def build_server(fs,
                                    col)
         raise errors.StartupFailedError('Failed to build project')
 
-    if isinstance(fs, string_types):
-        if '://' in fs:
-            fs = fsopendir(fs)
-        else:
-            fs = OSFS(fs)
-    archive.project_fs = fs
+    if project_fs is None:
+        if isinstance(fs, string_types):
+            if '://' in fs:
+                fs = fsopendir(fs)
+            else:
+                fs = OSFS(fs)
+    archive.project_fs = project_fs
 
     try:
         app, server = doc.get_element(server_element)
@@ -234,7 +256,7 @@ def build_server(fs,
     docs_location = archive.cfg.get('project', 'location')
     try:
         with pilot.manage_request(None, context):
-            server.startup(archive, context, fs.opendir(docs_location), breakpoint=breakpoint)
+            server.startup(archive, context, project_fs.opendir(docs_location), breakpoint=breakpoint)
     except errors.StartupFailedError as error:
         error_msg = text_type(error)
         #raise

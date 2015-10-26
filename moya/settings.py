@@ -144,13 +144,13 @@ class SettingsContainer(OrderedDict):
     def get(self, section_name, key, default=Ellipsis):
         if section_name not in self:
             if default is Ellipsis:
-                raise SettingsKeyError("Required section '%s' not found in settings" % section_name)
+                raise SettingsKeyError("required section [%s] not found in settings" % section_name)
             else:
                 return default
         section = self[section_name]
         if key not in section:
             if default is Ellipsis:
-                raise SettingsKeyError("Key '%s' not found in section '%s'" % (key, section_name))
+                raise SettingsKeyError("key '%s' not found in section [%s]" % (key, section_name))
             else:
                 return default
         return section[key]
@@ -175,7 +175,7 @@ class SettingsContainer(OrderedDict):
         try:
             value = int(value_text)
         except:
-            raise SettingsKeyError("Key [{}]/{} should be empty or a value integer (not '{}')".format(section_name, key, value_text))
+            raise SettingsKeyError("key [{}]/{} should be empty or a value integer (not '{}')".format(section_name, key, value_text))
         else:
             return value
 
