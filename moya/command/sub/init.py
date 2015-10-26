@@ -27,7 +27,7 @@ class Init(SubCommand):
     def run(self):
         args = self.args
         console = self.console
-        console.text("Initializing site...", fg="magenta")
+        console.text("Initializing site...", bold=True)
 
         application = WSGIApplication(self.location, self.get_settings(), validate_db=True, disable_autoreload=True)
         archive = application.archive
