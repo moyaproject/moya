@@ -212,6 +212,8 @@ def qs(value):
         value = value.__moyadbobject__()
     if hasattr(value, '_get_query_set'):
         value = value._get_query_set()
+    if isinstance(value, list):
+        return [getattr(v, 'id', v) for v in value]
     return value
 
 
