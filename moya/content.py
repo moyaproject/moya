@@ -238,7 +238,7 @@ class Content(interface.AttributeExposer):
                                  td,
                                  base_context=context,
                                  app=self.app)
-    
+
         return HTML(rendered)
 
     def print_tree(self):

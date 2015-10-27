@@ -347,14 +347,14 @@ class View(ContextElementBase, ContentElementMixin):
         synopsis = "define a view to handle a URL"
 
     content = Attribute("Content", type="elementref", required=False, default=None)
-    template = Attribute("Template", type="template", required=False, default=None)
+    template = Attribute("Template", type="templates", required=False, default=None)
     requires = Attribute("Permission expression", type="expression", required=False, default=None)
     withscope = Attribute("Use scope as template / content data?", type="boolean", required=False, default=True)
 
     @wrap_element_error
     def run(self, context):
         (content,
-         template,
+         templates,
          requires,
          withscope) = self.get_parameters(context,
                                           "content",
@@ -378,7 +378,7 @@ class View(ContextElementBase, ContentElementMixin):
 
         if scope is not None and not isinstance(scope, Content):
             app = self.get_app(context)
-            template = self.resolve_template(app, template)
+            template = self.resolve_templates(app, templates)
             if content is not None:
                 #self.get_element(content)
                 if not hasattr(scope, 'items'):

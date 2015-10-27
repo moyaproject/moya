@@ -427,12 +427,25 @@ class Namespace(AttributeType):
     name = "namespace"
 
 
+class Templates(AttributeType):
+    type_display = "list of template paths"
+    name = "templates"
+
+    def __call__(self, context):
+        sub = context.sub
+        text = self.text
+        if ',' in text:
+            return [sub(t.strip()) for t in text.split(',')]
+        else:
+            return [text.strip()]
+
+
 class Template(AttributeType):
     type_display = "template path"
     name = "template"
 
     def __call__(self, context):
-        text = context.sub(self.text)
+        text = context.sub(self.text).strip()
         return text
 
 

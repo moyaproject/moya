@@ -156,14 +156,14 @@ STRING_ENCODE = {
     '\t': '\\t',
     '\v': '\\v',
     "'": "\\'",
-    #'"': '\\"',
+    '"': '\\"',
     '\\': '\\\\'
 }
 
 STRING_DECODE = {v: k for k, v in STRING_ENCODE.items()}
 
 _encode_string = ('|'.join(re.escape(c) for c in STRING_ENCODE.keys()))
-_decode_string = ('|'.join(re.escape(c) for c in STRING_DECODE.keys()))
+_decode_string = ('|'.join(re.escape(c) for c in STRING_DECODE.keys() if c != '"'))
 _re_encode_string = re.compile(_encode_string)
 _re_decode_string = re.compile(_decode_string)
 

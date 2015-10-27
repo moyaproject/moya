@@ -15,7 +15,7 @@ import weakref
 
 
 # Update for backwards incompatible changes, so we don't get old cached templates
-TEMPLATE_VERSION = 7
+TEMPLATE_VERSION = 8
 
 
 class Environment(object):
@@ -52,7 +52,7 @@ class Environment(object):
         if not self.template_fs.exists(template_path):
             raise MissingTemplateError(template_path)
 
-    def get_template(self, template_path):
+    def get_template(self, template_path, parse=True):
         template_path = abspath(normpath(template_path))
         template = self.templates.get(template_path, None)
         if template is not None:
@@ -69,11 +69,12 @@ class Environment(object):
                 template = Template.load(cached_template)
                 self.templates[template_path] = template
                 return template
+
         try:
             source = self.template_fs.getcontents(template_path, 'rt', encoding='utf-8')
         except ResourceNotFoundError:
             raise MissingTemplateError(template_path)
-        except:
+        except Exception as e:
             raise BadTemplateError(template_path)
 
         try:
@@ -86,9 +87,13 @@ class Environment(object):
             lib = self.archive.get_template_lib(template_path)
         #lib = self.archive.get_lib(lib) if lib else None
         template = Template(source, display_path, raw_path=template_path, lib=lib)
+
         template.parse(self)
+
+
         if self.cache.enabled:
             self.cache.set(cache_name, template.dump(self))
+
         self.templates[template_path] = template
         return template
 

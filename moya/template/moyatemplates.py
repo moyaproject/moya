@@ -70,8 +70,6 @@ class MoyaTemplateEngine(TemplateEngine):
 
         if isinstance(paths, Template):
             return self.render_template(paths, data, base_context=base_context, **tdata)
-        if paths is None:
-            paths = []
         if isinstance(paths, string_types):
             paths = [paths]
         if not paths:
@@ -892,11 +890,7 @@ class ExtendsNode(Node):
         else:
             path = pathjoin(base_path, path)
 
-        #try:
-        environment.get_template(path)
-        #except errors.MissingTemplateError as e:
-        #    self.render_error(text_type(e))
-        self.template.extend(path, self, lib)
+        self.template.extend(environment, path, self, lib)
         parser.expect_end()
 
 
@@ -937,10 +931,10 @@ class RenderNode(Node):
         options['unique'] = self.unique
         try:
             yield render_object(render_obj,
-                                 environment.archive,
-                                 context,
-                                 target=target,
-                                 options=options)
+                                environment.archive,
+                                context,
+                                target=target,
+                                options=options)
         except errors.MissingTemplateError as e:
             self.render_error('Missing template: "%s"' % e.path, original=e)
         except errors.TagError as e:
@@ -1776,6 +1770,7 @@ class Template(object):
 
         self.parsed = False
         self.valid = False
+        self.checked_extends = False
         self.root_node = None
         self._extend = TemplateExtend(None, None, None)
         self.blocks = {}
@@ -1822,8 +1817,45 @@ class Template(object):
                 template = environment.get_template(template._extend.path)
         return template.root_node
 
-    def extend(self, path, node, lib):
+    def extend(self, environment, path, node, lib):
         self._extend = TemplateExtend(path, node, lib)
+
+    def check_extend(self, environment):
+        """Check for recursive extends"""
+        if self.checked_extends:
+            return
+        template = self
+        path = self.raw_path
+        visited = set()
+        nodes = []
+        self.checked_extends = True
+
+        while 1:
+            visited.add(path)
+            if template._extend.path is not None:
+                path, node, lib = template._extend
+                template = environment.get_template(path, parse=False)
+                nodes.append(node)
+            else:
+                break
+
+            if path in visited:
+                diagnosis = """A template may not be extended more than once in chain."""
+
+                frames = []
+                for node in reversed(nodes):
+                    frame = TraceFrame(node.template.source,
+                                       node.template.path,
+                                       node.location[0],
+                                       raw_location=node.template.raw_path,
+                                       cols=node.location[1:],
+                                       format='moyatemplate')
+                    frames.append(frame)
+
+                    raise errors.TemplateError("Recursive extends directive detected in '{}'".format(self.raw_path),
+                                               diagnosis=diagnosis,
+                                               trace_frames=frames)
+
 
     def get_extended_data(self, environment):
         extended_data = []
@@ -1957,7 +1989,9 @@ class Template(object):
             environment = Environment.make_default()
         if self.parsed:
             return self.root_node
+
         self.root_node = node = RootNode(self, 'root', '', (0, 0, 0))
+        #self.parsed = True
         node_stack = [node]
 
         tokens = self.tokenize()
@@ -2020,16 +2054,15 @@ class Template(object):
 
         self.parsed = True
 
-        visited = {self.raw_path}
-        template = self
-
-        while template._extend.path:
-            template = environment.get_template(template._extend.path)
-            if template.raw_path in visited:
-                raise errors.RecursiveExtends("Recursive extends directive detected (in '{}')".format(template.raw_path),
-                                              node=self.extend_node,
-                                              *self.extend_node.location)
-            visited.add(template.raw_path)
+        # visited = {self.raw_path}
+        # template = self
+        # while template._extend.path:
+        #     template = environment.get_template(template._extend.path)
+        #     if template.raw_path in visited:
+        #         raise errors.RecursiveExtends("Recursive extends directive detected (in '{}')".format(template.raw_path),
+        #                                       self._extend.node,
+        #                                       *self._extend.node.location)
+        #     visited.add(template.raw_path)
 
         self.valid = True
         return self.root_node
@@ -2190,13 +2223,14 @@ class Template(object):
                                format='moyatemplate')
             frames.append(frame)
         else:
-            frame = TraceFrame(recent_node.template.source,
-                               recent_node.template.path,
-                               recent_node.location[0],
-                               raw_location=relativefrom(base, recent_node.template.raw_path),
-                               cols=recent_node.location[1:],
-                               format='moyatemplate')
-            frames.append(frame)
+            if recent_node:
+                frame = TraceFrame(recent_node.template.source,
+                                   recent_node.template.path,
+                                   recent_node.location[0],
+                                   raw_location=relativefrom(base, recent_node.template.raw_path),
+                                   cols=recent_node.location[1:],
+                                   format='moyatemplate')
+                frames.append(frame)
 
         if hasattr(exc, 'get_moya_frames'):
             frames.extend(exc.get_moya_frames())
@@ -2229,6 +2263,7 @@ class Template(object):
             context = Context()
 
         self.parse(environment)
+        self.check_extend(environment)
 
         root = self.get_root_node(environment)
         with self.frame(context, data=data, app=app) as frame:

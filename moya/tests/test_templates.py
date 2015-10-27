@@ -6,7 +6,6 @@ import time
 from os.path import join
 
 from fs.opener import fsopendir
-from moya.context import Context
 from moya.template.moyatemplates import MoyaTemplateEngine
 from moya.archive import Archive
 from moya.settings import SettingsContainer

@@ -177,7 +177,6 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
         pyframes = pytraceback.extract_tb(tb)
 
-
         for i, f in enumerate(reversed(pyframes)):
             if f[2] == 'logic':
                 pyframes = pyframes[len(pyframes) - i - 1:]

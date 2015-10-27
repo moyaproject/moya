@@ -756,21 +756,21 @@ class Console(object):
         code = code.strip('\n') + '\n'
         self.snippet(code, line_numbers=False)
         return self
-        with self._lock:
-            self.update_terminal_width()
-            if not self.terminal_colors:
-                self(code).nl()
-            else:
-                try:
-                    from pygments import highlight
-                    from pygments.lexers import XmlLexer
-                    from pygments.formatters import TerminalFormatter
-                except ImportError:
-                    self(xml).nl()
-                else:
-                    hcode = highlight(code, XmlLexer(), TerminalFormatter())
-                    self(hcode)
-            return self
+        # with self._lock:
+        #     self.update_terminal_width()
+        #     if not self.terminal_colors:
+        #         self(code).nl()
+        #     else:
+        #         try:
+        #             from pygments import highlight
+        #             from pygments.lexers import XmlLexer
+        #             from pygments.formatters import TerminalFormatter
+        #         except ImportError:
+        #             self(xml).nl()
+        #         else:
+        #             hcode = highlight(code, XmlLexer(), TerminalFormatter())
+        #             self(hcode)
+        #     return self
 
     def document_error(self, msg, path, code, lineno, colno, diagnosis=None):
         with self._lock:

@@ -24,6 +24,7 @@ class MissingTemplateError(Exception):
 
 @implements_to_string
 class BadTemplateError(MissingTemplateError):
+    error_type = "Bad Template Error"
 
     def __str__(self):
         return 'Unable to load template "%s"' % self.path
@@ -68,6 +69,9 @@ class TemplateError(Exception):
 
 @implements_to_string
 class NodeError(Exception):
+    hide_py_traceback = True
+    error_type = "Template Node Error"
+
     def __init__(self, msg, node, lineno, start, end, diagnosis=None):
         self.msg = msg
         self.node = node
@@ -78,10 +82,6 @@ class NodeError(Exception):
 
     def __str__(self):
         return self.msg
-
-class UnmatchedComment(NodeError):
-    """Begin comments don't manage end comments"""
-    pass
 
 
 class UnknownTag(NodeError):

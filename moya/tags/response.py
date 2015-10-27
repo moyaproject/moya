@@ -213,22 +213,7 @@ class AdminOnly(LogicElement):
             raise logic.EndLogic(http.RespondForbidden())
 
 
-class RedirectTo(LogicElement):
-    """Redirect to new location."""
-
-    class Help:
-        synopsis = "redirect to a new location"
-        example = """
-    <redirect-to url="http://www.moyaproject.com" />
-    <redirect-to path="../newuser?result=success" />
-    """
-
-    url = Attribute("Destination URL", metavar="URL", required=False, default=None)
-    path = Attribute("New path portion of the url, may be relative", metavar="PATH", required=False)
-    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="httpstatus")
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
-    fragment = Attribute("Fragment component in url")
-
+class RedirectToBase(object):
     def logic(self, context):
         (url,
          path,
@@ -265,6 +250,23 @@ class RedirectTo(LogicElement):
             location = "{}#{}".format(location, fragment)
         self.new_location(context, location)
 
+
+class RedirectTo(RedirectToBase, LogicElement):
+    """Redirect to new location."""
+
+    class Help:
+        synopsis = "redirect to a new location"
+        example = """
+    <redirect-to url="http://www.moyaproject.com" />
+    <redirect-to path="../newuser?result=success" />
+    """
+
+    url = Attribute("Destination URL", metavar="URL", required=False, default=None)
+    path = Attribute("New path portion of the url, may be relative", metavar="PATH", required=False)
+    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="httpstatus")
+    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    fragment = Attribute("Fragment component in url")
+
     def new_location(self, context, location):
         code = self.code(context)
         response = MoyaResponse(status=code)
@@ -272,17 +274,7 @@ class RedirectTo(LogicElement):
         raise logic.EndLogic(response)
 
 
-class Redirect(LogicElement):
-    """Redirect to a mounted URL"""
-
-    class Help:
-        synopsis = "redirect to a named URL"
-
-    name = Attribute("URL name", required="y")
-    _from = Attribute("Application", type="application", default=None)
-    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="integer")
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
-    fragment = Attribute("Fragment component in url")
+class RedirectBase(object):
 
     def logic(self, context):
         (urlname,
@@ -315,6 +307,19 @@ class Redirect(LogicElement):
 
         self.new_location(context, location)
 
+
+class Redirect(RedirectBase, LogicElement):
+    """Redirect to a mounted URL"""
+
+    class Help:
+        synopsis = "redirect to a named URL"
+
+    name = Attribute("URL name", required=True, metavar="URL NAME")
+    _from = Attribute("Application", type="application", default=None)
+    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="integer")
+    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    fragment = Attribute("Fragment component in url")
+
     def new_location(self, context, location):
         code = self.code(context)
         response = MoyaResponse(status=code)
@@ -322,7 +327,7 @@ class Redirect(LogicElement):
         raise logic.EndLogic(response)
 
 
-class Rewrite(Redirect):
+class Rewrite(RedirectBase, LogicElement):
     """
     This tag tells Moya to serve the content from a different named URL.
 
@@ -333,7 +338,10 @@ class Rewrite(Redirect):
     class Help:
         synopsis = "serve response from a different named URL"
 
-    code = None
+    name = Attribute("URL name", required=True, metavar="URL NAME")
+    _from = Attribute("Application", type="application", default=None)
+    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    fragment = Attribute("Fragment component in url")
 
     def new_location(self, context, location):
         url = urlparse(location)
@@ -345,7 +353,7 @@ class Rewrite(Redirect):
         raise logic.EndLogic(ReplaceRequest(new_request))
 
 
-class RewriteTo(RedirectTo):
+class RewriteTo(RedirectToBase, LogicElement):
     """
     This tag tells Moya to serve the content from a different URL.
 
@@ -353,7 +361,10 @@ class RewriteTo(RedirectTo):
 
     """
 
-    code = None
+    url = Attribute("Destination URL", metavar="URL", required=False, default=None)
+    path = Attribute("New path portion of the url, may be relative", metavar="PATH", required=False)
+    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    fragment = Attribute("Fragment component in url")
 
     class Help:
         synopsis = """serve response from a different location"""

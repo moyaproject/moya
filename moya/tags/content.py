@@ -10,7 +10,7 @@ from .. import errors
 from ..html import escape
 from ..console import Console
 from ..content import Content, Section, IncludePath
-from ..tools import url_join, silent_iter
+from ..tools import url_join, silent_iter, textual_list
 from ..context.missing import is_missing
 from ..markup import Markup, get_installed_markups
 from ..template import Template as MoyaTemplate
@@ -47,16 +47,41 @@ class TemplateRenderable(Renderable):
 class ContentElementMixin(object):
 
     def resolve_template(self, app, template, element=None):
+        """Get template path relative to templates filesystem"""
         if element is None:
             element = self
         if template is None:
             return None
-        template = app.resolve_template(template)
-        if not self.archive.get_template_engine().exists(template):
+        template_engine = self.archive.get_template_engine()
+
+        _template = app.resolve_template(template)
+        if not template_engine.exists(_template):
             raise errors.ContentError("missing template '{}'".format(template),
                                       element=element,
                                       diagnosis="You can check what templates are installed with **moya fs templates --tree**.")
-        return template
+        return _template
+
+    def resolve_templates(self, app, templates, element=None):
+        """Get first template path that exists"""
+        if templates is None:
+            return None
+        if element is None:
+            element = self
+
+        template_exists = self.archive.get_template_engine().exists
+        for _template in templates:
+            template = app.resolve_template(_template)
+            if template_exists(template):
+                return template
+
+        if len(templates) == 1:
+            raise errors.ContentError("missing template '{}'".format(template[1]),
+                                      element=element,
+                                      diagnosis="You can check what templates are installed with **moya fs templates --tree**.")
+        else:
+            raise errors.ContentError("missing templates ".format(textual_list(template)),
+                                      element=element,
+                                      diagnosis="You can check what templates are installed with **moya fs templates --tree**.")
 
     def push_content_frame(self, context, content):
         content_stack = context.set_new_call(".contentstack", list)
@@ -89,7 +114,8 @@ class ContentElementMixin(object):
 
         merge_content = []
         for content_app, content_element in element.get_extends_chain(context, app=app):
-            template = self.resolve_template(content_app, content_element.template, content_element) if content_app else content_element.template
+            templates = content_element.templates(context)
+            template = self.resolve_templates(content_app, templates, content_element) if content_app else templates[0]
             content = Content(content_app, template, td=td)
             merge_content.append(content)
 
@@ -171,7 +197,7 @@ class ContentElement(ContextElementBase):
 
         """
 
-    template = Attribute("Template name", type="template", required=False, default=None)
+    template = Attribute("Template name(s)", type="templates", required=False, default=None, map_to="templates")
     extends = Attribute("Extend content element", type="elementref")
     final = Attribute("Stop extending with this content element?", type="boolean", default=False)
 
@@ -215,7 +241,7 @@ class ContentElement(ContextElementBase):
         return chain
 
     def post_build(self, context):
-        self.template = self.template(context)
+        #self.template = self.template(context)
         self.extends = self.extends(context)
         self.final = self.final(context)
 
