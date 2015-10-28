@@ -1856,7 +1856,6 @@ class Template(object):
                                                diagnosis=diagnosis,
                                                trace_frames=frames)
 
-
     def get_extended_data(self, environment):
         extended_data = []
         template = self

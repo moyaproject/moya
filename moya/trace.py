@@ -2,29 +2,22 @@
 
 from __future__ import print_function
 
-from . import syntax
 from .console import Console, Cell
-from .template.errors import (TagError,
-                              TemplateError,
-                              MissingTemplateError)
+from .template.errors import TemplateError
 from .context.expression import ExpressionError
 from .context.errors import SubstitutionError
 from .moyaexceptions import MoyaException
 from .compat import implements_to_string, text_type
 from .traceframe import Frame
 
-from os.path import abspath
-
 import io
 import sys
-import os
 import traceback as pytraceback
 
 
 _PYTHON_ERROR_TEXT = """A Python Exception may indicate either a bug in a Python extension, or Moya itself.
 
 Consider reporting this to the Moya developers."""
-
 
 
 @implements_to_string
@@ -165,11 +158,11 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     if hasattr(exc, 'get_moya_frames'):
         mf = exc.get_moya_frames()
-        traceback.stack[0:0] = mf
-
+        traceback.stack.extend(mf)
 
     if context.get('.develop', False):
         add_pytraceback = True
+
     if add_pytraceback and exc_info and py_traceback:
         traceback.error_type = "Python Exception"
         tb_type, tb_value, tb = exc_info

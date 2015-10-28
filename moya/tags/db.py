@@ -627,7 +627,6 @@ class DBModel(DBElement):
             model = extend_model
 
         definitions = []
-        names = set()
         for app, model in reversed(extends_chain):
             definition = ExtendedDefinition(model.columns,
                                             model.properties,
@@ -665,7 +664,7 @@ class DBModel(DBElement):
         names = set()
         for definition_app, ext in definitions:
             columns = [(definition_app, col(app, self) if callable(col) else col)
-                            for col in ext.columns]
+                       for col in ext.columns]
             columns = [(_, c) for _, c in columns if c.name not in names]
             names.update(c.name for _, c in columns)
             app_columns.extend(columns)
@@ -739,16 +738,31 @@ class Property(DBElement):
     class Help:
         synopsis = "add a property to a database object"
 
+    class Meta:
+        is_call = True
+
     _name = Attribute("Property name", required=True)
-    expression = Attribute("expression using database object", type="function")
+    expression = Attribute("expression using database object", type="function", default=None)
 
     def document_finalize(self, context):
         params = self.get_parameters(context)
         model = self.get_ancestor((self.xmlns, "model"))
-        func = params.expression
+        has_expression = self.has_parameter('expression')
+
+        def make_property_callable(app, model):
+            if has_expression:
+                def expression_property(obj):
+                    return params.expression.call(pilot.context, obj)
+                return expression_property
+            else:
+                def moya_code_property(obj):
+                    _call = self.archive.get_callable_from_element(self, app=app)
+                    result = _call(pilot.context, object=obj)
+                    return result
+                return moya_code_property
 
         def get_property(app, model):
-            return lambda obj: func.call(pilot.context, obj)
+            return make_property_callable(app, model)
 
         model.add_object_property(params.name, get_property)
 

@@ -125,6 +125,7 @@ class CallableElement(ContextElementBase):
         self._document = weakref.ref(self.element.document)
         self.args = []
         self.kwargs = {}
+        self.frame = None
         self._return_value = None
         self._code = None
         self._tag_name = "ExternalCall"
@@ -144,17 +145,20 @@ class CallableElement(ContextElementBase):
     def logic(self, context):
         call = self.push_call(context, {'args': self.args} if self.args else {}, app=self.app)
         call.update(self.kwargs)
-        try:
-            for node in self.element.run(context):
-                yield node
-        finally:
-            call = self.pop_call(context)
-            # try:
-            #     call = self.pop_call(context)
-            # except:
-            #     raise
-            #     # TODO: Why is this required?
-            #     pass
+        if self.frame is None:
+            try:
+                for node in self.element.run(context):
+                    yield node
+            finally:
+                call = self.pop_call(context)
+        else:
+            with context.data_frame(self.frame):
+                try:
+                    for node in self.element.run(context):
+                        yield node
+                finally:
+                    call = self.pop_call(context)
+
 
         if self._return_value is None:
             self._return_value = call.get('_return')
@@ -167,6 +171,14 @@ class CallableElement(ContextElementBase):
     def call(self, context, args, kwargs):
         self.args = args
         self.kwargs = kwargs
+        if self.breakpoint and not self.archive.suppress_breakpoints:
+            logic.debug(self.archive, context, self)
+        else:
+            logic.run_logic(self.archive, context, self)
+        return self._return_value
+
+    def call_frame(self, context, frame):
+        self.frame = frame
         if self.breakpoint and not self.archive.suppress_breakpoints:
             logic.debug(self.archive, context, self)
         else:
@@ -445,8 +457,8 @@ class Archive(object):
                                                     code=element._code,
                                                     line=element.source_line or 0,
                                                     col=None,
-                                                    msg="error in parameter '{}', {}".format(k, error),
-                                                    diagnosis="this check is performed when [project]/strict is enabled, or with 'moya runserver --strict' switch")
+                                                    msg="error in parameter '{}'; {}".format(k, error),
+                                                    diagnosis="This check is performed when [project]/strict is enabled, or with 'moya runserver --strict' switch")
                         self.failed_documents.append(failed_doc)
         return failed
 

@@ -316,7 +316,7 @@ class Redirect(RedirectBase, LogicElement):
 
     name = Attribute("URL name", required=True, metavar="URL NAME")
     _from = Attribute("Application", type="application", default=None)
-    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="integer")
+    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default="303", type="httpstatus")
     query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
     fragment = Attribute("Fragment component in url")
 

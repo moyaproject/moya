@@ -55,7 +55,6 @@ def build(fs,
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
 
-
     syspath = fs.getsyspath('/', allow_none=True)
 
     cwd = os.getcwd()
@@ -80,6 +79,10 @@ def build(fs,
                 overlay_fs.addfs('project', fs)
                 overlay_fs.addfs('custom', customize_fs, write=True)
                 fs = overlay_fs
+
+                syspath = fs.getsyspath('/', allow_none=True)
+                if syspath is not None:
+                    os.chdir(syspath)
 
         if archive is None:
             archive = Archive(fs, strict=strict, test_build=test_build, develop=develop)

@@ -486,7 +486,7 @@ class HTTPStatus(AttributeType):
         try:
             StatusCode(value)
         except Exception as e:
-            return text_type(e)
+            return ValueError("'{}' is not a valid status code".format(value))
         else:
             return None
 
