@@ -2,15 +2,14 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from .compat import PY2, text_type, implements_to_string
+from .urltools import urlencode
 
 from threading import Lock
 
 if PY2:
     from urlparse import parse_qsl
-    from urllib import urlencode
 else:
     from urllib.parse import parse_qsl
-    from urllib.parse import urlencode
 
 
 from collections import OrderedDict
@@ -53,7 +52,7 @@ class QueryData(OrderedDict):
     @classmethod
     def from_qs(cls, qs, change_callback=None):
         qd = cls()
-        for k, v in parse_qsl(qs, strict_parsing=False):
+        for k, v in parse_qsl(qs, keep_blank_values=True, strict_parsing=False):
             qd.setdefault(k, []).append(v)
         return qd
 
@@ -70,15 +69,17 @@ class QueryData(OrderedDict):
                 if isinstance(v, (list, set, tuple, dict)) or hasattr(v, 'items'):
                     self[k] = list(v)
                 else:
-                    if not isinstance(v, text_type):
+                    if v is None:
+                        v = ''
+                    elif not isinstance(v, text_type):
                         v = text_type(v)
                     self[k] = [v]
 
     def __str__(self):
-        return urlencode(list(self.items()), doseq=True)
+        return urlencode(self)
 
     def __repr__(self):
-        return '<querydata "{}">'.format(urlencode(list(self.items()), doseq=True))
+        return '<querydata "{}">'.format(urlencode(self))
 
     def __setitem__(self, k, v):
         if v is None:

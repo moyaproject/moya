@@ -373,7 +373,7 @@ class WSGIApplication(object):
                          request.path_qs,
                          request.http_version,
                          response.status_int,
-                         response.content_length,
+                         response.content_length or 0,
                          taken_ms)
 
         if request.method == 'HEAD':

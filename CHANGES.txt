@@ -21,6 +21,7 @@ Added <extract-data>
 Added <zoom-to-fit>
 Added <admin-only>
 Implemented signature validator for filters
+Added <check-modified>
 
 0.5.21
 ------

@@ -53,16 +53,18 @@ The code inside the processor transforms that image. The new image is then writt
     <macro libname="get_thumb_path">
         <doc>Get the path to a thumbnail</doc>
         <signature>
-            <argument name="path"/>
-            <argument name="app"/>
-            <argument name="processor"/>
+            <argument name="path" required="yes"/>
+            <argument name="app" check="isstr:app">Application name</argument>
+            <argument name="processor" required="yes">Processor element</argument>
         </signature>
+
         <let
             thumbnails_name="processor.parent.params.name"
             thumbnail_directory=".app.settings.thumb_dir"
             thumb_dir="path:dirname:path / thumbnail_directory / app / basename:path" />
         <str dst="thumb_filename">${slug:basename:path}.${processor.params.name}.${processor.params.version}.${processor.params.format}</str>
         <let thumb_path="path:thumb_dir / thumb_filename" />
+
         <return value="thumb_path"/>
     </macro>
 
@@ -100,7 +102,8 @@ The code inside the processor transforms that image. The new image is then writt
             path="value"
             app="app or _caller_app.name"
             dst="url"/>
-        <catch exception="*">
+        <catch exception="*" dst="e">
+            <log-error>${e}</log-error>
             <return value="None"/>
         </catch>
 
@@ -127,7 +130,7 @@ The code inside the processor transforms that image. The new image is then writt
         <for-children element="thumbnails" tag="processor" dst="processor">
             <tn:render-processor
                 processor="processor"
-                app="app"
+                app="processor.app.name"
                 path="path"
                 image="image"
                 overwrite="overwrite"/>

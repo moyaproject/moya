@@ -7,15 +7,21 @@ from .. import logic
 from .. import http
 from .. import serve
 from .. import errors
-from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse
+from .. import interface
+from .. import urltools
+from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse, quote_plus
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
 from ..urlmapper import MissingURLParameter, RouteError
 
+from webob.response import Response
 
+from datetime import datetime
+import pytz
 import json
-
 import logging
+
+GMT = pytz.timezone('GMT')
 log = logging.getLogger('moya.runtime')
 
 
@@ -298,7 +304,10 @@ class RedirectBase(object):
             self.throw('redirect.no-route', text_type(e))
 
         if query:
-            qs = urlencode(list(query.items()), True)
+            qs = urltools.urlencode(query)
+            # qs = "&".join(["{}={}".format(quote_plus(k), quote_plus(v)) if v is not None else quote_plus(k)
+            #                for k, v in query.items()])
+            #qs = urlencode(list(query.items()), True)
             url += '?' + qs
 
         location = url
@@ -400,3 +409,44 @@ class SetHeader(LogicElement):
             value = context.sub(self.text).strip()
         headers = context.set_new_call('.headers', dict)
         headers[header] = value
+
+
+class CheckModified(LogicElement):
+    """
+    Return a not_modifed (304) response if a resource hasn't changed.
+
+    """
+
+    time = Attribute("Time resource was updated", type="expression", required=False)
+    etag = Attribute("ETag for resource", type="text", required=False)
+
+    class Help:
+        synopis = "conditionally return a not modified response"
+
+    def logic(self, context):
+        request = context['.request']
+
+        if request.method not in ["GET", "HEAD"]:
+            return
+        headers = context.set_new_call('.headers', dict)
+
+        if self.has_parameter('time'):
+            _dt = self.time(context)
+            dt = interface.unproxy(_dt)
+            if not isinstance(dt, datetime):
+                self.throw('bad-value.time', "attribute 'time' should be a datetime object, not {}".format(context.to_expr(dt)))
+            gmt_time = GMT.localize(dt)
+            modified_date = gmt_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+            headers['Last-Modified'] = modified_date
+            if request.if_modified_since and gmt_time > request.if_modified_since:
+                response = Response(status=http.StatusCode.not_modified,
+                                    headers=headers)
+                raise logic.EndLogic(response)
+
+        if self.has_parameter('etag'):
+            etag = self.etag(context)
+            headers['ETag'] = etag
+            if etag in request.if_none_match:
+                response = Response(status=http.StatusCode.not_modified,
+                                    headers=headers)
+                raise logic.EndLogic(response)

@@ -1287,6 +1287,18 @@ class SingleLineNode(Node):
         return ''.join(text.splitlines())
 
 
+class CompactNode(Node):
+    """Replace runs of whitespace with a single space"""
+    tag_name = "compact"
+
+    _re_whitespace = re.compile("\s+")
+
+    def render(self, environment, context, template, text_escape):
+        text = self.render_contents(environment, context, template, text_escape)
+        _text = self._re_whitespace.sub(' ', text)
+        return _text
+
+
 class SpacelessNode(Node):
     """Remove whitespace between tags."""
     tag_name = "spaceless"
@@ -1557,6 +1569,7 @@ class ExtractNode(Node):
 
     def render(self, environment, context, template, text_escape):
         markup = self.render_contents(environment, context, template, text_escape)
+        replace_markup = ''
         extract_name = None
         if self.as_expression is not None:
             extract_name = self.as_expression.eval(context)
@@ -1565,8 +1578,9 @@ class ExtractNode(Node):
         if self.if_expression.eval(context):
             if extract_name is not None:
                 context[extract_name] = markup
-            filter_function = self.replace_expression.make_function(context)
-            replace_markup = filter_function(context, contents=markup)
+            if self.replace_expression is not None:
+                filter_function = self.replace_expression.make_function(context)
+                replace_markup = filter_function(context, contents=markup)
         else:
             replace_markup = markup
         return text_escape(replace_markup)

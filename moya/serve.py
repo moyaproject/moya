@@ -4,7 +4,7 @@ from __future__ import print_function
 from .response import MoyaResponse
 from .compat import PY2, py2bytes
 from . import http
-from .tools import datetime_to_epoch, md5_hexdigest
+from .tools import md5_hexdigest
 from . import logic
 
 from fs.path import basename
@@ -12,7 +12,7 @@ from fs.errors import FSError
 
 from datetime import datetime
 import mimetypes
-import time
+from pytz import UTC
 
 
 from . import __version__
@@ -45,9 +45,9 @@ def serve_file(req, fs, path, filename=None):
         # Make a response
         mtime = info.get('modified_time', None)
         if mtime is None:
-            mtime = time.time()
+            mtime = datetime.utcnow()
         else:
-            mtime = datetime_to_epoch(mtime)
+            mtime = UTC.localize(mtime)
         res.date = datetime.utcnow()
         res.content_type = py2bytes(mime_type)
         res.last_modified = mtime
@@ -72,5 +72,6 @@ def serve_file(req, fs, path, filename=None):
             else:
                 res.body_file = serve_file
         # Set content length
-        res.content_length = file_size
+        if not status304:
+            res.content_length = file_size
     raise logic.EndLogic(res)

@@ -3,13 +3,12 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from ..versioning import Version, VersionSpec
-from ..url import URL, get_domain
+from ..url import URL, get_domain, urlencode
 from ..compat import (text_type,
                       string_types,
                       int_types,
                       number_types,
-                      unichr,
-                      urlencode)
+                      unichr)
 from ..html import slugify, textilize, linebreaks
 from ..render import HTML, Safe
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
@@ -173,7 +172,7 @@ class ExpressionModifiersBase(object):
     def _urlencode(cls, data):
         if not hasattr(data, 'items'):
             raise ValueError("Can't urlencode {!r}".format(data))
-        return urlencode(cls._to_query_list(data), doseq=True)
+        return urlencode(data)
 
     @classmethod
     def _qsupdate(cls, context, data, base_qs=None):

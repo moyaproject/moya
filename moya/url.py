@@ -8,6 +8,7 @@ from __future__ import print_function
 
 
 from .containers import QueryData
+from .urltools import urlencode
 from .interface import AttributeExposer
 from .compat import implements_to_string, text_type, PY2
 

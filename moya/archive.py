@@ -800,7 +800,7 @@ class Archive(object):
         templates_fs = self.filesystems.get("templates")
         fs = self.open_fs(location)
         templates_fs.addfs(name, fs, priority=priority)
-        startup_log.debug("added templates filesystem, priority %s", priority)
+        #startup_log.debug("added templates filesystem, priority %s", priority)
 
     def get_template_engine(self, engine="moya"):
         return self.template_engines[engine]
@@ -940,7 +940,7 @@ class Archive(object):
                 location = section["location"]
                 theme_fs = self.open_fs(location)
                 self.add_filesystem('themes', theme_fs)
-                startup_log.debug("added theme filesystem '%s'", location)
+                #startup_log.debug("added theme filesystem '%s'", location)
 
             else:
                 startup_log.warn("unknown settings section, [%s]", section_name)

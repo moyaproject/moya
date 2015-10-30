@@ -23,11 +23,12 @@ from babel.dates import (format_datetime,
 
 import calendar
 from time import mktime
-from pytz import UTC
+from pytz import UTC, timezone
 
 
 utcfromtimestamp = datetime.utcfromtimestamp
 utclocalize = UTC.localize
+GMT = timezone('GMT')
 
 
 def datetime_to_epoch(d):
@@ -430,13 +431,13 @@ class ExpressionDateTime(datetime, interface.Proxy):
                                        "days_in_month", "epoch",
                                        "isoformat", "local", 'utc', 'naive',
                                        "html5_datetime", "html5_date", "html5_time",
-                                       'rfc2822']
+                                       'rfc2822', 'http_date']
 
         _re_date = re.compile(r"^(\d\d\d\d)-(\d\d)-(\d\d)$")
         _re_time = re.compile(r'^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$')
 
         def __init__(self, obj):
-            self._obj = obj
+            self._dt = obj
 
         def __hash__(self):
             return hash(interface.unproxy(self))
@@ -445,7 +446,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return "datetime:'{}'".format(self.isoformat)
 
         def __moyapy__(self):
-            return self._obj
+            return self._dt
 
         def __moyajson__(self):
             return self.isoformat
@@ -466,11 +467,11 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return '<datetime "{}">'.format(self.isoformat)
 
         def __format__(self, fmt):
-            return format(self._obj, fmt)
+            return format(self._dt, fmt)
 
         def __moyalocalize__(self, context, locale):
             fmt = context.get('.sys.site.datetime_format', 'medium')
-            return format_datetime(self.local._obj, format=fmt, locale=text_type(locale))
+            return format_datetime(self.local._dt, format=fmt, locale=text_type(locale))
 
         def __moyadbobject__(self):
             dt = self.utc.naive
@@ -485,7 +486,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return dt
 
         def __getattr__(self, key):
-            return getattr(self._obj, key)
+            return getattr(self._dt, key)
 
         @classmethod
         def utcnow(cls):
@@ -531,42 +532,42 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def date(self):
-            dt = self._obj
+            dt = self._dt
             return ExpressionDate(dt.year, dt.month, dt.day)
 
         @property
         def time(self):
-            dt = self._obj
+            dt = self._dt
             return ExpressionTime(dt.hour, dt.minute, dt.second, dt.microsecond, dt.tzinfo)
 
         @property
         def year_start(self):
             """Start of the year"""
-            dt = self._obj
+            dt = self._dt
             return ExpressionDateTime(dt.year, 1, 1, tzinfo=dt.tzinfo)
 
         @property
         def month_start(self):
             """Start of the month"""
-            dt = self._obj
+            dt = self._dt
             return ExpressionDateTime(dt.year, dt.month, 1, tzinfo=dt.tzinfo)
 
         @property
         def day_start(self):
             """Start of the day"""
-            dt = self._obj
+            dt = self._dt
             return ExpressionDateTime(dt.year, dt.month, dt.day, tzinfo=dt.tzinfo)
 
         @property
         def next_year(self):
             """First date in the following year"""
-            dt = self._obj
+            dt = self._dt
             return ExpressionDateTime(dt.year + 1, 1, 1, tzinfo=dt.tzinfo)
 
         @property
         def next_month(self):
             """The first date in the following month"""
-            dt = self._obj
+            dt = self._dt
             if dt.month == 12:
                 return ExpressionDateTime(dt.year + 1, 1, 1, tzinfo=dt.tzinfo)
             else:
@@ -575,22 +576,22 @@ class ExpressionDateTime(datetime, interface.Proxy):
         @property
         def next_day(self):
             """The start of the following day"""
-            return self.from_datetime(self._obj + timedelta(hours=24)).day_start
+            return self.from_datetime(self._dt + timedelta(hours=24)).day_start
 
         @property
         def previous_day(self):
-            return self.from_datetime(self._obj - timedelta(hours=24)).day_start
+            return self.from_datetime(self._dt - timedelta(hours=24)).day_start
 
         @property
         def previous_year(self):
             """First date in the previous year"""
-            dt = self._obj
+            dt = self._dt
             return ExpressionDateTime(dt.year - 1, 1, 1, tzinfo=dt.tzinfo)
 
         @property
         def previous_month(self):
             """First date in the previous month"""
-            dt = self._obj
+            dt = self.dt
             if dt.month == 1:
                 return ExpressionDateTime(dt.year - 1, 12, 1, tzinfo=dt.tzinfo)
             else:
@@ -602,13 +603,13 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def days_in_month(self):
-            dt = self._obj
+            dt = self.dt
             _, maxdays = monthrange(dt.year, dt.month)
             return maxdays
 
         @property
         def epoch(self):
-            return datetime_to_epoch(self._obj)
+            return datetime_to_epoch(self._dt)
 
         @property
         def html5_datetime(self):
@@ -617,7 +618,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def html5_date(self):
-            dt = self._obj
+            dt = self._dt
             fmt = "{:04}-{:02}-{:02}"
             return fmt.format(dt.year,
                               dt.month,
@@ -625,14 +626,14 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def html5_time(self):
-            dt = self._obj
+            dt = self._dt
             fmt = "{:02}:{:02}"
             return fmt.format(dt.hour,
                               dt.minute)
 
         @property
         def isoformat(self):
-            dt = self._obj
+            dt = self._dt
             return datetime.isoformat(dt)
 
         @property
@@ -641,15 +642,21 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return utils.formatdate(self.epoch)
 
         @property
+        def http_date(self):
+            dt = self._dt
+            gmt_time = GMT.localize(dt)
+            return gmt_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+        @property
         def utc(self):
-            dt = self._obj
+            dt = self._dt
             if dt.tzinfo is None:
                 return self.from_datetime(UTC.localize(dt))
             return self.from_datetime(dt.astimezone(UTC))
 
         @property
         def naive(self):
-            dt = self._obj
+            dt = self._dt
             return self.make(dt.year,
                              dt.month,
                              dt.day,
@@ -663,16 +670,16 @@ class ExpressionDateTime(datetime, interface.Proxy):
             tz = pilot.context.get('.tz', None)
             if tz is None:
                 return None
-            return self.from_datetime(tz(self._obj))
+            return self.from_datetime(tz(self._dt))
 
         def __mod__(self, fmt):
-            self = self._obj
+            self = self._dt
             return format_datetime(self,
                                    fmt,
                                    locale=text_type(pilot.context.get('.locale', 'en_US')))
 
         def __sub__(self, other):
-            dt = self._obj
+            dt = self._dt
             result = dt - interface.unproxy(other)
             if isinstance(result, datetime):
                 return ExpressionDateTime.from_datetime(result)
@@ -682,7 +689,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
                 return result
 
         def __add__(self, other):
-            dt = self._obj
+            dt = self._dt
             result = dt + interface.unproxy(other)
             if isinstance(result, datetime):
                 return ExpressionDateTime.from_datetime(result)

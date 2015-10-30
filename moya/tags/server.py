@@ -32,6 +32,7 @@ from .. import tools
 
 from webob import Response
 
+from datetime import datetime
 from fs.path import splitext
 import pytz
 
@@ -533,6 +534,12 @@ class Server(LogicElement):
             cookie.set(response)
         for cookie_name in cookies.deleted_cookies:
             response.delete_cookie(cookie_name)
+        try:
+            if not response.date and 'now' in context.root:
+                response.date = context.root['now']._dt
+        except:
+            # Don't want to discard the response here, so log exception
+            log.exception('error setting response date')
         return response
 
     def render_response(self, archive, context, obj, status=StatusCode.ok):
