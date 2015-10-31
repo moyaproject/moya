@@ -2534,6 +2534,7 @@ class _LazyCallable(object):
                 else:
                     result = self.callable(*self.args, **self.kwargs)
         except Exception as e:
+            # TODO: better reporting of lazy error
             log.exception("lazy error %s", e)
             raise
         else:
