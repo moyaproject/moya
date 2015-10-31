@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 __author__ = "Will McGugan <admin@moyaproject.com>"
-__version__ = "0.5.22"
+__version__ = "0.5.23a0"
 # *** Don't forget to update version in setup.py ***
 
 __all__ = ['pilot', 'expose']
