@@ -73,11 +73,11 @@ class XMLHighlighter(ConsoleHighlighter):
         "substitution": "bold magenta",
         "templatetag": "bold magenta",
         "braced": "bold",
-        "comment": "dim black italic not bold"
+        "comment": "dim italic not bold"
     }
 
     highlights = [
-        r'(?P<tag>\<.*?\>)',
+        r'(?P<tag>\<[^\!].*?\>)',
         r'(?P<attribute>\s\S*?=\".*?\")',
         r'(?P<string>\".*?\")',
         r'(?P<braced>\{.*?\})',
