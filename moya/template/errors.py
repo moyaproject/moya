@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+from __future__ import print_function
+
 from ..compat import implements_to_string, text_type
 
 

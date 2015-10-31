@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
 from __future__ import print_function
+from __future__ import absolute_import
 
 from ..context import Context, Expression, FalseExpression, TrueExpression, DefaultExpression
 from ..context.errors import SubstitutionError
 from .. import interface
 from ..markup import Markup
-from ..template.enginebase import TemplateEngine
+from .enginebase import TemplateEngine
 from . import errors
 from ..html import escape, spaceless
 from ..errors import AppError, MarkupError

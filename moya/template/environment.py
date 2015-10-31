@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from ..compat import string_types
-from ..template.errors import MissingTemplateError, BadTemplateError
+from .errors import MissingTemplateError, BadTemplateError
 from ..context.expressiontime import datetime_to_epoch
-from ..template import Template
+from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
 from fs.path import abspath, normpath
