@@ -221,7 +221,7 @@ class MoyaMarkup(MarkupBase):
             new_el = fromstring(replace_markup)
             el.getparent().replace(el, new_el)
 
-        return HTML("".join(tostring(e) for e in soup.getchildren()))
+        return HTML("".join(tostring(e).decode('utf-8') for e in soup.getchildren()))
 
 
 @implements_to_string

@@ -392,15 +392,10 @@ class NodeType(object):
     def get_app(self, context):
         return context.get('._t.app', None)
 
-    # def render_nodes(self, nodes, environment, context, sub_escape):
-    #     stack = nodes[::-1]
-    #     return self._render_nodes(stack, environment, context, sub_escape)
-
     def render_contents(self, environment, context, template, text_escape):
-        # with template.frame(context, data=context['.td'], app=context['._t.app']) as frame:
-        #     frame.current_node = None
         with template.block(context, self) as frame:
-            return template._render_frame(frame, environment, context, text_escape)
+            contents = template._render_frame(frame, environment, context, text_escape)
+        return contents
 
 
 class Node(with_metaclass(NodeMeta, NodeType)):
@@ -1868,6 +1863,8 @@ class Template(object):
                     frames.append(frame)
 
                     raise errors.TemplateError("Recursive extends directive detected in '{}'".format(self.raw_path),
+                                               node.template.path,
+                                               node.location[0],
                                                diagnosis=diagnosis,
                                                trace_frames=frames)
 
@@ -1983,6 +1980,8 @@ class Template(object):
                                cols=(e.start, e.end),
                                format='moyatemplate')
             raise errors.TemplateError(e.msg,
+                                       self.path,
+                                       e.lineno,
                                        diagnosis=e.diagnosis,
                                        trace_frames=[frame])
         except errors.NodeError as e:
@@ -1992,6 +1991,8 @@ class Template(object):
                                cols=(e.start, e.end),
                                format='moyatemplate')
             raise errors.TemplateError(e.msg,
+                                       self.path,
+                                       e.lineno,
                                        diagnosis=e.diagnosis,
                                        trace_frames=[frame])
         else:
@@ -2250,6 +2251,8 @@ class Template(object):
             frames.extend(exc.get_moya_frames())
 
         raise errors.TemplateError(error_msg,
+                                   current_node.template.path,
+                                   current_node.location[0],
                                    original=exc,
                                    diagnosis=diagnosis,
                                    trace_frames=frames)

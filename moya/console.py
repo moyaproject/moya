@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from .tools import lazystr
+
 import sys
 import platform
 import warnings
@@ -590,7 +592,9 @@ class Console(object):
                                   reverse=reverse,
                                   italic=italic,
                                   nl=nl)
-        if not isinstance(text, text_type):
+        if isinstance(text, lazystr):
+            text = text_type(text)
+        if isinstance(text, bytes):
             text = text.decode('ascii', 'replace')
         if PY2:
             text = text.encode(self.encoding, 'replace')

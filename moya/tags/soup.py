@@ -167,7 +167,7 @@ class ExtractList(Extract):
         synopsis = "extract a list of markup fragments from HTML"
 
     def set_result(self, context, elements):
-        result = [tostring(el) for el in elements]
+        result = [tostring(el).decode('utf-8') for el in elements]
         self.set_context(context, self.dst(context), result)
 
 

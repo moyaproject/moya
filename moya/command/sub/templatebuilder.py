@@ -28,9 +28,9 @@ def compile_fs_template(fs, template_text, data=None, path=None):
         data = {}
     template = Template(template_text)
     template.re_special = re.compile(r'\{\{\%((?:\".*?\"|\'.*?\'|.|\s)*?)\%\}\}|(\{\{\#)|(\#\}\})')
-    context = Context({"data": data}, re_sub=r'\$\{\{(.*?)\}\}')
-    with context.frame("data"):
-        fs_template = template.render(context)
+    context = Context(re_sub=r'\$\{\{(.*?)\}\}')
+    #with context.frame("data"):
+    fs_template = template.render(data, context=context)
 
     out_type = None
     out_filename = None
@@ -57,7 +57,6 @@ def compile_fs_template(fs, template_text, data=None, path=None):
     for line in fs_template.splitlines():
         line = line.rstrip()
         if line.startswith('@'):
-            #out_path = out_filename
             write_file(out_filename, out_type)
             out_filename = None
             out_type, path_spec = line[1:].split(' ', 1)

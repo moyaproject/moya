@@ -47,10 +47,14 @@ class TemplateError(Exception):
 
     def __init__(self,
                  msg,
+                 path,
+                 lineno,
                  diagnosis=None,
                  original=None,
                  trace_frames=None):
         self.msg = msg
+        self.path = path
+        self.lineno = lineno
         self.diagnosis = diagnosis
         self.original = original
         self.trace_frames = trace_frames or []
