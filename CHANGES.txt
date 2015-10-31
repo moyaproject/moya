@@ -1,6 +1,7 @@
 0.5.23
 ------
 
+Fix for comments in console syntax highlighting
 Fix for ignore exceptions error
 Allow help command to work when project doesn't build
 

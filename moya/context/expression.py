@@ -191,6 +191,7 @@ class EvalTimespan(Evaluator):
     def eval(self, context):
         return self.ts
 
+
 class EvalCurrentScope(Evaluator):
     """Class to eval the current scope"""
 
@@ -430,7 +431,6 @@ class EvalMultOp(Evaluator):
         _eval = self._eval = self.value[0].eval
         ops = self.ops
         operator_eval = self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
-
 
         if len(self.operator_eval) == 1:
             op_func, rhs_eval = self.operator_eval[0]

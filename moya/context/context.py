@@ -714,6 +714,12 @@ class Context(object):
         (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
 
     @synchronize
+    def set_simple(self, index, value):
+        """Set a single index"""
+        obj = self._stack.obj
+        (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(index, value)
+
+    @synchronize
     def set_multiple(self, seq):
         """Set many index / value pairs"""
         _lookup = self._set_lookup

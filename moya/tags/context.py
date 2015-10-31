@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from ..elements.elementbase import (LogicElement,
                                     ReturnContainer,
                                     Attribute)
-from ..context import Expression
+from ..context import Context, Expression
 from ..context.expressiontime import ExpressionDateTime, TimeSpan
 from ..context import dataindex
 from ..context.errors import ContextKeyError
@@ -424,17 +424,21 @@ class Let(DataSetter):
     _reserved_attribute_names = ['if']
     preserve_attributes = ['expressions']
 
-    def post_build(self, context, _parse=dataindex.parse, _Expression=Expression):
+    def post_build(self, context, _parse=dataindex.parse, _Expression=Expression, setter=Context.set, simple_setter=Context.set_simple):
         self.expressions = []
         append = self.expressions.append
         for k, v in self._attributes.items():
             if k not in self._reserved_attribute_names:
-                append((_parse(k), _Expression(v).eval))
+                indices = _parse(k)
+                if indices.from_root or len(indices) > 1:
+                    append((setter, indices, _Expression(v).eval))
+                else:
+                    append((simple_setter, indices.tokens[0], _Expression(v).eval))
 
     def logic(self, context):
         try:
-            context.set_multiple((k, v(context))
-                                 for k, v in self.expressions)
+            for setter, indices, _eval in self.expressions:
+                setter(context, indices, _eval(context))
         except ContextKeyError as e:
             self.throw('let.fail',
                        text_type(e))
