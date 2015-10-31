@@ -221,11 +221,13 @@ class NodeGenerator(object):
         return self.generator.throw(*args, **kwargs)
 
 
-def close_generator(gen):
+def close_generator(gen, _ElementBase=ElementBase):
     try:
-        gen.throw(GeneratorExit)
-    except:
-        pass
+        if not isinstance(gen, _ElementBase):
+            #gen.throw(GeneratorExit)
+            gen.close()
+    except Exception as e:
+        log.exception('error in close_generator')
 
 
 def _logic_loop(context,
@@ -321,6 +323,7 @@ def _logic_loop(context,
                     close_generator(node)
                     node = pop_stack()
                 else:
+                    close_generator(node)
                     if on_exception:
                         on_exception(callstack, exc_node, moya_exception)
                     request = context.get('.request', None)

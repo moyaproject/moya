@@ -10,7 +10,7 @@ from .. import errors
 from ..html import escape
 from ..console import Console
 from ..content import Content, Section, IncludePath
-from ..tools import url_join, silent_iter, textual_list
+from ..tools import url_join, textual_list
 from ..context.missing import is_missing
 from ..markup import Markup, get_installed_markups
 from ..template import Template as MoyaTemplate
@@ -478,7 +478,7 @@ class RenderContent(DataSetter, ContentElementMixin):
             td.update(kwargs)
         kwargs.update(let)
 
-        for defer in silent_iter(self.generate_content(context, content, app, td=td)):
+        for defer in self.generate_content(context, content, app, td=td):
             yield defer
 
         content_obj = context['_content']
@@ -531,7 +531,7 @@ class ServeContent(LogicElement, ContentElementMixin):
             td.update(kwargs)
         td.update(let)
 
-        for defer in silent_iter(self.generate_content(context, content, app, td=td)):
+        for defer in self.generate_content(context, content, app, td=td):
             yield defer
         context.copy('_content', '_return')
 

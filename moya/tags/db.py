@@ -786,7 +786,7 @@ class _ForeignKey(DBElement):
     blank = Attribute("Allow empty field in Moya admin?", type="boolean")
     default = Attribute("Default value if not set explicitly", default=None)
     primary = Attribute("Primary key?", type="boolean", default=False)
-    index = Attribute("Index?", type="boolean", default=False)
+    index = Attribute("Generate a db index?", type="boolean", default=False)
     ondelete = Attribute("Delete behavior", default="CASCADE", choices=['CASCADE', 'SET NULL'])
 
     options = Attribute("Objects to consider in admin forms", type="dbexpression", required=False, default=None)
@@ -804,7 +804,6 @@ class _ForeignKey(DBElement):
         self.name = name = params.name
         model = self.get_ancestor((self.xmlns, "model"))
         ref_model_ref = params.model
-
 
         def get_backref_collection(app, model, name):
             class ListCollection(list):

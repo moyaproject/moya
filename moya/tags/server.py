@@ -18,7 +18,7 @@ from .. import trace
 from .. import __version__
 from ..content import Content
 from ..tags.content import ContentElementMixin
-from ..tools import get_return, silent_iter
+from ..tools import get_return
 from .. import syntax
 from ..timezone import Timezone
 from ..context.tools import to_expression, set_dynamic
@@ -386,7 +386,7 @@ class View(ContextElementBase, ContentElementMixin):
                     self.throw("view.bad-return",
                                "View should return a dict or other mapping object (not {})".format(to_expression(scope)))
 
-                for defer in silent_iter(self.generate_content(context, content, app, td=scope)):
+                for defer in self.generate_content(context, content, app, td=scope):
                     yield defer
                 context.copy('_content', '_return')
 
