@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from compat import quote_plus, text_type
+from .compat import quote_plus, text_type
 
 
 def _iter_qs_map(qs_map):
