@@ -4,6 +4,7 @@ from ...wsgi import WSGIApplication
 from ...command import SubCommand
 from ...command.app import NoProjectError
 from ...archive import Archive
+from ...compat import text_type
 
 
 class Help(SubCommand):
@@ -25,6 +26,8 @@ class Help(SubCommand):
 
     def run(self):
         args = self.args
+        console = self.console
+
         try:
             application = WSGIApplication(self.location,
                                           self.get_settings(),
@@ -33,10 +36,13 @@ class Help(SubCommand):
             archive = application.archive
         except (ValueError, NoProjectError):
             archive = Archive()
+        except Exception as e:
+            console.error(text_type(e))
+            console.text('Project failed to build, some help topics may be unavailable',)
+            archive = Archive()
             # Not in a project directory
             # Only built in tags will be available
 
-        console = self.console
         if args.html is not None:
             from ...console import Console
             console = Console(html=True)
