@@ -12,6 +12,7 @@ from .traceframe import Frame
 
 import io
 import sys
+from operator import attrgetter
 import traceback as pytraceback
 
 
@@ -22,6 +23,9 @@ Consider reporting this to the Moya developers."""
 
 @implements_to_string
 class Traceback(object):
+
+    _get_frame_compare = attrgetter('_location', 'lineno', 'libid')
+
     def __init__(self, url=None, method=None, handler=None, exc=None):
         self.url = url
         self.method = method
@@ -44,6 +48,15 @@ class Traceback(object):
         console = Console(html=True)
         console.obj(None, self.exc)
         return console.get_text()
+
+    def remove_duplicates(self):
+        current = None
+        out = []
+        for frame in self.stack:
+            if current is None or self._get_frame_compare(frame) != self._get_frame_compare(current):
+                out.append(frame)
+                current = frame
+        self.stack = out
 
     def add_frame(self, frame):
         self.stack.append(frame)
@@ -110,7 +123,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
         e = getattr(s, 'element', None)
         if e and e._code:
             frame = Frame(e._code,
-                          relativefrom(base, e._location),
+                          e._location,
                           e.source_line or 1,
                           obj=text_type(e),
                           libid=e.libid)
@@ -120,7 +133,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
 
     if element is not None and hasattr(element.document, 'structure'):
         frame = Frame(element.document.structure.xml,
-                      relativefrom(base, element._location),
+                      element._location,
                       element.source_line or 1,
                       obj=text_type(element),
                       libid=element.libid)
@@ -130,7 +143,7 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
     elif hasattr(node, '_location') and hasattr(node, 'source_line'):
         if node._code:
             frame = Frame(node._code,
-                          relativefrom(base, node._location),
+                          node._location,
                           node.source_line or 1,
                           obj=text_type(node),
                           libid=node.libid)
@@ -195,6 +208,8 @@ def build(context, stack, node, exc, exc_info, request, py_traceback=True):
             traceback.msg = text_type(exc)
         if traceback.diagnosis is None:
             traceback.diagnosis = _PYTHON_ERROR_TEXT
+
+    traceback.remove_duplicates()
 
     return traceback
 

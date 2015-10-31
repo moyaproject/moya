@@ -10,6 +10,9 @@ class ArchiveError(Exception):
 
 
 class LogicError(Exception):
+    hide_py_traceback = True
+    error_type = "Logic Error"
+
     def __init__(self, original, trace):
         self.original = original
         self.moya_trace = trace
