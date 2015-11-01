@@ -130,16 +130,13 @@ def django(dirname, verbose=False):
 def moya(dirname, verbose=False):
 
     from moya.template import Environment
-    from moya.context import Context
     env = Environment(dirname, None)
-
     tmpl = env.get_template("templates/template.html")
-    tmpl.parse(env)
 
     def render():
-        context = Context({'title': 'Just a test', 'user': 'joe',
-                           'items': ['Number %d' % num for num in range(1, 15)]})
-        return tmpl.render(context, environment=env)
+        data = {'title': 'Just a test', 'user': 'joe',
+                'items': ['Number %d' % num for num in range(1, 15)]}
+        return tmpl.render(data, environment=env)
 
     if verbose:
         print(render())

@@ -107,18 +107,17 @@ from moya.template.moyatemplates import Template
 
 moya_tmpl = Template(
 """<table>
-{%- for row in table %}<tr>
-    {% for col in values:row %}<td>${col}</td>{% endfor %}
-</tr>{%- endfor %}
+{% for row in table %}<tr>
+{% for c in values:row %}<td>${c}</td>{% endfor %}
+</tr>{% endfor %}
 </table>
 """)
 #moya_tmpl.parse(None)
-from moya.context import Context
 def test_moya():
     """Moya template"""
 
-    context = Context({'table': table})
-    moya_tmpl.render(context)
+    data = {'table': table}
+    moya_tmpl.render(data)
 
 
 if MakoTemplate:
