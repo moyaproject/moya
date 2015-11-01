@@ -233,6 +233,7 @@ class PKColumn(MoyaDBColumn):
                      Sequence(sequence_name),
                      **kwargs)
 
+
 class ForeignKeyColumn(MoyaDBColumn):
 
     def __init__(self,

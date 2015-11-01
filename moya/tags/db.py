@@ -590,14 +590,14 @@ class DBModel(DBElement):
         name = "%s_to_%s" % (left, right)
         sa_columns = [Column('left_id',
                              Integer,
-                             ForeignKey('%s.id' % left),
-                             nullable=False,
+                             ForeignKey('%s.id' % left, ondelete="CASCADE"),
+                             nullable=False
                              #primary_key=True
                              ),
                       Column('right_id',
                              Integer,
-                             ForeignKey('%s.id' % right),
-                             nullable=False,
+                             ForeignKey('%s.id' % right, ondelete="CASCADE"),
+                             nullable=False
                              #primary_key=True
                              )
                       ]
@@ -719,9 +719,11 @@ class DBModel(DBElement):
     def create_all(self, archive, engine, app):
         self.metadata.create_all(engine.engine)
 
-    def event_listener(self, event, app, object):
+    def event_listener(self, event, app, _object):
+        if _object is None:
+            return
         signal_params = {
-            'object': object,
+            'object': _object,
             'app': app,
             'model': self.libid
         }
@@ -797,7 +799,7 @@ class _ForeignKey(DBElement):
     backref = Attribute("Back reference", required=False, default=None)
     picker = Attribute("Picker table for admin view", required=False)
 
-    cascade = Attribute("Cascade behaviour of backref", type="text", default=None)
+    cascade = Attribute("Cascade behaviour of backref", type="text", default="all, delete-orphan")
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
@@ -1128,7 +1130,7 @@ class ManyToMany(DBElement, DBMixin):
                                         primaryjoin=primaryjoin,
                                         secondaryjoin=secondaryjoin,
                                         foreign_keys=_foreign_keys,
-                                        collection_class=get_collection(self)
+                                        collection_class=get_collection(self),
                                         #lazy="dynamic"
                                         )
             model.add_relationship(self.tag_name,

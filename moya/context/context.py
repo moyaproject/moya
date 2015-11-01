@@ -711,13 +711,19 @@ class Context(object):
     def set(self, index, value):
         """Set a value"""
         obj, final = self._set_lookup(index)
-        (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+        try:
+            (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+        except Exception:
+            raise ContextKeyError(self, index)
 
     @synchronize
     def set_simple(self, index, value):
         """Set a single index"""
         obj = self._stack.obj
-        (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(index, value)
+        try:
+            (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(index, value)
+        except Exception:
+            raise ContextKeyError(self, index)
 
     @synchronize
     def set_multiple(self, seq):
