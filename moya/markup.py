@@ -162,17 +162,22 @@ class MoyaMarkup(MarkupBase):
         # return HTML(text)
         console = context['.console']
 
-        def write_error(el, msg, exc=None):
-            if exc is not None and context['.debug']:
-                c = Console(text=True, width=120)
-                c.obj(context, exc)
-                _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(c.get_text()))
+        def write_error(insert_ref, el, msg, exc=None):
+            log.error("insert '%s' failed; %s", insert_ref, msg)
+
+            if context['.debug']:
+                if exc is not None:
+                    c = Console(text=True, width=120)
+                    c.obj(context, exc)
+                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(c.get_text()))
+                else:
+                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(msg))
+                new_el = fromstring(_html)
+                el.getparent().replace(el, new_el)
             else:
-                _html = "<!-- {} -->".format(escape(msg))
-            log.warning(msg)
+                el.getparent().remove(el)
+
             console.obj(context, exc)
-            new_el = fromstring(_html)
-            el.getparent().replace(el, new_el)
 
         for el in self._selector(soup):
 
@@ -184,10 +189,8 @@ class MoyaMarkup(MarkupBase):
             app = None
             app_name = el.attrib.get('app', None)
             if app_name is None:
-                app = archive.get_app(app_name)
-                if app is None:
-                    write_error(el, "no app called '{}'".format(app_name))
-                    continue
+                write_error(insert_ref, el, "'app' attribute is required on <moya> tag")
+                continue
 
             # Get data params
             params = {k.split('-', 1)[-1]: v for k, v in el.attrib.items()
@@ -199,12 +202,12 @@ class MoyaMarkup(MarkupBase):
             try:
                 _app, insert_el = archive.get_element(insert_ref, app=app)
             except ElementNotFoundError as e:
-                write_error(el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
+                write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
                 continue
 
             if not getattr(insert_el, '_moya_markup_insert', False):
                 msg = '{} is not safe for markup insertion'.format(html.escape(insert_el))
-                write_error(el, msg)
+                write_error(insert_ref, el, msg)
                 continue
 
             insert_callable = archive.get_callable_from_element(insert_el, app=_app)
@@ -212,13 +215,15 @@ class MoyaMarkup(MarkupBase):
             try:
                 replace_markup = insert_callable(context, **params)
             except LogicError as e:
-                write_error(el, "markup insert failed due to logic error, see logs", exc=e)
+                write_error(insert_ref, el, "markup insert failed due to logic error, see logs", exc=e)
                 continue
             except Exception as e:
-                write_error(el, "markup insert failed, see logs", exc=e)
+                write_error(insert_ref, el, "markup insert failed, see logs", exc=e)
                 continue
 
             new_el = fromstring(replace_markup)
+            #new_el.head = el.head
+            new_el.tail = el.tail
             el.getparent().replace(el, new_el)
 
         return HTML("".join(tostring(e).decode('utf-8') for e in soup.getchildren()))

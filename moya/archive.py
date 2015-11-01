@@ -589,7 +589,7 @@ class Archive(object):
     def get_app(self, app_id):
         try:
             return self.apps[app_id]
-        except IndexError:
+        except KeyError:
             return None
 
     def has_app(self, app_id):

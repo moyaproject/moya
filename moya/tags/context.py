@@ -22,6 +22,7 @@ from ..logic import (DeferNodeContents,
                      MoyaException)
 from ..console import style as console_style
 from ..render import HTML
+from ..html import escape as escape_html
 from ..compat import zip_longest, raw_input, text_type, string, xrange, PY3
 
 import json
@@ -534,6 +535,29 @@ class Str(DataSetter):
         if self.has_parameter('value'):
             return self.value(context)
         return context.sub(self.text)
+
+
+class WrapTag(DataSetter):
+    """Wraps text in a HTML tag."""
+
+    class Help:
+        synopsis = """wrap a string in a HTML tag"""
+        example = """
+        <!-- Wrap the string "Hello, World" in a P tag -->
+        <wrap-tag tag="p" dst="paragraph">Hello, World!</wrap-tag>
+        <echo>${paragraph}</echo>
+        """
+
+    tag = Attribute("Tag", default="span")
+
+    def get_value(self, context):
+        tag = self.tag(context)
+        _let = self.get_let_map(context)
+        if _let:
+            attribs = " " + " ".join('{}="{}"'.format(k, escape_html(v)) for k, v in _let.items())
+        else:
+            attribs = ""
+        return """<{tag}{attribs}>{text}</{tag}>""".format(tag=tag, attribs=attribs, text=escape_html(context.sub(self.text)))
 
 
 class Dedent(DataSetter):

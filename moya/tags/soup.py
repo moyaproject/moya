@@ -29,7 +29,6 @@ class Strain(DataSetter):
     prepend = Attribute("markup to prepend", type="expression", required=False, default=None)
     replace = Attribute("markup to replace", type="expression", required=False, default=None)
     remove = Attribute("Remove matched element?", type="boolean", required=False)
-#    unwrap = Attribute("Remove outer tag", type="boolean", default=False, required=False)
 
     filter = Attribute("Filter by attributes", type="function", required=False, default=None)
     _max = Attribute("Maximum number of tags to match", type="integer", required=False, default=None)

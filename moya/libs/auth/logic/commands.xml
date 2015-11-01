@@ -4,15 +4,13 @@
       xmlns:auth="http://moyaproject.com/auth">
 
 
+    <!--
     <command libname="cmd.test" synopsis="tests">
-
         <db:query model="#GroupMembership" collect="list" collectkey="group"
             filter="#GroupMembership.user.username == 'will'" dst="users" />
-
         <echo obj="list:users" />
-
     </command>
-
+    -->
 
     <macro docname="getuser">
         <if test="isint:int:name">
@@ -148,9 +146,23 @@
 
     <command libname="cmd.init" synopsis="create default groups/permissions and a superuser" init="yes" priority="10">
         <doc>Run this once to initialize the auth system</doc>
-        <echo>This will create a super user and default groups/permissions.</echo>
-        <echo if="not .init">You should run this once to initialize.</echo>
 
+        <db:transaction>
+            <db:get-or-create model="#Permission" let:name="'admin'"
+                let:description="'User may perform administration tasks'" />
+            <db:get-or-create model="#Permission" let:name="'super'" dst="super_permission"
+                let:description="'User may perform all system tasks'" />
+            <db:get-or-create model="#Group" let:name="'administrators'"
+                let:description="'Users with administration privileges'" dst="admin_group"/>
+        </db:transaction>
+        <catch exception="db.integrity-error" />
+
+        <db:if-exists model="#PermissionMembership" let:permission="super_permission">
+            <echo>A 'super' user exists</echo>
+            <exit/>
+        </db:if-exists>
+
+        <echo>This will create a super user and default groups/permissions.</echo>
         <input dst="username" default="superuser">Username of 'super' user:</input>
         <input dst="password" password="yes">Super user's password:</input>
         <input dst="email">Super user's email address:</input>
@@ -169,16 +181,6 @@
             <db:create model="#Group" let:user="user" dst="personal_group"/>
             <append value="personal_group" src="user.groups"/>
         </db:transaction>
-
-        <db:transaction>
-            <db:get-or-create model="#Permission" let:name="'admin'"
-                let:description="'User may perform administration tasks'" />
-            <db:get-or-create model="#Permission" let:name="'super'"
-                let:description="'User may perform all system tasks'" />
-            <db:get-or-create model="#Group" let:name="'administrators'"
-                let:description="'Users with administration privileges'" dst="admin_group"/>
-        </db:transaction>
-        <catch exception="db.integrity-error" />
 
         <call macro="add_permissions" let:permission="'super'" let:user="user" />
         <call macro="add_permissions" let:permission="'admin'" let:user="user" />

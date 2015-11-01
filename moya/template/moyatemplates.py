@@ -1541,7 +1541,6 @@ class MarkupBlockNode(Node):
 
     def render(self, environment, context, template, text_escape):
         markup = self.render_contents(environment, context, template, text_escape)
-
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
         options = self.options_expression.eval(context)
@@ -1550,6 +1549,10 @@ class MarkupBlockNode(Node):
             html = render_object(markup_renderable, environment.archive, context, target, options=options)
         except MarkupError as e:
             self.render_error("unable to render markup ({})".format(e))
+        except Exception as e:
+            import traceback
+            traceback.print_exc(e)
+            self.render_error("{}".format(e))
         return html
 
 
