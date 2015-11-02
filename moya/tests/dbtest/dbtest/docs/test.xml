@@ -8,6 +8,29 @@
 		<text name="content" />
 	</model>
 
+
+    <model libname="Owner" xmlns="http://moyaproject.com/db">
+        <string name="name" length="100"/>
+        <foreign-key name="unowned_child" model="#Child"/>
+        <foreign-key name="owned_child" model="#Child" owner="yes"/>
+        <one-to-one name="unowned_child_o2o" model="#Child"/>
+        <one-to-one name="owned_child_o2o" model="#Child" owner="yes"/>
+    </model>
+
+    <model libname="Child" xmlns="http://moyaproject.com/db">
+        <string name="name" length="100"/>
+    </model>
+
+
+    <model libname="Post" xmlns="http://moyaproject.com/db">
+        <string name="name" length="100"/>
+    </model>
+
+    <model libname="Images" xmlns="http://moyaproject.com/db">
+        <string name="name" length="100"/>
+        <foreign-key model="#Post" name="post" backref="images" owned="yes"/>
+    </model>
+
 	<macro libname="setup">
 		<db:bulk-create model="#testmodel1">
 			[
@@ -60,4 +83,58 @@
 	</macro>
 
 
+    <macro libname="owner_test">
+        <db:commit/>
+        <db:create model="#Child" let:name="'child1'" dst="child1"/>
+        <db:create model="#Child" let:name="'child2'" dst="child2"/>
+        <db:create model="#Child" let:name="'child3'" dst="child3"/>
+        <db:create model="#Child" let:name="'child4'" dst="child4"/>
+        <db:create model="#Owner" let:name="'owner'"
+            let:unowned_child="child1" let:owned_child="child2"
+            let:unowned_child_o2o="child3" let:owned_child_o2o="child4"/>
+        <db:commit/>
+    </macro>
+
+    <macro libname="get_owner">
+        <return>
+            <db:get model="#Owner" let:name="name"/>
+        </return>
+    </macro>
+
+    <macro libname="get_child">
+        <return>
+            <db:get model="#Child" let:name="name"/>
+        </return>
+    </macro>
+
+    <macro libname="delete_owner">
+        <db:get model="#Owner" let:name="name" dst="owner"/>
+        <db:delete src="owner"/>
+        <db:commit/>
+    </macro>
+
+
+    <macro libname="make_post">
+        <db:create model="#Post" let:name="'post'" dst="post"/>
+        <db:create model="#Images" let:name="'images1'" let:post="post"/>
+        <db:commit/>
+    </macro>
+
+    <macro libname="get_post">
+        <return>
+            <db:get model="#Post" let:name="name"/>
+        </return>
+    </macro>
+
+    <macro libname="get_images">
+        <return>
+            <db:get model="#Images" let:name="name"/>
+        </return>
+    </macro>
+
+    <macro libname="delete_post">
+        <db:get model="#Post" let:name="name" dst="post"/>
+        <db:delete src="post"/>
+        <db:commit/>
+    </macro>
 </moya>

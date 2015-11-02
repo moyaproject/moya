@@ -6,6 +6,8 @@ Fix for ignore exceptions error
 Allow help command to work when project doesn't build
 Optimization for <let>
 Added <wrap-tag>
+Added <let-parallel>
+Added owned and owner attribute to foreign keys
 
 0.5.22
 ------

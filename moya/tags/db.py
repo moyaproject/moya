@@ -89,7 +89,7 @@ class DBMixin(object):
         dbsessions = context.get('._dbsessions', None)
         if dbsessions is None:
             raise logic.MoyaException("db.no-session",
-                                      "Unable to get database session",
+                                      "unable to get database session",
                                       diagnosis="Have you initialized a database in settings?")
 
         try:
@@ -590,13 +590,13 @@ class DBModel(DBElement):
         name = "%s_to_%s" % (left, right)
         sa_columns = [Column('left_id',
                              Integer,
-                             ForeignKey('%s.id' % left, ondelete="CASCADE"),
+                             ForeignKey('%s.id' % left),
                              nullable=False
                              #primary_key=True
                              ),
                       Column('right_id',
                              Integer,
-                             ForeignKey('%s.id' % right, ondelete="CASCADE"),
+                             ForeignKey('%s.id' % right),
                              nullable=False
                              #primary_key=True
                              )
@@ -621,7 +621,7 @@ class DBModel(DBElement):
             app, extend_model = self.document.get_app_element(extend_model_ref, app=app)
 
             if (app, extend_model) in extends_chain:
-                raise errors.StartupFailedError('Recursive extends in {!r}, {!r} previously included'.format(self, extend_model))
+                raise errors.StartupFailedError('recursive extends in {!r}, {!r} previously included'.format(self, extend_model))
 
             extends_chain.append((app, extend_model))
             model = extend_model
@@ -638,13 +638,11 @@ class DBModel(DBElement):
         return definitions
 
     def _build_model(self, app):
-
         if self.abstract:
             return
         if self.get_db() is None:
             raise errors.StartupFailedError("can't build model for {}; no database defined".format(self.libid))
 
-        app_name = app.name
         app_name = self.get_table_name(app)
         if app_name in self.table_map:
             return
@@ -721,6 +719,7 @@ class DBModel(DBElement):
 
     def event_listener(self, event, app, _object):
         if _object is None:
+            # TODO: figure out why this occurs
             return
         signal_params = {
             'object': _object,
@@ -789,7 +788,7 @@ class _ForeignKey(DBElement):
     default = Attribute("Default value if not set explicitly", default=None)
     primary = Attribute("Primary key?", type="boolean", default=False)
     index = Attribute("Generate a db index?", type="boolean", default=False)
-    ondelete = Attribute("Delete behavior", default="CASCADE", choices=['CASCADE', 'SET NULL'])
+    #ondelete = Attribute("Delete behavior", default="CASCADE", choices=['CASCADE', 'SET NULL'])
 
     options = Attribute("Objects to consider in admin forms", type="dbexpression", required=False, default=None)
     orderby = Attribute("Default order for admin forms", required=False, default="id")
@@ -799,7 +798,10 @@ class _ForeignKey(DBElement):
     backref = Attribute("Back reference", required=False, default=None)
     picker = Attribute("Picker table for admin view", required=False)
 
-    cascade = Attribute("Cascade behaviour of backref", type="text", default="save-update, merge")
+    #cascade = Attribute("Cascade behaviour of backref", type="text", default="save-update, merge")
+
+    owner = Attribute("Does this model own the referenced object?", type="boolean", default=False)
+    owned = Attribute("Is tis model owned by the referenced model?", type="boolean", default=False)
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
@@ -814,7 +816,6 @@ class _ForeignKey(DBElement):
 
                 @property
                 def table_class(self):
-                    #ref_model = model.document.get_app_element(ref_model_ref, app)
                     return model.get_table_class(app)
 
                 def __moyaqs__(self, context, dbsession):
@@ -825,23 +826,6 @@ class _ForeignKey(DBElement):
                 def _get_query_set(self):
                     # Not a query set, but a list of id works
                     return [getattr(i, 'id') for i in self if hasattr(i, 'id')]
-
-                # def __moyadbsubselect__(self, context):
-                #     dbsession = dbobj.get_session(context, model.dbname)
-                #     qs = dbsession.query(getattr(assoc_table.c, left_key))
-                #     qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
-                #     return qs
-
-                # def __moyaqs__(self, context, dbsession):
-                #     qs = dbsession.query(getattr(assoc_table.c, left_key))
-                #     qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
-                #     qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
-                #     return qs
-
-                # def __check_type__(self, obj):
-                #     table_class = model.get_table_class(app)
-                #     return isinstance(obj, table_class)
-
             return ListCollection
 
         def get_col(app, model):
@@ -851,6 +835,16 @@ class _ForeignKey(DBElement):
                 raise errors.ElementError(text_type(e), element=self)
 
             default = no_default if self.has_parameter('default') else params.default
+
+            ondelete = "CASCADE" if not params.null else "SET NULL"
+            cascade = "save-update, merge"
+            back_cascade = "save-update, merge"
+            if params.owned:
+                back_cascade = "all, delete"
+            if params.owner:
+                cascade = "all, delete"
+                ondelete = "CASCADE"
+
             col = dbcolumns.ForeignKeyColumn(self.tag_name,
                                              name,
                                              ref_model.element,
@@ -862,12 +856,13 @@ class _ForeignKey(DBElement):
                                              blank=params.blank,
                                              primary=params.primary,
                                              index=params.index,
-                                             ondelete=params.ondelete,
+                                             ondelete=ondelete,
                                              options=params.options,
                                              orderby=params.orderby,
                                              backref=params.backref,
                                              picker=params.picker,
-                                             cascade=params.cascade,
+                                             cascade=cascade,
+                                             back_cascade=back_cascade,
                                              uselist=True,
                                              backref_collection=get_backref_collection(app, model, name))
             ref_model.element.add_reference(model.libid)
@@ -899,6 +894,16 @@ class OneToOne(_ForeignKey):
                 raise errors.ElementError(text_type(e), element=self)
 
             default = no_default if self.has_parameter('default') else params.default
+
+            ondelete = "CASCADE" if not params.null else "SET NULL"
+            cascade = "save-update, merge"
+            back_cascade = "save-update, merge"
+            if params.owned:
+                back_cascade = "all, delete-orphan"
+            if params.owner:
+                cascade = "all, delete"
+                ondelete = "CASCADE"
+
             col = dbcolumns.ForeignKeyColumn(self.tag_name,
                                              name,
                                              ref_model.element,
@@ -910,12 +915,13 @@ class OneToOne(_ForeignKey):
                                              blank=params.blank,
                                              primary=params.primary,
                                              index=params.index,
-                                             ondelete=params.ondelete,
+                                             ondelete=ondelete,
                                              options=params.options,
                                              orderby=params.orderby,
                                              backref=params.backref,
                                              picker=params.picker,
-                                             cascade=params.cascade,
+                                             cascade=cascade,
+                                             back_cascade=back_cascade,
                                              uselist=False)
             ref_model.element.add_reference(model.libid)
             return col
@@ -1796,7 +1802,7 @@ class Delete(ContextElementBase, DBMixin):
     xmlns = namespaces.db
 
     db = Attribute("Database", default="_default")
-    src = Attribute("Object or queryset to delete", type="expression", required=True)
+    src = Attribute("Object or queryset to delete", type="expression", required=True, missing=False)
 
     @wrap_db_errors
     def logic(self, context):

@@ -249,8 +249,9 @@ class ForeignKeyColumn(MoyaDBColumn):
                  primary=False,
                  index=False,
                  unique=False,
-                 ondelete="CASCADE",
+                 ondelete="SET NULL",
                  cascade=None,
+                 back_cascade=None,
                  orderby=None,
                  options=None,
                  backref=None,
@@ -275,6 +276,7 @@ class ForeignKeyColumn(MoyaDBColumn):
         self.unique = unique
         self.ondelete = ondelete
         self.cascade = cascade
+        self.back_cascade = back_cascade
         self.orderby = orderby
         self.options = options
         self.backref = backref
@@ -312,7 +314,7 @@ class ForeignKeyColumn(MoyaDBColumn):
                 _backref = backref(self.backref,
                                    uselist=self.uselist,
                                    #lazy="subquery",
-                                   #cascade=self.cascade,
+                                   cascade=self.back_cascade,
                                    collection_class=self.backref_collection)
             else:
                 _backref = None

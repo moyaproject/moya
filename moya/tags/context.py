@@ -445,6 +445,40 @@ class Let(DataSetter):
                        text_type(e))
 
 
+class LetParallel(Let):
+    """
+    Sets multiple variables in parallel.
+
+    Like [tag]let[/tag], this tag sets values to the results of expressions, but evaluates all the expressions before assignment.
+
+    One use for this, is to [i]swap[/i] variables without using an intermediate.
+    """
+
+    class Help:
+        synopsis = """set values in parallel."""
+        example = """
+        <str dst="a">foo</str>
+        <str dst="b">bar</str>
+        <let-parallel a="b" b="a" />
+        """
+
+    class Meta:
+        all_attributes = True
+
+    _reserved_attribute_names = ['if']
+
+    def logic(self, context):
+        values = []
+        for setter, indices, _eval in self.expressions:
+            values.append(_eval(context))
+        try:
+            for (setter, indices, _eval), value in zip(self.expressions, values):
+                setter(context, indices, value)
+        except ContextKeyError as e:
+            self.throw('let.fail',
+                       text_type(e))
+
+
 class LetStr(DataSetter):
     """Like [tag]let[/tag] but sets variables as strings. Setting strings with [tag]let[/tag] can look a little clumsy because of the requirement to escape the text twice. [tag]let-str[/tag] treats attributes as strings and not expressions."""
 
