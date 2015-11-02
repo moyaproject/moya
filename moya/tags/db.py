@@ -799,7 +799,7 @@ class _ForeignKey(DBElement):
     backref = Attribute("Back reference", required=False, default=None)
     picker = Attribute("Picker table for admin view", required=False)
 
-    cascade = Attribute("Cascade behaviour of backref", type="text", default="all, delete-orphan")
+    cascade = Attribute("Cascade behaviour of backref", type="text", default="save-update, merge")
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)
@@ -915,6 +915,7 @@ class OneToOne(_ForeignKey):
                                              orderby=params.orderby,
                                              backref=params.backref,
                                              picker=params.picker,
+                                             cascade=params.cascade,
                                              uselist=False)
             ref_model.element.add_reference(model.libid)
             return col

@@ -273,7 +273,7 @@ class ForeignKeyColumn(MoyaDBColumn):
         self.primary = primary
         self.index = index
         self.unique = unique
-        self.ondelete = "CASCADE"
+        self.ondelete = ondelete
         self.cascade = cascade
         self.orderby = orderby
         self.options = options
@@ -312,7 +312,7 @@ class ForeignKeyColumn(MoyaDBColumn):
                 _backref = backref(self.backref,
                                    uselist=self.uselist,
                                    #lazy="subquery",
-                                   cascade=self.cascade,
+                                   #cascade=self.cascade,
                                    collection_class=self.backref_collection)
             else:
                 _backref = None
@@ -320,7 +320,8 @@ class ForeignKeyColumn(MoyaDBColumn):
             return relationship(ref_model_table_class(),
                                 primaryjoin=lambda: get_join(ref_model_table_class),
                                 remote_side=lambda: ref_model_table_class().id,
-                                backref=_backref
+                                backref=_backref,
+                                cascade=self.cascade
                                 )
 
         yield self.name, lazy_relationship
