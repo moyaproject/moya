@@ -57,6 +57,18 @@ class Application(object):
             self.archive.get_template_engine().check(template)
         return path
 
+    def resolve_templates(self, templates, check=False):
+        if not templates:
+            return None
+        engine = self.archive.get_template_engine()
+        template_exists = engine.exists
+        path = None
+        for template in templates:
+            path = self.resolve_template(template)
+            if template_exists(path):
+                break
+        return path
+
     def get_element(self, element_ref):
         archive = self.archive
         app_id, lib_id, name = archive.parse_element_ref(element_ref)

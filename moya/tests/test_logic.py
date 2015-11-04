@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from __future__ import print_function
 
 import os.path
@@ -9,6 +10,9 @@ from moya.console import Console
 
 from moya.tags import context, config
 
+BF_HELLO = """
+++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
+"""
 
 class TestLogic(unittest.TestCase):
 
@@ -93,6 +97,14 @@ class TestLogic(unittest.TestCase):
         for n, correct in tests:
             result = self.archive('moya.tests#ifelse', self.context, None, n=n)
             self.assertEqual(result, correct)
+
+    def test_bf(self):
+        """Test BF macro"""
+        # Just because is a moderately complex piece of code with lots of loops
+        context = self.context
+        call = self.archive.call
+        result = call('moya.tests#bf', context, None, program=BF_HELLO)
+        self.assertEqual(result, "Hello World!\n")
 
 
 if __name__ == "__main__":

@@ -71,14 +71,25 @@ class WidgetBase(LogicElement):
                 context.pop_frame()
 
         app = self.get_app(context)
-        custom_template = app.resolve_template(self.template(context))
-        template_node = content.add_template(self._tag_name,
-                                             custom_template or widget_app.resolve_template(self._template),
-                                             app=widget_app)
+
+
+
+        # custom_template = app.resolve_template(self.template(context))
+        # template_node = content.add_template(self._tag_name,
+        #                                      custom_template or widget_app.resolve_template(self._template),
+        #                                      app=widget_app)
 
         self.push_call(context, td, widget_app)
         if self._let_dst:
             context[self._let_dst] = let_map
+
+        if self.has_parameter('template'):
+            template = widget_app.resolve_templates(self.template(context))
+        else:
+            template = widget_app.resolve_templates(self._template(context))
+        template_node = content.add_template(self._tag_name,
+                                             template,
+                                             app=widget_app)
 
         yield_stack = context.set_new_call('._yield_stack', list)
         yield_stack.append(lambda c, data: on_yield(c, app, content, self, data))
@@ -136,7 +147,7 @@ class Widget(ElementBase):
 
     ns = Attribute("XML Namespace", required=False)
     name = Attribute("Tag name", required=True)
-    template = Attribute("Template", type="template", required=False, default=None)
+    template = Attribute("Template", type="templates", required=False, default=None)
     let = Attribute("Let destination", required=False, default=None)
     container = Attribute("Is this widget a container?", type="boolean", default=True, required=False)
     synopsis = Attribute("Short description of the widget")
@@ -147,7 +158,7 @@ class Widget(ElementBase):
         params = self.get_parameters(context)
 
         attributes = {}
-        attributes['template'] = Attribute('Override widget template', name="template", required=False, default=None)
+        attributes['template'] = Attribute('Override widget template', name="template", type="templates", required=False, default=None)
         for signature in self.children("signature"):
             for attribute_tag in signature.children("attribute"):
                 param_map = attribute_tag.get_all_parameters(context)
@@ -178,7 +189,7 @@ class Widget(ElementBase):
             definition = self._location
 
         cls_dict['_definition'] = definition
-        cls_dict['_template'] = params.template
+        cls_dict['_template'] = self.template
         cls_dict['_let_dst'] = params.let
         cls_dict['xmlns'] = params.ns or self.lib.namespace or namespaces.default
         cls_dict.update(('_attribute_' + k, v)

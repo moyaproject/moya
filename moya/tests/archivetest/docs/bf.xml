@@ -1,0 +1,65 @@
+<moya xmlns="http://moyaproject.com" xmlns:let="http://moyaproject.com/let">
+
+    <!-- https://en.wikipedia.org/wiki/Brainfuck interpreter -->
+    <!-- A 'real world' test with lots of loops -->
+    <macro libname="bf" docname="bf">
+        <let memory="[0]*30000" cp="0" ip="0" in="0"/>
+        <list dst="output"/>
+
+        <repeat>
+
+            <let c="program[ip]"/>
+            <break if="missing:c"/>
+
+            <switch on="c">
+                <case>&gt;</case>
+                <let cp="(cp + 1) % len:memory"/>
+
+                <case>&lt;</case>
+                <let cp="(cp - 1) % len:memory"/>
+
+                <case>+</case>
+                <set-item src="memory" index="cp" value="memory[cp] + 1" />
+
+                <case>-</case>
+                <set-item src="memory" index="cp" value="memory[cp] - 1" />
+
+                <case>.</case>
+                <append src="output" value="chr:memory[cp]" />
+
+                <case>,</case>
+                <let v="input[in] or 0" in="in+1"/>
+                <set-item src="memory" index="cp" value="v"/>
+
+                <case>[</case>
+                <if test="memory[cp] == 0">
+                    <let braces="1"/>
+                    <while test="braces">
+                        <let ip="ip + 1" c="program[ip]"/>
+                        <switch on="c">
+                            <case>[</case><let braces="braces+1"/>
+                            <case>]</case><let braces="braces-1"/>
+                        </switch>
+                    </while>
+                </if>
+
+                <case>]</case>
+                <let braces="1"/>
+                <while test="braces">
+                    <let ip="ip - 1" c="program[ip]"/>
+                    <switch on="c">
+                        <case>[</case><let braces="braces-1"/>
+                        <case>]</case><let braces="braces+1"/>
+                    </switch>
+                </while>
+                <dec dst="ip"/>
+            </switch>
+
+            <inc dst="ip"/>
+
+        </repeat>
+        <return value="join:output"/>
+    </macro>
+
+
+</moya>
