@@ -129,7 +129,7 @@ log_signals = no
 # Run pre-flight checks before running server
 preflight = yes
 # Location of moya logic xml files
-location = ./logic
+location = ./startup
 # Path to logic file containing server
 startup = server.xml
 
@@ -343,7 +343,7 @@ NB. If you make local edits to these files, the moya command line app may end up
 This folder contains site-wide templates, typically used to customize the look and feel of the site.
 @WRAPTEXT /local/readme.txt
 This folder should contain libraries that are local to the project, i.e. authored by yourself or organization.
-@TEXT /logic/server.xml
+@TEXT /startup/server.xml
 <moya xmlns="http://moyaproject.com">
 
     <!-- Initialize a server -->
@@ -573,6 +573,6 @@ The filenames used here are just a suggestion of how to organize your Moya code 
 </moya>
 @WRAPTEXT /site/readme.txt
 This folder contains the 'site' library. The site library is for functionality that is highly specific to the site, and is generally used to customize functionality of other libraries.
-@WRAPTEXT /logic/readme.txt
+@WRAPTEXT /startup/readme.txt
 This folder contains the first XML files read by Moya, which will typically contain one or more <server> declarations.
 """

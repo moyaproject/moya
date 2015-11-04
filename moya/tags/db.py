@@ -94,8 +94,11 @@ class DBMixin(object):
 
         try:
             session = dbsessions[db]
-        except IndexError:
-            raise logic.MoyaException("db.missing-db", "No database called '{}'".format(db))
+        except KeyError:
+            if db == "_default":
+                raise logic.MoyaException("db.missing-db", "No database defined".format(db))
+            else:
+                raise logic.MoyaException("db.missing-db", "No database called '{}'".format(db))
         else:
             return session
 
@@ -590,13 +593,13 @@ class DBModel(DBElement):
         name = "%s_to_%s" % (left, right)
         sa_columns = [Column('left_id',
                              Integer,
-                             ForeignKey('%s.id' % left),
+                             ForeignKey('%s.id' % left, ondelete="CASCADE"),
                              nullable=False
                              #primary_key=True
                              ),
                       Column('right_id',
                              Integer,
-                             ForeignKey('%s.id' % right),
+                             ForeignKey('%s.id' % right, ondelete="CASCADE"),
                              nullable=False
                              #primary_key=True
                              )
@@ -1204,9 +1207,9 @@ class FieldElement(DBElement):
     null = Attribute("Allow null?", type="boolean", default=False)
     blank = Attribute("Allow blank?", type="boolean", default=True)
     default = Attribute("Default value", default=None)
-    primary = Attribute("Use as primary key", type="boolean")
-    index = Attribute("Create index", type="boolean", default=False)
-    unique = Attribute("Impose unique constraint", type="boolean", default=False)
+    primary = Attribute("Use as primary key?", type="boolean")
+    index = Attribute("Create index?", type="boolean", default=False)
+    unique = Attribute("Impose unique constraint?", type="boolean", default=False)
     label = Attribute("Short description of field purpose")
     help = Attribute("Additional help text for use in object forms")
     formfield = Attribute("Macro to create a form field, used in admin", required=False, default=None)

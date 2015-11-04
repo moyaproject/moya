@@ -364,10 +364,10 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
             project["auth"] = Auth.ask(console, default='y')
             project['signup'] = Signup.ask(console, default='y')
             project["pages"] = Pages.ask(console, default='y')
-            project["feedback"] = Feedback.ask(console, default='y')
             project["blog"] = Blog.ask(console, default='y')
-        project["comments"] = project.get("feedback", False) or project.get("pages", False)
-        project["wysihtml5"] = project.get("feedback", False) or project.get("pages", False)
+        project["feedback"] = Feedback.ask(console, default='y')
+        project["comments"] = project.get("blog", False) or project.get("pages", False)
+        project["wysihtml5"] = project.get("blog", False) or project.get("pages", False)
         project['jsonrpc'] = JSONRPC.ask(console, default='y')
 
         dirname = longname.split('.', 1)[-1].replace('.', '_')
