@@ -77,7 +77,7 @@ class WidgetBase(LogicElement):
             context[self._let_dst] = let_map
 
         if self.has_parameter('template'):
-            template = widget_app.resolve_templates(self.template(context), check=True)
+            template = app.resolve_templates(self.template(context), check=True)
         else:
             template = widget_app.resolve_templates(self._template(context), check=True)
         template_node = content.add_template(self._tag_name,
