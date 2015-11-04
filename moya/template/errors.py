@@ -12,7 +12,7 @@ class MoyaRuntimeError(Exception):
 @implements_to_string
 class MissingTemplateError(Exception):
     hide_py_traceback = True
-    error_type = "Missing Template Error"
+    error_type = "Missing Template"
 
     def __init__(self, path, diagnosis=None):
         self.path = path
@@ -26,7 +26,7 @@ class MissingTemplateError(Exception):
 
 @implements_to_string
 class BadTemplateError(MissingTemplateError):
-    error_type = "Bad Template Error"
+    error_type = "Bad Template"
 
     def __str__(self):
         return 'Unable to load template "%s"' % self.path

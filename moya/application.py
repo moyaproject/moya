@@ -67,6 +67,10 @@ class Application(object):
             path = self.resolve_template(template)
             if template_exists(path):
                 break
+        else:
+            if check:
+                from .template.errors import MissingTemplateError
+                raise MissingTemplateError(path)
         return path
 
     def get_element(self, element_ref):
