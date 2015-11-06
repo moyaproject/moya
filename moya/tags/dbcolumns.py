@@ -323,7 +323,8 @@ class ForeignKeyColumn(MoyaDBColumn):
                                 primaryjoin=lambda: get_join(ref_model_table_class),
                                 remote_side=lambda: ref_model_table_class().id,
                                 backref=_backref,
-                                cascade=self.cascade
+                                cascade=self.cascade,
+                                #lazy="subquery"
                                 )
 
         yield self.name, lazy_relationship

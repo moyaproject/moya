@@ -359,17 +359,18 @@ class NodeType(object):
     def add_child(self, child):
         self.children.append(child)
 
-    def _combine_text_nodes(self, nodes):
+    def _combine_text_nodes(self, nodes, _string_types=string_types):
         """Combines consecutive text nodes in to a single text node"""
         if not nodes:
             return []
         nodes = nodes[:]
         out_nodes = [nodes.pop(0)]
+        append = out_nodes.append
         for node in nodes:
-            if isinstance(node, string_types) and isinstance(out_nodes[-1], string_types):
+            if isinstance(node, _string_types) and isinstance(out_nodes[-1], _string_types):
                 out_nodes[-1] += node
             else:
-                out_nodes.append(node)
+                append(node)
         return out_nodes
 
     def _parse_tag_name(self, t):

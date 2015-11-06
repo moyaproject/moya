@@ -291,6 +291,7 @@ class TemplateNode(Node):
         self.template = template
         self.td = td.copy() if td is not None else {}
         self.app = app
+        self._rendered = None
         super(TemplateNode, self).__init__(name)
         self.td.update({'children': self.children,
                         'groups': self._groups})
@@ -337,6 +338,8 @@ class TemplateNode(Node):
         return self.td.items()
 
     def moya_render(self, archive, context, target, options):
+        if self._rendered is not None:
+            return self._rendered
         engine = archive.get_template_engine("moya")
         td = self.td
 
@@ -354,7 +357,9 @@ class TemplateNode(Node):
             html = engine.render(self.template, td, base_context=context, app=self.app)
         else:
             html = engine.render_template(self.template, td, base_context=context, app=self.app)
-        return HTML(html)
+        html = HTML(html)
+        self._rendered = html
+        return html
 
 
 @implements_to_string
@@ -451,7 +456,7 @@ class Section(object):
         self.add_node(node)
 
     def add_markup(self, name, html):
-        node = MarkupNode(name, html)
+        node = MarkupNode(name, HTML(html))
         self.add_node(node)
 
     def add_renderable(self, name, renderable):

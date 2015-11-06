@@ -438,7 +438,7 @@ class CheckModified(LogicElement):
             gmt_time = GMT.localize(dt)
             modified_date = gmt_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
             headers['Last-Modified'] = modified_date
-            if request.if_modified_since and gmt_time > request.if_modified_since:
+            if request.if_modified_since and gmt_time >= request.if_modified_since:
                 response = Response(status=http.StatusCode.not_modified,
                                     headers=headers)
                 raise logic.EndLogic(response)

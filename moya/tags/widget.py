@@ -13,7 +13,6 @@ from .. import errors
 from .. import namespaces
 
 from collections import OrderedDict
-import weakref
 
 
 class WidgetBase(LogicElement):
@@ -54,8 +53,23 @@ class WidgetBase(LogicElement):
 
         td = self.get_all_parameters(context)
         td.pop('_if', None)
+        _cachekey, _cachefor = self._cache
+        cachekey, cachefor = None, None
+
         let_map = self.get_let_map(context)
         widget_app = self.get_widget_app(context)
+
+        if _cachekey and _cachefor:
+            with context.data_frame(td):
+                cachekey = _cachekey(context)
+                cachefor = _cachefor(context).milliseconds
+
+            cachekey = "__widget__.{}.{}".format(self.libid, cachekey)
+            cache = self.archive.get_cache('fragment')
+            html = cache.get(cachekey, None)
+            if html is not None:
+                content.add_markup(self._tag_name, html)
+                return
 
         if '_caller' not in td:
             td['_caller'] = self.get_proxy(context, context['.app'])
@@ -109,6 +123,10 @@ class WidgetBase(LogicElement):
                            'the return value from a widget must be a dict, or None (not {})'.format(context.to_expr(scope)))
 
         template_node.update_template_data(scope)
+        if cachekey is not None:
+            html = template_node.moya_render(self.archive, context, 'html', {})
+            cache = self.archive.get_cache('fragment')
+            cache.set(cachekey, html, cachefor)
 
 
 class WidgetBaseContainer(WidgetBase):
@@ -147,11 +165,15 @@ class Widget(ElementBase):
     undocumented = Attribute("Set to yes to disabled documentation for this tag", type="boolean", default=False)
     text = Attribute("Include text children?", type="boolean", default=True)
 
+    cachekey = Attribute("Cache key", name="cachekey", type="text", default=None, required=False)
+    cachefor = Attribute("Cache time", name="cachefor", type="timespan", default=None, required=False)
+
     def finalize(self, context):
         params = self.get_parameters(context)
 
         attributes = {}
         attributes['template'] = Attribute('Override widget template', name="template", type="templates", required=False, default=None)
+
         for signature in self.children("signature"):
             for attribute_tag in signature.children("attribute"):
                 param_map = attribute_tag.get_all_parameters(context)
@@ -184,6 +206,12 @@ class Widget(ElementBase):
         cls_dict['_definition'] = definition
         cls_dict['_template'] = self.template
         cls_dict['_let_dst'] = params.let
+
+        if self.has_parameters('cachekey', 'cachefor'):
+            cls_dict['_cache'] = (self.cachekey, self.cachefor)
+        else:
+            cls_dict['_cache'] = (None, None)
+
         cls_dict['xmlns'] = params.ns or self.lib.namespace or namespaces.default
         cls_dict.update(('_attribute_' + k, v)
                         for k, v in attributes.items())

@@ -32,7 +32,6 @@ from .. import tools
 
 from webob import Response
 
-from datetime import datetime
 from fs.path import splitext
 import pytz
 

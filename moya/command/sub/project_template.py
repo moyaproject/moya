@@ -109,6 +109,23 @@ engine = sqlite:///basic.sqlite
 echo = no
 default = yes
 {{% endif %}}
+
+
+# We want caches to be persistent in production
+# file caches are good, memcached is generally better in production
+
+[cache:parser]
+type = file
+
+[cache:templates]
+type = file
+
+[cache:fragment]
+type = file
+
+[cache:runtime]
+type = file
+
 @TEXT /basesettings.ini
 # -------------------------------------------------------------
 # Project settings
@@ -140,7 +157,6 @@ location = ./themes
 
 [autoreload]
 enabled = no
-
 
 # -------------------------------------------------------------
 # Sites
@@ -191,19 +207,28 @@ location = ./static
 
 [cache:parser]
 # Cache used to store parsed xml documents
-type = file
+type = dict
 namespace = parser
-location = ./__moyacache__
+location = __moyacache__
 
 [cache:templates]
 # Cache used to store compiled templates
-type = file
+type = dict
 namespace = templates
-location = ./__moyacache__
+location = __moyacache__
 
 [cache:fragment]
 # Cache used to store html fragments
 type = dict
+namespace = framgment
+location = __moyacache__
+
+[cache:runtime]
+# Used by <cache-return> tag to cache expensive calculations
+type = dict
+namespace = runtime
+location = __moyacache__
+
 
 # -------------------------------------------------------------
 # Email servers

@@ -311,7 +311,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return result
 
     def collectids(self, context, v, _lookup_key=ExpressionModifiersBase._lookup_key):
-        return [_item for _item in (_lookup_key(item, 'id', Ellipsis) for item in v) if _item is not Ellipsis]
+        return [_item for _item in (_lookup_key(item, 'id', Ellipsis) for item in v) if _item is not Ellipsis] if v else []
 
     def color(sefl, context, v):
         return Color.construct(context, v)
@@ -559,7 +559,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return self._map(v)
 
     def max(self, context, v):
-        return max(v)
+        return max(_item for _item in v if _item is not None)
 
     def md5(self, context, v):
         if hasattr(v, 'read'):
@@ -580,7 +580,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return hashlib.md5(v).hexdigest()
 
     def min(self, context, v):
-        return min(v)
+        return min(_item for _item in v if _item is not None)
 
     def missing(self, context, v):
         return getattr(v, 'moya_missing', False)

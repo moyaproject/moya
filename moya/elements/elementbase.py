@@ -508,6 +508,9 @@ class ElementBaseType(object):
     def has_parameter(self, name):
         return name in self._tag_attributes and name not in self._missing
 
+    def has_parameters(self, *names):
+        return all(name in self._tag_attributes and name not in self._missing for name in names)
+
     def supports_parameter(self, name):
         return name in self._tag_attributes
 

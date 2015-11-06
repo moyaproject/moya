@@ -9,6 +9,7 @@ Added <wrap-tag>
 Added <let-parallel>
 Added owned and owner attribute to foreign keys
 Changed convention for server.xml, from /logic/ to /startup/ to make directory structure more clear
+Added cachekey and cachefor to widgets
 
 0.5.22
 ------
