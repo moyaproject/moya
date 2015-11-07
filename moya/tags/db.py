@@ -141,7 +141,7 @@ class MoyaQuerySet(interface.AttributeExposer):
         return text_type(self._qs.statement)
 
     @wrap_db_errors
-    def slice(self, start, stop, step):
+    def slice(self, start, stop, step=None):
         if step is not None:
             raise logic.MoyaException('db.slice-error',
                                       "Querysets do not support slicing with a step")
