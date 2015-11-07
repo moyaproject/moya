@@ -99,7 +99,7 @@
                 let:object_url="form.data.object_url"/>
             <let comment.user=".user"
                  comment.moderated="yes"
-                 comment.text="form.data.text"
+                 comment.text="form.data.text[:.app.settings.max_comment_length.int]"
                  comment.format="comment.commentobject.markup"/>
             <db:commit/>
 
@@ -133,7 +133,7 @@
                 let:object="form.data.object"
                 let:namespace="form.data.namespace"
                 let:object_url="form.data.object_url"/>
-            <let comment.text="form.data.text"
+            <let comment.text="form.data.text[:.app.settings.max_comment_length.int]"
                  comment.format="comment.commentobject.markup"
                  comment.commenter_name="form.data.commenter_name"
                  comment.commenter_url="form.data.commenter_url"
@@ -162,7 +162,7 @@
                 let:object_url="form.data.object_url"
                 let:subscribe="form.data.subscribe" />
 
-            <let comment.text="form.data.text"
+            <let comment.text="form.data.text[:.app.settings.max_comment_length.int]"
                  comment.format="comment.commentobject.markup"
                  comment.user=".user"/>
 

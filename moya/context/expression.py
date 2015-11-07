@@ -15,6 +15,7 @@ from fs.path import basename
 
 from pyparsing import (Word,
                        WordEnd,
+                       Empty,
                        nums,
                        Combine,
                        oneOf,
@@ -28,7 +29,8 @@ from pyparsing import (Word,
                        Group,
                        Suppress,
                        Regex,
-                       delimitedList)
+                       delimitedList,
+                       Optional)
 ParserElement.enablePackrat()
 
 from ..context import dataindex
@@ -375,13 +377,35 @@ class EvalFilterOp(Evaluator):
         return prod
 
 
+class EvalSliceOp(Evaluator):
+    def build(self, tokens):
+        self.value_eval = tokens[0][0].eval
+        self.slice_eval = [t.eval if t is not None else (lambda c: None) for t in tokens[0][1]]
+        if len(self.slice_eval) == 2:
+            self.slice_eval.append(lambda context: None)
+        if len(self.slice_eval) > 3:
+            raise ValueError('Slice syntax takes at most 3 values, i.e. value[start:stop:step]')
+
+    def eval(self, context):
+        obj = self.value_eval(context)
+        slice_indices = [_eval(context) for _eval in self.slice_eval]
+        start, stop, step = (None if _s == '' else _s for _s in slice_indices)
+        try:
+            if hasattr(obj, 'slice'):
+                return obj.slice(start, stop, step)
+            else:
+                return obj[start:stop:step]
+        except TypeError:
+            _vars = (context.to_expr(start), context.to_expr(stop), context.to_expr(step))
+            raise ValueError('unable to perform slice operation [{}:{}:{}]; check types are integers or None'.format(*_vars))
+
+
 class EvalBraceOp(Evaluator):
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.index_eval = [(t[0], t[1].eval) for t in tokens[0][1:]]
 
     def eval(self, context):
-
         obj = self.value_eval(context)
         for brace, eval in self.index_eval:
             index = eval(context)
@@ -405,7 +429,6 @@ class EvalBraceOp(Evaluator):
                     obj = obj.__moyacall__(index)
                 else:
                     raise ValueError("{} does not accept parameters".format(to_expression(context, obj)))
-
         return obj
 
 
@@ -712,7 +735,10 @@ key_pair_dict_operand.setParseAction(EvalKeyPairDict)
 callop = Group(('(') + expr + Suppress(')'))
 index = Group(('[') + expr + Suppress(']'))
 
+_slice = Group(Suppress('[') + delimitedList(Optional(expr, default=None), ':') + Suppress(']'))
+
 braceop = callop | index
+sliceop = _slice
 
 literalindex = Regex(r'\.([a-zA-Z0-9\._]+)')
 
@@ -749,8 +775,8 @@ expr << operatorPrecedence(operand, [
     (exclusiverangeop, 2, opAssoc.LEFT, EvalExclusiveRangeOp),
     (rangeop, 2, opAssoc.LEFT, EvalRangeOp),
 
-
     (braceop, 1, opAssoc.LEFT, EvalBraceOp),
+    (sliceop, 1, opAssoc.LEFT, EvalSliceOp),
     (literalindex, 1, opAssoc.LEFT, EvalLiteralIndex),
 
     (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
@@ -1007,27 +1033,17 @@ def main():
 if __name__=='__main__':
     #main()
 
-    e = Expression("(order = (order == 'desc'))")
-    #e = Expression("a=(order == ('test'))")
+    from moya.context import Context
+    c = Context({'l': "Hello, World"})
+    c['.develop'] = True
 
-    #e = Expression("{'order' : (order == 'desc' ? 'asc' : 'desc')}")
-    from context import Context
-    c = Context()
-    print(e.eval(c))
+    tests = ["l[-1]", "l[3]", "l[:3]", "l[3:]", "l[:]", "l[::-1]", "l[1:2:'a']"]
 
-    class Callable(object):
-        def __moyacall__(self, params):
-            print("Called with {}".format(params))
-            return 7
-
-    from context import Context
-    c = Context({'a': 1, 'foo': 'bar', 'call': Callable()})
-
-    e = Expression("call(a=7,c=2,b=3)")
-    print(e.eval(c))
-
-    # e = Expression("1...10")
-    # print list(e.eval(c))
-
-    # e = Expression("(.a or 10) * 10")
-    # print e.eval(c)
+    for test in tests:
+        e = Expression(test)
+        print(e.eval(c))
+    # e = Expression("l[3]")
+    # e = Expression("l[:3]")
+    # e = Expression("l[0:3]")
+    # e = Expression("l[3]")
+    # print(e.eval(c))

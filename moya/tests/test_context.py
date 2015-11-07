@@ -338,7 +338,12 @@ class TestContext(unittest.TestCase):
                  ("commaspacelist:['hello', 'world']", "hello, world"),
                  ("'hello\\nworld'", "hello\nworld"),
                  (r"'you can \"quote me\" on that'", 'you can "quote me" on that'),
-                 ("'\\\\'", "\\")
+                 ("'\\\\'", "\\"),
+                 ("'helloworld'[1]", 'e'),
+                 ("'helloworld'[-1]", 'd'),
+                 ("'helloworld'[:2]", "he"),
+                 ("'helloworld'[2:4]", "ll"),
+                 ("'helloworld'[::-1]", "dlrowolleh")
                  ]
 
         for expression, result in tests:
@@ -346,8 +351,6 @@ class TestContext(unittest.TestCase):
             expression_result = c.eval(expression)
             print("\t", expression_result)
             self.assertEqual(expression_result, result)
-            #expression_result_callable = c.compile(expression)
-            #self.assertEqual(expression_result_callable(), result)
 
     def test_expression_index(self):
         """Test the index operator"""

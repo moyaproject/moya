@@ -1,5 +1,5 @@
 {% if reply %}
-<textarea placeholder="{% trans %}Leave a reply{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
+<textarea placeholder="{% trans %}Leave a reply{% end %}" class="form-control input-block-level" name="text" rows="7" maxlength="${.app.settings.max_comment_length}"></textarea>
 {% else %}
-<textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7"></textarea>
+<textarea placeholder="{% trans %}Leave a comment{% end %}" class="form-control input-block-level" name="text" rows="7" maxlength="${.app.settings.max_comment_length}"></textarea>
 {% endif %}
