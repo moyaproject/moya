@@ -347,6 +347,9 @@ class NodeType(object):
     def render_error(self, msg, original=None, diagnosis=None):
         raise NodeRenderError(self, msg, original=original, diagnosis=diagnosis)
 
+    def syntax_error(self, msg, diagnosis=None):
+        raise errors.TagSyntaxError(msg, self, *self.location, diagnosis=diagnosis)
+
     def on_create(self, environment, parser):
         pass
 
@@ -1414,7 +1417,8 @@ class TransNode(Node):
                 return False
             else:
                 if self.number_expression is None:
-                    self.render_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute")
+                    self.syntax_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute",
+                                      diagnosis="For example; {% trans number post_count %}")
                 if tag != 'plural':
                     self.render_error("{% trans %} tag may not contain other tags, except for {% plural %}")
                 self.plural_clause = True
