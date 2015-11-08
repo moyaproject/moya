@@ -308,7 +308,7 @@ class GetURL(DataSetter):
     def qualify(self, context, url):
         base = self.base(context)
         if base is not None:
-            url = base + url
+            url = base.rstrip('/') + '/' + url.lstrip('/')
         return url
 
 
