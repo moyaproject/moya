@@ -173,7 +173,10 @@ The code inside the processor transforms that image. The new image is then writt
             let:app="app"
             dst="thumb_path"/>
 
-        <get-url name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
+        <let serve_urls=".app.settings.serve_url.list" serve_url="''"/>
+        <let serve_url="serve_urls[.counter % len:serve_urls]" if="serve_urls" />
+
+        <get-url base="${serve_url}" name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
         <if test="overwrite or thumb_path not in thumb_fs">
             <thread join="yes" scope="yes">
                 <!-- lazy load of the image -->

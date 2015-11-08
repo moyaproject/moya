@@ -11,6 +11,7 @@ Added owned and owner attribute to foreign keys
 Changed convention for server.xml, from /logic/ to /startup/ to make directory structure more clear
 Added cachekey and cachefor to widgets
 Added Python-like slice notation to expressions
+Added serve_url setting to moya.thumbnails
 
 0.5.22
 ------
