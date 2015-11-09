@@ -190,8 +190,8 @@ The code inside the processor transforms that image. The new image is then writt
                     dirpath="${dirname:thumb_path}"
                     filename="${basename:thumb_path}"
                     let:quality="processor.params.quality"/>
-                <wait-on-threads if="not .app.settings.threads.bool" />
             </thread>
+            <wait-on-threads if="not .app.settings.threads.bool" />
         </if>
         <return value="url"/>
     </tag>
