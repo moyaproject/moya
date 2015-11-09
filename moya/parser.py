@@ -14,10 +14,9 @@ from .document import Document, DocumentStructure, DocumentNode, DocumentTextNod
 from . import namespaces
 from .containers import OrderedDict
 from .cache.dictcache import DictCache
-from .compat import text_type, string_types
+from .compat import text_type, string_types, binary_type
 
 from fs.path import abspath
-from fs.errors import FSError
 
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 
@@ -26,9 +25,13 @@ import logging
 log = logging.getLogger("moya.startup")
 
 
-def _extract_namespace(tag_name):
+def extract_namespace(tag_name, _cache={}):
     """Extracts namespace and tag name in Clark's notation"""
-    return _re_xml_namespace.match(tag_name).groups()
+    try:
+        return _cache[tag_name]
+    except KeyError:
+        _cache[tag_name] = ns = _re_xml_namespace.match(tag_name).groups()
+        return ns
 
 
 class Parser(object):
@@ -60,13 +63,13 @@ class Parser(object):
             self._xml = xml
         return self._xml
 
-    def parse(self):
+    def parse(self, _extract_namespace=extract_namespace, _DocumentTextNode=DocumentTextNode, _DocumentNode=DocumentNode, _binary_type=binary_type):
         location = self.location
         document = Document(self.archive,
                             lib=self.library,
                             path=self.path)
         document.location = location
-
+        default_namespace = namespaces.default
         # if self.cache.enabled:
         #     mtime = datetime_to_epoch(self.fs.getinfokeys(self.path, 'modified_time')['modified_time'])
         #     cache_key = "{}.{}".format(self.fs, self.path, mtime)
@@ -96,25 +99,22 @@ class Parser(object):
                                     position=getattr(e, 'position', (1, 1)),
                                     code=xml)
 
-        document_encoding = "UTF-8"
         stack = [(root, None)]
-        match_xml_namespace = _re_xml_namespace.match
 
         def make_unicode(s):
-            if s is None:
-                return s
-            if not isinstance(s, text_type):
-                return s.decode(document_encoding)
+            if isinstance(s, _binary_type):
+                return s.decode('utf-8')
             return s
 
+        add_namespace = self.archive.known_namespaces.add
         while stack:
             node, parent_doc_id = stack.pop()
             if not isinstance(node.tag, string_types):
                 continue
-            xmlns, tag_name = match_xml_namespace(make_unicode(node.tag)).groups()
+            xmlns, tag_name = _extract_namespace(make_unicode(node.tag))
             if xmlns is None:
-                xmlns = namespaces.default
-            self.archive.known_namespaces.add(xmlns)
+                xmlns = default_namespace
+            add_namespace(xmlns)
 
             translate_text = False
             if tag_name.startswith('_'):
@@ -124,37 +124,34 @@ class Parser(object):
             attrs = defaultdict(OrderedDict)
             translatable_attrs = set()
             for k, v in node.items():
-                k = make_unicode(k)
-                v = make_unicode(v)
-                attr_ns, attr_name = match_xml_namespace(k).groups()
-
+                attr_ns, attr_name = _extract_namespace(make_unicode(k))
                 if attr_name.startswith('_'):
                     attr_name = attr_name[1:]
                     translatable_attrs.add(attr_name)
-                attrs[attr_ns or namespaces.default][attr_name] = v
+                attrs[attr_ns or default_namespace][attr_name] = make_unicode(v)
 
             source_line = getattr(node, "sourceline", None)
-            doc_node = DocumentNode(xmlns,
-                                    tag_name,
-                                    parent_doc_id,
-                                    attrs,
-                                    translatable_attrs,
-                                    make_unicode(node.text),
-                                    source_line,
-                                    translate_text=translate_text)
+            doc_node = _DocumentNode(xmlns,
+                                     tag_name,
+                                     parent_doc_id,
+                                     attrs,
+                                     translatable_attrs,
+                                     make_unicode(node.text),
+                                     source_line,
+                                     translate_text=translate_text)
 
             structure.add_node(doc_node)
 
             if node.tail:
-                text_node = DocumentTextNode(parent_doc_id,
-                                             source_line,
-                                             make_unicode(node.tail))
+                text_node = _DocumentTextNode(parent_doc_id,
+                                              source_line,
+                                              make_unicode(node.tail))
                 structure.add_node(text_node)
 
             if node.text:
-                doc_text_node = DocumentTextNode(doc_node.doc_id,
-                                                 doc_node.source_line,
-                                                 make_unicode(node.text))
+                doc_text_node = _DocumentTextNode(doc_node.doc_id,
+                                                  doc_node.source_line,
+                                                  make_unicode(node.text))
                 structure.add_node(doc_text_node)
 
             stack.extend((child, doc_node.doc_id) for child in reversed(node))

@@ -11,7 +11,7 @@ from .. import pilot
 from ..context.expressionrange import ExpressionRange
 
 from datetime import date, time, datetime, timedelta
-from calendar import monthrange
+from calendar import monthrange, timegm
 from math import floor
 import re
 import iso8601
@@ -22,7 +22,6 @@ from babel.dates import (format_datetime,
                          parse_pattern)
 
 import calendar
-from time import mktime
 from pytz import UTC, timezone
 
 
@@ -33,7 +32,7 @@ GMT = timezone('GMT')
 
 def datetime_to_epoch(d):
     """Convert datetime to epoch"""
-    return mktime(d.timetuple())
+    return timegm(d.utctimetuple())
 
 
 def epoch_to_datetime(t):

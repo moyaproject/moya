@@ -13,7 +13,6 @@ MemoryHandler = handlers.MemoryHandler
 import fs.path
 from fs.errors import FSError
 
-import sys
 from os.path import abspath, join, dirname, normpath
 
 

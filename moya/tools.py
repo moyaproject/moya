@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from time import time, mktime
+from time import time
 from datetime import datetime
 from contextlib import contextmanager
 from random import choice
 from functools import reduce
+from calendar import timegm
 
 from os.path import abspath, dirname, join, isfile, basename
 import re
@@ -19,9 +20,9 @@ from .compat import zip_longest, iteritems, xrange, text_type, PY3, implements_t
 _re_xml_namespace = re.compile(r'^\{(.*?)\}(.*)$', re.UNICODE)
 
 
-def extract_namespace(tag_name, default='http://moyaproject.com'):
+def extract_namespace(tag_name, default='http://moyaproject.com', _namespace_match=_re_xml_namespace.match):
     """Extracts namespace and tag name in Clark's notation"""
-    match = _re_xml_namespace.match(tag_name)
+    match = _namespace_match(tag_name)
     if match is None:
         return default, tag_name
     return match.group(1) or default, match.group(2)
@@ -148,7 +149,7 @@ def make_id():
 def datetime_to_epoch(d):
     if isinstance(d, number_types):
         return int(d)
-    return mktime(d.timetuple())
+    return timegm(d.utctimetuple())
 
 
 def split_commas(s):
@@ -252,9 +253,9 @@ def format_element_type(element_type):
     return "{" + ns + "}" + et
 
 
-def get_ids(seq):
-    """Get ID attributes from a sequence"""
-    return [item.id for item in seq if hasattr(seq, 'id')]
+# def get_ids(seq):
+#     """Get ID attributes from a sequence"""
+#     return [item.id for item in seq if hasattr(seq, 'id')]
 
 
 class MultiReplace(object):
@@ -360,30 +361,8 @@ class lazystr(object):
             self._str = text_type(self._callable(*self._args, **self._kwargs))
         return self._str
 
+    def __len__(self):
+        return len(text_type(self))
+
     def __getattr__(self, k):
         return getattr(text_type(self), k)
-
-if __name__ == "__main__":
-    print(parse_timedelta('50ms'))
-    print(parse_timedelta('5s'))
-    print(parse_timedelta('10m'))
-    print(parse_timedelta('2h'))
-    print(parse_timedelta('2'))
-
-    print(url_join('foo/bar/', '/baz/egg/', 'rrtrt', 'asdasd/asdasd/'))
-    print(url_join('foo/bar'))
-    print(url_join('foo/bar', 'baz'))
-
-    text = """
-
-
-    blank lines!
-
-    a line
-
-    """
-    print(remove_padding(text))
-    print(remove_padding('asd'))
-
-    print(levenshtein('peek', 'pewk'))
-    print(levenshtein('peek', 'foobar'))
