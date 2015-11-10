@@ -38,15 +38,18 @@ class MoyaThread(Thread):
         archive = self.element.archive
         with pilot.manage(self.context):
             try:
-                try:
-                    self._result = archive.call_params(self.element.libid,
-                                                       self.context,
-                                                       self.app,
-                                                       self.data)
-                except Exception as e:
-                    self.context['.console'].obj(self.context, e)
-                    self._error = e
-            finally:
+                self._result = archive.call_params(self.element.libid,
+                                                   self.context,
+                                                   self.app,
+                                                   self.data)
+            except Exception as e:
+                self.context['.console'].obj(self.context, e)
+                self._error = e
+                dbsessions = self.context['._dbsessions']
+                if dbsessions:
+                    db.rollback_sessions(self.context)
+
+            else:
                 dbsessions = self.context['._dbsessions']
                 if dbsessions:
                     db.commit_sessions(self.context)
