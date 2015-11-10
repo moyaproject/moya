@@ -676,6 +676,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             n, r = v
         except:
+            n = v
             r = 0.0
         n = float(n)
         r = int(r)
