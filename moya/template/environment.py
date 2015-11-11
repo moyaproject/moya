@@ -85,11 +85,9 @@ class Environment(object):
             lib = None
         else:
             lib = self.archive.get_template_lib(template_path)
-        #lib = self.archive.get_lib(lib) if lib else None
+
         template = Template(source, display_path, raw_path=template_path, lib=lib)
-
         template.parse(self)
-
 
         if self.cache.enabled:
             self.cache.set(cache_name, template.dump(self))

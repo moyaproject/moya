@@ -19,4 +19,5 @@ __all__ = ['call',
            'apps',
            'syntax',
            'new',
-           'init']
+           'init',
+           'precache']

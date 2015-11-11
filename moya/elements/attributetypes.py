@@ -344,6 +344,7 @@ class Boolean(ExpressionAttribute):
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
+        self.text = text
         if text in ('yes', 'True'):
             self.exp = TrueExpression()
         elif text in ('no', 'False'):

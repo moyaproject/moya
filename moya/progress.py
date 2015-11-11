@@ -8,6 +8,7 @@ from __future__ import division
 
 from time import sleep
 
+
 class Progress(object):
     """Renders a progress bar to the console"""
     def __init__(self, console, msg, num_steps=100, width=12, indent='', vanish=False):

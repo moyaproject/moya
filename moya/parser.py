@@ -7,9 +7,11 @@ element_fromstring = etree.fromstring
 import re
 from collections import defaultdict
 import io
+from time import time
 
 from . import errors
 from . import tags
+from .tools import datetime_to_epoch
 from .document import Document, DocumentStructure, DocumentNode, DocumentTextNode
 from . import namespaces
 from .containers import OrderedDict
@@ -70,6 +72,11 @@ class Parser(object):
                             path=self.path)
         document.location = location
         default_namespace = namespaces.default
+
+
+        # The parser cache is disable because it only speeds up startup by around 6%
+        # Not quite ready to give up the idea and delete this code just yet - WM 11/11/2015
+
         # if self.cache.enabled:
         #     mtime = datetime_to_epoch(self.fs.getinfokeys(self.path, 'modified_time')['modified_time'])
         #     cache_key = "{}.{}".format(self.fs, self.path, mtime)
@@ -159,10 +166,6 @@ class Parser(object):
 
         # if self.cache.enabled:
         #     self.cache.set(cache_key, structure.dumps())
-
-        # log.debug("%s parsed %0.1fms",
-        #           document,
-        #           (time() - start) * 1000.0)
 
         return document
 

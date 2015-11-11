@@ -18,6 +18,7 @@ from . import http
 from .compat import text_type, itervalues, py2bytes
 from . import namespaces
 from .loggingconf import init_logging_fs
+from .context.expression import Expression
 
 
 from webob import Response
@@ -120,7 +121,8 @@ class WSGIApplication(object):
                  strict=False,
                  master_settings=None,
                  test_build=False,
-                 develop=False):
+                 develop=False,
+                 load_expression_cache=True):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -136,6 +138,7 @@ class WSGIApplication(object):
         self.master_settings = master_settings
         self.test_build = test_build
         self.develop = develop
+        self.load_expression_cache = load_expression_cache
 
         if logging is not None:
             with fsopendir(self.filesystem_url) as logging_fs:
@@ -186,6 +189,12 @@ class WSGIApplication(object):
         self.archive = build_result.archive
         self.archive.finalize()
         self.server = build_result.server
+
+        if self.load_expression_cache:
+            if self.archive.has_cache('parser'):
+                parser_cache = self.archive.get_cache('parser')
+                if Expression.load(parser_cache):
+                    log.debug('expression cache loaded')
 
         context = Context({"console": self.archive.console,
                            "settings": self.archive.settings,

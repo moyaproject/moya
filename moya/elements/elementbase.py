@@ -487,6 +487,25 @@ class ElementBaseType(object):
                 self.throw("bad-value.attribute", "Attribute '{}' -- {}".format(name, text_type(e)))
         return [make_param(n) for n in names]
 
+    def compile_expressions(self):
+        """Attempt to compile anything that could be an expression (used by precache)"""
+        if getattr(self, '_attrs', None):
+            for k, v in self._attrs.items():
+                try:
+                    Expression.compile_cache(v)
+                except:
+                    pass
+                if '${' in v and '}' in v:
+                    Expression.extract(v)
+        if getattr(self, '_let', None):
+            for k, v in self._let.items():
+                try:
+                    Expression.compile_cache(v)
+                except:
+                    pass
+        if getattr(self, 'text', None):
+            Expression.extract(self.text)
+
     def get_parameters_nonlazy(self, context):
         return _Parameters(self._attr_values, context, lazy=False)
 

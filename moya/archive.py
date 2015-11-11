@@ -783,6 +783,13 @@ class Archive(object):
         self.caches[name] = cache
         startup_log.debug('%s cache added', cache)
 
+    def has_cache(self, name):
+        """Check if a cache is present and enabled"""
+        if name not in self.caches:
+            return False
+        cache = self.caches[name]
+        return cache.enabled
+
     def get_cache(self, name):
         if name in self.caches:
             return self.caches[name]

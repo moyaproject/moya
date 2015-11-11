@@ -183,14 +183,19 @@ The code inside the processor transforms that image. The new image is then writt
                 <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
                 <!-- make a copy -->
                 <image:copy image="original_image" />
-                <!-- call the processor to modify the image in place -->
-                <call macro="${processor.element_ref}" let:image="image" />
-                <!-- write the thumbnail -->
-                <image:write fsobj="thumb_fs"
-                    dirpath="${dirname:thumb_path}"
-                    filename="${basename:thumb_path}"
-                    let:quality="processor.params.quality"/>
+
+
+                <timer msg="rendering ${image} with processor '${processor.params.name}'">
+                    <!-- call the processor to modify the image in place -->
+                    <call macro="${processor.element_ref}" let:image="image" />
+                    <!-- write the thumbnail -->
+                    <image:write fsobj="thumb_fs"
+                        dirpath="${dirname:thumb_path}"
+                        filename="${basename:thumb_path}"
+                        let:quality="processor.params.quality"/>
+                </timer>
             </thread>
+            <!-- If threads are 'disabled', wait for the thread to continue -->
             <wait-on-threads if="not .app.settings.threads.bool" />
         </if>
         <return value="url"/>

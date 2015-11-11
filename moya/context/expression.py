@@ -1,5 +1,5 @@
 """
-Parse and evaluate Moya expresssions
+Parse and evaluate Moya expressions
 
 This module contains some quite shocking micro-optimizations to offset the extra work when compared to Python expressions.
 
@@ -33,6 +33,7 @@ from pyparsing import (Word,
                        Optional)
 ParserElement.enablePackrat()
 
+from .. import __version__
 from ..context import dataindex
 from ..context.dataindex import parse as parseindex
 from ..context.expressiontime import TimeSpan
@@ -54,6 +55,8 @@ from fnmatch import fnmatchcase
 # TODO: is there a better place for this
 import sys
 sys.setrecursionlimit(10000)
+
+VERSION = 1
 
 
 @implements_to_string
@@ -908,8 +911,24 @@ class Expression(object):
 
     @classmethod
     def insert_expressions(cls, expressions):
+        exp_cache = cls.exp_cache
         for expression in expressions:
-            cls.exp_cache[expression.exp] = expression.compiled_exp
+            if expression.exp not in exp_cache:
+                exp_cache[expression.exp] = expression.compiled_exp
+
+    @classmethod
+    def dump(cls, cache):
+        name = "expcache.{}.{}".format(VERSION, __version__)
+        cache.set(name, cls.exp_cache)
+
+    @classmethod
+    def load(cls, cache):
+        name = "expcache.{}.{}".format(VERSION, __version__)
+        exp = cache.get(name, None)
+        if exp is not None:
+            cls.exp_cache.update(exp)
+            return True
+        return False
 
     @classmethod
     def get_eval(cls, exp, context):
@@ -957,6 +976,19 @@ class Expression(object):
             expression = exp[start:end]
             cls.exp_cache[expression] = compiled_exp.asList()
             return expression, exp[end:]
+
+    _re_substitute_context = re.compile(r'\$\{(.*?)\}')
+    @classmethod
+    def extract(cls, text):
+        """Extract and compile expression in substitution syntax"""
+        text = text_type(text)
+        if not text:
+            return
+        for exp in cls._re_substitute_context.findall(text):
+            try:
+                cls.compile_cache(exp.group(1))
+            except:
+                pass
 
 
 class DefaultExpression(object):
