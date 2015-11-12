@@ -18,7 +18,6 @@ class PreCache(SubCommand):
                             help="path to projects settings file")
 
     def run(self):
-        args = self.args
         console = self.console
 
         console.text("loading project", bold=True)
@@ -29,22 +28,21 @@ class PreCache(SubCommand):
             templates_fs = archive.get_filesystem('templates')
         except KeyError:
             self.error("templates filesystem not found")
-            return -1
+        else:
+            template_engine = archive.get_template_engine()
+            paths = list(templates_fs.walkfiles(wildcard="*.html"))
 
-        template_engine = archive.get_template_engine()
-        paths = list(templates_fs.walkfiles(wildcard="*.html"))
+            console.text('pre-caching templates', bold=True)
 
-        console.text('pre-caching templates', bold=True)
-
-        failed_templates = []
-        with console.progress('pre-caching templates', width=20) as progress:
-            progress.set_num_steps(len(paths))
-            for path in paths:
-                progress.step(msg=path)
-                try:
-                    template_engine.env.get_template(path)
-                except Exception as e:
-                    failed_templates.append((path, text_type(e)))
+            failed_templates = []
+            with console.progress('pre-caching templates', width=20) as progress:
+                progress.set_num_steps(len(paths))
+                for path in paths:
+                    progress.step(msg=path)
+                    try:
+                        template_engine.env.get_template(path)
+                    except Exception as e:
+                        failed_templates.append((path, text_type(e)))
 
         if archive.has_cache('parser'):
             parser_cache = archive.get_cache('parser')
@@ -63,6 +61,7 @@ class PreCache(SubCommand):
                     el.compile_expressions()
 
             Expression.dump(parser_cache)
+        else:
+            console.error("no 'parser' cache available to store expressions")
 
         console.text('done', fg="green", bold=True)
-

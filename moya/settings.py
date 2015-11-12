@@ -175,7 +175,7 @@ class SettingsContainer(OrderedDict):
         try:
             value = int(value_text)
         except:
-            raise SettingsKeyError("key [{}]/{} should be empty or a value integer (not '{}')".format(section_name, key, value_text))
+            raise SettingsKeyError("key [{}]/{} should be empty or an integer value (not '{}')".format(section_name, key, value_text))
         else:
             return value
 

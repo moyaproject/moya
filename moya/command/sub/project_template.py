@@ -1,10 +1,18 @@
 template = """@TEXT /wsgi.py
 # encoding=UTF-8
+
+# This file serves the project in production
+# See http://wsgi.readthedocs.org/en/latest/
+
 from __future__ import unicode_literals
 from moya.wsgi import Application
 
 application = Application('./', ['local.ini', 'production.ini'], server='main', logging='prodlogging.ini')
 @TEXT /logging.ini
+
+# This file tells moya what to do with log information it generates
+# Tweak this if you want more or less log information
+
 [logger:root]
 handlers=moyaconsole
 
@@ -17,6 +25,7 @@ level=DEBUG
 
 [logger:sqlalchemy.engine]
 handlers=moyaconsole
+# Change the following to DEBUG if you want to track down SQL issues
 level=WARN
 propagate=no
 
@@ -71,6 +80,10 @@ args = ('/dev/log',)
 # args = ()
 
 @TEXT /settings.ini
+
+# This settings file is the default settings for your server
+# It inherits the settings from basesettings.ini with the declaration below
+
 extends=basesettings.ini
 
 [project]
@@ -96,6 +109,10 @@ default = yes
 {{%- endif %}}
 
 @TEXT /production.ini
+
+# This file contains settings used in production (live on the web)
+# It inherits settings from basesettings.ini with the declaration below
+
 extends=basesettings.ini
 
 [project]
@@ -116,6 +133,7 @@ default = yes
 
 [cache:parser]
 type = file
+enabled = yes
 
 [cache:templates]
 type = file
@@ -127,6 +145,9 @@ type = file
 type = file
 
 @TEXT /basesettings.ini
+
+# This file contains settings common to development and production
+
 # -------------------------------------------------------------
 # Project settings
 # -------------------------------------------------------------
@@ -206,28 +227,29 @@ location = ./static
 # -------------------------------------------------------------
 
 [cache:parser]
-# Cache used to store parsed xml documents
+# Cache used to store parsed expressions
 type = dict
 namespace = parser
-location = __moyacache__
+location = ./__moyacache__
+enabled = no
 
 [cache:templates]
 # Cache used to store compiled templates
 type = dict
 namespace = templates
-location = __moyacache__
+location = ./__moyacache__
 
 [cache:fragment]
 # Cache used to store html fragments
 type = dict
 namespace = framgment
-location = __moyacache__
+location = ./__moyacache__
 
 [cache:runtime]
 # Used by <cache-return> tag to cache expensive calculations
 type = dict
 namespace = runtime
-location = __moyacache__
+location = ./__moyacache__
 
 
 # -------------------------------------------------------------
@@ -325,7 +347,8 @@ Moya loads the JSON file from the 'theme' value in the matching [site] section i
 #
 # The command line tool will look for this in the current directory and ancestors.
 #
-# Although the contents of this file are not currently read by Moya, in the future this file may be an INI file
+# Although the contents of this file are not currently read by Moya, in the future this file may be an INI file.
+
 @WRAPTEXT /static/readme.txt
 The contents of this directory will be served as static files by the moya.static library (including this file)!
 If you have directory listing enabled, you can see what files are served by visiting the /static/ url in your browser.
