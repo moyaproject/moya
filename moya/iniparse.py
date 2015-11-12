@@ -11,12 +11,11 @@ import re
 re_section = re.compile(r'\[(.*?)\]', re.UNICODE)
 
 
-def sub_env(text, _re_env=re.compile(r'\$(\w+)')):
+def sub_env(text, _re_env=re.compile(r'\$(\w+)', re.MULTILINE)):
     """Substition renvironment, in $ENV_VARIABLE syntax"""
-    environ = os.environ
+    get_environ = os.environ.get
     def repl(match):
-        env_name = match.group(1)
-        return environ.get(match.group(1), match.group(0))
+        return get_environ(match.group(1), match.group(0))
     return _re_env.sub(repl, text)
 
 
@@ -53,14 +52,14 @@ def parse(inifile, sections=None, section_class=OrderedDict, _sub_env=sub_env):
         elif line[0] in ' \t':
             if current_key is not None:
                 current_value += '\n' + line.strip()
-                current_section_data[current_key] = _sub_env(current_value)
+                current_section_data[current_key] = current_value
         elif '=' in line:
             key, value = line.split('=', 1)
             key = key.rstrip()
-            value = value.lstrip()
+            value = _sub_env(value.lstrip())
             current_key = key
             current_value = value
-            current_section_data[key] = _sub_env(value)
+            current_section_data[key] = value
         else:
             current_section_data[line.strip()] = ''
 
