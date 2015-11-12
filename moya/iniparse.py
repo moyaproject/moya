@@ -5,12 +5,22 @@ from __future__ import unicode_literals
 from .compat import text_type, iteritems
 from .containers import OrderedDict
 
+import os
 import re
 
 re_section = re.compile(r'\[(.*?)\]', re.UNICODE)
 
 
-def parse(inifile, sections=None, section_class=OrderedDict):
+def sub_env(text, _re_env=re.compile(r'\$(\w+)')):
+    """Substition renvironment, in $ENV_VARIABLE syntax"""
+    environ = os.environ
+    def repl(match):
+        env_name = match.group(1)
+        return environ.get(match.group(1), match.group(0))
+    return _re_env.sub(repl, text)
+
+
+def parse(inifile, sections=None, section_class=OrderedDict, _sub_env=sub_env):
     """Parse an ini file in to nested dictionaries"""
     if hasattr(inifile, "read"):
         ini = inifile.read()
@@ -43,14 +53,14 @@ def parse(inifile, sections=None, section_class=OrderedDict):
         elif line[0] in ' \t':
             if current_key is not None:
                 current_value += '\n' + line.strip()
-                current_section_data[current_key] = current_value
+                current_section_data[current_key] = _sub_env(current_value)
         elif '=' in line:
             key, value = line.split('=', 1)
             key = key.rstrip()
             value = value.lstrip()
             current_key = key
             current_value = value
-            current_section_data[key] = value
+            current_section_data[key] = _sub_env(value)
         else:
             current_section_data[line.strip()] = ''
 
