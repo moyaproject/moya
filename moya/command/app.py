@@ -115,7 +115,7 @@ To list all available commands for a given application, omit the libname:
     def get_settings(self):
         settings = self.args.settings
         if not settings:
-            settings = self.moyarc.get('defaults', 'ini', 'settings.ini').strip()
+            settings = os.environ.get('MOYA_PROJECT_INI', None) or self.moyarc.get('defaults', 'ini', 'settings.ini').strip()
         if not settings:
             return []
         ini_list = [s.strip() for s in settings.splitlines() if s.strip()]
