@@ -366,3 +366,4 @@ class lazystr(object):
 
     def __getattr__(self, k):
         return getattr(text_type(self), k)
+
