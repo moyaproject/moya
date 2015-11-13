@@ -118,13 +118,14 @@ The code inside the processor transforms that image. The new image is then writt
             <attribute name="thumbnails" type="element">A reference to the thumbnail tag</attribute>
             <attribute name="path">Path to the image to the original image</attribute>
             <attribute name="overwrite" required="no" default="yes" type="boolean">Should existing thumbnails be overwritten?</attribute>
+            <attribute name="image" required="no">Image object if already read in to memory (will be read from the fs if not supplied)</attribute>
         </signature>
 
         <let settings=".app.settings"
             fsname="settings.fs"
             fs=".fs[fsname]"/>
 
-        <image:read fsobj="fs" path="${path}" dst="original_image"/>
+        <image:read fsobj="fs" path="${path}" dst="image" if="not image"/>
 
         <!-- loop through all the processors -->
         <for-children element="thumbnails" tag="processor" dst="processor">
@@ -146,7 +147,6 @@ The code inside the processor transforms that image. The new image is then writt
             <attribute name="overwrite" required="no" type="boolean" default="no">Overwrite thumbnail if it exists?</attribute>
             <attribute name="image" required="no">Optional original image (will be loaded automatically if not supplied)</attribute>
         </signature>
-
         <let settings=".app.settings"
             fsname="settings.fs"
             fs=".fs[fsname]"
@@ -176,24 +176,29 @@ The code inside the processor transforms that image. The new image is then writt
         <let serve_urls=".app.settings.serve_url.list" serve_url="''"/>
         <let serve_url="serve_urls[.counter % len:serve_urls]" if="serve_urls" />
 
-        <get-url base="${serve_url}" name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
+        <if test="settings.app_serve">
+            <get-url base="${serve_url}" name="serve" from="${settings.app_serve}" let:path="thumb_path" dst="url"/>
+        </if>
+        <else>
+            <let url="slashjoin:[settings.serve_url, thumb_path]"/>
+        </else>
         <if test="overwrite or thumb_path not in thumb_fs">
             <thread join="yes" scope="yes">
                 <!-- lazy load of the image -->
                 <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
+
                 <!-- make a copy -->
                 <image:copy image="original_image" />
 
-
-                <timer msg="rendering ${image} with processor '${processor.params.name}'">
+                <timer msg="rendered ${image} with processor '${processor.params.name}'">
                     <!-- call the processor to modify the image in place -->
                     <call macro="${processor.element_ref}" let:image="image" />
-                    <!-- write the thumbnail -->
-                    <image:write fsobj="thumb_fs"
-                        dirpath="${dirname:thumb_path}"
-                        filename="${basename:thumb_path}"
-                        let:quality="processor.params.quality"/>
                 </timer>
+                <!-- write the thumbnail -->
+                <image:write fsobj="thumb_fs"
+                    dirpath="${dirname:thumb_path}"
+                    filename="${basename:thumb_path}"
+                    let:quality="processor.params.quality"/>
             </thread>
             <!-- If threads are 'disabled', wait for the thread to continue -->
             <wait-on-threads if="not .app.settings.threads.bool" />

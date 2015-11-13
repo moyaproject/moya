@@ -56,6 +56,14 @@ class Path(text_type):
         return Path(pathjoin(self, text_type(other)))
 
 
+def _slashjoin(paths):
+    _paths = [paths.pop(0).rstrip('/')]
+    for p in paths:
+        _paths.append('/')
+        _paths.append(p.lstrip('/'))
+    return ''.join(_paths)
+
+
 def make_uuid(context, version, nstype="url", nsname=None):
 
     _namespace_map = {
@@ -625,6 +633,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def path(self, context, v):
         return Path(v)
+
+    def slashjoin(self, context, v):
+        return _slashjoin(v)
 
     def permission(self, context, v):
         return self._permission(context, v)

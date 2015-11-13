@@ -11,6 +11,9 @@ from fs.errors import FSError
 from fs.path import pathjoin, basename, dirname
 
 import hashlib
+import logging
+
+log = logging.getLogger('moya.fs')
 
 
 class SetContents(LogicElement):
@@ -37,6 +40,8 @@ class SetContents(LogicElement):
             dst_fs.setcontents(params.path, params.contents)
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
+        log.debug("%r written '%s'", dst_fs, params.path)
+
 
 class RemoveFile(LogicElement):
     """Delete a file from a filesystem"""
@@ -63,6 +68,8 @@ class RemoveFile(LogicElement):
         except Exception as e:
             self.throw("fs.remove-file.fail",
                        "unable to remove '{}' ({})".format(params.path, e))
+        log.debug("%r read '%s'", dst_fs, params.path)
+
 
 class GetSyspath(DataSetter):
     """
@@ -129,6 +136,7 @@ class GetMD5(DataSetter):
             self.throw("fs.get-md5.fail", "unable to read file '{}'".format(params.path))
         else:
             return m.hexdigest()
+
 
 class GetInfo(DataSetter):
     xmlns = namespaces.fs

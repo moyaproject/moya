@@ -19,11 +19,12 @@ from sqlalchemy import (Column,
                         Float,
                         UnicodeText,
                         DateTime,
+                        Date,
                         Sequence)
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.mutable import Mutable
 
-from sqlalchemy.types import TypeDecorator, TEXT, DATETIME, DATE
+from sqlalchemy.types import TypeDecorator, TEXT
 import json
 from datetime import datetime, date
 from decimal import Decimal
@@ -38,7 +39,7 @@ class JSONDict(dict):
 
 class MoyaCustomDateTime(TypeDecorator):
     """Massage to Moya datetime"""
-    impl = DATETIME
+    impl = DateTime
 
     def process_result_value(self, value, dialect):
         if isinstance(value, datetime):
@@ -48,7 +49,7 @@ class MoyaCustomDateTime(TypeDecorator):
 
 class MoyaCustomDate(TypeDecorator):
     """Massage to Moya date"""
-    impl = DATE
+    impl = Date
 
     def process_result_value(self, value, dialect):
         if isinstance(value, date):

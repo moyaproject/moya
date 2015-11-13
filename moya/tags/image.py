@@ -88,6 +88,7 @@ class Read(DataSetterBase):
     fs = Attribute("FS name")
     dst = Attribute('Destination', type="reference", default="image")
     _file = Attribute('File object with image data', type="expression")
+    filename = Attribute("Filename to associate with the image if the filename can't be detected", default='', type="expression")
 
     def get_image(self, context, params):
         if self.has_parameter('file'):
@@ -113,7 +114,7 @@ class Read(DataSetterBase):
                 fp = fs.open(params.path, 'rb')
                 img = Image.open(fp)
             except Exception as e:
-                self.throw("image.read-fail", "failed to read '{}' from {} ({})".format(params.path, fs, e))
+                self.throw("image.read-fail", "failed to read '{}' from {!r} ({})".format(params.path, fs, e))
         return img
 
     def logic(self, context):
@@ -124,8 +125,9 @@ class Read(DataSetterBase):
         except Exception as e:
             self.throw("image.read-fail", "Failed to read image ({})".format(e))
 
-        moya_image = MoyaImage(img, filename=basename(params.path or ''))
+        moya_image = MoyaImage(img, filename=basename(params.path or params.filename or ''))
         self.set_context(context, params.dst, moya_image)
+        log.debug("%r read", moya_image)
 
 
 class GetSize(Read):
@@ -195,8 +197,9 @@ class Write(LogicElement):
             with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
                 with dir_fs.open(params.filename, 'wb') as f:
                     img.save(f, img_format, **save_params)
+            log.debug("wrote %r to '%s'", params.image, params.filename)
         except Exception as e:
-            self.throw('image.write-fail', "Failed to write {} to '{}' in {} ({})".format(params.image, path, fs, e))
+            self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 
 
 class New(DataSetterBase):

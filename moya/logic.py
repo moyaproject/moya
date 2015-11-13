@@ -170,6 +170,9 @@ class SkipNext(object):
     def __next__(self):
         pass
 
+    def close(self):
+        pass
+
 
 class Unwind(LogicFlowException):
     pass
