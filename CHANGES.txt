@@ -1,3 +1,9 @@
+0.5.26
+------
+
+Optimized thumbnail generation
+Added slashjoin: modifier
+
 0.5.25
 ------
 
