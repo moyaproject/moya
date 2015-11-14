@@ -562,8 +562,11 @@ class Handle(LogicElement):
                 app, element = self.get_element(sender)
                 senders.append(element.libid)
         for signal in signals:
-            for sender in senders:
-                self.archive.signals.add_handler(signal, self.libid, sender)
+            if senders:
+                for sender in senders:
+                    self.archive.signals.add_handler(signal, self.libid, sender)
+            else:
+                self.archive.signals.add_handler(signal, self.libid, None)
 
 
 class Fire(LogicElement):
