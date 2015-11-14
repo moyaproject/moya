@@ -190,10 +190,9 @@ The code inside the processor transforms that image. The new image is then writt
                 <!-- make a copy -->
                 <image:copy image="original_image" />
 
-                <timer msg="rendered ${image} with processor '${processor.params.name}'">
-                    <!-- call the processor to modify the image in place -->
-                    <call macro="${processor.element_ref}" let:image="image" />
-                </timer>
+                <!-- call the processor to modify the image in place -->
+                <call macro="${processor.element_ref}" let:image="image" />
+
                 <!-- write the thumbnail -->
                 <image:write fsobj="thumb_fs"
                     dirpath="${dirname:thumb_path}"

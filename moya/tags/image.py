@@ -197,7 +197,7 @@ class Write(LogicElement):
             with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
                 with dir_fs.open(params.filename, 'wb') as f:
                     img.save(f, img_format, **save_params)
-            log.debug("wrote %r to '%s'", params.image, params.filename)
+            log.debug("wrote '%s'", params.filename)
         except Exception as e:
             self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 

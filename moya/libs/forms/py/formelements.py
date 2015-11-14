@@ -905,6 +905,9 @@ class Apply(LogicElement):
     """
     xmlns = namespaces.forms
 
+    class Meta:
+        is_call = True
+
     class Help:
         synopsis = "apply a form to an object"
         example = """

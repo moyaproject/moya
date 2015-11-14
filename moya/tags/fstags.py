@@ -40,7 +40,7 @@ class SetContents(LogicElement):
             dst_fs.setcontents(params.path, params.contents)
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
-        log.debug("%r written '%s'", dst_fs, params.path)
+        log.debug("setcontents '%s'", params.path)
 
 
 class RemoveFile(LogicElement):
@@ -68,7 +68,7 @@ class RemoveFile(LogicElement):
         except Exception as e:
             self.throw("fs.remove-file.fail",
                        "unable to remove '{}' ({})".format(params.path, e))
-        log.debug("%r read '%s'", dst_fs, params.path)
+        log.debug("removed '%s'", params.path)
 
 
 class GetSyspath(DataSetter):

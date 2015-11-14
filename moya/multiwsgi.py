@@ -34,9 +34,9 @@ not_found_response = """<!DOCTYPE html>
 </head>
 <body>
 <h1>404 Not Found</h1>
+<small>moya-srv does not know about this domain</small>
 </body>
 </html>
-
 """
 
 
@@ -93,6 +93,7 @@ class MultiWSGIApplication(object):
     def not_found(self):
         response = Response(charset=py2bytes("utf8"), status=404)
         response.text = not_found_response
+        return response
 
     def reload_required(server_name):
         return False
