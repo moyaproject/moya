@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.27a"
+VERSION = "0.5.28"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -51,7 +51,7 @@ setup(name='moya',
                         'babel==1.3',
                         'postmarkup',
                         'polib',
-                        'pillow',
+                        'pillow==2.9.0',
                         'pymysql',
                         'passlib',
                         'commonmark',
