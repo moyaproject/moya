@@ -75,14 +75,28 @@
         <redirect-to url="${.request.GET.fwd or '/'}" />
     </view>
 
-    <view libname="view.user_edit" content="#content.user_edit">
-        <forbidden if="not .user"/>
-        <forms:get form="#form.user_edit" dst="form" src=".user"/>
+    <view libname="view.user_edit" content="#content.user_edit" requires=".user">
+        <forms:get form="#form.user_edit" dst="user_form" src=".user" bind="None"/>
+        <forms:get form="#form.password_change" dst="password_form" src=".user" bind="None"/>
         <if-post>
-            <forms:validate src="form">
-                <forms:apply src="form" dst=".user" />
-                <let success="yes" />
-            </forms:validate>
+            <switch on=".request.POST.action">
+                <case>details</case>
+                <let-str tab="details"/>
+                <forms:bind src="user_form"/>
+                <forms:validate src="user_form">
+                    <forms:apply src="user_form" dst=".user" />
+                    <let details_success="yes" />
+                </forms:validate>
+
+                <case>password</case>
+                <let-str tab="password"/>
+                <forms:bind src="password_form"/>
+                <forms:validate src="password_form">
+                    <auth:set-password user=".user" password="password_form.data.new_password"/>
+                    <let password_success="yes"/>
+                    <forms:reset src="password_form"/>
+                </forms:validate>
+            </switch>
         </if-post>
     </view>
 
@@ -135,4 +149,3 @@
     </view>
 
 </moya>
-

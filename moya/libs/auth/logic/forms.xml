@@ -1,9 +1,11 @@
 <moya xmlns="http://moyaproject.com"
+    xmlns:m="http://moyaproject.com"
     xmlns:db="http://moyaproject.com/db"
     xmlns:let="http://moyaproject.com/let"
     xmlns:moya="http://moyaproject.com"
     xmlns:w="http://moyaproject.com/widgets"
-    xmlns:html="http://moyaproject.com/html">
+    xmlns:html="http://moyaproject.com/html"
+    xmlns:auth="http://moyaproject.com/auth">
 
     <form libname="form.login" xmlns="http://moyaproject.com/forms"
         legend="Please Sign In" style="basic" action="${.urls.auth.login}" class="moya-auth-signin" >
@@ -53,12 +55,29 @@
         </validate-field>
     </form>
 
-    <form libname="form.user_edit" legend="User Details" style="horizontal" xmlns="http://moyaproject.com/forms">
+    <form libname="form.user_edit" style="horizontal" xmlns="http://moyaproject.com/forms">
         <moya:get-timezone-groups dst="tzchoices" />
         <input label="First name" name="first_name" src="first_name" maxlength="30" />
         <input label="Last name" name="last_name" src="last_name" maxlength="30" />
         <select label="Timezone" name="timezone" src="timezone" choices="tzchoices"/>
-        <submit-button name="update" text="Update" />
+        <submit-button name="action" clicked="details" text="Save Changes" />
+    </form>
+
+    <form libname="form.password_change" style="horizontal" xmlns="http://moyaproject.com/forms">
+        <password label="Old Password" src="" required="yes" name="password" maxlength="100"/>
+        <password label="New Password"  src="" required="yes" name="new_password" maxlength="100"/>
+        <password label="New Password (again)" src="" required="yes" name="new_password2" maxlength="100"/>
+        <submit-button name="action" clicked="password" text="Update Password" />
+
+        <validate-field field="password">
+            <auth:check-password user=".user" password="value" dst="correct"/>
+            <fail if="not correct">Password is not correct</fail>
+        </validate-field>
+
+        <validate-field field="new_password">
+            <fail if="values.new_password != values.new_password2">Passwords do not match</fail>
+            <fail if="len:value lte 3">Password is too short</fail>
+        </validate-field>
     </form>
 
 </moya>

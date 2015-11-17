@@ -520,13 +520,6 @@ class GetTimezoneGroups(DataSetter):
         return timezone.get_common_timezones_groups()
 
 
-
-# class Signal(ElementBase):
-#     """Define a [i]signal[/i]. A signal is a way of broadcasting to other parts of the project that a particular event has happened."""
-
-#     name = Attribute("signal name", required=True)
-
-
 class Handle(LogicElement):
     """
     Handles a [i]signal[/i]. A signal is a way of broadcasting to other parts of the project that a particular event has occurred.

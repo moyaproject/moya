@@ -146,6 +146,11 @@
 
     <command libname="cmd.init" synopsis="create default groups/permissions and a superuser" init="yes" priority="10">
         <doc>Run this once to initialize the auth system</doc>
+        <signature>
+            <option name="username" help="Superuser username"/>
+            <option name="password" help="Superuser password"/>
+            <option name="email" help="Superuser email"/>
+        </signature>
 
         <db:transaction>
             <db:get-or-create model="#Permission" let:name="'admin'"
@@ -163,9 +168,11 @@
         </db:if-exists>
 
         <echo>This will create a super user and default groups/permissions.</echo>
-        <input dst="username" default="superuser">Username of 'super' user:</input>
-        <input dst="password" password="yes">Super user's password:</input>
-        <input dst="email">Super user's email address:</input>
+        <let username="args.username" password="args.password" email="args.email"/>
+
+        <input dst="username" default="superuser" if="not username">Username of 'super' user:</input>
+        <input dst="password" password="yes" if="not password">Super user's password:</input>
+        <input dst="email" if="not email">Super user's email address:</input>
 
         <db:get model="#User" let:username="username" dst="user" />
         <exit if="user">${user} already exists!</exit>

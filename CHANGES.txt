@@ -1,6 +1,8 @@
 0.5.29
 ------
 
+Added password change to /auth/edit/
+
 0.5.28
 ------
 

@@ -56,7 +56,7 @@ def parse(inifile, sections=None, section_class=OrderedDict, _sub_env=sub_env):
         elif '=' in line:
             key, value = line.split('=', 1)
             key = key.rstrip()
-            value = _sub_env(value.lstrip())
+            value = _sub_env(value.lstrip()).lstrip()
             current_key = key
             current_value = value
             current_section_data[key] = value

@@ -321,7 +321,8 @@ class Form(AttributeExposer):
         self._data = {}
         self.raw_data = {}
         for field in self.all_fields:
-            field.value = None
+            if not field.name.startswith('_'):
+                field.value = None
 
     @property
     def csrf_token(self):
@@ -609,7 +610,7 @@ class Bind(ContextElementBase):
     class Help:
         synopsis = "Add data to a form"
 
-    bind = Attribute("Object to bind to", type="expression", required=False)
+    bind = Attribute("Object to bind to", type="expression", default=".request.POST", evaldefault=True, required=False)
     src = Attribute("Source object to fill in fields", type="expression", default=None)
 
     def logic(self, context):
@@ -798,7 +799,7 @@ class Validate(LogicElement):
     """
     xmlns = namespaces.forms
 
-    src = Attribute("Form source", type="index", default="form", evaldefault=True, map_to="src")
+    src = Attribute("Form source", type="index", default="form", evaldefault=True, map_to="src", missing=False)
     csrf = Attribute("Enable CSRF check?", type="boolean", default=True)
 
     class Meta:

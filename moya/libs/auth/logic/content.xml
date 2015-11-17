@@ -1,9 +1,11 @@
 <moya xmlns="http://moyaproject.com"
+      xmlns:m="http://moyaproject.com"
       xmlns:db="http://moyaproject.com/db"
       xmlns:admin="http://moyaproject.com/admin"
       xmlns:w="http://moyaproject.com/widgets"
       xmlns:html="http://moyaproject.com/html"
-      xmlns:let="http://moyaproject.com/let">
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:widgets="http://noyaproject.com/widgets">
 
     <content libname="content.base" template="base.html" />
 
@@ -36,8 +38,18 @@
     <content libname="content.user_edit" extends="#content.base">
         <title>Edit User Details</title>
         <section name="body">
-            <w:success if="success">Details updated successfully</w:success>
-            <render src="form"/>
+            <w:tab-panel active="${tab or 'details'}">
+                <w:tab id="details" title="Details">
+                    <w:info if="not user_form.errors"><m:markdown>Use this form to edit your details</m:markdown></w:info>
+                    <w:success if="details_success">Details updated successfully</w:success>
+                    <render src="user_form"/>
+                </w:tab>
+                <w:tab id="password" title="Password">
+                    <w:info if="not password_form.errors"><m:markdown>Use this form to change your password</m:markdown></w:info>
+                    <w:success if="password_success">Your password was updated</w:success>
+                    <render src="password_form"/>
+                </w:tab>
+            </w:tab-panel>
         </section>
     </content>
 
