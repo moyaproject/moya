@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.5.30a"
+VERSION = "0.5.30"
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -41,7 +41,7 @@ setup(name='moya',
       exclude_package_data={'': ['_*', 'docs/*']},
 
       classifiers=classifiers,
-      install_requires=['pyparsing',
+      install_requires=['pyparsing==2.0.5',
                         'webob',
                         'sqlalchemy',
                         'pytz',
