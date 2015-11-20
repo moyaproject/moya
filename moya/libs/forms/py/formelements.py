@@ -610,14 +610,23 @@ class Bind(ContextElementBase):
     class Help:
         synopsis = "Add data to a form"
 
-    bind = Attribute("Object to bind to", type="expression", default=".request.POST", evaldefault=True, required=False)
-    src = Attribute("Source object to fill in fields", type="expression", default=None)
+    bind = Attribute("Object to bind to (typically .request.POST)", type="expression", default=".request.method=='POST' ? .request.POST : None", evaldefault=True, required=False)
+    src = Attribute("Source object to fill in fields (the form)", type="expression", default=None)
 
     def logic(self, context):
         bind, src = self.get_parameters(context, 'bind', 'src')
         if bind is None:
             bind = {}
-        bind.update(self.get_let_map(context))
+
+        let_map = self.get_let_map(context)
+        try:
+            bind.update(let_map)
+        except Exception as e:
+            self.throw('moya.forms.bind-fail',
+                       'unable to update bind object {} with {} ({})'.format(context.to_expr(bind),
+                                                                             context.to_expr(let_map),
+                                                                             e))
+
         form = src
         form.bind(context, bind)
 
