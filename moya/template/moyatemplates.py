@@ -2040,7 +2040,7 @@ class Template(object):
                     closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()
                     if closing_tag and closing_tag != closed_tag.name:
-                        raise errors.UnmatchedTag("End tag, {{% {} %}}, doesn't match {}".format(closing_tag, closed_tag),
+                        raise errors.UnmatchedTag("End tag, {{% end{} %}}, doesn't match {}".format(closing_tag, closed_tag),
                                                   node,
                                                   lineno + 1, pos + 1, endpos,
                                                   diagnosis="The {{% {close} %}} tag requires a corresponding {{% end-{close} %}}".format(close=closing_tag))
