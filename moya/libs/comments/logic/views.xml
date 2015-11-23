@@ -151,8 +151,7 @@
         <serve-content content="#content.anoncomment" let:form="form"/>
     </view>
 
-    <view libname="view.pendingcomment" content="#content.pending.error">
-        <not-found if="not .user"/>
+    <view libname="view.pendingcomment" content="#content.pending.error" requires=".user">
         <forms:get form="#form.comment" dst="form" bind=".session.pendingcomment"/>
         <forms:validate src="form">
             <call macro="#create_comment" dst="comment"

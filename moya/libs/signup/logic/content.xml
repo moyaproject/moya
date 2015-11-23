@@ -5,6 +5,18 @@
     <content libname="content.base" template="/base.html" />
 
 
+    <macro docname="login_button">
+        <if test=".session.pendingcomment and 'moya.comments' in .libs">
+            <w:button-link name="login" app="moya.auth" query="(fwd=.urls[app:'moya.comments'].pendingcomment)">Sign In</w:button-link>
+            <markdown>
+                *Your pending comment will be posted when you sign in*
+            </markdown>
+        </if>
+        <else>
+            <w:button-link name="login" app="moya.auth">Sign In</w:button-link>
+        </else>
+    </macro>
+
     <content libname="content.signup" extends="#content.base">
         <title>Signup!</title>
         <section name="body">
@@ -21,14 +33,13 @@ If you don't receive this email within a few minutes, please check your spam fol
                 </if>
                 <else>
                     <w:success>Your new account was created!</w:success>
-                    <w:button-link name="login" app="moya.auth">Sign In</w:button-link>
+                    <defer to="login_button"/>
                 </else>
                 <done />
             </if>
             <render src="form"/>
         </section>
     </content>
-
 
     <content libname="content.validate" extends="#content.base">
         <title>Validate Email</title>
@@ -43,7 +54,7 @@ If you don't receive this email within a few minutes, please check your spam fol
     Your email was validated successfully.
                     </markdown>
                 </w:success>
-                <w:button-link name="login" app="moya.auth">Sign In</w:button-link>
+                <defer to="login_button"/>
             </if>
             <else>
                 <w:error>
@@ -53,7 +64,7 @@ If you don't receive this email within a few minutes, please check your spam fol
     You may have already used this link.
                     </markdown>
                 </w:error>
-                <w:button-link name="login" app="moya.auth">Sign In</w:button-link>
+                <defer to="login_button"/>
             </else>
         </section>
     </content>

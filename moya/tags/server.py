@@ -27,7 +27,7 @@ from ..compat import text_type, itervalues, py2bytes, iteritems
 from .. import db
 from ..response import MoyaResponse
 from ..request import ReplaceRequest
-from ..compat import urlencode
+from ..urltools import urlencode as moya_urlencode
 from .. import tools
 
 from webob import Response
@@ -298,8 +298,9 @@ class GetURL(DataSetter):
             self.throw('get-url.no-route', text_type(e))
 
         if query and hasattr(query, 'items'):
-            qs = urlencode(list(query.items()), True)
-            url += '?' + qs
+            qs = moya_urlencode(query)
+            if qs:
+                url += '?' + qs
 
         url = self.qualify(context, url)
 

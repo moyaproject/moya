@@ -825,7 +825,7 @@ class TimeSpan(object):
         return self._ms // (1000 * 60 * 60 * 24)
 
     def __int__(self):
-        return self._ms
+        return int(self._ms)
 
     def __float__(self):
         return float(self._ms / 1000.0)
