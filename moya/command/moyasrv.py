@@ -236,7 +236,7 @@ class MoyaSrv(object):
             return -1
 
     def run_install(self):
-        home_dir = self.args.home
+        home_dir = self.args.home or DEFAULT_HOME_DIR
 
         def create_dir(_path):
             path = os.path.join(home_dir, _path)
