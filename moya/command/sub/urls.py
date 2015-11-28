@@ -55,7 +55,8 @@ class URLS(SubCommand):
         application = WSGIApplication(self.location,
                                       self.get_settings(),
                                       args.server,
-                                      disable_autoreload=True)
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         urlmapper = application.server.urlmapper
         urls = []
 

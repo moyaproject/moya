@@ -29,7 +29,11 @@ class Init(SubCommand):
         console = self.console
         console.text("Initializing site...", bold=True)
 
-        application = WSGIApplication(self.location, self.get_settings(), validate_db=True, disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      validate_db=True,
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
         db.sync_all(archive, self.console, summary=False)
 

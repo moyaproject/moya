@@ -38,7 +38,10 @@ class Email(SubCommand):
         getattr(self, "sub_" + self.args.email_subcommand)()
 
     def sub_list(self):
-        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
 
         from ...console import Cell

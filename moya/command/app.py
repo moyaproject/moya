@@ -16,10 +16,10 @@ from ..tools import get_moya_dir, is_moya_dir, nearest_word
 from ..errors import ElementNotFoundError
 from ..compat import text_type
 from ..command.subcommand import SubCommandMeta
+from ..multiwsgi import Service
 from .. import db
 from .. import settings
 from .. import errors
-from .. import multiwsgi
 
 from .. import __version__ as version
 
@@ -79,6 +79,7 @@ To list all available commands for a given application, omit the libname:
         super(Moya, self).__init__()
         self._location = None
         self._location_fs = None
+        self._master_settings = None
 
     @property
     def console(self):
@@ -115,6 +116,10 @@ To list all available commands for a given application, omit the libname:
 
     def get_settings(self):
         settings = self.args.settings
+
+        moya_service = os.environ.get('MOYA_SERVICE_PROJECT', None)
+        if moya_service is not None:
+            settings = self.master_settings.get('service', 'ini', None)
         if not settings:
             settings = os.environ.get('MOYA_PROJECT_INI', None) or self.moyarc.get('defaults', 'ini', 'settings.ini').strip()
         if not settings:
@@ -123,10 +128,24 @@ To list all available commands for a given application, omit the libname:
         return ini_list
 
     @property
+    def master_settings(self):
+        if self._master_settings is not None:
+            return self._master_settings
+        moya_service = os.environ.get('MOYA_SERVICE_PROJECT', None)
+        if moya_service is None:
+            self._master_settings = None
+        else:
+            self._master_settings = Service.get_project_settings(moya_service)
+        return self._master_settings
+
+    @property
     def location(self):
         if self._location is not None:
             return self._location
-        location = self.args.location or os.environ.get('MOYA_PROJECT', None)
+        location = None
+        if self.master_settings:
+            location = self.master_settings.get('service', 'location', None)
+        location = self.args.location or location or os.environ.get('MOYA_PROJECT', None)
         if location is None:
             location = './'
         if location and '://' in location:
@@ -190,6 +209,7 @@ To list all available commands for a given application, omit the libname:
         subcommand.console = self.console
         subcommand.moyarc = self.moyarc
         subcommand.moya_command = self
+        subcommand.master_settings = self.master_settings
 
         try:
             return subcommand.run()

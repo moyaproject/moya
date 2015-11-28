@@ -25,7 +25,10 @@ class Libs(SubCommand):
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
         table = []
         if args.org:

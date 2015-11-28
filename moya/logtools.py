@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from . import pilot
 from .console import ConsoleHighlighter
 
+import sys
 import io
 import logging
 
@@ -67,7 +68,8 @@ class MoyaConsoleHandler(logging.StreamHandler):
 
 
 class MoyaFileHandler(logging.Handler):
-    """A handler that writes to a file.
+    """
+    A handler that writes to a file.
 
     The default FileHandler keeps the file open, which breaks when Ubuntu rotates the logs. This handler
     avoids that issue by closing the file on every emit.
@@ -86,6 +88,24 @@ class MoyaFileHandler(logging.Handler):
         except IOError:
             # paranoia
             pass
+
+
+class MoyaSysLogHandler(logging.handlers.SysLogHandler):
+    """
+    A syslog handler that detects the platform
+
+    """
+    def __init__(self):
+        platform = sys.platform
+        if platform == 'linux2':
+            args = ('/dev/log',)
+        elif platform == 'darwin':
+            args = ('/var/run/syslog',)
+        elif platform == 'win32':
+            args = ()
+        else:
+            args = ()
+        super(MoyaSysLogHandler, self).__init__(*args)
 
 
 class LoggerFile(object):

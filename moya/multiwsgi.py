@@ -93,7 +93,7 @@ class MultiWSGIApplication(object):
     def not_found(self):
         response = Response(charset=py2bytes("utf8"), status=404)
         response.text = not_found_response
-        return response
+        return response.app_iter
 
     def reload_required(server_name):
         return False
@@ -176,7 +176,7 @@ class Service(MultiWSGIApplication):
         except OSError:
             pass
 
-        for path in self._get_projects():
+        for path in self._get_projects(self.settings, self.home_dir):
             log.debug('reading project settings %s', path)
             try:
                 self.add_project(path)
@@ -196,7 +196,30 @@ class Service(MultiWSGIApplication):
 
         self.build_all()
 
+    @classmethod
+    def get_project_settings(cls, project_name):
+        """Get the settings for a single project"""
+        home_dir = os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
+        settings_path = os.path.join(home_dir, 'moya.conf')
+
+        try:
+            with io.open(settings_path, 'rt') as f:
+                service_settings = SettingsContainer.read_from_file(f)
+        except IOError:
+            log.error("unable to read moya service settings from '{}'", settings_path)
+            return -1
+
+        for path in cls._get_projects(service_settings, home_dir):
+            try:
+                settings = SettingsContainer.read_os(path)
+            except Exception as e:
+                log.error("error reading '%s' (%s)", path, e)
+            if settings.get('service', 'name', None) == project_name:
+                return settings
+        return None
+
     def reload_required(self, server_name):
+        """Detect if a reload is required"""
         path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
         mtime = os.path.getmtime(path)
         return self.changes[server_name] != mtime
@@ -206,16 +229,16 @@ class Service(MultiWSGIApplication):
         self.changes[server_name] = os.path.getmtime(path)
         super(Service, self).reload(server_name)
 
-    def _get_projects(self):
-        project_paths = self.settings.get_list('projects', 'read')
+    @classmethod
+    def _get_projects(self, settings, home_dir):
+        project_paths = settings.get_list('projects', 'read')
         paths = []
         cwd = os.getcwd()
         try:
-            os.chdir(self.home_dir)
+            os.chdir(home_dir)
             for path in project_paths:
                 glob_paths = glob.glob(path)
                 paths.extend([os.path.abspath(p) for p in glob_paths])
         finally:
             os.chdir(cwd)
-
         return paths

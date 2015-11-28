@@ -1,3 +1,9 @@
+0.5.33
+------
+
+Added 'moya-srv install' command
+Added logtools.MoyaSysLoghandler to auto-detect platform
+
 0.5.32
 ------
 

@@ -40,12 +40,20 @@ class DB(SubCommand):
         getattr(self, "sub_" + self.args.dbsubcommand)()
 
     def sub_sync(self):
-        application = WSGIApplication(self.location, self.get_settings(), validate_db=True, disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      validate_db=True,
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
         return db.sync_all(archive, self.console)
 
     def sub_list(self):
-        application = WSGIApplication(self.location, self.get_settings(), validate_db=False, disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      validate_db=False,
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
         engines = archive.database_engines
         from ...console import Cell

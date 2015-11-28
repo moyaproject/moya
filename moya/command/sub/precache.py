@@ -21,7 +21,10 @@ class PreCache(SubCommand):
         console = self.console
 
         console.text("loading project", bold=True)
-        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
+        application = WSGIApplication(self.location,
+                                      self.get_settings(),
+                                      disable_autoreload=True,
+                                      master_settings=self.master_settings)
         archive = application.archive
 
         try:
