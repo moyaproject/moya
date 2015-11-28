@@ -8,9 +8,9 @@ def _iter_qs_map(qs_map):
     for k, v in qs_map.items():
         if isinstance(v, list):
             for _v in v:
-                yield k, _v
+                yield text_type(k), text_type(_v)
         else:
-            yield k, v
+            yield text_type(k), text_type(v)
 
 
 def urlencode(query, _quote_plus=quote_plus, _iter_qs=_iter_qs_map):

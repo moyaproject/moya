@@ -735,10 +735,10 @@ def to_seconds(value):
 class TimeSpan(object):
     def __init__(self, ms=0):
         if isinstance(ms, string_types):
-            self._ms = sum(parse_timedelta(token)
-                           for token in ms.split())
+            self._ms = float(sum(parse_timedelta(token)
+                             for token in ms.split()))
         else:
-            self._ms = int(ms)
+            self._ms = float(ms)
 
     def __str__(self):
         return self.text
@@ -825,7 +825,7 @@ class TimeSpan(object):
         return self._ms // (1000 * 60 * 60 * 24)
 
     def __int__(self):
-        return self._ms
+        return int(self._ms)
 
     def __float__(self):
         return float(self._ms / 1000.0)
@@ -846,10 +846,13 @@ class TimeSpan(object):
         return TimeSpan(self._ms - self.to_ms(other))
 
     def __mul__(self, other):
-        return TimeSpan(self._ms * int(other))
+        return TimeSpan(self._ms * float(other))
 
     def __eq__(self, other):
         return self._ms == self.to_ms(other)
+
+    def __rmul__(self, other):
+        return TimeSpan(self._ms * float(other))
 
     def __radd__(self, other):
         if isinstance(other, datetime):

@@ -530,6 +530,13 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def joinspace(self, context, v):
         return ' '.join(text_type(i) for i in v if i)
 
+    def joinwith(self, context, v):
+        try:
+            join, char = v
+        except:
+            raise ValueError("joinwith: expects two values, e.g, joinwith[filenames, ', ']")
+        return text_type(char).join(join)
+
     def keys(self, context, v):
         return self._keys(context, v)
 

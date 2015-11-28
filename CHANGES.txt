@@ -1,6 +1,10 @@
 0.5.32
 ------
 
+Added joinwith: modifier
+Added exceptions to system-call
+
+
 0.5.31
 ------
 

@@ -1368,8 +1368,12 @@ class CacheNode(Node):
         cache = environment.get_cache(in_cache)
         cached_html = cache.get(cache_key, None)
 
-        if cached_html is not None:
+        if isinstance(cached_html, text_type):
             return cached_html
+        else:
+            if cached_html is not None:
+                # Appears to happen with memcache
+                log.warning('cache returned non-unicode! %r', cached_html)
 
         html = self.render_contents(environment, context, template, text_escape)
 

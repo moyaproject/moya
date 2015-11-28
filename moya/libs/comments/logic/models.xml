@@ -36,7 +36,7 @@
         <integer label="Comment Level" name="level" null="no" default="0" />
         <datetime label="Commented posted time" name="time" auto="yes" />
 
-        <foreign-key label="Commenter user account" name="user" model="auth#User" null="yes" orderby="username"/>
+        <foreign-key label="Commenter user account" name="user" model="auth#User" blank="yes" null="yes" orderby="username"/>
         <string label="Commenter Name" name="commenter_name" length="50" null="yes" />
         <string label="Commenter Email" name="commenter_email" length="300" null="yes" />
         <string label="Commenter URL" name="commenter_url" length="300" null="yes" />

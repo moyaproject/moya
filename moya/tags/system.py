@@ -11,7 +11,8 @@ except ImportError:
 log = logging.getLogger('moya.runtime')
 
 from ..context import Context
-from ..compat import iteritems
+from ..context.missing import is_missing
+from ..compat import iteritems, text_type
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter, LogicElement
 from ..import db
@@ -196,8 +197,12 @@ class SystemCall(DataSetter):
 
         shell = False
         if self.has_parameter('args'):
+            for arg in params.args:
+                if is_missing(arg):
+                    self.throw('bad-value.args',
+                               'args parameter must not contain missing values (args contains {})'.format(context.to_expr(arg)))
             try:
-                command = list(params.args)
+                command = [text_type(arg) for arg in params.args]
             except:
                 self.throw('bad-value.args',
                            "args parameter should be a list")
@@ -225,6 +230,10 @@ class SystemCall(DataSetter):
                        'system call returned non-zero code ({})'.format(return_code),
                        code=return_code,
                        output=output)
+        except OSError as e:
+            self.throw('system-call.os-error',
+                       'system call failed ({})'.format(e),
+                       errono=e.errno)
 
         if params.console and console:
             console(output)
