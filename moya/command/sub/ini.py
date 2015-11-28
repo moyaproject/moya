@@ -5,8 +5,6 @@ from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ... import iniparse
 
-import sys
-
 
 class Ini(SubCommand):
     """
@@ -28,5 +26,9 @@ class Ini(SubCommand):
                                       disable_autoreload=True,
                                       master_settings=self.master_settings)
 
-        ini = iniparse.write(application.archive.cfg)
+        cfg = application.archive.cfg
+        # Remove meta section (i.e. extends=) because it is no longer relevant
+        if '' in cfg:
+            del cfg['']
+        ini = iniparse.write(cfg)
         self.console.ini(ini)

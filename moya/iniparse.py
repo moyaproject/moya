@@ -14,6 +14,7 @@ re_section = re.compile(r'\[(.*?)\]', re.UNICODE)
 def sub_env(text, _re_env=re.compile(r'\$(\w+)', re.MULTILINE)):
     """Substition renvironment, in $ENV_VARIABLE syntax"""
     get_environ = os.environ.get
+
     def repl(match):
         return get_environ(match.group(1), match.group(0))
     return _re_env.sub(repl, text)
@@ -91,7 +92,6 @@ def write(settings, comments=None):
             write_section(name, section)
 
     return '\n'.join(lines)
-
 
 
 if __name__ == "__main__":
