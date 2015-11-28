@@ -20,4 +20,5 @@ __all__ = ['call',
            'syntax',
            'new',
            'init',
+           'ini',
            'precache']

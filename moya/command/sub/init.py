@@ -13,10 +13,10 @@ try:
 except ImportError:
     pass
 
-class Init(SubCommand):
-    """Initialize a site for first use"""
-    help = """Initialize a site for first use"""
 
+class Init(SubCommand):
+    """initialize a site for first use"""
+    help = """initialize a site for first use"""
 
     def add_arguments(self, parser):
         parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",

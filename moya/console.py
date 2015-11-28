@@ -116,6 +116,21 @@ class PythonHighlighter(ConsoleHighlighter):
     ]
 
 
+class INIHighligher(ConsoleHighlighter):
+    styles = {
+        "section": "bold green",
+        "key": "bold",
+        "value": "cyan",
+        "substitution": "bold magenta"
+    }
+    highlights = [
+        r'^(?P<key>\S+?)\s*?\=\s*?(?P<value>.*?)$',
+        r'^\s+?(?P<value>.+?)$',
+        r'(?P<substitution>\$\{.*?\})',
+        r'^(?P<section>\[.*?\])',
+    ]
+
+
 def style(style_def):
     """Convert a console style definition in to dictionary
 
@@ -738,6 +753,12 @@ class Console(object):
                          line_numbers=True,
                          highlighter=highlighter)
         return self
+
+    def ini(self, code):
+        highlighter = INIHighligher()
+        self.snippet(code,
+                     highlighter=highlighter,
+                     line_numbers=False)
 
     def templatesnippet(self, code, lineno=1, colno=None, endcolno=None, extralines=3, line_numbers=True):
         with self._lock:

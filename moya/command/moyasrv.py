@@ -87,7 +87,7 @@ moyacd () {
     cd $(moya-srv where $1)
 }
 alias moya-cd=moyacd
-export PS1=$MOYA_SERVICE_HOME$PS1
+export PS1=$MOYA_SERVICE_PROJECT$PS1
 """
 
 
@@ -205,6 +205,7 @@ class MoyaSrv(object):
             name = settings.get('service', 'name', '?')
             domains = "\n".join(settings.get_list('service', 'domains', ""))
             table.append([name, domains, path, location])
+        table.sort(key=lambda row: row[0].lower())
         self.console.table(table, header_row=['name', 'domain(s)', 'conf', 'location'])
 
     def run_where(self):
@@ -291,7 +292,7 @@ class MoyaSrv(object):
             sys.stdout.write('unable to add moya service bash tools ({})'.format(e))
         else:
             sys.stdout.write('Added Moya service bash tools to ~/.bashrc\n')
-            sys.stdout.write('Tools will be available when you next log in (or run source ~/.bashrc)\n')
+            sys.stdout.write("Tools will be available when you next log in (or run 'source ~/.bashrc')\n")
 
         sys.stdout.write('Moya server was installed in {}\n'.format(home_dir))
 
