@@ -121,13 +121,15 @@ class INIHighligher(ConsoleHighlighter):
         "section": "bold green",
         "key": "bold",
         "value": "cyan",
-        "substitution": "bold magenta"
+        "substitution": "bold magenta",
+        "comment": "dim white italic",
     }
     highlights = [
         r'^(?P<key>\S+?)\s*?\=\s*?(?P<value>.*?)$',
         r'^\s+?(?P<value>.+?)$',
         r'(?P<substitution>\$\{.*?\})',
         r'^(?P<section>\[.*?\])',
+        r'^(?P<comment>\#.*?)$'
     ]
 
 
