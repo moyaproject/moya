@@ -46,6 +46,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
 
+import weakref
 import logging
 log = logging.getLogger('moya.db')
 
@@ -739,6 +740,27 @@ class DBModel(DBElement):
                           signal_params)
 
 
+class _PropertyCallable(object):
+    def __init__(self, element, expression):
+        self._element = weakref.ref(element)
+        self._expression = expression
+
+    def __call__(self, app, model):
+        if self._expression is not None:
+            expression = self._expression
+            def expression_property(obj):
+                return expression.call(pilot.context, obj)
+            return expression_property
+        else:
+            def moya_code_property(obj):
+                element = self._element()
+                _call = element.archive.get_callable_from_element(element, app=app)
+                result = _call(pilot.context, object=obj)
+                return result
+            return moya_code_property
+
+
+
 class Property(DBElement):
     """Add a property to a db object"""
 
@@ -754,24 +776,8 @@ class Property(DBElement):
     def document_finalize(self, context):
         params = self.get_parameters(context)
         model = self.get_ancestor((self.xmlns, "model"))
-        has_expression = self.has_parameter('expression')
-
-        def make_property_callable(app, model):
-            if has_expression:
-                def expression_property(obj):
-                    return params.expression.call(pilot.context, obj)
-                return expression_property
-            else:
-                def moya_code_property(obj):
-                    _call = self.archive.get_callable_from_element(self, app=app)
-                    result = _call(pilot.context, object=obj)
-                    return result
-                return moya_code_property
-
-        def get_property(app, model):
-            return make_property_callable(app, model)
-
-        model.add_object_property(params.name, get_property)
+        expression = params.expression if self.has_parameter('expression') else None
+        model.add_object_property(params.name, _PropertyCallable(self, expression))
 
 
 class _ForeignKey(DBElement):
