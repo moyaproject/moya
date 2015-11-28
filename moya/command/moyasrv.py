@@ -65,7 +65,7 @@ class MoyaSrv(object):
         self.args = args = parser.parse_args(sys.argv[1:])
         self.console = Console()
 
-        self.home_dir = args.home or os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
+        self.home_dir = args.home or os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
 
         settings_path = os.path.join(self.home_dir, 'moya.conf')
         try:

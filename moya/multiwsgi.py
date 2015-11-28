@@ -148,7 +148,7 @@ class Service(MultiWSGIApplication):
         super(Service, self).__init__()
         self.changes = {}
 
-        self.home_dir = home_dir = os.environ.get('MOYA_SRV_HOME', None) or DEFAULT_HOME_DIR
+        self.home_dir = home_dir = os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
         settings_path = os.path.join(home_dir, 'moya.conf')
 
         try:

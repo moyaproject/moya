@@ -19,6 +19,7 @@ from ..command.subcommand import SubCommandMeta
 from .. import db
 from .. import settings
 from .. import errors
+from .. import multiwsgi
 
 from .. import __version__ as version
 
