@@ -86,8 +86,10 @@ BASH_TOOLS = """
 moyacd () {
     cd $(moya-srv where $1)
 }
+
 alias moya-cd=moyacd
-export PS1=$MOYA_SERVICE_PROJECT$PS1
+PS1="\`if [ \"\$MOYA_SERVICE_PROJECT\" != \"\" ]; then echo \"<\$MOYA_SERVICE_PROJECT>\"; fi\`$PS1"
+export PS1
 """
 
 
@@ -281,18 +283,19 @@ class MoyaSrv(object):
                     raise
 
         try:
-            cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(os.path.join(home_dir, 'bashtools'))
-            bashrc_path = os.path.expanduser("~/.bashrc")
+            bashtools_path = os.path.join(home_dir, 'bashtools')
+            cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(bashtools_path)
+            bashrc_path = os.path.expanduser("~/.bash_profile")
             with open(bashrc_path, 'rb') as f:
                 bashrc = f.read()
             if cmd not in bashrc:
                 with open(bashrc_path, 'ab') as f:
                     f.write(cmd)
         except Exception as e:
-            sys.stdout.write('unable to add moya service bash tools ({})'.format(e))
+            sys.stdout.write('unable to add moya service bash tools ({})\n'.format(e))
         else:
-            sys.stdout.write('Added Moya service bash tools to ~/.bashrc\n')
-            sys.stdout.write("Tools will be available when you next log in (or run 'source ~/.bashrc')\n")
+            sys.stdout.write('Added Moya service bash tools to ~/.bash_profile\n')
+            sys.stdout.write("Tools will be available when you next log in (or run 'source {})\n".format(bashtools_path))
 
         sys.stdout.write('Moya server was installed in {}\n'.format(home_dir))
 

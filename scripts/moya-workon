@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -i
 
 export MOYA_SERVICE_PROJECT="$1"
-$SHELL
+$SHELL -il
