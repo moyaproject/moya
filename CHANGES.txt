@@ -1,6 +1,8 @@
 0.5.34
 ------
 
+Service install fixes
+
 0.5.33
 ------
 
