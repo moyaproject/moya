@@ -40,28 +40,13 @@ propagate=no
 
 [logger:moya.srv]
 level=INFO
-handlers=srv_log
+handlers=syslog
 propagate=no
 
 [logger:moya.request]
 level=DEBUG
 handlers=null
 propagate=no
-
-[logger:referers]
-level=INFO
-handlers=referers_log
-propagate=no
-
-[handler:referers_log]
-formatter=format_referer
-class=moya.logtools.MoyaFileHandler
-args=('/var/log/nginx/referers.log',)
-
-[handler:srv_log]
-formatter=format_referer
-class=moya.logtools.MoyaFileHandler
-args=('/var/log/nginx/moyasrv.log',)
 
 [handler:stdout]
 class=StreamHandler
