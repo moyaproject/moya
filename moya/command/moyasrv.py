@@ -82,7 +82,7 @@ datefmt=[%d/%b/%Y %H:%M:%S]
 
 """
 
-BASH_TOOLS = """
+BASH_TOOLS = r"""
 moyacd () {
     cd $(moya-srv where $1)
 }
@@ -282,10 +282,11 @@ class MoyaSrv(object):
                 else:
                     raise
 
+        TOOLS_PATH = "~/.bashrc"
         try:
             bashtools_path = os.path.join(home_dir, 'bashtools')
             cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(bashtools_path)
-            bashrc_path = os.path.expanduser("~/.bash_profile")
+            bashrc_path = os.path.expanduser(TOOLS_PATH)
             with open(bashrc_path, 'rb') as f:
                 bashrc = f.read()
             if cmd not in bashrc:
@@ -298,7 +299,6 @@ class MoyaSrv(object):
             sys.stdout.write("Tools will be available when you next log in (or run 'source {})\n".format(bashtools_path))
 
         sys.stdout.write('Moya server was installed in {}\n'.format(home_dir))
-
 
 
 def main():
