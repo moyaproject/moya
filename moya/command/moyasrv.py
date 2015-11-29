@@ -272,8 +272,11 @@ class MoyaSrv(object):
             bashtools_path = os.path.join(home_dir, 'bashtools')
             cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(bashtools_path)
             bashrc_path = os.path.expanduser(TOOLS_PATH)
-            with open(bashrc_path, 'rb') as f:
-                bashrc = f.read()
+            if os.path.exists(bashrc_path):
+                with open(bashrc_path, 'rb') as f:
+                    bashrc = f.read()
+            else:
+                bashrc = b''
             if cmd not in bashrc:
                 with open(bashrc_path, 'ab') as f:
                     f.write(cmd)
