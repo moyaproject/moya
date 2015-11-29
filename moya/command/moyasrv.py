@@ -268,8 +268,8 @@ class MoyaSrv(object):
                     raise
 
         TOOLS_PATH = "~/.bashrc"
+        bashtools_path = os.path.join(home_dir, 'bashtools')
         try:
-            bashtools_path = os.path.join(home_dir, 'bashtools')
             cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(bashtools_path)
             bashrc_path = os.path.expanduser(TOOLS_PATH)
             if os.path.exists(bashrc_path):
@@ -283,7 +283,7 @@ class MoyaSrv(object):
         except Exception as e:
             sys.stdout.write('unable to add moya service bash tools ({})\n'.format(e))
         else:
-            sys.stdout.write('Added Moya service bash tools to ~/.bash_profile\n')
+            sys.stdout.write('Added Moya service bash tools to {}\n'.format(TOOLS_PATH))
             sys.stdout.write("Tools will be available when you next log in (or run 'source {})\n".format(bashtools_path))
 
         sys.stdout.write('Moya server was installed in {}\n'.format(home_dir))
