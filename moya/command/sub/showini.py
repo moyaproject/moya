@@ -6,7 +6,7 @@ from ...wsgi import WSGIApplication
 from ... import iniparse
 
 
-class Ini(SubCommand):
+class ShowIni(SubCommand):
     """
     Display the INI settings that will be used by the project.
 
