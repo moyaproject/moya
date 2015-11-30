@@ -14,6 +14,7 @@ from ..tools import lazystr
 from ..moyaexceptions import MoyaException
 
 import re
+import weakref
 
 from itertools import chain
 from threading import local
@@ -324,11 +325,15 @@ class Frame(object):
 
 class Stack(object):
     def __init__(self, context, root_obj):
-        self.context = context
+        self._context = weakref.ref(context)
         self.frames = [Frame(self, '.', root_obj)]
         self._push = self.frames.append
         self._pop = self.frames.pop
         self._current_frame = self.frames[-1]
+
+    @property
+    def context(self):
+        return self._context()
 
     def push_frame(self, index_or_frame):
         if isinstance(index_or_frame, Frame):
@@ -517,7 +522,7 @@ class Context(object):
     _re_substitute_context = re.compile(r'\$\{(.*?)\}')
     _sub = _re_substitute_context.sub
 
-    def __init__(self, root=None, thread_safe=False, re_sub=None):
+    def __init__(self, root=None, thread_safe=False, re_sub=None, name=None):
         if root is None:
             self.root = {}
         else:
@@ -530,6 +535,7 @@ class Context(object):
         self.thread_safe = False
         if thread_safe:
             self._make_thread_safe()
+        self.name = name
 
     def _make_thread_safe(self):
         if self.thread_safe:
@@ -550,10 +556,16 @@ class Context(object):
         return v.replace('.', '\\.')
 
     def __repr__(self):
-        return "<context>"
+        if self.name:
+            return "<context '{}'>".format(self.name)
+        else:
+            return "<context>"
 
     def __str__(self):
-        return "<context>"
+        if self.name:
+            return "<context '{}'>".format(self.name)
+        else:
+            return "<context>"
 
     def to_expr(self, obj, max_size=200):
         """Convert an object to a context expression, if possible"""

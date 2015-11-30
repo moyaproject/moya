@@ -140,5 +140,9 @@ class Pilot(ObjectExposer):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._stack.pop()
+        # import objgraph
+        # objgraph.show_most_common_types(limit=20)
+        # contexts= objgraph.by_type('moya.context.context.Context')
+        # print(contexts)
 
     _stack = _LocalAttribute("stack", list)

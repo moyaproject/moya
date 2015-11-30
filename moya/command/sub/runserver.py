@@ -129,21 +129,22 @@ class Runserver(SubCommand):
             log.debug('user exit')
             application.close()
 
-            # Can track down memory leaks
-            
-            # del server
-            # del application
-            #
-            # from moya.elements.registry import default_registry
-            # default_registry.clear()
-            # import gc
-            # gc.collect()
-            #
-            # import objgraph
-            # objgraph.show_most_common_types(limit=20)
-            #
-            # contexts= objgraph.by_type('moya.context.context.Context')
-            # print([id(c) for c in contexts])
-            # obj = objgraph.by_type('Context')[-1]
-            # print(repr(obj))
-            # objgraph.show_backrefs([obj], max_depth=3, refcounts=True, filename="refs.png")
+        # Can track down memory leaks
+
+        # del server
+        # del application
+        #
+        # from moya.elements.registry import default_registry
+        # default_registry.clear()
+        # import gc
+        # gc.collect()
+        #
+        
+        # import objgraph
+        # objgraph.show_most_common_types(limit=20)
+        #
+        # contexts= objgraph.by_type('moya.context.context.Context')
+        # print([id(c) for c in contexts])
+        # obj = objgraph.by_type('Context')[-1]
+        # print(repr(obj))
+        # objgraph.show_backrefs([obj], max_depth=3, refcounts=True, filename="refs.png")

@@ -367,7 +367,7 @@ class WSGIApplication(object):
 
         start = time()
         start_clock = clock()
-        context = Context()
+        context = Context(name="WSGIApplication.__call__")
         request = MoyaRequest(environ)
 
         response = self.get_response(request, context)

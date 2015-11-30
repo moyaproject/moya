@@ -142,9 +142,9 @@ def set_dynamic(context):
     theme_fs = context.get('.fs.themes', None)
     from ..theme import Theme
     if theme_fs:
-        context.set_lazy('.theme', Theme.loader(theme_fs), context)
+        context.set_lazy('.theme', Theme.loader(theme_fs), None)
     else:
-        context.set_lazy('.theme', Theme.dummy_loader, context)
+        context.set_lazy('.theme', Theme.dummy_loader, None)
 
 
 STRING_ENCODE = {

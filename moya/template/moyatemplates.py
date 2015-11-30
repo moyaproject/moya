@@ -96,7 +96,7 @@ class MoyaTemplateEngine(TemplateEngine):
 
     def render_template(self, template, data, base_context=None, **tdata):
         if base_context is None:
-            base_context = Context()
+            base_context = Context(name="base_context")
 
         data = data.copy()
         data.update(tdata)

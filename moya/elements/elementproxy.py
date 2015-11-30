@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from ..interface import AttributeExposer
 
+import weakref
 
 class ElementProxy(AttributeExposer):
     __moya_exposed_attributes__ = ["app",
@@ -14,7 +15,7 @@ class ElementProxy(AttributeExposer):
                                    "parent"]
 
     def __init__(self, context, app, element):
-        self._context = context
+        self._context = weakref.ref(context)
         self.app = app
         self.tag = element
         self.attributes = element.get_all_parameters(context)
@@ -24,6 +25,10 @@ class ElementProxy(AttributeExposer):
         self.tag_type = "{{{}}}{}".format(self.tag_xmlns, self.tag_name)
 
     @property
+    def context(self):
+        return self._context()
+
+    @property
     def params(self):
         return self.attributes
 
@@ -31,7 +36,7 @@ class ElementProxy(AttributeExposer):
     def parent(self):
         if not self.tag.parent:
             return None
-        return ElementProxy(self._context, self.app, self.tag.parent)
+        return ElementProxy(self.context, self.app, self.tag.parent)
 
     def __moyaelement__(self):
         return self.tag

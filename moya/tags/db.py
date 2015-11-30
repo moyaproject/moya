@@ -620,7 +620,7 @@ class DBModel(DBElement):
             return self._extended_definitions[app.name]
         model = self
         extends_chain = [(app, self)]
-        context = Context()
+        context = Context(name="_get_extended_definition")
         while 1:
             extend_model_ref = model.extends(context)
             if extend_model_ref is None:

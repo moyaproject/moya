@@ -1,6 +1,7 @@
 
 from .context.context import Context
 from .compat import text_type
+from . import pilot
 
 import json
 import hashlib
@@ -49,7 +50,9 @@ class Theme(object):
     @classmethod
     def loader(cls, fs):
         """Automatically add theme to context"""
-        def load(context):
+        def load(context=None):
+            if context is None:
+                context = pilot.context
             name = context.get('.sys.site.theme', 'default')
 
             path = "{}.json".format(name)

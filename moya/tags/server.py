@@ -29,6 +29,7 @@ from ..response import MoyaResponse
 from ..request import ReplaceRequest
 from ..urltools import urlencode as moya_urlencode
 from .. import tools
+from .. import pilot
 
 from webob import Response
 
@@ -627,6 +628,8 @@ class Server(LogicElement):
     @classmethod
     def _get_tz(self, context, default_timezone='UTC', user_timezone=False):
         """lazy insertion of .tz"""
+        if context is None:
+            context = pilot.context
         tz = None
         if user_timezone:
             tz = context.get('.user.timezone', None)
@@ -698,7 +701,7 @@ class Server(LogicElement):
         root['locale'] = site.locale
         context.set_lazy('.tz',
                          self._get_tz,
-                         context,
+                         None,
                          user_timezone=site.user_timezone,
                          default_timezone=site.timezone)
 
