@@ -27,6 +27,7 @@ from fs.path import splitext
 from fs.opener import fsopendir
 from fs.errors import FSError
 
+import gc
 import random
 from time import time, clock, sleep
 from threading import RLock
@@ -385,13 +386,18 @@ class WSGIApplication(object):
                          response.content_length or 0,
                          taken_ms)
 
-        if request.method == 'HEAD':
-            return []
-        else:
-            return response.app_iter
+        try:
+            if request.method == 'HEAD':
+                return []
+            else:
+                return response.app_iter
+        finally:
 
-        self.archive.fire(context,
-                          "request.end",
-                          data={'response': response})
+            self.archive.fire(context,
+                              "request.end",
+                              data={'response': response})
+
+            context.root = {}
+
 
 Application = WSGIApplication

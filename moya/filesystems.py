@@ -7,6 +7,7 @@ from .console import Cell
 from .compat import text_type, implements_to_string
 from .reader import DataReader
 
+import weakref
 import re
 
 _re_fs_path = re.compile(r'^(?:\{(.*?)\})*(.*$)')
@@ -57,7 +58,11 @@ class FSContainer(dict):
 @implements_to_string
 class FSWrapper(object):
     def __init__(self, fs):
-        self.fs = fs
+        self._fs = weakref.ref(fs)
+
+    @property
+    def fs(self):
+        return self._fs()
 
     def get_type_name(self):
         return type(self.fs).__name__
@@ -80,7 +85,6 @@ class FSWrapper(object):
         return getattr(self.fs, name)
 
     def __moyaconsole__(self, console):
-        #self.fs.tree(max_levels=3)
         console((self.fs.desc('.'))).nl()
         self.fs.tree(max_levels=1)
 

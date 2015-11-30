@@ -21,6 +21,10 @@ else:
     from _thread import interrupt_main
 
 
+# import gc
+# gc.set_debug(gc.DEBUG_LEAK)
+
+
 class RequestHandler(WSGIRequestHandler):
 
     # Disable simple_server's logging to stdout
@@ -129,6 +133,15 @@ class Runserver(SubCommand):
             log.debug('user exit')
             application.close()
 
+            # del server
+            # del application
+            # import gc
+            # gc.collect()
+
+            # import objgraph
+            # objgraph.show_most_common_types(limit=200)
+
+
         # Can track down memory leaks
 
         # del server
@@ -139,7 +152,7 @@ class Runserver(SubCommand):
         # import gc
         # gc.collect()
         #
-        
+
         # import objgraph
         # objgraph.show_most_common_types(limit=20)
         #

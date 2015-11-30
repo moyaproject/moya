@@ -16,10 +16,11 @@ from fs.opener import fsopendir
 from fs.osfs import OSFS
 from fs.multifs import MultiFS
 
-from time import time
-from collections import namedtuple
+import gc
 import os
 import sys
+from time import time
+from collections import namedtuple
 from os.path import dirname, abspath
 
 import logging
@@ -115,6 +116,7 @@ def build(fs,
 
     finally:
         os.chdir(cwd)
+        gc.collect()
 
 
 ServerBuildResult = namedtuple("ServerBuildResult",
