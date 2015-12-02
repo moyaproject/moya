@@ -120,6 +120,7 @@ class DBSession(object):
     def close(self):
         if self._session:
             self.session.close()
+            self._session = None
 
     def __moyacontext__(self, context):
         return self._session
@@ -138,12 +139,10 @@ class DBSession(object):
 
     def enter_transaction(self):
         self._transaction_level += 1
-        #print("ENTER", self._transaction_level)
 
     @wrap_db_errors
     def exit_transaction(self, element=None, exc_type=None, exc_val=None):
         self._transaction_level -= 1
-        #print("EXIT", self._transaction_level)
         if exc_type is None:
             if self._transaction_level == 0:
                 try:
