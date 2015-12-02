@@ -7,6 +7,7 @@ from .console import ConsoleHighlighter
 import sys
 import io
 import logging
+import logging.handlers
 
 
 class LogHighlighter(ConsoleHighlighter):
