@@ -13,7 +13,10 @@ from .compat import text_type, implements_to_string, itervalues
 from . import logic
 from .console import Cell
 
+import weakref
 import logging
+
+
 startup_log = logging.getLogger('moya.startup')
 db_log = logging.getLogger('moya.db')
 
@@ -29,12 +32,13 @@ class DBEngine(object):
         self.engine_name = engine_name
         self.engine = engine
         self.default = default
-        self.Session = sessionmaker(bind=engine)  # expire_on_commit
+        #self.Session = sessionmaker(bind=engine)  # expire_on_commit
+        self.session_factory = sessionmaker(bind=engine)
         self.metadata = MetaData()
         self.table_names = set()
 
     def get_session(self):
-        return DBSession(self.Session, self.engine)
+        return DBSession(self.session_factory, self.engine)
 
     def __str__(self):
         return '<dbengine %s>' % self.engine_name
@@ -98,16 +102,24 @@ class _SessionContextManager(object):
 
 class DBSession(object):
     def __init__(self, session_factory, engine=None):
-        self.session_factory = scoped_session(session_factory)
-        self.engine = engine
+        self.session_factory = session_factory
+        self._engine = weakref.ref(engine) if engine is not None else None
         self._session = None
         self._transaction_level = 0
+
+    @property
+    def engine(self):
+        return self._engine() if self._engine is not None else None
 
     @property
     def session(self):
         if self._session is None:
             self._session = self.session_factory()
         return self._session
+
+    def close(self):
+        if self._session:
+            self.session.close()
 
     def __moyacontext__(self, context):
         return self._session
@@ -200,6 +212,10 @@ def commit_sessions(context):
                 db_log.exception('error committing session')
             else:
                 count += 1
+            try:
+                dbsession.close()
+            except:
+                db_log.exception('error closing session')
     return count
 
 
@@ -214,6 +230,10 @@ def rollback_sessions(context):
                 db_log.exception('error rolling back session')
             else:
                 count += 1
+            try:
+                dbsession.close()
+            except:
+                db_log.exception('error closing session')
     return count
 
 
