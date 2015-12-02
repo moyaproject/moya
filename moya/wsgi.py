@@ -207,6 +207,7 @@ class WSGIApplication(object):
         self.archive.populate_context(context)
         self.archive.fire(context, "sys.startup")
         db.commit_sessions(context)
+        gc.collect()
 
     def populate_context(self, context):
         # Called by moya <command>
@@ -239,8 +240,7 @@ class WSGIApplication(object):
             self.archive = new_build.archive
             self.server = new_build.server
             self.archive.finalize()
-        import gc
-        gc.collect()
+
         self.rebuild_required = False
         self.archive.console.div("Modified project built successfully", bold=True, fg="green")
 
