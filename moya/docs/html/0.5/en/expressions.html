@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Expressions</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="moyacode.html">&larr; 5. Moya Code</a>
+        </li>
+        
+        <li class="next">
+            <a href="customtags.html">7. Custom Tags &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Expressions</h1>
+            <p>Expression in Moya are similar in many ways to expressions in other languages, with extensions for web related tasks. They are designed to be powerful, without compromising on readability.</p>
+<h2><a name="testing-expressions"></a><a href="#testing-expressions">Testing Expressions<span class="anchor"> &#182;</span></a></h2><p>Perhaps the easiest way to test Moya expressions is to enter them in to the debugger. If you launch a Moya code file (any valid file will do) with <code>moya run</code> and the <code>--breakpoint</code> switch, Moya will drop straight in to the debugger. If you type an expression in to the command line, Moya will evaluate the expression and show you the result.</p>
+<p>You can also create data types (see below) with the <code>let</code> command in the debugger. This assigns the result of an expression to a variable, which you can then use in further expressions. Here's an example debugger session:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">moya&nbsp;moya.run#debug.1&nbsp;&gt;&nbsp;let&nbsp;test&nbsp;=&nbsp;"moya"</div><a name="line2"></a><div class="line line-2">moya&nbsp;moya.run#debug.1&nbsp;&gt;&nbsp;"Hello,&nbsp;"&nbsp;+&nbsp;title:test&nbsp;+&nbsp;"!"</div></pre><h2><a name="data-indices"></a><a href="#data-indices">Data Indices<span class="anchor"> &#182;</span></a></h2><p>Some data types contain other values, which may be used independently in expressions. We can refer to these values with a <em>data index</em>, which is a sequence of names, separated by a period (<code>.</code>). For instance, if we have a list of values called <code>crew</code>, we can refer to the first value with <code>crew.0</code> (Moya starts counting from 0), and <code>crew.1</code> to refer to the second value.</p>
+<p>Moya stores all variables in the <em>context</em> which a single data structure containing all information for a request. Most variables you work with will be in a <em>local scope</em> (a view of part of the context). For example, when calling a macro, Moya stores the local variables in a new scope.</p>
+<p>A data index may also refer to the top (or <em>root</em>) of the context, even when you are working in a local scope. To refer to such root values, prefix the index with a single period.</p>
+<p>One such value stored in the root of the context, is <code>request</code>, which contains information regarding the current request being handled. Because it is in the root, it is always available, and may be referred with the data index <code>.request</code> (note the leading period).</p>
+<aside>There are other root values which you can rely on. These are covered in later chapters.</aside><p>Here are some examples of data indices:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">color.r</div><a name="line2"></a><div class="line line-2">.now.epoch</div><a name="line3"></a><div class="line line-3">.request.POST.back_url</div></pre><h2><a name="missing-values"></a><a href="#missing-values">Missing Values<span class="anchor"> &#182;</span></a></h2><p>If a data index refers to a value that doesn't exist Moya returns a value of a special type called <code>Missing</code>. Let's use the following data index as an example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">ships.moya.crew.peacekeepers</div></pre><p>If the object refered to by the data index <code>ships.moya.crew</code> doesn't contain a key called <code>peacekeepers</code>, then a value of <code>Missing</code> is returned. This is true if <em>any</em> of the components of the index don't exist. For example, if <code>ships</code> doesn't exist then the entire index will return <code>Missing</code>. Similarly if there is no key called <code>moya</code> in <code>ships</code>, then <code>Missing</code> will be returned.</p>
+<p>A missing value is always considered False, has no keys, and results in an empty string if you use it in a template. It is also considered an empty sequence if you try to iterate over it. These properties keep code simple. For example, the following code is valid, even with a missing data index:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"not&nbsp;ships.moya.crew.peacekeepers"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>No&nbsp;Peacekeepers&nbsp;on&nbsp;board!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>There may be some situations where it is not enough to treat a missing index as false. In these situation you may use the <code>missing:</code> modifier (modifiers explained below).</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"missing:ships.moya.crew"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>No&nbsp;crew&nbsp;on&nbsp;Moya!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><div class="alert alert-warning"><strong>NOTE</strong> Although missing data indices are useful, it does mean that Moya can't distinguish between a missing value and one with a spelling error. So if an index is inexplicably missing, check for typos!</div><h2><a name="data-types"></a><a href="#data-types">Data Types<span class="anchor"> &#182;</span></a></h2><p>Moya can work with various kinds of <em>data</em> such as numbers and text. These may be created by Moya, but you can also create them within an expression. When values are directly entered in to an expression, they are known as <em>literals</em>. For instances <code>5</code> is a number literal.</p>
+<p>Moya supports the following data types:</p>
+<h3><a name="numbers"></a><a href="#numbers">Numbers<span class="anchor"> &#182;</span></a></h3><p>Literal numbers may be positive or negative, and may contain digits after the decimal point. Defining numbers is very simple, here are some examples:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">-23</div><a name="line2"></a><div class="line line-2">0</div><a name="line3"></a><div class="line line-3">3.14</div><a name="line4"></a><div class="line line-4">1000000000</div></pre><h3><a name="strings"></a><a href="#strings">Strings<span class="anchor"> &#182;</span></a></h3><p>Strings contain text, and are defined by enclosing the text in a quote marks (either single (<code>'</code>) or double (<code>"</code>)).</p>
+<p>If you want to write a string which contains a quote character, you must <em>escape</em> the quote, so that Moya knows not to treat it as the end of the string. You can do this by preceding the quote with a backslash. An alternative to escaping is <em>tripple</em> quoting; you can enclose your string in three quotes (of the same type), and Moya will know not to end the string at the single quote.</p>
+<aside>Note that for expressions in an XML attribute, you can use <em>single</em> quotes to avoid confusing the parser. It's also possible to replace the double quotes with <code>&amp;quot;</code> &ndash; but this can make an expression hard to read!</aside><p>The following are some examples of string definitions:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">"Hello,&nbsp;World!"</div><a name="line2"></a><div class="line line-2">'Where&nbsp;there&nbsp;is&nbsp;a&nbsp;Will,&nbsp;there&nbsp;is&nbsp;a&nbsp;way'</div><a name="line3"></a><div class="line line-3">""</div><a name="line4"></a><div class="line line-4">'Ka&nbsp;D\'Argo'</div><a name="line5"></a><div class="line line-5">'''Ka&nbsp;D'Argo'''</div></pre><h3><a name="constants"></a><a href="#constants">Constants<span class="anchor"> &#182;</span></a></h3><p>There are a few values that always available and have a specific meaning.</p>
+<dl class="dl-horizontal"><dt>True</dt>
+<dd>
+Indicates truth (see Booleans below).
+</dd><dt>yes</dt>
+<dd>
+Alias for True
+</dd><dt>False</dt>
+<dd>
+Indicates falseness (see Booleans below).
+</dd><dt>no</dt>
+<dd>
+An alias for False.
+</dd><dt>None</dt>
+<dd>
+A special value that indicates 'nothing here'.
+</dd></dl><h3><a name="booleans"></a><a href="#booleans">Booleans<span class="anchor"> &#182;</span></a></h3><p>A <em>boolean</em> is a value which indicates true or false. Boolean values are used when making decisions, in an <a class="tag" href="tags/httpmoyaprojectcom/tag_if.html">&lt;if&gt;</a> tag for example.</p>
+<p>The constants, <code>True</code> and <code>False</code>, are used for this. Moya also allows the use of <code>yes</code> and <code>no</code>, which are equivalent. For example, these values indicate true:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1">True</div><a name="line2"></a><div class="line line-2">yes</div></pre><p>And these values indicate false:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1">False</div><a name="line2"></a><div class="line line-2">no</div></pre><p>Other values can also be interpreted as true or false by Moya. The number <code>0</code> is considered false, as is an empty string, or an empty collection (e.g. a list with nothing in it). All other values are considered true.</p>
+<p>If you use one of these values in an expression where Moya expects a boolean, then the result of the expression will be interpreted according to the above rules. You can also used the <code>bool:</code> modifier to convert a value in to a boolean.</p>
+<p>Here's are some examples of converting a value in to its boolean interpretation:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{bool:0}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;False&nbsp;--&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{bool:''}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;False&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{bool:3}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;True&nbsp;--&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="tag tagname">list</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"my_list"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{bool:my_list}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;False&nbsp;--&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="tag tagname">list</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"my_list_2"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">int</span><span class="tag">&gt;</span>5</span><span class="tag">&lt;</span><span class="endtagname tag">/int</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/list</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{bool:my_list_2}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;True&nbsp;--&gt;</span></div></pre><h3><a name="lists"></a><a href="#lists">Lists<span class="anchor"> &#182;</span></a></h3><p>A <em>list</em> is a sequence of other Moya values. A list consists of a values separated by a colon and enclosed in square brackets (<code>[]</code>). Here are some examples of lists:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">['A','B','C']</div><a name="line2"></a><div class="line line-2">["apples","oranges","pears"]</div><a name="line3"></a><div class="line line-3">[2,3,5,7,11,13,19]</div><a name="line4"></a><div class="line line-4">[]</div></pre><p>Lists are indexed by their position in the list. Where the first item is at index 0, and the second is index 1 etc. The following is an example of using an index with a list:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">var</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"crew"</span><span class="tag">&gt;</span>["John",&nbsp;"Ka&nbsp;D'Argo",&nbsp;"Aeryn"]</span><span class="tag">&lt;</span><span class="endtagname tag">/var</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>First&nbsp;crew&nbsp;member&nbsp;is&nbsp;</span><span class="sub">$</span><span class="braced sub">{crew.0}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Second&nbsp;is&nbsp;</span><span class="sub">$</span><span class="braced sub">{crew.1}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h3><a name="dictionaries"></a><a href="#dictionaries">Dictionaries<span class="anchor"> &#182;</span></a></h3><p>A dictionary contains named values. Basically, a dictionary associates a values with a <em>keys</em> (usually a string) so that you can look up the value from the original key. You can define a dictionary with the <code>=</code> operator. For example <code>foo="bar"</code> creates a dictionary with a single value <code>foo</code>. To create a dictionary with multiple keys, separate them with commas. Here is an example of an expression that creates a dictionary:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">rygel="hynerian",&nbsp;john="human",&nbsp;aeryn="peace&nbsp;keeper"</div></pre><p>The keys in the dictionary are used as the index when looking up a value. The following example shows how to look up species for <code>john</code>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">var</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"crew"</span><span class="tag">&gt;</span>rygel="hynerian",&nbsp;john=</span><span class="attrib">"human"</span>,&nbsp;aeryn=</span><span class="attrib">"peace&nbsp;keeper"</span><span class="tag">&lt;</span><span class="endtagname tag">/var</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>John&nbsp;is&nbsp;a&nbsp;</span><span class="sub">$</span><span class="braced sub">{crew.john}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><p>Moya also supports an alternative syntax for dictionaries that may be more familiar if you have experience with other languages. This syntax consists of a number of key / value pairs separated by a colon and enclosed in curly brackets. Here's the same dictionary in this alternate syntax:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">{"rygel":"hyerian",&nbsp;"john":"human",&nbsp;"aeytn":"peace&nbsp;keeper"}</div></pre><p>You can create empty dictionary with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">{}</div></pre><p>Note that the alternate syntax can define dictionaries where the keys aren't strings.</p>
+<h3><a name="ranges"></a><a href="#ranges">Ranges<span class="anchor"> &#182;</span></a></h3><p>A <em>range</em> represents a sequence of values between a start and end point. Ranges are defined with either the <code>..</code> operator (2 periods) which defines an <em>inclusive</em> range, or the <code>...</code> operator (three periods) which defines an <em>exclusive</em> range. For examples, the expression <code>1..3</code> would create an inclusive range between 1 and 3, containing the values 1, 2, and 3. Whereas <code>1...3</code> would crate an exclusive range from 1 to 3, but not including the end point, and would contain the values 1, and 2.</p>
+<p>Loops may go forward or backwards; <code>3..1</code> is the reverse of <code>1..3</code>. Ranges also work with letters, and will produce a sequence from one character to another. For example, <code>'A'..'Z'</code> would contain all 26 letters of the alphabet.</p>
+<aside>Range objects don't store the intermediate values, just the start and end points, i.e. <code>1..1000000</code> will only store 2 values, not a million.</aside><p>Probably the main use for range objects is in loops. Here's an example of using range object to count down from 10 to 1:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"10..1"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"count"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{count}</span>&nbsp;seconds&nbsp;remaining</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">sleep</span><span class="tag tagcontent">&nbsp;for=</span><span class="attrib tag tagcontent">"1s"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre><h3><a name="regular-expressions"></a><a href="#regular-expressions">Regular Expressions<span class="anchor"> &#182;</span></a></h3><p>A <em>regular expression</em> is a sequence of characters used to match patterns in strings. Regular expressions can be a little cryptic, but they are very useful when working with string data. See the <a href="http://en.wikipedia.org/wiki/Regular_expression">article on Wikipedia</a> for an introduction.</p>
+<p>Regular expressions are defined in Moya by entering them between two slashes. Here is an example of a regular expression that matches an email address:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/</div></pre><p>You can use the <code>matches</code> operator with regular expressions to do the matching. The left hand side should be the string you want to match. Here's how you would use it with the regular expression above:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">'john@example.org'&nbsp;matches&nbsp;/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/</div></pre><p>The result of this expression would be True, because the string looks like an email address.</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">'not&nbsp;an&nbsp;email'&nbsp;matches&nbsp;/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/</div></pre><p>The result of this expression would be False, because the strings does not look like an email address.</p>
+<h3><a name="timespans"></a><a href="#timespans">Timespans<span class="anchor"> &#182;</span></a></h3><p>Timespans represent a period of time. They are used in a variety of places in Moya development, and can represent a period of milliseconds to a period of centuries. A timespan consists of a number followed by a symbol that indicates the unit. The unit may either be <code>ms</code> for milliseconds, <code>s</code> for seconds, <code>m</code> for minutes, <code>h</code> for hours and <code>d</code> for days (exactly 24 hours).</p>
+<aside>You may have noticed there is no unit for months and years. This is because a month may vary in length, ditto with a year (changes on a leap years).</aside><p>Here are some examples of timespans:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">250ms</div><a name="line2"></a><div class="line line-2">1s</div><a name="line3"></a><div class="line line-3">60m</div><a name="line4"></a><div class="line line-4">4h</div><a name="line5"></a><div class="line line-5">7d</div><a name="line6"></a><div class="line line-6">365d</div></pre><p>Timespans work with the arithmetic operator, and may be <em>mixed</em> (i.e. timespans of different units). Here are some examples of arithmetic operators on timestamps:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">3m&nbsp;+&nbsp;10s</div><a name="line2"></a><div class="line line-2">7d&nbsp;/&nbsp;24h</div><a name="line3"></a><div class="line line-3">60s&nbsp;-&nbsp;1h</div></pre><p>Timestamps have a number of useful attributes. The attributes <code>milliseconds</code>, <code>seconds</code>, <code>minutes</code>, <code>hours</code>, and <code>days</code> all return a number. The attribute, <code>text</code>, returns a human readable description of the timespan period. For example, if <code>t</code> contains the result of <code>24h - 1s</code> (24 hours minus one second), then <code>t.text</code> would produce the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">23&nbsp;hours,&nbsp;59&nbsp;minutes,&nbsp;59&nbsp;seconds</div></pre><h2><a name="operators"></a><a href="#operators">Operators<span class="anchor"> &#182;</span></a></h2><p>An operator is something that acts on data in an expression. Most operators take two values and combine them in some way. For instance, <code>+</code> and <code>-</code> are operators which combine values to produce a new value. The two values used by an operator are often referred to as the <em>left hand side</em> and <em>right hand side</em> of the operator, depending on their relative position. For example, in the expression <code>a + b</code>, <code>a</code> would be the left hand side, and <code>b</code> the right hand side.</p>
+<p>Moya supports the following operators:</p>
+<h3><a name="arithmetic-operators"></a><a href="#arithmetic-operators">Arithmetic Operators<span class="anchor"> &#182;</span></a></h3><p>
+The standard arithmetic operators work with numbers (and many other data types).</p>
+<h4><a name="add"></a><a href="#add">add<span class="anchor"> &#182;</span></a></h4><p>
+The add operator (<code>+</code>) adds two values together.</p>
+<p>When used with numbers, this operator produced a number result, but it can also be used with strings. Adding two strings together produces a new string that is a combination of both. The following is an example of adding strings together:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1">'Hello,&nbsp;'&nbsp;+&nbsp;"World!"</div></pre><p>Adding strings together is known as string <em>concatenation</em>.</p>
+<h4><a name="subtract"></a><a href="#subtract">Subtract<span class="anchor"> &#182;</span></a></h4><p>The subtract operator (<code>-</code>) subtracts one values from another.</p>
+<h4><a name="multiply"></a><a href="#multiply">Multiply<span class="anchor"> &#182;</span></a></h4><p>The multiple operator (<code>*</code>) multiplies one value by another.</p>
+<h4><a name="divide"></a><a href="#divide">Divide<span class="anchor"> &#182;</span></a></h4><p>The divide operator (<code>/</code>) divides one value by another.</p>
+<h4><a name="modulus"></a><a href="#modulus">Modulus<span class="anchor"> &#182;</span></a></h4><p>The <em>modulus</em> operator (<code>%</code>) calculates the <em>remainder</em> in a divide operation. For example <code>5 % 2</code> is <code>1</code>, because <code>2</code> goes in to <code>5</code>, <code>2</code> times, with a remainder of <code>1</code>.</p>
+<h4><a name="integer-division"></a><a href="#integer-division">Integer Division<span class="anchor"> &#182;</span></a></h4><p>The integer division operator (<code>//</code>) is like divide, but rounds down the answer. For example <code>5 // 2</code> is <code>2</code>.</p>
+<h4><a name="unary-minus-operator"></a><a href="#unary-minus-operator">Unary Minus Operator<span class="anchor"> &#182;</span></a></h4><p>The unary minus operator (<code>-</code>) makes the right hand side negative (as this is a <em>unary</em> operator, there is no left hand side). For example if a variable <code>count</code> has the value <code>3</code>, then the result of <code>-count</code> is the value <code>-3</code>.</p>
+<h3><a name="logic-operators"></a><a href="#logic-operators">Logic Operators<span class="anchor"> &#182;</span></a></h3><p>Logic operators combine boolean expressions. They are most often used when making decisions in <code>if</code> tags.</p>
+<h4><a name="and-operator"></a><a href="#and-operator">AND operator<span class="anchor"> &#182;</span></a></h4><p>Check if the left hand side of the operator <code>and</code> the right hand side are both true. The following truth table shows how <code>and</code> combines boolean values:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">False&nbsp;and&nbsp;False&nbsp;(False)</div><a name="line2"></a><div class="line line-2">False&nbsp;and&nbsp;True&nbsp;(False)</div><a name="line3"></a><div class="line line-3">True&nbsp;and&nbsp;False&nbsp;(False)</div><a name="line4"></a><div class="line line-4">True&nbsp;and&nbsp;True&nbsp;(True)</div></pre><p>Here's an example of <code>and</code> used in an expression:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"crew&nbsp;and&nbsp;fuel"</span><span class="tag">&gt;</span>Take&nbsp;off!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h4><a name="or-operator"></a><a href="#or-operator">OR operator<span class="anchor"> &#182;</span></a></h4><p>Check if either the left hand side <em>or</em> the right hand side values are true. Here's the corresponding truth table:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">False&nbsp;or&nbsp;False&nbsp;(False)</div><a name="line2"></a><div class="line line-2">True&nbsp;or&nbsp;False&nbsp;(True)</div><a name="line3"></a><div class="line line-3">False&nbsp;or&nbsp;True&nbsp;(True)</div><a name="line4"></a><div class="line line-4">True&nbsp;or&nbsp;True&nbsp;(True)</div></pre><h4><a name="not-operator"></a><a href="#not-operator">NOT operator<span class="anchor"> &#182;</span></a></h4><p>The <em>not</em> operator operates on a single value, and logically reverses it (so a true value becomes false, and vice versa).</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">not&nbsp;True&nbsp;(False)</div><a name="line2"></a><div class="line line-2">not&nbsp;False&nbsp;(True)</div></pre><p>Here's an example in an expression:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"not&nbsp;crew"</span><span class="tag">&gt;</span>Can't&nbsp;take&nbsp;off&nbsp;without&nbsp;crew</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h3><a name="comparision-operators"></a><a href="#comparision-operators">Comparision Operators<span class="anchor"> &#182;</span></a></h3><p>A comparision operator compares two values.</p>
+<h4><a name="equality"></a><a href="#equality">Equality<span class="anchor"> &#182;</span></a></h4><p>The equality operator (<code>==</code>) checks that two values are the same. If the values are the same, it will return True, otherwise False. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">str</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"name"</span><span class="tag">&gt;</span>Rygel</span><span class="tag">&lt;</span><span class="endtagname tag">/str</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{name&nbsp;==&nbsp;'Rygel'}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;</span><span class="comment">&lt;!--&nbsp;True&nbsp;--&gt;</span></div></pre><h4><a name="inequality"></a><a href="#inequality">Inequality<span class="anchor"> &#182;</span></a></h4><p>The <em>inequality</em> operator, <code>!=</code>, is the inverse of the equality operator. It return True if the two values are <em>not</em> the same.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">str</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"name"</span><span class="tag">&gt;</span>Rygel</span><span class="tag">&lt;</span><span class="endtagname tag">/str</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{name&nbsp;!=&nbsp;'John'}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span>&nbsp;</span><span class="comment">&lt;!--&nbsp;True&nbsp;--&gt;</span></div></pre><h4><a name="greater-than"></a><a href="#greater-than">Greater Than<span class="anchor"> &#182;</span></a></h4><p>The greater than operator (<code>&gt;</code> or <code>gt</code>) checks if the left hand side is greater than the right hand side. The reason there are two aliases for this operator, is that the <code>&gt;</code> symbol has special meaning in XML, so you may use <code>gt</code> for expressions in XML attributes.</p>
+<h4><a name="greater-than-or-equal-to"></a><a href="#greater-than-or-equal-to">Greater Than or Equal to<span class="anchor"> &#182;</span></a></h4><p>The <code>&gt;=</code> or <code>gte</code> operator checks if the left hand side is greater than or equal to the right hand side.</p>
+<h4><a name="less-than"></a><a href="#less-than">Less Than<span class="anchor"> &#182;</span></a></h4><p>The <code>&lt;</code> or <code>lt</code> operator checks if the left hand side is less than the right hand side.</p>
+<h4><a name="less-than-or-equal-to"></a><a href="#less-than-or-equal-to">Less Than or Equal To<span class="anchor"> &#182;</span></a></h4><p>The <code>&lt;=</code> or <code>lte</code> operator checks if the left hand side is less than or equal to the right hand side.</p>
+<h3><a name="in-operator"></a><a href="#in-operator">IN Operator<span class="anchor"> &#182;</span></a></h3><p>The <em>in</em> checks if a value is contained within a sequence, or strings. For example <code>'e' in 'abcdef'</code> would return True, but <code>'z' in 'abcdef'</code> would result in False.</p>
+<p>Here are some examples of <code>in</code> that result in True:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">'World'&nbsp;in&nbsp;'Hello,&nbsp;World!'</div><a name="line2"></a><div class="line line-2">5&nbsp;in&nbsp;[1,2,3,4,5,6,7]</div><a name="line3"></a><div class="line line-3">5&nbsp;in&nbsp;1..10</div><a name="line4"></a><div class="line line-4">'foo'&nbsp;in&nbsp;foo='bar'</div></pre><p>Here are some examples of <code>in</code> that result in False:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">'Mars'&nbsp;in&nbsp;'Hello,&nbsp;World!'</div><a name="line2"></a><div class="line line-2">88&nbsp;in&nbsp;[1,2,3,4,5,6,7]</div><a name="line3"></a><div class="line line-3">20&nbsp;in&nbsp;1..10</div><a name="line4"></a><div class="line line-4">'baz'&nbsp;in&nbsp;foo='bar'</div></pre><h3><a name="not-in-operator"></a><a href="#not-in-operator">NOT IN Operator<span class="anchor"> &#182;</span></a></h3><p>The <code>not in</code> operator is the logical reverse of the <code>in</code> operator. It returns True if the left hand side does <em>not</em> appear in the right hand side.</p>
+<h3><a name="index-operator"></a><a href="#index-operator">Index Operator<span class="anchor"> &#182;</span></a></h3><p>The <em>index</em> operator looks up a key in a collection, such as a <em>dict</em> or <em>list</em>.</p>
+<p>Here's an example of the index operator:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;species=</span><span class="attrib tag tagcontent">"rygel='hynerian',&nbsp;john='human',&nbsp;aeryn='peace&nbsp;keeper'</span><span class="attrib tag endtagname">/</span><span class="attrib tag">&gt;</span><span class="attrib"></span></div><a name="line2"></a><div class="line line-2"><span class="attrib"></span><span class="attrib tag">&lt;</span><span class="attrib tag tagname">ask</span><span class="attrib tag tagcontent">&nbsp;dst="</span><span class="tag tagcontent">crew"</span><span class="tag">&gt;</span>Enter&nbsp;a&nbsp;crew&nbsp;member</span><span class="tag">&lt;</span><span class="endtagname tag">/ask</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{crew}</span>&nbsp;is&nbsp;a&nbsp;</span><span class="sub">$</span><span class="braced sub">{species[crew]}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h3><a name="format-operator"></a><a href="#format-operator">Format Operator<span class="anchor"> &#182;</span></a></h3><p>The format operator (<code>::</code>) converts the left hand side to a string, and <em>formats</em> it according the format specification in the right hand side. The format specification is the same as the <a href="https://docs.python.org/2/library/string.html#formatspec">format specification used in Python</a>.</p>
+<p>Here's an example of the format operator which formats a floating point number so that it has commas to separate the thousands, and two places after the decimal point:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;n=</span><span class="attrib tag tagcontent">"12300232.2325"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{count::',.2f'}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h3><a name="modifiers"></a><a href="#modifiers">Modifiers<span class="anchor"> &#182;</span></a></h3><p>A <em>modifier</em> in an expression consists of a name followed by a colon, for example <code>title:</code> is an modifier. Modifiers processes the value on the right hand side of the expression and returns a result..</p>
+<p>Note, that modifiers have a low precedence in expressions, which means they will operate on the value immediately to the right. For instance <code>upper:'hello ' + 'world'</code>, returns <code>"HELLO world"</code> and <em>not</em> <code>HELLO WORLD</code>. If you would like the modifier to apply to the result of an expression, you may enclose the expression in parenthesis, i.e. <code>upper:('hello ' + 'world')</code>.</p>
+<p>See <a href="expressions.html#modifier-reference" title="Expressions">Modifier Reference</a> for a list of available modifiers.</p>
+<h3><a name="filters"></a><a href="#filters">Filters<span class="anchor"> &#182;</span></a></h3><p>Closely related to modifiers are <em>filters</em>, which take a value and transform it in some way. Filters use the pipe symbol (<code>|</code>) and work from left to right, so <code>data|my_filter</code> would process <code>data</code> with a filter called <code>myfilter</code>. Filters may be <em>chained</em> so the result of the previous filter is filtered by the next. For example <code>data|my_filter|my_other_filter</code> would filter data first with <code>my_filter</code> <em>then</em> by <code>moya_other_filter</code>.</p>
+<p>The difference between modifiers and filters is that filters are defined in library code and not built in. You may define a filter with the <a class="tag" href="tags/httpmoyaprojectcom/tag_filter.html">&lt;filter&gt;</a> tag. Here's an example of a filter that repeats text three times.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">filter</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"repeat3"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{str:value&nbsp;*&nbsp;3}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/filter</span><span class="tag">&gt;</span></div></pre><p>A filter is essentially a macro which will be called with a parameter called <code>value</code> which is the left hand side of the filter expression. The return value is used as the result of the filter.</p>
+<p>Filters are stored in the application object, so <code>.app.filters</code> will contain all the filters for the current app. Here's how you could use the <code>repeat3</code> filter:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{"beetlejuice&nbsp;"|.app.filters.repeat3}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><p>Although this works perfectly well, referencing filters in this way is a little verbose. Moya offers an alternative way of referencing filters. If you replace the filter object (right hand side) with a string, Moya will look up that filter in the current application. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{"beetlejuice"|"repeat3"}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><p>It is also possible to look up a filter in another application, by appending <code>from APP</code>, where <code>APP</code> is the name of the application containing the filter. For example, lets say we want to use the <code>repeat3</code> filter in a template not in the same application as the filter. We could use something like the following:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">h1</span><span class="tag">&gt;</span><span class="sub">${"beetlejuice"|"repeat3&nbsp;from&nbsp;my_app"}</span><span class="tag">&lt;</span><span class="endtagname tag">/h1</span><span class="tag">&gt;</span></div></pre><p>It is also possible to use a library (long) name in place of the application name. This works as long as the library has been installed just once, otherwise Moya will not be able to detect which application to use. If a library has been desgined to be installed just once &ndash; and many are &ndash; then the long name can be used, otherwise stick to the app name.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> Specifying the app or library is only required if you are using a filter from a different application.</div><h4><a name="filter-parameters"></a><a href="#filter-parameters">Filter Parameters<span class="anchor"> &#182;</span></a></h4><p>Filters may be associated with additional parameters. For instance, let's make a more flexible version of our example filter that can repeat text by an arbitrary number. Here's the new filter:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">filter</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"repeat"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{str:value&nbsp;*&nbsp;count}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/filter</span><span class="tag">&gt;</span></div></pre><p>This filter references a value called <code>count</code>, which we can supply in the filter expression as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{"beetlejuice"|"repeat"(count=5)}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><p>Here, an additional parameter list is added to the right hand side (i.e. the filter object or filter string reference), that sets <code>count</code> to <code>5</code>. This value is passed to the <code>filter</code> tag along with <code>value</code>. This will result in the <code>repeat</code> filter, repeating our text <code>5</code> times.</p>
+<h4><a name="simple-filters"></a><a href="#simple-filters">Simple Filters<span class="anchor"> &#182;</span></a></h4><p>Filters may be as complex as necessary &ndash; you could, for example, lookup object from the database and do some processing. Although if a filter is simple enough to fit in to a single expression, you can supply the <code>expression</code> attribute to <a class="tag" href="tags/httpmoyaprojectcom/tag_filter.html">&lt;filter&gt;</a> which will be used in preference to the inner code. For instance, our example filter, could be written more concisely as the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">filter</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"repeat"</span><span class="tag tagcontent">&nbsp;expression=</span><span class="attrib tag tagcontent">"str:value&nbsp;*&nbsp;count"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="modifier-reference"></a><a href="#modifier-reference">Modifier Reference<span class="anchor"> &#182;</span></a></h2><p>The following is a list of the modifiers supported by Moya:</p>
+<h3><a name="abs"></a><a href="#abs">abs<span class="anchor"> &#182;</span></a></h3><p>Returns the <em>absolute</em> value of a number (makes it positive). For example, <code>abs:-5</code> is <code>5</code>.</p>
+<h3><a name="all"></a><a href="#all">all<span class="anchor"> &#182;</span></a></h3><p>Returns True if all the values in a sequence would be considered True if used in a condition.</p>
+<h3><a name="any"></a><a href="#any">any<span class="anchor"> &#182;</span></a></h3><p>Return True if any of the values in a sequence would be considered True.</p>
+<h3><a name="basename"></a><a href="#basename">basename<span class="anchor"> &#182;</span></a></h3><p>Returns the <em>basename</em> of a path. The basename is the very last component, e.g. <code>basename:'foo/bar/baz'</code> returns <code>'baz'</code></p>
+<h3><a name="bool"></a><a href="#bool">bool<span class="anchor"> &#182;</span></a></h3><p>Converts a value to a boolean. Various values are considered False, for example the number 0, empty strings, and empty collections. Most other values will return True. For example <code>bool:[]</code> would return False, <code>bool:1</code> would return True.</p>
+<h3><a name="capitalize"></a><a href="#capitalize">capitalize<span class="anchor"> &#182;</span></a></h3><p>Capitalizes the first letter of a string. For example <code>capitalize:'hello'</code> returns 'Hello'.</p>
+<h3><a name="ceil"></a><a href="#ceil">ceil<span class="anchor"> &#182;</span></a></h3><p>Returns the ceiling of a number (first integer that is greater than or equal to the number). For example, <code>ceil:2.7</code> returns <code>3.0</code>.</p>
+<h3><a name="collect"></a><a href="#collect">collect<span class="anchor"> &#182;</span></a></h3><p>Extracts an indexed item from a sequence, and returns a list of values. This collection should be a applied to a sequence of 2 values, the first contains the sequence to collect, and the second contains the key to look up.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">json</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"crew_ids"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;[</div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="braced">{"id":&nbsp;1,&nbsp;name:"Aeryn"}</span>,</div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="braced">{"id":&nbsp;7,&nbsp;name:"John"}</span>,</div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="braced">{"id":&nbsp;99,&nbsp;name:"Scorpius"}</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;]</div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/json</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;crew_ids=</span><span class="attrib tag tagcontent">"collect:[crew,&nbsp;'id']"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span>&nbsp;</span><span class="comment">&lt;!--&nbsp;creates&nbsp;list&nbsp;[1,&nbsp;7,&nbsp;99]&nbsp;--&gt;</span></div></pre><h3><a name="commalist"></a><a href="#commalist">commalist<span class="anchor"> &#182;</span></a></h3><p>Returns a string containing values in a sequence separated by commas. For example <code>commalist:[1,5,7]</code> returns <code>'1,5,7'</code>.</p>
+<h3><a name="commaspacelist"></a><a href="#commaspacelist">commaspacelist<span class="anchor"> &#182;</span></a></h3><p>Returns a string containing values in a sequence separated by a comma and space. For example <code>commaspacelist:[1,5,7]</code> returns <code>'1, 5, 7'</code>.</p>
+<h3><a name="commasplit"></a><a href="#commasplit">commasplit<span class="anchor"> &#182;</span></a></h3><p>Splits a string by commas, for example <code>commasplit:"1,2,3"</code> returns <code>['1', '2', '3']</code>.</p>
+<h3><a name="date"></a><a href="#date">date<span class="anchor"> &#182;</span></a></h3><p>Create a date object from a date in iso8601 format. For example, <code>date:'1974-07-05'</code>.</p>
+<h3><a name="datetime"></a><a href="#datetime">datetime<span class="anchor"> &#182;</span></a></h3><p>Create a <em>datetime</em> object from a date &amp; time in iso8601 format. For example, <code>datetime:'1974-07-05T15:45:00'</code>.</p>
+<h3><a name="debug"></a><a href="#debug">debug<span class="anchor"> &#182;</span></a></h3><p>Returns a debug description of the right hand side. This may contain helpful information. For example, <code>debug:datetime:'19740705T154500'</code>.</p>
+<h3><a name="dirname"></a><a href="#dirname">dirname<span class="anchor"> &#182;</span></a></h3><p>Returns the directory name of a path. Can be considered there inverse of <code>basename:</code>. For example <code>dirname:'foo/bar/baz'</code> returns <code>foo/bar</code>.</p>
+<h3><a name="enum"></a><a href="#enum">enum<span class="anchor"> &#182;</span></a></h3><p>Retrieve an enumeration object from its libid. For example, <code>enum:'moya.sociallinks#enum.jsonrpc.errors'</code>.</p>
+<h3><a name="enumerate"></a><a href="#enumerate">enumerate<span class="anchor"> &#182;</span></a></h3><p>Creates an <em>enumerator</em> object that when iterated over returns the 0-based index and the value. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"enumerate:['John',&nbsp;'Rygel',&nbsp;'Scorpius']"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"index,&nbsp;name"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{index&nbsp;+&nbsp;1}</span>.&nbsp;</span><span class="sub">$</span><span class="braced sub">{name}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre><h3><a name="enumerate1"></a><a href="#enumerate1">enumerate1<span class="anchor"> &#182;</span></a></h3><p>Like <code>enumerate:</code> but starts counting from 1, which is more natural for your average human. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"enumerate1:['John',&nbsp;'Rygel',&nbsp;'Scorpius']"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"index,&nbsp;name"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{index}</span>.&nbsp;</span><span class="sub">$</span><span class="braced sub">{name}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre><h3><a name="exists"></a><a href="#exists">exists<span class="anchor"> &#182;</span></a></h3><p>Return True if a value is <em>not</em> missing. For example, <code>exists:.requests</code> would be True in a project, but <code>exists:.santa.clause.and.the.tooth.fairy</code> would likely return False.</p>
+<h3><a name="ext"></a><a href="#ext">ext<span class="anchor"> &#182;</span></a></h3><p>Gets the extension from a path. For example, <code>ext:'foo/bar.html'</code> would return <code>"html"</code>.</p>
+<h3><a name="filesize"></a><a href="#filesize">filesize<span class="anchor"> &#182;</span></a></h3><p>Converts a file size (in bytes), rounded to the most appropriate unit. For example <code>filesize:1024</code> returns <code>1.0kB</code>, and <code>filesize:32859558</code> returns 31.3MB.</p>
+<h3><a name="first"></a><a href="#first">first<span class="anchor"> &#182;</span></a></h3><p>Returns the first item in a sequence, or <code>None</code> if the sequence is empty.</p>
+<h3><a name="flat"></a><a href="#flat">flat<span class="anchor"> &#182;</span></a></h3><p>Attempts to <em>flatten</em> a sequence containing other sequences. For example, <code>flat:[1,2,3,[4,5,6]]</code> returns <code>[1,2,3,4,5,6]</code>.</p>
+<h3><a name="float"></a><a href="#float">float<span class="anchor"> &#182;</span></a></h3><p>Converts a string containing a number in to a number, for example <code>float:'3.1427'</code> returns a floating point number of <code>3.1427</code>.</p>
+<h3><a name="floor"></a><a href="#floor">floor<span class="anchor"> &#182;</span></a></h3><p>Returns the <code>floor</code> of a number (the greatest integer that is equal to or less than a number). For example, <code>float:3.1427</code> returns <code>3.0</code>.</p>
+<h3><a name="html"></a><a href="#html">html<span class="anchor"> &#182;</span></a></h3><p>Used mainly in templates, this marks text as being valid HTML, so Moya will know not to escape any tags. For example, <code>html:'&lt;h1&gt;Header&lt;/h1&gt;'</code>.</p>
+<h3><a name="int"></a><a href="#int">int<span class="anchor"> &#182;</span></a></h3><p>This converts a string to an integer. For example, <code>int:'100'</code> returns <code>100</code>.</p>
+<h3><a name="isbool"></a><a href="#isbool">isbool<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is a boolean (i.e. True or False). For example, <code>bool:False</code> returns True (because False is a boolean), but <code>bool:"True"</code> would return False, because the right hand side is a string.</p>
+<h3><a name="isemail"></a><a href="#isemail">isemail<span class="anchor"> &#182;</span></a></h3><p>Check if the right hand side is a valid email address. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"not&nbsp;isemail:email"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>You&nbsp;didn't&nbsp;enter&nbsp;a&nbsp;valid&nbsp;email&nbsp;address!</div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><h3><a name="isfloat"></a><a href="#isfloat">isfloat<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is a floating point number.</p>
+<h3><a name="isint"></a><a href="#isint">isint<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is an integer.</p>
+<h3><a name="isnumber"></a><a href="#isnumber">isnumber<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is a number (either an integer or a floating point number).</p>
+<h3><a name="isstr"></a><a href="#isstr">isstr<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is a string.</p>
+<h3><a name="items"></a><a href="#items">items<span class="anchor"> &#182;</span></a></h3><p>Returns the <em>items</em> of a sequence. Used with a dictionary it will return a sequence of the keys and values. Used with a sequence (e.g. a list), it will return a list of the index and the value. For example <code>items:['John','Rygel','Scoprpius']</code> returns <code>[[0, 'John'], [1, 'Rygel'], [2, 'Scorpius']]</code>.</p>
+<h3><a name="keys"></a><a href="#keys">keys<span class="anchor"> &#182;</span></a></h3><p>Returns the <em>keys</em> from a dictionary, or if the right hand side is a sequence it will return the indexes.</p>
+<h3><a name="last"></a><a href="#last">last<span class="anchor"> &#182;</span></a></h3><p>Returns the last item in a sequence, or None if the sequence is empty. For example, <code>last:(1,5,99)</code> returns <code>99</code>.</p>
+<h3><a name="len"></a><a href="#len">len<span class="anchor"> &#182;</span></a></h3><p>Return the count of the number of elements in a collection.</p>
+<h3><a name="list"></a><a href="#list">list<span class="anchor"> &#182;</span></a></h3><p>Converts the right hand side in to a list.</p>
+<h3><a name="localize"></a><a href="#localize">localize<span class="anchor"> &#182;</span></a></h3><p>Returns a text representation of an object, suitable for the current <em>locale</em>. Mainly used for dates and times, which have different formats depending on your location. For example, in a request, <code>localize:.now</code> create a string containing the data and time in a localized format.</p>
+<h3><a name="log10"></a><a href="#log10">log10<span class="anchor"> &#182;</span></a></h3><p>Returns the base 10 logarithm of a number.</p>
+<h3><a name="lower"></a><a href="#lower">lower<span class="anchor"> &#182;</span></a></h3><p>Converts a string to lower case.</p>
+<h3><a name="lstrip"></a><a href="#lstrip">lstrip<span class="anchor"> &#182;</span></a></h3><p>Strips whitespace (spaces, tabs etc) from the left of a string.</p>
+<h3><a name="map"></a><a href="#map">map<span class="anchor"> &#182;</span></a></h3><p>Converts an object in to a dictionary. The right hand side should be a sequence of keys and values.</p>
+<h3><a name="max"></a><a href="#max">max<span class="anchor"> &#182;</span></a></h3><p>Returns the largest value in a sequence of numbers. For example, <code>max:[1,99,-6]</code> returns <code>99</code>.</p>
+<h3><a name="md5"></a><a href="#md5">md5<span class="anchor"> &#182;</span></a></h3><p>Returns the <a href="http://en.wikipedia.org/wiki/MD5">md5</a> hash of an object.</p>
+<h3><a name="min"></a><a href="#min">min<span class="anchor"> &#182;</span></a></h3><p>Returns the lowest value in a sequence of numbers. For example, <code>min:[1,99,-6]</code> returns <code>-6</code>.</p>
+<h3><a name="missing"></a><a href="#missing">missing<span class="anchor"> &#182;</span></a></h3><p>Returns True if the right hand side is a <em>missing</em> object (does not exist in the context). For example, <code>missing:.lord.lucan</code> would likely return True (assuming you haven't create a value called <code>lord.lucan</code>).</p>
+<h3><a name="path"></a><a href="#path">path<span class="anchor"> &#182;</span></a></h3><p>Converts a string in to a <em>path</em> object. Path objects have some syntactic sugar to construct paths. You can use <code>/</code> as a path join operator on paths, which makes sure there is only a single forward slash between path components. You can also use <code>../</code> to go back one directory. For example, <code>path:uploads_directory / 'images' / filename</code>.</p>
+<h3><a name="permission"></a><a href="#permission">permission<span class="anchor"> &#182;</span></a></h3><p>Checks the current user for a permission. For example, <code>permission:'admin'</code> checks if the current use has admin permission.</p>
+<h3><a name="prettylist"></a><a href="#prettylist">prettylist<span class="anchor"> &#182;</span></a></h3><p>Converts a sequence in to a string representation, where each element in the sequence is enclosed with quotes and separated by a command and a space. For example, <code>prettylist:[1,2,3]</code> returns <code>"'1', '2', '3'"</code>.</p>
+<h3><a name="relto"></a><a href="#relto">relto<span class="anchor"> &#182;</span></a></h3><p>Converts an absolute path in to a path relative path relative to the current request. For example, <code>relto:'/foo/bar/index.html'</code> would return <code>'../bar/index.html'</code>, if the current request is for <code>'/foo/index.html'</code>.</p>
+<h3><a name="renderable"></a><a href="#renderable">renderable<span class="anchor"> &#182;</span></a></h3><p>Returns an object that may be more easily rendered. Although rarely necessary, this modifier is typically used in templates to convert an object to a form that is easier to work with. If you apply <code>renderable:</code> to an value without an additional renderable interface, then the same value is returned, i.e. the modifier has no effect.</p>
+<h3><a name="reversed"></a><a href="#reversed">reversed<span class="anchor"> &#182;</span></a></h3><p>Reverses the order of a sequence. For example, <code>reversed:[1,2,3]</code> returns <code>(3, 2, 1)</code>.</p>
+<h3><a name="round"></a><a href="#round">round<span class="anchor"> &#182;</span></a></h3><p>Rounds a value to the nearest integer. If you supply a sequence of two values, then the first is the number you want to round and the second is the number of decimal places. For example, <code>round:0.777</code> returns <code>1.0</code>, and <code>round:[0.777, 2]</code> equals <code>0.78</code>.</p>
+<h3><a name="rstrip"></a><a href="#rstrip">rstrip<span class="anchor"> &#182;</span></a></h3><p>Removes whitespace (spaces, tabs etc.) from the tail end of a string. For example, <code>rstrip:'Hello   '</code> return <code>'Hello'</code>.</p>
+<h3><a name="seqlast"></a><a href="#seqlast">seqlast<span class="anchor"> &#182;</span></a></h3><p>Takes a sequence and returns a list containing a flag and each value from the sequence. The flag is set to True if the value is the last in the sequence. For example, <code>seqlast:['John', 'Rygel', 'Scorpius']</code> returns <code>[[False, 'John'], [False, 'Rygel'], [True, 'Scorpius']]</code>.</p>
+<h3><a name="set"></a><a href="#set">set<span class="anchor"> &#182;</span></a></h3><p>Create a <em>set</em> from a sequence. A set is a collection where each item appears only once.</p>
+<h3><a name="slug"></a><a href="#slug">slug<span class="anchor"> &#182;</span></a></h3><p>Creates a <em>slug</em> from a string. A slug is a version of the string which is suitable for use in a URL. Slugifying text will remove any characters that may not be used in a URL, convert runs of whitespace to a single hyphen, and make the result lower case. For example, <code>slug:"This may be used in a URL!"</code> returns <code>'this-may-be-used-in-a-url'</code>.</p>
+<h3><a name="sorted"></a><a href="#sorted">sorted<span class="anchor"> &#182;</span></a></h3><p>Returns a sorted version of a sequence. For example, <code>sort:[99, 1, 20]</code> returns <code>[1, 20, 99]</code>. Works with sequences of other types, including strings.</p>
+<h3><a name="str"></a><a href="#str">str<span class="anchor"> &#182;</span></a></h3><p>Converts the right hand side to a string. For example, <code>str:3.14</code> returns <code>"3.14"</code>.</p>
+<h3><a name="strip"></a><a href="#strip">strip<span class="anchor"> &#182;</span></a></h3><p>Strips whitespace from the start and end of a string. For example, <code>strip:"  hello   "</code> returns <code>"hello"</code>.</p>
+<h3><a name="sub"></a><a href="#sub">sub<span class="anchor"> &#182;</span></a></h3><p>Performs expression substitution on a string. For example, <code>sub:'Hello, ${name}'</code> would return <code>'Hello, John'</code> if the variable <code>name</code> was <code>"John"</code>.</p>
+<h3><a name="swapcase"></a><a href="#swapcase">swapcase<span class="anchor"> &#182;</span></a></h3><p>Swaps the case of a string. i.e. upper case becomes lower case and vice verse. For example, <code>swapcase:'Hello'</code> returns <code>'hELLO'</code>.</p>
+<h3><a name="time"></a><a href="#time">time<span class="anchor"> &#182;</span></a></h3><p>Returns a time object from a string in iso8601 format. For example, <code>time:'23:59:59'</code>.</p>
+<h3><a name="title"></a><a href="#title">title<span class="anchor"> &#182;</span></a></h3><p>Capitalizes the first letter of every word in a string. For example, <code>title:'hello world'</code> return s <code>"Hello World"</code>.</p>
+<h3><a name="unique"></a><a href="#unique">unique<span class="anchor"> &#182;</span></a></h3><p>Modifies a sequence so that each element appears exactly once. For example, <code>unqiue:['john', 'rygel', 'scorpius', 'rygel', 'john']</code> would return <code>['john', 'rygel', 'scorpius']</code>.</p>
+<h3><a name="upper"></a><a href="#upper">upper<span class="anchor"> &#182;</span></a></h3><p>Converts a string to upper case, for example <code>upper:'hello'</code> returns <code>'HELLO'</code>.</p>
+<h3><a name="url"></a><a href="#url">url<span class="anchor"> &#182;</span></a></h3><p>Parses a URL in a string and returns a URL object. For example, <code>url:'http://example.org/foo/bar/'</code>. URL objects are interchangeable with strings, but have a number of useful properties and may use the <code>/</code> operator to join paths.</p>
+<h3><a name="urldecode"></a><a href="#urldecode">urldecode<span class="anchor"> &#182;</span></a></h3><p>This modifier decodes query string data in to a dictionary of lists. Lists are used because in a query string a key may appear more than once. For example, <code>urldecode:'crew=Rygel&amp;crew=John&amp;crew=Scorpius'</code> returns <code>{'crew':['Rygel', 'John', 'Scorpius']}</code>.</p>
+<h3><a name="urlencode"></a><a href="#urlencode">urlencode<span class="anchor"> &#182;</span></a></h3><p>Encodes a dictionary of lists in to a query string suitable for use in a URL. For example, <code>urlencode:(crew=['Rygel', 'John', 'Scorpius'])</code> returns <code>urldecode:'crew=Rygel&amp;crew=John&amp;crew=Scorpius'</code>.</p>
+<h3><a name="urlupdate"></a><a href="#urlupdate">urlupdate<span class="anchor"> &#182;</span></a></h3><p>Combines the current query string (from <code>.request.query_string</code>) with new data and returns the an encoded query string.  For example, <code>urlupdate:(ship='Moya')</code> would return a query string with <code>ship</code> set to <code>'Moya'</code>. You can also <em>remove</em> a value from the current query string by setting it to <code>None</code>. For example, <code>urlupdate:(crew=None)</code> would return a new query string with no value for <code>crew</code>.</p>
+<h3><a name="validfloat"></a><a href="#validfloat">validfloat<span class="anchor"> &#182;</span></a></h3><p>Return True if a string could be parsed as a floating point number. For example, <code>validfloat:'3.14'</code> would return True, but <code>validfloat:'pie'</code> would return False.</p>
+<h3><a name="validint"></a><a href="#validint">validint<span class="anchor"> &#182;</span></a></h3><p>Return True is a string could be parsed a valid integer. For example, <code>validint:'1000000'</code> is True, but <code>validint:'one million'</code> would return False.</p>
+<h3><a name="values"></a><a href="#values">values<span class="anchor"> &#182;</span></a></h3><p>Returns the values in a collection (e.g. list or dictionary). For example, <code>values:{'foo':'bar', 'baz':'egg'}</code> would return <code>['bar', 'egg']</code>.</p>
+<h3><a name="zip"></a><a href="#zip">zip<span class="anchor"> &#182;</span></a></h3><p>This modifier combines two or more sequences in to one. For example, <code>zip:[[1, 2, 3], ['a', 'b', 'c']]</code> returns <code>[[1, 'a'], [2, 'b'], [3, 'c']]</code>. This is useful in for loops, where you want to an item from each sequence on each iteration. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"zip:[[1,&nbsp;2,&nbsp;3],&nbsp;['a',&nbsp;'b',&nbsp;'c']]"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"number,&nbsp;letter"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>(</span><span class="sub">$</span><span class="braced sub">{number}</span>)&nbsp;</span><span class="sub">$</span><span class="braced sub">{letter}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="moyacode.html">&larr; 5. Moya Code</a>
+        </li>
+        
+        <li class="next">
+            <a href="customtags.html">7. Custom Tags &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#testing-expressions">Testing Expressions</a></li>
+    
+    <li><a href="#data-indices">Data Indices</a></li>
+    
+    <li><a href="#missing-values">Missing Values</a></li>
+    
+    <li><a href="#data-types">Data Types</a><ul>
+    
+    <li><a href="#numbers">Numbers</a></li>
+    
+    <li><a href="#strings">Strings</a></li>
+    
+    <li><a href="#constants">Constants</a></li>
+    
+    <li><a href="#booleans">Booleans</a></li>
+    
+    <li><a href="#lists">Lists</a></li>
+    
+    <li><a href="#dictionaries">Dictionaries</a></li>
+    
+    <li><a href="#ranges">Ranges</a></li>
+    
+    <li><a href="#regular-expressions">Regular Expressions</a></li>
+    
+    <li><a href="#timespans">Timespans</a></li>
+    
+</ul></li>
+    
+    <li><a href="#operators">Operators</a><ul>
+    
+    <li><a href="#arithmetic-operators">Arithmetic Operators</a></li>
+    
+    <li><a href="#logic-operators">Logic Operators</a></li>
+    
+    <li><a href="#comparision-operators">Comparision Operators</a></li>
+    
+    <li><a href="#in-operator">IN Operator</a></li>
+    
+    <li><a href="#not-in-operator">NOT IN Operator</a></li>
+    
+    <li><a href="#index-operator">Index Operator</a></li>
+    
+    <li><a href="#format-operator">Format Operator</a></li>
+    
+    <li><a href="#modifiers">Modifiers</a></li>
+    
+    <li><a href="#filters">Filters</a></li>
+    
+</ul></li>
+    
+    <li><a href="#modifier-reference">Modifier Reference</a><ul>
+    
+    <li><a href="#abs">abs</a></li>
+    
+    <li><a href="#all">all</a></li>
+    
+    <li><a href="#any">any</a></li>
+    
+    <li><a href="#basename">basename</a></li>
+    
+    <li><a href="#bool">bool</a></li>
+    
+    <li><a href="#capitalize">capitalize</a></li>
+    
+    <li><a href="#ceil">ceil</a></li>
+    
+    <li><a href="#collect">collect</a></li>
+    
+    <li><a href="#commalist">commalist</a></li>
+    
+    <li><a href="#commaspacelist">commaspacelist</a></li>
+    
+    <li><a href="#commasplit">commasplit</a></li>
+    
+    <li><a href="#date">date</a></li>
+    
+    <li><a href="#datetime">datetime</a></li>
+    
+    <li><a href="#debug">debug</a></li>
+    
+    <li><a href="#dirname">dirname</a></li>
+    
+    <li><a href="#enum">enum</a></li>
+    
+    <li><a href="#enumerate">enumerate</a></li>
+    
+    <li><a href="#enumerate1">enumerate1</a></li>
+    
+    <li><a href="#exists">exists</a></li>
+    
+    <li><a href="#ext">ext</a></li>
+    
+    <li><a href="#filesize">filesize</a></li>
+    
+    <li><a href="#first">first</a></li>
+    
+    <li><a href="#flat">flat</a></li>
+    
+    <li><a href="#float">float</a></li>
+    
+    <li><a href="#floor">floor</a></li>
+    
+    <li><a href="#html">html</a></li>
+    
+    <li><a href="#int">int</a></li>
+    
+    <li><a href="#isbool">isbool</a></li>
+    
+    <li><a href="#isemail">isemail</a></li>
+    
+    <li><a href="#isfloat">isfloat</a></li>
+    
+    <li><a href="#isint">isint</a></li>
+    
+    <li><a href="#isnumber">isnumber</a></li>
+    
+    <li><a href="#isstr">isstr</a></li>
+    
+    <li><a href="#items">items</a></li>
+    
+    <li><a href="#keys">keys</a></li>
+    
+    <li><a href="#last">last</a></li>
+    
+    <li><a href="#len">len</a></li>
+    
+    <li><a href="#list">list</a></li>
+    
+    <li><a href="#localize">localize</a></li>
+    
+    <li><a href="#log10">log10</a></li>
+    
+    <li><a href="#lower">lower</a></li>
+    
+    <li><a href="#lstrip">lstrip</a></li>
+    
+    <li><a href="#map">map</a></li>
+    
+    <li><a href="#max">max</a></li>
+    
+    <li><a href="#md5">md5</a></li>
+    
+    <li><a href="#min">min</a></li>
+    
+    <li><a href="#missing">missing</a></li>
+    
+    <li><a href="#path">path</a></li>
+    
+    <li><a href="#permission">permission</a></li>
+    
+    <li><a href="#prettylist">prettylist</a></li>
+    
+    <li><a href="#relto">relto</a></li>
+    
+    <li><a href="#renderable">renderable</a></li>
+    
+    <li><a href="#reversed">reversed</a></li>
+    
+    <li><a href="#round">round</a></li>
+    
+    <li><a href="#rstrip">rstrip</a></li>
+    
+    <li><a href="#seqlast">seqlast</a></li>
+    
+    <li><a href="#set">set</a></li>
+    
+    <li><a href="#slug">slug</a></li>
+    
+    <li><a href="#sorted">sorted</a></li>
+    
+    <li><a href="#str">str</a></li>
+    
+    <li><a href="#strip">strip</a></li>
+    
+    <li><a href="#sub">sub</a></li>
+    
+    <li><a href="#swapcase">swapcase</a></li>
+    
+    <li><a href="#time">time</a></li>
+    
+    <li><a href="#title">title</a></li>
+    
+    <li><a href="#unique">unique</a></li>
+    
+    <li><a href="#upper">upper</a></li>
+    
+    <li><a href="#url">url</a></li>
+    
+    <li><a href="#urldecode">urldecode</a></li>
+    
+    <li><a href="#urlencode">urlencode</a></li>
+    
+    <li><a href="#urlupdate">urlupdate</a></li>
+    
+    <li><a href="#validfloat">validfloat</a></li>
+    
+    <li><a href="#validint">validint</a></li>
+    
+    <li><a href="#values">values</a></li>
+    
+    <li><a href="#zip">zip</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

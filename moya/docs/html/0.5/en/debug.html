@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Debug</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="comments.html">&larr; 6. Moya Comments</a>
+        </li>
+        
+        <li class="next">
+            <a href="faq.html">8. Moya FAQ &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Debug</h1>
+            <p>Moya Debug is a built in library that enables some debug only features. The primary feature is the error page that renders a Moya Traceback and error information.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Debug is a built in library, and may be installed via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.debug"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">".debug"</span><span class="tag tagcontent">&nbsp;priority=</span><span class="attrib tag tagcontent">"100"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The <code>if=".debug"</code> test ensures that Moya Debug is only imported when debug mode is enabled. Debug mode is enabled in settings as follows:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[project]</span><span class="key"></span></div><div class="line line-2"><span class="key">debug&nbsp;</span>=</span><span class="value">&nbsp;yes</span></div></pre><p>Your <code>production.ini</code> will set <code>debug</code> to <code>no</code> to disable Moya Debug in a production environment.</p>
+<p>The <code>priority="100"</code> attribute ensures that templates in Moya Debug have the highest priority &ndash; in order to override any error handlers you have created.</p>
+<p>You may install the library with the following line:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"debug"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.debug"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/debug/"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">".debug"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This mounts the debug views on <code>/debug/</code> (if the server is running in debug mode).</p>
+ 
+<h2><a name="error-handlers"></a><a href="#error-handlers">Error Handlers<span class="anchor"> &#182;</span></a></h2><p>Moya Debug supplies handlers for 404 (not found) and 500 (internal error) pages by overriding the <code>404.html</code> and <code>500.html</code> templates respectively.</p>
+<h3><a name="not-found"></a><a href="#not-found">Not Found<span class="anchor"> &#182;</span></a></h3><p>The Not Found page will display information about the request, and the URL routes Moya ran through to attempt to generate a response. There are two possible scenarios that generate a 404 page; either there was no route matching the URL, or a route was found but your code intentionally returned a Not Found response. The Trace panel on the debug 404 page will tell you which was the case.</p>
+<h3><a name="internal-error"></a><a href="#internal-error">Internal Error<span class="anchor"> &#182;</span></a></h3><p>The Internal Error page will display information about the request, plus snapshot of the code being executed when the error occurred &ndash; which may be Moya code or template.</p>
+<h2><a name="user-views"></a><a href="#user-views">User Views<span class="anchor"> &#182;</span></a></h2><p>The url <code>/debug/user/</code> whil show you information about the currently logged in user, including groups and permissions. You can also view the same information on other users by visiting <code>/debug/user/&lt;USERNAME/</code>.</p>
+<h2><a name="code-introspection"></a><a href="#code-introspection">Code Introspection<span class="anchor"> &#182;</span></a></h2><p>Moya Debug can display the code for any element &ndash; with syntax highlighting. Clicking a element reference in the 404 page will link to the debug view that displays code. For example, <code>/debug/element/moya.pages%23view.page/</code>.</p>
+<aside>The <code>%23</code> in the URL above is how browsers escape the # character.</aside><p>Moya Debug can also display templates from the template filesystem. For example <code>/debug/templates/500.html</code> would show you the template Moya Debug uses to render the Internal Error page.
+</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="comments.html">&larr; 6. Moya Comments</a>
+        </li>
+        
+        <li class="next">
+            <a href="faq.html">8. Moya FAQ &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#error-handlers">Error Handlers</a><ul>
+    
+    <li><a href="#not-found">Not Found</a></li>
+    
+    <li><a href="#internal-error">Internal Error</a></li>
+    
+</ul></li>
+    
+    <li><a href="#user-views">User Views</a></li>
+    
+    <li><a href="#code-introspection">Code Introspection</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

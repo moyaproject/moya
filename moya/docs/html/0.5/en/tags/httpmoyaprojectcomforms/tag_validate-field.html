@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag validate-field</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-validate-field
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+            <li class="next pull-right">
+                <a href="tag_validate-post.html" title="Next tag">&lt;validate-post&gt; &rarr;</a> &nbsp;
+            </li>
+            <li class="previous pull-right">
+                <a href="tag_validate.html" title="Previous tag">&larr; &lt;validate&gt;</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="validate-field"/>
+        <input type="hidden" name="synopsis" value="validate a field in a form"/>
+
+        <h2>&lt;validate-field&gt; <small>validate a field in a form</small></h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>validate-field</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/forms</tt></dd>
+            
+        </dl>
+        <p>
+Define validation code for a field in a form.</p>
+        <h4>Example</h4>
+        <pre class="moya-console format-xml""><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">validate-field</span><span class="tag tagcontent">&nbsp;field=</span><span class="attrib tag tagcontent">"price"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">fail</span><span class="tag tagcontent">&nbsp;if="value&nbsp;lte&nbsp;0</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price&nbsp;must&nbsp;be&nbsp;greater&nbsp;than&nbsp;0.00.</div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/fail</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/validate-field</span><span class="tag">&gt;</span></div></pre>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>field</code></td>
+                <td>Field name</td>
+                <td>text</td>
+                <td>Yes</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>if</code></td>
+                <td>Conditional expression</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li title="mark a group of action buttons in a form" class="tag-link tag-link-actions" data-tagdata='{"name":"actions"}'>
+            <a name="tag_actions.html" href="tag_actions.html">actions</a>
+        </li>
+        <li title="adapt a field in a form" class="tag-link tag-link-adapt-field" data-tagdata='{"name":"adapt-field"}'>
+            <a name="tag_adapt-field.html" href="tag_adapt-field.html">adapt-field</a>
+        </li>
+        <li title="add choices to a select tag" class="tag-link tag-link-add-choices" data-tagdata='{"name":"add-choices"}'>
+            <a name="tag_add-choices.html" href="tag_add-choices.html">add-choices</a>
+        </li>
+        <li title="apply a form to an object" class="tag-link tag-link-apply" data-tagdata='{"name":"apply"}'>
+            <a name="tag_apply.html" href="tag_apply.html">apply</a>
+        </li>
+        <li title="apply a form field" class="tag-link tag-link-apply-field" data-tagdata='{"name":"apply-field"}'>
+            <a name="tag_apply-field.html" href="tag_apply-field.html">apply-field</a>
+        </li>
+        <li title="Add data to a form" class="tag-link tag-link-bind" data-tagdata='{"name":"bind"}'>
+            <a name="tag_bind.html" href="tag_bind.html">bind</a>
+        </li>
+        <li title="add a check select control to a form" class="tag-link tag-link-check-select" data-tagdata='{"name":"check-select"}'>
+            <a name="tag_check-select.html" href="tag_check-select.html">check-select</a>
+        </li>
+        <li title="add a checkbox to a form" class="tag-link tag-link-checkbox" data-tagdata='{"name":"checkbox"}'>
+            <a name="tag_checkbox.html" href="tag_checkbox.html">checkbox</a>
+        </li>
+        <li title="add an error message to a form" class="tag-link tag-link-error" data-tagdata='{"name":"error"}'>
+            <a name="tag_error.html" href="tag_error.html">error</a>
+        </li>
+        <li title="set a fail in a form validation" class="tag-link tag-link-fail" data-tagdata='{"name":"fail"}'>
+            <a name="tag_fail.html" href="tag_fail.html">fail</a>
+        </li>
+        <li title="add a custom field to a form" class="tag-link tag-link-field" data-tagdata='{"name":"field"}'>
+            <a name="tag_field.html" href="tag_field.html">field</a>
+        </li>
+        <li title="begin a form definition" class="tag-link tag-link-form" data-tagdata='{"name":"form"}'>
+            <a name="tag_form.html" href="tag_form.html">form</a>
+        </li>
+        <li title="get a form" class="tag-link tag-link-get" data-tagdata='{"name":"get"}'>
+            <a name="tag_get.html" href="tag_get.html">get</a>
+        </li>
+        <li title="render a group of form elements" class="tag-link tag-link-group" data-tagdata='{"name":"group"}'>
+            <a name="tag_group.html" href="tag_group.html">group</a>
+        </li>
+        <li title="add a hidden input value to a form" class="tag-link tag-link-hidden-input" data-tagdata='{"name":"hidden-input"}'>
+            <a name="tag_hidden-input.html" href="tag_hidden-input.html">hidden-input</a>
+        </li>
+        <li title="add an input to a form" class="tag-link tag-link-input" data-tagdata='{"name":"input"}'>
+            <a name="tag_input.html" href="tag_input.html">input</a>
+        </li>
+        <li title="add an optgroup to a select" class="tag-link tag-link-opt-group" data-tagdata='{"name":"opt-group"}'>
+            <a name="tag_opt-group.html" href="tag_opt-group.html">opt-group</a>
+        </li>
+        <li title="an option in a select control" class="tag-link tag-link-option" data-tagdata='{"name":"option"}'>
+            <a name="tag_option.html" href="tag_option.html">option</a>
+        </li>
+        <li title="add a password field to a form" class="tag-link tag-link-password" data-tagdata='{"name":"password"}'>
+            <a name="tag_password.html" href="tag_password.html">password</a>
+        </li>
+        <li title="add a radio button to a field" class="tag-link tag-link-radio" data-tagdata='{"name":"radio"}'>
+            <a name="tag_radio.html" href="tag_radio.html">radio</a>
+        </li>
+        <li title="add a radio group to a form" class="tag-link tag-link-radio-group" data-tagdata='{"name":"radio-group"}'>
+            <a name="tag_radio-group.html" href="tag_radio-group.html">radio-group</a>
+        </li>
+        <li title="reset a form" class="tag-link tag-link-reset" data-tagdata='{"name":"reset"}'>
+            <a name="tag_reset.html" href="tag_reset.html">reset</a>
+        </li>
+        <li title="add a select box to a form" class="tag-link tag-link-select" data-tagdata='{"name":"select"}'>
+            <a name="tag_select.html" href="tag_select.html">select</a>
+        </li>
+        <li title="add a submit button in a form" class="tag-link tag-link-submit-button" data-tagdata='{"name":"submit-button"}'>
+            <a name="tag_submit-button.html" href="tag_submit-button.html">submit-button</a>
+        </li>
+        <li title="add a textarea to a form" class="tag-link tag-link-text-area" data-tagdata='{"name":"text-area"}'>
+            <a name="tag_text-area.html" href="tag_text-area.html">text-area</a>
+        </li>
+        <li title="add a file upload to a form" class="tag-link tag-link-upload" data-tagdata='{"name":"upload"}'>
+            <a name="tag_upload.html" href="tag_upload.html">upload</a>
+        </li>
+        <li title="validate a form" class="tag-link tag-link-validate" data-tagdata='{"name":"validate"}'>
+            <a name="tag_validate.html" href="tag_validate.html">validate</a>
+        </li>
+        <li title="validate a field in a form" class="tag-link tag-link-validate-field" data-tagdata='{"name":"validate-field"}'>
+            <a name="tag_validate-field.html" href="tag_validate-field.html">validate-field</a>
+        </li>
+        <li title="validate a form for post requests" class="tag-link tag-link-validate-post" data-tagdata='{"name":"validate-post"}'>
+            <a name="tag_validate-post.html" href="tag_validate-post.html">validate-post</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

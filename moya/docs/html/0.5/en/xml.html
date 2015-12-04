@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>XML</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="index.html">&larr; Index</a>
+        </li>
+        <li class="next">
+            <a href="codes.html">B. Status Codes &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>XML</h1>
+            <p>To create a web application with Moya you will need to be familiar with writing and editing <a href="http://en.wikipedia.org/wiki/XML">XML</a>. This document will get you up to speed with working with XML but is not intended to be comprehensive. You should be able to find plenty of resources on the Internet if you would like to know more.</p>
+<aside>Even if you are familiar with XML, the section on <a href="xml.html#namespaces" title="XML">Namespaces</a> may be worth a read.</aside><h2><a name="tags-and-text"></a><a href="#tags-and-text">Tags and Text<span class="anchor"> &#182;</span></a></h2><p>An XML document consists of <em>tags</em> which looks something like this:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>The text <code>&lt;moya&gt;</code> marks the beginning of a tag, and the text <code>&lt;/moya&gt;</code> marks the end. There may be other tags inside a tag. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">macro</span><span class="tag tagcontent">&nbsp;docname=</span><span class="attrib tag tagcontent">"main"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Hello,&nbsp;World</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/macro</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>Here we can see there is <code>&lt;macro&gt;</code> tag <em>inside</em> the <code>&lt;moya&gt;</code> tag.</p>
+<p>You may have noticed that the <code>&lt;macro&gt;</code> tag has some additional text, <code>docname="main"</code>, inside the angular brackets. This is called a tag <em>attribute</em>, which associates information with the tag. In the previous example, the <code>&lt;macro&gt;</code> tag has a tag attribute called <code>docname</code> with a value of <code>main</code>. A tag may contain zero or more attributes.</p>
+<p>Tags may also contain text. In the previous example, there is an <code>echo</code> tag which contains the text <code>Hello, World</code>.</p>
+<p>If a tag doesn't contain any <em>child</em> tags or text, it may be <em>auto-closed</em> with the following syntax:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">breakpoint</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Here we can see an auto-closed tag which is equivalent to the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">breakpoint</span><span class="tag">&gt;&lt;</span><span class="endtagname tag">/breakpoint</span><span class="tag">&gt;</span></div></pre><h2><a name="comments"></a><a href="#comments">Comments<span class="anchor"> &#182;</span></a></h2><p>You can insert <em>comments</em> in the an XML document which serve has reminders to refresh your memory when re-visiting code you may have written some time ago. Comments are introduced with <code>&lt;!--</code> and end with <code>--&gt;</code>. Here is an example of an XL comment:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;this&nbsp;is&nbsp;a&nbsp;comment&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><h2><a name="namespaces"></a><a href="#namespaces">Namespaces<span class="anchor"> &#182;</span></a></h2><p>XML documents may mix tags defined from various sources. A problem arises that a tag may have the same name as another, and the parser would be unable to know which one was intended. This is true in Moya, which allows third party libraries to implement tags.</p>
+<p>As an example, Moya defines a tag called <a class="tag" href="tags/httpmoyaprojectcomdb/tag_get.html">&lt;get&gt;</a> which gets a form, it also defines a tag called <a class="tag" href="tags/httpmoyaprojectcomforms/tag_get.html">&lt;get&gt;</a> which gets an object from the database. The way the parser can know which tag is which is through XML <em>namespaces</em>. You can set the namespace of a tag with the <code>xmlns</code> attribute. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/db"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/forms"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>Here we can see two <code>&lt;get&gt;</code> tags with a different <code>xmlns</code> attribute for each. This attribute takes a URL which has been reserved for the namespace. The parser never reads the URL, in fact the URL doesn't need to return any content if you visit it in a browser. URLs are used to identify namespaces because if you only use URLs from domains you own, you can be sure there will not be any conflict with third parties.</p>
+<p>Setting the namespace this way can be somewhat verbose if you are mixing tags from a variety of namespaces. A more compact way of setting the namespace is to define a namespace prefix on an outer tag (often the root tag). Here's an example of setting a namespace prefix:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns:db=</span><span class="attrib tag tagcontent">"http://moyaproject.com/db"</span><span class="tag tagcontent">&nbsp;xmlns:forms=</span><span class="attrib tag tagcontent">"http://moyaproject.com/forms"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">get</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">form:</span><span class="tag tagname">get</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>The text <code>xmlns:db="http://moyaproject.com/db"</code> introduces the namespace prefix <code>db:</code>. Any child tags with <code>db:</code> will be in the <code>http://moyaproject.com/db</code> namespace. A namespace prefix for <code>forms</code> is defined in the same way. The prefix text may be anything you want, and is generally chosen to be short yet descriptive.</p>
+<h2><a name="moya-boilerplate"></a><a href="#moya-boilerplate">Moya Boilerplate<span class="anchor"> &#182;</span></a></h2><p>The first tag (known as the <em>root</em> tag) you write in a Moya project file should be <a class="tag" href="tags/httpmoyaprojectcom/tag_moya.html">&lt;moya&gt;</a>. Further tags (forms, content, views etc.) should be contained within this root tag.</p>
+<p>There are a number of commonly used namespaces that would would be worthwhile including in a template file you can use as a starting point for new code. There may be a feature in your OS or editor to simplify this.</p>
+<p>Here's a good start for a blank Moya XML file:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagcontent">?xml&nbsp;version=</span><span class="attrib tag tagcontent">"1.0"</span><span class="tag tagcontent">&nbsp;?</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag tagcontent"></span></div><a name="line3"></a><div class="line line-3"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;xmlns:let=</span><span class="attrib tag tagcontent">"http://moyaproject.com/let"</span><span class="tag tagcontent"></span></div><a name="line4"></a><div class="line line-4"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;xmlns:db=</span><span class="attrib tag tagcontent">"http://moyaproject.com/db"</span><span class="tag tagcontent"></span></div><a name="line5"></a><div class="line line-5"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;xmlns:forms=</span><span class="attrib tag tagcontent">"http://moyaproject.com/forms"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;your&nbsp;content&nbsp;goes&nbsp;here&nbsp;--&gt;</span></div><a name="line8"></a><div class="line line-8"><br></div><a name="line9"></a><div class="line line-9"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>The first line in the above XML file is a <em>processing instruction</em> which indicates the version of the XML specification. It is not strictly necessary, and Moya will happily parse any XML files without it.</p>
+<p>Note the namespace declaration of <code>xmlns="http://moyaproject.com"</code> which sets the default namespace for tags without a namespace prefix (which is most tags in Moya). This is also not strictly necessarily because Moya assumes this namespace by default. However, it is good practice to include it. The other namespace declarations introduce the <a href="moyacode.html#let-extension" title="Moya Code">LET extension</a>, <a href="db.html" title="Databases">database</a> and <a href="forms.html" title="Moya Forms">form</a> tags.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="index.html">&larr; Index</a>
+        </li>
+        <li class="next">
+            <a href="codes.html">B. Status Codes &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#tags-and-text">Tags and Text</a></li>
+    
+    <li><a href="#comments">Comments</a></li>
+    
+    <li><a href="#namespaces">Namespaces</a></li>
+    
+    <li><a href="#moya-boilerplate">Moya Boilerplate</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Starting a Project</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="overview.html">&larr; 3. Overview</a>
+        </li>
+        
+        <li class="next">
+            <a href="moyacode.html">5. Moya Code &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Starting a Project</h1>
+            <p>Before we dive in to the details of building a web application with Moya, it is worth creating an example project to have a look it. This is especially true if you are the 'show me the code' type of developer (as the author is).</p>
+<h2><a name="start-project-command"></a><a href="#start-project-command">Start Project Command<span class="anchor"> &#182;</span></a></h2><p>The Moya command line application contains a command line <em>wizard</em> that can build a project framework for us. If you run <code>moya start project</code> without any additional arguments, it will ask you for information regarding your project and what applications you want to enable (auth, feedback, blog etc). For the purposes of this demonstration we are going to enter the title on the command line and accept all defaults (with the <code>-a</code> switch).</p>
+<p>Enter the following from the command line to build the test project:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;start&nbsp;project&nbsp;--title&nbsp;"Intended&nbsp;For&nbsp;Humans"&nbsp;-a</div></pre><p>Moya will ask you for a few details, then if all goes well you should see confirmation that the project files were written. If you now navigate to the newly created <code>intendedforhumans/</code> directory, you can begin working with the project.</p>
+<h3><a name="moyarc"></a><a href="#moyarc">MoyaRC<span class="anchor"> &#182;</span></a></h3><p>
+If you don't want to have to re-enter basic information in the wizard every time you use it, you can create a configuration file containing these defaults. This file should be called <code>.moyarc</code> and should be in your home directory. If you are on linux, you can create this file with <code>nano ~/.moyarc</code>. Here is an example of a moyarc file:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[author]</span><span class="key"></span></div><div class="line line-2"><span class="key">name&nbsp;</span>=</span><span class="value">&nbsp;John&nbsp;Crichton</span></div><div class="line line-3"></span><span class="key">email&nbsp;</span>=</span><span class="value">&nbsp;john@moya.org</span></div><div class="line line-4"></span><span class="key">organization&nbsp;</span>=</span><span class="value">&nbsp;Moya&nbsp;Project</span></div><div class="line line-5"></span><span class="key">url&nbsp;</span>=</span><span class="value">&nbsp;http://example.org</span></div></pre><p>See <a href="moyarc.html">MoyaRC</a> for more information.</p>
+<h2><a name="initializing-a-new-project"></a><a href="#initializing-a-new-project">Initializing a New Project<span class="anchor"> &#182;</span></a></h2><p>Moya now has all the information it needs to run a database driven web application, but before it can run successfully we first need to initialize the database. The first step we need is to create tables in the database. Navigate to the project directory (<code>intendedforhumans/</code>) and enter the following at the command line:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;db&nbsp;sync</div></pre><p>The above command will create the tables for the project in the database. You should see a confirmation for each application that was <em>synced</em> with the database.</p>
+<p>The tables now exist in the database, but no information is stored there. The authorization library (users and permissions) first needs to store some objects in the database, such as a user account for yourself. We can do this by invoking a command in the auth library, as follows:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;auth#cmd.init</div></pre><p>This will ask you to create a super user account &ndash; you can accept the default username of 'superuser' or enter a more personalized username. Moya will then ask you for a password. On a production site, you would of course use a secure password here. Since this is just a test, feel free to enter 'password' or something memorable. Finally, Moya will ask you for an email address. Enter your email address, or a fake one.</p>
+<p>At this point everything should be set up to run your application. When developing, use the following command to run the server:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;runserver</div></pre><p>This will read the files from your project and run the server. You should see a stream of log information followed by confirmation that the server is running. You can now visit <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> to view your web application. Feel free to look around.</p>
+<p>The site should be empty, but fully functional. If you want to add content, click the 'Login' link on the top right, and log in with your superuser account. You can now edit pages / post blogs etc and view the Admin site from the Admin dropdown (top left).</p>
+<aside>Visit <a href="http://127.0.0.1:8000/debug/">http://127.0.0.1:8000/debug/</a> for some details regarding running applications.</aside><h2><a name="project-contents"></a><a href="#project-contents">Project Contents<span class="anchor"> &#182;</span></a></h2><p>Let's look at the files and directories that the wizard has created. You should find a <code>readme.txt</code> in most directories containing a brief description of the directory contents.</p>
+<p>In the top level directory you should see a file called simply <code>moya</code>. This file tells Moya that this directory contains a project. The command line application will look for this file when running the development server, or other commands that require a project. If Moya doesn't find the <code>moya</code> file in the current directory, it will look for it in the parent directories. This means that <code>moya runserver</code> will work even if you are in a sub-directory.</p>
+<p>Also in the top directory are some <code>ini</code> files. These will be explained in detail in later chapters, but feel free to have a look at these &ndash; they are in a simple text format.</p>
+<p>If you have run the project, you should also see a directory called <code>__moyacache__</code> which contains temporary files when running, and <code>basic.sqlite</code> which is your database. You may configure both in settings.</p>
+<aside>You won't find a great deal of executable code in a fresh project. This is because the project uses a number of builtin libraries that come with the Moya distribution. If you want to look through the code for these libraries, you can find them on your Python path, but it is probably easiest to download the source from Github.</aside><p>In your top level directory, you should also find the following sub-directories:</p>
+<dl class="dl-horizontal"><dt>/external/</dt>
+<dd>
+Contains <em>libraries</em> which are <em>external</em>, i.e. authored by third parties.
+</dd><dt>/local/</dt>
+<dd>
+Contains <em>libraries</em> which are <em>local</em> to the project, i.e. authored by yourself or organization.
+</dd><dt>/logic/</dt>
+<dd>
+Contains executable Moya code to initialize the server. By default there is a single file, <code>server.xml</code>, containing a server definition. It is this server that runs when you do <code>moya runserver</code>.
+</dd><dt>/site/</dt>
+<dd>
+Contains a library that handles site specific functionality. In other words, it is code that you wouldn't want to re-use in another web site.
+</dd><dt>/static/</dt>
+<dd>
+A directory for static media (css, images, js etc) to be used by your application. It is merged in a virtual filesystem with other static files in installed libraries. If your development server is running, visit <a href="http://127.0.0.1:8000/static/">http://127.0.0.1:8000/static/</a> to see what files are being served.
+</dd><dt>/templates/</dt>
+<dd>
+Contains templates (text files with a special markup to generate html), that are specific to the project. Libraries also have their own templates, but templates in this directory can override templates defined in other libraries. This way you can customize HTML content defined in a library.
+</dd></dl><h2><a name="creating-a-new-library"></a><a href="#creating-a-new-library">Creating a New Library<span class="anchor"> &#182;</span></a></h2><p>All new functionality you write will be done in a <em>library</em> of some sort. If you want to add content specific a single site, then you could work with the library in <code>/site/</code>, but generally you will want to create a library for each distinct feature set in your site.</p>
+<p>The <code>moya start</code> command can create libraries, in much the same way as projects. To do this you will need to be in your project directory. let's add a new library to our test project. We'll pretend we are going to start a new app that locates the finest sushi in your area. Enter the following from the command line:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;start&nbsp;library&nbsp;--title&nbsp;"Sushi&nbsp;Finder"</div></pre><p>This will ask you about some basic author information (see section on <a href="start.html#moyarc" title="Starting a Project">MoyaRC</a> if you don't like repeating yourself).</p>
+<aside>The information the wizard requires may be changed later by modifying an INI file, so don't worry about mistakes.</aside><p>The wizard will ask you for a 'long name' to give to the library. A long name consists of two or more identifiers separated by dots. The first identifier should be your organization. The second identifier should be the name of your project. You can add further identifiers if you want more fine-grained categorization.</p>
+<p>After the long name, the wizard will ask you for a URL for the library. This URL should be a link to documentation, or some information regarding the library. You may leave this field blank if you aren't going to distribute your library.</p>
+<p>The next thing the wizard will ask for is an <em>XML namespace</em>, which should be a fully qualified (including http://) URL. This URL doesn't have to exist; the only requirement is that it should be unique to you. Using a domain you own is the best way to ensure that this is the case. If you don't have a domain, you are welcome to use a URL in this format:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">http://ns.moyaproject.com/&lt;organization&gt;/&lt;library&nbsp;name&gt;/</div></pre><p>Moya will then ask you if you want to <em>mount</em> the library. Mounting a library allows it to generate responses to requests. Select <code>y</code> for this, and accept the default of <code>sushifinder</code> for the mount location.</p>
+<p>The final piece of information Moya will ask you for is a name for your application (an application in Moya terminology is a mounted library). This should be relatively short, lower case, and contain no periods. Enter a value of <code>sushi</code> for this.</p>
+<p>If all goes well, Moya will generate a skeleton library in the <code>/local/</code> directory. It will also modify <code>server.xml</code> so the new libray will be loaded.</p>
+<p>If you now run the development server (<code>moya runserver</code>), you should see a few references to the new library in the logs. And if you visit <a href="http://127.0.0.1:8000/sushifinder/">http://127.0.0.1:8000/sushifinder/</a> in the browser, you will see the new application in action.</p>
+<p>The new application doesn't do anything particularly interesting, but does contain most of the elements you might use in a more functional project. Feel free to examine the auto-generated code and tweak it.</p>
+<h2><a name="library-contents"></a><a href="#library-contents">Library Contents<span class="anchor"> &#182;</span></a></h2><p>Let's look at the directory structure of the new library we just created. Navigate to the library, which you will find in <code>/local/</code> (inside the project directory).</p>
+<p>At the top level you will find a <code>__init__.py</code> file. This is necessary if you would like to distribute your library as a Python module. Also at the top level is a file called <code>lib.ini</code>. This contains information regarding the library, and the locations of additional files.</p>
+<p>There is probably no good reason to change the defaults, so most libraries will contain the following directories.</p>
+<dl class="dl-horizontal"><dt>/locale/</dt>
+<dd>
+This directory will contain translation catalogs, which contain the text of your project in various languages. If you don't intend to make your library available in other languages, you may delete this directory.
+</dd><dt>/logic/</dt>
+<dd>
+Contains the executable code for your library, in the form of a number of XML documents that handle URLs, views, database models, forms etc. Most of the work on a library will go in to creating and
+editing of the files in here.
+</dd><dt>/media/</dt>
+<dd>
+If your library distributes any static media (images, css, Javascript etc), they will go in here.
+</dd><dt>/templates/</dt>
+<dd>
+This directory will contain the templates your library uses.
+</dd></dl><h2><a name="summary"></a><a href="#summary">Summary<span class="anchor"> &#182;</span></a></h2><p>A <em>project</em> consists of a number of directories where the top level is denoted by a filed called <code>moya</code>. This file lets the <code>moya</code> command line application know the location of the root of the project.</p>
+<p>All functionality for generating and serving content is contained within <em>libraries</em> which have a globally unique name (or <em>long name</em>) consisting of two or more identifiers separated by dots. There are three directories for libraries in a typical project; <code>/local/</code> contains libraries authored by yourself, <code>/external/</code> contains third party libraries, and <code>/site/</code> contains a library to customize the site.</p>
+<p>When a library is installed, it is given a short identifier which contains no spaces or periods. Once installed, a library is known as an <em>application</em>. There may be more than once application installed for any given library.
+</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="overview.html">&larr; 3. Overview</a>
+        </li>
+        
+        <li class="next">
+            <a href="moyacode.html">5. Moya Code &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#start-project-command">Start Project Command</a><ul>
+    
+    <li><a href="#moyarc">MoyaRC</a></li>
+    
+</ul></li>
+    
+    <li><a href="#initializing-a-new-project">Initializing a New Project</a></li>
+    
+    <li><a href="#project-contents">Project Contents</a></li>
+    
+    <li><a href="#creating-a-new-library">Creating a New Library</a></li>
+    
+    <li><a href="#library-contents">Library Contents</a></li>
+    
+    <li><a href="#summary">Summary</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

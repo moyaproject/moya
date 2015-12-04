@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Overview</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="installation.html">&larr; 2. Installing Moya</a>
+        </li>
+        
+        <li class="next">
+            <a href="start.html">4. Starting a Project &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Overview</h1>
+            <p>This chapter summarizes some important concepts in Moya, which will be covered more fully in later chapters.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> The code snippets in this chapter are for illustration only, and may not work outside of a project.</div><h2><a name="moya-command-line-application"></a><a href="#moya-command-line-application">Moya Command Line Application<span class="anchor"> &#182;</span></a></h2><p>The moya command is a swiss-army knife of tools for development; in addition to running the development server, it can also report settings, check databases, test email, trace URLs, and assist with the minutia of developing a web application.</p>
+<p>If Moya is installed, you can run the following command to see the help text:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;-h</div></pre><h2><a name="moya-code"></a><a href="#moya-code">Moya Code<span class="anchor"> &#182;</span></a></h2><p>
+In Moya, executable code is written in XML. The <a href="moyacode.html" title="Moya Code">Moya language</a> supports many of the constructs found in other high-level languages and although more verbose in terms of characters to type, it can be very readable and easy to work with.</p>
+<aside>The verbosity of XML is offset somewhat by the fact that Moya code statements typically work at a higher-level.</aside><p>The Moya languages is also extremely <em>extensible</em>. New tags can be implemented in Moya code itself, or via extensions written in Python.</p>
+<p>The following Moya code is an implementation of <a href="http://en.wikipedia.org/wiki/Fizz_buzz">Fizz Buzz</a> in Moya code:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">macro</span><span class="tag tagcontent">&nbsp;docname=</span><span class="attrib tag tagcontent">"main"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"1..100"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"number"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"number&nbsp;%&nbsp;15&nbsp;==&nbsp;0"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>FizzBuzz</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">elif</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"number&nbsp;%&nbsp;3&nbsp;==&nbsp;0"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Fizz</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/elif</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">elif</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"number&nbsp;%&nbsp;5&nbsp;==&nbsp;0"</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Buzz</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line11"></a><div class="line line-11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/elif</span><span class="tag">&gt;</span></div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">else</span><span class="tag">&gt;</span></div><a name="line13"></a><div class="line line-13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{number}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/else</span><span class="tag">&gt;</span></div><a name="line15"></a><div class="line line-15">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div><a name="line16"></a><div class="line line-16"></span><span class="tag">&lt;</span><span class="endtagname tag">/macro</span><span class="tag">&gt;</span></div></pre><p>Or for an alternative, less readable version:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">macro</span><span class="tag tagcontent">&nbsp;docname=</span><span class="attrib tag tagcontent">"fizzbuzz2"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"1..100"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"number"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{number&nbsp;%&nbsp;15&nbsp;==&nbsp;0&nbsp;?&nbsp;'FizzBuzz'&nbsp;:&nbsp;(number&nbsp;%&nbsp;3&nbsp;==&nbsp;0&nbsp;?&nbsp;'Fizz'&nbsp;:&nbsp;(number&nbsp;%&nbsp;5&nbsp;==&nbsp;0&nbsp;?&nbsp;'Buzz'&nbsp;:&nbsp;number))}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/macro</span><span class="tag">&gt;</span></div></pre><h3><a name="expressions"></a><a href="#expressions">Expressions<span class="anchor"> &#182;</span></a></h3><p>Moya Code may contain <a href="expressions.html" title="Expressions">expressions</a> which work like most other languages, but with additional syntax for web related tasks, such as url manipulation / encoding, path manipulation, date-time arithmetic etc.</p>
+<p>For example, the expression in the following code gets the current price of <a href="http://en.wikipedia.org/wiki/Bitcoin">Bitcoin</a> from an online service:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{(fromjson:get:"https://www.bitstamp.net/api/ticker/")['ask']}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><h3><a name="debugger"></a><a href="#debugger">Debugger<span class="anchor"> &#182;</span></a></h3><p>A fully featured <em>debugger</em> is built in to Moya. With the Moya debugger you can step through your code, inspect data, and set breakpoints. Code is displayed with beautiful syntax highlighting (if your console supports it).</p>
+<h2><a name="libraries-and-applications"></a><a href="#libraries-and-applications">Libraries and Applications<span class="anchor"> &#182;</span></a></h2><p>All web application functionality in Moya is contained in bundle of XML documents, known as a <em><a href="library.html" title="Creating a Library">library</a></em>. Libraries typically contain <em>views</em> which process URLs and generate a response, and may also add features that can be used elsewhere in the project.</p>
+<p>Moya is bundled with a number of libraries to handle typical web applications requirements. For example there is a libary to manage users, sessions, forms, comments, remote procedure calls, and many more.</p>
+<p>Libraries self contained; the developer will rarely have to do more than <em>mount</em> the library (give it a root URL). Static files may be served directly from the library, without having to copy anything.</p>
+<h2><a name="components"></a><a href="#components">Components<span class="anchor"> &#182;</span></a></h2><p>There are a number of systems involved in generating a page of html in a modern web application. The following is a list of the major components of a project built with Moya.</p>
+<h3><a name="url-routing"></a><a href="#url-routing">URL Routing<span class="anchor"> &#182;</span></a></h3><p>A library may define one or more <em>mountpoints</em>, which take an incoming URL and dispatch it to a <a href="overview.html#view" title="Overview">view</a> which will generate a response. A special syntax called a <em>route</em> is used to match URLs to views and extract parameters.</p>
+<p>Here's a simple URL route:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">/topic/{topic}/{link}/</div></pre><p>This will match a URL of the form <code>/topic/farscape/my-favorite-character/</code>, and extract a value for <code>topic</code> (farscape) and <code>link</code> (my-favorite-character).</p>
+<h3><a name="views"></a><a href="#views">Views<span class="anchor"> &#182;</span></a></h3><p>In Moya a <em>view</em> is the executable code responsible for generating a response for a given URL. A view will typically retrieve some information from the database, which it then renders in to HTML with via a template, or Moya's <a href="content.html" title="Content">content</a> system.</p>
+<p>The following is an example of a view taken from the builtin blog library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">view</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"view.posts-by-month"</span><span class="tag tagcontent">&nbsp;content=</span><span class="attrib tag tagcontent">"#content.list-posts-by-month"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">not-found</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"exists:.request.GET.page&nbsp;and&nbsp;not&nbsp;int:.request.GET.page"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;page=</span><span class="attrib tag tagcontent">"int:.request.GET.page&nbsp;or&nbsp;1"</span><span class="tag tagcontent">&nbsp;pagesize=</span><span class="attrib tag tagcontent">".app.settings.page_size.int"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">datetime</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"start"</span><span class="tag tagcontent">&nbsp;year=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{url.year}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;month=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{url.month}</span><span class="attrib tag tagcontent">"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">catch</span><span class="tag tagcontent">&nbsp;exception=</span><span class="attrib tag tagcontent">"date-time.*"</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">not-found</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/catch</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">query</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#Post"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"posts"</span><span class="tag tagcontent">&nbsp;orderby=</span><span class="attrib tag tagcontent">"-published_date"</span><span class="tag tagcontent"></span></div><a name="line9"></a><div class="line line-9"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter=</span><span class="attrib tag tagcontent">"#Post.published_date&nbsp;gte&nbsp;start&nbsp;and&nbsp;#Post.published_date&nbsp;lt&nbsp;start.next_month"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10"></span><span class="tag">&lt;</span><span class="endtagname tag">/view</span><span class="tag">&gt;</span></div></pre><h3><a name="databases"></a><a href="#databases">Databases<span class="anchor"> &#182;</span></a></h3><p>Moya simplifies <a href="db.html" title="Databases">databases</a> with <em>models</em> and <em>database expressions</em>. Models map database tables on to simple objects and types. Database expressions build queries without the need for SQL.</p>
+<p>Here's an example of a model definition:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">model</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/db"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"Post"</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"Post"</span><span class="tag tagcontent">&nbsp;repr=</span><span class="attrib tag tagcontent">"Post:&nbsp;</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{slug}</span><span class="attrib tag tagcontent">"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">foreign-key</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"auth#User"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"owner"</span><span class="tag tagcontent">&nbsp;null=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">string</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"title"</span><span class="tag tagcontent">&nbsp;length=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;null=</span><span class="attrib tag tagcontent">"no"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">string</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"slug"</span><span class="tag tagcontent">&nbsp;length=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;null=</span><span class="attrib tag tagcontent">"no"</span><span class="tag tagcontent">&nbsp;unique=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">boolean</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"published"</span><span class="tag tagcontent">&nbsp;default=</span><span class="attrib tag tagcontent">"no"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">date-time</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"published_date"</span><span class="tag tagcontent">&nbsp;null=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">text</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"content"</span><span class="tag tagcontent">&nbsp;null=</span><span class="attrib tag tagcontent">"no"</span><span class="tag tagcontent">&nbsp;default=</span><span class="attrib tag tagcontent">""</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/model</span><span class="tag">&gt;</span></div></pre><p>Here's an example of a query for the above model:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">query</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"newer_posts"</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#Post"</span><span class="tag tagcontent">&nbsp;orderby=</span><span class="attrib tag tagcontent">"published_date"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;filter=</span><span class="attrib tag tagcontent">"#Post.published_date&nbsp;gt&nbsp;post.published_date"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The <code>filter</code> attribute in the code above is an example of a database expression.</p>
+<h3><a name="templates"></a><a href="#templates">Templates<span class="anchor"> &#182;</span></a></h3><p>Moya <a href="templates.html" title="Templates">templates</a> are text files with a simple &ndash; but powerful &ndash; markup that transforms data in to HTML (typically). The syntax used in Moya templates borrows heavily from Django and Jinja, but with some differences to compliment Moya Code.</p>
+<p>The following is an example of Moya template code:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="comment">&lt;!--&nbsp;List&nbsp;of&nbsp;crew&nbsp;onboard&nbsp;Moya&nbsp;--&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">ul</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="templatetag">{%&nbsp;for&nbsp;species,&nbsp;crew&nbsp;in&nbsp;moya&nbsp;%}</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">li</span><span class="tag">&gt;</span><span class="sub">${title:crew}</span>&nbsp;is&nbsp;a&nbsp;</span><span class="sub">${species}</span><span class="tag">&lt;</span><span class="endtagname tag">/li</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="templatetag">{%&nbsp;endfor&nbsp;%}</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/ul</span><span class="tag">&gt;</span></div></pre><p>The Moya template language supports many tags, with a clean, consistent syntax and the same expressions used elsewhere in Moya.</p>
+<h3><a name="content"></a><a href="#content">Content<span class="anchor"> &#182;</span></a></h3><p>Templates are powerful tools for building html, but are not particularly good at managing the layout of pages which are typically built from many smaller components. Moya's answer to this issue is <a href="content.html" title="Content">content</a> &ndash; a high level description of a page defined in Moya code.</p>
+<p>Content assembles a page from components, or <em>widgets</em>. A widget can pull in associated CSS, Javascript, and templates, so that all that is required to add a widget to a page is a single tag.</p>
+<p>Here's an example of a content definition, taken from Moya's FAQ (Frequently Asked Questions) library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">content</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"content.faqlist"</span><span class="tag tagcontent">&nbsp;template=</span><span class="attrib tag tagcontent">"faqs.html"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">title</span><span class="tag">&gt;</span>Frequently&nbsp;Asked&nbsp;Questions</span><span class="tag">&lt;</span><span class="endtagname tag">/title</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">section</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"body"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"faqs"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"qa"</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">faq:</span><span class="tag tagname">faq</span><span class="tag tagcontent">&nbsp;qa=</span><span class="attrib tag tagcontent">"qa"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/section</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/content</span><span class="tag">&gt;</span></div></pre><h3><a name="internationalization-and-localization"></a><a href="#internationalization-and-localization">Internationalization and Localization<span class="anchor"> &#182;</span></a></h3><p>In a globalized world, it is often necessary to support a single website in more than one territory. Moya can display translated text from messages catalogs extracted with the command line app. Localization (currency / data formats formats etc) is also supported.</p>
+<h3><a name="forms"></a><a href="#forms">Forms<span class="anchor"> &#182;</span></a></h3><p>Forms are a fundamental part of most web applications, and a common source of errors and frustration. Moya <a href="forms.html" title="Moya Forms">forms</a> makes working with forms no harder than it needs to be. Forms created with Moya's form system know how to render themselves as well as validated and process data in a request.</p>
+<p>Forms are integrated tightly with the <a href="content.html" title="Content">content</a> system and may be rendered in a variety of styles, or customized at the field or form level.</p>
+<h3><a name="filesystems"></a><a href="#filesystems">Filesystems<span class="anchor"> &#182;</span></a></h3><p>Moya can selectively expose parts of the local filesystem (or other filesystem) to logic code. Code in the project is unable to access any files outside of what the developer has chosen to expose. This is a boon for security, as it is impossible to serve files outside of specified locations.</p>
+<h3><a name="caching"></a><a href="#caching">Caching<span class="anchor"> &#182;</span></a></h3><p>Moya supports a number of different caching methods; such as local memory, disk based, and memcached servers. These may be mixed and matched as appropriate to optimize expensive code.</p>
+<h3><a name="email"></a><a href="#email">Email<span class="anchor"> &#182;</span></a></h3><p>Moya makes sending template emails very simple. HTML and / or text emails are rendered with Moya templates, and may contain attachments.</p>
+<h3><a name="tests-and-checks"></a><a href="#tests-and-checks">Tests and Checks<span class="anchor"> &#182;</span></a></h3><p>Unit Tests are essential if you want to guarantee a level of quality in your product. Moya can run test suites (written in Moya code) that produce elegant reports to the console or as HTML. Tests ensuring that recent changes to your code don't break the user experience on other pages.</p>
+<p>In addition to unit tests, Moya can run <em>preflight</em> checks, which detect common errors and potential problems before the server runs. These can prevent potentially embarrassing issues from being pushed live.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="installation.html">&larr; 2. Installing Moya</a>
+        </li>
+        
+        <li class="next">
+            <a href="start.html">4. Starting a Project &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#moya-command-line-application">Moya Command Line Application</a></li>
+    
+    <li><a href="#moya-code">Moya Code</a><ul>
+    
+    <li><a href="#expressions">Expressions</a></li>
+    
+    <li><a href="#debugger">Debugger</a></li>
+    
+</ul></li>
+    
+    <li><a href="#libraries-and-applications">Libraries and Applications</a></li>
+    
+    <li><a href="#components">Components</a><ul>
+    
+    <li><a href="#url-routing">URL Routing</a></li>
+    
+    <li><a href="#views">Views</a></li>
+    
+    <li><a href="#databases">Databases</a></li>
+    
+    <li><a href="#templates">Templates</a></li>
+    
+    <li><a href="#content">Content</a></li>
+    
+    <li><a href="#internationalization-and-localization">Internationalization and Localization</a></li>
+    
+    <li><a href="#forms">Forms</a></li>
+    
+    <li><a href="#filesystems">Filesystems</a></li>
+    
+    <li><a href="#caching">Caching</a></li>
+    
+    <li><a href="#email">Email</a></li>
+    
+    <li><a href="#tests-and-checks">Tests and Checks</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

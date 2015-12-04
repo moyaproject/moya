@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag parameter</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-parameter
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+            <li class="previous pull-right">
+                <a href="tag_method.html" title="Previous tag">&larr; &lt;method&gt;</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="parameter"/>
+        <input type="hidden" name="synopsis" value="define an rpc parameter"/>
+
+        <h2>&lt;parameter&gt; <small>define an rpc parameter</small></h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>parameter</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/jsonrpc</tt></dd>
+            
+        </dl>
+        <p>Defines a parameter in an RPC call.</p>
+        <h4>Example</h4>
+        <pre class="moya-console format-xml""><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">error</span><span class="tag tagcontent">&nbsp;code=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"format&nbsp;not&nbsp;in&nbsp;['short',&nbsp;'medium',&nbsp;'long',&nbsp;'full']"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;parameter&nbsp;is&nbsp;not&nbsp;correct</div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:error</span><span class="tag">&gt;</span></div></pre>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>default</code></td>
+                <td>Default value</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>None</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td>Name of the parameter</td>
+                <td>text</td>
+                <td>Yes</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>required</code></td>
+                <td>Required?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>type</code></td>
+                <td>Parameter type (number, string, bool, list, object, anything)</td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>&quot;anything&quot;</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li title="return an rpc error" class="tag-link tag-link-error" data-tagdata='{"name":"error"}'>
+            <a name="tag_error.html" href="tag_error.html">error</a>
+        </li>
+        <li title="create an interface for remote methods" class="tag-link tag-link-interface" data-tagdata='{"name":"interface"}'>
+            <a name="tag_interface.html" href="tag_interface.html">interface</a>
+        </li>
+        <li title="define a remote method" class="tag-link tag-link-method" data-tagdata='{"name":"method"}'>
+            <a name="tag_method.html" href="tag_method.html">method</a>
+        </li>
+        <li title="define an rpc parameter" class="tag-link tag-link-parameter" data-tagdata='{"name":"parameter"}'>
+            <a name="tag_parameter.html" href="tag_parameter.html">parameter</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

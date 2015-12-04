@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag button</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-button
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+            <li class="next pull-right">
+                <a href="tag_button-link.html" title="Next tag">&lt;button-link&gt; &rarr;</a> &nbsp;
+            </li>
+            <li class="previous pull-right">
+                <a href="tag_breadcrumbs.html" title="Previous tag">&larr; &lt;breadcrumbs&gt;</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="button"/>
+        <input type="hidden" name="synopsis" value="render a simple button"/>
+
+        <h2>&lt;button&gt; <small>render a simple button</small></h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>button</dd>
+            
+            <dt>library</dt>
+            <dd>moya.widgets</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/widgets</tt></dd>
+            
+        </dl>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>block</code></td>
+                <td></td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>no</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>class</code></td>
+                <td></td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>from</code></td>
+                <td>Application</td>
+                <td>application reference</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>icon</code></td>
+                <td></td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td></td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>size</code></td>
+                <td></td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>md</code></td>
+                <td>
+                    <code>lg</code><br/>
+                    <code>md</code><br/>
+                    <code>sm</code><br/>
+                </td>
+            </tr>
+            <tr>
+                <td><code>template</code></td>
+                <td>Override widget template</td>
+                <td>list of template paths</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>visual</code></td>
+                <td></td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>default</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>if</code></td>
+                <td>Conditional expression</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li title="add theme style" class="tag-link tag-link-add-theme-style" data-tagdata='{"name":"add-theme-style"}'>
+            <a name="tag_add-theme-style.html" href="tag_add-theme-style.html">add-theme-style</a>
+        </li>
+        <li title="navigation breadcrumbs" class="tag-link tag-link-breadcrumbs" data-tagdata='{"name":"breadcrumbs"}'>
+            <a name="tag_breadcrumbs.html" href="tag_breadcrumbs.html">breadcrumbs</a>
+        </li>
+        <li title="render a simple button" class="tag-link tag-link-button" data-tagdata='{"name":"button"}'>
+            <a name="tag_button.html" href="tag_button.html">button</a>
+        </li>
+        <li title="render a link styled as a button" class="tag-link tag-link-button-link" data-tagdata='{"name":"button-link"}'>
+            <a name="tag_button-link.html" href="tag_button-link.html">button-link</a>
+        </li>
+        <li title="renders enclosed links as buttons" class="tag-link tag-link-buttons" data-tagdata='{"name":"buttons"}'>
+            <a name="tag_buttons.html" href="tag_buttons.html">buttons</a>
+        </li>
+        <li title="render a check" class="tag-link tag-link-check" data-tagdata='{"name":"check"}'>
+            <a name="tag_check.html" href="tag_check.html">check</a>
+        </li>
+        <li title="danger alert" class="tag-link tag-link-danger" data-tagdata='{"name":"danger"}'>
+            <a name="tag_danger.html" href="tag_danger.html">danger</a>
+        </li>
+        <li title="container for dialog" class="tag-link tag-link-dialog" data-tagdata='{"name":"dialog"}'>
+            <a name="tag_dialog.html" href="tag_dialog.html">dialog</a>
+        </li>
+        <li title="container for dialog buttons" class="tag-link tag-link-dialog-buttons" data-tagdata='{"name":"dialog-buttons"}'>
+            <a name="tag_dialog-buttons.html" href="tag_dialog-buttons.html">dialog-buttons</a>
+        </li>
+        <li title="error alert" class="tag-link tag-link-error" data-tagdata='{"name":"error"}'>
+            <a name="tag_error.html" href="tag_error.html">error</a>
+        </li>
+        <li title="renders a link to a feed" class="tag-link tag-link-feed-link" data-tagdata='{"name":"feed-link"}'>
+            <a name="tag_feed-link.html" href="tag_feed-link.html">feed-link</a>
+        </li>
+        <li title="info alert" class="tag-link tag-link-info" data-tagdata='{"name":"info"}'>
+            <a name="tag_info.html" href="tag_info.html">info</a>
+        </li>
+        <li title="render a large well" class="tag-link tag-link-large-well" data-tagdata='{"name":"large-well"}'>
+            <a name="tag_large-well.html" href="tag_large-well.html">large-well</a>
+        </li>
+        <li title="renders a link" class="tag-link tag-link-link" data-tagdata='{"name":"link"}'>
+            <a name="tag_link.html" href="tag_link.html">link</a>
+        </li>
+        <li title="set no wrap on contents" class="tag-link tag-link-no-wrap" data-tagdata='{"name":"no-wrap"}'>
+            <a name="tag_no-wrap.html" href="tag_no-wrap.html">no-wrap</a>
+        </li>
+        <li title="paginate a list of results" class="tag-link tag-link-paginate" data-tagdata='{"name":"paginate"}'>
+            <a name="tag_paginate.html" href="tag_paginate.html">paginate</a>
+        </li>
+        <li class="tag-link tag-link-search-input" data-tagdata='{"name":"search-input"}'>
+            <a name="tag_search-input.html" href="tag_search-input.html">search-input</a>
+        </li>
+        <li title="render contents as code" class="tag-link tag-link-show-code" data-tagdata='{"name":"show-code"}'>
+            <a name="tag_show-code.html" href="tag_show-code.html">show-code</a>
+        </li>
+        <li title="render a small well" class="tag-link tag-link-small-well" data-tagdata='{"name":"small-well"}'>
+            <a name="tag_small-well.html" href="tag_small-well.html">small-well</a>
+        </li>
+        <li title="success alert" class="tag-link tag-link-success" data-tagdata='{"name":"success"}'>
+            <a name="tag_success.html" href="tag_success.html">success</a>
+        </li>
+        <li title="individial tab" class="tag-link tag-link-tab" data-tagdata='{"name":"tab"}'>
+            <a name="tag_tab.html" href="tag_tab.html">tab</a>
+        </li>
+        <li title="tab panel container" class="tag-link tag-link-tab-panel" data-tagdata='{"name":"tab-panel"}'>
+            <a name="tag_tab-panel.html" href="tag_tab-panel.html">tab-panel</a>
+        </li>
+        <li title="renders a hyperlinked URL" class="tag-link tag-link-url" data-tagdata='{"name":"url"}'>
+            <a name="tag_url.html" href="tag_url.html">url</a>
+        </li>
+        <li title="warning alert" class="tag-link tag-link-warning" data-tagdata='{"name":"warning"}'>
+            <a name="tag_warning.html" href="tag_warning.html">warning</a>
+        </li>
+        <li title="render a well" class="tag-link tag-link-well" data-tagdata='{"name":"well"}'>
+            <a name="tag_well.html" href="tag_well.html">well</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag load-project</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-load-project
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+            <li class="next pull-right">
+                <a href="tag_request.html" title="Next tag">&lt;request&gt; &rarr;</a> &nbsp;
+            </li>
+            <li class="previous pull-right">
+                <a href="tag_get-response.html" title="Previous tag">&larr; &lt;get-response&gt;</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="load-project"/>
+        <input type="hidden" name="synopsis" value="load a project for testing"/>
+
+        <h2>&lt;load-project&gt; <small>load a project for testing</small></h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>load-project</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/test</tt></dd>
+            
+        </dl>
+        <p>Load a moya project</p>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>location</code></td>
+                <td>Project location (relative to library)</td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>&quot;./testproject&quot;</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>server</code></td>
+                <td>Server name</td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>&quot;main&quot;</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>settings</code></td>
+                <td>Settings path within project</td>
+                <td>text</td>
+                <td>No</td>
+                <td><code>&quot;settings.ini&quot;</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>dst</code></td>
+                <td>Destination</td>
+                <td>reference</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>if</code></td>
+                <td>Conditional expression</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>value</code></td>
+                <td>Value</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>None</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li title="define a test case" class="tag-link tag-link-case" data-tagdata='{"name":"case"}'>
+            <a name="tag_case.html" href="tag_case.html">case</a>
+        </li>
+        <li title="fail a test case" class="tag-link tag-link-fail" data-tagdata='{"name":"fail"}'>
+            <a name="tag_fail.html" href="tag_fail.html">fail</a>
+        </li>
+        <li title="get a test response" class="tag-link tag-link-get-response" data-tagdata='{"name":"get-response"}'>
+            <a name="tag_get-response.html" href="tag_get-response.html">get-response</a>
+        </li>
+        <li title="load a project for testing" class="tag-link tag-link-load-project" data-tagdata='{"name":"load-project"}'>
+            <a name="tag_load-project.html" href="tag_load-project.html">load-project</a>
+        </li>
+        <li title="make a mock request" class="tag-link tag-link-request" data-tagdata='{"name":"request"}'>
+            <a name="tag_request.html" href="tag_request.html">request</a>
+        </li>
+        <li title="require an exception to be thrown in a test case" class="tag-link tag-link-require" data-tagdata='{"name":"require"}'>
+            <a name="tag_require.html" href="tag_require.html">require</a>
+        </li>
+        <li title="setup code for a test suite" class="tag-link tag-link-set-up" data-tagdata='{"name":"set-up"}'>
+            <a name="tag_set-up.html" href="tag_set-up.html">set-up</a>
+        </li>
+        <li title="define a suite of test cases" class="tag-link tag-link-suite" data-tagdata='{"name":"suite"}'>
+            <a name="tag_suite.html" href="tag_suite.html">suite</a>
+        </li>
+        <li title="tear down (finalize) code for a test suite" class="tag-link tag-link-tear-down" data-tagdata='{"name":"tear-down"}'>
+            <a name="tag_tear-down.html" href="tag_tear-down.html">tear-down</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

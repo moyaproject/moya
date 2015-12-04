@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Google Recaptcha</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="pages.html">&larr; 14. Moya Pages</a>
+        </li>
+        
+        <li class="next">
+            <a href="session.html">16. Moya Sessions &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Google Recaptcha</h1>
+            <p> <a href="https://www.google.com/recaptcha/intro/index.html">Google reCAPTCHA</a> is a service from Google that prevents bots (automated systems) from accessing your web application. Mosts bots are malicious in nature, and attempt to <em>spam</em> your site with links to products, or to test for potential exploits.</p>
+ 
+<aside>CAPTCHA stands for Completely Automated Public Turing test to tell Computer and Human Apart.</aside><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Google Recaptcha is built in to Moya and may be imported from its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.recaptcha"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>And installed as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"recaptcha"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.google.recaptcha"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This library's long name is <code>moya.google.recaptcha</code> to reflect the fact that it is packaged by Moya, but the author is <a href="http://google.com">Google</a>.</p>
+<h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>The XML namespace for this library is <code>http://moyaproject.com/recaptcha</code>. The XML prefix is assumed to be <code>recaptcha:</code> for the the examples in this document.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>To use reCAPTCHA, you will need two keys; a <em>site</em> key which identifies the URL your web application will run on, and a <em>secret</em> key which is used when checking the user's response. You can get both keys by <a href="https://www.google.com/recaptcha/intro/index.html">signing up</a>.</p>
+<h2><a name="settings"></a><a href="#settings">Settings<span class="anchor"> &#182;</span></a></h2><p>This library has the following settings:</p>
+<p class="setting">sitekey =<span class="value"> &lt;SITEKEY&gt;</span></p><p>This should be your site key.</p>
+<p class="setting">secretkey =<span class="value"> &lt;SECRETKEY&gt;</span></p><p>This should be your secret key.</p>
+<h2><a name="usage"></a><a href="#usage">Usage<span class="anchor"> &#182;</span></a></h2><p>This library supplies a tag called <a class="tag" href="tags/httpmoyaprojectcomrecaptcha/tag_recaptcha.html">&lt;recaptcha&gt;</a> which should be embedded in a <a class="tag" href="tags/httpmoyaprojectcomforms/tag_form.html">&lt;form&gt;</a> as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">field</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"g-recaptcha-response"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">recaptcha:</span><span class="tag tagname">recaptcha</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/field</span><span class="tag">&gt;</span></div></pre><p>When the user fills in the CAPTCHA, it writes a reCAPTCHA response value called <code>g-recaptcha-response</code> to the form (this name can not be changed). You can then check reCAPTCHA response with <a class="tag" href="tags/httpmoyaprojectcomrecaptcha/tag_verify.html">&lt;verify&gt;</a>, which will return <code>True</code> if the user is likely a human. This may done directly in the form with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">validate-field</span><span class="tag tagcontent">&nbsp;field=</span><span class="attrib tag tagcontent">"g-recaptcha-response"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">recaptcha:</span><span class="tag tagname">verify</span><span class="tag tagcontent">&nbsp;response=</span><span class="attrib tag tagcontent">"value"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"human"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">fail</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"not&nbsp;human"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAPTCHA&nbsp;failed.&nbsp;You&nbsp;may&nbsp;be&nbsp;a&nbsp;bot.</div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/fail</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/validate-field</span><span class="tag">&gt;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="pages.html">&larr; 14. Moya Pages</a>
+        </li>
+        
+        <li class="next">
+            <a href="session.html">16. Moya Sessions &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#settings">Settings</a></li>
+    
+    <li><a href="#usage">Usage</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag decimal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-decimal
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+            <li class="next pull-right">
+                <a href="tag_delete.html" title="Next tag">&lt;delete&gt; &rarr;</a> &nbsp;
+            </li>
+            <li class="previous pull-right">
+                <a href="tag_datetime.html" title="Previous tag">&larr; &lt;datetime&gt;</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="decimal"/>
+        <input type="hidden" name="synopsis" value="a fix precision number"/>
+
+        <h2>&lt;decimal&gt; <small>a fix precision number</small></h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>decimal</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/db</tt></dd>
+            
+        </dl>
+        <p>Defines a fixed precision number field in a &lt;model&gt;. Use this field element for currency.</p>
+        <h4>Example</h4>
+        <pre class="moya-console format-xml""><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">decimal</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"balance"</span><span class="tag tagcontent">&nbsp;precision=</span><span class="attrib tag tagcontent">"12"</span><span class="tag tagcontent">&nbsp;scale=</span><span class="attrib tag tagcontent">"2"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>precision</code></td>
+                <td>number of digits</td>
+                <td>integer</td>
+                <td>No</td>
+                <td><code>36</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>scale</code></td>
+                <td>number of digits after the decimal point</td>
+                <td>integer</td>
+                <td>No</td>
+                <td><code>8</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>blank</code></td>
+                <td>Allow blank?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>default</code></td>
+                <td>Default value</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>formfield</code></td>
+                <td>Macro to create a form field, used in admin</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>help</code></td>
+                <td>Additional help text for use in object forms</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>index</code></td>
+                <td>Create index?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>no</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>label</code></td>
+                <td>Short description of field purpose</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td>Name of the element</td>
+                <td>text</td>
+                <td>Yes</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>null</code></td>
+                <td>Allow null?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>no</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>primary</code></td>
+                <td>Use as primary key?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>unique</code></td>
+                <td>Impose unique constraint?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>no</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li title="mark a block as being atomic" class="tag-link tag-link-atomic" data-tagdata='{"name":"atomic"}'>
+            <a name="tag_atomic.html" href="tag_atomic.html">atomic</a>
+        </li>
+        <li title="a field that stores a big integer" class="tag-link tag-link-big-integer" data-tagdata='{"name":"big-integer"}'>
+            <a name="tag_big-integer.html" href="tag_big-integer.html">big-integer</a>
+        </li>
+        <li title="a field that is True or False" class="tag-link tag-link-boolean" data-tagdata='{"name":"boolean"}'>
+            <a name="tag_boolean.html" href="tag_boolean.html">boolean</a>
+        </li>
+        <li title="bulk create database objects" class="tag-link tag-link-bulk-create" data-tagdata='{"name":"bulk-create"}'>
+            <a name="tag_bulk-create.html" href="tag_bulk-create.html">bulk-create</a>
+        </li>
+        <li title="check connection to the database" class="tag-link tag-link-check" data-tagdata='{"name":"check"}'>
+            <a name="tag_check.html" href="tag_check.html">check</a>
+        </li>
+        <li title="commit the current transaction" class="tag-link tag-link-commit" data-tagdata='{"name":"commit"}'>
+            <a name="tag_commit.html" href="tag_commit.html">commit</a>
+        </li>
+        <li title="create an object in the database" class="tag-link tag-link-create" data-tagdata='{"name":"create"}'>
+            <a name="tag_create.html" href="tag_create.html">create</a>
+        </li>
+        <li title="a field that stores a date" class="tag-link tag-link-date" data-tagdata='{"name":"date"}'>
+            <a name="tag_date.html" href="tag_date.html">date</a>
+        </li>
+        <li title="a field that stores a date and time" class="tag-link tag-link-datetime" data-tagdata='{"name":"datetime"}'>
+            <a name="tag_datetime.html" href="tag_datetime.html">datetime</a>
+        </li>
+        <li title="a fix precision number" class="tag-link tag-link-decimal" data-tagdata='{"name":"decimal"}'>
+            <a name="tag_decimal.html" href="tag_decimal.html">decimal</a>
+        </li>
+        <li title="delete from the database" class="tag-link tag-link-delete" data-tagdata='{"name":"delete"}'>
+            <a name="tag_delete.html" href="tag_delete.html">delete</a>
+        </li>
+        <li title="delete all objects in a table" class="tag-link tag-link-delete-all" data-tagdata='{"name":"delete-all"}'>
+            <a name="tag_delete-all.html" href="tag_delete-all.html">delete-all</a>
+        </li>
+        <li title="a field that stores a floating point number" class="tag-link tag-link-float" data-tagdata='{"name":"float"}'>
+            <a name="tag_float.html" href="tag_float.html">float</a>
+        </li>
+        <li title="a key to another model" class="tag-link tag-link-foreign-key" data-tagdata='{"name":"foreign-key"}'>
+            <a name="tag_foreign-key.html" href="tag_foreign-key.html">foreign-key</a>
+        </li>
+        <li title="a generic foreign key" class="tag-link tag-link-generic-key" data-tagdata='{"name":"generic-key"}'>
+            <a name="tag_generic-key.html" href="tag_generic-key.html">generic-key</a>
+        </li>
+        <li title="get an object in the database." class="tag-link tag-link-get" data-tagdata='{"name":"get"}'>
+            <a name="tag_get.html" href="tag_get.html">get</a>
+        </li>
+        <li title="get a column from a model" class="tag-link tag-link-get-column" data-tagdata='{"name":"get-column"}'>
+            <a name="tag_get-column.html" href="tag_get-column.html">get-column</a>
+        </li>
+        <li title="get an object in the database." class="tag-link tag-link-get-exist" data-tagdata='{"name":"get-exist"}'>
+            <a name="tag_get-exist.html" href="tag_get-exist.html">get-exist</a>
+        </li>
+        <li title="get precisely one matching object" class="tag-link tag-link-get-one" data-tagdata='{"name":"get-one"}'>
+            <a name="tag_get-one.html" href="tag_get-one.html">get-one</a>
+        </li>
+        <li title="get an object from the database, or create it if it doesn&#39;t exist." class="tag-link tag-link-get-or-create" data-tagdata='{"name":"get-or-create"}'>
+            <a name="tag_get-or-create.html" href="tag_get-or-create.html">get-or-create</a>
+        </li>
+        <li title="get an object from the database, or return a 404 if it doesn&#39;t exist" class="tag-link tag-link-get-required" data-tagdata='{"name":"get-required"}'>
+            <a name="tag_get-required.html" href="tag_get-required.html">get-required</a>
+        </li>
+        <li title="execute a block if an object exists in the database" class="tag-link tag-link-if-exists" data-tagdata='{"name":"if-exists"}'>
+            <a name="tag_if-exists.html" href="tag_if-exists.html">if-exists</a>
+        </li>
+        <li title="executes a block of code if an object does not exist in the db" class="tag-link tag-link-if-not-exists" data-tagdata='{"name":"if-not-exists"}'>
+            <a name="tag_if-not-exists.html" href="tag_if-not-exists.html">if-not-exists</a>
+        </li>
+        <li title="get model information" class="tag-link tag-link-inspect" data-tagdata='{"name":"inspect"}'>
+            <a name="tag_inspect.html" href="tag_inspect.html">inspect</a>
+        </li>
+        <li title="a field that stores an integer" class="tag-link tag-link-integer" data-tagdata='{"name":"integer"}'>
+            <a name="tag_integer.html" href="tag_integer.html">integer</a>
+        </li>
+        <li title="define a many to may relationship" class="tag-link tag-link-many-to-many" data-tagdata='{"name":"many-to-many"}'>
+            <a name="tag_many-to-many.html" href="tag_many-to-many.html">many-to-many</a>
+        </li>
+        <li title="define a database model" class="tag-link tag-link-model" data-tagdata='{"name":"model"}'>
+            <a name="tag_model.html" href="tag_model.html">model</a>
+        </li>
+        <li title="dynamically create a database query" class="tag-link tag-link-new-query" data-tagdata='{"name":"new-query"}'>
+            <a name="tag_new-query.html" href="tag_new-query.html">new-query</a>
+        </li>
+        <li title="create a one to one relationship" class="tag-link tag-link-one-to-one" data-tagdata='{"name":"one-to-one"}'>
+            <a name="tag_one-to-one.html" href="tag_one-to-one.html">one-to-one</a>
+        </li>
+        <li title="add a property to a database object" class="tag-link tag-link-property" data-tagdata='{"name":"property"}'>
+            <a name="tag_property.html" href="tag_property.html">property</a>
+        </li>
+        <li title="query the database" class="tag-link tag-link-query" data-tagdata='{"name":"query"}'>
+            <a name="tag_query.html" href="tag_query.html">query</a>
+        </li>
+        <li title="define a model relationship that creates a collection" class="tag-link tag-link-relationship" data-tagdata='{"name":"relationship"}'>
+            <a name="tag_relationship.html" href="tag_relationship.html">relationship</a>
+        </li>
+        <li title="roll back the current transactions" class="tag-link tag-link-roll-back" data-tagdata='{"name":"roll-back"}'>
+            <a name="tag_roll-back.html" href="tag_roll-back.html">roll-back</a>
+        </li>
+        <li title="a field that stores a small integer" class="tag-link tag-link-small-integer" data-tagdata='{"name":"small-integer"}'>
+            <a name="tag_small-integer.html" href="tag_small-integer.html">small-integer</a>
+        </li>
+        <li title="sort a query set" class="tag-link tag-link-sort" data-tagdata='{"name":"sort"}'>
+            <a name="tag_sort.html" href="tag_sort.html">sort</a>
+        </li>
+        <li title="sort a query set dynamically" class="tag-link tag-link-sort-map" data-tagdata='{"name":"sort-map"}'>
+            <a name="tag_sort-map.html" href="tag_sort-map.html">sort-map</a>
+        </li>
+        <li title="execute raw sql" class="tag-link tag-link-sql" data-tagdata='{"name":"sql"}'>
+            <a name="tag_sql.html" href="tag_sql.html">sql</a>
+        </li>
+        <li title="a field that stores a string of characters" class="tag-link tag-link-string" data-tagdata='{"name":"string"}'>
+            <a name="tag_string.html" href="tag_string.html">string</a>
+        </li>
+        <li title="a field that stores a mapping of keys and strings" class="tag-link tag-link-string-map" data-tagdata='{"name":"string-map"}'>
+            <a name="tag_string-map.html" href="tag_string-map.html">string-map</a>
+        </li>
+        <li title="a field that stores arbitrary length text" class="tag-link tag-link-text" data-tagdata='{"name":"text"}'>
+            <a name="tag_text.html" href="tag_text.html">text</a>
+        </li>
+        <li title="a field that stores a timezone" class="tag-link tag-link-timezone" data-tagdata='{"name":"timezone"}'>
+            <a name="tag_timezone.html" href="tag_timezone.html">timezone</a>
+        </li>
+        <li title="create a randomly generated token in the database" class="tag-link tag-link-token" data-tagdata='{"name":"token"}'>
+            <a name="tag_token.html" href="tag_token.html">token</a>
+        </li>
+        <li title="commit changes to the database" class="tag-link tag-link-transaction" data-tagdata='{"name":"transaction"}'>
+            <a name="tag_transaction.html" href="tag_transaction.html">transaction</a>
+        </li>
+        <li title="require combinations of fields to be unique" class="tag-link tag-link-unique-together" data-tagdata='{"name":"unique-together"}'>
+            <a name="tag_unique-together.html" href="tag_unique-together.html">unique-together</a>
+        </li>
+        <li title="update fields in a query" class="tag-link tag-link-update" data-tagdata='{"name":"update"}'>
+            <a name="tag_update.html" href="tag_update.html">update</a>
+        </li>
+        <li title="a field to store the path of an uploaded file" class="tag-link tag-link-upload" data-tagdata='{"name":"upload"}'>
+            <a name="tag_upload.html" href="tag_upload.html">upload</a>
+        </li>
+        <li title="create a UUID in the database" class="tag-link tag-link-uuid" data-tagdata='{"name":"uuid"}'>
+            <a name="tag_uuid.html" href="tag_uuid.html">uuid</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya WYSIHTML5</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="widgets.html">&larr; 21. Moya Widgets</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+            <h1>Moya WYSIHTML5</h1>
+            <p>Moya WYSIHTML5 (What You See Is HTML 5) is a wrapper for <a href="http://xing.github.io/wysihtml5/">wysihtml5</a>, an open source rich text edtor By Xing.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>This is a built in library may be imported from its Python path, as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.wysihtml5"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>And installed as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"wysihtml5"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.wysihtml5"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This library doesn't haven any views, and does not need to be mounted.</p>
+<h2><a name="usage"></a><a href="#usage">Usage<span class="anchor"> &#182;</span></a></h2><p>This library supplies a single widget, <a class="tag" href="tags/httpmoyaprojectcomwysihtml5/tag_editor.html">&lt;editor&gt;</a> which may be used to replace a textarea in a form with a rich editor that supports bold / italic / links / image etc.</p>
+<p>The easiest way to use this widget is to use it in a form as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">field</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"content"</span><span class="tag tagcontent">&nbsp;label=</span><span class="attrib tag tagcontent">"Page&nbsp;Content"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">wysihtml5:</span><span class="tag tagname">editor</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/field</span><span class="tag">&gt;</span></div></pre><p>This will insert a rich text editor in your form, that writes HTML to a field named <code>content</code>. The field may be treated as any other when the form is validated, it will contain HTML markup when the form is submitted. Essentially, the above code is equivelent to the following when it comes to processing forms:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">textarea</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"content"</span><span class="tag tagcontent">&nbsp;label=</span><span class="attrib tag tagcontent">"Page&nbsp;Content"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>See <a class="tag" href="tags/httpmoyaprojectcomwysihtml5/tag_editor.html">&lt;editor&gt;</a> for how to configure the editor.
+</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="widgets.html">&larr; 21. Moya Widgets</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#usage">Usage</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

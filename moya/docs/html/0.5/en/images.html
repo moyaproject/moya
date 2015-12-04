@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Images</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="commands.html">&larr; 17. Commands</a>
+        </li>
+        
+        <li class="next">
+            <a href="signals.html">19. Signals &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Images</h1>
+            <p>Moya has support for reading, processing, and writing images. The could be anything from icons, photographs, profile pictures, etc. Image tags may be used for offline processing, via commands, or in the context of a request (to handle image uploads).</p>
+<aside>If you are looking to generate <em>thumbnails</em> for uploaded images, see <a href="thumbnail.html">Moya Thumbnail</a>.</aside><h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Moya Image tags use the namespace <code>"http://moyaproject.com/image"</code>.</p>
+<h2><a name="reading-images"></a><a href="#reading-images">Reading Images<span class="anchor"> &#182;</span></a></h2><p>You can read images with <a class="tag" href="tags/httpmoyaprojectcomimage/tag_read.html">&lt;read&gt;</a> which reads an image file (such as a .jpg or.png), and creates an <em>image</em> object.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">read</span><span class="tag tagcontent">&nbsp;fs=</span><span class="attrib tag tagcontent">"media"</span><span class="tag tagcontent">&nbsp;filename=</span><span class="attrib tag tagcontent">"photos/profile.jpg"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"photo"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This reads a file called <code>photos/profile.jpg</code> in the <code>media</code> filesystem, and creates an image object called <code>photo</code>. Image objects are used in tags that process the image, and may later be written to a filesystem. Image objects contain the following properties:</p>
+<dl class="dl-horizontal"><dt>filename</dt>
+<dd>
+The original filename of the image (not including the path).
+</dd><dt>mode</dt>
+<dd>
+The <em>mode</em> of the image, which specifies the color depth. Typical values are <code>1</code>, <code>L</code>, <code>RGB</code>, or <code>CMYK</code>. See <a href="https://pillow.readthedocs.org/handbook/concepts.html#concept-modes">here</a> for more information on modes.
+</dd><dt>size</dt>
+<dd>
+The size of the image as a list of <code>[WIDTH, HEIGHT]</code>
+</dd></dl><h2><a name="writing-images"></a><a href="#writing-images">Writing Images<span class="anchor"> &#182;</span></a></h2><p>You can use the <a class="tag" href="tags/httpmoyaprojectcomimage/tag_write.html">&lt;write&gt;</a> to to write an image to a filesystem. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">write</span><span class="tag tagcontent">&nbsp;dirpath=</span><span class="attrib tag tagcontent">"profiles/</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{profile.id}</span><span class="attrib tag tagcontent">/"</span><span class="tag tagcontent">&nbsp;filename=</span><span class="attrib tag tagcontent">"profile.jpg"</span><span class="tag tagcontent">&nbsp;fs=</span><span class="attrib tag tagcontent">"media"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>If you are saving the images as a jpeg, you can set the quality wit the LET extension as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">write</span><span class="tag tagcontent">&nbsp;dirpath=</span><span class="attrib tag tagcontent">"profiles/</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{profile.id}</span><span class="attrib tag tagcontent">/"</span><span class="tag tagcontent">&nbsp;filename=</span><span class="attrib tag tagcontent">"profile.jpg"</span><span class="tag tagcontent">&nbsp;fs=</span><span class="attrib tag tagcontent">"media"</span><span class="tag tagcontent">&nbsp;let:quality=</span><span class="attrib tag tagcontent">"85"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The value, <code>quality</code>, should be an integer between 0 and 100, where 100 is the maximum quality.</p>
+<h2><a name="creating-blank-images"></a><a href="#creating-blank-images">Creating Blank Images<span class="anchor"> &#182;</span></a></h2><p>You can create a new blank image, initialized to a given color, with the <a class="tag" href="tags/httpmoyaprojectcomimage/tag_new.html">&lt;new&gt;</a> tag. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">new</span><span class="tag tagcontent">&nbsp;size=</span><span class="attrib tag tagcontent">"[64,64]"</span><span class="tag tagcontent">&nbsp;color=</span><span class="attrib tag tagcontent">"#00FF00"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"green_square"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This create a blank 64x64 image set to 100% green.</p>
+<h2><a name="copying"></a><a href="#copying">Copying<span class="anchor"> &#182;</span></a></h2><p>You can copy an image with <a class="tag" href="tags/httpmoyaprojectcomimage/tag_copy.html">&lt;copy&gt;</a>, which takes the image to be copied as <code>image</code> and the destination for the new image as <code>dst</code>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">copy</span><span class="tag tagcontent">&nbsp;image=</span><span class="attrib tag tagcontent">"profile_photo"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"profile_photo_copy"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="image-operations"></a><a href="#image-operations">Image Operations<span class="anchor"> &#182;</span></a></h2><p>Moya supports a number of image operations which you can use to process your images.</p>
+<h3><a name="resize"></a><a href="#resize">Resize<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_resize.html">&lt;resize&gt;</a> tag resized the image to fit in to new dimensions. This can result in <em>stretching</em> of the image, if you want to ensure that the image doesn't stretch, see <a href="images.html#resize-to-fix" title="Images">Resize To Fit</a>.</p>
+<p>The <code>resample</code> attribute defines how Moya should scale the image, and should be one of the following values:</p>
+<dl class="dl-horizontal">
+<dt>nearest</dt>
+<dd>The quickest scaling method, but lowest quality.</dd>
+<dt>bilinear</dt>
+<dd>Uses bilinear filtering to scale the image. Offers reasonable quality and speed.</dd>
+<dt>bicubic</dt>
+<dd>Uses bicubic filtering to scale the image. Offers better quality than bilinear, at comparable speeds.</dd>
+<dt>antialias</dt>
+<dd>The highest quality filtering, but the slowest of the options.</dd>
+</dl><p>The default is to use the <code>antialias</code> because it is usually worth sacrificing speed for quality.</p>
+<h3><a name="resize-to-fit"></a><a href="#resize-to-fit">Resize To Fit<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_resize-to-fit.html">&lt;resize-to-fit&gt;</a> tag resizes an image so that it will fit within the given dimensions. while maintaining the <em>aspect ratio</em> (the image won't be stretched). This may result in the image having a lower width or height that requested.</p>
+<h3><a name="resize-canvas"></a><a href="#resize-canvas">Resize Canvas<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_resize-canvas.html">&lt;resize-canvas&gt;</a> changes the size of the image without scaling. If you make the image smaller, it will be cropped. If you make the image larger, it will have a border. You may set the color of the border with the <code>color</code> attribute.</p>
+<h3><a name="square"></a><a href="#square">Square<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_square.html">&lt;square&gt;</a> tag makes the dimensions of the image equal (i.e. a square). This will crop part of the image, if the image was not already a square.</p>
+<h3><a name="crop"></a><a href="#crop">Crop<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_crop.html">&lt;crop&gt;</a> tag crops to a part of the image. The area to crop is specified in the <code>box</code> attribute, which should be a list. If the list is two items long, the image is cropped to <code>[WIDTH, HEIGHT]</code>. If the list is four items long, the image is cropped to <code>[X, Y, WIDTH, HEIGHT]</code> where X and Y are the coordinates of the point to start cropping from.</p>
+<p>When the image is cropped, the new dimensions will be the width and height specified in <code>box</code>.</p>
+<h2><a name="debugging-images"></a><a href="#debugging-images">Debugging Images<span class="anchor"> &#182;</span></a></h2><p>When debugging, you can use the <a class="tag" href="tags/httpmoyaprojectcomimage/tag_show.html">&lt;show&gt;</a> tag which will pop up a window containing the image. You will need <a href="http://www.imagemagick.org/">ImageMagick</a> installed for this to work.</p>
+<p>This tag only works in debug, as you wouldn't want or need to show an image in a window on a headless server. If you forget to remove the <a class="tag" href="tags/httpmoyaprojectcomimage/tag_show.html">&lt;show&gt;</a> in production, Moya will write a warning to the logs.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="commands.html">&larr; 17. Commands</a>
+        </li>
+        
+        <li class="next">
+            <a href="signals.html">19. Signals &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#reading-images">Reading Images</a></li>
+    
+    <li><a href="#writing-images">Writing Images</a></li>
+    
+    <li><a href="#creating-blank-images">Creating Blank Images</a></li>
+    
+    <li><a href="#copying">Copying</a></li>
+    
+    <li><a href="#image-operations">Image Operations</a><ul>
+    
+    <li><a href="#resize">Resize</a></li>
+    
+    <li><a href="#resize-to-fit">Resize To Fit</a></li>
+    
+    <li><a href="#resize-canvas">Resize Canvas</a></li>
+    
+    <li><a href="#square">Square</a></li>
+    
+    <li><a href="#crop">Crop</a></li>
+    
+</ul></li>
+    
+    <li><a href="#debugging-images">Debugging Images</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

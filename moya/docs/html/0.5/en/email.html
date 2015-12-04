@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Email</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="db.html">&larr; 14. Databases</a>
+        </li>
+        
+        <li class="next">
+            <a href="i18n.html">16. Internationalization &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Email</h1>
+            <p>Moya has support for sending template emails which allow you to insert personalized information for the recipient.</p>
+<h2><a name="email-settings"></a><a href="#email-settings">Email Settings<span class="anchor"> &#182;</span></a></h2><p>See the <a href="project.html#mailservers" title="Building a Project">Mailservers</a> for information on how to configure Moya to send emails.</p>
+<p>You can test your email settings with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;email&nbsp;send</div></pre><h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Email tags use the namespace <code>http://moyaproject.com/email</code>.</p>
+<h2><a name="defining-emails"></a><a href="#defining-emails">Defining Emails<span class="anchor"> &#182;</span></a></h2><p>Before sending emails they must first be defined with the <a class="tag" href="tags/httpmoyaprojectcomemail/tag_email.html">&lt;email&gt;</a> tag &ndash; typically in a file called <code>email.xml</code>, although this is just a convention. Here's a an example of a very simple email definition:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;An&nbsp;example&nbsp;email&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">email</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"email.test"</span><span class="tag tagcontent">&nbsp;subject=</span><span class="attrib tag tagcontent">"Test&nbsp;Email"</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/email"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">text</span><span class="tag tagcontent">&nbsp;template=</span><span class="attrib tag tagcontent">"email/test.txt"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/email</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>The <a class="tag" href="tags/httpmoyaprojectcomemail/tag_text.html">&lt;text&gt;</a> tag tells moya to create a text email with the subject <code>Test Email</code> created from the template <code>email/test.txt</code>. Here's an example email:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">Dear&nbsp;Sir/Madam,</div><a name="line2"></a><div class="line line-2"><br></div><a name="line3"></a><div class="line line-3">This&nbsp;is&nbsp;a&nbsp;test&nbsp;Email!</div><a name="line4"></a><div class="line line-4"><br></div><a name="line5"></a><div class="line line-5">Love,</div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7">Moya</div></pre><p>You can attach HTML in the same way with the <a class="tag" href="tags/httpmoyaprojectcomemail/tag_html.html">&lt;html&gt;</a> tag. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">email</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"email.test"</span><span class="tag tagcontent">&nbsp;subject=</span><span class="attrib tag tagcontent">"Test&nbsp;Email"</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/email"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">text</span><span class="tag tagcontent">&nbsp;template=</span><span class="attrib tag tagcontent">"email/test.txt"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">html</span><span class="tag tagcontent">&nbsp;template=</span><span class="attrib tag tagcontent">"email/test.html"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/email</span><span class="tag">&gt;</span></div></pre><p>Here we have attached both text <em>and</em> HTML. Some email clients don't display rich (HTML) emails, so it is a good idea to include a text version as well. However, these days there are few people who can't view HTML emails, so you might consider just going with HTML.</p>
+<aside>
+Although most people will be able to <em>receive</em> HTML emails, there is no guarantee that their email client will render it faithfully if you use more than simple formatting. It's left as an exercise for the reader to research best practices for authoring email.
+</aside><p>The <code>email</code> tag also has the optional attributes <code>from</code>, <code>cc</code>, <code>bcc</code> and <code>replyto</code> which will set the relevant email headers. These attributes can be overridden when you send the email.</p>
+<h2><a name="sending"></a><a href="#sending">Sending<span class="anchor"> &#182;</span></a></h2><p>To send the email, use the <a class="tag" href="tags/httpmoyaprojectcomemail/tag_send.html">&lt;send&gt;</a> tag; the <code>email</code> attribute should be the element reference of the email you want to send, and <code>to</code> should be the recipients email address. Here's how you would send the example email:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">email:</span><span class="tag tagname">send</span><span class="tag tagcontent">&nbsp;email=</span><span class="attrib tag tagcontent">"#email.text"</span><span class="tag tagcontent">&nbsp;to=</span><span class="attrib tag tagcontent">"user@example.org"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The <a class="tag" href="tags/httpmoyaprojectcomemail/tag_send.html">&lt;send&gt;</a> tag has the optional attributes <code>from</code>, <code>subject</code>, <code>cc</code>, <code>bcc</code>, <code>replyto</code> to set the relevant email fields. These override the attributes of the same name on the email definition.</p>
+<h3><a name="errors"></a><a href="#errors">Errors<span class="anchor"> &#182;</span></a></h3><p>If the email could not be sent, Moya will throw a <code>email.send-failed</code> exception, <em>unless</em> you set the <code>fail_silently</code> attribute to <code>yes</code>.</p>
+<p>Emails can fail to send due to a variety of reasons such as connectivity issues, server isn't running etc. Often your application won't be able to do much more that suggest the user try again. Moya will write an error log to the <code>moya.email</code> logger, to alert you when emails fail to send.</p>
+<h2><a name="email-parameters"></a><a href="#email-parameters">Email Parameters<span class="anchor"> &#182;</span></a></h2><p>When you send an email, Moya calls the <a class="tag" href="tags/httpmoyaprojectcomemail/tag_email.html">&lt;email&gt;</a> tag, which allows you to pass in parameters to be used in the template. For instance, lets say we want to render a personalized greeting in our email template. We could edit it as follows:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">Dear&nbsp;${name},</div><a name="line2"></a><div class="line line-2"><br></div><a name="line3"></a><div class="line line-3">This&nbsp;is&nbsp;a&nbsp;test&nbsp;Email!</div><a name="line4"></a><div class="line line-4"><br></div><a name="line5"></a><div class="line line-5">Love,</div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7">Moya</div></pre><p>We can send this email in the usual way, but add a parameter for <code>name</code> which will be substituted in the text template.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">email:</span><span class="tag tagname">send</span><span class="tag tagcontent">&nbsp;email=</span><span class="attrib tag tagcontent">"#email.text"</span><span class="tag tagcontent">&nbsp;to=</span><span class="attrib tag tagcontent">"user@example.org"</span><span class="tag tagcontent">&nbsp;let:name=</span><span class="attrib tag tagcontent">"'John'"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Alternatively <a class="tag" href="tags/httpmoyaprojectcomemail/tag_send.html">&lt;send&gt;</a> has a <code>data</code> attributer which you can set to a dictionary containing data to be rendered in the template. Here's the equivalent of the above, using the <code>data</code> attribute</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">email:</span><span class="tag tagname">send</span><span class="tag tagcontent">&nbsp;email=</span><span class="attrib tag tagcontent">"#email.text"</span><span class="tag tagcontent">&nbsp;to=</span><span class="attrib tag tagcontent">"user@example.org"</span><span class="tag tagcontent">&nbsp;data=</span><span class="attrib tag tagcontent">"</span><span class="braced attrib tag tagcontent">{'name':&nbsp;John'}</span><span class="attrib tag tagcontent">"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="debugging-emails"></a><a href="#debugging-emails">Debugging Emails<span class="anchor"> &#182;</span></a></h2><p>If you are running the server in debug mode, Moya will display emails in the terminal. This is useful for debugging because you won't have to wait for the email to come through to check your emails.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="db.html">&larr; 14. Databases</a>
+        </li>
+        
+        <li class="next">
+            <a href="i18n.html">16. Internationalization &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#email-settings">Email Settings</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#defining-emails">Defining Emails</a></li>
+    
+    <li><a href="#sending">Sending</a><ul>
+    
+    <li><a href="#errors">Errors</a></li>
+    
+</ul></li>
+    
+    <li><a href="#email-parameters">Email Parameters</a></li>
+    
+    <li><a href="#debugging-emails">Debugging Emails</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

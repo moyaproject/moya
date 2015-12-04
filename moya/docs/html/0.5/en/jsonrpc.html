@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya JSON-RPC</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="forms.html">&larr; 11. Moya Forms</a>
+        </li>
+        
+        <li class="next">
+            <a href="links.html">13. Moya Links &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya JSON-RPC</h1>
+            <p> <a href="http://en.wikipedia.org/wiki/JSON-RPC">JSON-RPC</a> is a way for the user's browser, or other computer systems, to communicate with your web application without the need for a page refresh &ndash; a technique known as <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>. While not the only way to implement AJAX, the JSON-RPC protocol is powerful, well-supported and easy to work with in Javascript. The <a href="http://www.jsonrpc.org/specification">specification</a> is worth a read, but you won't need to be familiar with the inner workings to implement remote methods.</p>
+<aside>Since JSON-RPC uses JSON and <em>not</em> XML, it would be more accurate to call it AJAJ. However the term never really caught on, probably because it is not easy to pronounce.</aside><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>The Moya JSON-RPC library is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.jsonrpc"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can install Moya JSON-RPC with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"jsonrpc"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.jsonrpc"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Note that this library doesn't provide any mountpoints or views, so doesn't strictly require being installed at all. The purpose of installing it is to serve the a JQuery plugin which can call the remote methods. If don't want to use this, then you can leave out the install line entirely.</p>
+<h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>This library uses the namespace <code>http://moyaproject.com/jsonrpc</code>. Since we will be mixing rpc methods with tags in the default namespace it is advisable to add <code>xmlns:rpc="http://moyaproject.com/jsonrpc</code> to the top level tag, which will enable the <code>rpc:</code> prefix.</p>
+<h2><a name="interfaces"></a><a href="#interfaces">Interfaces<span class="anchor"> &#182;</span></a></h2><p>The Moya JSON-RPC library handles the job of decoding requests, invoking methods (macros), and encoding the response. It can also generate a self-documenting index page.</p>
+<p>To serve remote methods, add an <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_interface.html">&lt;interface&gt;</a> tag. An <em>interface</em> is a container for your remote methods, and functions just like a view. You can mount an rpc interface in the same way you would mount a view, i.e. with the <code>view</code> parameter on a <a class="tag" href="tags/httpmoyaprojectcom/tag_url.html">&lt;url&gt;</a>.</p>
+<p>Here's an example of the simplest possible interface:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:rpc=</span><span class="attrib tag tagcontent">"http://moyaproject.com/jsonrpc"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"><br></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">interface</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"jsonrpc.interface"</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;methods&nbsp;go&nbsp;here&nbsp;--&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:interface</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"><br></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>We can mount this as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">url</span><span class="tag tagcontent">&nbsp;route=</span><span class="attrib tag tagcontent">"/jsonrpc/"</span><span class="tag tagcontent">&nbsp;methods=</span><span class="attrib tag tagcontent">"GET,POST"</span><span class="tag tagcontent">&nbsp;view='#jsonrpc.interface'&nbsp;name=</span><span class="attrib tag tagcontent">"jsonrpc"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Now if you were to visit <code>/jsonrpc/</code> you would see the interface documentation page. Although without any <em>methods</em> (see below), it will not be particularly useful.</p>
+<h2><a name="methods"></a><a href="#methods">Methods<span class="anchor"> &#182;</span></a></h2><p>A <em>method</em> is Moya code that may be invoked via JSON-RPC. You can define a method with the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_method.html">&lt;method&gt;</a> tag, which documents the method and sets the parameters the method will take, as well as containing the code the method will run.</p>
+<p>To add a method to a interface, insert a <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_method.html">&lt;method&gt;</a> inside the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_interface.html">&lt;interface&gt;</a>. Alternatively, if you prefer to organize your methods differently you can put the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_method.html">&lt;method&gt;</a> elsewhere and link it to the interface with the <code>interface</code> attribute. Here's an example of a trivial method that gets a string containing the current time:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">interface</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"jsonrpc.interface"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">method</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"time"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{.now}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:method</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:interface</span><span class="tag">&gt;</span></div></pre><h3><a name="documenting-methods"></a><a href="#documenting-methods">Documenting Methods<span class="anchor"> &#182;</span></a></h3><p>You can associate text with each method that will be displayed in the auto-generate documentation page, with the <code>dpc</code> tag. Documentation is useful, even if the rpc methods are for internal use, but essential if third parties will be using your remote methods. Here's an example of adding a <code>doc</code> to a remote method:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">interface</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"jsonrpc.interface"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">method</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"time"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">doc</span><span class="tag">&gt;</span>Get&nbsp;the&nbsp;current&nbsp;time.</span><span class="tag">&lt;</span><span class="endtagname tag">/doc</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{.now}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:method</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:interface</span><span class="tag">&gt;</span></div></pre><h3><a name="parameters"></a><a href="#parameters">Parameters<span class="anchor"> &#182;</span></a></h3><p>If a method has parameters, the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_method.html">&lt;method&gt;</a> tag should contain a <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_parameter.html">&lt;parameter&gt;</a> for each parameter. These are used to document the method and to validate remote calls. For example, parameters may be set as requried (with the <code>required</code> attribute). You can also set a requirement on the type of the value in a remote call with the <code>type</code> attribute, which should be one of the following values:</p>
+<dl class="dl-horizontal"><dt>anything</dt>
+<dd>
+No particular requirements for the parameter.
+</dd><dt>bool</dt>
+<dd>
+The parameter should be a boolean, e.g. <code>True</code> or <code>False</code>.
+</dd><dt>list</dt>
+<dd>
+The parameter should be a list, e.g <code>[1, 2, 3, 4]</code>.
+</dd><dt>number</dt>
+<dd>
+The parameter should be a number, e.g <code>3.14</code>.
+</dd><dt>object</dt>
+<dd>
+The parameter should be an object (dict in Moya), e.g. <code>{'foo': 'bar'}</code>.
+</dd><dt>string</dt>
+<dd>
+The parameter should be a string, e.g. <code>"moya"</code>.
+</dd></dl><p>If the method call doesn't match the parameter requirements, then Moya JSON-RPC will return an appropriate response code.</p>
+<p>The following example builds on the previous method to get the server time, and adds a <code>format</code> parameter to select the format of the returned time:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">interface</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"jsonrpc.interface"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">method</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"time"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">parameter</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"format"</span><span class="tag tagcontent">&nbsp;type=</span><span class="attrib tag tagcontent">"string"</span><span class="tag tagcontent">&nbsp;default=</span><span class="attrib tag tagcontent">"medium"</span><span class="tag tagcontent">&nbsp;required=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time&nbsp;format&nbsp;to&nbsp;return</div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:parameter</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{.now::format}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:method</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:interface</span><span class="tag">&gt;</span></div></pre><p>If can now call this method with <code>format</code> set to a datetime format, such as <code>'YYYY mm dd'</code></p>
+<h3><a name="errors"></a><a href="#errors">Errors<span class="anchor"> &#182;</span></a></h3><p>You can return an error response with the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_error.html">&lt;error&gt;</a> tag which sets the error message, an error code with the <code>code</code> attribute, and optional message data with the <code>data</code> attribute. An <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_error.html">&lt;error&gt;</a> acts like a return and immediately stops processing the method.</p>
+<p>For example, lets say we want to restrict the format parameter on the gettime example to one of four standard formats: <code>short</code>, <code>medium</code>, <code>long</code>, and <code>full</code>. We could add the following to the method, before the call to <a class="tag" href="tags/httpmoyaprojectcom/tag_return-str.html">&lt;return-str&gt;</a>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">error</span><span class="tag tagcontent">&nbsp;code=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"format&nbsp;not&nbsp;in&nbsp;['short',&nbsp;'medium',&nbsp;'long',&nbsp;'full']"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;parameter&nbsp;is&nbsp;not&nbsp;correct</div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:error</span><span class="tag">&gt;</span></div></pre><p>Numerical error codes can be hard to keep track of, especially when the number of methods grows. To manage error codes, you can use an enumeration to map the integer on to a label. Here's how to create an enumeration the previous error:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">enum</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"enum.jsonrpc.errors"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">value</span><span class="tag tagcontent">&nbsp;id=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;label=</span><span class="attrib tag tagcontent">"bad_time_format"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;format&nbsp;for&nbsp;the&nbsp;time&nbsp;method&nbsp;should&nbsp;be&nbsp;on&nbsp;of:&nbsp;'short',&nbsp;'medium',&nbsp;'long',&nbsp;'full'</div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/value</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/enum</span><span class="tag">&gt;</span></div></pre><p>Error enumerations also make it possible for the auto-generated docs to list the error codes in a table.</p>
+<p>To use this enumeration, set it on the the <a class="tag" href="tags/httpmoyaprojectcomjsonrpc/tag_interface.html">&lt;interface&gt;</a> with the <code>errors</code> attribute. Then you can replace the error code <code>100</code> with its corresponding label, <code>bad_time_format</code>. Here's the complete <code>gettime</code> method:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">interface</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"jsonrpc.interface"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"><br></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">enum</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"enum.jsonrpc.errors"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">value</span><span class="tag tagcontent">&nbsp;id=</span><span class="attrib tag tagcontent">"100"</span><span class="tag tagcontent">&nbsp;label=</span><span class="attrib tag tagcontent">"bad_time_format"</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;format&nbsp;for&nbsp;the&nbsp;time&nbsp;method&nbsp;should&nbsp;be&nbsp;one&nbsp;of:&nbsp;'short',&nbsp;'medium',&nbsp;'long',&nbsp;'full'</div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/value</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/enum</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8"><br></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">method</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"time"</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">parameter</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"format"</span><span class="tag tagcontent">&nbsp;type=</span><span class="attrib tag tagcontent">"string"</span><span class="tag tagcontent">&nbsp;default=</span><span class="attrib tag tagcontent">"medium"</span><span class="tag tagcontent">&nbsp;required=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag">&gt;</span></div><a name="line11"></a><div class="line line-11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time&nbsp;format&nbsp;to&nbsp;return</div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:parameter</span><span class="tag">&gt;</span></div><a name="line13"></a><div class="line line-13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">rpc:</span><span class="tag tagname">error</span><span class="tag tagcontent">&nbsp;code=</span><span class="attrib tag tagcontent">"bad_time_format"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"format&nbsp;not&nbsp;in&nbsp;['short',&nbsp;'medium',&nbsp;'long',&nbsp;'full']"</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;parameter&nbsp;is&nbsp;not&nbsp;correct</div><a name="line15"></a><div class="line line-15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:error</span><span class="tag">&gt;</span></div><a name="line16"></a><div class="line line-16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">return-str</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{.now::format}</span><span class="tag">&lt;</span><span class="endtagname tag">/return-str</span><span class="tag">&gt;</span></div><a name="line17"></a><div class="line line-17">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:method</span><span class="tag">&gt;</span></div><a name="line18"></a><div class="line line-18"><br></div><a name="line19"></a><div class="line line-19"></span><span class="tag">&lt;</span><span class="endtagname tag">/rpc:interface</span><span class="tag">&gt;</span></div></pre><h2><a name="logging"></a><a href="#logging">Logging<span class="anchor"> &#182;</span></a></h2><p>Moya JSON-RPC writes information about each call and it's return value to the logger, <code>moya.jsonrpc</code>. See <a href="logging.html">Logging</a> for information on configuring the logging system.</p>
+<h2><a name="javascript"></a><a href="#javascript">Javascript<span class="anchor"> &#182;</span></a></h2><p>The Moya JSON-RPC library comes with a <a href="http://jquery.com/">JQuery</a> plugin to call remote methods from Javascript.</p>
+<aside>Any other Javascript client should work with Moya JSON-RPC.</aside><p>To load the JS file you can add the following to your content:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">include-js</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.jsonrpc"</span><span class="tag tagcontent">&nbsp;path=</span><span class="attrib tag tagcontent">"js/jsonrpc.js"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Alternatively, you can add the following to your template:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">script</span><span class="tag tagcontent">&nbsp;type=</span><span class="attrib tag tagcontent">"text/javascript"</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent templatetag">{%&nbsp;media&nbsp;'js/jsonrpc.js'&nbsp;from&nbsp;'moya.jsonrpc'&nbsp;%}</span><span class="attrib tag tagcontent">"</span><span class="tag">&gt;&lt;</span><span class="endtagname tag">/script</span><span class="tag">&gt;</span></div></pre><p>This makes available a class called <code>JSONRPC</code>, which you can create as follows:</p>
+<pre class="moya-console format-js"><a name="line1"></a><div class="line line-1"></span><span class="keyword">var</span><span class="operator">&nbsp;</span>rpc</span><span class="operator">&nbsp;=&nbsp;</span><span class="keyword">new</span><span class="operator">&nbsp;</span>JSONRPC</span><span class="operator brace">(</span><span class="operator string">'/</span><span class="string">jsonrpc</span><span class="operator string">/'</span><span class="operator brace">)</span><span class="operator">;</span></div></pre><p>The constructor takes the URL of the JSON-RPC server, and an optional object containing default callbacks.</p>
+<dl class="dl-horizontal"><dt>"success"</dt>
+<dd>
+<code>function success(result){}</code><br>
+Called when the remote method executes successfully.
+</dd><dt>"error"</dt>
+<dd>
+<code>function error(response) {}</code><br>
+Called when the remote method returns an error code.
+</dd><dt>"failure"</dt>
+<dd>
+<code>function failure(jqXHR, textStatus, errorThrown) {}</code><br>
+Called when there is a error making the remote call (and no remote method was called).
+</dd><dt>"complete"</dt>
+<dd>
+<code>function complete() {}</code><br>
+Called when the the call completes (regardless of whether it was successful), prior to other callbacks. This may be used to disable a <em>throbber</em>, for example.
+</dd></dl><h3><a name="calls"></a><a href="#calls">Calls<span class="anchor"> &#182;</span></a></h3><p>You can make calls with the <code>call</code> method, which takes the method name, followed by the parameters and a function that processes the result. Here's an example which gets the time with the remote <code>gettime</code> method we created:</p>
+<pre class="moya-console format-js"><a name="line1"></a><div class="line line-1">rpc</span><span class="operator">.</span>call</span><span class="operator brace">(</span><span class="operator string">'</span><span class="string">gettime</span><span class="operator string">'</span><span class="operator">,</span></div><a name="line2"></a><div class="line line-2"><span class="operator">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="operator brace">{</span><span class="operator string">'</span><span class="string">format</span><span class="operator string">'</span><span class="operator">:&nbsp;</span><span class="operator string">'</span><span class="string">long</span><span class="operator string">'</span><span class="operator brace">}</span><span class="operator">,</span></div><a name="line3"></a><div class="line line-3"><span class="operator">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="operator brace">(</span>result</span><span class="operator brace">){</span><span class="operator"></span></div><a name="line4"></a><div class="line line-4"><span class="operator">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">alert</span><span class="operator brace">(</span><span class="operator string">"</span><span class="string">The</span><span class="operator string">&nbsp;</span><span class="string">time</span><span class="operator string">&nbsp;</span><span class="string">is</span><span class="operator string">:&nbsp;"</span><span class="operator">&nbsp;+&nbsp;</span>result</span><span class="operator brace">)</span><span class="operator">;</span></div><a name="line5"></a><div class="line line-5"><span class="operator">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="operator brace">})</span><span class="operator">;</span></div></pre><p>You can also add an optional callbacks object as the fourth parameter, which can have the same callback functions as the constructor. Any callbacks supplied to the <code>call</code> method will override those set in the constructor.</p>
+<h3><a name="notifications"></a><a href="#notifications">Notifications<span class="anchor"> &#182;</span></a></h3><p>An alternative to <code>call</code> is the <code>notify</code> method which sends <em>notifications</em>. Notifications are remote calls where you aren't interested in the result. This is reflected in the <code>success</code> parameter which will be invoked with no parameters.</p>
+<h3><a name="batch-calls"></a><a href="#batch-calls">Batch Calls<span class="anchor"> &#182;</span></a></h3><p>You can make <em>batch</em> calls (multiple calls in a single requests) by calling <code>createBatch</code> method which returns a new <code>JSONRPCBatch</code> object. You may then use the <code>call</code> and <code>notifiy</code> methods on the batch object to store a list of method calls, and send then to the server with <code>JSONRPC.batch</code>. Here's an example that calls the <code>gettime</code> method with two different parameters, in a single request.</p>
+<pre class="moya-console format-js"><a name="line1"></a><div class="line line-1"></span><span class="comment operator">/*&nbsp;</span><span class="comment">make</span><span class="comment operator">&nbsp;</span><span class="comment">a</span><span class="comment operator">&nbsp;</span><span class="comment">batch</span><span class="comment operator">&nbsp;</span><span class="comment">object</span><span class="comment operator">&nbsp;*/</span><span class="operator"></span></div><a name="line2"></a><div class="line line-2"><span class="operator"></span><span class="keyword">var</span><span class="operator">&nbsp;</span>batch</span><span class="operator">&nbsp;=&nbsp;</span>rpc</span><span class="operator">.</span>createBatch</span><span class="operator brace">()</span><span class="operator">;</span></div><a name="line3"></a><div class="line line-3"><span class="operator"></span><span class="keyword">function</span><span class="operator">&nbsp;</span>log_time</span><span class="operator brace">(</span>result</span><span class="operator brace">)</span><span class="operator"></span></div><a name="line4"></a><div class="line line-4"><span class="operator"></span><span class="operator brace">{</span><span class="operator"></span></div><a name="line5"></a><div class="line line-5"><span class="operator">&nbsp;&nbsp;&nbsp;&nbsp;</span>console</span><span class="operator">.</span>log</span><span class="operator brace">(</span>result</span><span class="operator brace">)</span><span class="operator">;</span></div><a name="line6"></a><div class="line line-6"><span class="operator"></span><span class="operator brace">}</span><span class="operator"></span></div><a name="line7"></a><div class="line line-7"><span class="operator"></span><span class="operator comment">/*&nbsp;</span><span class="comment">Add</span><span class="comment operator">&nbsp;</span><span class="comment">calls</span><span class="comment operator">&nbsp;</span><span class="comment">to</span><span class="comment operator">&nbsp;</span><span class="comment">batch</span><span class="comment operator">&nbsp;*/</span><span class="operator"></span></div><a name="line8"></a><div class="line line-8"><span class="operator"></span>batch</span><span class="operator">.</span>call</span><span class="operator brace">(</span><span class="operator string">'</span><span class="string">gettime</span><span class="operator string">'</span><span class="operator">,&nbsp;</span><span class="operator brace">{</span><span class="operator string">'</span><span class="string">format</span><span class="operator string">'</span><span class="operator">:</span><span class="operator string">'</span><span class="string">medium</span><span class="operator string">'</span><span class="operator brace">}</span><span class="operator">,&nbsp;</span>log_time</span><span class="operator brace">)</span><span class="operator">;</span></div><a name="line9"></a><div class="line line-9"><span class="operator"></span>batch</span><span class="operator">.</span>call</span><span class="operator brace">(</span><span class="operator string">'</span><span class="string">gettime</span><span class="operator string">'</span><span class="operator">,&nbsp;</span><span class="operator brace">{</span><span class="operator string">'</span><span class="string">format</span><span class="operator string">'</span><span class="operator">:</span><span class="operator string">'</span><span class="string">short</span><span class="operator string">'</span><span class="operator brace">}</span><span class="operator">,&nbsp;</span>log_time</span><span class="operator brace">)</span><span class="operator">;</span></div><a name="line10"></a><div class="line line-10"><span class="operator"></span><span class="operator comment">/*&nbsp;</span><span class="comment">send</span><span class="comment operator">&nbsp;</span><span class="comment">calls</span><span class="comment operator">&nbsp;</span><span class="comment">to</span><span class="comment operator">&nbsp;</span><span class="comment">server</span><span class="comment operator">&nbsp;</span><span class="comment">and</span><span class="comment operator">&nbsp;</span><span class="comment">invoke</span><span class="comment operator">&nbsp;</span><span class="comment">callbacks</span><span class="comment operator">&nbsp;*/</span><span class="operator"></span></div><a name="line11"></a><div class="line line-11"><span class="operator"></span>rpc</span><span class="operator">.</span>batch</span><span class="operator brace">(</span>batch</span><span class="operator brace">)</span><span class="operator">;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="forms.html">&larr; 11. Moya Forms</a>
+        </li>
+        
+        <li class="next">
+            <a href="links.html">13. Moya Links &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#interfaces">Interfaces</a></li>
+    
+    <li><a href="#methods">Methods</a><ul>
+    
+    <li><a href="#documenting-methods">Documenting Methods</a></li>
+    
+    <li><a href="#parameters">Parameters</a></li>
+    
+    <li><a href="#errors">Errors</a></li>
+    
+</ul></li>
+    
+    <li><a href="#logging">Logging</a></li>
+    
+    <li><a href="#javascript">Javascript</a><ul>
+    
+    <li><a href="#calls">Calls</a></li>
+    
+    <li><a href="#notifications">Notifications</a></li>
+    
+    <li><a href="#batch-calls">Batch Calls</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Links</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="jsonrpc.html">&larr; 12. Moya JSON-RPC</a>
+        </li>
+        
+        <li class="next">
+            <a href="pages.html">14. Moya Pages &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Links</h1>
+            <p>Moya Links provides a way for libraries to advertise hyper-links for a particular purpose. This is typically used to add links to a menu or sub-menu of some kind.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Links is built in to Moya and may be imported with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.links"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The following will install Moya Links:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"links"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.links"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>There is no need to mount this library, as there are no views, just custom tags.</p>
+<h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Moya Links uses the namespace <code>http://moyaproject.com/links</code>. Link tags in this document are assumed to have the XML prefix <code>links:</code> declared.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>The <code>moya start</code> command uses the Moya Links library to define which links are displayed on the top <em>navbar</em> (menu at the top of the page); it writes following file in your site application (<code>site/logic/data.xml</code>):</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:links=</span><span class="attrib tag tagcontent">"http://moyaproject.com/links"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"><br></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"About"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"pages"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"showpage"</span><span class="tag tagcontent">&nbsp;with=</span><span class="attrib tag tagcontent">"</span><span class="braced attrib tag tagcontent">{'pagename':&nbsp;'about'}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent"></span></div><a name="line5"></a><div class="line line-5"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.pages"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Blog"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"blog"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"list"</span><span class="tag tagcontent"></span></div><a name="line7"></a><div class="line line-7"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.blog"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Contact"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"pages"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"showpage"</span><span class="tag tagcontent">&nbsp;with=</span><span class="attrib tag tagcontent">"</span><span class="braced attrib tag tagcontent">{'pagename':&nbsp;'contact'}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent"></span></div><a name="line9"></a><div class="line line-9"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.pages"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Feedback"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"feedback"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"feedback"</span><span class="tag tagcontent"></span></div><a name="line11"></a><div class="line line-11"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.feedback"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Debug"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"debug"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"intro"</span><span class="tag tagcontent"></span></div><a name="line13"></a><div class="line line-13"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.debug&nbsp;and&nbsp;.debug"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"API"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"site"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"jsonrpc"</span><span class="tag tagcontent"></span></div><a name="line15"></a><div class="line line-15"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if=</span><span class="attrib tag tagcontent">".apps.jsonrpc"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line16"></a><div class="line line-16"><br></div><a name="line17"></a><div class="line line-17"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>The above file sets the navbar links, but <em>only</em> if the relevant application is installed. Otherwise there would be broken links &ndash; and you wouldn't have a very good impression of Moya.</p>
+<p>The start command also writes the following file (<code>site/logic/content.xml</code>):</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:links=</span><span class="attrib tag tagcontent">"http://moyaproject.com/links"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"><br></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">content</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"content.base"</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"navlinks"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/content</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"><br></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/moya</span><span class="tag">&gt;</span></div></pre><p>This contains the base <a href="content.html" title="Content">content</a> definition which is inherited by all <a class="tag" href="tags/httpmoyaprojectcom/tag_content.html">&lt;content&gt;</a> tags in your project. The call to <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_get.html">&lt;get&gt;</a> retrieves a value called <code>navlinks</code> which contains a list of links, which is ultimately used to render the navbar in your base template.</p>
+<p>See the rest of the document for the details on using the links tags.</p>
+<h2><a name="tags"></a><a href="#tags">Tags<span class="anchor"> &#182;</span></a></h2><p>Moya Links supplies two tags; <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_link.html">&lt;link&gt;</a> which defines links, and <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_get.html">&lt;get&gt;</a> which retrieves a list of those links.</p>
+<h3><a name="link-tag"></a><a href="#link-tag">Link Tag<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_link.html">&lt;link&gt;</a> defines a link to a page installed in your project. The following example defines two links; to the login page and about page:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.auth"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"login"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Login&nbsp;to&nbsp;Sushi&nbsp;Finder"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"sushifinder.shop"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"cart"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Shopping&nbsp;Cart"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can also add the URL explicitly, which might be necessary if you want a link to an external page. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">link:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;url=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Moya"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Link tags also have a <code>purpose</code> attribute which allows you to categorize links. You may have a category for a main menu / sub-menu / footer links etc. The following example defines links for typical footer:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;purpose=</span><span class="attrib tag tagcontent">"footer"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.pages"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"about"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"About"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;purpose=</span><span class="attrib tag tagcontent">"footer"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.pages"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"contact"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Contact"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;purpose=</span><span class="attrib tag tagcontent">"footer"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.pages"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"terms-and-conditions"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Terms&nbsp;and&nbsp;Conditions"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h3><a name="get-tag"></a><a href="#get-tag">Get Tag<span class="anchor"> &#182;</span></a></h3><p>The <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_get.html">&lt;get&gt;</a> tag can retrieve a collection of links.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"links"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This will retrieve the link tags and extract a list of dictionaries containing the following information:</p>
+<dl class="dl-horizontal">
+<dt>url</dt>
+<dd>The URL for the link.</dd>
+<dt>text</dt>
+<dd>Text associated with the link.</dd>
+</dl><p>You could use the links list in a template such as the following:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">div</span><span class="tag tagcontent">&nbsp;class=</span><span class="attrib tag tagcontent">"menu"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="templatetag">{%&nbsp;for&nbsp;link&nbsp;in&nbsp;links&nbsp;%}</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">a</span><span class="tag tagcontent">&nbsp;href=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">${link.url}</span><span class="attrib tag tagcontent">"</span><span class="tag">&gt;</span><span class="sub">${link.text}</span><span class="tag">&lt;</span><span class="endtagname tag">/a</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="templatetag">{%&nbsp;endfor&nbsp;%}</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/div</span><span class="tag">&gt;</span></div></pre><p>You can set a <code>purpose</code> attribute on <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_get.html">&lt;get&gt;</a> which gathers only <a class="tag" href="tags/httpmoyaprojectcomlinks/tag_link.html">&lt;link&gt;</a> tags with the same value for <code>purpose</code>. For example, the following would get the footer tags defined previously:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">links:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"footer_links"</span><span class="tag tagcontent">&nbsp;purpose=</span><span class="attrib tag tagcontent">"footer"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="jsonrpc.html">&larr; 12. Moya JSON-RPC</a>
+        </li>
+        
+        <li class="next">
+            <a href="pages.html">14. Moya Pages &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#tags">Tags</a><ul>
+    
+    <li><a href="#link-tag">Link Tag</a></li>
+    
+    <li><a href="#get-tag">Get Tag</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

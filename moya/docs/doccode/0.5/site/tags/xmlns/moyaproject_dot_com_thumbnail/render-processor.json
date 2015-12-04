@@ -1,0 +1,133 @@
+{
+    "name": "render-processor",
+    "doc_namespace": "xmlns.http://moyaproject.com/thumbnail",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "render-processor",
+        "lib": "moya.thumbnail",
+        "namespace_slug": "moyaproject_dot_com_thumbnail",
+        "defined": "/Users/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 142)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/thumbnail",
+        "synopsis": "render a thumbnail for a given processor",
+        "tag_name": "render-processor",
+        "params": {
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "app": {
+                "default_display": null,
+                "name": "app",
+                "missing": true,
+                "default": null,
+                "doc": "Application name",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "processor": {
+                "default_display": null,
+                "name": "processor",
+                "missing": true,
+                "default": null,
+                "doc": "Processor element or name of processor",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "image": {
+                "default_display": null,
+                "name": "image",
+                "missing": true,
+                "default": null,
+                "doc": "Optional original image (will be loaded automatically if not supplied)",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "path": {
+                "default_display": null,
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path of image",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "overwrite": {
+                "default_display": "no",
+                "name": "overwrite",
+                "missing": true,
+                "default": "no",
+                "doc": "Overwrite thumbnail if it exists?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/thumbnail.render-processor"
+}

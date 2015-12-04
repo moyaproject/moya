@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Bootstrap</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="blog.html">&larr; 4. Moya Blog</a>
+        </li>
+        
+        <li class="next">
+            <a href="comments.html">6. Moya Comments &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Bootstrap</h1>
+            <p>Moya Bootstrap is a media-only library which contains the <a href="">Twitter Bootstrap</a> CSS framework.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> The long name of this library (<b>moya.twitter.bootstrap</b>) reflects the fact that although it was packaged in Moya, the author is <a href="http://twitter.com">Twitter</a>.</div><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>You may import Moya Twitter Bootstrap with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.bootstrap"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>And you can install it with:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"bootstrap"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.twitter.bootstrap"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This library has no views, and does not need to be mounted.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>The Twitter Bootstrap CSS framework is <em>the most popular HTML, CSS and JS framework for developing responsive, mobile first projects on the web</em>.</p>
+<p>Moya uses Bootstrap in its built in libraries, since without a CSS framework, your newly created site would be <em>aesthetically challenged</em>. One advantage of Bootstrap is that it is easy to customize, and there are many drop-in themes available.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> Moya doesn't <em>require</em> Bootstrap. It's just used to give you a head start with designing stylesheets.</div><h2><a name="media"></a><a href="#media">Media<span class="anchor"> &#182;</span></a></h2><p>Moya Bootstrap provides a number of media files, which you can list with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;media&nbsp;--tree&nbsp;bootstrap-media</div></pre><p>The simplest way to include the Bootstrap CSS would be to add it to your base template:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;href=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent templatetag">{%&nbsp;media&nbsp;'css/bootstrap.css'&nbsp;from&nbsp;'twitter.bootstrap'&nbsp;%}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;rel=</span><span class="attrib tag tagcontent">"stylesheet"</span><span class="tag">&gt;</span></div></pre><p>If you built a Moya project with <code>moya.start</code>, the CSS will have been included for you in the base template. The following command will display the base template in the terminal:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;templates&nbsp;--cat&nbsp;moya.twitter.bootstrap/starter.html</div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="blog.html">&larr; 4. Moya Blog</a>
+        </li>
+        
+        <li class="next">
+            <a href="comments.html">6. Moya Comments &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#media">Media</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

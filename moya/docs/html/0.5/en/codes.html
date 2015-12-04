@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Status Codes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="xml.html">&larr; A. XML</a>
+        </li>
+        
+        <li class="next">
+            <a href="moyarc.html">C. MoyaRC &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Status Codes</h1>
+            <p>The following is a list of <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP status codes</a>. The text and numeric code are interchangeable where Moya expects a status code. Using the text label is preferable as it is self documenting.</p>
+<p>If the response code isn't listed here, you may still use the numeric code.</p>
+<aside>It is unlikely that you will need more than a handful of these status codes in a project.</aside><h2><a name="http-status-codes"></a><a href="#http-status-codes">HTTP Status Codes<span class="anchor"> &#182;</span></a></h2><pre class="moya-console format-python"><a name="line1"></a><div class="line line-1"></span><span class="comment operator">#&nbsp;</span><span class="comment">Informational</span><span class="comment operator">&nbsp;</span><span class="comment number">1</span><span class="comment">xx</span></div><a name="line2"></a><div class="line line-2"></span><span class="operator"></span>continue</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">100</span></div><a name="line3"></a><div class="line line-3"></span><span class="operator"></span>switching_protocols</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">101</span></div><a name="line4"></a><div class="line line-4"></span><span class="operator"></span></div><a name="line5"></a><div class="line line-5"><span class="operator"></span><span class="operator comment">#&nbsp;</span><span class="comment">Successful</span><span class="comment operator">&nbsp;</span><span class="comment number">2</span><span class="comment">xxx</span></div><a name="line6"></a><div class="line line-6"></span><span class="operator"></span>ok</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">200</span></div><a name="line7"></a><div class="line line-7"></span><span class="operator"></span>created</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">201</span></div><a name="line8"></a><div class="line line-8"></span><span class="operator"></span>accepted</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">202</span></div><a name="line9"></a><div class="line line-9"></span><span class="operator"></span>non_authorative_information</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">203</span></div><a name="line10"></a><div class="line line-10"></span><span class="operator"></span>no_content</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">204</span></div><a name="line11"></a><div class="line line-11"></span><span class="operator"></span>reset_content</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">205</span></div><a name="line12"></a><div class="line line-12"></span><span class="operator"></span>partial_content</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">206</span></div><a name="line13"></a><div class="line line-13"></span><span class="operator"></span></div><a name="line14"></a><div class="line line-14"><span class="operator"></span><span class="operator comment">#&nbsp;</span><span class="comment">Redirection</span><span class="comment operator">&nbsp;</span><span class="comment number">3</span><span class="comment">xxx</span></div><a name="line15"></a><div class="line line-15"></span><span class="operator"></span>multiple_choices</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">300</span></div><a name="line16"></a><div class="line line-16"></span><span class="operator"></span>moved_permanently</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">301</span></div><a name="line17"></a><div class="line line-17"></span><span class="operator"></span>found</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">302</span></div><a name="line18"></a><div class="line line-18"></span><span class="operator"></span>see_other</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">303</span></div><a name="line19"></a><div class="line line-19"></span><span class="operator"></span>not_modified</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">304</span></div><a name="line20"></a><div class="line line-20"></span><span class="operator"></span>use_proxy</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">305</span></div><a name="line21"></a><div class="line line-21"></span><span class="operator"></span>temporary_redirect</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">307</span></div><a name="line22"></a><div class="line line-22"></span><span class="operator"></span>permanent_redirect</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">308</span></div><a name="line23"></a><div class="line line-23"></span><span class="operator"></span></div><a name="line24"></a><div class="line line-24"><span class="operator"></span><span class="operator comment">#&nbsp;</span><span class="comment">Client</span><span class="comment operator">&nbsp;</span><span class="comment">Error</span><span class="comment operator">&nbsp;</span><span class="comment number">4</span><span class="comment">xx</span></div><a name="line25"></a><div class="line line-25"></span><span class="operator"></span>bad_request</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">400</span></div><a name="line26"></a><div class="line line-26"></span><span class="operator"></span>unauthorized</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">401</span></div><a name="line27"></a><div class="line line-27"></span><span class="operator"></span>payment_required</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">402</span></div><a name="line28"></a><div class="line line-28"></span><span class="operator"></span>forbidden</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">403</span></div><a name="line29"></a><div class="line line-29"></span><span class="operator"></span>not_found</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">404</span></div><a name="line30"></a><div class="line line-30"></span><span class="operator"></span>method_not_allowed</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">405</span></div><a name="line31"></a><div class="line line-31"></span><span class="operator"></span>not_acceptable</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">406</span></div><a name="line32"></a><div class="line line-32"></span><span class="operator"></span>proxy_authentication_requred</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">407</span></div><a name="line33"></a><div class="line line-33"></span><span class="operator"></span>request_timeout</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">408</span></div><a name="line34"></a><div class="line line-34"></span><span class="operator"></span>conflict</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">409</span></div><a name="line35"></a><div class="line line-35"></span><span class="operator"></span>gone</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">410</span></div><a name="line36"></a><div class="line line-36"></span><span class="operator"></span>length_required</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">411</span></div><a name="line37"></a><div class="line line-37"></span><span class="operator"></span>precondition_failed</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">412</span></div><a name="line38"></a><div class="line line-38"></span><span class="operator"></span>request_entity_too_large</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">413</span></div><a name="line39"></a><div class="line line-39"></span><span class="operator"></span>request_uri_too_long</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">414</span></div><a name="line40"></a><div class="line line-40"></span><span class="operator"></span>unsupported_media_type</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">415</span></div><a name="line41"></a><div class="line line-41"></span><span class="operator"></span>request_range_not_satisfiable</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">416</span></div><a name="line42"></a><div class="line line-42"></span><span class="operator"></span>expectation_failed</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">417</span></div><a name="line43"></a><div class="line line-43"></span><span class="operator"></span>im_a_teapot</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">418</span></div><a name="line44"></a><div class="line line-44"></span><span class="operator"></span></div><a name="line45"></a><div class="line line-45"><span class="operator"></span><span class="operator comment">#&nbsp;</span><span class="comment">Server</span><span class="comment operator">&nbsp;</span><span class="comment">Error</span><span class="comment operator">&nbsp;</span><span class="comment number">5</span><span class="comment">xx</span></div><a name="line46"></a><div class="line line-46"></span><span class="operator"></span>internal_error</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">500</span></div><a name="line47"></a><div class="line line-47"></span><span class="operator"></span>no_implemented</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">501</span></div><a name="line48"></a><div class="line line-48"></span><span class="operator"></span>bad_gateway</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">502</span></div><a name="line49"></a><div class="line line-49"></span><span class="operator"></span>service_unavailable</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">503</span></div><a name="line50"></a><div class="line line-50"></span><span class="operator"></span>gateway_timeout</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">504</span></div><a name="line51"></a><div class="line line-51"></span><span class="operator"></span>http_version_not_supported</span><span class="operator">&nbsp;=&nbsp;</span><span class="number">505</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="xml.html">&larr; A. XML</a>
+        </li>
+        
+        <li class="next">
+            <a href="moyarc.html">C. MoyaRC &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#http-status-codes">HTTP Status Codes</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+{
+    "name": "check-modified",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "check-modified",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
+        "doc": "\nReturn a not_modifed (304) response if a resource hasn't changed.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": null,
+        "tag_name": "check-modified",
+        "params": {
+            "etag": {
+                "default_display": "",
+                "name": "etag",
+                "missing": true,
+                "default": null,
+                "doc": "ETag for resource",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "time": {
+                "default_display": "None",
+                "name": "time",
+                "missing": true,
+                "default": null,
+                "doc": "Time resource was updated",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.check-modified"
+}

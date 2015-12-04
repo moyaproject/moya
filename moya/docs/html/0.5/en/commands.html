@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Commands</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="i18n.html">&larr; 16. Internationalization</a>
+        </li>
+        
+        <li class="next">
+            <a href="images.html">18. Images &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Commands</h1>
+            <p>Moya <em>commands</em> are a way to write code that may be invoked from the command line. This allows you to write tools that you don't need (or want) to write an HTML user interface for. Commands also allow you to automate project actions with the standard tools your operating system provides.</p>
+<h2><a name="calling-commands"></a><a href="#calling-commands">Calling Commands<span class="anchor"> &#182;</span></a></h2><p>You may already have used a command, if you have run through the tutorial. The following command line is an example of running a command in the <code>auth</code> application:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;auth#cmd.init</div></pre><p>If the first argument to the <code>moya</code> command contains a hash (<code>#</code>), moya treats it as an element reference, and runs the command associated with that element.</p>
+<p>If you omit the text after the <code>#</code>, Moya will give you a table of the available commands. For example, run the following to list all the commands in the <code>auth</code> application:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;auth#</div></pre><p>If you add a <code>-h</code> switch after a command, Moya will show you the help text and options associated with the command. For example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;auth#cmd.listusers&nbsp;-h</div></pre><h2><a name="creating-commands"></a><a href="#creating-commands">Creating Commands<span class="anchor"> &#182;</span></a></h2><p>To create a command, use the <a class="tag" href="tags/httpmoyaprojectcom/tag_command.html">&lt;command&gt;</a> tag. The <code>libname</code> is used to identify the command at the prompt, and the <code>synopisis</code> attribute is used when generating documentation. The code inside the <a class="tag" href="tags/httpmoyaprojectcom/tag_command.html">&lt;command&gt;</a> is run when the command is invoked. Here's an example of a very simple command:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">command</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"cmd.sayhello"</span><span class="tag tagcontent">&nbsp;synopsis=</span><span class="attrib tag tagcontent">"test&nbsp;command"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">doc</span><span class="tag">&gt;</span>Simple&nbsp;example&nbsp;of&nbsp;a&nbsp;command.</span><span class="tag">&lt;</span><span class="endtagname tag">/doc</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Hello</span><span class="tag">&lt;</span><span class="endtagname tag">/Echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/command</span><span class="tag">&gt;</span></div></pre><p>If the command above was in a library installed as <code>example</code>, you could run the command with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;example#cmd.sayhello</div></pre><p>This should result in the text <code>Hello</code> being written to the terminal.</p>
+<p>Code in a command has full access to the project environment, so you may query the database for example. You will be missing context values related to a request, such as <code>.request</code> itself, since no request is involved when running a command. Tags that depend on such context values may not work as expected.</p>
+<h2><a name="switches-and-options"></a><a href="#switches-and-options">Switches and Options<span class="anchor"> &#182;</span></a></h2><p>You can add arguments and options to a command to create a more flexible command line interface. Let's add an argument to the example command which allows you to provide a name to greet:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">command</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"cmd.sayhello"</span><span class="tag tagcontent">&nbsp;synopsis=</span><span class="attrib tag tagcontent">"test&nbsp;command"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">doc</span><span class="tag">&gt;</span>Simple&nbsp;example&nbsp;of&nbsp;a&nbsp;command.</span><span class="tag">&lt;</span><span class="endtagname tag">/doc</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">signature</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">arg</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"name"</span><span class="tag tagcontent">&nbsp;metavar=</span><span class="attrib tag tagcontent">"NAME"</span><span class="tag tagcontent">&nbsp;help=</span><span class="attrib tag tagcontent">"A&nbsp;name&nbsp;to&nbsp;greet"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/signature</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Hello,&nbsp;</span><span class="sub">$</span><span class="braced sub">{args.name}</span>!</span><span class="tag">&lt;</span><span class="endtagname tag">/Echo</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/command</span><span class="tag">&gt;</span></div></pre><p>The <a class="tag" href="tags/httpmoyaprojectcom/tag_arg.html">&lt;arg&gt;</a> tag adds a required argument to the command line. Here's how you cold invoke it:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;example#cmd.sayhello&nbsp;John</div></pre><p>When the above command line runs, Moya creates an object called <code>args</code>, containing arguments parsed from the command line. So <code>args.name</code> would be set to <code>John</code>, and you would see <code>Hello, John!</code> in the terminal.</p>
+<p>You may add as many arguments as needed inside the <a class="tag" href="tags/httpmoyaprojectcom/tag_signature.html">&lt;signature&gt;</a> tag. You can also add <a class="tag" href="tags/httpmoyaprojectcom/tag_option.html">&lt;option&gt;</a> tags which, as the name suggests, are <em>optional</em>. If you don't include an option, then the value in <code>args</code> will be set to a default value (if supplied) or to <code>None</code>.</p>
+<p>Let's modify the example command to take an option:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">command</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"cmd.sayhello"</span><span class="tag tagcontent">&nbsp;synopsis=</span><span class="attrib tag tagcontent">"test&nbsp;command"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">doc</span><span class="tag">&gt;</span>Simple&nbsp;example&nbsp;of&nbsp;a&nbsp;command.</span><span class="tag">&lt;</span><span class="endtagname tag">/doc</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">signature</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">option</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"name"</span><span class="tag tagcontent">&nbsp;metavar=</span><span class="attrib tag tagcontent">"NAME"</span><span class="tag tagcontent">&nbsp;help=</span><span class="attrib tag tagcontent">"A&nbsp;name&nbsp;to&nbsp;greet"</span><span class="tag tagcontent">&nbsp;default=</span><span class="attrib tag tagcontent">"User"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/signature</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Hello,&nbsp;</span><span class="sub">$</span><span class="braced sub">{args.name}</span>!</span><span class="tag">&lt;</span><span class="endtagname tag">/Echo</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/command</span><span class="tag">&gt;</span></div></pre><p>You can now invoke the command with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;example#cmd.sayhello&nbsp;--name&nbsp;John</div></pre><p>This will write the text <code>Hello, John!</code> to the console.</p>
+<p>If you omit the option from the command line, then the <code>args.name</code> will contain the default value of <code>User</code>, and the command will write the text <code>Hello, User!</code> to the console. Most commands will use a combination of <a class="tag" href="tags/httpmoyaprojectcom/tag_arg.html">&lt;arg&gt;</a> and <a class="tag" href="tags/httpmoyaprojectcom/tag_option.html">&lt;option&gt;</a> to create a fully featured command interface.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="i18n.html">&larr; 16. Internationalization</a>
+        </li>
+        
+        <li class="next">
+            <a href="images.html">18. Images &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#calling-commands">Calling Commands</a></li>
+    
+    <li><a href="#creating-commands">Creating Commands</a></li>
+    
+    <li><a href="#switches-and-options">Switches and Options</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

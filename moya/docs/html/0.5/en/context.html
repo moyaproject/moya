@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Context</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="index.html">&larr; Index</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Context</h1>
+            <p>In Moya, the <em>context</em> is a data-structure that holds all the information required to process any given request. There is nothing remarkable about the data contained in the context &ndash; it is actually a combination of dictionaries (key + value collections), lists, numbers, strings and other objects. What may be novel is the way in which any piece of information may be referenced.</p>
+<h2><a name="data-index"></a><a href="#data-index">Data Index<span class="anchor"> &#182;</span></a></h2><p>A data index is a string that references a value in the context. On its simplest level, a data index is just the name of a variable. A data index may also reference a value within a data-structure using a dotted notation. Here are some examples of simple data indices:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">foo.bar.0</div><a name="line2"></a><div class="line line-2">middle_earth.hobbits.frodo</div><a name="line3"></a><div class="line line-3">url.blog_name</div></pre><p>A context may also have a <em>scope</em>, which changes the starting point of the data index. For instance if the current scope was set to <code>middle_earth</code>, then frodo could be referenced using a simpler index:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">hobbits.frodo</div></pre><p>This would also make it impossible to reference any value not inside the <code>middle_earth</code> scope with a simple index. An alternate form allows an index to ignore the current scope and reference a value from the top (or <em>root</em>) of the context. This alternate form begins with a period to indicate the top level.</p>
+<p>The following is an example of a root data index:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">.foo.bar.0</div></pre><aside>This dotted notation is similar to how file paths works, you can think of a <em>scope</em> as a current working directory, and a root index as an <em>absolute</em> path.</aside><p>When serving a web application, Moya puts important information, such as the <code>request</code> in the root of the context. This makes such values always available, even when working in another scope. For instance <code>.request.url</code> will always return currently requested URL.</p>
+<h2><a name="context-magic"></a><a href="#context-magic">Context magic<span class="anchor"> &#182;</span></a></h2><p>This data index scheme also allows Moya to accomplish some magic which may be difficult to do elegantly in other languages (including Python). For instance, some values on the context may be <em>lazily</em> evaluated. Values may appear on the context, but are only calculated when they are first referenced. Moya can also calculate values on the fly. For instance, in a web application, a value <code>clock</code> exists in the root. This value appears to be constantly updated with the current time, but in reality, Moya returns the latest time whenever <code>.clock</code> is referenced.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="index.html">&larr; Index</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#data-index">Data Index</a></li>
+    
+    <li><a href="#context-magic">Context magic</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+{
+    "name": "upload-file",
+    "doc_namespace": "xmlns.http://moyaproject.com/admin",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "upload-file",
+        "lib": "moya.admin",
+        "namespace_slug": "moyaproject_dot_com_admin",
+        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 187)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/admin",
+        "synopsis": null,
+        "tag_name": "upload-file",
+        "params": {
+            "url": {
+                "default_display": null,
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "path": {
+                "default_display": null,
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fs": {
+                "default_display": null,
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/admin.upload-file"
+}

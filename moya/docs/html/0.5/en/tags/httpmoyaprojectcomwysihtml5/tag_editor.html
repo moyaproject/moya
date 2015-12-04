@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Tag editor</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../../assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+    .tag-link-editor
+    {
+        font-weight:bold;
+    }
+
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="../../index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../../index.html">Reference</a>
+                    </li>
+                    <li class="active">
+                        <a href="../index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="../../tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container content height-500">
+    <div class="row">
+        <div class="col-md-9">
+
+
+    
+    <div class="doc-nav">
+        <ul class="pager">
+            <li class="previous">
+                <a href="index.html" title="Return to tag index">&#8593; Index</a>
+            </li>
+        </ul>
+    </div>
+    
+
+
+    <div id="description-panel">
+        <input type="hidden" name="tag_name" value="editor"/>
+        <input type="hidden" name="synopsis" value=""/>
+
+        <h2>&lt;editor&gt;</h3>
+
+        <dl class="dl-horizontal alert alert-info">
+            <dt>name</dt>
+            <dd>editor</dd>
+            
+            <dt>library</dt>
+            <dd>moya.wysihtml5</dd>
+            
+            <dt>xml namespace</dt>
+            <dd><tt>http://moyaproject.com/wysihtml5</tt></dd>
+            
+        </dl>
+        <p>A rich text editor.</p>
+<p>            The <code>buttons</code> and <code>rbuttons</code> attributes may be used to configure the row of buttons at the top of the editor. You can set them to a comma separated list of the following possible values:</p>
+ 
+<dl class="dl-horizontal">
+            <dt>bold</dt>
+<dd>Bold <b>text</b></dd>
+            <dt>italic</dt>
+<dd>Italic <em>text</em></dd>
+            <dt>underline</dt>
+<dd>Underline <u>text</u></dd>
+            <dt>strike</dt>
+<dd>Strikethrough <s>text</s></dd>
+            <dt>h1 - h7</dt>
+<dd>Header level 1 through 7</dd>
+            <dt>ol</dt>
+<dd>Ordered List</dd>
+            <dt>ul</dt>
+<dd>Unordered List</dd>
+            <dt>left</dt>
+<dd>Left align</dd>
+            <dt>center</dt>
+<dd>Center align</dd>
+            <dt>right</dt>
+<dd>Right align</dd>
+            <dt>justify</dt>
+<dd>Justify text</dd>
+            <dt>quote</dt>
+<dd>Block quote</dd>
+            <dt>link</dt>
+<dd>Insert a link</dd>
+            <dt>image</dt>
+<dd>Insert an image</dd>
+            <dt>view</dt>
+<dd>Switch between rich text and markup view</dd>
+            </dl><p>            You can also add a bar symbol (<b>|</b>) which will insert a divider between the buttons.</p>
+<p>            The default for buttons is to have all text controls on the left, and the view button on the right.</p>
+        <table class="table table-bordered table-condensed">
+            <caption>attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>breaks</code></td>
+                <td>Use line breaks?</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td><code>no</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>buttons</code></td>
+                <td>A list of buttons.</td>
+                <td>comma list</td>
+                <td>No</td>
+                <td><code>bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>from</code></td>
+                <td>Application</td>
+                <td>application reference</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td>The name attribute of the textarea.</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>placeholder</code></td>
+                <td>Placeholder text to display in empty editor</td>
+                <td>text</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>rbuttons</code></td>
+                <td>A list of buttons on the right hand side.</td>
+                <td>comma list</td>
+                <td>No</td>
+                <td><code>view</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>rows</code></td>
+                <td>Number of rows.</td>
+                <td>integer</td>
+                <td>No</td>
+                <td><code>12</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td><code>template</code></td>
+                <td>Override widget template</td>
+                <td>list of template paths</td>
+                <td>No</td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-condensed">
+            <caption>inherited attributes</caption>
+            <tr>
+                <th>name</th>
+                <th>purpose</th>
+                <th>type</th>
+                <th>required?</th>
+                <th>default</th>
+                <th>choices</th>
+            </tr>
+            <tr>
+                <td><code>if</code></td>
+                <td>Conditional expression</td>
+                <td>expression</td>
+                <td>No</td>
+                <td><code>yes</code></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+        </div>
+<div class="col-md-3">
+
+<div class="doctree-panel">
+    
+    <ul class="tag-index">
+        <li class="tag-link tag-link-editor" data-tagdata='{"name":"editor"}'>
+            <a name="tag_editor.html" href="tag_editor.html">editor</a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

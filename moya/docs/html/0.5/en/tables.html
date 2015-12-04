@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Tables</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="static.html">&larr; 18. Moya Static</a>
+        </li>
+        
+        <li class="next">
+            <a href="thumbnail.html">20. Moya Thumbnail &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Tables</h1>
+            <p>Moya Tables supplies a system of widgets for rendering tables in content definitions.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Tables is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.tables"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can install this library with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"tables"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.tables"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You won't need to mount Moya Tables, because there are no views. However, there is a test page, which you may mount as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">mount</span><span class="tag tagcontent">&nbsp;app=</span><span class="attrib tag tagcontent">"tables"</span><span class="tag tagcontent">&nbsp;mountpoint=</span><span class="attrib tag tagcontent">"test"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/tables/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre> 
+<h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Moya Tables uses the namespace <code>http://moyaproject.com/tables</code>.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>It is entirely possible to generate HTML tables in templates <em>without</em> using this library. The main advantage of Moya Tables is that table cells may contain arbitrary content, which may be difficult to manage with an HTML tag soup.</p>
+<h2><a name="widgets"></a><a href="#widgets">Widgets<span class="anchor"> &#182;</span></a></h2><p>A <a class="tag" href="tags/httpmoyaprojectcomtables/tag_table.html">&lt;table&gt;</a> defines a table in a content definition. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;table&nbsp;contents&nbsp;go&nbsp;here&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>To define the columns in a table, add a <a class="tag" href="tags/httpmoyaprojectcomtables/tag_columns.html">&lt;columns&gt;</a> tag inside the <a class="tag" href="tags/httpmoyaprojectcomtables/tag_table.html">&lt;table&gt;</a>.</p>
+<p>The <a class="tag" href="tags/httpmoyaprojectcomtables/tag_columns.html">&lt;columns&gt;</a> tag should contain a number of <a class="tag" href="tags/httpmoyaprojectcomtables/tag_header.html">&lt;header&gt;</a> tags which define a header for each column in the table. For example, the following creates a table with two columns:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>To define the rows for the tables add a <a class="tag" href="tags/httpmoyaprojectcomtables/tag_rows.html">&lt;rows&gt;</a> tag containing a <a class="tag" href="tags/httpmoyaprojectcomtables/tag_row.html">&lt;row&gt;</a> tag for each row. The <a class="tag" href="tags/httpmoyaprojectcomtables/tag_row.html">&lt;row&gt;</a> tags should themselves contain a <a class="tag" href="tags/httpmoyaprojectcomtables/tag_cell.html">&lt;cell&gt;</a> for each column. A cell may contain simple text, or any other content tags; images, forms, alerts etc. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">rows</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">row</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span>Salmon&nbsp;Nigiri&nbsp;Bento</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span>4</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/row</span><span class="tag">&gt;</span></div><a name="line11"></a><div class="line line-11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">row</span><span class="tag">&gt;</span></div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span>Mixed&nbsp;Sushi&nbsp;Bento</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line13"></a><div class="line line-13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span>2</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/row</span><span class="tag">&gt;</span></div><a name="line15"></a><div class="line line-15">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rows</span><span class="tag">&gt;</span></div><a name="line16"></a><div class="line line-16"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>This will create a table with two rows.</p>
+<p>While it is possible to add each row individually, it is more common to generate the rows from a sequence, such as a database query. In this case you can supply a <code>src</code> attribute to the <a class="tag" href="tags/httpmoyaprojectcomtables/tag_rows.html">&lt;rows&gt;</a> tag, which contains the object to iterate over.</p>
+<p>Here's an example which generates the rows from a queryset called <code>products</code>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">rows</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"products"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"product"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.stock}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rows</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>Note that when you use the <code>src</code> attribute in this way, Moya inserts the rows automatically &ndash; so you won't need to add <a class="tag" href="tags/httpmoyaprojectcomtables/tag_row.html">&lt;row&gt;</a> tags</p>
+<h3><a name="table-style"></a><a href="#table-style">Table Style<span class="anchor"> &#182;</span></a></h3><p>You can set a CSS style on your <a class="tag" href="tags/httpmoyaprojectcomtables/tag_table.html">&lt;table&gt;</a> with the <code>class</code> attribute. You will probably want to do this if you are using Bootstrap CSS, which doesn't apply any particular style to a table unless it has the class <code>"table"</code>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag tagcontent">&nbsp;style=</span><span class="attrib tag tagcontent">"table&nbsp;table-striped"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">header</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">rows</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"products"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"product"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.stock}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rows</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><h3><a name="sortable-columns"></a><a href="#sortable-columns">Sortable Columns<span class="anchor"> &#182;</span></a></h3><p>You may generate a clickable header that adds sort information to the query string, with the <a class="tag" href="tags/httpmoyaprojectcomtables/tag_sort-header.html">&lt;sort-header&gt;</a>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">sort-header</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"product"</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/sort-header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">sort-header</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"stock"</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/sort-header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">rows</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"products"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"product"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">cell</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{product.stock}</span><span class="tag">&lt;</span><span class="endtagname tag">/cell</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rows</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>This makes both column headers clickable. If you click the Product header, it will link to the same page, with the query string <code>sort=product&amp;order=asc</code>. If you click on the header again it will toggle the <code>order</code> value between <code>asc</code> and <code>desc</code> (for <em>ascending</em> and <em>descending</em> order).</p>
+<p>You will still need to implement sorting in the view that gets the products. The sort and order values can be looked up with <code>.request.GET.sort</code> and <code>.request.GET.order</code>.</p>
+<h2><a name="customization"></a><a href="#customization">Customization<span class="anchor"> &#182;</span></a></h2><p>You may customize the various components of a table individually with the <code>template</code> attribute on the tags, <em>or</em> project-wide by overriding the template in your project.</p>
+<p>Table templates are stored in the template filesystem, in the <code>/moya.tables/</code> directory. You may list them with the following command:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;templates&nbsp;--tree&nbsp;moya.tables</div></pre><p>It is also possible to mix table tags with other content tags. For example, if you want to render a template for each row rather than define the cells individually. Here's how you might do that:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/tables"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">columns</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">sort-header</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"product"</span><span class="tag">&gt;</span>Product</span><span class="tag">&lt;</span><span class="endtagname tag">/sort-header</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">sort-header</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"stock"</span><span class="tag">&gt;</span>Stock</span><span class="tag">&lt;</span><span class="endtagname tag">/sort-header</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/columns</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">rows</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">moya:</span><span class="tag tagname">node</span><span class="tag tagcontent">&nbsp;template=</span><span class="attrib tag tagcontent">"/sushifinder/table/rows.html"</span><span class="tag tagcontent">&nbsp;let:products=</span><span class="attrib tag tagcontent">"products"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/rows</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>The template equivelent of the preceding examples would be something like the following:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="templatetag">{%&nbsp;for&nbsp;product&nbsp;in&nbsp;products&nbsp;%}</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">tr</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">td</span><span class="tag">&gt;</span><span class="sub">${product.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/td</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">td</span><span class="tag">&gt;</span><span class="sub">${product.stock}</span><span class="tag">&lt;</span><span class="endtagname tag">/td</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/tr</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="templatetag">{%&nbsp;endfor&nbsp;%}</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="static.html">&larr; 18. Moya Static</a>
+        </li>
+        
+        <li class="next">
+            <a href="thumbnail.html">20. Moya Thumbnail &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#widgets">Widgets</a><ul>
+    
+    <li><a href="#table-style">Table Style</a></li>
+    
+    <li><a href="#sortable-columns">Sortable Columns</a></li>
+    
+</ul></li>
+    
+    <li><a href="#customization">Customization</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

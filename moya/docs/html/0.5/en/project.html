@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Building a Project</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="customtags.html">&larr; 7. Custom Tags</a>
+        </li>
+        
+        <li class="next">
+            <a href="server.html">9. Creating a Server &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Building a Project</h1>
+            <p>This chapter explores the files required to launch a server. If you have an example project created with <code>moya start</code>, you can compare the settings and other files discussed here.</p>
+<h2><a name="settings-format"></a><a href="#settings-format">Settings Format<span class="anchor"> &#182;</span></a></h2><p>The following is en example of an file in Moya's INI format:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="comment key">#&nbsp;This&nbsp;line&nbsp;is&nbsp;a&nbsp;comment,&nbsp;and&nbsp;is&nbsp;ignored</span><span class="key"></span></div><div class="line line-2"><span class="key"></span></div><div class="line line-3"><span class="key"></span><span class="comment value key">#&nbsp;The&nbsp;next&nbsp;line&nbsp;tells&nbsp;Moya&nbsp;to&nbsp;extend&nbsp;this&nbsp;ini&nbsp;file&nbsp;with&nbsp;another.</span><span class="key"></span></div><div class="line line-4"><span class="key">extends&nbsp;</span>=</span><span class="value">&nbsp;./common.ini</span></div><div class="line line-5"><br></div><div class="line line-6"></span><span class="key"></span><span class="comment value key">#&nbsp;This&nbsp;is&nbsp;a&nbsp;section</span><span class="key"></span></div><div class="line line-7"><span class="key"></span><span class="section key">[</span><span class="section sectiontype key">section]</span><span class="key sectiontype"></span></div><div class="line line-8"><span class="sectiontype key">key&nbsp;</span><span class="sectiontype">=</span><span class="value sectiontype">&nbsp;value</span><span class="sectiontype"></span></div><div class="line line-9"><span class="sectiontype"></span></div><div class="line line-10"><span class="sectiontype"></span><span class="key sectiontype"></span><span class="comment value sectiontype key">#&nbsp;This&nbsp;is&nbsp;a&nbsp;named&nbsp;section</span><span class="key sectiontype"></span></div><div class="line line-11"><span class="sectiontype key"></span><span class="section key sectiontype">[ship</span><span class="section key">:</span><span class="section key sectionname">moya</span><span class="section key">]</span><span class="key"></span></div><div class="line line-12"><span class="key"></span><span class="comment key">#&nbsp;a&nbsp;multi-line&nbsp;list&nbsp;(note&nbsp;the&nbsp;indentation)</span><span class="key"></span></div><div class="line line-13"><span class="key">crew&nbsp;</span>=</span><span class="value">&nbsp;Aeryn</span></div><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">John</span></div><div class="line line-15">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">Scorpius</span></div></pre><p>Moya reads ini files line by line. If the line begins with a <code>#</code> character, the rest of the line is ignored. A line with text enclosed in square brackets introduces a <em>section</em>. A line with an <code>=</code> defines a settings in the section, where the text before the <code>=</code> is the key (name of the settings), and the text after the <code>=</code> is the value. A value may contain multiple lines (treated as a list by Moya) if they are indented.</p>
+<aside>Note that whitespace around the key and value is ignored.</aside><p>Some section names may contain a single colon. Such sections are known as <em>named</em> sections. A named section generally creates an object in Moya with the given name. In the example above, the section, <code>ship:moya</code>, would create a <code>ship</code> called <code>moya</code>.</p>
+<p>You may have noticed in the example INI above, there is a key / value pair at the top of the file and <em>not</em> in a section. This is the <em>extends directive</em> which tells Moya to first load the settings from another INI file, before merging the settings in the current file. There is no limit to the number of times an INI file may be extended, but be careful not to include the same file more than once in the chain, as this will be flagged as an error.</p>
+<h2><a name="project-settings"></a><a href="#project-settings">Project Settings<span class="anchor"> &#182;</span></a></h2><p>The project settings file creates the initial environment to run a server.</p>
+<p>The convention for Moya settings files is to have a file called <code>settings.ini</code> which contains development settings, and a file called <code>production.ini</code> which contains settings required for a production environment (running live). Both these INI files extend <code>basesettings</code>, which contains settings common to both.</p>
+<p>When you run the server, you can specify which settings file to run with the <code>--ini</code> file. For example, the following command will run the production settings:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;runserver&nbsp;--ini&nbsp;production.ini</div></pre> 
+<h3><a name="console-section"></a><a href="#console-section">[console] Section<span class="anchor"> &#182;</span></a></h3><p>This section configures the console (text written by the <a class="tag" href="tags/httpmoyaprojectcom/tag_echo.html">&lt;echo&gt;</a> tag).</p>
+<p class="setting">color =<span class="value"> yes/no</span></p><p>If <code>yes</code> (the default) Moya will write colored output to the console. Set to <code>no</code> for monochrome output.</p>
+<p class="setting">width =<span class="value"> &lt;INTEGER&gt;</span></p><p>Set's the width of the console. Leave blank to auto-detect the terminal size.</p>
+<p class="setting">logger =<span class="value"> &lt;LOGGER&gt;</span></p><p>If not blank, Moya will re-direct all console output to a <a href="logging.html" title="Logging">logger</a> (e.g. "moya.console"). Use this in a production environment, where you don't have a terminal.</p>
+<h3><a name="media-section"></a><a href="#media-section">[media] Section<span class="anchor"> &#182;</span></a></h3><p>This section defines where <em>media</em> (static images / css etc) should be stored and served. See <a href="library.html#media-section">Creating a Library</a> for more information on media.</p>
+<p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This should be a path to the static media for the project, by convention this is typically <code>./media</code>.</p>
+<p class="setting">url =<span class="value"> &lt;media base url&gt;</span></p><p>This should be the base url for media, which be fully qualified (include https:// etc), or an absolute URL path. If you leave this value blank, Moya will use the <code>app</code> setting to detect the media url.</p>
+<p class="setting">app =<span class="value"> &lt;app name&gt;</span></p><p>If a base URL isn't supplied (<code>url</code> setting above), this should contain an application name. Moya will set the media url to be wherever this application is mounted. If not specified, the default will be <code>'media'</code> so the media url will be wherever the application named <code>media</code> is installed.</p>
+<aside>If you used <b>moya start</b> to create the project, media will be set up for you and serving on <b>/static/</b>.</aside> <h3><a name="settings-section"></a><a href="#settings-section">[settings] Section<span class="anchor"> &#182;</span></a></h3><p>The settings section sets project wide settings, which may be used to customize project behaviour. Here's an example of settings section:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[settings]</span><span class="key"></span></div><div class="line line-2"><span class="key">project_title&nbsp;</span>=</span><span class="value">&nbsp;Sushi&nbsp;Finder</span></div></pre><p>Values set here are copied to a root object called <code>.settings</code> at the beginning of a request. For example, you can refer the value <code>.settings.project_title</code>, which will contain the string <code>"Sushi Finder"</code>.</p>
+<h3><a name="project-section"></a><a href="#project-section">[project] Section<span class="anchor"> &#182;</span></a></h3><p>The project section contains a few settings required to start up a project.</p>
+<p class="setting">debug =<span class="value"> yes/no</span></p><p>Set to <code>yes</code> to enable a flag in Moya code (<code>.debug</code>) which can be used to enable debug features. Set to <code>no</code> to disable debug features.</p>
+<p class="setting">preflight =<span class="value"> yes/no</span></p><p>Moya can run <a href="preflight.html" title="Preflight Checks">preflight checks</a> on startup which will alert you to any potential problems via the logs. Set to <code>yes</code> to enable preflight checks, or <code>no</code> to disable. You should probably enable this for development, but disable in a production environment.</p>
+<p class="setting">log_signals =<span class="value"> yes/no</span></p><p>If set to <code>yes</code>, Moya will log any signal fired in the project. This is disabled by default as it can generate a lot of log messages. Enable if you are debugging signal related code.</p>
+<p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This setting lets Moya know the path to the logic code that will be used to create a server. This is typically set to <code>./logic</code>, but can be any valid directory.</p>
+<p class="setting">startup =<span class="value"> &lt;filename&gt;</span></p><p>This setting defines the first file that Moya will run, it should be set to the name of a file within directory defined in <code>location</code>. Typically, this will be <code>server.xml</code> which contains a server definition.</p>
+<h3><a name="autoreload-section"></a><a href="#autoreload-section">[autoreload] Section<span class="anchor"> &#182;</span></a></h3><p>When developing a project, Moya can watch the project files for changes, and when it notices a file was modified, added or removed, it will rebuild the project. This means that you may edit your project without having to restart the server.</p>
+<p class="setting">enabled =<span class="value"> yes/no</span></p><p>Set to <code>yes</code> to enable auto-reload. Set to <code>no</code> to disable auto-reload (in a production environment for example).</p>
+<p class="setting">extensions =<span class="value"> &lt;list of extensions&gt;</span></p><p>This should be set to a list of file extensions which should be monitored. Changes to file types not in this list will not cause a reload. This setting will typically be set to the following:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="key">extensions&nbsp;</span>=</span><span class="value">&nbsp;.xml</span></div><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">.ini</span></div><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">.py</span></div><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">.html</span></div></pre><p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This section should be set to the directory to be monitored for auto-reload, typically <code>./</code> which will including the entire project (including sub-directories).</p>
+<h3><a name="site-section"></a><a href="#site-section">[site] Section<span class="anchor"> &#182;</span></a></h3><p>This section contains settings regarding the site that will be served. Moya uses this information internally, but you may access these settings during runtime, in the values <code>.sys.site</code>. See also <a href="#site-data">Site Data</a>.</p>
+<p>
+<p class="setting">base_content =<span class="value"> &lt;element&gt;</span></p></p>
+<p>A reference to a base <a href="content.html" title="Content">content</a> definition. This is the content element that other content elements will be extended from, if they don't explicitly set an <code>extends</code> attribute.</p>
+<p class="setting">timezone =<span class="value"> &lt;timezone&gt;</span></p><p>This setting should be set to a <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">timezone</a>, which will be used when displaying dates to the user. An example of a timezone would be <code>US/Eastern</code> for Eastern Standard Time, and <code>Europe/London</code> for the time in the UK.</p>
+<p class="setting">user_timezone =<span class="value"> yes/no</span></p><p>A single timezone for all visitors to your site may be enough for many sites, but if your site has users from various parts of the globe, they might appreciate dates appearing in there own timezone. If this value is set to <code>yes</code> Moya will use the timezone associated with the user in the database. If there is no user logged in, then the timezone will default to the <code>timezone</code> setting.</p>
+<p class="setting">append_slash =<span class="value"> yes/no</span></p><p>
+If this setting is set to <code>yes</code>, Moya will redirect to a URL ending with a forward slash (<code>/</code>) if the current URL doesn't already end with a slash. Set to <code>no</code> to disable this features.</p>
+<aside>Moya is fairly clever at doing the <b>append_slash</b> redirect. It won't redirect if the project can serve content on the current URL. It also won't redirect if the new URL (with slash appended) has no content associated with it.</aside><h3><a name="site-data"></a><a href="#site-data">Site Data<span class="anchor"> &#182;</span></a></h3><p>You can add arbitrary data to the site section by prefixing it with <code>data-</code>. When Moya sees such a setting, it drops the <code>data-</code> part and stores the key and value in a dictionary in <code>.site</code>. You can then use these settings in your code to configure various site level features. Here's an example of setting site data:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[site]</span><span class="key"></span></div><div class="line line-2"><span class="key">data-theme&nbsp;</span>=</span><span class="value">&nbsp;css/themes/default.ini</span></div><div class="line line-3"></span><span class="key">data-title&nbsp;</span>=</span><span class="value">&nbsp;Sushi&nbsp;Finder</span></div></pre><p>You could then use these values in Moya code or a template. Here's an example:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="templatetag">{%&nbsp;if&nbsp;.site.theme&nbsp;%}</span><span class="tag">&lt;</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;href=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">${.site.theme}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;rel=</span><span class="attrib tag tagcontent">"stylesheet"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span><span class="templatetag">{%&nbsp;endif&nbsp;%}</span></div></pre><h3><a name="templates-section"></a><a href="#templates-section">[templates] Section<span class="anchor"> &#182;</span></a></h3><p>A project may define a templates directory which can override library templates, in order to customize the look and feel of a site.</p>
+<p class="setting">location =<span class="value"> &lt;relative path to settings&gt;</span></p><p>Sets the path to a directory containing templates. This should be <code>./templates</code> by convention.</p>
+<p class="setting">priority =<span class="value"> &lt;template priority&gt;</span></p><p>This sets the priority of for the project templates. Templates with a higher priority will be selected over templates with a lower priority. The default priority for templates is <code>0</code>, so this setting should be set to something higher than that to ensure they override the templates (I suggest <code>10</code>).</p>
+<h2><a name="caches"></a><a href="#caches">Caches<span class="anchor"> &#182;</span></a></h2><p>A <em>cache</em> in Moya is an object which stores temporary data. Caches are typically used to speed up your application by saving data that may otherwise have to be re-calculated. There are a few caches that are used internally by Moya, but you may also define additional caches for use in your project code.</p>
+<p>A new cache object is creates with a named section called <code>cache:</code>, which takes a name for the cache (used as an identifier in code). A cache section should contain some of the following settings:</p>
+<p class="setting">type =<span class="value"> dict / file / memcache</span></p><p>Moya supports a few different methods of storing cache data, this setting defined which type to use. The available cache types are as follows:</p>
+<dl class="dl-horizontal"><dt>dict</dt>
+<dd>
+A <code>dict</code> cache stores cache data in memory, within the same process as the server. Dict caches are fast, but non-permentant. They are best used for development, or where you can be sure the cache will not grow very large.
+</dd><dt>file</dt>
+<dd>
+A <code>file</code> cache stores cache data on disk. File caches are permanent, and have the advantage that data will still be cached when the server re-starts. In theory, they are not as fast as a <code>dict</code> cache, but modern operating systems are so good at optimizing file access that the difference may not be noticeable.
+</dd><dt>memcache</dt>
+<dd>
+The <code>memcache</code> cache type stores data in a <a href="http://memcached.org/">memcached</a> server, which is an industrial strength distributed cache server. This is the best choice for a production environment &ndash; it is very fast and can share cache data across multiple servers.
+</dd></dl><p>A cache section may take the following settings:</p>
+<p class="setting">enabled =<span class="value"> yes/no</span></p><p>A cache may be disabled by setting <code>enabled</code> to <code>no</code>. A disabled cache is still present, and may be used, but it will not store any data. This is a good way of testing scenarios where the memcache server is unreachable (for example). Written properly, your web application should be able to function with disabled / broken caches &ndash; albeit at a performance cost.</p>
+<p class="setting">debug =<span class="value"> yes/no</span></p><p>If <code>debug</code> is set to <code>yes</code> then any operations on the cache will be logged. This is useful for debugging, but can result in a lot of log entries when enabled.</p>
+<p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This is the directory where cache files will be stored. Only required for caches that write data to disk (i.e. the <code>file</code> cache type).</p>
+<p class="setting">namespace =<span class="value"> &lt;identifier&gt;</span></p><p>Caches may have an associated <em>namespace</em> which keeps cache data separate if they share the same resource. For example, you may have more than one <code>file</code> cache that shares the same location <em>if</em> they have different namespaces. Ditto with the <em>memcache</em> cache, which can share cache data on the same server.</p>
+<p class="setting">hosts =<span class="value"> &lt;memcache server IPs&gt;</span></p><p>Used by the <code>memcache</code> cache type, this setting defines the IP address(es) of the server(s). For example, a local memcache server would require:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">hosts&nbsp;=&nbsp;127.0.0.1</div></pre><p class="setting">compress =<span class="value"> yes/no</span></p><p>If set to <code>yes</code> then data will be compressed before it is stored in the cache, which will reduce the size of cache required, at a slight performance cost.</p>
+<p class="setting">compress_min =<span class="value"> &lt;size in bytes&gt;</span></p><p>This is the minimum required size of a value (in bytes), before compression is enabled. If a cache value is small, compression is probably not worth the effort. A default of <code>1024</code> (1KB) is used, which should be adequate for most purposes. You can set this value to <code>0</code> to always compress.</p>
+<h2><a name="standard-caches"></a><a href="#standard-caches">Standard Caches<span class="anchor"> &#182;</span></a></h2><p>Moya uses some caches for internal data. You can configure these caches in the same with as any other.</p>
+<h3><a name="cachetemplates"></a><a href="#cachetemplates">[cache:templates]<span class="anchor"> &#182;</span></a></h3><p>The cache object named <code>templates</code> is used to store compiled templates. When Moya loads a new template, it first has to compile it in to a form that is faster to render. This compile stage only needs to be done once per template, so Moya will cache the compiled template in <code>templates</code> to avoid re-compiling. This is one of the reasons why pages are slower to render the first time they are requested.</p>
+<p>A file cache is probably the best type for templates. The default location created by <code>moya start</code> is in <code>./__moyacache__</code>. In a production environment, you would probably put it somewhere not in the project directory (<code>/tmp/__moyacache__</code> for example).</p>
+<h3><a name="cachefragment"></a><a href="#cachefragment">[cache:fragment]<span class="anchor"> &#182;</span></a></h3><p>The <code>fragment</code> cache stores pieces of html (generated from templates) that don't change often and may be expensive to generate. In a production environment, <code>memcache</code> or <code>file</code> is the best type for this cache object. Stick to <code>dict</code> for development.</p>
+<h2><a name="application-settings"></a><a href="#application-settings">Application Settings<span class="anchor"> &#182;</span></a></h2><p>In addition to site-wide settings, you can also modify settings for individual applications installed in your project. These override the default settings set by the library itself. To modify application settings, add a named section called <code>settings:</code>, which takes the name of application you wish to configure. For example, the following sets values for the fictitious <code>sushifinder</code> application:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">settings</span><span class="section key">:</span><span class="section key sectionname">sushifinder</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">open_for_business&nbsp;</span>=</span><span class="value">&nbsp;yes</span></div><div class="line line-3"></span><span class="key">currencies&nbsp;</span>=</span><span class="value">&nbsp;USD</span></div><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">GBP</span></div><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">BTC</span></div></pre><p>You can use the <code>settings</code> subcommand to review settings. For example, the following command line will list the default settings for the <code>moya.static</code> library (assuming it is installed in your project):</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;settings&nbsp;moya.static</div></pre><p>You can also use this command to show you the settings configured for an application. For example, if the <code>moya.static</code> has been installed as an application called <code>static</code>, then you can review its settings with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;settings&nbsp;static</div></pre><p>And if you want to see all settings for both libraries and applications installed in a project, you can use the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;settings</div></pre><h3><a name="customizing-applications"></a><a href="#customizing-applications">Customizing Applications<span class="anchor"> &#182;</span></a></h3><p>Moya selects some sensible defaults when installing application, but occasionally you may want to customize some of these internal settings. To customize an application, add a named section called <code>application</code> with the name of the application you would like to customize. The following is an example of a section to customize an application:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">application</span><span class="section key">:</span><span class="section key sectionname">help_pages</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">templates_directory&nbsp;</span>=</span><span class="value">&nbsp;/custom_help_pages/</span></div><div class="line line-3"></span><span class="key">data_directory&nbsp;</span>=</span><span class="value">&nbsp;/custom_data/</span></div></pre><p>Note, that if you don't want to modify any of these settings, you may omit the app section entirely.</p>
+<p class="setting">templates_directory =<span class="value"> &lt;path&gt;</span></p><p>This sets the root directory for templates in the <code>templates</code> filesystem. This is usually the library's <em>long name</em>, but you can set any directory here. The most common use for this is so that you can have have custom templates for each application, even if they share the same library.</p>
+<p class="setting">data_directory =<span class="value"> &lt;path&gt;</span></p><p>Similar to the <code>templates_directory</code>, this setting defines the root directory (in the <code>data</code> filesystem) for the application's data files. The default is to use the library's long name. This setting is typically used if you have more than application from a single library, and you want to provide different data files to each application.</p>
+<h2><a name="supporting-multiple-sites"></a><a href="#supporting-multiple-sites">Supporting Multiple Sites<span class="anchor"> &#182;</span></a></h2><p>It is not uncommon for a web application to need to respond to requests from multiple domains, often with slight differences in the content or look and feel. You can implement this in Moya with a <em>custom site definition</em>, which overrides any of the settings present in the [site] section.</p>
+<p>To define a custom site, add a named section that starts with <code>site:</code> followed by a domain (or IP) you want to customize. The domain may also contain a wildcard character (<code>*</code>) which will match a partial domain. If the domain of the request matches the domain in the site definition then its settings will override the defaults in [site].</p>
+<p>Here's an example of a site definition for a subdomain:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">site</span><span class="section key">:</span><span class="section key sectionname">admin.example.org</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">data-admin&nbsp;</span>=</span><span class="value">&nbsp;yes</span></div></pre><p>This will match the exact domain, <code>admin.example.org</code>. It will also set the value <code>.site.admin</code> to <code>"yes"</code>.</p>
+<p>Here's an example of a site section that matches <em>all</em> <em>subdomains</em> of <code>example.org</code>:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section">[</span><span class="section sectiontype">site</span><span class="section">:</span><span class="section sectionname">*.example.org</span><span class="section">]</span></div></pre><p>This will match <code>foo.example.org</code>, or any domain that ends with <code>.example.org</code>. It won't match <code>example.org</code> or any other domain.</p>
+<p>You can store the part of the domain that matches the wildcard with the following syntax:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section">[</span><span class="section sectiontype">site</span><span class="section">:</span><span class="section sectionname">{subdomain}.example.org</span><span class="section">]</span></div></pre><p>This matches any subdomain of <code>example.org</code> as before, but also save the value <code>subdomain</code> in the site data. So if the request comes from <code>gromits.example.org</code>, then the value of <code>.site.subdomain</code> will be <code>"gromits"</code>.</p>
+<p>The above code will match only a single component (separated by a period) of the subdomain. so <code>widgets.gromits.example.org</code> will <em>not</em> match. If you want to match anything, including the period, then you can use the following syntax:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section">[</span><span class="section sectiontype">site</span><span class="section">:</span><span class="section sectionname">{*subdomain}.example.org</span><span class="section">]</span></div></pre><p>The asterisk means 'match anything'. For the above site definition, <code>widgets.gromits.example.org</code> <em>will</em> match, and the value of <code>.site.subdomain</code> will be <code>widgets.gromit</code>.</p>
+<p>A single site definition may also match multiple domains, by seprating the domains (or wildcards) with a comma. For example, the following will match the IP <code>127.0.0.1</code> <em>and</em> the domain <code>localhost</code>.</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section">[</span><span class="section sectiontype">site</span><span class="section">:</span><span class="section sectionname">127.0.0.1,localhost</span><span class="section">]</span></div></pre><p>Moya checks each site definition in the order they appear in the settings file, until a match is found. So put the domains you want to match first at the beginning of your settings. If no settings definitions match then Moya will return a 404 (not found) response for the request. If you want Moya to serve a response to all requests, add a <em>catch all</em> site definition to the end of your sites. Here's how to use a wildcard to match any domain:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section">[</span><span class="section sectiontype">site</span><span class="section">:</span><span class="section sectionname">*</span><span class="section">]</span></div></pre><h2><a name="mailservers"></a><a href="#mailservers">Mailservers<span class="anchor"> &#182;</span></a></h2><p>This section defines the mail (<a href="http://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol">smtp</a>) servers which will be used to send email in the project. Most projects will only require a single mail server, but it is possible to specify more than one. To configure a mail server, add a named section called <code>smtp</code>, with a short name to be used as an identifier. Here's an example of a typical smtp section which assumes one server running on the same host as the project:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">smtp</span><span class="section key">:</span><span class="section key sectionname">default</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">host&nbsp;</span>=</span><span class="value">&nbsp;127.0.0.1</span></div><div class="line line-3"></span><span class="key">default&nbsp;</span>=</span><span class="value">&nbsp;yes</span></div></pre><p>You can review the mail servers in a project with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;email&nbsp;list</div></pre><p>You can check the mail server settings with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;email&nbsp;check</div></pre><p>This will attempt to connect to each server, and report any errors. You can also send a test email with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;email&nbsp;send</div></pre><aside>If the above commands don't report any errors, you can be sure that the smtp settings are correct. Unfortunately, this is no guarantee the email will reach its destination, as there could be other issues preventing email delivery.</aside><p>An smtp section, takes the following settings:</p>
+<p class="setting">host =<span class="value"> &lt;mail domain / ip&gt;</span></p><p>Sets the mail server url or IP. Use <code>127.0.0.1</code> for a local server.</p>
+<p class="setting">port =<span class="value"> &lt;port number&gt;</span></p><p>Set the port number of the email server (default is 25).</p>
+<p class="setting">username =<span class="value"> &lt;mail server username&gt;</span></p><p>Sets the username for the mail server, if it required authentication.</p>
+<p class="setting">password =<span class="value"> &lt;mail server password&gt;</span></p><p>Sets the password for the mail server, if it requires authentication.</p>
+<p class="setting">default =<span class="value"> &lt;yes / no&gt;</span></p><p>If <code>yes</code>, this mail server will be the <em>default</em>, i.e. if you don't specify the mail server to use when sending a mail, Moya will use this server. If you don't set a server as default, Moya will make the first server in settings the default.</p>
+ 
+<h2><a name="filesystems"></a><a href="#filesystems">Filesystems<span class="anchor"> &#182;</span></a></h2><p>Moya code may only access files (other than its own code) if they are within a <em>filesystem</em>. Moya creates a few filesystems by default, such as a filesystem for templates, and static media, but you may also define your own. Creating a filesystem is necessary if you want to statically serve additional files, write files (for uploads) or read data from your Moya code.</p>
+<p>You can list the filesystems configured for your project with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs</div></pre><p>The above command will display a table of all filesystems and their location. You can inspect an individual filesystem with its name. For example, the following command will show you information regarding template locations:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;templates</div></pre><p>The templates filesystem is a <em>MultiFS</em> filesystem, which merges several directories in to a single filesystem. You can see information regarding any other filesystem in this way. You can also see the directory structure of a filesystem with the following command line:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;templates&nbsp;--tree</div></pre><p>There are other switches in the <code>fs</code> sub-command for managine files in Moya filesystems. See the command help (<code>moya fs --help</code>) for the details.</p>
+<p>You may create a filesystem with a named section called <code>fs</code>, which takes an identifier to refer to the filesystem in code. Here's an example that creates an <code>uploads</code> filesystem:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">fs</span><span class="section key">:</span><span class="section key sectionname">uploads</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./uploads</span></div></pre><p>Currently, only one setting is required to create a filesystem:</p>
+<p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This setting should be the directory that should be exposed. If it is relative, then the path will be assumed to be relative to the project root.</p>
+<h2><a name="settings-interface"></a><a href="#settings-interface">Settings Interface<span class="anchor"> &#182;</span></a></h2><p>There are two places you can access settings when handling a request in a Moya project; <code>.settings</code> which contains project-wide settings, and <code>app.settings</code> which contains individual settings for an application. Both settings objects are essentially a dictionary containing strings, but Moya adds an additional attributes to interpret those strings.</p>
+<p>You can treat a setting as a boolean with the <code>.bool</code> attribute, which will be set to True if the value is <code>yes</code>. For example, in the following code, the condition will be True only if the <code>open_for_businbess</code> application setting is set to <code>yes</code>. The <code>.bool</code> is important because otherwise any non-empty string would be considered True in a boolean expression.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"app.settings.sushifinder.open_for_business.bool"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>You&nbsp;can&nbsp;haz&nbsp;Sushi</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>You can also convert a setting in to a list with the <code>.list</code> attribute.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"app.settings.sushifinder.currencies.list"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"currency"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>You&nbsp;can&nbsp;buy&nbsp;sushi&nbsp;in&nbsp;with&nbsp;</span><span class="sub">$</span><span class="braced sub">{currency}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre><p>You may also use the attributes <code>.int</code> which returns an integer version of the setting, and <code>.float</code> which returns the string as a floating point number. If the setting isn't a valid integer or float, then a value of <code>None</code> will be returned.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="customtags.html">&larr; 7. Custom Tags</a>
+        </li>
+        
+        <li class="next">
+            <a href="server.html">9. Creating a Server &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#settings-format">Settings Format</a></li>
+    
+    <li><a href="#project-settings">Project Settings</a><ul>
+    
+    <li><a href="#console-section">[console] Section</a></li>
+    
+    <li><a href="#media-section">[media] Section</a></li>
+    
+    <li><a href="#settings-section">[settings] Section</a></li>
+    
+    <li><a href="#project-section">[project] Section</a></li>
+    
+    <li><a href="#autoreload-section">[autoreload] Section</a></li>
+    
+    <li><a href="#site-section">[site] Section</a></li>
+    
+    <li><a href="#site-data">Site Data</a></li>
+    
+    <li><a href="#templates-section">[templates] Section</a></li>
+    
+</ul></li>
+    
+    <li><a href="#caches">Caches</a></li>
+    
+    <li><a href="#standard-caches">Standard Caches</a><ul>
+    
+    <li><a href="#cachetemplates">[cache:templates]</a></li>
+    
+    <li><a href="#cachefragment">[cache:fragment]</a></li>
+    
+</ul></li>
+    
+    <li><a href="#application-settings">Application Settings</a><ul>
+    
+    <li><a href="#customizing-applications">Customizing Applications</a></li>
+    
+</ul></li>
+    
+    <li><a href="#supporting-multiple-sites">Supporting Multiple Sites</a></li>
+    
+    <li><a href="#mailservers">Mailservers</a></li>
+    
+    <li><a href="#filesystems">Filesystems</a></li>
+    
+    <li><a href="#settings-interface">Settings Interface</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Favicon</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="faq.html">&larr; 8. Moya FAQ</a>
+        </li>
+        
+        <li class="next">
+            <a href="feedback.html">10. Moya Feedback &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Favicon</h1>
+            <p>This library serves classic <a href="http://en.wikipedia.org/wiki/Favicon">favicons</a>, which is a file called <code>favicon.ico</code> stored in the root of your site.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> 
+Serving a favicon in this way is supported by many browsers, but is somewhat deprecated in favor of an HTML link tag to specify the location of the favicon. Using this library is probably only necessary if you wish to support very old browsers.
+</div><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Favicon is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.favicon"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can install the library with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"favicon"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.favicon"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="usage"></a><a href="#usage">Usage<span class="anchor"> &#182;</span></a></h2><p>The default settings simply serve a file called <code>favicon.ico</code>, which you should place in your <b>/static/</b> directory.</p>
+<h2><a name="settings"></a><a href="#settings">Settings<span class="anchor"> &#182;</span></a></h2><p>Moya Static supports the following settings</p>
+<p class="setting">fs =<span class="value"> &lt;LIST OF FILESYSTEMS&gt;</span></p><p>This setting should be a list of filesystem names where Moya Favicon will look for the favicon.</p>
+<p class="setting">iconpath =<span class="value"> &lt;SETTING FILENAME&gt;</span></p><p>This should be set to the filename of the icon file to serve. Note that this only changes the file that Moya Static reads, the file will always be served as <code>/favicon.ico</code>/</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="faq.html">&larr; 8. Moya FAQ</a>
+        </li>
+        
+        <li class="next">
+            <a href="feedback.html">10. Moya Feedback &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#usage">Usage</a></li>
+    
+    <li><a href="#settings">Settings</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

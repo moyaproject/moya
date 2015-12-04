@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Auth (users and permissions)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="libintro.html">&larr; 1. Introduction</a>
+        </li>
+        
+        <li class="next">
+            <a href="admin.html">3. Moya Admin &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Auth (users and permissions)</h1>
+            <p>The Moya Auth library provides the ability for users to <em>log in</em> to your web application, and manages what they can do (or see) when they are there. Most sites will require some kind of system of users, even if it is a single <em>admin</em> user who may make changes to the site.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>The Moya Auth library is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.forms"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can install the library with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"auth"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.auth"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/auth/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">mount</span><span class="tag tagcontent">&nbsp;app=</span><span class="attrib tag tagcontent">"auth"</span><span class="tag tagcontent">&nbsp;mountpoint=</span><span class="attrib tag tagcontent">"middleware"</span><span class="tag tagcontent">&nbsp;url=</span><span class="attrib tag tagcontent">"/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This will mount <a href="auth.html#views" title="Moya Auth (users and permissions)">Auth views</a> and middleware which does the work of managing permissions.</p>
+<aside>If you created your project with <b>moya start project</b>, then Moya Auth will have been installed automatically.</aside><h2><a name="init-command"></a><a href="#init-command">Init Command<span class="anchor"> &#182;</span></a></h2><p>The Auth library has a command to create the default user and some other required object in the database. To run it, enter the following at the command line:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;moya.auth#cmd.init</div></pre><p>The command prompt will ask you for the credentials (username and password) and email address of the <em>super user</em>. A super user is the first user created and will have the ability to perform any administration tasks.</p>
+<div class="alert alert-warning">If you run this on a production server, be sure to use a strong password</div><h2><a name="views"></a><a href="#views">Views<span class="anchor"> &#182;</span></a></h2><p>When mounted, the Auth library supplies a few views to allow visitors to login / logout and do other user account tasks, such as reseting their password.</p>
+<p>This section lists the available views by their URL name. You can use the URL name to retrieve the actual URL with something like the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">get-url</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.auth"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"login"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"url"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Or in template&#8230;</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">a</span><span class="tag tagcontent">&nbsp;href=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent templatetag">{%&nbsp;url&nbsp;'login'&nbsp;from&nbsp;'moya.auth'&nbsp;%}</span><span class="attrib tag tagcontent">"</span><span class="tag">&gt;</span>Login</span><span class="tag">&lt;</span><span class="endtagname tag">/a</span><span class="tag">&gt;</span></div></pre><div class="alert alert-warning">The URLs given here assume the Auth library was mounted on <b>/auth/</b>.</div><h3><a name="login"></a><a href="#login">login<span class="anchor"> &#182;</span></a></h3><code>/auth/login/</code><p>Displays a form with username and password form. If the login was successful, the user is forwarded to either <code>/</code> or a path defined in the query value called <code>fwd</code>. For example, <code>/auth/login/?fwd=/dashboard/</code>.</p>
+<h3><a name="logout"></a><a href="#logout">logout<span class="anchor"> &#182;</span></a></h3><code>/auth/logout</code><p>Logs the user out and forwards them to <code>/</code> or a path given in a query value called <code>fwd</code>.</p>
+<h3><a name="user_edit"></a><a href="#user_edit">user_edit<span class="anchor"> &#182;</span></a></h3><code>/auth/edit/</code><p>A form to allow a user to edit basic details; their first / last name and timezone.</p>
+<h3><a name="forgot_password"></a><a href="#forgot_password">forgot_password<span class="anchor"> &#182;</span></a></h3><code>/auth/forgot-password/</code><p>Displays a form requesting the user's email address. If the email is recognized then Moya Auth will send the user a password reset email which contains a link. Clicking the link in the email will let them enter a new password.</p>
+<p>A link to this page is displayed in the login view.</p>
+<h3><a name="reset_password"></a><a href="#reset_password">reset_password<span class="anchor"> &#182;</span></a></h3><code>/auth/reset/{token}/</code><p>This is the view to handle password resets.</p>
+<h2><a name="user-model"></a><a href="#user-model">User Model<span class="anchor"> &#182;</span></a></h2><p>When a user logs in, Moya looks up a user object from the database and stores it in the context as <code>.user</code>. If no user has logged in, the value of <code>.user</code> will be missing &ndash; which allows you to write code such as this:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">".user"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>User&nbsp;is&nbsp;logged&nbsp;in&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>Or the equivalent in template:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="templatetag">{%&nbsp;if&nbsp;.user&nbsp;%}</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">h1</span><span class="tag">&gt;</span>Welcome,&nbsp;</span><span class="sub">${.user.username}</span>!</span><span class="tag">&lt;</span><span class="endtagname tag">/h1</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="templatetag">{%&nbsp;endif&nbsp;%}</span></div></pre><aside>The <b>.user</b> value in the context is actually calculated <em>lazily</em>, so that Moya won't query the database if you never reference <b>.user</b>.</aside><dl class="dl-horizontal"><dt>username</dt>
+<dd>
+This is the user's <em>identity</em> in the site. It will be a maximum of 30 characters with no spaces.
+</dd><dt>first_name</dt>
+<dd>
+The user's first name (forename).
+</dd><dt>last_name</dt>
+<dd>
+The user's last name (surname).
+</dd><dt>email</dt>
+<dd>
+The user's email address.
+</dd><dt>mail_validated</dt>
+<dd>
+A boolean which indicates if the user's email has been <em>validated</em>.
+</dd><dt>password</dt>
+<dd>
+A <em>hash</em> of the user's password. Moya follows the best practice of not storing the password has a hash rather than plain-text.
+</dd><dt>timezone</dt>
+<dd>
+The user's <em>timezone</em>. If set, Moya can use this information to display times and dates in the user's timezone.
+</dd><dt>last_login</dt>
+<dd>
+The time of the user's most recent login. This will be the start of the current session if the user is logged in.
+</dd><dt>previous_login</dt>
+<dd>
+The time the user logged in prior to the most recent login. Use this value in preference to <code>last_login</code> when working out what has changed since the user's last logged in.
+</dd><dt>notes</dt>
+<dd>
+A text field for admin to store notes regarding a user.
+</dd><dt>groups</dt>
+<dd>
+A many to many of the <a href="auth.html#groups" title="Moya Auth (users and permissions)">groups</a> a user belongs to. Including the user's personal group.
+</dd></dl><h2><a name="permissions-and-groups"></a><a href="#permissions-and-groups">Permissions and Groups<span class="anchor"> &#182;</span></a></h2><p>Moya Auth supports a flexible permissions system that you can user to manage different types of users and define what they can do or see.</p>
+<aside>Many sites will only require two types of users; administrators and <em>everyone else</em>.</aside><h3><a name="permissions"></a><a href="#permissions">Permissions<span class="anchor"> &#182;</span></a></h3><p>A <em>permission</em> is a label associated with a particular capability on the site. The default permissions (created with the <a href="auth.html#init_command" title="Moya Auth (users and permissions)">Init Command</a>) are <code>'admin'</code> which gives you access to the admin site, and <code>'superuser'</code> which identifies you as the owner of the site.</p>
+<p>When a user is logged in, Moya stores the user's permissions in the context as a dict called <code>.permissions</code>, which maps the permission label to a permission object (consisting of it's <code>name</code> and <code>description</code>). For example, if a user has the <code>admin</code> permission, then <code>.permission.admin</code> would contain the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">{</div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;'name':&nbsp;'admin',</div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;'description':&nbsp;'User&nbsp;may&nbsp;perform&nbsp;administration&nbsp;tasks'</div><a name="line4"></a><div class="line line-4">}</div></pre><p>You can use the permissions object to test if a user has a particular permission as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">".permissions.admin"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>The&nbsp;user&nbsp;is&nbsp;an&nbsp;Administrator!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{.permissions.admin.description}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>Alternatively, there is a modifier, <code>permission:</code> which checks the <code>.permissions</code> value. Here's the equivalent check to the above code, written with the modifier:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"permission:'admin'"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>The&nbsp;user&nbsp;is&nbsp;an&nbsp;Administrator!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>The <code>permission:</code> modifier also accept a list of permissions, and will return <code>True</code> only if the user has <em>all</em> of them.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"permission:['admin',&nbsp;'superuser']"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>User&nbsp;is&nbsp;an&nbsp;administrator&nbsp;and&nbsp;a&nbsp;superuser</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><p>The modifier has the advantage that it is easier to define the permissions check in a setting. You might want to do this in a library if you don't want to hard-code the required permissions. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"not&nbsp;permission:.settings.post_permssions.list"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Sorry,&nbsp;you&nbsp;are&nbsp;not&nbsp;permitted&nbsp;to&nbsp;post!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div></pre><h3><a name="view-permissions"></a><a href="#view-permissions">View Permissions<span class="anchor"> &#182;</span></a></h3><p>You may want to restrict a URL to a users with a particular permission (for example, admin users). One way of doing this is to apply a permission check to the <a class="tag" href="tags/httpmoyaprojectcom/tag_forbidden.html">&lt;forbidden&gt;</a> tag which generates a <b>403 Forbidden</b> response. The Moya Auth library handles this special response by forwarding the user to the login page.</p>
+<p>Here's how you might do a permission check in a view:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">forbidden</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"not&nbsp;permission:'admin'"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Because this is such a common pattern, the <a class="tag" href="tags/httpmoyaprojectcom/tag_view.html">&lt;view&gt;</a> has a <code>requires</code> attribute which will have the same effect. Here's how you would do the same permission check with the <code>requires</code> attribute:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">view</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"view.admin"</span><span class="tag tagcontent">&nbsp;requires=</span><span class="attrib tag tagcontent">"permission:'admin'"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;admin&nbsp;only&nbsp;view&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/view</span><span class="tag">&gt;</span></div></pre><h3><a name="url-permissions"></a><a href="#url-permissions">URL Permissions<span class="anchor"> &#182;</span></a></h3><p>It's often a requirement to have many views restricted to users with a particular permission, often under a single top level URL. It would be somewhat tedious to add a permissions check to all the views, and the consequences of a missing check could potentially be serious. In these situations you might want to add a <a class="tag" href="tags/httpmoyaprojectcom/tag_url.html">&lt;url&gt;</a> to apply a permissions check.</p>
+<p>Here's how you would check for admin permissions for <em>any</em> URL under <code>/admin-only/</code>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">url</span><span class="tag tagcontent">&nbsp;route=</span><span class="attrib tag tagcontent">"/admin-only/*"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">forbidden</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"not&nbsp;permission:'admin'"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/url</span><span class="tag">&gt;</span></div></pre><h3><a name="groups"></a><a href="#groups">Groups<span class="anchor"> &#182;</span></a></h3><p>Permissions are associated with <em>groups</em> which may contain any number of users. Users in a group acquire all the permissions of that group. For example, there is a default group called <code>'administrators'</code> which gives users the <code>'admin'</code> permission, i.e. if you are in the <code>'administrators'</code> group you will have the <code>'admin'</code> permission.</p>
+<p>The user object has a many to many of groups the user belongs to. Here's how you could list the groups for the logged in user:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">".user.groups"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"group"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>User&nbsp;belongs&nbsp;to&nbsp;</span><span class="sub">$</span><span class="braced sub">{group}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/form</span><span class="tag">&gt;</span></div></pre><p>You will rarely need to look at a users groups directly, as the <a href="auth.html#permissions" title="Moya Auth (users and permissions)">permissions</a> will already have been determined.</p>
+<h3><a name="personal-groups"></a><a href="#personal-groups">Personal Groups<span class="anchor"> &#182;</span></a></h3><p>Permissions are not strictly speaking associated with a user, but users can have a <em>personal group</em> which is a special group unique to them. Adding a permission to this group will apply to that user and that user only. You can use this to tailor individual permissions for a user where there is no appropriate group to put them in.</p>
+<h3><a name="default-groups-and-permissions"></a><a href="#default-groups-and-permissions">Default Groups and Permissions<span class="anchor"> &#182;</span></a></h3><p>The <a href="auth.html#init-command" title="Moya Auth (users and permissions)">init command</a> creates a small number of default groups and permission. These are the minimum requirements for most sites.</p>
+<p>The init command creates a single group called <code>administrators</code> which supplies a permission called <code>admin</code>. Users with the <code>admin</code> permission may log in to the admin site. The <code>admin</code> permission also enables the editing of site content in some applications, e.g. editing pages, blog posts, FAQs etc.</p>
+<p>The first user created is a member of the <code>administrator</code> group, and also has a permission called <code>super</code> assigned to their <em>personal</em> group. You should use the <code>super</code> permission to guard any potentially destructive operations that you wouldn't want to risk an administrator doing by accident.</p>
+<h3><a name="managing-groups-permissions"></a><a href="#managing-groups-permissions">Managing Groups &amp; Permissions<span class="anchor"> &#182;</span></a></h3><p>Generally speaking, groups and permissions are relatively <em>static</em> in that once created you will rarely need to change them &ndash; probably only when you roll out features to your site. Creating groups and permissions can be done with either the <a href="auth.html#auth-commands" title="Moya Auth (users and permissions)">auth command</a> or via the admin site.</p>
+<p>Adding a user to a group can be done with the <a class="tag" href="tags/httpmoyaprojectcomauth/tag_add-user-to-group.html">&lt;add-user-to-group&gt;</a> tag, which takes a user object and the group to add to. For example, the following adds a user with username <code>'john'</code> to the administrators group.</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#User"</span><span class="tag tagcontent">&nbsp;let:username=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"john"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">add-user-to-group</span><span class="tag tagcontent">&nbsp;let:user=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;let:group=</span><span class="attrib tag tagcontent">"administrators"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>To add a permission to a group (or a users's personal group) you can use <a class="tag" href="tags/httpmoyaprojectcomauth/tag_add-permission.html">&lt;add-permission&gt;</a> which takes either a user or group, and a permission name. For example, here is how you make a user a <em>superuser</em> user by adding the <code>super</code> permission to their personal group:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#User"</span><span class="tag tagcontent">&nbsp;let:username=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"john"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag xmlns">db:</span><span class="tag tagname">add-permission</span><span class="tag tagcontent">&nbsp;user=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;permission=</span><span class="attrib tag tagcontent">"super"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><aside>If everyone is <em>super</em>, nobody is.</aside> 
+<h2><a name="creating-users"></a><a href="#creating-users">Creating Users<span class="anchor"> &#182;</span></a></h2><p>You can create a new user manually with <a class="tag" href="tags/httpmoyaprojectcomauth/tag_new-user.html">&lt;new-user&gt;</a>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">auth:</span><span class="tag tagname">new-user</span><span class="tag tagcontent">&nbsp;username=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;email=</span><span class="attrib tag tagcontent">"john@moya.com"</span><span class="tag tagcontent"></span></div><a name="line3"></a><div class="line line-3"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;first_name=</span><span class="attrib tag tagcontent">"John"</span><span class="tag tagcontent"></span></div><a name="line4"></a><div class="line line-4"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;last_name=</span><span class="attrib tag tagcontent">"Crichton"</span><span class="tag tagcontent"></span></div><a name="line5"></a><div class="line line-5"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;password=</span><span class="attrib tag tagcontent">"aeryn1234"</span><span class="tag tagcontent"></span></div><a name="line6"></a><div class="line line-6"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;dst=</span><span class="attrib tag tagcontent">"john"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This will create a new user with username <code>john</code>. If that username is taken, Moya will raise a <code>moya.auth.duplicate-user</code> exception.</p>
+<p>Note that the password will be hashed automatically.</p>
+<h2><a name="logging-in-a-user"></a><a href="#logging-in-a-user">Logging In a User<span class="anchor"> &#182;</span></a></h2><p>You can login a user for the current session with <a class="tag" href="tags/httpmoyaprojectcomauth/tag_login.html">&lt;login&gt;</a> which takes a username and password. If the username exists and the password matches, then the user object will be returned (and stored in <code>.user</code>). Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">auth:</span><span class="tag tagname">login</span><span class="tag tagcontent">&nbsp;username=</span><span class="attrib tag tagcontent">"'john'"</span><span class="tag tagcontent">&nbsp;password=</span><span class="attrib tag tagcontent">"'aeryn1234'"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"user"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>A few exception may be thrown by <a class="tag" href="tags/httpmoyaprojectcomauth/tag_login.html">&lt;login&gt;</a> if the login was unsuccessful; the exception <code>"moya.auth.no-user"</code> indicates the username was incorrect, <code>"moya.auth.password-fail"</code> indicates the password was incorrect, and <code>"moya.auth.not-active"</code> indicates the login was disabled.</p>
+<h2><a name="logging-out-a-user"></a><a href="#logging-out-a-user">Logging Out a User<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomauth/tag_logout.html">&lt;logout&gt;</a> will logout a given user, or the currently logged in user. For example, the following will log out the current user:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">auth:</span><span class="tag tagname">logout</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre> 
+<h2><a name="setting-checking-passwords"></a><a href="#setting-checking-passwords">Setting / Checking Passwords<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomauth/tag_set-password.html">&lt;set-password&gt;</a> can set (and hash) a password for the given user. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">auth:</span><span class="tag tagname">set-password</span><span class="tag tagcontent">&nbsp;user=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;password=</span><span class="attrib tag tagcontent">"'ayom74'"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can <em>check</em> a password with the <a class="tag" href="tags/httpmoyaprojectcomauth/tag_check-password.html">&lt;check-password&gt;</a> tag. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">auth:</span><span class="tag tagname">check-password</span><span class="tag tagcontent">&nbsp;user=</span><span class="attrib tag tagcontent">"john"</span><span class="tag tagcontent">&nbsp;password=</span><span class="attrib tag tagcontent">"'ayom74'"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"passed"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">if</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"passed"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Password&nbsp;is&nbsp;correct!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/if</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="tag tagname">else</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Password&nbsp;failed!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/else</span><span class="tag">&gt;</span></div></pre><h2><a name="auth-commands"></a><a href="#auth-commands">Auth Commands<span class="anchor"> &#182;</span></a></h2><p>Moya Auth has a number of commands you can invoke from the command line, including commands to create / edit permissions, groups and users.</p>
+<p>Enter the following from a project directory to view all the commands available:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;auth#</div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="libintro.html">&larr; 1. Introduction</a>
+        </li>
+        
+        <li class="next">
+            <a href="admin.html">3. Moya Admin &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#init-command">Init Command</a></li>
+    
+    <li><a href="#views">Views</a><ul>
+    
+    <li><a href="#login">login</a></li>
+    
+    <li><a href="#logout">logout</a></li>
+    
+    <li><a href="#user_edit">user_edit</a></li>
+    
+    <li><a href="#forgot_password">forgot_password</a></li>
+    
+    <li><a href="#reset_password">reset_password</a></li>
+    
+</ul></li>
+    
+    <li><a href="#user-model">User Model</a></li>
+    
+    <li><a href="#permissions-and-groups">Permissions and Groups</a><ul>
+    
+    <li><a href="#permissions">Permissions</a></li>
+    
+    <li><a href="#view-permissions">View Permissions</a></li>
+    
+    <li><a href="#url-permissions">URL Permissions</a></li>
+    
+    <li><a href="#groups">Groups</a></li>
+    
+    <li><a href="#personal-groups">Personal Groups</a></li>
+    
+    <li><a href="#default-groups-and-permissions">Default Groups and Permissions</a></li>
+    
+    <li><a href="#managing-groups-permissions">Managing Groups &amp; Permissions</a></li>
+    
+</ul></li>
+    
+    <li><a href="#creating-users">Creating Users</a></li>
+    
+    <li><a href="#logging-in-a-user">Logging In a User</a></li>
+    
+    <li><a href="#logging-out-a-user">Logging Out a User</a></li>
+    
+    <li><a href="#setting-checking-passwords">Setting / Checking Passwords</a></li>
+    
+    <li><a href="#auth-commands">Auth Commands</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

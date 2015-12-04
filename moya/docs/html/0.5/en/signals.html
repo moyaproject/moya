@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Signals</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="images.html">&larr; 18. Images</a>
+        </li>
+        
+        <li class="next">
+            <a href="logging.html">20. Logging &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Signals</h1>
+            <p>Signals in Moya are a way for your project code to respond to various events that may occur during the processing of a request, or at other points during the lifetime of the server. For example, you may want to run some code when server starts up, or when an object is written to the database.</p>
+<h2><a name="writing-handlers"></a><a href="#writing-handlers">Writing Handlers<span class="anchor"> &#182;</span></a></h2><p>Signals are identified by a string in dotted notation. For example, <code>sys.startup</code>, is a signal for the server starting up. You may write code that <em>handles</em> a signal with the <a class="tag" href="tags/httpmoyaprojectcom/tag_handle.html">&lt;handle&gt;</a> tag. Here's an example of handling the <code>sys.startup</code> signal:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">handle</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"sys.startup"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Moya&nbsp;is&nbsp;starting&nbsp;up.&nbsp;To&nbsp;infinity,&nbsp;and&nbsp;beyond!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/handle</span><span class="tag">&gt;</span></div></pre><p>If you add the above code to your project (it can go anywhere), Moya will display text in the console when you run the server. Naturally, in a real project a signal handler would so something more useful.</p>
+<p>The <code>signal</code> attribute of <a class="tag" href="tags/httpmoyaprojectcom/tag_handle.html">&lt;handle&gt;</a> may also accept <em>wildcards</em> &ndash; an asterisk is used to indicate that it will match anything with the same prefix. For example, if you were to set <code>signal</code> to <code>sys.*</code>, the handler would be invoked for any signal in the <code>sys</code> namespace.</p>
+<h3><a name="senders"></a><a href="#senders">Senders<span class="anchor"> &#182;</span></a></h3><p>Some signals have an associated <code>sender</code>, which is the library name of an element from which the signal is sent. For example, database related signals set the sender to the model name. You can whose to handle signals from a given sender with the <code>sender</code> attribute of <a class="tag" href="tags/httpmoyaprojectcom/tag_handle.html">&lt;handle&gt;</a>. For example, the following handler will be invoked for every database signal sent from the User model:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">handle</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"db.*"</span><span class="tag tagcontent">&nbsp;sender=</span><span class="attrib tag tagcontent">"moya.auth#User"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>DB&nbsp;signal&nbsp;handled</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/handle</span><span class="tag">&gt;</span></div></pre><h3><a name="signal-object"></a><a href="#signal-object">Signal Object<span class="anchor"> &#182;</span></a></h3><p>When a handler is invoked, Moya passes in a <code>signal</code> object with information regarding the signal. It contains three keys; <code>name</code> is the name of the signal, <code>sender</code> is the sender, and <code>data</code> is a dictionary containing extra information regarding the signal.</p>
+<p>The contents of a signal's <code>data</code> dictionary vary according to the signal. For example, database related signals contain a value called <code>object</code>, which is the database object associated with the signal. Here's an example of a signal handler used in the Auth library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">handle</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"db.before-update"</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.auth#User"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;Hash&nbsp;password&nbsp;automatically&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;user=</span><span class="attrib tag tagcontent">"signal.data.object"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">call</span><span class="tag tagcontent">&nbsp;macro=</span><span class="attrib tag tagcontent">"#hashpassword"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"'$'&nbsp;not&nbsp;in&nbsp;user.password"</span><span class="tag tagcontent"></span></div><a name="line5"></a><div class="line line-5"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dst=</span><span class="attrib tag tagcontent">"user.password"</span><span class="tag tagcontent">&nbsp;let:password=</span><span class="attrib tag tagcontent">"user.password"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/handle</span><span class="tag">&gt;</span></div></pre><p>This handler is invoked just prior to writing a User object to the database. The handler <em>hashes</em> the password, so as not to store it in plain text. If we didn't use a handler here, we would have to cut and paste a line of code to every point where the User model is saves &ndash; which would be prone to errors.</p>
+<h2><a name="custom-signals"></a><a href="#custom-signals">Custom Signals<span class="anchor"> &#182;</span></a></h2><p>Some signals are sent by Moya itself, but you may also write code that sends, or <em>fires</em> custom signals. This allows you to respond to events without cluttering up your code. The <a class="tag" href="tags/httpmoyaprojectcom/tag_fire.html">&lt;fire&gt;</a> tag is used to fire a custom signal. You can set the name of the signal to fire with the <code>signal</code> attribute, and the sender with the <code>sender</code> attribute. Additional data (which will be stored in <code>signal.data</code>) is set via the moya-codelet map</a>. Here's an firing a signal:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">fire</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"moyaproject.sushifinder.out-of-stock"</span><span class="tag tagcontent">&nbsp;let:item=</span><span class="attrib tag tagcontent">"Tuna&nbsp;Roll"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The following would catch the above signal:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">handle</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"moyaproject.sushifinder.out-of-stock"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>We&nbsp;need&nbsp;to&nbsp;order&nbsp;more&nbsp;</span><span class="sub">$</span><span class="braced sub">{signal.data.item}</span>s!</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/handle</span><span class="tag">&gt;</span></div></pre><h3><a name="naming-convention"></a><a href="#naming-convention">Naming Convention<span class="anchor"> &#182;</span></a></h3><p>Signal names with a single dot, such as <code>db.before-update</code>, <code>sys.startup</code>, are reserved by Moya. Custom signals should be named with the prefix of the library they are being sent from, e.g. <code>moyaproject.sushifinder.out-of-stock</code>.</p>
+<p>If signals fall in to broad catagories, it is a good idea to name your signals to reflect that. For example, you could have <code>moyaproject.sushifinder.stock.out-of-stock</code> and <code>moyaproject.sushifinder.stock.low-stock</code> etc. A single handler may be written to respond to all stock related signals (with a <code>signal</code> attribute of <code>moyaproject.sushihandler.stock.*</code>).</p>
+<h2><a name="debugging"></a><a href="#debugging">Debugging<span class="anchor"> &#182;</span></a></h2><p>Moya intentionally ignores all exceptions that occur within signal handlers. Otherwise, you could never be sure that code you write won't break due to a bug in a signal handler (possibly written by a third party).</p>
+<aside>It is generally considered a bad idea to ignore errors in programming, but Moya takes a pragmatic approach with signals. It is preferable to have the signal handler silently fail than to break the User Interface or potentially lose data.</aside><p>If a traceback does happen within a signal handler, Moya will write a message to the logs. Moya will also display a trace in the console if debug mode is enabled. You can also step through code in signal handlers and insert <a class="tag" href="tags/httpmoyaprojectcom/tag_breakpoint.html">&lt;breakpoint&gt;</a> tags as normal.</p>
+<p>If you enable <code>log_signals</code> in <a href="project.html#project-section" title="Building a Project">Project Settings</a>, Moya will write a message to the log every time it sends a signal. You could also replicate this with a <em>catch all</em> signal handler, such as the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">handler</span><span class="tag tagcontent">&nbsp;signal=</span><span class="attrib tag tagcontent">"*"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Signal&nbsp;</span><span class="sub">$</span><span class="braced sub">{signal.name}</span>&nbsp;detected</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Sent&nbsp;by&nbsp;</span><span class="sub">$</span><span class="braced sub">{signal.sender&nbsp;or&nbsp;'nobody'}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span>Signal&nbsp;data:</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag tagcontent">&nbsp;obj=</span><span class="attrib tag tagcontent">"signal.data"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/handler</span><span class="tag">&gt;</span></div></pre><h2><a name="built-in-signals"></a><a href="#built-in-signals">Built-in Signals<span class="anchor"> &#182;</span></a></h2><p>The following signals are built-in to Moya.</p>
+<h3><a name="system"></a><a href="#system">System<span class="anchor"> &#182;</span></a></h3><p>System signals are sent at various points in the life-time of the server. System signals begin with the prefix <code>sys</code>.</p>
+<dl class="dl-horizontal">
+<dt>sys.startup</dt>
+<dd>
+Sent when the server is starting up.
+</dd>
+</dl><h3><a name="request"></a><a href="#request">Request<span class="anchor"> &#182;</span></a></h3><p>A number of signals are sent at several points during the request process. Request signals begin with the <code>request</code> prefix.</p>
+<dl class="dl-horizontal">
+<dt>request.pre-dispatch</dt>
+<dd>
+This signal is sent immediately prior to processing a request. Signal data contains no values.
+</dd><dt>request.post-dispatch</dt>
+<dd>
+This signal is sent immediately after processing a request, but before the result of that request (which may be content or another renderable) has been rendered in to html. The result is stored in the signal data, as <code>result</code>.
+</dd><dt>request.response</dt>
+<dd>
+This signal is sent once a valid response object has been created. It is this response which will be ultimately sent to the user. The response object is stored in the signal data as <code>response</code>.
+</dd><dt>request.end</dt>
+<dd>
+This signal is send at the very end of the request process, <em>after</em> the response has been sent. The signal data contains the <code>response</code> object.Note, that since the response has been sent when the <code>request.end</code> signal is fired, modifying the response will have no effect.
+</dd></dl>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="images.html">&larr; 18. Images</a>
+        </li>
+        
+        <li class="next">
+            <a href="logging.html">20. Logging &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#writing-handlers">Writing Handlers</a><ul>
+    
+    <li><a href="#senders">Senders</a></li>
+    
+    <li><a href="#signal-object">Signal Object</a></li>
+    
+</ul></li>
+    
+    <li><a href="#custom-signals">Custom Signals</a><ul>
+    
+    <li><a href="#naming-convention">Naming Convention</a></li>
+    
+</ul></li>
+    
+    <li><a href="#debugging">Debugging</a></li>
+    
+    <li><a href="#built-in-signals">Built-in Signals</a><ul>
+    
+    <li><a href="#system">System</a></li>
+    
+    <li><a href="#request">Request</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

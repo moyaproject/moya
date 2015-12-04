@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Admin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="auth.html">&larr; 2. Moya Auth (users and permissions)</a>
+        </li>
+        
+        <li class="next">
+            <a href="blog.html">4. Moya Blog &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Admin</h1>
+            <p>Moya Admin creates a fully features <em>administration</em> site, which allows users (with admin permissions) to query and manage objects stored in the database.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>The Moya Admin library is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.forms"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The above line should be in your <a class="tag" href="tags/httpmoyaprojectcom/tag_server.html">&lt;server&gt;</a> declaration.</p>
+<p>You can install the library with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"admin"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.admin"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/admin/"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This will install Moya Admin and mount it on <b>/admin/</b>.</p>
+<aside>If you created your project with <b>moya start</b> then Moya Admin will have been installed automatically.</aside><h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Moya Admin uses the namespace <code>http://moyaproject.com/admin</code>.</p>
+ 
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>If you visit the admin site (on /admin/) you will see a list of <em>modules</em> in a panel. These are headings which contain a sub-menu of table views which display objects stored in the database. From a table view you can search the database for a particular object, and also create / edit / delete items from the database.</p>
+<p>Libraries can advertise what modules / tables they support and customize admin functionality as well as look and feel. You won't need to do any particular configuration for a library to use the admin sites; installing a library is enough to register with the admin sites.</p>
+<h2><a name="modules"></a><a href="#modules">Modules<span class="anchor"> &#182;</span></a></h2><p>A library can <em>advertise</em> the modules it wishes to add to the admin site by adding a <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_module.html">&lt;module&gt;</a> tag anywhere in the library code &ndash; by convention in a file called <code>admin.xml</code>. There is typically only one module per application, but it is entirely possible to have more than one.</p>
+<p>Here's how you might create a module in your library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">module</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/admin"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;slug=</span><span class="attrib tag tagcontent">"sushi-shop"</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Shop"</span><span class="tag tagcontent">&nbsp;description=</span><span class="attrib tag tagcontent">"Manage&nbsp;Sushi&nbsp;Products"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/module</span><span class="tag">&gt;</span></div></pre><p>This will create a link in the admin panel using these details. If you click on a module link in admin (as apposed to just expanding the menu), you will see a simple title page. You can customize this page by setting the <code>content</code> attribute to your new content. Your custom content should extend <code>moya.admin#content.cover</code>, and contain a section called <code>content</code>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">module</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/admin"</span><span class="tag tagcontent">&nbsp;content=</span><span class="attrib tag tagcontent">"content.custom.admin"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;slug=</span><span class="attrib tag tagcontent">"sushi-shop"</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Shop"</span><span class="tag tagcontent">&nbsp;description=</span><span class="attrib tag tagcontent">"Manage&nbsp;Sushi&nbsp;Products"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/module</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"><br></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="tag tagname">content</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"content.custom.admin"</span><span class="tag tagcontent">&nbsp;extends=</span><span class="attrib tag tagcontent">"moya.admin#content.cover"</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">section</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"content"</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">markdown</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">Sushi&nbsp;Shop</div><a name="line9"></a><div class="line line-9">==========</div><a name="line10"></a><div class="line line-10"><br></div><a name="line11"></a><div class="line line-11">Get&nbsp;your&nbsp;sushi&nbsp;here!</div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/markdown</span><span class="tag">&gt;</span></div><a name="line13"></a><div class="line line-13">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/section</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14"></span><span class="tag">&lt;</span><span class="endtagname tag">/content</span><span class="tag">&gt;</span></div></pre><p>
+A <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_module.html">&lt;module&gt;</a> should contain one or more <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_link.html">&lt;link&gt;</a> tags. These reference <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_table.html">&lt;table&gt;</a> tags which define a table view. See the next section for an overview of defining tables.</p>
+<h2><a name="tables"></a><a href="#tables">Tables<span class="anchor"> &#182;</span></a></h2><p>Tables are advertised with the <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_table.html">&lt;table&gt;</a> tag which sets the <code>title</code>. <code>slug</code>, and <code>model</code> for the table view. The model should be a reference to the <a class="tag" href="tags/httpmoyaprojectcomdb/tag_model.html">&lt;model&gt;</a> you want to list in the table.</p>
+<p>Within the <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_table.html">&lt;table&gt;</a> should be a sequence of <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_column.html">&lt;column&gt;</a> tags which define the columns to be displayed in the table. Here's an example of a table definition with two columns:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"admintable.products"</span><span class="tag tagcontent">&nbsp;slug=</span><span class="attrib tag tagcontent">"products"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Products"</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#Product"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"><br></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Product"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"name"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Stock"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"stock"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.stock}</span>&nbsp;piece(s)</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>When Moya Admin renders a table, it iterates through each object in the database and creates table cells from the <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_column.html">&lt;column&gt;</a> tags, to which it passes the current object as a value called <code>object</code>. Columns may contain simple expressions, for example <code>${object.name}</code> to display the <code>name</code> field of the database object, or, any other content tags. This makes tables infinitely customizable as you can put text, images, widgets, forms or any other renderable content inside a cell.</p>
+<p>To display this table in the modules panel, you would add a <a class="tag" href="tags/httpmoyaprojectcomadmin/tag_link.html">&lt;link&gt;</a> to your module definition. Here's how to add the products table to the Sushi Shop model:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">module</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/admin"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;slug=</span><span class="attrib tag tagcontent">"sushi-shop"</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Shop"</span><span class="tag tagcontent">&nbsp;description=</span><span class="attrib tag tagcontent">"Manage&nbsp;Sushi&nbsp;Products"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;to=</span><span class="attrib tag tagcontent">"admintable.products"</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Products"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/module</span><span class="tag">&gt;</span></div></pre><h2><a name="searching"></a><a href="#searching">Searching<span class="anchor"> &#182;</span></a></h2><p>You can add a search field to the table by setting the <code>search</code> attribute on the <code>table</code>. This should be a <a href="db.html#database-expressions" title="Databases">database expression</a> referencing the value <code>q</code> which contains the text the user searched for. Here's how we would add search capabilities to the Sushi Products table:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"admintable.products"</span><span class="tag tagcontent">&nbsp;slug=</span><span class="attrib tag tagcontent">"products"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;search=</span><span class="attrib tag tagcontent">"#Product.name&nbsp;==&nbsp;q"</span><span class="tag tagcontent"></span></div><a name="line3"></a><div class="line line-3"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Products"</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#Product"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"><br></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Product"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"name"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Stock"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"stock"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.stock}</span>&nbsp;piece(s)</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"><br></div><a name="line8"></a><div class="line line-8"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre><p>The db expression, <code>#Product.name == q</code> matches all products a name field set to the search query. You can use a more complicated db expression to search multiple fields, or to do more relaxed queries. For instance <code>#Product.name icontains q</code>, would match any products with a name containing the search substring.</p>
+<h2><a name="filtering"></a><a href="#filtering">Filtering<span class="anchor"> &#182;</span></a></h2><p>By default, Moya Admin will list all objects of the specified type in the table. It is also possible to restrict the query to objects matching a db expression. You might want to do this if you want several tables, each showing a different subset of objects. To filter objects in a table, set the <code>filter</code> attribute to a db expression. Here's how you would create a table view that displayed only the sushi products in stock:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">table</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"admintable.products_in_stock"</span><span class="tag tagcontent">&nbsp;slug=</span><span class="attrib tag tagcontent">"products_on_stock"</span><span class="tag tagcontent"></span></div><a name="line2"></a><div class="line line-2"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;search=</span><span class="attrib tag tagcontent">"#Product.name&nbsp;==&nbsp;q"</span><span class="tag tagcontent"></span></div><a name="line3"></a><div class="line line-3"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;description=</span><span class="attrib tag tagcontent">"Products&nbsp;in&nbsp;stock"</span><span class="tag tagcontent"></span></div><a name="line4"></a><div class="line line-4"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;filter=</span><span class="attrib tag tagcontent">"#Product.stock&nbsp;gt&nbsp;0"</span><span class="tag tagcontent"></span></div><a name="line5"></a><div class="line line-5"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;title=</span><span class="attrib tag tagcontent">"Sushi&nbsp;Products"</span><span class="tag tagcontent">&nbsp;model=</span><span class="attrib tag tagcontent">"#Product"</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Product"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"name"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.name}</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">column</span><span class="tag tagcontent">&nbsp;title=</span><span class="attrib tag tagcontent">"Stock"</span><span class="tag tagcontent">&nbsp;sort=</span><span class="attrib tag tagcontent">"stock"</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{object.stock}</span>&nbsp;piece(s)</span><span class="tag">&lt;</span><span class="endtagname tag">/column</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9"><br></div><a name="line10"></a><div class="line line-10"></span><span class="tag">&lt;</span><span class="endtagname tag">/table</span><span class="tag">&gt;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="auth.html">&larr; 2. Moya Auth (users and permissions)</a>
+        </li>
+        
+        <li class="next">
+            <a href="blog.html">4. Moya Blog &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#modules">Modules</a></li>
+    
+    <li><a href="#tables">Tables</a></li>
+    
+    <li><a href="#searching">Searching</a></li>
+    
+    <li><a href="#filtering">Filtering</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

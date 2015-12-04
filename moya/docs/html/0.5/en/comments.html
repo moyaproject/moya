@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Comments</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="bootstrap.html">&larr; 5. Moya Bootstrap</a>
+        </li>
+        
+        <li class="next">
+            <a href="debug.html">7. Moya Debug &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Comments</h1>
+            <p>Moya Comments enable threaded comments to be added to any page. You can get notification emails regarding comments, and replies. User's may unsubscribe from these emails at any point.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Comments is built in to Moya, and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.comments"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>You can install Moya Comments with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"comments"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.comments"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/comments/"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The mount URL is used for few forms and the inner workings of the comments system, users will be able to make comments on any page.</p>
+<h2><a name="settings"></a><a href="#settings">Settings<span class="anchor"> &#182;</span></a></h2><p class="setting">email_from =<span class="value"> &lt;EMAIL ADDRESS&gt;</span></p><p>This sets the email address that emails regarding notifications will be sent from.</p>
+<p class="setting">recaptcha =<span class="value"> &lt;yes/no&gt;</span></p><p>If <code>yes</code>, Moya Comments will require a CAPTCHA to post anonymously. See <a href="recaptcha.html">Moya Google Recaptcha</a>.</p>
+<h2><a name="comment-widget"></a><a href="#comment-widget">Comment Widget<span class="anchor"> &#182;</span></a></h2><p>To enable comments on a page add a <code>comment</code> to your content, where you want the comments to appear (typically near the end of the page).</p>
+<p>The <a class="tag" href="tags/httpmoyaprojectcomcomments/tag_comments.html">&lt;comments&gt;</a> widget needs two pieces of information in order to associate comments with the comment <em>topic</em>; these are <code>topic</code> and <code>namespace</code>. The <code>topic</code> attribute is a string which should be unique to type of topic. Since the comment topic is likely a database object of some kind, a sensible choice would be name of the object type and its primary key. For example <code>post-${post.id}</code>. The <code>namespace</code> is a similar string, which can be any format you like, as long as the combination of <code>namespace</code> and <code>topic</code> is unique in your website. If your topic is a database object, then a <code>namespace</code> that includes the application name should be enough to make the combination unique.</p>
+<p>You can also supply a <code>url</code> attribute, which is used to redirect back to the page containing the topic when a comment is posted. It is also stored along with the comments, so you can reference it in the admin view. If you don't supply a <code>url</code>, Moya Comments will use the current url being processed.</p>
+<p>Here's an example of how to enable comments:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">comments:</span><span class="tag tagname">comments</span><span class="tag tagcontent">&nbsp;namespace=</span><span class="attrib tag tagcontent">"app-</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{.app.name}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;topic=</span><span class="attrib tag tagcontent">"post-</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{post.id}</span><span class="attrib tag tagcontent">"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Note that the namespace plus topic scheme ensures that even if you change your URL structures, Moya will be able to keep track of the comments on that page.</p>
+<h2><a name="comment-counts"></a><a href="#comment-counts">Comment Counts<span class="anchor"> &#182;</span></a></h2><p>Moya Comments also supplies the <a class="tag" href="tags/httpmoyaprojectcomcomments/tag_get-count.html">&lt;get-count&gt;</a> tag to get the number of comments on a particular topic. You would use this if you want to display the number of comments in some kind of summary page. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"posts"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"post"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">comments:</span><span class="tag tagname">get-count</span><span class="tag tagcontent">&nbsp;namespace=</span><span class="attrib tag tagcontent">"app-post"</span><span class="tag tagcontent">&nbsp;topic=</span><span class="attrib tag tagcontent">"post-</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{post.id}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"count"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">html:</span><span class="tag tagname">h1</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{post.title}</span><span class="tag">&lt;</span><span class="endtagname tag">/html:h1</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">html:</span><span class="tag tagname">p</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{count}</span>&nbsp;comment(s)</span><span class="tag">&lt;</span><span class="endtagname tag">/html:p</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/for</span><span class="tag">&gt;</span></div></pre><p>This would be used in a content definition to add a <code>&lt;h1&gt;</code> tag for each post, followed by the number of comments on the post.</p>
+<p>To avoid doing a database query for every object you want to get the comment counts for, you can use <a class="tag" href="tags/httpmoyaprojectcomcomments/tag_get-counts.html">&lt;get-counts&gt;</a> which gets the counts for a group of topics (in a single query). It returns a dictionary that maps the topic on to the number of comments.</p>
+<p>The following does the same thing as the preceding example, but uses a single call to <a class="tag" href="tags/httpmoyaprojectcomcomments/tag_get-counts.html">&lt;get-counts&gt;</a>, rather than multiple <a class="tag" href="tags/httpmoyaprojectcomcomments/tag_get-count.html">&lt;get-count&gt;</a> calls:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">comments:</span><span class="tag tagname">get-counts</span><span class="tag tagcontent">&nbsp;namespace=</span><span class="attrib tag tagcontent">"app-post"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"counts"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">for</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"posts"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"post"</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">html:</span><span class="tag tagname">h1</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{post.title}</span><span class="tag">&lt;</span><span class="endtagname tag">/html:h1</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">html:</span><span class="tag tagname">p</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{counts['post-'&nbsp;+&nbsp;post.id]}</span>&nbsp;comment(s)</span><span class="tag">&lt;</span><span class="endtagname tag">/html:p</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5"></span><span class="tag">&lt;</span><span class="endtagname tag">/form</span><span class="tag">&gt;</span></div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="bootstrap.html">&larr; 5. Moya Bootstrap</a>
+        </li>
+        
+        <li class="next">
+            <a href="debug.html">7. Moya Debug &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#settings">Settings</a></li>
+    
+    <li><a href="#comment-widget">Comment Widget</a></li>
+    
+    <li><a href="#comment-counts">Comment Counts</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

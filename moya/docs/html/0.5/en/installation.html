@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Installing Moya</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="introduction.html">&larr; 1. Introduction</a>
+        </li>
+        
+        <li class="next">
+            <a href="overview.html">3. Overview &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Installing Moya</h1>
+            <p>Moya is distributed as a Python module.</p>
+<h2><a name="requirements"></a><a href="#requirements">Requirements<span class="anchor"> &#182;</span></a></h2><p>Moya supports Python 2.7, and Python 3.3+. Support for Python 2.7 will continue for its lifespan &ndash; likely many years yet.</p>
+<h2><a name="linux"></a><a href="#linux">Linux<span class="anchor"> &#182;</span></a></h2><p>Moya requires <a href="http://lxml.de">lxml</a>. Probably the simplest way to install lxml is via your package manager:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">sudo&nbsp;apt-get&nbsp;install&nbsp;python-lxml</div></pre><aside>If you are using Python 3, install <b>python3-lxml</b></aside><p>If your package manager doesn't offer lxml, you will need to install libxml2 and libxslt:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">sudo&nbsp;apt-get&nbsp;install&nbsp;libxml2-dev&nbsp;libxslt-dev&nbsp;python-dev</div></pre><p>See the official <a href="http://lxml.de/installation.html#requirements">documentation on installing lxml</a> if you have any problems.</p>
+<p>You can then install Moya with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">sudo&nbsp;pip&nbsp;install&nbsp;moya</div></pre><h2><a name="windows"></a><a href="#windows">Windows<span class="anchor"> &#182;</span></a></h2><p>You can stall Moya on Windows with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">pip&nbsp;install&nbsp;moya</div></pre><p>If you get errors about lxml not installing, you may need to install lxml separately. Download a binary from <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml">http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml</a> and install with pip. Then run install Moya again (with pip).</p>
+<h2><a name="osx"></a><a href="#osx">OSX<span class="anchor"> &#182;</span></a></h2><p>If you have a Python environment set up, then the following command will install Moya:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">pip&nbsp;install&nbsp;moya</div></pre><p>If you don't have Python + Pip set up, you can install them via Homebrew. Follow the official <a href="http://brew.sh/">instructions</a> to install Homebrew. Then run the following to install Python + Pip + Moya:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">brew&nbsp;install&nbsp;python</div><a name="line2"></a><div class="line line-2">pip&nbsp;install&nbsp;pip&nbsp;-U</div><a name="line3"></a><div class="line line-3">pip&nbsp;install&nbsp;moya</div></pre><h2><a name="installing-from-source"></a><a href="#installing-from-source">Installing from Source<span class="anchor"> &#182;</span></a></h2><p>If you want the cutting edge code, you can install the latest from GitHub. The Moya repos also contains example projects that you may want to try out.</p>
+<p>To get the source, clone the <a href="https://github.com/moyaproject/moya">Moya GitHub repository</a>, then run the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;sudo&nbsp;python&nbsp;setup.py&nbsp;install</div></pre><h2><a name="command-line-application"></a><a href="#command-line-application">Command Line Application <span class="anchor"> &#182;</span></a></h2><p>After installation you should have the <code>moya</code> command available on the command line. Enter the following in a terminal to confirm installation was successful and display the version number:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;-v</div></pre><p>The command app has extensive help; run the following to get help information on the available sub-commands:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;-h</div></pre><p>You can get help on a sub-command by typing <code>moya</code> followed by the name of the sub-command and <code>-h</code>. Here's an example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;runserver&nbsp;-h</div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="introduction.html">&larr; 1. Introduction</a>
+        </li>
+        
+        <li class="next">
+            <a href="overview.html">3. Overview &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#requirements">Requirements</a></li>
+    
+    <li><a href="#linux">Linux</a></li>
+    
+    <li><a href="#windows">Windows</a></li>
+    
+    <li><a href="#osx">OSX</a></li>
+    
+    <li><a href="#installing-from-source">Installing from Source</a></li>
+    
+    <li><a href="#command-line-application">Command Line Application</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

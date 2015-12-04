@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Widgets</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="thumbnail.html">&larr; 20. Moya Thumbnail</a>
+        </li>
+        
+        <li class="next">
+            <a href="wysihtml5.html">22. Moya WYSIHTML5 &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Widgets</h1>
+            <p>Moya Widgets is a libarary of <a href="content.html#widgets" title="Content">widgets</a> for common user interface elements. Using this widgets library is a good way of establishing a common look and feel across your libraries, and is used by many of the built in libraries.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> Widgets must go inside <a href="content.html" title="Content">content</a> tags.</div><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Widgets is built in to Moya and may be installed as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.widgets"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Moya Widgets does not need to be installed, to make the tags available for use. Althouge, there is a test page which you may want to have a look at. You can mount the test with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"widgets"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.widgets"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/widgets/"</span><span class="tag tagcontent">&nbsp;mountpoint=</span><span class="attrib tag tagcontent">"tests"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Moya Widgets uses the namespace <code>http://moyaproject.com/widgets</code>. For brevity, the namespace prefix is typically set to <code>w:</code>.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>This widgets library is a repository for common user interface elements, such as alerts, links, dialogs etc. and more advanced widgets such as pagination. They use markup targeted at <a href="http://getbootstrap.com/">Twitter Bootstrap</a>, but can be customized if you are not using Bootstrap.</p>
+<h2><a name="alerts"></a><a href="#alerts">Alerts<span class="anchor"> &#182;</span></a></h2><p>Alerts are simple container widgets with no parameters. The create a color coded panel containing a text message. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">success</span><span class="tag">&gt;</span>Everything&nbsp;went&nbsp;according&nbsp;to&nbsp;plan!</span><span class="tag">&lt;</span><span class="endtagname tag">/w:success</span><span class="tag">&gt;</span></div></pre><p>The following is a list of available alert widgets:</p>
+<dl class="dl-horizontal">
+<dt>&lt;success&gt;</dt>
+<dd>The operation completed successfully.</dd>
+<dt>&lt;info&gt;</dt>
+<dd>Some additional information for the user.</dd>
+<dt>&lt;warning&gt;</dt>
+<dd>Inform the user of potentially destructive consequences.</dd>
+<dt>&lt;danger&gt;</dt>
+<dd>Alert the user that their action didn't succeed.</dd>
+<dt>&lt;error&gt;</dt>
+<dd>Alert the user of an error.</dd>
+</dl><h2><a name="wells"></a><a href="#wells">Wells<span class="anchor"> &#182;</span></a></h2><p>Wells are a simple container that draws attention to their contents. The following is a list of the available wells:</p>
+<dl class="dl-horizontal">
+<dt>&lt;well&gt;</dt>
+<dd>The default well.</dd>
+<dt>&lt;small-well&gt;</dt>
+<dd>A well with less padding.</dd>
+<dt>&lt;large-well&gt;</dt>
+<dd>A well with more padding.</dd>
+</dl><h2><a name="check"></a><a href="#check">Check<span class="anchor"> &#182;</span></a></h2><p>Displays a green check (tick). Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">check</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"product.stock&nbsp;gt&nbsp;0"</span><span class="tag">&gt;</span></div></pre><h2><a name="no-wrap"></a><a href="#no-wrap">No Wrap<span class="anchor"> &#182;</span></a></h2><p>Disables wrapping of text for its children. Essentially this wraps content in a div with the css property <code>white-space</code> set to <code>nowrap</code>. This widget is particularly useful in tables. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">no-wrap</span><span class="tag">&gt;</span>This&nbsp;text&nbsp;won't&nbsp;be&nbsp;wrapped,&nbsp;even&nbsp;if&nbsp;the&nbsp;table&nbsp;is&nbsp;quite&nbsp;small.</span><span class="tag">&lt;</span><span class="endtagname tag">/w:no-wrap</span><span class="tag">&gt;</span></div></pre><h2><a name="links"></a><a href="#links">Links<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_link.html">&lt;link&gt;</a> tag creates a link to a url on the site. This widget wraps a <code>&lt;a&gt;</code> tag around content with a generated url, optional class, and icon. The following link widgets are available:</p>
+<dl class="dl-horizontal">
+<dt>&lt;link&gt;</dt>
+<dd>Renders a simple link, see <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_link.html">&lt;link&gt;</a>.</dd>
+<dt>&lt;button-link&gt;</dt>
+<dd>Renders a link styled as a button, see <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_button-link.html">&lt;button-link&gt;</a>.</dd>
+</dl><h2><a name="buttons"></a><a href="#buttons">Buttons<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_buttons.html">&lt;buttons&gt;</a> tag renders <code>links</code> tags as buttons. Here's an example take from the Moya Admin library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">buttons</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.admin"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"admin_new_object"</span><span class="tag tagcontent">&nbsp;with=</span><span class="attrib tag tagcontent">".url"</span><span class="tag">&gt;</span>Add&nbsp;Another</span><span class="tag">&lt;</span><span class="endtagname tag">/w:link</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">link</span><span class="tag tagcontent">&nbsp;from=</span><span class="attrib tag tagcontent">"moya.admin"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"admin_table_edit"</span><span class="tag tagcontent">&nbsp;with=</span><span class="attrib tag tagcontent">".url"</span><span class="tag tagcontent">&nbsp;let:pk=</span><span class="attrib tag tagcontent">"obj.id"</span><span class="tag">&gt;</span>Edit</span><span class="tag">&lt;</span><span class="endtagname tag">/w:link</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4"></span><span class="tag">&lt;</span><span class="endtagname tag">/w:buttons</span><span class="tag">&gt;</span></div></pre><h2><a name="url"></a><a href="#url">URL<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_url.html">&lt;url&gt;</a> tag renders a hyperlinked URL. For instance if you want to display a URL such as <code>http://moyaproject.com</code>, and you also want it to link to the same URLS. Here's how you could do that in a content definition:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">url</span><span class="tag tagcontent">&nbsp;url=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>This would generate the following markup:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">a</span><span class="tag tagcontent">&nbsp;href=</span><span class="attrib tag tagcontent">"http://moyaproject.com"</span><span class="tag">&gt;</span>http://moyaproject.com</span><span class="tag">&lt;</span><span class="endtagname tag">/a</span><span class="tag">&gt;</span></div></pre><h2><a name="dialogs"></a><a href="#dialogs">Dialogs<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_dialog.html">&lt;dialog&gt;</a> tag defines a dialog, used to render a container with a message and buttons.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> There is currently no particular style associated with a dialog. It exists to to allow for future customization.</div><p>Dialogs may contain a <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_dialog-buttons.html">&lt;dialog-buttons&gt;</a> tag which is a container for buttons.</p>
+<p>The following is an example of a dialog, take from the Moya Blog library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">form</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"form.deletepost"</span><span class="tag tagcontent">&nbsp;legend=</span><span class="attrib tag tagcontent">"Delete&nbsp;Post"</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/forms"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">dialog</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">moya:</span><span class="tag tagname">markdown</span><span class="tag">&gt;</span>Are&nbsp;you&nbsp;sure&nbsp;you&nbsp;wish&nbsp;to&nbsp;delete&nbsp;post&nbsp;*</span><span class="sub">$</span><span class="braced sub">{post.title}</span>*?</span><span class="tag">&lt;</span><span class="endtagname tag">/moya:markdown</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">dialog-buttons</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">submit-button</span><span class="tag tagcontent">&nbsp;class=</span><span class="attrib tag tagcontent">"btn-primary"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"delete"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Delete"</span><span class="tag tagcontent">&nbsp;clicked=</span><span class="attrib tag tagcontent">"delete"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">submit-button</span><span class="tag tagcontent">&nbsp;class=</span><span class="attrib tag tagcontent">"btn"</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"cancel"</span><span class="tag tagcontent">&nbsp;text=</span><span class="attrib tag tagcontent">"Cancel"</span><span class="tag tagcontent">&nbsp;clicked=</span><span class="attrib tag tagcontent">"cancel"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/w:dialog-buttons</span><span class="tag">&gt;</span></div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/w:dialog</span><span class="tag">&gt;</span></div><a name="line9"></a><div class="line line-9"></span><span class="tag">&lt;</span><span class="endtagname tag">/form</span><span class="tag">&gt;</span></div></pre><h2><a name="paginate"></a><a href="#paginate">Paginate<span class="anchor"> &#182;</span></a></h2><p>The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_paginate.html">&lt;paginate&gt;</a> tag <em>paginates</em> a list of items, such as results from a database query, in to smaller pages and render a navigation control with numbered pages and forward / backward links.</p>
+<p>The widget handles large queries quite elegantly. It will show the first few page numbers, the last few page numbers, and page numbers surrounding the current page. Other page numbers are replace with ellipsis so as not to render too many buttons. For example, if you are on page 16 of 100 pages you will see something like <code> [prev] [1] [2] ... [15] [16] [17] ... [99] [100] [next] </code>.</p>
+<p>Here's an example taken from the Moya Blog library:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">w:</span><span class="tag tagname">paginate</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"posts"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"post"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">blog:</span><span class="tag tagname">post</span><span class="tag tagcontent">&nbsp;post=</span><span class="attrib tag tagcontent">"post"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/w:paginate</span><span class="tag">&gt;</span></div></pre><p>The <code>src</code> attribute should be the query results, in this case a query set of post objects from the db. The <a class="tag" href="tags/httpmoyaprojectcomwidgets/tag_paginate.html">&lt;paginate&gt;</a> iterates over each item, storing the current item in a value specified in <code>dst</code>, and rendering it with the enclosed content tags. That is literally all that is required to enable pagination.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="thumbnail.html">&larr; 20. Moya Thumbnail</a>
+        </li>
+        
+        <li class="next">
+            <a href="wysihtml5.html">22. Moya WYSIHTML5 &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#alerts">Alerts</a></li>
+    
+    <li><a href="#wells">Wells</a></li>
+    
+    <li><a href="#check">Check</a></li>
+    
+    <li><a href="#no-wrap">No Wrap</a></li>
+    
+    <li><a href="#links">Links</a></li>
+    
+    <li><a href="#buttons">Buttons</a></li>
+    
+    <li><a href="#url">URL</a></li>
+    
+    <li><a href="#dialogs">Dialogs</a></li>
+    
+    <li><a href="#paginate">Paginate</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

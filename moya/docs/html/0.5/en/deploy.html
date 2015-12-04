@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Deploying</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="preflight.html">&larr; 21. Preflight Checks</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+            <h1>Deploying</h1>
+            <p>The webserver built in to Moya wasn't intended for a production environment. To deploy a Moya site on the internet, we need to use an external webserver which ensures that your site is scalable to a large number of visitors.</p>
+<h2><a name="serving-with-wsgi"></a><a href="#serving-with-wsgi">Serving with WSGI<span class="anchor"> &#182;</span></a></h2><p>Moya uses <a href="http://en.wikipedia.org/wiki/Web_Server_Gateway_Interface">WSGI</a> to serve a project with an external http (web) server. WSGI is the standard way of interfacing with Python web applications and there should be an adapter for your favorite front-end web server.</p>
+<p>The WSGI spec requires that a site provides a Python file which exposes a WSGI <em>application</em> object (not to be confused with Moya's applications). If you created your project with <b>moya start</b> you should find a file called <code>wsgi.py</code> in the top level of your project directory. This Python file should look something like the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">from&nbsp;moya.wsgi&nbsp;import&nbsp;Application</div><a name="line2"></a><div class="line line-2"><br></div><a name="line3"></a><div class="line line-3">application&nbsp;=&nbsp;Application('./',&nbsp;'production.ini',&nbsp;server='main',&nbsp;logging='prodlogging.ini')</div></pre><p>This tells the Moya to read the project from <code>./</code> using settings from <code>production.ini</code>, and to serve the <a class="tag" href="tags/httpmoyaprojectcom/tag_server.html">&lt;server&gt;</a> with a docname of <code>main</code>. It also tells Moya to use logging settings from a file called <code>prodlogging.ini</code>. Unless you want to expose multiple servers from the same project &ndash; which is entirely possible &ndash; you will be unlikely to change these parameters.</p>
+<p>Configuring your http server is beyond the scope of this project: please see the server's documentation (or google) for details.</p>
+<h2><a name="production-database"></a><a href="#production-database">Production Database<span class="anchor"> &#182;</span></a></h2><p>You will probably want to use different database settings for a project in production than you have been using for development. You should put these in <code>production.ini</code>.</p>
+<p>You can test your production settings by running a development server and using the <b>-i</b> switch to point at the production settings. For example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;runserver&nbsp;-i&nbsp;production.ini</div></pre><h2><a name="media"></a><a href="#media">Media<span class="anchor"> &#182;</span></a></h2><p>It is often worthwhile letting an http server, such as Apache or Nginx, serve your static files. This is because modern http servers are very good at serving static files and it is more efficient to leave Moya serving just dynamic requests.</p>
+<p>Unfortunately such webservers won't be aware of Moya's virtual filesystems and will require that all the static files are in a single directory. If you want to serve your static media in this way, you will first have to copy the media to a single location. You can do this fairly simply with the <b>fs</b> subcommand. For example, you can copy everything in the <code>media</code> file system to a directory called <code>staticmedia</code> with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;media&nbsp;--copy&nbsp;./staticmedia</div></pre><p>You will need to do this every time your media changes.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="preflight.html">&larr; 21. Preflight Checks</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#serving-with-wsgi">Serving with WSGI</a></li>
+    
+    <li><a href="#production-database">Production Database</a></li>
+    
+    <li><a href="#media">Media</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

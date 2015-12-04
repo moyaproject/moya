@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Thumbnail</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="tables.html">&larr; 19. Moya Tables</a>
+        </li>
+        
+        <li class="next">
+            <a href="widgets.html">21. Moya Widgets &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Thumbnail</h1>
+            <p>Moya Thumbnail is a solution for generate <em>thumbnails</em> (smaller versions of a image). Although it could be used for a variety of image processing purposes.</p>
+<aside>You may want to familiarize yourself with Moya's <a href="images.html" title="Images">image processing tags</a> before you read the rest of this chapter.</aside><h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Thumbnail is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.thumbnail"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>It can then be installed with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"thumbnail"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.thumbnail"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>No views are required for this library, but there is a test view which processes upload images in to thumbnails. You can mount this with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">mount</span><span class="tag tagcontent">&nbsp;app=</span><span class="attrib tag tagcontent">"thumbnail"</span><span class="tag tagcontent">&nbsp;mountpoint=</span><span class="attrib tag tagcontent">"tests"</span><span class="tag tagcontent">&nbsp;url=</span><span class="attrib tag tagcontent">"/thumbtest/"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="namespace"></a><a href="#namespace">Namespace<span class="anchor"> &#182;</span></a></h2><p>Tags in this library use the namespace <code>http://moyaproject.com/thumbnail</code>. The test view and the examples here use the prefix <code>tn</code> for brevity.</p>
+<h2><a name="settings"></a><a href="#settings">Settings<span class="anchor"> &#182;</span></a></h2><p>Moya Thumbnail supports the following settings:</p>
+<p class="setting">fs =<span class="value"> &lt;FS NAME&gt;</span></p><p>This sets the filesystem where the images and generated thumbnails should be stored. By default this is <code>uploads</code> which should be a writable filesytem.</p>
+<p class="setting">app_serve =<span class="value"> uploads</span></p><p>This should be the application which serves the thumbnail filesystem. It is used to retrieve a named url called <code>serve</code>. This will typically be an instance of <code>moya.static</code>, installed as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="comment">&lt;!--&nbsp;in&nbsp;your&nbsp;server.xml&nbsp;--&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"uploads"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.static"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/uploads/"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>And the follow settings in your <code>basesettings.ini</code>:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">settings</span><span class="section key">:</span><span class="section key sectionname">uploads</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">fs&nbsp;</span>=</span><span class="value">&nbsp;uploads</span></div></pre><p class="setting">thumb_dir =<span class="value"> &lt;NAME OF THUMBNAIL DIRECTOR&gt;</span></p><p>This should be the name to use for the directory containing the thumbnails. Moya Thumbnail creates a directory of this name to hold the thumbnails. The default is <code>thumbnails</code>.</p>
+<h2><a name="generate-thumbnails"></a><a href="#generate-thumbnails">Generate Thumbnails<span class="anchor"> &#182;</span></a></h2><p>The purpose of Moya Thumbnail is to process an image in to different versions; so that you have flexibility on how the image is displayed. For example, you might have a small 80x80 pixel version to go in a table, or a larger 640x480 version to embed in an article, etc.</p>
+<p>To create image processors, define a <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_thumbnails.html">&lt;thumbnails&gt;</a> which is a container for the various image formats you wish to supply. Inside <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_thumbnails.html">&lt;thumbnails&gt;</a> should be a <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_processor.html">&lt;processor&gt;</a> tag for each format. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">tn:</span><span class="tag tagname">thumbnails</span><span class="tag tagcontent">&nbsp;libname=</span><span class="attrib tag tagcontent">"thumbnails.tests"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"><br></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">tn:</span><span class="tag tagname">processor</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"small"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">image:</span><span class="tag tagname">resize-to-fit</span><span class="tag tagcontent">&nbsp;width=</span><span class="attrib tag tagcontent">"80"</span><span class="tag tagcontent">&nbsp;height=</span><span class="attrib tag tagcontent">"80"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/tn:processor</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"><br></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="endtagname tag">/tn:thumbnails</span><span class="tag">&gt;</span></div></pre><p>The code above defines a single thumbnail processor called <code>small</code>. Moya calls the code inside the <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_processor.html">&lt;processor&gt;</a> with the value <code>image</code> containing the image to be processed. The <a class="tag" href="tags/httpmoyaprojectcomimage/tag_resize-to-fit.html">&lt;resize-to-fit&gt;</a> tag resized the image.</p>
+<p>Note, that if you don't specify the image to process, the <a class="tag" href="tags/httpmoyaprojectcomimage/tag_resize-to-fit.html">&lt;resize-to-fit&gt;</a> tag (and other image tags) will use a value called <code>image</code> from the local scope &ndash; which is why we don't need to specify it above.</p>
+<p>To generate the thumbnails, use the <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_generate.html">&lt;generate&gt;</a> tag, which takes the element reference of the <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_thumbnails.html">&lt;thumbnails&gt;</a> you which to use, and the path of the image file. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag xmlns">tn:</span><span class="tag tagname">generate</span><span class="tag tagcontent">&nbsp;thumbnails=</span><span class="attrib tag tagcontent">"#thumbnails.tests"</span><span class="tag tagcontent">&nbsp;test=</span><span class="attrib tag tagcontent">"profile.jpg"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>When the above code runs, it will create a sub-directory  (called <code>thumbnails</code> by default) used to store the thumbnails. The filename of the thumbnail is generate from the <code>name</code> and <code>version</code> attribute of the <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_processor.html">&lt;processor&gt;</a>. The version number is so that a new image can be generated if you update the processor. Simply increment the version number when you make a change to the processor.</p>
+<h3><a name="processing-uploads"></a><a href="#processing-uploads">Processing Uploads<span class="anchor"> &#182;</span></a></h3><p>The most common use of the Moya Thumbnail library is to process images uploaded by the user. The thumbnails can be generates in the same view that generates the form. Here's an example</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="comment">&lt;!--&nbsp;a&nbsp;form&nbsp;containing&nbsp;a&nbsp;file&nbsp;upload&nbsp;field&nbsp;--&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">form</span><span class="tag tagcontent">&nbsp;xmlns=</span><span class="attrib tag tagcontent">"http://moyaproject.com/forms"</span><span class="tag tagcontent">&nbsp;docname=</span><span class="attrib tag tagcontent">"form.upload"</span><span class="tag tagcontent">&nbsp;style=</span><span class="attrib tag tagcontent">"horizontal"</span><span class="tag tagcontent"></span></div><a name="line3"></a><div class="line line-3"><span class="tag tagcontent">&nbsp;&nbsp;&nbsp;&nbsp;legend=</span><span class="attrib tag tagcontent">"Thumbnail&nbsp;Test"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">upload</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"upload_image"</span><span class="tag tagcontent">&nbsp;label=</span><span class="attrib tag tagcontent">"Image"</span><span class="tag tagcontent">&nbsp;required=</span><span class="attrib tag tagcontent">"yes"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">submit-button</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"submit"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6"></span><span class="tag">&lt;</span><span class="endtagname tag">/form</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"><br></div><a name="line8"></a><div class="line line-8"></span><span class="comment">&lt;!--&nbsp;the&nbsp;view&nbsp;to&nbsp;handle&nbsp;the&nbsp;form&nbsp;--&gt;</span></div><a name="line9"></a><div class="line line-9"></span><span class="tag">&lt;</span><span class="tag tagname">view</span><span class="tag tagcontent">&nbsp;docname=</span><span class="attrib tag tagcontent">"view.upload"</span><span class="tag tagcontent">&nbsp;content=</span><span class="attrib tag tagcontent">"content.upload"</span><span class="tag">&gt;</span></div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">forms:</span><span class="tag tagname">get</span><span class="tag tagcontent">&nbsp;form=</span><span class="attrib tag tagcontent">"form.upload"</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"form"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line11"></a><div class="line line-11">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">forms:</span><span class="tag tagname">validate</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"form"</span><span class="tag">&gt;</span></div><a name="line12"></a><div class="line line-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;filename=</span><span class="attrib tag tagcontent">"form.data.upload_image.filename"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line13"></a><div class="line line-13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">fs:</span><span class="tag tagname">set-contents</span><span class="tag tagcontent">&nbsp;fs=</span><span class="attrib tag tagcontent">"uploads"</span><span class="tag tagcontent">&nbsp;path=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{filename}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;contents=</span><span class="attrib tag tagcontent">"form.data.upload_image"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line14"></a><div class="line line-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">tn:</span><span class="tag tagname">generate</span><span class="tag tagcontent">&nbsp;thumbnails=</span><span class="attrib tag tagcontent">"#thumbnails.tests"</span><span class="tag tagcontent">&nbsp;path=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">$</span><span class="braced attrib tag tagcontent sub">{filename}</span><span class="attrib tag tagcontent">"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line15"></a><div class="line line-15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">let</span><span class="tag tagcontent">&nbsp;success=</span><span class="attrib tag tagcontent">"yes"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line16"></a><div class="line line-16">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/forms:validate</span><span class="tag">&gt;</span></div><a name="line17"></a><div class="line line-17"></span><span class="tag">&lt;</span><span class="endtagname tag">/view</span><span class="tag">&gt;</span></div></pre><p>When the form validates successfully, the upload field will be stored in <code>form.data.upload_image</code>. File fields have two parameters; <code>filename</code> contains the filename from the user's computer (minus the path), and <code>file</code> is a file object, which may be copied to a filesystem (see <a class="tag" href="tags/httpmoyaprojectcomfs/tag_set-contents.html">&lt;set-contents&gt;</a>).</p>
+<p>Once the file has been copied to the <code>uploads</code> filesystem, the <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_generate.html">&lt;generate&gt;</a> tag can create the thumbnails.</p>
+<h3><a name="managing-filenames"></a><a href="#managing-filenames">Managing Filenames<span class="anchor"> &#182;</span></a></h3><p>Note that Moya Thumbnail doesn't manage image filenames for you. You will need to come up with a scheme to ensure that your image filenames are unique, or risk overwriting a previous upload. Probably the simplest way to do this would be to incorporate the primary key of a database object in to the filename or path. For example the image for a profile with a primary key of 5 would be <code>profile.5.jpg</code>.</p>
+<h2><a name="generate-command"></a><a href="#generate-command">Generate Command<span class="anchor"> &#182;</span></a></h2><p>Moya Thumbnail supplies a command to generate new thumbnails in a filesystem. This might be necessary if you have updated / added thumbnail formats and you want to generate the thumbnails for previously uploaded images.</p>
+<p>The following command will generate new thumbnails for all <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_thumbnails.html">&lt;thumbnails&gt;</a> tags.</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;moya.thumbnail#cmd.generate</div></pre><p>You may also specify one or more <a class="tag" href="tags/httpmoyaprojectcomthumbnail/tag_thumbnails.html">&lt;thumbnails&gt;</a> tags on the command line to only generate thumbnails for those tags. For example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;moya.thumbnail#cmd.generate&nbsp;sushifinder#thumbnails.products</div></pre><h2><a name="thumbnails-in-templates"></a><a href="#thumbnails-in-templates">Thumbnails in Templates<span class="anchor"> &#182;</span></a></h2><p>To display a thumbnail in a template, use the <code>thumbnail_url</code> filter, which takes the filename of the image and returns its url. Here's an example:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">img</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">"</span><span class="attrib tag tagcontent sub">${'profile.jpg'&nbsp;|&nbsp;"</span><span class="tag tagcontent sub">thumbnail_url&nbsp;from&nbsp;moya.thumbnail"(processor=small)}</span><span class="tag tagcontent">"</span><span class="tag">&gt;</span></div></pre><p>The <code>thumbnail</code> filter takes the name of the processor as a parameter, and will return a URL for that thumbnail.
+</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="tables.html">&larr; 19. Moya Tables</a>
+        </li>
+        
+        <li class="next">
+            <a href="widgets.html">21. Moya Widgets &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#namespace">Namespace</a></li>
+    
+    <li><a href="#settings">Settings</a></li>
+    
+    <li><a href="#generate-thumbnails">Generate Thumbnails</a><ul>
+    
+    <li><a href="#processing-uploads">Processing Uploads</a></li>
+    
+    <li><a href="#managing-filenames">Managing Filenames</a></li>
+    
+</ul></li>
+    
+    <li><a href="#generate-command">Generate Command</a></li>
+    
+    <li><a href="#thumbnails-in-templates">Thumbnails in Templates</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

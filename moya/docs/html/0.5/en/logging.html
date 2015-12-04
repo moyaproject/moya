@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Logging</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="signals.html">&larr; 19. Signals</a>
+        </li>
+        
+        <li class="next">
+            <a href="preflight.html">21. Preflight Checks &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Logging</h1>
+            <p>A Moya web application can generate a number of log messages, useful for monitoring what your site is doing and diagnosing errors. Moya's logging system is highly configurable and allows you to set which log messages you see and where they are written.</p>
+<h2><a name="introduction"></a><a href="#introduction">Introduction<span class="anchor"> &#182;</span></a></h2><p>Moya borrows its logging system from Python's <a href="https://docs.python.org/2/library/logging.html">logging</a> library and has much the same capabilities.</p>
+<p>Log messages are <em>emited</em> from various <em>loggers</em>. A logger has a name which identifies the source of the log messages. Moya uses the name <code>moya</code> for its log messages. Loggers are further categorized with a dot. The following lists the loggers used by Moya:</p>
+<dl class="dl-horizontal"><dt>moya.app.APP</dt>
+<dd>
+Logs messages written by applications; APP is replaced with the name of the application. For example <code>moya.app.auth</code> would be the name used for log messages written by the application named "auth".
+</dd><dt>moya.cache</dt>
+<dd>
+Log messages written by the cache system when cache debug is enabled.
+</dd><dt>moya.email</dt>
+<dd>
+Log messages written regarding the sending of emails.
+</dd><dt>moya.jsonrpc</dt>
+<dd>
+Log messages regarding remote procedure calls.
+</dd><dt>moya.request</dt>
+<dd>
+Logs information about each request.
+</dd><dt>moya.runtime</dt>
+<dd>
+Logs information about events that occur during normal operation.
+</dd><dt>moya.security</dt>
+<dd>
+Logs information about security issues, such <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">CSRF</a> attempts detected by the forms library.
+</dd><dt>moya.signal</dt>
+<dd>
+Log messages regarding signals.
+</dd><dt>moya.startup</dt>
+<dd>
+Messages regarding the startup process, such as the importing and installing of libraries.
+</dd></dl><p>Each log messages has a log <em>level</em>, which defines the <em>severity</em> of the log message. Log messages may be filtered based on the log level, so you only see the type of message you are interested in. The log levels are as follows:</p>
+<dl class="dl-horizontal"><dt>debug</dt>
+<dd>
+Information to help you track down errors, which you probably don't want in production.
+</dd><dt>info</dt>
+<dd>
+General information about normal operation of the server.
+</dd><dt>warning</dt>
+<dd>
+A <em>potential</em> problem was detected.
+</dd><dt>error</dt>
+<dd>
+The server was unable to perform as requested.
+</dd><dt>fatal</dt>
+<dd>
+A serious issue with potential data loss was detected.
+</dd></dl><h2><a name="log-tags"></a><a href="#log-tags">Log Tags<span class="anchor"> &#182;</span></a></h2><p>You can write log messages of your own with the <a class="tag" href="tags/httpmoyaprojectcom/tag_log.html">&lt;log&gt;</a> tag. The message goes in the enclosed text. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">log</span><span class="tag">&gt;</span>Your&nbsp;log&nbsp;messages&nbsp;goes&nbsp;here</span><span class="tag">&lt;</span><span class="endtagname tag">/log</span><span class="tag">&gt;</span></div></pre><p>You may set the logging level with the <code>level</code> attribute. For example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">log</span><span class="tag tagcontent">&nbsp;level=</span><span class="attrib tag tagcontent">"debug"</span><span class="tag">&gt;</span>1s&nbsp;and&nbsp;0s</span><span class="tag">&lt;</span><span class="endtagname tag">/log</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2"></span><span class="tag">&lt;</span><span class="tag tagname">log</span><span class="tag tagcontent">&nbsp;level=</span><span class="attrib tag tagcontent">"info"</span><span class="tag">&gt;</span>Thought&nbsp;you&nbsp;might&nbsp;want&nbsp;to&nbsp;know</span><span class="tag">&lt;</span><span class="endtagname tag">/log</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="tag tagname">log</span><span class="tag tagcontent">&nbsp;level=</span><span class="attrib tag tagcontent">"error"</span><span class="tag">&gt;</span>I've&nbsp;made&nbsp;a&nbsp;terrible&nbsp;mistake</span><span class="tag">&lt;</span><span class="endtagname tag">/log</span><span class="tag">&gt;</span></div></pre><p>For each of the logging levels there is a log tag that write logs just that level. For instance, <a class="tag" href="tags/httpmoyaprojectcom/tag_log-debug.html">&lt;log-debug&gt;</a> writes a debug log and <a class="tag" href="tags/httpmoyaprojectcom/tag_log-warn.html">&lt;log-warn&gt;</a> writes a warning log. These level specific log tags are identical to <a class="tag" href="tags/httpmoyaprojectcom/tag_log.html">&lt;log&gt;</a> in all other respects.</p>
+<h2><a name="configuration"></a><a href="#configuration">Configuration<span class="anchor"> &#182;</span></a></h2><p>The logging system may be configured via an INI file, which allows you to set which messages are to be filtered, and where they should will be written (e.g. to the console or to a file).</p>
+<p>The development server uses logging configuration taken from a file called <code>logging.ini</code> which is set up to write all message to the console. In production, Moya uses the file <code>prodlogging.ini</code> which shows only messages with level <b>info</b> or higher.</p>
+<p>You can change which logging configuration file is used in the development server with the <code>--logging</code> switch. This is useful for checking your production logging settings. For example:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;--logging&nbsp;prodlogging.ini&nbsp;runserver</div></pre><p>The logging configuration file used in production is set in the WSGI file (see <a href="deploy.html">Deploying</a>). The default <code>prodlogging.ini</code> writes log messages with a level of INFO or higher to <a href="http://en.wikipedia.org/wiki/Syslog">syslog</a>. Note that the syslog configuration assumes the defaults for most Linux Distros, if you are running on OSX or Windows, you will need enable the configuration for your platform which will be commented out in <code>prodlogging.ini</code>.</p>
+<p>Moya's logging INI format is similar to the <a href="https://docs.python.org/2/library/logging.config.html#configuration-file-format">configuration format</a> used by Python's logging module, but is more consistent with Moya's other INI files  (and somewhat less prone to errors).</p>
+<h3><a name="loggers"></a><a href="#loggers">Loggers<span class="anchor"> &#182;</span></a></h3><p>You can configure a logger with a named section as follows:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">logger</span><span class="section key">:</span><span class="section key sectionname">moya</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">level&nbsp;</span>=</span><span class="value">&nbsp;DEBUG</span></div></pre><p>This sets a level of DEBUG on the <code>moya</code> logger, which ensures that all log messages are written.</p>
+<p>Note that when a log message is written, the logging system looks for all handlers in the hierarchy defined with the dotted notation. For example if the <code>moya.app.auth</code> logger emits a message, it will be written to <code>moya.app.auth</code>, <code>moya.app</code>, <code>moya</code>, and finally a special logger called <code>root</code>. If you don't want this behavior, you can set <code>propagate=no</code> on the logger, to stop writing to the loggers further up the chain.</p>
+<div class="alert alert-warning">If you find your log messages are being written twice, it is likely because they are being propagated up the hierarchy. You will probably want to disable propagation on most specific handler (most dots).</div><h3><a name="formatters"></a><a href="#formatters">Formatters<span class="anchor"> &#182;</span></a></h3><p>A formatter sets how a log message is formatted. Here's the default formatter that writes the log message along with the date and level:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">formatter</span><span class="section key">:</span><span class="section key sectionname">simple</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">format&nbsp;</span>=</span><span class="value">&nbsp;%(asctime)s:%(name)s:%(levelname)s:&nbsp;%(message)s</span></div><div class="line line-3"></span><span class="key">datefmt&nbsp;</span>=</span><span class="value">&nbsp;[%d/%b/%Y&nbsp;%H:%M:%S]</span></div></pre><h3><a name="handlers"></a><a href="#handlers">Handlers<span class="anchor"> &#182;</span></a></h3><p>A handler sets the destination for logging messages (file, console, syslog etc). See the <a href="https://docs.python.org/2/library/logging.config.html#configuration-file-format">Python documentation</a> for the full details on creating formatters. Otherwise, here are the default handlers used by Moya:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="comment key">#&nbsp;Writes&nbsp;syntax&nbsp;highlighted&nbsp;log&nbsp;messages&nbsp;to&nbsp;the&nbsp;terminal</span><span class="key"></span></div><div class="line line-2"><span class="key"></span><span class="section key">[</span><span class="section sectiontype key">handler</span><span class="section key">:</span><span class="section key sectionname">moyaconsole</span><span class="section key">]</span><span class="key"></span></div><div class="line line-3"><span class="key">class&nbsp;</span>=</span><span class="value">&nbsp;moya.logtools.MoyaConsoleHandler</span></div><div class="line line-4"></span><span class="key">formatter&nbsp;</span>=</span><span class="value">&nbsp;simple</span></div><div class="line line-5"></span><span class="key">args&nbsp;</span>=</span><span class="value">&nbsp;(sys.stdout,)</span></div><div class="line line-6"><br></div><div class="line line-7"></span><span class="key"></span><span class="comment value key">#&nbsp;Writes&nbsp;simple&nbsp;text&nbsp;to&nbsp;the&nbsp;terminal</span><span class="key"></span></div><div class="line line-8"><span class="key"></span><span class="section key">[</span><span class="section sectiontype key">handler</span><span class="section key">:</span><span class="section key sectionname">stdout</span><span class="section key">]</span><span class="key"></span></div><div class="line line-9"><span class="key">class&nbsp;</span>=</span><span class="value">&nbsp;StreamHandler</span></div><div class="line line-10"></span><span class="key">formatter&nbsp;</span>=</span><span class="value">&nbsp;simple</span></div><div class="line line-11"></span><span class="key">args&nbsp;</span>=</span><span class="value">&nbsp;(sys.stdout,)</span></div><div class="line line-12"><br></div><div class="line line-13"></span><span class="key"></span><span class="comment value key">#&nbsp;Writes&nbsp;to&nbsp;a&nbsp;syslog&nbsp;server</span><span class="key"></span></div><div class="line line-14"><span class="key"></span><span class="section key">[</span><span class="section sectiontype key">handler</span><span class="section key">:</span><span class="section key sectionname">syslog</span><span class="section key">]</span><span class="key"></span></div><div class="line line-15"><span class="key">class&nbsp;</span>=</span><span class="value">&nbsp;logging.handlers.SysLogHandler</span></div><div class="line line-16"></span><span class="key">args&nbsp;</span>=</span><span class="value">&nbsp;('/dev/log',)</span></div></pre><p>You can set which handler a logger should use with the <code>handler</code> key. For example:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">logger</span><span class="section key">:</span><span class="section key sectionname">moya</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">level&nbsp;</span>=</span><span class="value">&nbsp;DEBUG</span></div><div class="line line-3"></span><span class="key">handler&nbsp;</span>=</span><span class="value">&nbsp;moyaconsole</span></div></pre><div class="alert alert-warning">Note that without a handler of some kind a logger will not be able to write log messages.</div><h2><a name="other-loggers"></a><a href="#other-loggers">Other Loggers<span class="anchor"> &#182;</span></a></h2><p>Other loggers not under the <code>moya</code> namespace may be configured with Moya's logging configuration. The <code>sqlalchemy</code> logger is of particular interest, as it can log all the SQL queries going to the database. If you add the following to your logging ini, you will see SQL related information in the terminal:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">logger</span><span class="section key">:</span><span class="section key sectionname">sqlalchemy.engine</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">handlers&nbsp;</span>=</span><span class="value">&nbsp;moyaconsole</span></div><div class="line line-3"></span><span class="key">propagate&nbsp;</span>=</span><span class="value">&nbsp;no</span></div><div class="line line-4"></span><span class="key">level&nbsp;</span>=</span><span class="value">&nbsp;INFO</span></div></pre><p>You can set the <code>level</code> to DEBUG to display more details, although the messages there are less useful than the SQL. Set <code>level</code> to WARN to disable sqlalchemy logs.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="signals.html">&larr; 19. Signals</a>
+        </li>
+        
+        <li class="next">
+            <a href="preflight.html">21. Preflight Checks &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#introduction">Introduction</a></li>
+    
+    <li><a href="#log-tags">Log Tags</a></li>
+    
+    <li><a href="#configuration">Configuration</a><ul>
+    
+    <li><a href="#loggers">Loggers</a></li>
+    
+    <li><a href="#formatters">Formatters</a></li>
+    
+    <li><a href="#handlers">Handlers</a></li>
+    
+</ul></li>
+    
+    <li><a href="#other-loggers">Other Loggers</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

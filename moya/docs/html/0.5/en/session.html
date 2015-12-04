@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Sessions</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="recaptcha.html">&larr; 15. Moya Google Recaptcha</a>
+        </li>
+        
+        <li class="next">
+            <a href="signup.html">17. Moya Signup &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Sessions</h1>
+            <p>The Moya Sessions library manages <em>sessions</em>. A session is persistent data associated with a single browser session, and may be used for storing data across requests.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>The Moya Sessions library is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.sessions"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The session library should be installed and mounted on <code>/</code> as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"session"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.session"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><h2><a name="using-sessions"></a><a href="#using-sessions">Using Sessions<span class="anchor"> &#182;</span></a></h2><p>Session information is stored in a dictionary called <code>.session</code>. You may populate this with any data you wish to stored. At the end of a successful request, this data will be written to the database. Here's an example of how you might implement a shopping cart:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">dict</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">".session.cart"</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">"'cart'&nbsp;not&nbsp;in&nbsp;.session"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag tagname">list</span><span class="tag tagcontent">&nbsp;dst=</span><span class="attrib tag tagcontent">"cart"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="tag">&lt;</span><span class="endtagname tag">/dict</span><span class="tag">&gt;</span></div></pre><p>This code creates a list called <code>cart</code> in <code>.session</code> where we can store the products a user clicks on. To add a product we can simply append to <code>.session.cart</code>. Here's an example:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">append</span><span class="tag tagcontent">&nbsp;src=</span><span class="attrib tag tagcontent">".session.cart"</span><span class="tag tagcontent">&nbsp;value=</span><span class="attrib tag tagcontent">"'Asahi&nbsp;beer'"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>When the user visits the checkout page, you can then list all the products in their shopping cart.</p>
+<div class="alert alert-warning">Note that sessions are independent of users. In a checkout page, you might need to ask a user to log in before paying. Moya will use the same session information when the users has logged in.</div><h2><a name="session-keys"></a><a href="#session-keys">Session Keys<span class="anchor"> &#182;</span></a></h2><p>The session is identified by setting a randomly generated cookie. You can inspect this value in the context with <code>.session_key</code>.</p>
+<p>The session key may be used when caching to ensure that something is cached for user's session. This is useful if you have some content related to the user which is slow to generate, but won't change during a browser session. Here's how you might user that in a template:</p>
+<pre class="moya-console format-moyatemplate"><a name="line1"></a><div class="line line-1"></span><span class="templatetag">{%&nbsp;cache&nbsp;key=.session_key&nbsp;%}</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">&lt;!--&nbsp;calculate&nbsp;something&nbsp;expensive&nbsp;for&nbsp;the&nbsp;user&nbsp;--&gt;</span></div><a name="line3"></a><div class="line line-3"></span><span class="templatetag">{%&nbsp;endcache&nbsp;%}</span></div></pre><h2><a name="session-settings"></a><a href="#session-settings">Session Settings<span class="anchor"> &#182;</span></a></h2><p>There is currently one setting for the Session library; <code>expire</code> should be a timespan which indicates how long the session should persist before it expires. If the user makes no requests in this time, the session will be reset to an empty dictionary.</p>
+<p>The default value for <code>expire</code> is <code>1h</code> which will cause the session to expires after 1 hour. Here's what you would add to your settings to raise this to 24 hours:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">[settings:session]</div><a name="line2"></a><div class="line line-2">expire&nbsp;=&nbsp;24h</div></pre>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="recaptcha.html">&larr; 15. Moya Google Recaptcha</a>
+        </li>
+        
+        <li class="next">
+            <a href="signup.html">17. Moya Signup &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#using-sessions">Using Sessions</a></li>
+    
+    <li><a href="#session-keys">Session Keys</a></li>
+    
+    <li><a href="#session-settings">Session Settings</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

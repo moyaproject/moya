@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Creating a Library</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="server.html">&larr; 9. Creating a Server</a>
+        </li>
+        
+        <li class="next">
+            <a href="templates.html">11. Templates &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Creating a Library</h1>
+            <p>In Moya, a <em>library</em>, is a bundle of files for handling a particular component of your website. All functionality for handing URLs is contained within a library, whether unique to your project or something you would like to distribute. This chapter covers how to create a new library.</p>
+<h2><a name="starting-a-library"></a><a href="#starting-a-library">Starting a Library<span class="anchor"> &#182;</span></a></h2><p>You can use the <code>moya start library</code> command to create a library within your project. This will create a fully functioning library which you can use as a starting point.</p>
+<p>Here's how you might create a new library called "Sushi Finder":</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;start&nbsp;library&nbsp;--title&nbsp;"Sushi&nbsp;Finder"&nbsp;-a</div></pre><p>Alternatively, you can create the directory and files manually. This chapter will describe the structure and contents of a library.</p>
+<h2><a name="library-contents"></a><a href="#library-contents">Library Contents<span class="anchor"> &#182;</span></a></h2><p>By convention a library directory should be named after the <em>long name</em> of the library, so the directory name won't conflict with a library from another organization. An example long name would be <code>acme.shop</code>. As long as no other organization uses the name <code>acme</code>, there is no risk of creating a library name used by someone else.</p>
+<aside>You can <em>reserve</em> organization names on <a href="http://packages.moyaproject.com">packages.moyaproject.com</a>.</aside><p>Immediately inside the project directory should be the following files:</p>
+<dl class="dl-horizontal">
+<dt>__init__.py</dt>
+<dd>Required if you plan to distribute your library as a Python module.</dd>
+<dt>lib.ini</dt>
+<dd>Required for all libraries, this INI file contains information about the library and the files / directories it contains.</dd>
+</dl><p>
+A library will contain a number of directories that Moya will read from, depending on the features enabled in <code>lib.ini</code>. The next section describes the contents of <code>lib.ini</code>.</p>
+<h2><a name="library-settings"></a><a href="#library-settings">Library Settings<span class="anchor"> &#182;</span></a></h2><p>Like the main project, a library is initialized form an INI file which defines a few settings and tells Moya what files to load. This settings file should be called <code>lib.ini</code>. This INI file may define the following sections:</p>
+<h3><a name="author-section"></a><a href="#author-section">[author] Section<span class="anchor"> &#182;</span></a></h3><p>The author section contains information about the library and author, which is used when distributing the library. Here's an example of an author section:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[author]</span><span class="key"></span></div><div class="line line-2"><span class="key">name&nbsp;</span>=</span><span class="value">&nbsp;Mr&nbsp;T&nbsp;Author</span></div><div class="line line-3"></span><span class="key">email&nbsp;</span>=</span><span class="value">&nbsp;author@example.org</span></div><div class="line line-4"></span><span class="key">organization&nbsp;</span>=</span><span class="value">&nbsp;Example&nbsp;Inc</span></div><div class="line line-5"></span><span class="key">url&nbsp;</span>=</span><span class="value">&nbsp;http://example.org</span></div></pre><p class="setting">name =<span class="value"> &lt;author's name&gt;</span></p><p>The name of the author or &ndash; if you prefer &ndash; the organization.</p>
+<p class="setting">email =<span class="value"> &lt;email address&gt;</span></p><p>A contact email the library author. You can leave this blank if you wish.</p>
+<p class="setting">organization =<span class="value"> &lt;organization name&gt;</span></p><p>The author's <em>organization</em>, i.e. the company you work for or some other group you belong to. You can leave this blank if you wish.</p>
+<p class="setting">url =<span class="value"> &lt;homepage URL&gt;</span></p><p>This should be a URL with information regarding the author; which could be an homepage, blog, company website etc. You may leave this blank if you wish.</p>
+<h3><a name="lib-section"></a><a href="#lib-section">[lib] Section<span class="anchor"> &#182;</span></a></h3><p>This section contains information Moya needs to read the library's code. All libraries must contain a [lib] section. The following is en example of a lib section:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[lib]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./logic</span></div><div class="line line-3"></span><span class="key">title&nbsp;</span>=</span><span class="value">&nbsp;Sushi&nbsp;Finder</span></div><div class="line line-4"></span><span class="key">url&nbsp;</span>=</span><span class="value">&nbsp;http://www.example.org</span></div><div class="line line-5"></span><span class="key">namespace&nbsp;</span>=</span><span class="value">&nbsp;http://moyaproject.com/sushifinder</span></div><div class="line line-6"></span><span class="key">longname&nbsp;</span>=</span><span class="value">&nbsp;moyaproject.sushifinder</span></div><div class="line line-7"></span><span class="key">version&nbsp;</span>=</span><span class="value">&nbsp;0.1.0-dev</span></div></pre><p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This should be a relative path to a directory in the library which contains Moya code. This should be <code>./logic</code> according to convention, but could be another directory. When Moya <em>imports</em> the library it will read all the xml files in this directory, and sub-directories.</p>
+<p>Note that the names of the xml files are irrelevant as far as Moya is concerned, but should probably reflect what they contain. The <code>moya start library</code> command will create a few example files, but the names are only a suggestion.</p>
+<p class="setting">title =<span class="value"> &lt;project title&gt;</span></p><p>This is the human readable title of the project. For example, "Sushi Finder".</p>
+<p class="setting">url =<span class="value"> &lt;library homepage&gt;</span></p><p>This setting should be the URL for the library, i.e. documentation. Leave blank if the library has no URL.</p>
+<p class="setting">namespace =<span class="value"> &lt;xml namespace&gt;</span></p><p>This should be an XML namespace which will be used for any tags defined in the library. If your library doesn't define any tags, you may leave this blank.</p>
+<p class="setting">name =<span class="value"> &lt;library's long name&gt;</span></p><p>This should be the library long name (a name used to identify the library in code). A library long name consists of lower-case characters with no spaces, separated by periods (<code>.</code>). The first token should identify the organization, other tokens should identify the library. Library long names should be globally unique, so try and pick a long name that isn't likely to clash with a library from another author.</p>
+<p class="setting">version =<span class="value"> &lt;library version&gt;</span></p><p>Libraries should be tagged with a version number in <a href="http://semver.org/">Semantic Versioning</a> format. Essentially this consists of MAJOR.MINOR.PATCH. Start at 0.1.0 for a first pre-release version, then increment PATCH when you make backwards-compatible fixes, increment MINOR when you add new functionality, and increment MAJOR when there is a new version.</p>
+<p>A MAJOR value of 0 is for initial development. When you are ready to distribute your library, reset the version to 1.0.0. You can also add -dev to indicate a version in development. It is a good idea to bump your version number immediately after publishing the library and add -dev. Drop the -dev suffix when you publish the next version.</p>
+<h3><a name="py-section"></a><a href="#py-section">[py] Section<span class="anchor"> &#182;</span></a></h3><p>Moya can be <em>extended</em> with Python code that defines new tags and adds functionality.</p>
+<p class="setting">location =<span class="value"> &lt;path&gt;</span></p><p>This setting should be a relative path to a directory containing Python (.py) files. By convention, this should be <code>./py</code>.</p>
+<h3><a name="settings-section"></a><a href="#settings-section">[settings] Section<span class="anchor"> &#182;</span></a></h3><p>This section defines the initial settings for the library. These can be overridden in the project settings once installed. There are no particular requirements for the setting, you may define as many as you need to configure an application with the library. As a guideline though, it is recommended to chose sensible defaults so that a library may be installed with little or no configuration.</p>
+<h3><a name="templates-section"></a><a href="#templates-section">[templates] Section<span class="anchor"> &#182;</span></a></h3><p>This section initializes templates used in the library. This section isn't required if the library doesn't have any templates.</p>
+<p class="setting">location =<span class="value"> &lt;path to templates&gt;</span></p><p>This setting should be a relative path to template files. By convention, this setting should be <code>./templates</code>.</p>
+<p class="setting">priority =<span class="value"> &lt;integer priority&gt;</span></p><p>This setting defines the template directory <em>priority</em> which is used to resolve conflicting template paths. Moya will select the template with the highest priority. The priority defaults to 0 if this setting isn't present.</p>
+<p>The template priority may be overridden when the library is imported (see <a class="tag" href="tags/httpmoyaprojectcom/tag_import.html">&lt;import&gt;</a>).</p>
+<p>Generally this setting should be left as the default, as most libraries contain templates for their own use that will not conflict with other libraries. Set it to 10 if the library was designed to replace template in another library.</p>
+<h3><a name="media-section"></a><a href="#media-section">[media] Section<span class="anchor"> &#182;</span></a></h3><p>Moya libraries may bundle <em>media</em> files (images, CSS, Javascript etc.) with the code, which will be served statically. To add media to your library add a named section, called <code>media:</code> and give it a name to be used as an identifier. Most libraries will only have one media directory, and the convention is to name it simply <code>'media'</code>, so the section will be <code>[media:media]</code>.</p>
+<p>The media section takes one setting, <code>location</code>, which should be a relative path to the directory containing the media. By convention, this will be <code>./media</code>. For example:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">media</span><span class="section key">:</span><span class="section key sectionname">media</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./media</span></div></pre><p>When the library is installed, Moya adds media directories to a virtual filesytem called <code>media</code>, under a sub-directory called <code>&lt;application name&gt;-&lt;media name&gt;</code>.</p>
+<p>Let's work through an example to illustrate this. Assume we have a library called <code>moya.sushifinder</code>, with a media section as follows:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">media</span><span class="section key">:</span><span class="section key sectionname">media</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./media</span></div></pre><p>And the library contains the following files (some directories omitted for brevity):</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">moyaproject.sushifinder/</div><a name="line2"></a><div class="line line-2">|--&nbsp;lib.ini</div><a name="line3"></a><div class="line line-3">|--&nbsp;logic</div><a name="line4"></a><div class="line line-4">|&nbsp;&nbsp;&nbsp;|--&nbsp;views.xml</div><a name="line5"></a><div class="line line-5">|&nbsp;&nbsp;&nbsp;`--&nbsp;widgets.xml</div><a name="line6"></a><div class="line line-6">`--&nbsp;media</div><a name="line7"></a><div class="line line-7">&nbsp;&nbsp;&nbsp;&nbsp;|--&nbsp;css</div><a name="line8"></a><div class="line line-8">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`--&nbsp;sushi.css</div><a name="line9"></a><div class="line line-9">&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;images</div><a name="line10"></a><div class="line line-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;logo.png</div></pre><p>When we install this library with the application name of <code>sushi</code>, Moya adds a directory to the <code>media</code> filesystem called <code>sushi-media</code>. If we were to list the contents of the <code>media</code> filesystem, with <code>moya fs media --tree</code>, we would see something like the following (along with media from other libraries):</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">|--&nbsp;sushi-media</div><a name="line2"></a><div class="line line-2">|&nbsp;&nbsp;&nbsp;|--&nbsp;css</div><a name="line3"></a><div class="line line-3">|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`--&nbsp;sushi.css</div><a name="line4"></a><div class="line line-4">|&nbsp;&nbsp;&nbsp;`--&nbsp;images</div><a name="line5"></a><div class="line line-5">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;logo.png</div></pre><p>You can serve this media filesystem with the <code>moya.static</code> library. To use it, add the following to your <a class="tag" href="tags/httpmoyaprojectcom/tag_server.html">&lt;server&gt;</a>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.static"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Then install it with something like the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"media"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.static"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/static/"</span><span class="tag tagcontent">&nbsp;</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>Finally, add the following section to your project settings:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">settings</span><span class="section key">:</span><span class="section key sectionname">media</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">fs&nbsp;</span>=</span><span class="value">&nbsp;media</span></div><div class="line line-3"></span><span class="key">dirlist&nbsp;</span>=</span><span class="value">&nbsp;yes</span></div></pre><p>Your project should now be serving media from all applications. If you visit the <code>/static/</code> url, you should see a directory listing of the media files you are serving.</p>
+<aside>If you used the <b>moya start project</b> command to create your initial project, then the media system will have already been set up.</aside><p>See <a href="library.html#overriding-media" title="Creating a Library">Overriding Media</a> for ways of customizing media for a project.</p>
+<h3><a name="data-section"></a><a href="#data-section">[data] Section<span class="anchor"> &#182;</span></a></h3><p>This section defines additional data files (json, text etc) that may be read from your project code. Moya combines any directories defined in this section, in to a single filesystem called <code>"data"</code>. You can see what data files are exposed by Moya with the following command line:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;data&nbsp;--tree</div></pre><p>You can read a data file with the <a class="tag" href="tags/httpmoyaprojectcom/tag_read-data.html">&lt;read-data&gt;</a> tag, which supports a variety of standard formats.</p>
+<p>Data follows the same convention as templates; the data files should be within a directory named after the library. This allows a library to over-ride the data files from another library, and is another way of customizing behavior.</p>
+<p class="setting">location =<span class="value"> &lt;path to data&gt;</span></p><p>This setting should be a relative path to a directory containing data files by convention this should be <code>./data</code></p>
+<p class="setting">priority =<span class="value"> &lt;integer priority&gt;</span></p><p>The priority is used to resolve which path should be used when there are conflicting paths within data directories. The library with the highest priority is used. This setting may be blank, to use a default priority of 0.</p>
+<h3><a name="documentation-section"></a><a href="#documentation-section">[documentation] Section<span class="anchor"> &#182;</span></a></h3><p>This section defines documentation for the library. Moya can extract tag documentation automatically for your library, and you can add supplementary documentation in a dialog of bbcode.</p>
+<p class="setting">location =<span class="value"> &lt;path to documentation&gt;</span></p><p>This value should be a relative path to the documentation. By convention, documentation is stored in <code>./docs</code>.</p>
+<h3><a name="tests-section"></a><a href="#tests-section">[tests] Section<span class="anchor"> &#182;</span></a></h3><p>This section defines tests for your library. Tests consists of Moya code that checks the code in your library is working as expected. Well written tests ensure that you can catch bugs early, before they make it in to production.</p>
+<p class="setting">location =<span class="value"> &lt;path to tests&gt;</span></p><p>This setting should be a relative path to the directory containing tests, by convention this is <code>./tests</code>.</p>
+<p class="setting">projects =<span class="value"> &lt;path to projects directory&gt;</span></p><p>This setting should be a relative path to a directory containing projects. Your tests can load these projects on the fly and test that they are generating the expected responses.</p>
+<p class="setting">import =<span class="value"> &lt;list of imports&gt;</span></p><p>This setting should be a list of libraries to import when testing (i.e. dependencies of the library). An entry in this list can be a path, or a Python module if a line is prefixes with <code>py:</code>.</p>
+<h3><a name="translations-section"></a><a href="#translations-section">[translations] Section<span class="anchor"> &#182;</span></a></h3><p>Moya supports internationalization of text in to any language. If you intend to supply text translations for your library, then add this section.</p>
+<p class="setting">location =<span class="value"> &lt;path to translations&gt;</span></p><p>This should be a relative path to the directory containing <em>message catalogs</em>. By convention, this should be <code>./translations</code>.</p>
+<p class="setting">default_language =<span class="value"> &lt;language code&gt;</span></p><p>This setting defines the language used in the library. Moya needs this information when extracting text. Typically this will be <code>'en'</code> for English, but could be any language code.</p>
+<p class="setting">languages =<span class="value"> &lt;comma separated list of language codes&gt;</span></p><p>This should be a comma separated list of language codes, for each of the languages the library contains translations for. This language doesn't have to include the default language, which is implied. For example, a value of <code>fr, es</code> would indicate the library supports French and Spanish in addition to the default language.</p>
+<h2><a name="overriding-media"></a><a href="#overriding-media">Overriding Media<span class="anchor"> &#182;</span></a></h2><p>Moya's media system allows you to either <em>replace</em> individual files in the media directories, or completely swap out a media directory for another &ndash; depending on the level of customization you would like.</p>
+<aside>Note that when you <em>replace</em> media files or directories, no files are copied or removed &ndash; all that changes is Moya's <em>view</em> of the files.</aside><p>To override individual files, first add the following section to your project settings:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[media]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./static</span></div></pre><p>This combines the <code>/static</code> directory in your project with the files in media, so that any files in this directory take priority over the files stored in library directries. For example, lets say we want to completely replace the image <code>logo.png</code> in the Sushi Finder library with our own logo. To do this, we can add the custom <code>logo.png</code> to the project's static directory. So <code>./static</code> will look something like this:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">`--&nbsp;static</div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;sushi-media</div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;images</div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--&nbsp;logo.png</div></pre><p>Now when the browser requests <code>/static/sushi-sushimedia/images/logo.png</code> it will receive the version stored in the project directory, rather than the version in the library.</p>
+<p>The second way to customize media is to replace a media directory entirely. This can be done by creating a filesystem called <code>&lt;app name&gt;_&lt;media name&gt;</code>. In the Sushi Finder application, it would be called <code>sushi_media</code>. The contents of this filesystem will be used in preference to the media contained in the library.</p>
+<aside>Note that the <em>name</em> of the filesystem contains an underscore (_), and <em>not</em> a hyphen (-), this is so you can use the filesystem name in an expression <em>without</em> the hyphen being interpreted as a minus sign. A hyphen is used as the directory name, because hyphens are prefered over underscores in URLs.</aside><p>The following section, when added to project settings, creates a media directory that completely replaces the media from then Sushi Finder library:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[</span><span class="section sectiontype key">fs</span><span class="section key">:</span><span class="section key sectionname">sushi_media</span><span class="section key">]</span><span class="key"></span></div><div class="line line-2"><span class="key">location&nbsp;</span>=</span><span class="value">&nbsp;./replace_sushimedia</span></div></pre><p>Now, when you request any file under <code>/static/sushi-sushimedia/</code> it will look for it in the <code>./replace_sushimedia</code> directory in the project.</p>
+<p>Note that if you use this method you will probably have to replace or copy all the media files the library uses. As a starting point you can copy a library's media with the following:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;fs&nbsp;sushi_media&nbsp;--copy&nbsp;./replace_sushimedia</div></pre><p>This copies all the media files from the sushi library to the <code>replace_sushimedia</code> directory. You can now modify any files you wish to customize.
+</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="server.html">&larr; 9. Creating a Server</a>
+        </li>
+        
+        <li class="next">
+            <a href="templates.html">11. Templates &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#starting-a-library">Starting a Library</a></li>
+    
+    <li><a href="#library-contents">Library Contents</a></li>
+    
+    <li><a href="#library-settings">Library Settings</a><ul>
+    
+    <li><a href="#author-section">[author] Section</a></li>
+    
+    <li><a href="#lib-section">[lib] Section</a></li>
+    
+    <li><a href="#py-section">[py] Section</a></li>
+    
+    <li><a href="#settings-section">[settings] Section</a></li>
+    
+    <li><a href="#templates-section">[templates] Section</a></li>
+    
+    <li><a href="#media-section">[media] Section</a></li>
+    
+    <li><a href="#data-section">[data] Section</a></li>
+    
+    <li><a href="#documentation-section">[documentation] Section</a></li>
+    
+    <li><a href="#tests-section">[tests] Section</a></li>
+    
+    <li><a href="#translations-section">[translations] Section</a></li>
+    
+</ul></li>
+    
+    <li><a href="#overriding-media">Overriding Media</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

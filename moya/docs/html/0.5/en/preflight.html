@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Preflight Checks</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="logging.html">&larr; 20. Logging</a>
+        </li>
+        
+        <li class="next">
+            <a href="deploy.html">22. Deploying &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Preflight Checks</h1>
+            <p>Moya can alert you to potential problems in the project via <em>preflight checks</em>. These checks are code in a library which Moya can run for each application.</p>
+<h2><a name="running-preflight-checks"></a><a href="#running-preflight-checks">Running Preflight Checks<span class="anchor"> &#182;</span></a></h2><p>If enabled in <a href="project.html#project-section" title="Building a Project">project settings</a>, Moya will run preflight checks prior to running the server. Any information from the preflight checks will be displayed in the console. You can also run preflight checks independently with the following command:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;preflight</div></pre><p>This will run all the preflight checks and display a table with a summary of the checks together with any error information.</p>
+<h2><a name="writing-preflight-checks"></a><a href="#writing-preflight-checks">Writing Preflight Checks<span class="anchor"> &#182;</span></a></h2><p>Preflight checks use the namespace <code>http://moyaproject.com/preflight</code>, which you will probably want to add to the root <a class="tag" href="tags/httpmoyaprojectcom/tag_moya.html">&lt;moya&gt;</a> node. It is probably a good idea to gather all preflight checks in to a single file named <code>preflight.xml</code>.</p>
+<p>When the preflight check process is run, Moya invokes the code in <code>check</code> tags within the library. A preflight check should call one of three tags depending on the result of the check; <code>pass</code> reports a pass (i.e. no problem detected), <code>warning</code> reports a <em>potential</em> issue, and <code>fail</code> reports a more serious problem (one which could result in broken links or data loss).</p>
+<p>The following is an example of a preflight check that checks an application setting called <code>discount</code> is greater than or equal to 0:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag tagcontent">&nbsp;xmlns:preflight=</span><span class="attrib tag tagcontent">"http://moyaproject.com/preflight"</span><span class="tag">&gt;</span></div><a name="line2"></a><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">preflight:</span><span class="tag tagname">check</span><span class="tag">&gt;</span></div><a name="line3"></a><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="tag xmlns">preflight:</span><span class="tag tagname">fail</span><span class="tag tagcontent">&nbsp;if=</span><span class="attrib tag tagcontent">".app.settings.discount.int&nbsp;gte&nbsp;0"</span><span class="tag">&gt;</span></div><a name="line4"></a><div class="line line-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discount&nbsp;percentage&nbsp;should&nbsp;be&nbsp;greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;to&nbsp;zero!</div><a name="line5"></a><div class="line line-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/preflight:fail</span><span class="tag">&gt;</span></div><a name="line6"></a><div class="line line-6">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;</span><span class="endtagname tag">/preflight:check</span><span class="tag">&gt;</span></div><a name="line7"></a><div class="line line-7"></span><span class="tag">&lt;</span><span class="tag tagname">moya</span><span class="tag">&gt;</span></div></pre><p>The text in <code>fail</code> is used as the message in the logs, or table when ran from the command line.</p>
+<p>If an unhandled exception occurs in a preflight check, it will be logged or reported in the preflight results.</p>
+<h2><a name="check-guidelines"></a><a href="#check-guidelines">Check Guidelines<span class="anchor"> &#182;</span></a></h2><p>Checks should be written to be quick, since they will run when starting the server in development mode. Most often they will validate initial settings or confirm that required objects in the database have been created. You can use all of the tags that you might use in a view, but bear in mind that there will be no <code>.request</code> value in the context since since preflight checks run prior to serving any requests.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="logging.html">&larr; 20. Logging</a>
+        </li>
+        
+        <li class="next">
+            <a href="deploy.html">22. Deploying &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#running-preflight-checks">Running Preflight Checks</a></li>
+    
+    <li><a href="#writing-preflight-checks">Writing Preflight Checks</a></li>
+    
+    <li><a href="#check-guidelines">Check Guidelines</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

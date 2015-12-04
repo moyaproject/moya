@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Recipies</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="moyarc.html">&larr; C. MoyaRC</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+            <h1>Recipies</h1>
+            <p>The following is a number of interesting / useful solutions to problems, or <em>recipes</em>, written in Moya code.</p>
+<h2><a name="get-the-price-of-bitcoin"></a><a href="#get-the-price-of-bitcoin">Get the price of Bitcoin<span class="anchor"> &#182;</span></a></h2><p>The following one liner will retrieve the current price of Bitcoin (in USD) from <a href="https://www.bitstamp.net">https://www.bitstamp.net</a>:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">echo</span><span class="tag">&gt;</span><span class="sub">$</span><span class="braced sub">{(fromjson:get:"https://www.bitstamp.net/api/ticker/")['ask']}</span><span class="tag">&lt;</span><span class="endtagname tag">/echo</span><span class="tag">&gt;</span></div></pre><p>How does this work? Well, the URL <a href="https://www.bitstamp.net/api/ticker/">https://www.bitstamp.net/api/ticker/</a> contains a JSON object with the current Bitcoin prices. The <a href="expressions.html#get" title="Expressions">get:</a> modifier reads that request from the internet, and the <a href="expressions.html#fromjson" title="Expressions">fromjson:</a> modifier converts the text in to a dictionary with a number of values. Finally the index operator <code>['ask']</code> looks up the value of <code>'ask'</code> which is the current asking price.</p>
+<div class="alert alert-warning"><strong>NOTE</strong> This recipe depends on the the bitstamp api. We can't guarantee that will still be working, but we would be surprised if isn't.</div>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="moyarc.html">&larr; C. MoyaRC</a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#get-the-price-of-bitcoin">Get the price of Bitcoin</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

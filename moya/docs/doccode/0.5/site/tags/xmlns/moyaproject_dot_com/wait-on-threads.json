@@ -1,0 +1,36 @@
+{
+    "name": "wait-on-threads",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "wait-on-threads",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/Users/will/projects/moya/moya/tags/system.py",
+        "doc": "\nWait for threads to complete.\n\nThis tag will will for all [tag]tread[/tag] tags with [c]join[/c] set to [c]yes[/c] to complete.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "wait threads to complete",
+        "tag_name": "wait-on-threads",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.wait-on-threads"
+}

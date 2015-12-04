@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Moya Static</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="signup.html">&larr; 17. Moya Signup</a>
+        </li>
+        
+        <li class="next">
+            <a href="tables.html">19. Moya Tables &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>Moya Static</h1>
+            <p>Moya Static serves files from any filesystem in the project, and can generate index pages.</p>
+<h2><a name="installation"></a><a href="#installation">Installation<span class="anchor"> &#182;</span></a></h2><p>Moya Static is built in to Moya and may be imported via its Python path as follows:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">import</span><span class="tag tagcontent">&nbsp;py=</span><span class="attrib tag tagcontent">"moya.libs.static"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><p>The above line should be in your <a class="tag" href="tags/httpmoyaprojectcom/tag_server.html">&lt;server&gt;</a> declaration.</p>
+<p>You can install the library with the following:</p>
+<pre class="moya-console format-xml"><a name="line1"></a><div class="line line-1"></span><span class="tag">&lt;</span><span class="tag tagname">install</span><span class="tag tagcontent">&nbsp;name=</span><span class="attrib tag tagcontent">"media"</span><span class="tag tagcontent">&nbsp;lib=</span><span class="attrib tag tagcontent">"moya.static"</span><span class="tag tagcontent">&nbsp;mount=</span><span class="attrib tag tagcontent">"/static/"</span><span class="endtagname tag">/</span><span class="tag">&gt;</span></div></pre><aside>If you created your project with <b>moya start project</b>, the Moya Static will have been pre-installed.</aside><h2><a name="settings"></a><a href="#settings">Settings<span class="anchor"> &#182;</span></a></h2><p class="setting">dirlist =<span class="value"> &lt;yes/no&gt;</span></p><p>If set to <code>yes</code> then Moya Static will render index pages containing a directory listing. It is useful to have this enabled during development so you can see exactly what files are being served, but you may want to disable this on a production site.</p>
+<p class="setting">fs =<span class="value"> &lt;FILESYSTEM&gt;</span></p><p>Set this to one of the <a href="project.html#filesystems" title="Building a Project">filesystems</a> you would like to serve files from.</p>
+<p class="setting">hide =<span class="value"> &lt;WILDCARD LIST&gt;</span></p><p>This should be a list of <em>wildcards</em> that should <em>not</em> be served. You might want to hide temporary / configuration files for example.</p>
+<p>Here's how you would hide files with a filename that begin with a dot (hidden files in linux) and files ending with a tilde (~), which are often used as temporary files:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="key">hide&nbsp;</span>=</span><span class="value">&nbsp;.*</span></div><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">*~</span></div></pre><p class="setting">index =<span class="value"> &lt;INDEX FILES&gt;</span></p><p>This setting applies to index pages only, i.e. URLs ending with a forward slash. If any of the specified files are present, then Moya will serve them as HTML. If used, this setting is typically set to the following, to emulate the classic behavior of web servers:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="key">index&nbsp;</span>=</span><span class="value">&nbsp;index.htm</span></div><div class="line line-2">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">index.html</span></div></pre><h2><a name="moya-serve-command"></a><a href="#moya-serve-command">Moya Serve Command<span class="anchor"> &#182;</span></a></h2><p>The <code>moya serve</code> command uses Moya Static to serve the contents of a directory (without the need to create a project). For instance, the following command will serve the files in the current directory (and subdirectories):</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;serve&nbsp;.</div></pre><p>If you run this, you can visit <code>http://127.0.0.1:8000</code> to view the directory contents.</p>
+<p>You may set the <em>host</em> and <em>port</em> for the web server from the command line. The following will display the details in the terminal:</p>
+<pre class="moya-console format-"><a name="line1"></a><div class="line line-1">$&nbsp;moya&nbsp;serve&nbsp;-h</div></pre><div class="alert alert-warning"><strong>NOTE</strong> This comand is useful to serve files in a pinch, but isn't intended for production.</div>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="signup.html">&larr; 17. Moya Signup</a>
+        </li>
+        
+        <li class="next">
+            <a href="tables.html">19. Moya Tables &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#installation">Installation</a></li>
+    
+    <li><a href="#settings">Settings</a></li>
+    
+    <li><a href="#moya-serve-command">Moya Serve Command</a></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

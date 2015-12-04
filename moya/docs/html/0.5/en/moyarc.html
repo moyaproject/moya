@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://twitter.github.io/bootstrap/examples/starter-template.html -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>MoyaRC</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/custom.css" rel="stylesheet">
+
+        <style>
+        
+        </style>
+    </head>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  <body>
+    <div id="wrap">
+    <div id="main-nav" class="navbar navbar-default navbar-static-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".doc-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Moya Documentation</a>
+            </div>
+            <nav class="collapse navbar-collapse doc-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Reference</a>
+                    </li>
+                    <li >
+                        <a href="tags/index.html">Tags</a>
+                    </li>
+                    <li >
+                        <a href="tutorial.html">Tutorial</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+<div class="container">
+    <div class="row">
+        <div class="doc-content col-md-9">
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="codes.html">&larr; B. Status Codes</a>
+        </li>
+        
+        <li class="next">
+            <a href="recipes.html">D. Recipies &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+            <h1>MoyaRC</h1>
+            <p>The <code>moya</code> command line tools loads the file <code>.moyarc</code> from your home directory. It can be used to configure defaults and behaviour for subcommands.</p>
+<h2><a name="sections"></a><a href="#sections">Sections<span class="anchor"> &#182;</span></a></h2><p>The following is a list of sections in <code>.moyarc</code>:</p>
+<h3><a name="author"></a><a href="#author">[author]<span class="anchor"> &#182;</span></a></h3><p>This section is primary used by the <code>moya start</code> command which use these values, if not supplied.</p>
+<p class="setting">name =<span class="value"> &lt;YOUR NAME&gt;</span></p><p>The name of the library author.</p>
+<p class="setting">url =<span class="value"> &lt;URL&gt;</span></p><p>The author's URL (e.g. a blog or homepage)</p>
+<p class="setting">organization =<span class="value"> &lt;ORGANIZATION NAME&gt;</span></p><p>The name of the author's organization. If you don't have a particular organization, you can enter your own name here.</p>
+<p class="setting">email =<span class="value"> &lt;YOUR EMAIL ADDRESS&gt;</span></p><p>The author's email address.</p>
+<h3><a name="defaults"></a><a href="#defaults">[defaults]<span class="anchor"> &#182;</span></a></h3><p>Contains default values for the command line.</p>
+<p class="setting">ini =<span class="value"> &lt;SETTINGS FILENAME&gt;</span></p><p>The INI file to read when running subcommands. The default is to read <code>settings.ini</code> if this value is not supplied.</p>
+<p>On a production server, you might want to set the following:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[defaults]</span><span class="key"></span></div><div class="line line-2"><span class="key">ini&nbsp;</span>=</span><span class="value">&nbsp;production.ini</span></div></pre><p>This will load production settings by default.</p>
+<p>A common pattern with Moya is to have a file called <code>local.ini</code> which contains settings local to the server (such as db settings). These would <em>not</em> be checked in to source control. You can tell Moya to load <code>local.ini</code> if it exits, or <code>production.ini</code> if it doesn't, by specifying both filenames as follows:</p>
+<pre class="moya-console format-ini"><div class="line line-1"></span><span class="section key">[defaults]</span><span class="key"></span></div><div class="line line-2"><span class="key">ini&nbsp;</span>=</span><span class="value">&nbsp;local.ini</span></div><div class="line line-3">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="value">production.ini</span></div></pre><p>You can set as many filenames as you wish&ndash;Moya will try each one in turn.</p>
+            
+
+<div class="doc-nav">
+    <ul class="pager">
+        <li class="previous">
+            <a href="codes.html">&larr; B. Status Codes</a>
+        </li>
+        
+        <li class="next">
+            <a href="recipes.html">D. Recipies &rarr;</a>
+        </li>
+    </ul>
+</div>
+
+
+        </div>
+        
+        <div class="doctree-panel col-md-3">
+        <ul>
+    
+    <li><a href="#sections">Sections</a><ul>
+    
+    <li><a href="#author">[author]</a></li>
+    
+    <li><a href="#defaults">[defaults]</a></li>
+    
+</ul></li>
+    
+</ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="push"></div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Moya is &copy; 2014 <a href="#">Moya Software Foundation</a>.</p>
+      </div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+
+
+</body>
+
+</html>

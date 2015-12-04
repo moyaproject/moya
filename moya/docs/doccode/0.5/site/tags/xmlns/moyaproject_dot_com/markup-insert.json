@@ -1,0 +1,36 @@
+{
+    "name": "markup-insert",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "markup-insert",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/Users/will/projects/moya/moya/tags/markup.py",
+        "doc": "A callable invokef from Moya maarkup",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "insert code from markup",
+        "tag_name": "markup-insert",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.markup-insert"
+}
