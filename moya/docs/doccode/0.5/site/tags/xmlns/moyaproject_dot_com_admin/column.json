@@ -10,7 +10,7 @@
         "name": "column",
         "lib": "moya.admin",
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 130)",
+        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 131)",
         "doc": "Define a column in a database view\"",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "define a column in an admin view",
@@ -59,7 +59,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

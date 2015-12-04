@@ -10,7 +10,7 @@
         "name": "inspect",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/inspect.py",
+        "defined": "/Users/will/projects/moya/moya/tags/inspect.py",
         "doc": "\nGet an object which contains all the elements in the project.\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "inspect elements in the project",

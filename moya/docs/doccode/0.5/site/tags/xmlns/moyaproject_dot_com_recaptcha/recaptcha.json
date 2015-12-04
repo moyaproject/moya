@@ -10,7 +10,7 @@
         "name": "recaptcha",
         "lib": "moya.google.recaptcha",
         "namespace_slug": "moyaproject_dot_com_recaptcha",
-        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
+        "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
         "doc": "",
         "namespace": "http://moyaproject.com/recaptcha",
         "synopsis": "render a reCAPTCHA widget",
@@ -62,7 +62,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

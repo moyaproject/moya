@@ -10,7 +10,7 @@
         "name": "commit",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "\nCommit any pending transaction. This will [i]flush[/i] db operations to the database. If you have create new objects and you want to know their [i]primary key[/i] (id), you will need to commit them to the database.\n\nNote, that if this tag is called from within a [tag db]transaction[/tag] tag, nothing will be committed until the end of the [tag db]transaction[/tag].\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "commit the current transaction",

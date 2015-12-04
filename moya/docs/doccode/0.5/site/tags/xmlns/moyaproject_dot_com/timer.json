@@ -10,7 +10,7 @@
         "name": "timer",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/tools.py",
+        "defined": "/Users/will/projects/moya/moya/tags/tools.py",
         "doc": "\nTime a block of code, and log the elapsed time. The log will display two time values; the first is the wall time, the second is [i]processor time[/i]. Processor time is more useful for profiling, as it doesn't include the time spent waiting on IO.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "time a block of code",

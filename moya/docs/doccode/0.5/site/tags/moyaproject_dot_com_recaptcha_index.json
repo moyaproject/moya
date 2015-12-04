@@ -6,12 +6,77 @@
     "data": {
         "tags": [
             {
+                "name": "check",
+                "lib": "moya.google.recaptcha",
+                "namespace_slug": "moyaproject_dot_com_recaptcha",
+                "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 25)",
+                "doc": "Check the setting exists",
+                "prev_tag": "verify",
+                "namespace": "http://moyaproject.com/recaptcha",
+                "tag_name": "check",
+                "next_tag": "recaptcha",
+                "synopsis": null,
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "recaptcha",
                 "lib": "moya.google.recaptcha",
                 "namespace_slug": "moyaproject_dot_com_recaptcha",
-                "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
+                "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
                 "doc": "",
-                "prev_tag": "verify",
+                "prev_tag": "check",
                 "namespace": "http://moyaproject.com/recaptcha",
                 "tag_name": "recaptcha",
                 "next_tag": "verify",
@@ -63,7 +128,7 @@
                         "default": null,
                         "doc": "Override widget template",
                         "required": false,
-                        "type": "text",
+                        "type": "list of template paths",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -89,7 +154,7 @@
                 "name": "verify",
                 "lib": "moya.google.recaptcha",
                 "namespace_slug": "moyaproject_dot_com_recaptcha",
-                "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
+                "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
                 "doc": "Verify the response from a re-captcha.",
                 "prev_tag": "recaptcha",
                 "namespace": "http://moyaproject.com/recaptcha",

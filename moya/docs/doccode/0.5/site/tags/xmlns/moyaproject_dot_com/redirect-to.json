@@ -10,7 +10,7 @@
         "name": "redirect-to",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "Redirect to new location.",
         "namespace": "http://moyaproject.com",
         "synopsis": "redirect to a new location",

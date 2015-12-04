@@ -10,7 +10,7 @@
         "name": "set",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Create a [i]set[/i] object. A set is a container, where each item may only appears once. Any data items in the enclosed block are added to the set.",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a set object",

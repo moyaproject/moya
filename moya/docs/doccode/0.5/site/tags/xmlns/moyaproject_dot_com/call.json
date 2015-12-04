@@ -10,7 +10,7 @@
         "name": "call",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Call a [link moyacode#macros]macro[/link].",
         "namespace": "http://moyaproject.com",
         "synopsis": "invoke a macro",

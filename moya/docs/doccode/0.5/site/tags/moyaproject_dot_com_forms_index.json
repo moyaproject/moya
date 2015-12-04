@@ -9,7 +9,7 @@
                 "name": "actions",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nThis tag a group of [tag forms]submit-button[/tag] or other controls that will be rendered as a group (typically a single row).\n\n",
                 "prev_tag": "validate-post",
                 "namespace": "http://moyaproject.com/forms",
@@ -37,7 +37,7 @@
                 "name": "adapt-field",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": null,
                 "prev_tag": "actions",
                 "namespace": "http://moyaproject.com/forms",
@@ -78,7 +78,7 @@
                 "name": "add-choices",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd choices to a [tag]select[/tag] or [tag]check-select[/tag].\n\n",
                 "prev_tag": "adapt-field",
                 "namespace": "http://moyaproject.com/forms",
@@ -119,7 +119,7 @@
                 "name": "apply",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nApplying a form will copy data from a form (in [c]src[/c]) to an object ([c]dst[/c]).\n\nThe name of the values to copy are specified in the [c]dst[/c] attribute of field attributes.\n\n",
                 "prev_tag": "add-choices",
                 "namespace": "http://moyaproject.com/forms",
@@ -145,7 +145,7 @@
                         "missing": true,
                         "default": null,
                         "doc": "Destination object",
-                        "required": false,
+                        "required": true,
                         "type": "reference",
                         "metavar": null,
                         "empty": true,
@@ -184,7 +184,7 @@
                 "name": "apply-field",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nApply a form field.\n\nInvoked by [tag forms]apply[/tag].\n\n",
                 "prev_tag": "apply",
                 "namespace": "http://moyaproject.com/forms",
@@ -225,7 +225,7 @@
                 "name": "bind",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nBind a form to data\n\n",
                 "prev_tag": "apply-field",
                 "namespace": "http://moyaproject.com/forms",
@@ -234,11 +234,11 @@
                 "synopsis": "Add data to a form",
                 "params": {
                     "bind": {
-                        "default_display": "None",
+                        "default_display": ".request.method=='POST' ? .request.POST : None",
                         "name": "bind",
                         "missing": true,
-                        "default": null,
-                        "doc": "Object to bind to",
+                        "default": ".request.method=='POST' ? .request.POST : None",
+                        "doc": "Object to bind to (typically .request.POST)",
                         "required": false,
                         "type": "expression",
                         "metavar": null,
@@ -250,7 +250,7 @@
                         "name": "src",
                         "missing": true,
                         "default": null,
-                        "doc": "Source object to fill in fields",
+                        "doc": "Source object to fill in fields (the form)",
                         "required": false,
                         "type": "expression",
                         "metavar": null,
@@ -278,7 +278,7 @@
                 "name": "check-select",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a [i]check select[/i] to a form.\n\nA check select is an alternative to a multiple select ([tag forms]select[/tag]) which uses checkboxes rather than an input.\n\n",
                 "prev_tag": "bind",
                 "namespace": "http://moyaproject.com/forms",
@@ -421,6 +421,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -535,7 +547,7 @@
                 "name": "checkbox",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a checkbox to a form.\n\n",
                 "prev_tag": "check-select",
                 "namespace": "http://moyaproject.com/forms",
@@ -678,6 +690,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -792,7 +816,7 @@
                 "name": "error",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nSet an error message on either a field or the entire form.\n\n",
                 "prev_tag": "checkbox",
                 "namespace": "http://moyaproject.com/forms",
@@ -845,7 +869,7 @@
                 "name": "fail",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nUsed in a [tag forms]validate-feld[/tag], this tag marks a field as having failed validation, and sets an error message.\n\nNote that this tag acts like a [tag]return[/tag].\n\n",
                 "prev_tag": "error",
                 "namespace": "http://moyaproject.com/forms",
@@ -873,7 +897,7 @@
                 "name": "field",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nThis tag adds a field to the form object, but defers the rendering to enclosed content.\n\n",
                 "prev_tag": "fail",
                 "namespace": "http://moyaproject.com/forms",
@@ -992,6 +1016,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -1106,7 +1142,7 @@
                 "name": "form",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nDefines a form.\n\n",
                 "prev_tag": "field",
                 "namespace": "http://moyaproject.com/forms",
@@ -1138,12 +1174,12 @@
                         "empty": true,
                         "choices": null
                     },
-                    "class": {
+                    "id": {
                         "default_display": "",
-                        "name": "class",
+                        "name": "id",
                         "missing": true,
                         "default": null,
-                        "doc": "CSS class override",
+                        "doc": "Form HTML id",
                         "required": false,
                         "type": "text",
                         "metavar": null,
@@ -1164,6 +1200,18 @@
                             "get",
                             "post"
                         ]
+                    },
+                    "legend": {
+                        "default_display": "",
+                        "name": "legend",
+                        "missing": true,
+                        "default": null,
+                        "doc": "legend text shown above form",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
                     },
                     "extends": {
                         "default_display": "",
@@ -1201,12 +1249,12 @@
                         "empty": true,
                         "choices": null
                     },
-                    "legend": {
+                    "class": {
                         "default_display": "",
-                        "name": "legend",
+                        "name": "class",
                         "missing": true,
                         "default": null,
-                        "doc": "legend text shown above form",
+                        "doc": "CSS class override",
                         "required": false,
                         "type": "text",
                         "metavar": null,
@@ -1246,7 +1294,7 @@
                 "name": "get",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nGet a form object.\n\n",
                 "prev_tag": "form",
                 "namespace": "http://moyaproject.com/forms",
@@ -1278,6 +1326,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "withscope": {
+                        "default_display": "no",
+                        "name": "withscope",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Use current scope?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "form": {
                         "default_display": "",
                         "name": "form",
@@ -1302,17 +1362,32 @@
                         "empty": true,
                         "choices": null
                     },
-                    "withscope": {
-                        "default_display": "no",
-                        "name": "withscope",
+                    "id": {
+                        "default_display": "",
+                        "name": "id",
                         "missing": true,
-                        "default": false,
-                        "doc": "Use current scope?",
+                        "default": null,
+                        "doc": "Override HTML id attribute",
                         "required": false,
-                        "type": "boolean",
+                        "type": "text",
                         "metavar": null,
                         "empty": true,
                         "choices": null
+                    },
+                    "method": {
+                        "default_display": "\"post\"",
+                        "name": "method",
+                        "missing": true,
+                        "default": "post",
+                        "doc": "Form method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "get",
+                            "post"
+                        ]
                     },
                     "template": {
                         "default_display": "",
@@ -1350,20 +1425,17 @@
                         "empty": true,
                         "choices": null
                     },
-                    "method": {
-                        "default_display": "\"post\"",
-                        "name": "method",
+                    "legend": {
+                        "default_display": "",
+                        "name": "legend",
                         "missing": true,
-                        "default": "post",
-                        "doc": "Form method",
+                        "default": null,
+                        "doc": "Override form Legend",
                         "required": false,
                         "type": "text",
                         "metavar": null,
                         "empty": true,
-                        "choices": [
-                            "get",
-                            "post"
-                        ]
+                        "choices": null
                     }
                 },
                 "example": "\n        <forms:get form=\"#form.login\" dst=\"form\" />\n        ",
@@ -1410,7 +1482,7 @@
                 "name": "group",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "Renders a group of form elements",
                 "prev_tag": "get",
                 "namespace": "http://moyaproject.com/forms",
@@ -1451,7 +1523,7 @@
                 "name": "hidden-input",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a hidden input to a form.\n\n",
                 "prev_tag": "group",
                 "namespace": "http://moyaproject.com/forms",
@@ -1570,6 +1642,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -1684,7 +1768,7 @@
                 "name": "input",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd an input to a form.\n\n",
                 "prev_tag": "hidden-input",
                 "namespace": "http://moyaproject.com/forms",
@@ -1839,6 +1923,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -1953,7 +2049,7 @@
                 "name": "opt-group",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd an optgroup (heading for options) to a select.\n\n",
                 "prev_tag": "input",
                 "namespace": "http://moyaproject.com/forms",
@@ -1994,7 +2090,7 @@
                 "name": "option",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nDefine an option in a select input.\n\n",
                 "prev_tag": "opt-group",
                 "namespace": "http://moyaproject.com/forms",
@@ -2083,7 +2179,7 @@
                 "name": "password",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a password input to a form\n\n",
                 "prev_tag": "option",
                 "namespace": "http://moyaproject.com/forms",
@@ -2226,6 +2322,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -2340,7 +2448,7 @@
                 "name": "radio",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a radio button to a form.\n\nThe user will be able to select just one radio button with the same [c]name[/c] attribute.\n\n",
                 "prev_tag": "password",
                 "namespace": "http://moyaproject.com/forms",
@@ -2483,6 +2591,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -2597,7 +2717,7 @@
                 "name": "radio-group",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a radio group (container for radio buttons) to a form.\n\n",
                 "prev_tag": "radio",
                 "namespace": "http://moyaproject.com/forms",
@@ -2605,6 +2725,18 @@
                 "next_tag": "reset",
                 "synopsis": "add a radio group to a form",
                 "params": {
+                    "inline": {
+                        "default_display": "no",
+                        "name": "inline",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Display inline?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "fieldname": {
                         "default_display": "\"radio-group\"",
                         "name": "fieldname",
@@ -2613,6 +2745,18 @@
                         "doc": "Field name",
                         "required": false,
                         "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "choices": {
+                        "default_display": "None",
+                        "name": "choices",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Possible choices",
+                        "required": false,
+                        "type": "expression",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -2712,6 +2856,18 @@
                         "doc": "Initial value",
                         "required": false,
                         "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -2830,7 +2986,7 @@
                 "name": "reset",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nResets a form to a blank state.\n\n",
                 "prev_tag": "radio-group",
                 "namespace": "http://moyaproject.com/forms",
@@ -2871,7 +3027,7 @@
                 "name": "select",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a select input to a form.\n\n",
                 "prev_tag": "reset",
                 "namespace": "http://moyaproject.com/forms",
@@ -3026,6 +3182,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -3140,7 +3308,7 @@
                 "name": "submit-button",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a submit button to a form.\n\n",
                 "prev_tag": "select",
                 "namespace": "http://moyaproject.com/forms",
@@ -3319,6 +3487,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -3433,7 +3613,7 @@
                 "name": "text-area",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a textarea (multi-line text input) to a form.\n\n",
                 "prev_tag": "submit-button",
                 "namespace": "http://moyaproject.com/forms",
@@ -3576,6 +3756,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -3690,7 +3882,7 @@
                 "name": "upload",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nAdd a file upload input to a form.\n\n",
                 "prev_tag": "text-area",
                 "namespace": "http://moyaproject.com/forms",
@@ -3845,6 +4037,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "upload": {
+                        "default_display": "no",
+                        "name": "upload",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Contains a file upload field?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "label": {
                         "default_display": "",
                         "name": "label",
@@ -3959,7 +4163,7 @@
                 "name": "validate",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nValidates a form\n\nIf the form is passes all of the validate tests in the form, the Attribute\n'ok' will be True and the containing logic will be execute.\n\n",
                 "prev_tag": "upload",
                 "namespace": "http://moyaproject.com/forms",
@@ -3970,7 +4174,7 @@
                     "src": {
                         "default_display": "form",
                         "name": "src",
-                        "missing": true,
+                        "missing": false,
                         "default": "form",
                         "doc": "Form source",
                         "required": false,
@@ -4012,7 +4216,7 @@
                 "name": "validate-field",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nDefine validation code for a field in a form.\n\n",
                 "prev_tag": "validate",
                 "namespace": "http://moyaproject.com/forms",
@@ -4053,7 +4257,7 @@
                 "name": "validate-post",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_forms",
-                "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+                "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
                 "doc": "\nValidate a form if the current request is a POST request.\n\nThis tag does the same thing as [tag]validate[/tag], but only if the current request is a POST request. Otherwise, the enclosed block will be skipped.\n\n",
                 "prev_tag": "validate-field",
                 "namespace": "http://moyaproject.com/forms",
@@ -4065,7 +4269,7 @@
                     "src": {
                         "default_display": "form",
                         "name": "src",
-                        "missing": true,
+                        "missing": false,
                         "default": "form",
                         "doc": "Form source",
                         "required": false,

@@ -10,7 +10,7 @@
         "name": "field",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nThis tag adds a field to the form object, but defers the rendering to enclosed content.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "add a custom field to a form",
@@ -123,6 +123,18 @@
                 "doc": "Initial value",
                 "required": false,
                 "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "upload": {
+                "default_display": "no",
+                "name": "upload",
+                "missing": true,
+                "default": false,
+                "doc": "Contains a file upload field?",
+                "required": false,
+                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null

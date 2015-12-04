@@ -10,12 +10,24 @@
         "name": "widget",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "defined": "/Users/will/projects/moya/moya/tags/widget.py",
         "doc": "Create a widget",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a re-uasable widget",
         "tag_name": "widget",
         "params": {
+            "cachefor": {
+                "default_display": "",
+                "name": "cachefor",
+                "missing": true,
+                "default": null,
+                "doc": "Cache time",
+                "required": false,
+                "type": "timespan",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "container": {
                 "default_display": "yes",
                 "name": "container",
@@ -76,6 +88,18 @@
                 "empty": true,
                 "choices": null
             },
+            "cachekey": {
+                "default_display": "",
+                "name": "cachekey",
+                "missing": true,
+                "default": null,
+                "doc": "Cache key",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "let": {
                 "default_display": "",
                 "name": "let",
@@ -95,7 +119,7 @@
                 "default": null,
                 "doc": "Template",
                 "required": false,
-                "type": "template path",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

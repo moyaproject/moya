@@ -10,7 +10,7 @@
         "name": "breakpoint",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "defined": "/Users/will/projects/moya/moya/tags/config.py",
         "doc": "Stops the execute of Moya code and drops in to the debugger.",
         "namespace": "http://moyaproject.com",
         "synopsis": "drop in to the debugger",

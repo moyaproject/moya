@@ -10,7 +10,7 @@
         "name": "form",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nDefines a form.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "begin a form definition",
@@ -40,12 +40,12 @@
                 "empty": true,
                 "choices": null
             },
-            "class": {
+            "id": {
                 "default_display": "",
-                "name": "class",
+                "name": "id",
                 "missing": true,
                 "default": null,
-                "doc": "CSS class override",
+                "doc": "Form HTML id",
                 "required": false,
                 "type": "text",
                 "metavar": null,
@@ -66,6 +66,18 @@
                     "get",
                     "post"
                 ]
+            },
+            "legend": {
+                "default_display": "",
+                "name": "legend",
+                "missing": true,
+                "default": null,
+                "doc": "legend text shown above form",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
             },
             "extends": {
                 "default_display": "",
@@ -103,12 +115,12 @@
                 "empty": true,
                 "choices": null
             },
-            "legend": {
+            "class": {
                 "default_display": "",
-                "name": "legend",
+                "name": "class",
                 "missing": true,
                 "default": null,
-                "doc": "legend text shown above form",
+                "doc": "CSS class override",
                 "required": false,
                 "type": "text",
                 "metavar": null,

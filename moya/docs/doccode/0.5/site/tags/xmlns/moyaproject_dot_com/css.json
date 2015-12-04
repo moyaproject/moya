@@ -10,7 +10,7 @@
         "name": "css",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "defined": "/Users/will/projects/moya/moya/tags/content.py",
         "doc": "\nThis content tag creates a [c]<style>[/c] element in html, with the enclosed text.\n\nIt is generally preferable to use [tag]include-css[/tag], but this tag can be useful to insert dynamically generated CSS.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "add a CSS to content",

@@ -10,7 +10,7 @@
         "name": "comments",
         "lib": "moya.comments",
         "namespace_slug": "moyaproject_dot_com_comments",
-        "defined": "/home/will/projects/moya/moya/libs/comments/logic/widgets.xml (line 6)",
+        "defined": "/Users/will/projects/moya/moya/libs/comments/logic/widgets.xml (line 6)",
         "doc": "Render comments on a page.",
         "namespace": "http://moyaproject.com/comments",
         "synopsis": "enable comments",
@@ -83,7 +83,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

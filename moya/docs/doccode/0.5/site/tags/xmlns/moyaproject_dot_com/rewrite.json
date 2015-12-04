@@ -10,50 +10,12 @@
         "name": "rewrite",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "\nThis tag tells Moya to serve the content from a different named URL.\n\nNote, that unlike [tag]redirect[/tag], this does not involve an extra request.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve response from a different named URL",
         "tag_name": "rewrite",
-        "params": {},
-        "example": null,
-        "inherited_params": {
-            "code": {
-                "default_display": "303",
-                "name": "code",
-                "missing": true,
-                "default": 303,
-                "doc": "HTTP response code (use 301 for permanent redirect)",
-                "required": false,
-                "type": "integer",
-                "metavar": "HTTPCODE",
-                "empty": true,
-                "choices": null
-            },
-            "from": {
-                "default_display": "",
-                "name": "from",
-                "missing": true,
-                "default": null,
-                "doc": "Application",
-                "required": false,
-                "type": "application reference",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
-            "name": {
-                "default_display": "",
-                "name": "name",
-                "missing": true,
-                "default": null,
-                "doc": "URL name",
-                "required": true,
-                "type": "text",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
+        "params": {
             "fragment": {
                 "default_display": "",
                 "name": "fragment",
@@ -78,6 +40,33 @@
                 "empty": true,
                 "choices": null
             },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "URL name",
+                "required": true,
+                "type": "text",
+                "metavar": "URL NAME",
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
             "if": {
                 "default_display": "yes",
                 "name": "if",

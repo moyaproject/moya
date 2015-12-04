@@ -10,7 +10,7 @@
         "name": "adapt-field",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": null,
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "adapt a field in a form",

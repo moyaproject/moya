@@ -10,7 +10,7 @@
         "name": "link",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 16)",
+        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/tags.xml (line 16)",
         "doc": "A link to admin content (must go inside a module tag)",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "link to admin content",

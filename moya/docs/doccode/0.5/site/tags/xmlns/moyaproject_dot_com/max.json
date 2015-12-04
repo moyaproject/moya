@@ -10,7 +10,7 @@
         "name": "max",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Get the maximum value in a sequence.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get the maximum value in a sequence",

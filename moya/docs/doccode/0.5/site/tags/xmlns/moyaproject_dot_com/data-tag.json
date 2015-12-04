@@ -10,7 +10,7 @@
         "name": "data-tag",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/tag.py",
+        "defined": "/Users/will/projects/moya/moya/tags/tag.py",
         "doc": "Define a data tag. See [doc customtags].",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a data tag",

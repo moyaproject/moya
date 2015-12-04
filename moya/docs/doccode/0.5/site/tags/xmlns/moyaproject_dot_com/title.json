@@ -10,7 +10,7 @@
         "name": "title",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "defined": "/Users/will/projects/moya/moya/tags/content.py",
         "doc": "Set the title for content. This tag simply sets a value called [c]title[/c] on the context, which can be rendered in a templates. Here's an example:\n\n    [code xml]\n    <content libname=\"content.front\" template=\"front.html\">\n        <title>Welcome!<title>\n    </content>\n    [/code]\n\n    A reference to [c]title[/c] would appear somewhere in the template associated with the content. For example:\n\n    [code moyatemplate]\n    <html>\n       <head>\n           <title>${title}</title>\n        </head>\n        <body>\n            {% render sections.body %}\n        </body>\n    </html>\n    [/code]\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "set content title",

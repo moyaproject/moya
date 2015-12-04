@@ -10,7 +10,7 @@
         "name": "redirect",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "Redirect to a mounted URL",
         "namespace": "http://moyaproject.com",
         "synopsis": "redirect to a named URL",
@@ -41,13 +41,13 @@
                 "choices": null
             },
             "code": {
-                "default_display": "303",
+                "default_display": "\"303\"",
                 "name": "code",
                 "missing": true,
-                "default": 303,
+                "default": "303",
                 "doc": "HTTP response code (use 301 for permanent redirect)",
                 "required": false,
-                "type": "integer",
+                "type": "http status code",
                 "metavar": "HTTPCODE",
                 "empty": true,
                 "choices": null
@@ -72,7 +72,7 @@
                 "doc": "URL name",
                 "required": true,
                 "type": "text",
-                "metavar": null,
+                "metavar": "URL NAME",
                 "empty": true,
                 "choices": null
             }

@@ -10,7 +10,7 @@
         "name": "node",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "defined": "/Users/will/projects/moya/moya/tags/content.py",
         "doc": "\nCreate a template node in a content definition. A node is essentially a reference to a template with associated data. Here's an example of a content definition containing a template node:\n\n[code xml]\n<content libname=\"content.example\" template=\"front.html\">\n    <section name=\"body\">\n        <node template=\"newscontainer.html\" let:style=\"splash\"/>\n            <html:p>${news}</html:p>\n        </node>\n    </section>\n</content>\n[/code]\n\nHere's what newscontainer.html might look like. Note the use of [link templates#children]{% children %}[/link] which will render the content contained inside a node:\n\n[code moyatemplate]\n<div style=\"${style}\">\n    <h3>The Latest News</h3>\n    {% children %}\n</div>\n[/code]\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "creates a template node in content",

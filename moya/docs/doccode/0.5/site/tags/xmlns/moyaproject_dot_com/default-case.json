@@ -10,7 +10,7 @@
         "name": "default-case",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "\nDefines the [i]default[/i] case in a [tag]switch[/tag] tag.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "default case in a switch",

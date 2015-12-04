@@ -10,10 +10,10 @@
         "name": "get-or-create",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
-        "doc": "Get an object from the db if it exists, create it if it doesn't",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "doc": "\nGet an object from the db if it exists, create it if it doesn't.\n\nIf the object is create, the code in the enclosed block is executed.\n\n",
         "namespace": "http://moyaproject.com/db",
-        "synopsis": "Get an object from the database, or create it if it doesn't exist.",
+        "synopsis": "get an object from the database, or create it if it doesn't exist.",
         "tag_name": "get-or-create",
         "params": {
             "forupdate": {
@@ -101,7 +101,7 @@
                 "choices": null
             }
         },
-        "example": "\n            <db:get-or-create model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\" />\n        ",
+        "example": "\n            <db:get-or-create model=\"#Permission\" let:name=\"'admin'\"\n                let:description=\"'User may perform administration tasks'\">\n                <echo>New permission was created.\n            </db:get-or-create>\n        ",
         "inherited_params": {
             "dst": {
                 "default_display": "",

@@ -10,7 +10,7 @@
         "name": "map-dict",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Create a list of dictionaries from a sequence.",
         "namespace": "http://moyaproject.com",
         "synopsis": "generate a list of dictionaries",

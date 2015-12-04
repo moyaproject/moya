@@ -10,7 +10,7 @@
         "name": "load-project",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_test",
-        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "defined": "/Users/will/projects/moya/moya/tags/unittest.py",
         "doc": "Load a moya project",
         "namespace": "http://moyaproject.com/test",
         "synopsis": "load a project for testing",

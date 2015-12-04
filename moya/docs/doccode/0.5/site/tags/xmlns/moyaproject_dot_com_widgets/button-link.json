@@ -10,7 +10,7 @@
         "name": "button-link",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 57)",
+        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 86)",
         "doc": "Renders a link, styled as a button.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a link styled as a button",
@@ -83,7 +83,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

@@ -10,7 +10,7 @@
         "name": "install",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "defined": "/Users/will/projects/moya/moya/tags/config.py",
         "doc": "\nInstalls an [i]application[/i]. An application is effectively an [i]instance[/i] of a library, with its own settings and serving content from unique URL(s). An [tag]install[/tag] tag should appear within a [tag]server[/tag] tag. A library must first be [i]imported[/i] (with [tag]import[/tag]) prior to installing.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "create an application from a library",

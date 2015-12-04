@@ -10,7 +10,7 @@
         "name": "widget-yield",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "defined": "/Users/will/projects/moya/moya/tags/widget.py",
         "doc": "Yield to a widget block",
         "namespace": "http://moyaproject.com",
         "synopsis": "yield to code block in a widget",

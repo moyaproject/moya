@@ -10,7 +10,7 @@
         "name": "delete-all",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "Delete every object from a table",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "delete all objects in a table",

@@ -10,7 +10,7 @@
         "name": "query",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "Query the database. Will return a query set object that may be iterated over by default, unless [c]'collect'[/c] is specified.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "query the database",

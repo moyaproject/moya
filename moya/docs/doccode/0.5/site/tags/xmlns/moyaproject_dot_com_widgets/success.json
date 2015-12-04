@@ -10,7 +10,7 @@
         "name": "success",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 6)",
+        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 12)",
         "doc": "Renders a success message.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "success alert",
@@ -35,7 +35,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

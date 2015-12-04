@@ -10,7 +10,7 @@
         "name": "get-url",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "defined": "/Users/will/projects/moya/moya/tags/server.py",
         "doc": "Get a named URL.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get a named URL",

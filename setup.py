@@ -32,6 +32,7 @@ setup(
             'moya = moya.command.app:main',
             'moya-pm = moya.command.moyapi:main',
             'moya-srv = moya.command.moyasrv:main',
+            'moya-doc = moya.command.moyadoc:main'
         ]
     },
     scripts=[

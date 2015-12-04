@@ -10,7 +10,7 @@
         "name": "profile-python",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/tools.py",
+        "defined": "/Users/will/projects/moya/moya/tags/tools.py",
         "doc": "\nProfile Python code.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "profile python code",

@@ -10,7 +10,7 @@
         "name": "link",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_links",
-        "defined": "/home/will/projects/moya/moya/libs/links/logic/tags.xml (line 6)",
+        "defined": "/Users/will/projects/moya/moya/libs/links/logic/tags.xml (line 6)",
         "doc": "Defines a link. These tags may appear anywhere in the project, and can be extracted with the [tag links]get[/tag] tag.",
         "namespace": "http://moyaproject.com/links",
         "synopsis": "define a line",

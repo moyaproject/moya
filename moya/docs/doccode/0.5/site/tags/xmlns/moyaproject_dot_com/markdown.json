@@ -10,7 +10,7 @@
         "name": "markdown",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/markup.py",
+        "defined": "/Users/will/projects/moya/moya/tags/markup.py",
         "doc": "Add markdown to content",
         "namespace": "http://moyaproject.com",
         "synopsis": "add markdown to content",

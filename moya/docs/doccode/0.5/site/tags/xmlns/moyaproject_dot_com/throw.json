@@ -10,7 +10,7 @@
         "name": "throw",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Throw a Moya exception. An exception consists of a name in dotted notation with an optional message.\n\n    Custom exceptions should be named to start with the [i]long name[/i] of the library. Moya reserves exceptions with a single dot for internal use. These [i]may[/i] be thrown if appropriate.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "throw an exception",
@@ -44,21 +44,16 @@
         "example": "\n        <try>\n            <throw exception=\"middle.earth.cant\" msg=\"One can't simply do that!\"/>\n        </try>\n        <except exception=\"middle.earth.*\" dst=\"error\">\n            <echo>Error: ${error.msg}</echo>\n        </except>\n\n        ",
         "inherited_params": {
             "default": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "default",
                 "missing": true,
                 "default": null,
-                "doc": "Default object to return if the key isn't in the dict",
+                "doc": "Default return for missing keys",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
-                "choices": [
-                    "dict",
-                    "list",
-                    "int",
-                    "float"
-                ]
+                "choices": null
             },
             "dst": {
                 "default_display": "",

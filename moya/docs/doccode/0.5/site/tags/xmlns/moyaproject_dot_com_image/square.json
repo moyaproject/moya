@@ -10,7 +10,7 @@
         "name": "square",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "defined": "/Users/will/projects/moya/moya/tags/image.py",
         "doc": "Square crop an image.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "square crop an image",

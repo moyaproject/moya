@@ -10,7 +10,7 @@
         "name": "foreign-key",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "Add a [i]foreign key[/i] to a model. A foreign key is a reference to another table.\n\n    A [tag]foreign-key[/tag] tag must appear within a [tag]model[/tag] tag.\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a key to another model",
@@ -33,27 +33,12 @@
                 "name": "index",
                 "missing": true,
                 "default": false,
-                "doc": "Index?",
+                "doc": "Generate a db index?",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null
-            },
-            "ondelete": {
-                "default_display": "\"CASCADE\"",
-                "name": "ondelete",
-                "missing": true,
-                "default": "CASCADE",
-                "doc": "Delete behavior",
-                "required": false,
-                "type": "text",
-                "metavar": null,
-                "empty": true,
-                "choices": [
-                    "CASCADE",
-                    "SET NULL"
-                ]
             },
             "null": {
                 "default_display": "yes",
@@ -115,6 +100,18 @@
                 "empty": true,
                 "choices": null
             },
+            "owned": {
+                "default_display": "no",
+                "name": "owned",
+                "missing": true,
+                "default": false,
+                "doc": "Is tis model owned by the referenced model?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "label": {
                 "default_display": "",
                 "name": "label",
@@ -133,6 +130,18 @@
                 "missing": true,
                 "default": null,
                 "doc": "Allow empty field in Moya admin?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "owner": {
+                "default_display": "no",
+                "name": "owner",
+                "missing": true,
+                "default": false,
+                "doc": "Does this model own the referenced object?",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,

@@ -10,7 +10,7 @@
         "name": "tear-down",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_test",
-        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "defined": "/Users/will/projects/moya/moya/tags/unittest.py",
         "doc": "Logic to tear down a unit test suite. Must be inside a <suite>",
         "namespace": "http://moyaproject.com/test",
         "synopsis": "tear down (finalize) code for a test suite",

@@ -10,7 +10,7 @@
         "name": "signature",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "defined": "/Users/will/projects/moya/moya/tags/widget.py",
         "doc": "\nBegins a list of attributes and arguments for a [tag]tag[/tag], [tag]data-tag[/tag], [tag]macro[/tag] or [tag]command[/tag].\n\nIn the case of tags, the signature should contain [tag]attribute[/tag] tags.\nMacros expect [tag]argument[/tag] tags.\nFor a command, the signature should contain [tag]arg[/tag] and [tag]option[/tag] tags.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define the attributes / arguments to a tag / macro",

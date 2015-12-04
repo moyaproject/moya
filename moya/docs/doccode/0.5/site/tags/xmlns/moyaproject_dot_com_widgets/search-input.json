@@ -10,7 +10,7 @@
         "name": "search-input",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 191)",
+        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 213)",
         "doc": "A search input with cancel button",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": null,
@@ -71,7 +71,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

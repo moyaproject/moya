@@ -10,7 +10,7 @@
         "name": "resize-canvas",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "defined": "/Users/will/projects/moya/moya/tags/image.py",
         "doc": "Resize the image canvas.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "resize the image canvas",
@@ -23,7 +23,7 @@
                 "default": "#000000",
                 "doc": "Background color",
                 "required": false,
-                "type": "text",
+                "type": "color",
                 "metavar": null,
                 "empty": true,
                 "choices": null

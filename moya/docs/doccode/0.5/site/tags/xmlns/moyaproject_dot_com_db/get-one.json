@@ -10,7 +10,7 @@
         "name": "get-one",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "\nLike [tag db]get[/tag], but will throw a [c]db.multiple-results[/c] if there are more than one result, or [c]db.no-result[/c] if there are no results.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "get precisely one matching object",

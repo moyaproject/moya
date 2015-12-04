@@ -10,7 +10,7 @@
         "name": "view",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "defined": "/Users/will/projects/moya/moya/tags/server.py",
         "doc": "Define a view to handle a URL",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a view to handle a URL",
@@ -59,7 +59,7 @@
                 "default": null,
                 "doc": "Template",
                 "required": false,
-                "type": "template path",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

@@ -10,7 +10,7 @@
         "name": "value",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "defined": "/Users/will/projects/moya/moya/tags/config.py",
         "doc": "Defines a single value in an enumeration object. Should be contained within an [tag]enum[/tag].",
         "namespace": "http://moyaproject.com",
         "synopsis": "a value in an enumeration",

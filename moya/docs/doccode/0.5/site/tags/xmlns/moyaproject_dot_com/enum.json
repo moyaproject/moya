@@ -10,7 +10,7 @@
         "name": "enum",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "defined": "/Users/will/projects/moya/moya/tags/config.py",
         "doc": "\nDefine and [i]enumeration[/i] object. An enumeration is a collection of text identifiers with an integer value. This tag should contain [tag]value[/tag] tags that define the values.\n\nYou can retrieve an enumeration object with the [tag]get-enum[/tag] tag.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "map numbers on to identifiers",

@@ -10,7 +10,7 @@
         "name": "rows",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_tables",
-        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/tables/py/tableselements.py",
         "doc": "\nDefines a collection of rows in a [tag tables]table[/tag].\n\nA [tag tables]rows[/tag] tag may contain either [tag tables]row[/tag] tags [i]or[/i] -- if the [c]src[/c] attribute is set -- [tag tables]cell[/tag] tags.\n\nWhen the [c]src[/c] attribute is set, it should be a sequence of values to be iterated over (like [tag]for[/tag]). Each item in the sequence will generate a row containing the enclosed [tag tables]cell[/tag] tags.\n\n",
         "namespace": "http://moyaproject.com/tables",
         "synopsis": "a collection of rows in a table",

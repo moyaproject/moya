@@ -10,12 +10,24 @@
         "name": "radio-group",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nAdd a radio group (container for radio buttons) to a form.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "add a radio group to a form",
         "tag_name": "radio-group",
         "params": {
+            "inline": {
+                "default_display": "no",
+                "name": "inline",
+                "missing": true,
+                "default": false,
+                "doc": "Display inline?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "fieldname": {
                 "default_display": "\"radio-group\"",
                 "name": "fieldname",
@@ -24,6 +36,18 @@
                 "doc": "Field name",
                 "required": false,
                 "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "choices": {
+                "default_display": "None",
+                "name": "choices",
+                "missing": true,
+                "default": null,
+                "doc": "Possible choices",
+                "required": false,
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -123,6 +147,18 @@
                 "doc": "Initial value",
                 "required": false,
                 "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "upload": {
+                "default_display": "no",
+                "name": "upload",
+                "missing": true,
+                "default": false,
+                "doc": "Contains a file upload field?",
+                "required": false,
+                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null

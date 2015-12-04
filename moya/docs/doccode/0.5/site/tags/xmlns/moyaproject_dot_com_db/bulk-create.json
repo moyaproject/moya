@@ -10,7 +10,7 @@
         "name": "bulk-create",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "Create database object in bulk via JSON. Useful for quickly adding fixture data.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "bulk create database objects",

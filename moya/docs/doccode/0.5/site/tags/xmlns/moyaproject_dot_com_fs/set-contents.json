@@ -10,7 +10,7 @@
         "name": "set-contents",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
         "doc": "Set the contents of a file",
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "write data to a file",

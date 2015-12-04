@@ -10,7 +10,7 @@
         "name": "sort-map",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "defined": "/Users/will/projects/moya/moya/tags/db.py",
         "doc": "\nSort a query set in one of a number of different ways.\n\nThis is typically used to sort a table of results based on a value in the query set.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "sort a query set dynamically",

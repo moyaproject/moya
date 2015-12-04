@@ -10,7 +10,7 @@
         "name": "text",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_email",
-        "defined": "/home/will/projects/moya/moya/tags/email.py",
+        "defined": "/Users/will/projects/moya/moya/tags/email.py",
         "doc": "Add text template to an email.",
         "namespace": "http://moyaproject.com/email",
         "synopsis": "add text to an email",

@@ -10,7 +10,7 @@
         "name": "resize-to-fit",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "defined": "/Users/will/projects/moya/moya/tags/image.py",
         "doc": "Resize image to fit within the given dimensions (maintains aspect ratio).",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "resize an image to fit within new dimensions",

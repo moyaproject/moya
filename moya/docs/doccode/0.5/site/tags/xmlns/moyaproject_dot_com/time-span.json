@@ -10,7 +10,7 @@
         "name": "time-span",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Create a datetime object",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a timespan object",

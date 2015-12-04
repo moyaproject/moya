@@ -10,7 +10,7 @@
         "name": "pop",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Remove and return a value from a dictionary.",
         "namespace": "http://moyaproject.com",
         "synopsis": "remove a value from a dictionary",

@@ -10,7 +10,7 @@
         "name": "return-false",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "\nA shortcut to return False.\n\nThe following two lines are equivalent:\n\n[code xml]\n<return-false/>\n<return value=\"no\" />\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "shortcut to return false",

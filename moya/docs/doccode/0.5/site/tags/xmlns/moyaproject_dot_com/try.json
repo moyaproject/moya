@@ -10,7 +10,7 @@
         "name": "try",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Executes the enclosed block as part of a [tag]try[/tag][tag]catch[/tag] structure. ",
         "namespace": "http://moyaproject.com",
         "synopsis": "detect exceptions within a block",

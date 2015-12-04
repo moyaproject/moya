@@ -10,7 +10,7 @@
         "name": "for-children",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/elements.py",
+        "defined": "/Users/will/projects/moya/moya/tags/elements.py",
         "doc": "Loop for each child of an element",
         "namespace": "http://moyaproject.com",
         "synopsis": "iterate over the children of an element",

@@ -10,7 +10,7 @@
         "name": "tag",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/tag.py",
+        "defined": "/Users/will/projects/moya/moya/tags/tag.py",
         "doc": "\nDefine a custom tag. A custom tag is in a callable tag that works like builtin logic tags. Here's an example of defining a custom tag:\n\n[code xml]\n<tag name=\"getstock\">\n    <doc>Get count of available stock</doc>\n    <signature>\n        <attribute name=\"product\" />\n    </signature>\n    <db:get model=\"#Product.name == product\" dst=\"product\"/>\n    <return value=\"product.count\"/>\n</tag>\n[/code]\n\nYou may define a custom tag anywhere in a library. Once defined, the tag is available to any code that uses the appropriate namespace defined in [c]lib.ini[/c]. For example, if the above tag is defined in a library with an xml namespace of [c]http://moyaproject.com/sushifinder[/c], it could be invoked with the following file:\n\n[code xml]\n<moya xmlns:sushifinder=\"http://moyaproject.com/sushifinder\">\n    <macro name=\"main\">\n        <sushifinder:getstock product=\"tuna-roll\" dst=\"count\" />\n        <echo>We have ${count} tuna rolls in stock.</echo>\n    </macro>\n</moya>\n[/code]\n\nCustom tags are preferred over macros when exposing functionality to other libraries.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a custom tag",

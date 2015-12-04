@@ -10,7 +10,7 @@
         "name": "columns",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_tables",
-        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/tables/py/tableselements.py",
         "doc": "\nDefines the columns in a [tag tables]table[/tag].\n\n",
         "namespace": "http://moyaproject.com/tables",
         "synopsis": "define the columns in a table",

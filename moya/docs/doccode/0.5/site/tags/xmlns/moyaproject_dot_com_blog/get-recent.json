@@ -10,7 +10,7 @@
         "name": "get-recent",
         "lib": "moya.blog",
         "namespace_slug": "moyaproject_dot_com_blog",
-        "defined": "/home/will/projects/moya/moya/libs/blog/logic/tags.xml (line 5)",
+        "defined": "/Users/will/projects/moya/moya/libs/blog/logic/tags.xml (line 5)",
         "doc": "",
         "namespace": "http://moyaproject.com/blog",
         "synopsis": null,

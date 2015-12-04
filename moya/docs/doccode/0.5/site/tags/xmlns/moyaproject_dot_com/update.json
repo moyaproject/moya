@@ -10,7 +10,7 @@
         "name": "update",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Update a dictionary (or other mapping collection) with keys and values from another dictionary.",
         "namespace": "http://moyaproject.com",
         "synopsis": "add new values to a dictionary",

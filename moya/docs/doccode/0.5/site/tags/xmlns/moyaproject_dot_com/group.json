@@ -10,7 +10,7 @@
         "name": "group",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "\nGroup a sequence in to a list of values with common keys.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "group a sequence by common keys",

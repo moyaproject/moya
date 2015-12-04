@@ -10,7 +10,7 @@
         "name": "resolve-template",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/renderable.py",
+        "defined": "/Users/will/projects/moya/moya/tags/renderable.py",
         "doc": "Resolve a relative template and return a absolute path",
         "namespace": "http://moyaproject.com",
         "synopsis": "resolve a relative template path",

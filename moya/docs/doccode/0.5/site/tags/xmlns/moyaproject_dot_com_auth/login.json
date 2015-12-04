@@ -10,7 +10,7 @@
         "name": "login",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 61)",
+        "defined": "/Users/will/projects/moya/moya/libs/auth/logic/tags.xml (line 61)",
         "doc": "Check credentials and login a user",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "log in a user with username/password",

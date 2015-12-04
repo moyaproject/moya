@@ -10,7 +10,7 @@
         "name": "server",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "defined": "/Users/will/projects/moya/moya/tags/server.py",
         "doc": "Defines a server",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a server",

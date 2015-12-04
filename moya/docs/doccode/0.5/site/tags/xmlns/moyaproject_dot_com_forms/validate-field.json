@@ -10,7 +10,7 @@
         "name": "validate-field",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nDefine validation code for a field in a form.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "validate a field in a form",

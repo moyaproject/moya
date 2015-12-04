@@ -10,7 +10,7 @@
         "name": "get-count",
         "lib": "moya.comments",
         "namespace_slug": "moyaproject_dot_com_comments",
-        "defined": "/home/will/projects/moya/moya/libs/comments/logic/tags.xml (line 28)",
+        "defined": "/Users/will/projects/moya/moya/libs/comments/logic/tags.xml (line 28)",
         "doc": "Get comment count for a single topic.",
         "namespace": "http://moyaproject.com/comments",
         "synopsis": "get number of comments",

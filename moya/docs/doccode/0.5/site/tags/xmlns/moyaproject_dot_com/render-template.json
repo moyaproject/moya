@@ -10,7 +10,7 @@
         "name": "render-template",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/renderable.py",
+        "defined": "/Users/will/projects/moya/moya/tags/renderable.py",
         "doc": "Render a template",
         "namespace": "http://moyaproject.com",
         "synopsis": "render a template and store the result",

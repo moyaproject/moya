@@ -10,7 +10,7 @@
         "name": "odict",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Like <dict> but creates an [i]ordered[/i] dictionary (maintains the order data was inserted)/",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a dict object",
@@ -19,21 +19,16 @@
         "example": "\n        <dict dst=\"species\">\n            <str dst=\"Bibo\">Hobbit</dst>\n            <str dst=\"Gandalph\">Wizard</dst>\n        </dict>\n        <!-- Alternatively -->\n        <dict dst=\"species\" let:Bilbo=\"Hobbit\" let:Gandalph=\"Wizard\" />\n        <echo>Bilbo is a ${species['Bilbo']}</echo>\n\n        ",
         "inherited_params": {
             "default": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "default",
                 "missing": true,
                 "default": null,
-                "doc": "Default object to return if the key isn't in the dict",
+                "doc": "Default return for missing keys",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
-                "choices": [
-                    "dict",
-                    "list",
-                    "int",
-                    "float"
-                ]
+                "choices": null
             },
             "dst": {
                 "default_display": "",

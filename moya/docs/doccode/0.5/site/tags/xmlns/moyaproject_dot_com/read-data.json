@@ -10,7 +10,7 @@
         "name": "read-data",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/read.py",
+        "defined": "/Users/will/projects/moya/moya/tags/read.py",
         "doc": "\nRead and process a data file. The [c]path[/c] parameter may be absolute, or relative from the current application.\n\nlet's say we have a file, crew.txt in our [link library#data-section]data directory[/link], which is a text file with a list of names, one per line. For example:\n\n[code]\nRygel\nJohn\nScorpies\nKa D'Argo\n[/code]\n\nWe can read the above file and process each line with the following:\n\n[code xml]\n<read-data format=\"text/plain\" path=\"crew.txt\" dst=\"crew\" />\n<for src=\"splitlines:crew\" dst=\"characters\">\n    <echo>${character} is on board</echo>\n</for>\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "read and process data",

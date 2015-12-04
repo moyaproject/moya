@@ -10,7 +10,7 @@
         "name": "include-css",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "defined": "/Users/will/projects/moya/moya/tags/content.py",
         "doc": "\nAdd a CSS path to be included in the content. The list of paths will be added to a value called [c]include[/c] when the template is rendered. Here's an example:\n\n[code xml]\n<content libname=\"content.front\" template=\"front.html\">\n    <include-css path=\"css/news.css\" />\n</content>\n[/code]\n\nThe CSS paths can be rendered in a template as follows:\n\n[code moyatemplate]\n{% render include.css %}\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "include CSS with content",

@@ -10,7 +10,7 @@
         "name": "resize",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "defined": "/Users/will/projects/moya/moya/tags/image.py",
         "doc": "Resize an image to new dimensions.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "resize an image",

@@ -10,7 +10,7 @@
         "name": "suite",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_test",
-        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "defined": "/Users/will/projects/moya/moya/tags/unittest.py",
         "doc": "A suite of unit tests",
         "namespace": "http://moyaproject.com/test",
         "synopsis": "define a suite of test cases",

@@ -10,7 +10,7 @@
         "name": "content",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "defined": "/Users/will/projects/moya/moya/tags/content.py",
         "doc": "\nBegin a [link content]content[/link] definition.\n\nContent is a high level description of a page.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define content",
@@ -28,14 +28,26 @@
                 "empty": true,
                 "choices": null
             },
+            "final": {
+                "default_display": "no",
+                "name": "final",
+                "missing": true,
+                "default": false,
+                "doc": "Stop extending with this content element?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "template": {
                 "default_display": "",
                 "name": "template",
                 "missing": true,
                 "default": null,
-                "doc": "Template name",
+                "doc": "Template name(s)",
                 "required": false,
-                "type": "template path",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

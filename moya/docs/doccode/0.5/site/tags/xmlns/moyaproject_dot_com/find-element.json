@@ -10,7 +10,7 @@
         "name": "find-element",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/elements.py",
+        "defined": "/Users/will/projects/moya/moya/tags/elements.py",
         "doc": "Retrieve an element of a given type.",
         "namespace": "http://moyaproject.com",
         "synopsis": "retrieve information regarding an element",

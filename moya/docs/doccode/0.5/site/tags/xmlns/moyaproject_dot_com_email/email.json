@@ -10,7 +10,7 @@
         "name": "email",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_email",
-        "defined": "/home/will/projects/moya/moya/tags/email.py",
+        "defined": "/Users/will/projects/moya/moya/tags/email.py",
         "doc": "Define an email.",
         "namespace": "http://moyaproject.com/email",
         "synopsis": "define an email",
@@ -35,7 +35,7 @@
                 "default": null,
                 "doc": "To email address",
                 "required": false,
-                "type": "text",
+                "type": "comma list",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -47,7 +47,7 @@
                 "default": null,
                 "doc": "CC email address",
                 "required": false,
-                "type": "text",
+                "type": "comma list",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -59,7 +59,7 @@
                 "default": null,
                 "doc": "BCC email address",
                 "required": false,
-                "type": "text",
+                "type": "comma list",
                 "metavar": null,
                 "empty": true,
                 "choices": null

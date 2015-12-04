@@ -10,28 +10,23 @@
         "name": "dict",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Create a [i]dictionary[/i] object. A dictionary maps [i]keys[/i] on to [i]values[/i]. The keys and values are defined in the enclosing block, or via the [i]let map[/i].",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a dict object",
         "tag_name": "dict",
         "params": {
             "default": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "default",
                 "missing": true,
                 "default": null,
-                "doc": "Default object to return if the key isn't in the dict",
+                "doc": "Default return for missing keys",
                 "required": false,
-                "type": "text",
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
-                "choices": [
-                    "dict",
-                    "list",
-                    "int",
-                    "float"
-                ]
+                "choices": null
             },
             "sequence": {
                 "default_display": "None",

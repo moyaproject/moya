@@ -10,7 +10,7 @@
         "name": "get",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nGet a form object.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "get a form",
@@ -40,6 +40,18 @@
                 "empty": true,
                 "choices": null
             },
+            "withscope": {
+                "default_display": "no",
+                "name": "withscope",
+                "missing": true,
+                "default": false,
+                "doc": "Use current scope?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "form": {
                 "default_display": "",
                 "name": "form",
@@ -64,17 +76,32 @@
                 "empty": true,
                 "choices": null
             },
-            "withscope": {
-                "default_display": "no",
-                "name": "withscope",
+            "id": {
+                "default_display": "",
+                "name": "id",
                 "missing": true,
-                "default": false,
-                "doc": "Use current scope?",
+                "default": null,
+                "doc": "Override HTML id attribute",
                 "required": false,
-                "type": "boolean",
+                "type": "text",
                 "metavar": null,
                 "empty": true,
                 "choices": null
+            },
+            "method": {
+                "default_display": "\"post\"",
+                "name": "method",
+                "missing": true,
+                "default": "post",
+                "doc": "Form method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "get",
+                    "post"
+                ]
             },
             "template": {
                 "default_display": "",
@@ -112,20 +139,17 @@
                 "empty": true,
                 "choices": null
             },
-            "method": {
-                "default_display": "\"post\"",
-                "name": "method",
+            "legend": {
+                "default_display": "",
+                "name": "legend",
                 "missing": true,
-                "default": "post",
-                "doc": "Form method",
+                "default": null,
+                "doc": "Override form Legend",
                 "required": false,
                 "type": "text",
                 "metavar": null,
                 "empty": true,
-                "choices": [
-                    "get",
-                    "post"
-                ]
+                "choices": null
             }
         },
         "example": "\n        <forms:get form=\"#form.login\" dst=\"form\" />\n        ",

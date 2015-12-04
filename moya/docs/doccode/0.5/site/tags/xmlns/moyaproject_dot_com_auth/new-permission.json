@@ -10,7 +10,7 @@
         "name": "new-permission",
         "lib": "moya.auth",
         "namespace_slug": "moyaproject_dot_com_auth",
-        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 168)",
+        "defined": "/Users/will/projects/moya/moya/libs/auth/logic/tags.xml (line 168)",
         "doc": "Create a new permission (if it doesn't already exist)",
         "namespace": "http://moyaproject.com/auth",
         "synopsis": "create a new permission",

@@ -10,7 +10,7 @@
         "name": "add-choices",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nAdd choices to a [tag]select[/tag] or [tag]check-select[/tag].\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "add choices to a select tag",

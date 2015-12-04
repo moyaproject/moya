@@ -10,7 +10,7 @@
         "name": "if-post",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "\nExecutes the enclosing block if the current request is a POST request.\n\nBasically a shorthand for:\n\n[code xml]<if test=\".request.method=='POST'\">[/code]\n\nMay be followed by [tag]else[/tag] or [tag]elif[/tag].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "execute a block if this is a POST request",

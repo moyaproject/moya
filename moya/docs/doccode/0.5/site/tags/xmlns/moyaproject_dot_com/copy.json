@@ -10,7 +10,7 @@
         "name": "copy",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Copy a variable from one location to another",
         "namespace": "http://moyaproject.com",
         "synopsis": "copy a value",

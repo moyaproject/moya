@@ -10,7 +10,7 @@
         "name": "map",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Create a list by mapping an expression on to a sequence",
         "namespace": "http://moyaproject.com",
         "synopsis": "map an expression on to sequence",

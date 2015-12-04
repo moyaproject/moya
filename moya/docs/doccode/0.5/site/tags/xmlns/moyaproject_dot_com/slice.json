@@ -10,7 +10,7 @@
         "name": "slice",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Slice a sequence of values (extract a range of indexed values).",
         "namespace": "http://moyaproject.com",
         "synopsis": "get a 'slice' of a collection",

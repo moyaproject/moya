@@ -10,7 +10,7 @@
         "name": "serve-file",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "Serve a static file.",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve a file",
@@ -24,6 +24,18 @@
                 "doc": "Path in filesystem",
                 "required": true,
                 "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "ifexists": {
+                "default_display": "",
+                "name": "ifexists",
+                "missing": true,
+                "default": null,
+                "doc": "Only serve a response if the file exists",
+                "required": false,
+                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -52,26 +64,14 @@
                 "empty": true,
                 "choices": null
             },
-            "name": {
+            "filename": {
                 "default_display": "",
-                "name": "name",
+                "name": "filename",
                 "missing": true,
                 "default": null,
-                "doc": "Name of the file",
+                "doc": "Name of the file being serve",
                 "required": false,
                 "type": "text",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
-            "ifexists": {
-                "default_display": "",
-                "name": "ifexists",
-                "missing": true,
-                "default": null,
-                "doc": "Only serve a response if the file exists",
-                "required": false,
-                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null

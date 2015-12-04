@@ -10,7 +10,7 @@
         "name": "request",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/request.py",
+        "defined": "/Users/will/projects/moya/moya/tags/request.py",
         "doc": "\nMake HTTP requests.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "make an http request",

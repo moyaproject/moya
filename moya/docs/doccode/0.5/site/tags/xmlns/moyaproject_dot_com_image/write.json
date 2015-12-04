@@ -10,7 +10,7 @@
         "name": "write",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "defined": "/Users/will/projects/moya/moya/tags/image.py",
         "doc": "Write an image",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "write an image to disk",
@@ -81,13 +81,13 @@
                 "choices": null
             },
             "fsobj": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "fsobj",
                 "missing": true,
                 "default": null,
                 "doc": "FS",
                 "required": false,
-                "type": "index",
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
                 "choices": null

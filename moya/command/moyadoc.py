@@ -11,11 +11,15 @@ from fs.path import join, splitext
 from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
 from fs import utils
 from fs.opener import fsopendir
+from fs.errors import FSError
 
 import sys
 import argparse
 import time
 from os.path import dirname, expanduser
+
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 
 def _notify(title, message, icon="dialog-error"):
@@ -29,19 +33,21 @@ def _notify(title, message, icon="dialog-error"):
     n.show()
 
 
-class ReloadChangeWatcher(object):
+class ReloadChangeWatcher(FileSystemEventHandler):
 
     def __init__(self, watch_fs, rebuild):
         self.watching_fs = watch_fs
         self.rebuild = rebuild
         self.last_build_failed = False
-        self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
+        super(ReloadChangeWatcher, self).__init__()
+        #self.watching_fs.add_watcher(self.on_change, '/', (CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC))
 
-    def on_change(self, event):
-        ext = splitext(event.path)[1].lower()
+    def on_any_event(self, event):
+        path = event.src_path
+        ext = splitext(path)[1].lower()
         if ext not in ['.txt']:
             return
-        print('file "{}" changed, building...'.format(event.path))
+        print('file "{}" changed, building...'.format(path))
         try:
             self.rebuild()
         except Exception as e:
@@ -56,7 +62,12 @@ class ReloadChangeWatcher(object):
 
 
 class MoyaDoc(object):
-    """Moya documentation generator"""
+    """
+    Moya documentation generator
+
+    This builds the documentation for Moya itself. For library documentation see 'moya doc'
+
+    """
 
     builtin_namespaces = ["default",
                           "db",
@@ -132,8 +143,12 @@ class MoyaDoc(object):
         from ..command import doc_project
         location = dirname(doc_project.__file__)
 
+        try:
+            base_docs_fs = OSFS('text')
+        except FSError:
+            sys.stderr.write('run me from moya/docs directory\n')
+            return -1
         extract_fs = OSFS(join('doccode', version), create=True)
-        base_docs_fs = OSFS('text')
         languages = [d for d in base_docs_fs.listdir(dirs_only=True) if len(d) == 2]
 
         def do_extract():
@@ -225,11 +240,19 @@ class MoyaDoc(object):
 
             if not args.nobrowser:
                 import webbrowser
-                webbrowser.open(output_base_fs.getsyspath('en/index.html'))
+                index_url = "file://" + output_base_fs.getsyspath('en/index.html')
+                print(index_url)
+                webbrowser.open(index_url)
 
             if args.watch:
                 print("Watching for changes...")
-                watcher = ReloadChangeWatcher(base_docs_fs, extract_build)
+                observer = Observer()
+                path = base_docs_fs.getsyspath('/')
+
+                reload_watcher = ReloadChangeWatcher(base_docs_fs, extract_build)
+                observer.schedule(reload_watcher, path, recursive=True)
+                observer.start()
+                
                 while 1:
                     try:
                         time.sleep(0.1)
@@ -237,3 +260,6 @@ class MoyaDoc(object):
                         break
 
         return 0
+
+def main():
+    sys.exit(MoyaDoc().run())

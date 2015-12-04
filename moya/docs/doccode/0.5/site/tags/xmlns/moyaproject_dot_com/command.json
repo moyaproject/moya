@@ -10,12 +10,36 @@
         "name": "command",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/command.py",
+        "defined": "/Users/will/projects/moya/moya/tags/command.py",
         "doc": "\n    Defines a command accessible from the command line. To invoke a command enter its full app name after 'moya'. For example:\n\n    [code]$ moya testapp#cmd.hello World\nHello, World!\n    [/code]\n\n    You can also get a list of available commands for an application, by supplying the app name followed by #. For example:\n\n    [code]$ moya testapp#[/code]\n\n    See [doc commands] for more information.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a command",
         "tag_name": "command",
         "params": {
+            "priority": {
+                "default_display": "0",
+                "name": "priority",
+                "missing": true,
+                "default": 0,
+                "doc": "Priority for init process (higher piority commands will be run first)",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "init": {
+                "default_display": "no",
+                "name": "init",
+                "missing": true,
+                "default": false,
+                "doc": "Run this command as part of the init process?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "synopsis": {
                 "default_display": "",
                 "name": "synopsis",

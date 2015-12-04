@@ -10,7 +10,7 @@
         "name": "arg",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/command.py",
+        "defined": "/Users/will/projects/moya/moya/tags/command.py",
         "doc": "Defines an argument for a [link commands]command[/link]. An [tag]arg[/tag] tag must appear within the [tag]signature[/tag] tag for a command.",
         "namespace": "http://moyaproject.com",
         "synopsis": "add a positional argument to a command",
@@ -29,7 +29,8 @@
                 "choices": [
                     "string",
                     "integer",
-                    "float"
+                    "float",
+                    "file"
                 ]
             },
             "nargs": {

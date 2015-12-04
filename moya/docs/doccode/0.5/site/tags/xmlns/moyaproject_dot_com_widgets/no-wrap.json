@@ -10,7 +10,7 @@
         "name": "no-wrap",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 36)",
+        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 48)",
         "doc": "Disable text wrapping for contents.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "set no wrap on contents",
@@ -35,7 +35,7 @@
                 "default": null,
                 "doc": "Override widget template",
                 "required": false,
-                "type": "text",
+                "type": "list of template paths",
                 "metavar": null,
                 "empty": true,
                 "choices": null

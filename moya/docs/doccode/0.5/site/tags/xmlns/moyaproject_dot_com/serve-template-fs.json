@@ -10,7 +10,7 @@
         "name": "serve-template-fs",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/renderable.py",
+        "defined": "/Users/will/projects/moya/moya/tags/renderable.py",
         "doc": "\nRender and serve a template from a filesystem.\n\nSee [tag]render-template-fs[/tag].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "render and serve a template in a filesystem",

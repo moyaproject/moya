@@ -10,7 +10,7 @@
         "name": "log",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "defined": "/Users/will/projects/moya/moya/tags/config.py",
         "doc": "Write text to the logs. Every line of text can have a [i]level[/i] which indicates how significant the message is. Log levels can be filtered, so you only see relevant messages.\n\n    You can control which log messages are written via [c]logging.ini[/c].\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "write information to the log",

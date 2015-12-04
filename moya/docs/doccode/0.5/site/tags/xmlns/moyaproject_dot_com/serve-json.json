@@ -10,20 +10,20 @@
         "name": "serve-json",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "Serve an object encoded as JSON",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve an object as JSON",
         "tag_name": "serve-json",
         "params": {
             "obj": {
-                "default_display": "",
+                "default_display": "None",
                 "name": "obj",
                 "missing": false,
                 "default": null,
                 "doc": "Object to build JSON from",
                 "required": false,
-                "type": "index",
+                "type": "expression",
                 "metavar": null,
                 "empty": true,
                 "choices": null

@@ -10,7 +10,7 @@
         "name": "get",
         "lib": "moya.links",
         "namespace_slug": "moyaproject_dot_com_links",
-        "defined": "/home/will/projects/moya/moya/libs/links/logic/tags.xml (line 21)",
+        "defined": "/Users/will/projects/moya/moya/libs/links/logic/tags.xml (line 21)",
         "doc": "Gathers links from [tag links]link[/tag] tags.",
         "namespace": "http://moyaproject.com/links",
         "synopsis": "get advertised links",

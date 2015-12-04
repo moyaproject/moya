@@ -10,7 +10,7 @@
         "name": "repeat",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Repeat a block a set number of times, or indefinitely. You can leave a repeat loop prematurely with the [tag]break[/tag] tag.\n\n    [alert Note]Be careful not to create infinite loops with this tag[/alert]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "repeat a block",

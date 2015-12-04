@@ -10,7 +10,7 @@
         "name": "exit",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "defined": "/Users/will/projects/moya/moya/tags/context.py",
         "doc": "Exit the current command. When Moya sees this tag it stops running the current command and returns an exit code. It will also write any enclosed text to the console.",
         "namespace": "http://moyaproject.com",
         "synopsis": "exit the current command",

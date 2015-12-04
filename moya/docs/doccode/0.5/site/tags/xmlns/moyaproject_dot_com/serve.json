@@ -10,7 +10,7 @@
         "name": "serve",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "\nThis tag serves a response object, which may be created with the [tag]response[/tag].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve a response object",

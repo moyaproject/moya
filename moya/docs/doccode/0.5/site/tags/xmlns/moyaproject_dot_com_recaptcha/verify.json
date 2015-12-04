@@ -10,7 +10,7 @@
         "name": "verify",
         "lib": "moya.google.recaptcha",
         "namespace_slug": "moyaproject_dot_com_recaptcha",
-        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
+        "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
         "doc": "Verify the response from a re-captcha.",
         "namespace": "http://moyaproject.com/recaptcha",
         "synopsis": "verify a recaptcha response",

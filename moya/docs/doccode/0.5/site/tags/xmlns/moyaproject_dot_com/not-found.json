@@ -10,7 +10,7 @@
         "name": "not-found",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "defined": "/Users/will/projects/moya/moya/tags/response.py",
         "doc": "Respond to the request with a '404 not found' response",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve a '404 not found' response",
