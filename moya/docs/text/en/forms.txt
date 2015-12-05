@@ -81,13 +81,13 @@ The first form with libname [c]"form.post.base"[/c] isn't used directly. The fol
 
 [h1]Working with Forms[/h1]
 
-The first step in working with a Moya form, wether it's to process a POST request or to render the form HTML, is to get a form object for your [tag]{forms}form[/tag]. You do this with [tag]{forms}get[/tag] which takes the libname of the form in the [c]form[/c] attribute. Here is an example:
+The first step in working with a form, wether it's to process a POST request or to render the form HTML, is to get a [i]form object[/i] for your [tag]{forms}form[/tag]. You do this with [tag]{forms}get[/tag] which takes the libname of the form in the [c]form[/c] attribute. Here is an example:
 
 [code xml]
 <forms:get form="#form.login" dst="login_form" />
 [/code]
 
-The value [c]login_form[/c] now contains a [link form-object-reference]form object[/link]. It is this form object you work with when you come to process or render the form.
+The value [c]login_form[/c] now contains a [link forms#form-object-reference]form object[/link]. It is this form object you work with when you come to process or render the form.
 
 
 [h2]Form Parameters[/h2]
@@ -166,12 +166,12 @@ Rendering a form object in a template is similar:
 </div>
 [/code]
 
-Rendering forms in this way generates HTML from templates in the Moya Forms library. A number of different styles are supported, from a list of fields in a table to Bootstrap style forms. This is often all you'll need and makes generating the markup effortless, but you can customize the HTML generation on a number of levels, or render the HTML form manually and use Moya Forms for processing only.
+Rendering forms in this way generates HTML from templates in the Moya Forms library. A number of different styles are supported, from a list of fields in a table to Bootstrap style forms. This is often all you'll need and makes generating the markup effortless, but you may also customize the HTML generation on a number of levels, or render the HTML form manually and use Moya Forms for processing only.
 
 
 [h2]Form Styles[/h2]
 
-The [tag forms]form[/tag] tag has an attribute, [c]style[/c], which can be used to select one of a styles for the the form markup. The [tag forms]get[/tag] tag also has a [c]style[/c] attribute which will override the [c]style[/c] on the [tag forms]form[/tag] tag.
+The [tag forms]form[/tag] tag has an attribute, [c]style[/c], which can be used to select one of number of styles for the the form markup. The [tag forms]get[/tag] tag also has a [c]style[/c] attribute which will override the [c]style[/c] on the [tag forms]form[/tag] tag.
 
 [aside]Some of the styles assume [url http://getbootstrap.com]twitter bootstrap[/url] markup. Using Bootstrap will help you display nice looking forms with minimal effort, but you aren't required to use Bootstrap if you want to provide your own stylesheets.[/aside]
 
@@ -211,7 +211,7 @@ Moya uses templates to render forms and controls. These may be customized by ove
 
 When Moya renders the form, it generates a path from [c]/moya.forms/styles/{style}/form.html[/c], where [c]{style}[/c] is the style specified on the [tag forms]form[/tag] or [tag forms]get[/tag]. For example, if the style was [c]basic[/c], Moya would render the form [c]/moya.forms/styles/basic/form.html[/c].
 
-The form template is passed the form object (simply called [c]form[/c]) and renders the HTML [c]<form>[/c] and related markup. The form template also loops through the fields in the form and renders them. The template paths for fields are generated from [c]/moya.forms/styles/{style}/fields/{fieldname}.html[/c], where [c]{style}[/c] is the form style, and [c]{fieldname}[/c] is the name of the field. Field templates may also be overriden if you want to customize how a field is rendered.
+The form template is passed the form object (simply called [c]form[/c]), which it uses to render the HTML markup. The form template will loop through the fields in the form and render them. Template paths for fields are generated from [c]/moya.forms/styles/{style}/fields/{fieldname}.html[/c], where [c]{style}[/c] is the form style, and [c]{fieldname}[/c] is the name of the field. Field templates may also be overriden if you want to customize how a field is rendered.
 
 You can see the default templates used by the forms library with the following command:
 
@@ -223,7 +223,7 @@ If you override any of the templates, it will change how forms or fields are ren
 
 [h2]Custom Styles[/h2]
 
-You are not limited to the builtin form styles. If you want to define a new style entirely, you can add the template(s) under the path [c]/moya.forms/styles/{style}[/c] (in templates fs) where [c]{style}[/c] is the name of your custom style.
+You are not limited to the builtin form styles. If you want to define a new style entirely, you can add the template(s) under the path [c]/moya.forms/styles/{style}[/c] (in templates fs) where [c]{style}[/c] is the name of your custom style. You can now set that style on your forms to use your custom templates.
 
 See any of the existing form templates as a guide how to render a custom form style. You display any of the builtin form templates with the [c]moya fs[/c] command. Here's an example:
 
@@ -253,9 +253,7 @@ You can then render the form object in a template:
 </form>
 [/code]
 
-The custom emplate has access to all the parameters of the [link forms#form-object-reference]form object[/link], which you can use to insert information defined in the [tag]form[/tag]
-
-An alternative to rendering the form object is just to render the HTML for a form directly in your template.
+The custom emplate has access to all the parameters of the [link forms#form-object-reference]form object[/link], which you can use to insert information defined in your [tag]{forms}form[/tag].
 
 [h2]Form Content[/h2]
 
@@ -275,17 +273,17 @@ For example, let's say we want to wrap the username and password fields from the
 
 [aside]Note the use of the [b]moya:[/b] prefix on the node tag. This is because the node tag is not in the forms namespace.[/aside]
 
-When the above form is rendered, it will render the template [c]highlight.html[/c]:
+When the above form is rendered in the usual way, it will render [c]highlight.html[/c] within the form markup. Here's that template:
 
 [code moyatemplate]
 <div class="highlight">{% children %}</div>
 [/code]
 
-This template wraps it's children with an HTML div which may be styled independently.
+Note the use of the [c]{% children %}[/c] template tag which ensures that content and fields inside the [tag]node[/tag] are also rendered.
 
 [h2]Custom Fields[/h2]
 
-Moya includes a standard array of form inputs (see [link forms#field-reference]Field Reference[/link]), but there may be situations where you want to create entirely custom field tags either to change look and feel or to provide functionality that plain old HTML doesn't support. In these situations you can use the [tag forms]field[/tag] tag which registers the field with the form system (to enable validation etc.), but doesn't add any content of it's own. You can tell Moya how to render the field by adding the appropriate content tag(s) inside the [tag forms]field[/tag].
+Moya includes a standard array of form inputs (see [link forms#field-reference]Field Reference[/link]), but there may be situations where you want to create entirely custom field tags, either to change the look and feel or to provide functionality that plain old HTML doesn't support. In these situations you can use the [tag forms]field[/tag] tag which registers the field with the form system (to enable validation etc.), but doesn't add any content of it's own. You can tell Moya how to render the field by adding the appropriate content tag(s) inside the [tag forms]field[/tag].
 
 For instance, Moya comes with a builtin library to embed a rich text editor (supporting bold / italic / links etc), which may be used in place of text area fields (see [link forms#text-area]text-area[/link]). To use it, add the following lines to your [tag]server[/tag]:
 
@@ -314,7 +312,7 @@ When you get a form object during a POST request, Moya will fill in the field in
 
 Validating a form runs any checks on the fields, and generates error messages for fields that fail a check. The error messages are displayed when the form object is rendered, along with styles to highlight errors.
 
-To validate a form, use the [tag forms]validate[/tag] tag, which accepts a single attribute, [c]src[/c], which should be your form object. If the form validates successfully, Moya will execute the code within the [tag forms]validate[/tag] tag. This is where you would put the code to handle a valid form. The following code demonstrates how you might handle a login form:
+To validate a form, use the [tag forms]validate[/tag] tag, which accepts a single attribute, [c]src[/c], which should be your form object. If the form validates successfully, Moya will execute the code within the [tag forms]validate[/tag] tag. The following code demonstrates how you might handle a login form:
 
 [code xml]
 <view libname="view.login" content="#content.login">
@@ -366,7 +364,7 @@ You can also tell moya to not prepopulate a field by setting the fields [c]src[/
 
 This will prevent the password field from being pre-populated, even if value exists for [c]password[/c].
 
-Note that if a form is being rendered after a POST request it will be populated with data from the POST, which will likely be the result of the user having filled in the form. Data from the POST will take precedence over data from the [tag]{forms}get[/tag] tag.
+Note that if a form is rendered after a POST request, it will be populated with data from the request, which will likely be the result of the user having filled in the form. Data from the POST will take precedence over data from the [tag]{forms}get[/tag] tag.
 
 [h2]Processing Fields[/h2]
 
@@ -423,7 +421,7 @@ You may set error information on the form outside of the usual validate process 
 </forms:error>
 [/code]
 
-The following sets an error message that applys to the [c]username[/c] field:
+The following sets an error message that applies to the [c]username[/c] field:
 
 [code xml]
 <forms:error src="form" field="username">
@@ -564,8 +562,16 @@ Form objects contain the following fields:
     A short string containing a unique indentfier
 [/define]
 
+[define legend]
+    Text containing the form [i]legend[/i] (describes the purpose of the form)
+[/define]
+
 [define ok]
     A boolean that is True if the form was validated and there are no errors
+[/define]
+
+[define style]
+    The form style
 [/define]
 
 [/definitions]
@@ -588,9 +594,8 @@ The [c]fields[/c] attribute contains a list of field objects. Field objects have
     A short help message associated with the field
 [/define]
 
-
 [define name]
-    The name of the field (from the [c]name[/c] attribute of a field tag such as [tag]input[/tag])
+    The name of the field (from the [c]name[/c] attribute of a field tag such as [tag]{forms}input[/tag])
 [/define]
 
 [define label]
@@ -606,8 +611,6 @@ The [c]fields[/c] attribute contains a list of field objects. Field objects have
 [/define]
 
 [/definitions]
-
-
 
 
 [h1]Field Reference[/h1]
