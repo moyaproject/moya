@@ -12,6 +12,7 @@ from .console import Cell
 
 from webob import Request
 
+import weakref
 import os
 from cgi import FieldStorage
 
@@ -19,7 +20,7 @@ from cgi import FieldStorage
 @implements_to_string
 class _MultiProxy(object):
     def __init__(self, multidict, name):
-        self.multidict = multidict
+        self._multidict = weakref.ref(multidict)
         self.name = name
 
     def __moyaconsole__(self, console):
@@ -27,6 +28,10 @@ class _MultiProxy(object):
         table = [(Cell("Name", bold=True), Cell("Value", bold=True))]
         table += sorted((k, self.getall(k)) for k in set(self.iterkeys()))
         console.table(table)
+
+    @property
+    def multidict(self):
+        return self._multidict()
 
     def __str__(self):
         return "<multidict {}>".format(self.name)
