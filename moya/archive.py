@@ -128,7 +128,7 @@ class CallableElement(ContextElementBase):
         self.frame = None
         self._return_value = None
         self._code = None
-        self._tag_name = "ExternalCall"
+        self._tag_name = "external-call '{}'".format(element.libid)
         self._attr_values = {}
         self._require_context = True
         self._debug_skip = True
