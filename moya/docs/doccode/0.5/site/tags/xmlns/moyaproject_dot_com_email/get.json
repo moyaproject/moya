@@ -10,7 +10,7 @@
         "name": "get",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_email",
-        "defined": "/Users/will/projects/moya/moya/tags/email.py",
+        "defined": "/home/will/projects/moya/moya/tags/email.py",
         "doc": "Get an previously defined email object.",
         "namespace": "http://moyaproject.com/email",
         "synopsis": "get an email object",

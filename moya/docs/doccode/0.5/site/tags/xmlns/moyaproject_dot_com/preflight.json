@@ -10,7 +10,7 @@
         "name": "preflight",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "A pre-flight check is used to detect potential problems, such as missing settings.",
         "namespace": "http://moyaproject.com",
         "synopsis": "check initial settings",

@@ -10,7 +10,7 @@
         "name": "get-timezone-groups",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "Get timezone information, for use in select controls.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get timezone choices",

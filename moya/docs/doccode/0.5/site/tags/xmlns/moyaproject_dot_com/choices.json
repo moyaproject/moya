@@ -10,7 +10,7 @@
         "name": "choices",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "\nDefine choices, for use by select fields.\n\nChoices are a list of values and labels, that might be used by a select control. You can retrieve the data defined by this tag with [tag]get-choices[/tag].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define choices",

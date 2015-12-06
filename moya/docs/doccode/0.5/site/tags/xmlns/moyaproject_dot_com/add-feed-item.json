@@ -10,7 +10,7 @@
         "name": "add-feed-item",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/feed.py",
+        "defined": "/home/will/projects/moya/moya/tags/feed.py",
         "doc": "\nAdd an item to a [tag]feed[/tag].\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "add an item to an RSS feed",

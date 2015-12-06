@@ -10,7 +10,7 @@
         "name": "fire",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "\nFire (broadcast) a signal. Additional data may be provided to the signal handlers, by setting values in the [i]let map[/i]. Signals may be [i]handlers[/i] with the [tag]handle[/tag] tag.\n\nMoya will catch and log any exceptions raised by the signal handler(s).\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "fire a signal",

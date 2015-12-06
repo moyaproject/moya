@@ -10,7 +10,7 @@
         "name": "get-size",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
         "doc": null,
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "get the size of a file",

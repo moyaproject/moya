@@ -10,7 +10,7 @@
         "name": "walk",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
         "doc": "Get a list of files",
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "go through the files in a directory",

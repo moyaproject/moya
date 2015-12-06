@@ -10,7 +10,7 @@
         "name": "while",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Repeat a block of code while a condition is true, or a [tag]break[/tag] tag is reached.\n\n    [alert Note]Be careful not to create an [i]infinite[/i] loop with this tag.[/alert]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "repeat a block while a condition is true",

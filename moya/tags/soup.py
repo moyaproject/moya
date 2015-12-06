@@ -14,13 +14,25 @@ import json
 
 class Strain(DataSetter):
     """
-    Select html tags
+    Manipulate HTML with CSS selectors.
+
+    The [c]select[/c] attribute should be a CSS selector which will filter tags from the [c]src[/c] string. The other attributes define what should happen to the matches tags.
+
+    The following example defines a [tag]filter[/tag] which uses [tag]{soup}strain[/tag] to add [c]class="lead"[/c] to the first paragraph of HTML:
+
+    [code xml]
+    <filter name="leadp" value="html">
+        <doc>Add class="lead" to first paragraph</doc>
+        <soup:strain src="html" select="p" max="1" let:class="'lead'" dst="leadp"/>
+        <return value="html:leadp"/>
+    </filter>
+    [/code]
 
     """
     xmlns = namespaces.soup
 
     class Help:
-        synopsis = """select HTML tags"""
+        synopsis = """modify HTML with CSS selectors"""
 
     select = Attribute("CSS selector", type="text", default="*")
     src = Attribute("HTML document or fragment", type="expression", required=True)
@@ -100,12 +112,13 @@ class Strain(DataSetter):
 
 class Extract(DataSetter):
     """
-    Extract markup from HTML
+    Extract tags from HTML with CSS selectors
+
     """
     xmlns = namespaces.soup
 
     class Help:
-        synopsis = "extract markup from HTML"
+        synopsis = "extract tags from HTML"
 
     select = Attribute("CSS selector", type="text", default="*")
     src = Attribute("HTML document or fragment", type="expression", required=True)

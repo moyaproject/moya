@@ -10,7 +10,7 @@
         "name": "decimal",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Defines a fixed precision number field in a <model>. Use this field element for currency.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a fix precision number",

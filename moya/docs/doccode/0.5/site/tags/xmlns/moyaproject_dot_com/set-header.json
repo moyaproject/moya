@@ -10,7 +10,7 @@
         "name": "set-header",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/response.py",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
         "doc": "\nAdd additional headers to the outgoing response.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "add additional headers",

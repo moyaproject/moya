@@ -10,7 +10,7 @@
         "name": "include-js",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/content.py",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
         "doc": "\nLike [tag]include-css[/tag], but inserts a link to a JS file.\n\nThe JS files may be inserted in to the template as follows:\n\n[code moyatemplate]\n{% render include.js %}\n[/code]\n\nThis is equivalent to the following:\n\n[code moyatemplate]\n{%- for include in include.js %}\n<script type=\"text/javascript\" href=\"${include.path}\"/>\n{%- endfor %}\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "include a JS file in content",

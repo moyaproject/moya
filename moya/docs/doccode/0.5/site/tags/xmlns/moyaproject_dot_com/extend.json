@@ -10,7 +10,7 @@
         "name": "extend",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Extend a sequence with values from another sequence.",
         "namespace": "http://moyaproject.com",
         "synopsis": "add values from one sequence to another",

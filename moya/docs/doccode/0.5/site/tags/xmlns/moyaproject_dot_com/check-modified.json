@@ -10,10 +10,10 @@
         "name": "check-modified",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/response.py",
-        "doc": "\nReturn a not_modifed (304) response if a resource hasn't changed.\n\n",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "\nReturn a not_modifed (304) response if a resource hasn't changed.\n\nThis tag allows a view to skip generating a page if it hasn't changed since the last time a browser requested it.\nTo use this tag, set either the [url https://en.wikipedia.org/wiki/HTTP_ETag]etag[/url] parameter, or the [c]time[/c] parameter, which should be the time the page was last modified. Moya will compare these attributes to the request headers, and generate a not modified (304) response if the page hasn't changed. Otherwise the view will continue processing as normal.\n\n",
         "namespace": "http://moyaproject.com",
-        "synopsis": null,
+        "synopsis": "conditionally return a not modified response",
         "tag_name": "check-modified",
         "params": {
             "etag": {
@@ -41,7 +41,7 @@
                 "choices": null
             }
         },
-        "example": null,
+        "example": "\n        <view libname=\"view.show_post\" template=\"post.html\">\n            <db:get model=\"#Post\" let:slug=\".url.slug\"/>\n            <check-modified time=\"post.updated_date\" />\n        </view>\n        ",
         "inherited_params": {
             "if": {
                 "default_display": "yes",

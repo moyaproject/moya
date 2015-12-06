@@ -10,7 +10,7 @@
         "name": "middleware",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/server.py",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
         "doc": "Add middleware to a mountpoint",
         "namespace": "http://moyaproject.com",
         "synopsis": "add middleware to a mountpoint",

@@ -10,7 +10,7 @@
         "name": "echo",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Write text to the console. This is typically used in commands or for debugging. Bear in mind that in a production environment there is no console.",
         "namespace": "http://moyaproject.com",
         "synopsis": "write text to the console",

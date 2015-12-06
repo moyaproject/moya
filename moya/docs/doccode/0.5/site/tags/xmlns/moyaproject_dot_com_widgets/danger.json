@@ -10,7 +10,7 @@
         "name": "danger",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 20)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 20)",
         "doc": "Renders a danger alert.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "danger alert",

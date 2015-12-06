@@ -10,7 +10,7 @@
         "name": "section-content",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/content.py",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
         "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "add a 'content' content section",

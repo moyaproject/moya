@@ -10,7 +10,7 @@
         "name": "get-column",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Get a specific column from the database. This is required if you don't know the column reference ahead of time, i.e. when you want to generate a query dynamically from a table. Moya Admin uses this tag, but it unlikely to be useful for general applications.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "get a column from a model",

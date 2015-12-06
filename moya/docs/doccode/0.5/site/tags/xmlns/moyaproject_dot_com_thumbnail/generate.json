@@ -10,7 +10,7 @@
         "name": "generate",
         "lib": "moya.thumbnail",
         "namespace_slug": "moyaproject_dot_com_thumbnail",
-        "defined": "/Users/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 113)",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 113)",
         "doc": "Generate thumbnails for an image. See [tag thumbnail]thumbnails[/tag] and [tag thumbnail]processor[/tag].",
         "namespace": "http://moyaproject.com/thumbnail",
         "synopsis": "generate thumbnails",

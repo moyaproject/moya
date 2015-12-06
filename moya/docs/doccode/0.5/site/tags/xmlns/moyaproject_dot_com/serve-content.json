@@ -10,7 +10,7 @@
         "name": "serve-content",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/content.py",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
         "doc": "Render content and immediately serve it. Note that this tag will stop processing any more logic code.",
         "namespace": "http://moyaproject.com",
         "synopsis": "render and serve content",

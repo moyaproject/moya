@@ -10,7 +10,7 @@
         "name": "handle",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "\nHandles a [i]signal[/i]. A signal is a way of broadcasting to other parts of the project that a particular event has occurred.\n\nSee [doc signals] for more information.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "respond to a signal",

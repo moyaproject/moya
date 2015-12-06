@@ -10,7 +10,7 @@
         "name": "require",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_test",
-        "defined": "/Users/will/projects/moya/moya/tags/unittest.py",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
         "doc": "Check code throws an exception",
         "namespace": "http://moyaproject.com/test",
         "synopsis": "require an exception to be thrown in a test case",

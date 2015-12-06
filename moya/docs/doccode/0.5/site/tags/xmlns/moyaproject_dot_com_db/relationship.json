@@ -10,7 +10,7 @@
         "name": "relationship",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Defines a relationship between two tables.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "define a model relationship that creates a collection",

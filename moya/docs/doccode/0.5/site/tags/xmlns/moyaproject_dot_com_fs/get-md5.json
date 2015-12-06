@@ -10,7 +10,7 @@
         "name": "get-md5",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
         "doc": "Get the MD5 of a file",
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "get the md5 of a file",

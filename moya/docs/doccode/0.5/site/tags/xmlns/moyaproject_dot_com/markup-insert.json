@@ -10,7 +10,7 @@
         "name": "markup-insert",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/markup.py",
+        "defined": "/home/will/projects/moya/moya/tags/markup.py",
         "doc": "A callable invokef from Moya maarkup",
         "namespace": "http://moyaproject.com",
         "synopsis": "insert code from markup",

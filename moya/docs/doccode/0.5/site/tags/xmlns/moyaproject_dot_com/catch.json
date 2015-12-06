@@ -10,7 +10,7 @@
         "name": "catch",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Catches any [link moyacode#exceptions]exceptions[/link] from the previous block.",
         "namespace": "http://moyaproject.com",
         "synopsis": "catch exceptions from the previous block",

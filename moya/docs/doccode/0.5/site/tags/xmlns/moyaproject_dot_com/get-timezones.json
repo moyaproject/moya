@@ -10,7 +10,7 @@
         "name": "get-timezones",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "Get a list of common timezones.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get common timezones",

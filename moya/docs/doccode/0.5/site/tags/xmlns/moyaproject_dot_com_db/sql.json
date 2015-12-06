@@ -10,7 +10,7 @@
         "name": "sql",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "\nThis tag executes raw SQL and returns a [i]results[/i] object.\n\nResults objects have the properties [c]rowcount[/c] (number of rows matched), [c]rowkeys[/c] (list of field names), and [c]fetch[/c] (an interface to retrieve results).\n\nYou can retrieve all rows with [c]results.fetch.all[/c], or a single row at a time with [c]results.fetch.one[/c]. You can get a batch of a rows by using an integer index. For example, [c]results.fetch.10[/c] retrieves the next 10 rows.\n\nIf your query returns a scalar value, you can retrieve it with [c]results.fetch.scalar[/c].\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "execute raw sql",

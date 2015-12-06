@@ -10,7 +10,7 @@
         "name": "property",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Add a property to a db object",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "add a property to a database object",

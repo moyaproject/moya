@@ -10,7 +10,7 @@
         "name": "bbcode",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/markup.py",
+        "defined": "/home/will/projects/moya/moya/tags/markup.py",
         "doc": "Add bbcode to content",
         "namespace": "http://moyaproject.com",
         "synopsis": "add bbcode to content",

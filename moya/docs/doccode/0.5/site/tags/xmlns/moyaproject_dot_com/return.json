@@ -10,7 +10,7 @@
         "name": "return",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "\nUsed in a callable block such as a [tag]macro[/tag] or [tag]view[/tag] to return data.\n\nIf you enclose any [i]data setter[/i] tag ([tag]int[/tag], [tag]str[/tag], [tag]list[/tag] etc.) in the return block, the result will be returned. For example, the following macro will return a list of three items:\n\n[code xml]\n<macro libname=\"get_crew\">\n    <return>\n        <list>\n            <str>John</str>\n            <str>Scorpius</str>\n            <str>Rygel</str>\n        </list>\n    </return>\n</macro>\n[/code]\n\nAlternatively, you may use the [c]value[/c] attribute to return the result of an expression. The following code is equivalent to the above:\n\n[code xml]\n<macro libname=\"get_crew\">\n    <return value=\"['John', 'Scorpius', 'Rygel']\" />\n</macro>\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "return data from a macro or other callable",

@@ -10,7 +10,7 @@
         "name": "button-link",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 86)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 86)",
         "doc": "Renders a link, styled as a button.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a link styled as a button",

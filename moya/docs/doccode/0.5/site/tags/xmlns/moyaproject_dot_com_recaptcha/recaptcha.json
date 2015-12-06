@@ -10,7 +10,7 @@
         "name": "recaptcha",
         "lib": "moya.google.recaptcha",
         "namespace_slug": "moyaproject_dot_com_recaptcha",
-        "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
+        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
         "doc": "",
         "namespace": "http://moyaproject.com/recaptcha",
         "synopsis": "render a reCAPTCHA widget",

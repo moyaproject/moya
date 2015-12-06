@@ -10,7 +10,7 @@
         "name": "argument",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/widget.py",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
         "doc": "\nDefines an argument to a macro.\n\nThe text of this tag should document the purpose of the argument.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define an argument to a macro",

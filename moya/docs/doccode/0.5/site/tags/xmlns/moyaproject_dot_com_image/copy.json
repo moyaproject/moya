@@ -10,7 +10,7 @@
         "name": "copy",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/Users/will/projects/moya/moya/tags/image.py",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
         "doc": "Create an copy of [c]image[/c] in [c]dst[/c].",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "create a copy of an image",

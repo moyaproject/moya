@@ -10,7 +10,7 @@
         "name": "serve-template",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/renderable.py",
+        "defined": "/home/will/projects/moya/moya/tags/renderable.py",
         "doc": "Render and serve a template",
         "namespace": "http://moyaproject.com",
         "synopsis": "render and serve a template",

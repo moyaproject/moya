@@ -10,7 +10,7 @@
         "name": "let-str",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Like [tag]let[/tag] but sets variables as strings. Setting strings with [tag]let[/tag] can look a little clumsy because of the requirement to escape the text twice. [tag]let-str[/tag] treats attributes as strings and not expressions.",
         "namespace": "http://moyaproject.com",
         "synopsis": "create string variables",

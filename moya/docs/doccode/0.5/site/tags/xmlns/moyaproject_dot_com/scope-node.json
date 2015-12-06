@@ -10,7 +10,7 @@
         "name": "scope-node",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/content.py",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
         "doc": "\nCreate a template node that uses the current scope as the template data.\n\nThis node is identical to [tag]node[/tag], with the [c]withscope[/c] attribute set to [c]yes[/c].\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "creates a template node using the current scope",

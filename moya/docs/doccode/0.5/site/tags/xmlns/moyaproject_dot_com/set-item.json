@@ -10,7 +10,7 @@
         "name": "set-item",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Set a value in a container",
         "namespace": "http://moyaproject.com",
         "synopsis": "set an indexed value on a collection",

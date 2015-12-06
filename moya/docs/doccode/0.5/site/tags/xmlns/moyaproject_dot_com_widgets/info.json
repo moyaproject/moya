@@ -10,7 +10,7 @@
         "name": "info",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 16)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 16)",
         "doc": "Renders a message.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "info alert",

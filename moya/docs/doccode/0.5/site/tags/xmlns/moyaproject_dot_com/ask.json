@@ -10,7 +10,7 @@
         "name": "ask",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "\nAsk the user a yes / no question.\n\n[alert WARNING]This tag should only be used in an interactive context, such as a [tag]command[/tag] tag.[/alert]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "ask a yes / no question",

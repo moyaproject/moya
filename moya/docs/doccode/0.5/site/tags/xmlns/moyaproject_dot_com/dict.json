@@ -10,7 +10,7 @@
         "name": "dict",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Create a [i]dictionary[/i] object. A dictionary maps [i]keys[/i] on to [i]values[/i]. The keys and values are defined in the enclosing block, or via the [i]let map[/i].",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a dict object",

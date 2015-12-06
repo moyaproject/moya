@@ -10,7 +10,7 @@
         "name": "get-fq-url",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/server.py",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
         "doc": "Get a [i]fully qualified[/i] (including domain name and scheme) named URL",
         "namespace": "http://moyaproject.com",
         "synopsis": "get a fully qualified URL",

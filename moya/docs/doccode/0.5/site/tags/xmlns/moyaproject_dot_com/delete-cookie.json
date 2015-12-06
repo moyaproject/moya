@@ -10,7 +10,7 @@
         "name": "delete-cookie",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/cookie.py",
+        "defined": "/home/will/projects/moya/moya/tags/cookie.py",
         "doc": "Delete a previously set cookie.",
         "namespace": "http://moyaproject.com",
         "synopsis": "delete a cookie",

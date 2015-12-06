@@ -87,7 +87,8 @@ class MoyaDoc(object):
                           "comments",
                           "links",
                           "wysihtml5",
-                          "recaptcha"]
+                          "recaptcha",
+                          "soup"]
 
     document_libs = [("moya.auth", "py:moya.libs.auth"),
                      ("moya.forms", "py:moya.libs.forms"),
@@ -115,7 +116,7 @@ class MoyaDoc(object):
                             help="Extract tag information")
         parser.add_argument("--build", "-b", dest="build", action="store_true",
                             help="Build HTML docs")
-        parser.add_argument("-no-browser", '-n', dest="nobrowser", action="store_true",
+        parser.add_argument("--no-browser", '-n', dest="nobrowser", action="store_true",
                             help="Don't launch the browser")
         parser.add_argument("-s", "--settings", dest="settings", metavar="PATH", default="~/.moyadoc",
                             help="Doc settings file")
@@ -252,7 +253,7 @@ class MoyaDoc(object):
                 reload_watcher = ReloadChangeWatcher(base_docs_fs, extract_build)
                 observer.schedule(reload_watcher, path, recursive=True)
                 observer.start()
-                
+
                 while 1:
                     try:
                         time.sleep(0.1)

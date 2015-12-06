@@ -10,7 +10,7 @@
         "name": "error",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 28)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 28)",
         "doc": "Renders an error message.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "error alert",

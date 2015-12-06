@@ -10,7 +10,7 @@
         "name": "get-size",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/Users/will/projects/moya/moya/tags/image.py",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
         "doc": "Get the dimensions of an image without loading image data, returns a dictionary with keys 'width' and 'height'.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "get the dimensions of an image",

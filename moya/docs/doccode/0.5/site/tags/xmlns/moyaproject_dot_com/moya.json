@@ -10,7 +10,7 @@
         "name": "moya",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "This is the root element for Moya files.",
         "namespace": "http://moyaproject.com",
         "synopsis": "begin a Moya file",

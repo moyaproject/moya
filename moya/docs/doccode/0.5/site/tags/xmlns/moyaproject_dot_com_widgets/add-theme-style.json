@@ -10,7 +10,7 @@
         "name": "add-theme-style",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 6)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 6)",
         "doc": "Adds a script tag with styles generated from .theme",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "add theme style",

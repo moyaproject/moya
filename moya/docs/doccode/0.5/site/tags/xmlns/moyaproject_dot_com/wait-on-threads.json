@@ -10,7 +10,7 @@
         "name": "wait-on-threads",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/system.py",
+        "defined": "/home/will/projects/moya/moya/tags/system.py",
         "doc": "\nWait for threads to complete.\n\nThis tag will will for all [tag]tread[/tag] tags with [c]join[/c] set to [c]yes[/c] to complete.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "wait threads to complete",

@@ -10,7 +10,7 @@
         "name": "get-markup-choices",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/markup.py",
+        "defined": "/home/will/projects/moya/moya/tags/markup.py",
         "doc": "Get a list of Markup processor choices, suitable for use in a [tag forms]select[/tag] tag.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get supported markups",

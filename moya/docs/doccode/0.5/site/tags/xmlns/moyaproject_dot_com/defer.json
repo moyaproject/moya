@@ -10,7 +10,7 @@
         "name": "defer",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Defer to a given element, such as a [tag]macro[/tag]. [i]Deferring[/i] to a macro is similar to calling it, but no new [i]scope[/i] is created. This means that the macro has access to the same variables where defer was called.",
         "namespace": "http://moyaproject.com",
         "synopsis": "jump to another element",

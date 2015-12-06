@@ -10,7 +10,7 @@
         "name": "email",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_email",
-        "defined": "/Users/will/projects/moya/moya/tags/email.py",
+        "defined": "/home/will/projects/moya/moya/tags/email.py",
         "doc": "Define an email.",
         "namespace": "http://moyaproject.com/email",
         "synopsis": "define an email",

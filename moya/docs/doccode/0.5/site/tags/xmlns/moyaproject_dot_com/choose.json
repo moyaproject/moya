@@ -10,7 +10,7 @@
         "name": "choose",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Pick a random element from a sequence.",
         "namespace": "http://moyaproject.com",
         "synopsis": "choose a random value from a collection",

@@ -10,7 +10,7 @@
         "name": "error",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_jsonrpc",
-        "defined": "/Users/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
         "doc": "Return an rpc error response.",
         "namespace": "http://moyaproject.com/jsonrpc",
         "synopsis": "return an rpc error",

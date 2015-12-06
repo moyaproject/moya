@@ -10,7 +10,7 @@
         "name": "get-syspath",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
         "doc": "\nGet a system path for a path in a filesystem.\n\nA system path (or 'syspath') is a path that maps to the file on the OS filesystem. Not all filesystems can generate syspaths. If Moya is unable to generate a syspath it will throw a [c]get-syspath.no-syspath[/c] exception.\n\n",
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "get a system path",

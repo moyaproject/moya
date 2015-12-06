@@ -10,7 +10,7 @@
         "name": "model",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "\nDefines a database [i]model[/i], which maps data stored in a database table on to Moya objects.\n\nModels are referenced by their [i]libname[/i] in database expressions, the [c]name[/c] attribute is used when creating tables. If you convert a model instance to a string, it will return the value of the [c]repr[/c] attribute, with substitutions made with the object context.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "define a database model",

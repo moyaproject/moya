@@ -10,7 +10,7 @@
         "name": "rewrite-to",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/response.py",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
         "doc": "\nThis tag tells Moya to serve the content from a different URL.\n\nNote, that unlike [tag]redirect-to[/tag], this does not involve an extra request.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "serve response from a different location",

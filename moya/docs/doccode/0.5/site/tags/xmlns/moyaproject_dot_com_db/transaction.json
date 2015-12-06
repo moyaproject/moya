@@ -10,7 +10,7 @@
         "name": "transaction",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "\n    Executes the enclosed block in a single transaction.\n\n    If the block executes successfully, the changes will be committed. If an exception is thrown, the changes will be rolled back.\n\n    Note that databases related exceptions in the enclosed black won't be thrown until the end of the transaction.\n\n    In the case of nested transactions (a transaction inside a transactions), only the outer-most transaction will actually commit the changes. For more granular control over transactions, the [tag db]atomic[/tag] tag is preferred.\n\n2260\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "commit changes to the database",

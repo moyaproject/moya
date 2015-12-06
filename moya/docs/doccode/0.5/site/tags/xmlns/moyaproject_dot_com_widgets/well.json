@@ -10,7 +10,7 @@
         "name": "well",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 32)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 32)",
         "doc": "Renders a well (highlighted panel)",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a well",

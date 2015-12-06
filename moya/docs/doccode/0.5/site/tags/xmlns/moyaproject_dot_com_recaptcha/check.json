@@ -10,7 +10,7 @@
         "name": "check",
         "lib": "moya.google.recaptcha",
         "namespace_slug": "moyaproject_dot_com_recaptcha",
-        "defined": "/Users/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 25)",
+        "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 25)",
         "doc": "Check the setting exists",
         "namespace": "http://moyaproject.com/recaptcha",
         "synopsis": null,

@@ -10,7 +10,7 @@
         "name": "foreign-key",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Add a [i]foreign key[/i] to a model. A foreign key is a reference to another table.\n\n    A [tag]foreign-key[/tag] tag must appear within a [tag]model[/tag] tag.\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a key to another model",

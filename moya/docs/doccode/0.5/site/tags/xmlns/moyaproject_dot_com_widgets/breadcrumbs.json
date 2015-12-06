@@ -10,7 +10,7 @@
         "name": "breadcrumbs",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 207)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 207)",
         "doc": "Should contain link tags",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "navigation breadcrumbs",

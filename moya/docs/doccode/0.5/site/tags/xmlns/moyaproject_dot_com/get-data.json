@@ -10,7 +10,7 @@
         "name": "get-data",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/elements.py",
+        "defined": "/home/will/projects/moya/moya/tags/elements.py",
         "doc": "Get all data from data tags.",
         "namespace": "http://moyaproject.com",
         "synopsis": "get data from custom data tags",

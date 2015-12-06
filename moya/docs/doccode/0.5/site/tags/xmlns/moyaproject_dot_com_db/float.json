@@ -10,7 +10,7 @@
         "name": "float",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Defines a [i]floating point[/i] field. Must appear within a <model> tag.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a field that stores a floating point number",

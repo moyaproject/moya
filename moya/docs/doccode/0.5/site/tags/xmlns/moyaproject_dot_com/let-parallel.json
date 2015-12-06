@@ -10,7 +10,7 @@
         "name": "let-parallel",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "\nSets multiple variables in parallel.\n\nLike [tag]let[/tag], this tag sets values to the results of expressions, but evaluates all the expressions before assignment.\n\nOne use for this, is to [i]swap[/i] variables without using an intermediate.\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "set values in parallel.",

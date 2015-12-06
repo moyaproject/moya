@@ -10,7 +10,7 @@
         "name": "check-select",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_forms",
-        "defined": "/Users/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
         "doc": "\nAdd a [i]check select[/i] to a form.\n\nA check select is an alternative to a multiple select ([tag forms]select[/tag]) which uses checkboxes rather than an input.\n\n",
         "namespace": "http://moyaproject.com/forms",
         "synopsis": "add a check select control to a form",

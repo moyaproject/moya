@@ -10,7 +10,7 @@
         "name": "highlight",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/highlight.py",
+        "defined": "/home/will/projects/moya/moya/tags/highlight.py",
         "doc": "This tag is used by the Moya debug library to syntax highlight code (turning it into HTML in the process).",
         "namespace": "http://moyaproject.com",
         "synopsis": "syntax highlight code",

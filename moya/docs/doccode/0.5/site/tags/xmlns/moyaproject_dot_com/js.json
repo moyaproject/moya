@@ -10,7 +10,7 @@
         "name": "js",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/content.py",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
         "doc": "Insert Javascript content.\n\n    Here's an example:\n\n    [code xml]\n    <!-- must be inside a content definition -->\n    <js>alert(\"Ready for takeoff!);</js>\n    [/code]\n\n    This would render the following:\n\n    [code moyatemplate]\n    <script type=\"text/javascript\">\n        alert(\"Ready for takeoff!);\n    </script>\n    [/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "insert Javascript content",

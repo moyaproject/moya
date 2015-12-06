@@ -10,7 +10,7 @@
         "name": "return-true",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "\nA shortcut to return True.\n\nThe following two lines are equivalent:\n\n[code xml]\n<return-true/>\n<return value=\"yes\" />\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "shortcut to return true",

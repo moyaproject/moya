@@ -10,7 +10,7 @@
         "name": "remove-file",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_fs",
-        "defined": "/Users/will/projects/moya/moya/tags/fstags.py",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
         "doc": "Delete a file from a filesystem",
         "namespace": "http://moyaproject.com/fs",
         "synopsis": "delete a file",

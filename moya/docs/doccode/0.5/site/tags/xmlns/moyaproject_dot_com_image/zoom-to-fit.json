@@ -10,7 +10,7 @@
         "name": "zoom-to-fit",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/Users/will/projects/moya/moya/tags/image.py",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
         "doc": "Resize image to given dimensions, cropping if necessary.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "resize an image to fit in new dimensions, with cropping",

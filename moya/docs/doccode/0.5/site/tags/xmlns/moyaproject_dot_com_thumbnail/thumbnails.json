@@ -10,7 +10,7 @@
         "name": "thumbnails",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_thumbnail",
-        "defined": "/Users/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 7)",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 7)",
         "doc": "Define a collection of thumbnail processors.\n\n            This tag should contain one or more [tag thumbnail]processor[/tag] tags.",
         "namespace": "http://moyaproject.com/thumbnail",
         "synopsis": "a container for thumbnail processors",

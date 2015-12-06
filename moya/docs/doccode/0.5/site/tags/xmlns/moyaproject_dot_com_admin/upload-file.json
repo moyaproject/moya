@@ -10,7 +10,7 @@
         "name": "upload-file",
         "lib": "moya.admin",
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 187)",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 187)",
         "doc": "",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": null,

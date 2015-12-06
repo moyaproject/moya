@@ -10,7 +10,7 @@
         "name": "method",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_jsonrpc",
-        "defined": "/Users/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
         "doc": "\nExposes a single method on a JSON RPC interface.\n\nThis tag should appear within a [tag jsonrpc]interface[/tag], or set the [c]interface[/c] attribute to reference an interface.\n\n\n",
         "namespace": "http://moyaproject.com/jsonrpc",
         "synopsis": "define a remote method",

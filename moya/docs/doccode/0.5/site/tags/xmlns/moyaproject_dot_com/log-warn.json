@@ -10,7 +10,7 @@
         "name": "log-warn",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/config.py",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
         "doc": "See [tag]log[/tag]",
         "namespace": "http://moyaproject.com",
         "synopsis": "write information to the log",

@@ -10,7 +10,7 @@
         "name": "progress",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Like a for loop but renders an ascii progress bar in the console, which will look something like the following:\n\n    [code]\n    [###        ] 30% working...\n    [/code]\n\n    This is useful for commands that may take some time to execute.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "render an ascii progress bar",

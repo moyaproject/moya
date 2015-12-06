@@ -10,7 +10,7 @@
         "name": "yield",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/tag.py",
+        "defined": "/home/will/projects/moya/moya/tags/tag.py",
         "doc": "Yield from a tag",
         "namespace": "http://moyaproject.com",
         "synopsis": "yield to code block",

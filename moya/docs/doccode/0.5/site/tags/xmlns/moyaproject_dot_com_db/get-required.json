@@ -10,7 +10,7 @@
         "name": "get-required",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Gets an object from the db. If the object is not present in the db then return a 404 (not found) response. This is useful when page content corresponds to a single object in the database.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "get an object from the database, or return a 404 if it doesn't exist",

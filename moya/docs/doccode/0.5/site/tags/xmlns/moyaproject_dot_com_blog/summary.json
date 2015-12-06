@@ -10,7 +10,7 @@
         "name": "summary",
         "lib": "moya.blog",
         "namespace_slug": "moyaproject_dot_com_blog",
-        "defined": "/Users/will/projects/moya/moya/libs/blog/logic/widgets.xml (line 31)",
+        "defined": "/home/will/projects/moya/moya/libs/blog/logic/widgets.xml (line 31)",
         "doc": "Renders a list of most recent summarized blogs posts with links.",
         "namespace": "http://moyaproject.com/blog",
         "synopsis": "a summary of recent posts",

@@ -10,7 +10,7 @@
         "name": "show",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/Users/will/projects/moya/moya/tags/image.py",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
         "doc": "Show an image (for debugging purposes). Imagemagick is required for this operation.",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "show an image",

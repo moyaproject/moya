@@ -10,7 +10,7 @@
         "name": "make-token",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Generates a token of random characters. This is useful for creating unique IDs for database objects.",
         "namespace": "http://moyaproject.com",
         "synopsis": "make an opaque token",

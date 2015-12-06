@@ -10,7 +10,7 @@
         "name": "admin-only",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/response.py",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
         "doc": "\nRespond with a forbidden response if the user is not admin.\n\nThis tag is a shortcut for the following:\n\n[code xml]\n<forbidden if=\"not .permissions.admin\"/>\n[/code]\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "return a forbidden response if the user is not admin",

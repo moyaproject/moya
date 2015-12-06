@@ -10,7 +10,7 @@
         "name": "get-exist",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Gets an object from the db, or throws a [c]moya.db.does-not-exist[/c] exception if it doesn't exist",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "get an object in the database.",

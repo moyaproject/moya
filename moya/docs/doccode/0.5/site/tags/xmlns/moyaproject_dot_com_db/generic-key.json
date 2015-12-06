@@ -10,7 +10,7 @@
         "name": "generic-key",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "\nCreate a [i]generic[/i] key. A generic key is [tag db]foreign-key[/tag], but can link to any database object.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "a generic foreign key",

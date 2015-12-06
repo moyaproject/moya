@@ -10,7 +10,7 @@
         "name": "sleep",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Do nothing for a period of time",
         "namespace": "http://moyaproject.com",
         "synopsis": "wait for while",

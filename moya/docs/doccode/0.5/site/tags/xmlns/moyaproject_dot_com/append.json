@@ -10,7 +10,7 @@
         "name": "append",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Append a value to a list or other collection.",
         "namespace": "http://moyaproject.com",
         "synopsis": "append a value to a list",

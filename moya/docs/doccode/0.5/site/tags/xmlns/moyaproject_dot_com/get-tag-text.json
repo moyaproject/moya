@@ -10,7 +10,7 @@
         "name": "get-tag-text",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/tag.py",
+        "defined": "/home/will/projects/moya/moya/tags/tag.py",
         "doc": "\nGet the XML text associated with the parent tag.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "get text from the parent tag",

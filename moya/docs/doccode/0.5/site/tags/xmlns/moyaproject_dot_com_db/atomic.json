@@ -10,7 +10,7 @@
         "name": "atomic",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "\nMakes the enclosed block [i]atomic[/i].\n\nAn atomic block works much like [tag db]transaction[/tag], but uses the databases SAVEPOINT feature to better handle nested atomic blocks.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "mark a block as being atomic",

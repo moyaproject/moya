@@ -10,7 +10,7 @@
         "name": "view",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/server.py",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
         "doc": "Define a view to handle a URL",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a view to handle a URL",

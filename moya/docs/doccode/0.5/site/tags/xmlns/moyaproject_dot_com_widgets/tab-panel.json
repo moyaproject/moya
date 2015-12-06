@@ -10,7 +10,7 @@
         "name": "tab-panel",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 187)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 187)",
         "doc": "",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "tab panel container",

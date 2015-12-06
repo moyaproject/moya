@@ -10,7 +10,7 @@
         "name": "check",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 44)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 44)",
         "doc": "Renders a check mark.",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a check",

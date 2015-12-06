@@ -10,7 +10,7 @@
         "name": "set-language",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/server.py",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
         "doc": "Set the current language",
         "namespace": "http://moyaproject.com",
         "synopsis": "set the current language",

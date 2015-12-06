@@ -415,13 +415,22 @@ class CheckModified(LogicElement):
     """
     Return a not_modifed (304) response if a resource hasn't changed.
 
+    This tag allows a view to skip generating a page if it hasn't changed since the last time a browser requested it.
+    To use this tag, set either the [url https://en.wikipedia.org/wiki/HTTP_ETag]etag[/url] parameter, or the [c]time[/c] parameter, which should be the time the page was last modified. Moya will compare these attributes to the request headers, and generate a not modified (304) response if the page hasn't changed. Otherwise the view will continue processing as normal.
+
     """
 
     time = Attribute("Time resource was updated", type="expression", required=False)
     etag = Attribute("ETag for resource", type="text", required=False)
 
     class Help:
-        synopis = "conditionally return a not modified response"
+        synopsis = "conditionally return a not modified response"
+        example = """
+        <view libname="view.show_post" template="post.html">
+            <db:get model="#Post" let:slug=".url.slug"/>
+            <check-modified time="post.updated_date" />
+        </view>
+        """
 
     def logic(self, context):
         request = context['.request']

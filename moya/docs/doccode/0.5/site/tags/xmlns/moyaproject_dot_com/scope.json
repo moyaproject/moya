@@ -10,7 +10,7 @@
         "name": "scope",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "Creates a new temporary [i]scope[/i] from an object.",
         "namespace": "http://moyaproject.com",
         "synopsis": "create a temporary scope",

@@ -10,7 +10,7 @@
         "name": "table",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_tables",
-        "defined": "/Users/will/projects/moya/moya/libs/tables/py/tableselements.py",
+        "defined": "/home/will/projects/moya/moya/libs/tables/py/tableselements.py",
         "doc": "\nBegins a table content definition. Must be inside a [tag]content[/tag] tag.\n\n",
         "namespace": "http://moyaproject.com/tables",
         "synopsis": "add a table to content",

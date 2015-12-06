@@ -10,7 +10,7 @@
         "name": "create",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Create new object in the database.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "create an object in the database",

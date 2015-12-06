@@ -10,7 +10,7 @@
         "name": "large-well",
         "lib": "moya.widgets",
         "namespace_slug": "moyaproject_dot_com_widgets",
-        "defined": "/Users/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 40)",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 40)",
         "doc": "Renders a well (highlighted panel) with large borders",
         "namespace": "http://moyaproject.com/widgets",
         "synopsis": "render a large well",

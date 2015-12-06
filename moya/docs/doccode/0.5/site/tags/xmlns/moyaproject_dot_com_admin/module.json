@@ -10,7 +10,7 @@
         "name": "module",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/tags.xml (line 6)",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 6)",
         "doc": "Define a top level admin module",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "define a module in the admin interface",

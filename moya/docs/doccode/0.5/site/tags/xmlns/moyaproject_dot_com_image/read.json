@@ -10,7 +10,7 @@
         "name": "read",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_image",
-        "defined": "/Users/will/projects/moya/moya/tags/image.py",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
         "doc": "Read an image",
         "namespace": "http://moyaproject.com/image",
         "synopsis": "read an image from disk",

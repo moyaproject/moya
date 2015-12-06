@@ -10,7 +10,7 @@
         "name": "check",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
-        "defined": "/Users/will/projects/moya/moya/tags/db.py",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
         "doc": "Check connection to DB, throw db.no-connection if connection failed. This tag is used by Moya Debug, it is unlikely to be generally useful.",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "check connection to the database",

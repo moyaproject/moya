@@ -10,7 +10,7 @@
         "name": "parameter",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_jsonrpc",
-        "defined": "/Users/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
         "doc": "Defines a parameter in an RPC call.",
         "namespace": "http://moyaproject.com/jsonrpc",
         "synopsis": "define an rpc parameter",

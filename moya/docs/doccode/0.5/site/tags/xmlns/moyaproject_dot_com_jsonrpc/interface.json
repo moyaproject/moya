@@ -10,7 +10,7 @@
         "name": "interface",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_jsonrpc",
-        "defined": "/Users/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
         "doc": "Creates a JSON RPC interface.",
         "namespace": "http://moyaproject.com/jsonrpc",
         "synopsis": "create an interface for remote methods",

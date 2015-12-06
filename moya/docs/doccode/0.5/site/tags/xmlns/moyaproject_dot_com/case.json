@@ -10,7 +10,7 @@
         "name": "case",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
-        "defined": "/Users/will/projects/moya/moya/tags/context.py",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
         "doc": "\nDefines a case in a [tag]switch[/tag] tag.\n\nIf a [c]value[/c] attribute is given, it will be used as the comparison values, otherwise the tag text will be used.\n\n",
         "namespace": "http://moyaproject.com",
         "synopsis": "define a case in a switch",

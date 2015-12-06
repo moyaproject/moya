@@ -10,7 +10,7 @@
         "name": "table",
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_admin",
-        "defined": "/Users/will/projects/moya/moya/libs/admin/logic/tags.xml (line 26)",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 26)",
         "doc": "An admin table",
         "namespace": "http://moyaproject.com/admin",
         "synopsis": "define a table view in the admin interface",
