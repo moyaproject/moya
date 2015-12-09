@@ -718,14 +718,14 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
 def to_milliseconds(value):
     if isinstance(value, TimeSpan):
-        return TimeSpan(value).milliseconds
+        return int(TimeSpan(value).milliseconds)
     else:
         return int(value) if value is not None else None
 
 
 def to_seconds(value):
     if isinstance(value, TimeSpan):
-        return TimeSpan(value).seconds
+        return int(TimeSpan(value).seconds)
     else:
         return int(value) if value is not None else None
 
