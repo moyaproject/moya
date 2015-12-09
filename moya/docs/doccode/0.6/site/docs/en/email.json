@@ -1,0 +1,44 @@
+{
+    "name": "email",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Email]\n\nMoya has support for sending template emails which allow you to insert personalized information for the recipient.\n\n[h1]Email Settings[/h1]\n\nSee the [link project#mailservers]Mailservers[/link] for information on how to configure Moya to send emails.\n\nYou can test your email settings with the following command:\n\n[code]\n$ moya email send\n[/code]\n\n[h1]Namespace[/h1]\n\nEmail tags use the namespace [c]http://moyaproject.com/email[/c].\n\n[h1]Defining Emails[/h1]\n\nBefore sending emails they must first be defined with the [tag email]email[/tag] tag -- typically in a file called [c]email.xml[/c], although this is just a convention. Here's a an example of a very simple email definition:\n\n[code xml]\n<moya xmlns=\"http://moyaproject.com\">\n    <!-- An example email -->\n    <email libname=\"email.test\" subject=\"Test Email\" xmlns=\"http://moyaproject.com/email\">\n        <text template=\"email/test.txt\"/>\n    </email>\n</moya>\n[/code]\n\nThe [tag email]text[/tag] tag tells moya to create a text email with the subject [c]Test Email[/c] created from the template [c]email/test.txt[/c]. Here's an example email:\n\n[code]\nDear Sir/Madam,\n\nThis is a test Email!\n\nLove,\n\nMoya\n[/code]\n\nYou can attach HTML in the same way with the [tag email]html[/tag] tag. Here's an example:\n\n[code xml]\n<email libname=\"email.test\" subject=\"Test Email\" xmlns=\"http://moyaproject.com/email\">\n    <text template=\"email/test.txt\"/>\n    <html template=\"email/test.html\"/>\n</email>\n[/code]\n\nHere we have attached both text [i]and[/i] HTML. Some email clients don't display rich (HTML) emails, so it is a good idea to include a text version as well. However, these days there are few people who can't view HTML emails, so you might consider just going with HTML.\n\n[aside]\nAlthough most people will be able to [i]receive[/i] HTML emails, there is no guarantee that their email client will render it faithfully if you use more than simple formatting. It's left as an exercise for the reader to research best practices for authoring email.\n[/aside]\n\nThe [c]email[/c] tag also has the optional attributes [c]from[/c], [c]cc[/c], [c]bcc[/c] and [c]replyto[/c] which will set the relevant email headers. These attributes can be overridden when you send the email.\n\n[h1]Sending[/h1]\n\nTo send the email, use the [tag email]send[/tag] tag; the [c]email[/c] attribute should be the element reference of the email you want to send, and [c]to[/c] should be the recipients email address. Here's how you would send the example email:\n\n[code xml]\n<email:send email=\"#email.text\" to=\"user@example.org\" />\n[/code]\n\nThe [tag email]send[/tag] tag has the optional attributes [c]from[/c], [c]subject[/c], [c]cc[/c], [c]bcc[/c], [c]replyto[/c] to set the relevant email fields. These override the attributes of the same name on the email definition.\n\n[h2]Errors[/h2]\n\nIf the email could not be sent, Moya will throw a [c]email.send-failed[/c] exception, [i]unless[/i] you set the [c]fail_silently[/c] attribute to [c]yes[/c].\n\nEmails can fail to send due to a variety of reasons such as connectivity issues, server isn't running etc. Often your application won't be able to do much more that suggest the user try again. Moya will write an error log to the [c]moya.email[/c] logger, to alert you when emails fail to send.\n\n[h1]Email Parameters[/h1]\n\nWhen you send an email, Moya calls the [tag email]email[/tag] tag, which allows you to pass in parameters to be used in the template. For instance, lets say we want to render a personalized greeting in our email template. We could edit it as follows:\n\n[code]\nDear ${name},\n\nThis is a test Email!\n\nLove,\n\nMoya\n[/code]\n\nWe can send this email in the usual way, but add a parameter for [c]name[/c] which will be substituted in the text template.\n\n[code xml]\n<email:send email=\"#email.text\" to=\"user@example.org\" let:name=\"'John'\"/>\n[/code]\n\nAlternatively [tag email]send[/tag] has a [c]data[/c] attributer which you can set to a dictionary containing data to be rendered in the template. Here's the equivalent of the above, using the [c]data[/c] attribute\n\n[code xml]\n<email:send email=\"#email.text\" to=\"user@example.org\" data=\"{'name': John'}\"/>\n[/code]\n\n[h1]Debugging Emails[/h1]\n\nIf you are running the server in debug mode, Moya will display emails in the terminal. This is useful for debugging because you won't have to wait for the email to come through to check your emails.\n\n",
+        "name": "email",
+        "docmap": [
+            [
+                1,
+                "Email Settings"
+            ],
+            [
+                1,
+                "Namespace"
+            ],
+            [
+                1,
+                "Defining Emails"
+            ],
+            [
+                1,
+                "Sending"
+            ],
+            [
+                2,
+                "Errors"
+            ],
+            [
+                1,
+                "Email Parameters"
+            ],
+            [
+                1,
+                "Debugging Emails"
+            ]
+        ],
+        "title": "Email"
+    },
+    "id": "doc.email"
+}

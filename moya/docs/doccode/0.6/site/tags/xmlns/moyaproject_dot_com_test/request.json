@@ -1,0 +1,126 @@
+{
+    "name": "request",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "request",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "Create a mock request",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "make a mock request",
+        "tag_name": "request",
+        "params": {
+            "url": {
+                "default_display": "\"/\"",
+                "name": "url",
+                "missing": true,
+                "default": "/",
+                "doc": "URL for request",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "query": {
+                "default_display": "None",
+                "name": "query",
+                "missing": true,
+                "default": null,
+                "doc": "Query data",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "default_environ": {
+                "default_display": "yes",
+                "name": "default_environ",
+                "missing": true,
+                "default": true,
+                "doc": "build a default WSGI environ?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "environ": {
+                "default_display": "None",
+                "name": "environ",
+                "missing": true,
+                "default": null,
+                "doc": "WSGI environment",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "method": {
+                "default_display": "\"GET\"",
+                "name": "method",
+                "missing": true,
+                "default": "GET",
+                "doc": "Request method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "GET",
+                    "POST",
+                    "HEAD",
+                    "PUT"
+                ]
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.request"
+}

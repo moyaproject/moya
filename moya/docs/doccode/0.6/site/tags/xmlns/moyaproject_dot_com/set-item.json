@@ -1,0 +1,73 @@
+{
+    "name": "set-item",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set-item",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Set a value in a container",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "set an indexed value on a collection",
+        "tag_name": "set-item",
+        "params": {
+            "index": {
+                "default_display": "None",
+                "name": "index",
+                "missing": true,
+                "default": null,
+                "doc": "index to set",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "value to set",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "collection object",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <dict dst=\"moya\" />\n        <set-item src=\"moya\" index=\"'crew'\" value=\"['john', 'rygel'] />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.set-item"
+}

@@ -1,0 +1,68 @@
+{
+    "name": "log",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "log",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "Write text to the logs. Every line of text can have a [i]level[/i] which indicates how significant the message is. Log levels can be filtered, so you only see relevant messages.\n\n    You can control which log messages are written via [c]logging.ini[/c].\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "write information to the log",
+        "tag_name": "log",
+        "params": {
+            "logger": {
+                "default_display": "",
+                "name": "logger",
+                "missing": true,
+                "default": null,
+                "doc": "Logger to write to",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "level": {
+                "default_display": "",
+                "name": "level",
+                "missing": true,
+                "default": null,
+                "doc": "Logging level",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "info",
+                    "warn",
+                    "warning",
+                    "error",
+                    "debug",
+                    "fatal"
+                ]
+            }
+        },
+        "example": "\n\n        <log level=\"debug\">This may help you track down errors</log>\n        <log>Something worth knowing happened</log> <!-- default log level is \"info\" -->\n        <log level=\"warning\">Pay attention, this may be significant</log>\n        <log level=\"error\">Something quite alarming happened</log>\n        <log level=\"fatal\">Absolute disaster</log>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.log"
+}

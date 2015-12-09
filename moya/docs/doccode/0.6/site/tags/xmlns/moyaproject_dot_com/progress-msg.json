@@ -1,0 +1,36 @@
+{
+    "name": "progress-msg",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "progress-msg",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nSet a progress message.\n\nMust appear inside a [tag]progress[/tag] tag.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "set a progress message",
+        "tag_name": "progress-msg",
+        "params": {},
+        "example": "\n        <progress-msg>reading post ${post}</progress-msg>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.progress-msg"
+}

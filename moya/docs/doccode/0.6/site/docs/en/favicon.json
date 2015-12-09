@@ -1,0 +1,28 @@
+{
+    "name": "favicon",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Favicon]\n\nThis library serves classic [url http://en.wikipedia.org/wiki/Favicon]favicons[/url], which is a file called [c]favicon.ico[/c] stored in the root of your site.\n\n[alert NOTE]\nServing a favicon in this way is supported by many browsers, but is somewhat deprecated in favor of an HTML link tag to specify the location of the favicon. Using this library is probably only necessary if you wish to support very old browsers.\n[/alert]\n\n[h1]Installation[/h1]\n\nMoya Favicon is built in to Moya and may be imported via its Python path as follows:\n\n[code xml]\n<import py=\"moya.libs.favicon\"/>\n[/code]\n\nYou can install the library with the following:\n\n[code xml]\n<install name=\"favicon\" lib=\"moya.favicon\" mount=\"/\"/>\n[/code]\n\n[h1]Usage[/h1]\n\nThe default settings simply serve a file called [c]favicon.ico[/c], which you should place in your [b]/static/[/b] directory.\n\n[h1]Settings[/h1]\n\nMoya Static supports the following settings\n\n[setting]fs = <LIST OF FILESYSTEMS>[/setting]\n\nThis setting should be a list of filesystem names where Moya Favicon will look for the favicon.\n\n[setting]iconpath = <SETTING FILENAME>[/setting]\n\nThis should be set to the filename of the icon file to serve. Note that this only changes the file that Moya Static reads, the file will always be served as [c]/favicon.ico[/c]/",
+        "name": "favicon",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Usage"
+            ],
+            [
+                1,
+                "Settings"
+            ]
+        ],
+        "title": "Moya Favicon"
+    },
+    "id": "doc.favicon"
+}

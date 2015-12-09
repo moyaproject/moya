@@ -1,0 +1,61 @@
+{
+    "name": "check",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "check",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 44)",
+        "doc": "Renders a check mark.",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "render a check",
+        "tag_name": "check",
+        "params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.check"
+}

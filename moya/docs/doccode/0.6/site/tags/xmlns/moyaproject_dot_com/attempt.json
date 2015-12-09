@@ -1,0 +1,73 @@
+{
+    "name": "attempt",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "attempt",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Repeat a block of code if an exception is thrown. This is useful in situations where you are creating a database object\n    with a random token, and you want to repeat the code if the random token happens to exist. The [c]wait[/c] attribute can set a timespan\n    to wait between attempts, which may be appropriate for connecting to servers, for example.\n\n    If an exception occurs, after [c]times[/c] attempts, then it will be thrown normally.\n\n    [aside]Always set [c]times[/c] to a reasonable value. Programming errors could result in Moya getting stuck in a pointless loop.[/aside]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "repeat a block until it is successful",
+        "tag_name": "attempt",
+        "params": {
+            "catch": {
+                "default_display": "*",
+                "name": "catch",
+                "missing": true,
+                "default": "*",
+                "doc": "Type of exception to catch",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "wait": {
+                "default_display": "",
+                "name": "wait",
+                "missing": true,
+                "default": null,
+                "doc": "Time to wait between syncs (default doesn't wait)",
+                "required": false,
+                "type": "timespan",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "times": {
+                "default_display": "",
+                "name": "times",
+                "missing": true,
+                "default": null,
+                "doc": "Maximum number of times to repeat attempt block",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <attempt times=\"10\" catch=\"db.*\">\n            <db:create model=\"#ValidateEmail\" let:user=\"user\" dst=\"validate_email\" />\n        </attempt>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.attempt"
+}

@@ -1,0 +1,991 @@
+{
+    "name": "moyaproject_dot_com_auth_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/auth",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "add-permission",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 180)",
+                "doc": "Add a permission to a group or user",
+                "prev_tag": "set-password",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "add-permission",
+                "next_tag": "add-user-to-group",
+                "synopsis": "add a permission to a group or user",
+                "params": {
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "group": {
+                        "default_display": null,
+                        "name": "group",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A group name",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "permission": {
+                        "default_display": null,
+                        "name": "permission",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Permission name",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A user object",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "add-user-to-group",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 199)",
+                "doc": "Add a user to a group",
+                "prev_tag": "add-permission",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "add-user-to-group",
+                "next_tag": "check-password",
+                "synopsis": "add a user to a group",
+                "params": {
+                    "group": {
+                        "default_display": null,
+                        "name": "group",
+                        "missing": true,
+                        "default": null,
+                        "doc": "The name of a group",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A user object",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "check-password",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 30)",
+                "doc": "Validate a user's password",
+                "prev_tag": "add-user-to-group",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "check-password",
+                "next_tag": "get-permissions",
+                "synopsis": "check a user password",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "password": {
+                        "default_display": null,
+                        "name": "password",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-permissions",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 6)",
+                "doc": "Get list of permissions for a given user",
+                "prev_tag": "check-password",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "get-permissions",
+                "next_tag": "get-user",
+                "synopsis": "query user permissions",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A User object",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-user",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 110)",
+                "doc": "Get currently logged in user (if any)",
+                "prev_tag": "get-permissions",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "get-user",
+                "next_tag": "login",
+                "synopsis": "get current user details",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "login",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 61)",
+                "doc": "Check credentials and login a user",
+                "prev_tag": "get-user",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "login",
+                "next_tag": "login-user",
+                "synopsis": "log in a user with username/password",
+                "params": {
+                    "username": {
+                        "default_display": null,
+                        "name": "username",
+                        "missing": true,
+                        "default": null,
+                        "doc": "A username or email address",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "password": {
+                        "default_display": null,
+                        "name": "password",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "login-user",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 44)",
+                "doc": "Login a give user without checking credentials",
+                "prev_tag": "login",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "login-user",
+                "next_tag": "logout",
+                "synopsis": "log in a user",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "logout",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 95)",
+                "doc": "Log out the currently logged in user, or a given user",
+                "prev_tag": "login-user",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "logout",
+                "next_tag": "new-permission",
+                "synopsis": "log out a user",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": "None",
+                        "name": "user",
+                        "missing": true,
+                        "default": "None",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "new-permission",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 168)",
+                "doc": "Create a new permission (if it doesn't already exist)",
+                "prev_tag": "logout",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "new-permission",
+                "next_tag": "new-user",
+                "synopsis": "create a new permission",
+                "params": {
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": null,
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": null,
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "new-user",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 121)",
+                "doc": "Create a user",
+                "prev_tag": "new-permission",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "new-user",
+                "next_tag": "set-password",
+                "synopsis": "create a new user",
+                "params": {
+                    "email_validated": {
+                        "default_display": "no",
+                        "name": "email_validated",
+                        "missing": true,
+                        "default": "no",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "username": {
+                        "default_display": null,
+                        "name": "username",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "first_name": {
+                        "default_display": "",
+                        "name": "first_name",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "last_name": {
+                        "default_display": "",
+                        "name": "last_name",
+                        "missing": true,
+                        "default": "",
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "password": {
+                        "default_display": null,
+                        "name": "password",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "email": {
+                        "default_display": null,
+                        "name": "email",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "set-password",
+                "lib": "moya.auth",
+                "namespace_slug": "moyaproject_dot_com_auth",
+                "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 157)",
+                "doc": "This will set a users password",
+                "prev_tag": "new-user",
+                "namespace": "http://moyaproject.com/auth",
+                "tag_name": "set-password",
+                "synopsis": "set a user's password",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "password": {
+                        "default_display": null,
+                        "name": "password",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/auth",
+        "namespace_doc": "\n        Tags defined in [link auth]Moya Auth[/link] library.\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/auth.moyaproject_dot_com_auth_index"
+}

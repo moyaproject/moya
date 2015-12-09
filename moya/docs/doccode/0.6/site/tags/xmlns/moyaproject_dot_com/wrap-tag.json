@@ -1,0 +1,73 @@
+{
+    "name": "wrap-tag",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "wrap-tag",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Wraps text in a HTML tag.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "wrap a string in a HTML tag",
+        "tag_name": "wrap-tag",
+        "params": {
+            "tag": {
+                "default_display": "\"span\"",
+                "name": "tag",
+                "missing": true,
+                "default": "span",
+                "doc": "Tag",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <!-- Wrap the string \"Hello, World\" in a P tag -->\n        <wrap-tag tag=\"p\" dst=\"paragraph\">Hello, World!</wrap-tag>\n        <echo>${paragraph}</echo>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.wrap-tag"
+}

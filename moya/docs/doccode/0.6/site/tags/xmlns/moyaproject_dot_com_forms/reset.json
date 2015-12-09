@@ -1,0 +1,49 @@
+{
+    "name": "reset",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "reset",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nResets a form to a blank state.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "reset a form",
+        "tag_name": "reset",
+        "params": {
+            "src": {
+                "default_display": "form",
+                "name": "src",
+                "missing": true,
+                "default": "form",
+                "doc": "Form source",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.reset"
+}

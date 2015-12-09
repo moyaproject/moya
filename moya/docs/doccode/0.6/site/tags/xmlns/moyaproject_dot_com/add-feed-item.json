@@ -1,0 +1,133 @@
+{
+    "name": "add-feed-item",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "add-feed-item",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/feed.py",
+        "doc": "\nAdd an item to a [tag]feed[/tag].\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add an item to an RSS feed",
+        "tag_name": "add-feed-item",
+        "params": {
+            "category": {
+                "default_display": "None",
+                "name": "category",
+                "missing": true,
+                "default": null,
+                "doc": "Includes the item in one or more categories",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "feed to add to",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "description": {
+                "default_display": "None",
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "Item description",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "author": {
+                "default_display": "None",
+                "name": "author",
+                "missing": true,
+                "default": null,
+                "doc": "Email address of the author of this item",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "title": {
+                "default_display": "None",
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "Title of Feed",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "link": {
+                "default_display": "None",
+                "name": "link",
+                "missing": true,
+                "default": null,
+                "doc": "Link to this item on the web",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "guid": {
+                "default_display": "None",
+                "name": "guid",
+                "missing": true,
+                "default": null,
+                "doc": "A string that uniquely identifies the item.",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "pub_date": {
+                "default_display": "None",
+                "name": "pub_date",
+                "missing": true,
+                "default": null,
+                "doc": "Indicates when the item was published",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.add-feed-item"
+}

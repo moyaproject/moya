@@ -1,0 +1,48 @@
+{
+    "name": "choice",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "choice",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "\nDefine a choice in a [tag]choices[/tag] tag.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": null,
+        "tag_name": "choice",
+        "params": {
+            "value": {
+                "default_display": "",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Choice value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Label to display",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.choice"
+}

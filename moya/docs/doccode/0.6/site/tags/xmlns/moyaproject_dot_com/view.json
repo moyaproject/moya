@@ -1,0 +1,85 @@
+{
+    "name": "view",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "view",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Define a view to handle a URL",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define a view to handle a URL",
+        "tag_name": "view",
+        "params": {
+            "content": {
+                "default_display": "",
+                "name": "content",
+                "missing": true,
+                "default": null,
+                "doc": "Content",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "requires": {
+                "default_display": "None",
+                "name": "requires",
+                "missing": true,
+                "default": null,
+                "doc": "Permission expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "withscope": {
+                "default_display": "yes",
+                "name": "withscope",
+                "missing": true,
+                "default": true,
+                "doc": "Use scope as template / content data?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.view"
+}

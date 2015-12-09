@@ -1,0 +1,88 @@
+{
+    "name": "processor",
+    "doc_namespace": "xmlns.http://moyaproject.com/thumbnail",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "processor",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_thumbnail",
+        "defined": "/home/will/projects/moya/moya/libs/thumbnail/logic/tags.xml (line 19)",
+        "doc": "A thumbnail processor.\n\nDefines how an image should be processed to produce another image. When [tag thumbnail]generate[/tag] runs,\nit calls the each processor in a [tag thumbnail]thumbnails[/tag] with an image object called [c]image[/c].\nThe code inside the processor transforms that image. The new image is then written as the thumbnail. Here's an example:\n\n[code xml]\n<tn:thumbnails libname=\"sushifinder#thumbnails.products\">\n    <tn:processor name=\"small\">\n        <image:resize-to-fit width=\"80\" height=\"80\" />\n    </tn:processor>\n</tn:thumbnails>\n[/code]",
+        "namespace": "http://moyaproject.com/thumbnail",
+        "synopsis": "define a thumbnail processor",
+        "tag_name": "processor",
+        "params": {
+            "version": {
+                "default_display": "1",
+                "name": "version",
+                "missing": true,
+                "default": "1",
+                "doc": "A version number of the processor",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "quality": {
+                "default_display": "80",
+                "name": "quality",
+                "missing": true,
+                "default": "80",
+                "doc": "The quality of jpeg thumbnails (max 100)",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": null,
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "An identifier used in the thumbnail generation",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "format": {
+                "default_display": "jpeg",
+                "name": "format",
+                "missing": true,
+                "default": "jpeg",
+                "doc": "Image format for the thumbnail",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "jpeg",
+                    "png"
+                ]
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/thumbnail.processor"
+}

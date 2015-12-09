@@ -1,0 +1,49 @@
+{
+    "name": "repeat",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "repeat",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Repeat a block a set number of times, or indefinitely. You can leave a repeat loop prematurely with the [tag]break[/tag] tag.\n\n    [alert Note]Be careful not to create infinite loops with this tag[/alert]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "repeat a block",
+        "tag_name": "repeat",
+        "params": {
+            "times": {
+                "default_display": "None",
+                "name": "times",
+                "missing": true,
+                "default": null,
+                "doc": "Number of times to repeat (default is infinite)",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <repeat times=\"5\">\n            <echo>Candyman</echo>\n        </repeat>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.repeat"
+}

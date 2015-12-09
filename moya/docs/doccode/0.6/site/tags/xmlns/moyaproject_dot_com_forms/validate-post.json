@@ -1,0 +1,60 @@
+{
+    "name": "validate-post",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "validate-post",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nValidate a form if the current request is a POST request.\n\nThis tag does the same thing as [tag]validate[/tag], but only if the current request is a POST request. Otherwise, the enclosed block will be skipped.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "validate a form for post requests",
+        "tag_name": "validate-post",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "src": {
+                "default_display": "form",
+                "name": "src",
+                "missing": false,
+                "default": "form",
+                "doc": "Form source",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "csrf": {
+                "default_display": "yes",
+                "name": "csrf",
+                "missing": true,
+                "default": true,
+                "doc": "Enable CSRF check?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.validate-post"
+}

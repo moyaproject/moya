@@ -1,0 +1,84 @@
+{
+    "name": "overview",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Overview]\n\nThis chapter summarizes some important concepts in Moya, which will be covered more fully in later chapters.\n\n[alert NOTE]The code snippets in this chapter are for illustration only, and may not work outside of a project.[/alert]\n\n[h1]Moya Command Line Application[/h1]\n\nThe moya command is a swiss-army knife of tools for development; in addition to running the development server, it can also report settings, check databases, test email, trace URLs, and assist with the minutia of developing a web application.\n\nIf Moya is installed, you can run the following command to see the help text:\n\n[code]\n$ moya -h\n[/code]\n\n[h1]Moya Code[/h1]\nIn Moya, executable code is written in XML. The [link moyacode]Moya language[/link] supports many of the constructs found in other high-level languages and although more verbose in terms of characters to type, it can be very readable and easy to work with.\n\n[aside]The verbosity of XML is offset somewhat by the fact that Moya code statements typically work at a higher-level.[/aside]\n\nThe Moya languages is also extremely [i]extensible[/i]. New tags can be implemented in Moya code itself, or via extensions written in Python.\n\nThe following Moya code is an implementation of [url http://en.wikipedia.org/wiki/Fizz_buzz]Fizz Buzz[/url] in Moya code:\n\n[code xml]\n<macro docname=\"main\">\n    <for src=\"1..100\" dst=\"number\">\n        <if test=\"number % 15 == 0\">\n            <echo>FizzBuzz</echo>\n        </if>\n        <elif test=\"number % 3 == 0\">\n            <echo>Fizz</echo>\n        </elif>\n        <elif test=\"number % 5 == 0\">\n            <echo>Buzz</echo>\n        </elif>\n        <else>\n            <echo>${number}</echo>\n        </else>\n    </for>\n</macro>\n[/code]\n\nOr for an alternative, less readable version:\n\n[code xml]\n<macro docname=\"fizzbuzz2\">\n    <for src=\"1..100\" dst=\"number\">\n        <echo>${number % 15 == 0 ? 'FizzBuzz' : (number % 3 == 0 ? 'Fizz' : (number % 5 == 0 ? 'Buzz' : number))}</echo>\n    </for>\n</macro>\n[/code]\n\n[h2]Expressions[/h2]\n\nMoya Code may contain [link expressions]expressions[/link] which work like most other languages, but with additional syntax for web related tasks, such as url manipulation / encoding, path manipulation, date-time arithmetic etc.\n\nFor example, the expression in the following code gets the current price of [url http://en.wikipedia.org/wiki/Bitcoin]Bitcoin[/url] from an online service:\n\n[code xml]\n<echo>${(fromjson:get:\"https://www.bitstamp.net/api/ticker/\")['ask']}</echo>\n[/code]\n\n[h2]Debugger[/h2]\n\nA fully featured [i]debugger[/i] is built in to Moya. With the Moya debugger you can step through your code, inspect data, and set breakpoints. Code is displayed with beautiful syntax highlighting (if your console supports it).\n\n[h1]Libraries and Applications[/h1]\n\nAll web application functionality in Moya is contained in bundle of XML documents, known as a [i][link library]library[/link][/i]. Libraries typically contain [i]views[/i] which process URLs and generate a response, and may also add features that can be used elsewhere in the project.\n\nMoya is bundled with a number of libraries to handle typical web applications requirements. For example there is a libary to manage users, sessions, forms, comments, remote procedure calls, and many more.\n\nLibraries self contained; the developer will rarely have to do more than [i]mount[/i] the library (give it a root URL). Static files may be served directly from the library, without having to copy anything.\n\n[h1]Components[/h1]\n\nThere are a number of systems involved in generating a page of html in a modern web application. The following is a list of the major components of a project built with Moya.\n\n[h2]URL Routing[/h2]\n\nA library may define one or more [i]mountpoints[/i], which take an incoming URL and dispatch it to a [link overview#view]view[/link] which will generate a response. A special syntax called a [i]route[/i] is used to match URLs to views and extract parameters.\n\nHere's a simple URL route:\n\n[code]\n/topic/{topic}/{link}/\n[/code]\n\nThis will match a URL of the form [c]/topic/farscape/my-favorite-character/[/c], and extract a value for [c]topic[/c] (farscape) and [c]link[/c] (my-favorite-character).\n\n[h2]Views[/h2]\n\nIn Moya a [i]view[/i] is the executable code responsible for generating a response for a given URL. A view will typically retrieve some information from the database, which it then renders in to HTML with via a template, or Moya's [link content]content[/link] system.\n\nThe following is an example of a view taken from the builtin blog library:\n\n[code xml]\n<view libname=\"view.posts-by-month\" content=\"#content.list-posts-by-month\">\n    <not-found if=\"exists:.request.GET.page and not int:.request.GET.page\" />\n    <let page=\"int:.request.GET.page or 1\" pagesize=\".app.settings.page_size.int\"/>\n    <datetime dst=\"start\" year=\"${url.year}\" month=\"${url.month}\"/>\n    <catch exception=\"date-time.*\">\n        <not-found />\n    </catch>\n    <db:query model=\"#Post\" dst=\"posts\" orderby=\"-published_date\"\n        filter=\"#Post.published_date gte start and #Post.published_date lt start.next_month\"/>\n</view>\n[/code]\n\n[h2]Databases[/h2]\n\nMoya simplifies [link db]databases[/link] with [i]models[/i] and [i]database expressions[/i]. Models map database tables on to simple objects and types. Database expressions build queries without the need for SQL.\n\nHere's an example of a model definition:\n\n[code xml]\n<model xmlns=\"http://moyaproject.com/db\" name=\"Post\" libname=\"Post\" repr=\"Post: ${slug}\">\n    <foreign-key model=\"auth#User\" name=\"owner\" null=\"yes\" />\n    <string name=\"title\" length=\"100\" null=\"no\" />\n    <string name=\"slug\" length=\"100\" null=\"no\" unique=\"yes\" />\n    <boolean name=\"published\" default=\"no\" />\n    <date-time name=\"published_date\" null=\"yes\" />\n    <text name=\"content\" null=\"no\" default=\"\" />\n</model>\n[/code]\n\nHere's an example of a query for the above model:\n\n[code xml]\n<db:query dst=\"newer_posts\" model=\"#Post\" orderby=\"published_date\"\n    filter=\"#Post.published_date gt post.published_date\" />\n[/code]\n\nThe [c]filter[/c] attribute in the code above is an example of a database expression.\n\n[h2]Templates[/h2]\n\nMoya [link templates]templates[/link] are text files with a simple -- but powerful -- markup that transforms data in to HTML (typically). The syntax used in Moya templates borrows heavily from Django and Jinja, but with some differences to compliment Moya Code.\n\nThe following is an example of Moya template code:\n\n[code moyatemplate]\n<!-- List of crew onboard Moya -->\n<ul>\n    {% for species, crew in moya %}\n    <li>${title:crew} is a ${species}</li>\n    {% endfor %}\n</ul>\n[/code]\n\nThe Moya template language supports many tags, with a clean, consistent syntax and the same expressions used elsewhere in Moya.\n\n[h2]Content[/h2]\n\nTemplates are powerful tools for building html, but are not particularly good at managing the layout of pages which are typically built from many smaller components. Moya's answer to this issue is [link content]content[/link] -- a high level description of a page defined in Moya code.\n\nContent assembles a page from components, or [i]widgets[/i]. A widget can pull in associated CSS, Javascript, and templates, so that all that is required to add a widget to a page is a single tag.\n\nHere's an example of a content definition, taken from Moya's FAQ (Frequently Asked Questions) library:\n\n[code xml]\n<content libname=\"content.faqlist\" template=\"faqs.html\">\n    <title>Frequently Asked Questions</title>\n    <section name=\"body\">\n        <for src=\"faqs\" dst=\"qa\">\n            <faq:faq qa=\"qa\" />\n        </for>\n    </section>\n</content>\n[/code]\n\n[h2]Internationalization and Localization[/h2]\n\nIn a globalized world, it is often necessary to support a single website in more than one territory. Moya can display translated text from messages catalogs extracted with the command line app. Localization (currency / data formats formats etc) is also supported.\n\n[h2]Forms[/h2]\n\nForms are a fundamental part of most web applications, and a common source of errors and frustration. Moya [link forms]forms[/link] makes working with forms no harder than it needs to be. Forms created with Moya's form system know how to render themselves as well as validated and process data in a request.\n\nForms are integrated tightly with the [link content]content[/link] system and may be rendered in a variety of styles, or customized at the field or form level.\n\n[h2]Filesystems[/h2]\n\nMoya can selectively expose parts of the local filesystem (or other filesystem) to logic code. Code in the project is unable to access any files outside of what the developer has chosen to expose. This is a boon for security, as it is impossible to serve files outside of specified locations.\n\n[h2]Caching[/h2]\n\nMoya supports a number of different caching methods; such as local memory, disk based, and memcached servers. These may be mixed and matched as appropriate to optimize expensive code.\n\n[h2]Email[/h2]\n\nMoya makes sending template emails very simple. HTML and / or text emails are rendered with Moya templates, and may contain attachments.\n\n[h2]Tests and Checks[/h2]\n\nUnit Tests are essential if you want to guarantee a level of quality in your product. Moya can run test suites (written in Moya code) that produce elegant reports to the console or as HTML. Tests ensuring that recent changes to your code don't break the user experience on other pages.\n\nIn addition to unit tests, Moya can run [i]preflight[/i] checks, which detect common errors and potential problems before the server runs. These can prevent potentially embarrassing issues from being pushed live.",
+        "name": "overview",
+        "docmap": [
+            [
+                1,
+                "Moya Command Line Application"
+            ],
+            [
+                1,
+                "Moya Code"
+            ],
+            [
+                2,
+                "Expressions"
+            ],
+            [
+                2,
+                "Debugger"
+            ],
+            [
+                1,
+                "Libraries and Applications"
+            ],
+            [
+                1,
+                "Components"
+            ],
+            [
+                2,
+                "URL Routing"
+            ],
+            [
+                2,
+                "Views"
+            ],
+            [
+                2,
+                "Databases"
+            ],
+            [
+                2,
+                "Templates"
+            ],
+            [
+                2,
+                "Content"
+            ],
+            [
+                2,
+                "Internationalization and Localization"
+            ],
+            [
+                2,
+                "Forms"
+            ],
+            [
+                2,
+                "Filesystems"
+            ],
+            [
+                2,
+                "Caching"
+            ],
+            [
+                2,
+                "Email"
+            ],
+            [
+                2,
+                "Tests and Checks"
+            ]
+        ],
+        "title": "Overview"
+    },
+    "id": "doc.overview"
+}

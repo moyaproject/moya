@@ -1,0 +1,97 @@
+{
+    "name": "column",
+    "doc_namespace": "xmlns.http://moyaproject.com/admin",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "column",
+        "lib": "moya.admin",
+        "namespace_slug": "moyaproject_dot_com_admin",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 131)",
+        "doc": "Define a column in a database view\"",
+        "namespace": "http://moyaproject.com/admin",
+        "synopsis": "define a column in an admin view",
+        "tag_name": "column",
+        "params": {
+            "sort": {
+                "default_display": null,
+                "name": "sort",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "link": {
+                "default_display": "no",
+                "name": "link",
+                "missing": true,
+                "default": "no",
+                "doc": "",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "title": {
+                "default_display": null,
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/admin.column"
+}

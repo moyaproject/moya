@@ -1,0 +1,73 @@
+{
+    "name": "text",
+    "doc_namespace": "xmlns.http://moyaproject.com/email",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "text",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_email",
+        "defined": "/home/will/projects/moya/moya/tags/email.py",
+        "doc": "Add text template to an email.",
+        "namespace": "http://moyaproject.com/email",
+        "synopsis": "add text to an email",
+        "tag_name": "text",
+        "params": {
+            "content": {
+                "default_display": "",
+                "name": "content",
+                "missing": true,
+                "default": null,
+                "doc": "Content Element",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "From email",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template path",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/email.text"
+}

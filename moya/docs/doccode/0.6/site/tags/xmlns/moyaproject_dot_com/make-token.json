@@ -1,0 +1,121 @@
+{
+    "name": "make-token",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "make-token",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Generates a token of random characters. This is useful for creating unique IDs for database objects.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "make an opaque token",
+        "tag_name": "make-token",
+        "params": {
+            "digits": {
+                "default_display": "yes",
+                "name": "digits",
+                "missing": true,
+                "default": true,
+                "doc": "Use digits",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "uppercase": {
+                "default_display": "yes",
+                "name": "uppercase",
+                "missing": true,
+                "default": true,
+                "doc": "Use upper case characters",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "lowercase": {
+                "default_display": "yes",
+                "name": "lowercase",
+                "missing": true,
+                "default": true,
+                "doc": "Use lower case characters",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "punctuation": {
+                "default_display": "no",
+                "name": "punctuation",
+                "missing": true,
+                "default": false,
+                "doc": "Use punctuation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "size": {
+                "default_display": "20",
+                "name": "size",
+                "missing": true,
+                "default": 20,
+                "doc": "Size",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <maketoken dst=\"authorization_token\" size=\"16\" />\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.make-token"
+}

@@ -1,0 +1,97 @@
+{
+    "name": "get-count",
+    "doc_namespace": "xmlns.http://moyaproject.com/comments",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-count",
+        "lib": "moya.comments",
+        "namespace_slug": "moyaproject_dot_com_comments",
+        "defined": "/home/will/projects/moya/moya/libs/comments/logic/tags.xml (line 28)",
+        "doc": "Get comment count for a single topic.",
+        "namespace": "http://moyaproject.com/comments",
+        "synopsis": "get number of comments",
+        "tag_name": "get-count",
+        "params": {
+            "topic": {
+                "default_display": null,
+                "name": "topic",
+                "missing": true,
+                "default": null,
+                "doc": "An object id",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "namespace": {
+                "default_display": null,
+                "name": "namespace",
+                "missing": true,
+                "default": null,
+                "doc": "A comment namespace",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/comments.get-count"
+}

@@ -1,0 +1,13 @@
+{
+    "name": "home",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "",
+        "name": "home"
+    },
+    "id": "doc.home"
+}

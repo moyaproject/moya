@@ -19,7 +19,11 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
             import_tag = XML('<import location="{lib_path}"/>'.format(lib_path=lib_path))
             import_tag.tail = "\n"
 
-            install_tag = XML('<install name="{app_name}" lib="{lib_name}" />'.format(app_name=app_name, lib_name=lib_name, mount=mount))
+            if app_name is None:
+                install_tag = XML('<install lib="{lib_name}" />'.format(lib_name=lib_name))
+            else:
+                install_tag = XML('<install name="{app_name}" lib="{lib_name}" />'.format(app_name=app_name, lib_name=lib_name))
+
             install_tag.tail = "\n"
 
             def has_child(node, tag, **attribs):

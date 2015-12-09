@@ -1,0 +1,169 @@
+{
+    "name": "decimal",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "decimal",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Defines a fixed precision number field in a <model>. Use this field element for currency.",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "a fix precision number",
+        "tag_name": "decimal",
+        "params": {
+            "scale": {
+                "default_display": "8",
+                "name": "scale",
+                "missing": true,
+                "default": 8,
+                "doc": "number of digits after the decimal point",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "precision": {
+                "default_display": "36",
+                "name": "precision",
+                "missing": true,
+                "default": 36,
+                "doc": "number of digits",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n            <decimal name=\"balance\" precision=\"12\" scale=\"2\" />\n        ",
+        "inherited_params": {
+            "index": {
+                "default_display": "no",
+                "name": "index",
+                "missing": true,
+                "default": false,
+                "doc": "Create index?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "unique": {
+                "default_display": "no",
+                "name": "unique",
+                "missing": true,
+                "default": false,
+                "doc": "Impose unique constraint?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "null": {
+                "default_display": "no",
+                "name": "null",
+                "missing": true,
+                "default": false,
+                "doc": "Allow null?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Additional help text for use in object forms",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default value",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "primary": {
+                "default_display": "",
+                "name": "primary",
+                "missing": true,
+                "default": null,
+                "doc": "Use as primary key?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of field purpose",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "blank": {
+                "default_display": "yes",
+                "name": "blank",
+                "missing": true,
+                "default": true,
+                "doc": "Allow blank?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "formfield": {
+                "default_display": "",
+                "name": "formfield",
+                "missing": true,
+                "default": null,
+                "doc": "Macro to create a form field, used in admin",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the element",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.decimal"
+}

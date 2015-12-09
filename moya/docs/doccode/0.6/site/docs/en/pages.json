@@ -1,0 +1,28 @@
+{
+    "name": "pages",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Pages]\n\nMoya Pages is a very simple content management system that creates user editable pages. Pages may have a title, and rich text content.\n\n[h1]Installation[/h1]\n\nMoya Pages is built in to Moya and may be imported as follows:\n\n[code xml]\n<import py=\"moya.libs.pages\" />\n[/code]\n\nMoya Pages is typically mounted on [c]/[/c] as follows:\n\n[code xml]\n<install name=\"pages\" lib=\"moya.pages\" mount=\"/\" />\n[/code]\n\n[h1]Introduction[/h1]\n\nMoya Pages is used to create a simple page of content consisting of a title and rich text. A [i]slug[/i] under the mount point identifies the page in the database. If there is no such page in the database, Moya will continue to process other application URLs.\n\nThis library is typically used to create standard pages such as [c]/about/[/c] and [c]/contact/[/c].\n\n[h1]Settings[/h1]\n\nThe following is a list of the settings in Moya Pages:\n\n[setting]autocreate = <LIST OF PAGES>[/setting]\n\nThis setting should be a list of page slugs which should be auto-created when you visit the associate url. The default auto-created pages are as follows:\n\n[code ini]\nautocreate = about\n             contact\n             terms-and-conditions\n             privacy-policy\n[/code]\n\n[setting]comments = <yes/no>[/setting]\n\nSet to [c]yes[/c] to enable comments on pages, or [c]no[/c] to disable them.",
+        "name": "pages",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Introduction"
+            ],
+            [
+                1,
+                "Settings"
+            ]
+        ],
+        "title": "Moya Pages"
+    },
+    "id": "doc.pages"
+}

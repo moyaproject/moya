@@ -1,0 +1,61 @@
+{
+    "name": "error",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "error",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nSet an error message on either a field or the entire form.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "add an error message to a form",
+        "tag_name": "error",
+        "params": {
+            "field": {
+                "default_display": "",
+                "name": "field",
+                "missing": true,
+                "default": null,
+                "doc": "Field name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "form",
+                "name": "src",
+                "missing": true,
+                "default": "form",
+                "doc": "Form",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <forms:error src=\"form\" if=\".user\">\n            You must be logged in to do that!\n        </forms:error>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.error"
+}

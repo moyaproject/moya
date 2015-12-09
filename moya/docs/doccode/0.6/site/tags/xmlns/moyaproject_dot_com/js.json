@@ -1,0 +1,61 @@
+{
+    "name": "js",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "js",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "Insert Javascript content.\n\n    Here's an example:\n\n    [code xml]\n    <!-- must be inside a content definition -->\n    <js>alert(\"Ready for takeoff!);</js>\n    [/code]\n\n    This would render the following:\n\n    [code moyatemplate]\n    <script type=\"text/javascript\">\n        alert(\"Ready for takeoff!);\n    </script>\n    [/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "insert Javascript content",
+        "tag_name": "js",
+        "params": {
+            "section": {
+                "default_display": "\"js\"",
+                "name": "section",
+                "missing": true,
+                "default": "js",
+                "doc": "Section to add script to",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "obj": {
+                "default_display": "",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "Object to render",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.js"
+}

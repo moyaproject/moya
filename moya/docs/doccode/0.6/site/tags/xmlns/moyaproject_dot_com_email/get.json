@@ -1,0 +1,145 @@
+{
+    "name": "get",
+    "doc_namespace": "xmlns.http://moyaproject.com/email",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_email",
+        "defined": "/home/will/projects/moya/moya/tags/email.py",
+        "doc": "Get an previously defined email object.",
+        "namespace": "http://moyaproject.com/email",
+        "synopsis": "get an email object",
+        "tag_name": "get",
+        "params": {
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "From email",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "to": {
+                "default_display": "",
+                "name": "to",
+                "missing": true,
+                "default": null,
+                "doc": "To email address",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "cc": {
+                "default_display": "",
+                "name": "cc",
+                "missing": true,
+                "default": null,
+                "doc": "CC email address",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination to store exception object",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "bcc": {
+                "default_display": "",
+                "name": "bcc",
+                "missing": true,
+                "default": null,
+                "doc": "BCC email address",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "replyto": {
+                "default_display": "",
+                "name": "replyto",
+                "missing": true,
+                "default": null,
+                "doc": "Reply to email address",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "data": {
+                "default_display": "None",
+                "name": "data",
+                "missing": true,
+                "default": null,
+                "doc": "Template / content data",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "email": {
+                "default_display": "",
+                "name": "email",
+                "missing": true,
+                "default": null,
+                "doc": "Reference to email tag",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "subject": {
+                "default_display": "",
+                "name": "subject",
+                "missing": true,
+                "default": null,
+                "doc": "Email subject",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/email.get"
+}

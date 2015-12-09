@@ -1,0 +1,84 @@
+{
+    "name": "scope-node",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "scope-node",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nCreate a template node that uses the current scope as the template data.\n\nThis node is identical to [tag]node[/tag], with the [c]withscope[/c] attribute set to [c]yes[/c].\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "creates a template node using the current scope",
+        "tag_name": "scope-node",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "withscope": {
+                "default_display": "no",
+                "name": "withscope",
+                "missing": true,
+                "default": false,
+                "doc": "Is current context when rendering template",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "ifexists": {
+                "default_display": "no",
+                "name": "ifexists",
+                "missing": true,
+                "default": false,
+                "doc": "Skip if the template can not be found",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.scope-node"
+}

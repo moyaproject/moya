@@ -1,0 +1,36 @@
+{
+    "name": "return-str",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "return-str",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "A shortcut to returning a string.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "shortcut to return a string",
+        "tag_name": "return-str",
+        "params": {},
+        "example": "\n        <macro docname=\"get_text\">\n            <return-str>Hello, World</return-str>\n        </macro>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.return-str"
+}

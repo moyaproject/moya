@@ -1,0 +1,90 @@
+{
+    "name": "zoom-to-fit",
+    "doc_namespace": "xmlns.http://moyaproject.com/image",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "zoom-to-fit",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_image",
+        "defined": "/home/will/projects/moya/moya/tags/image.py",
+        "doc": "Resize image to given dimensions, cropping if necessary.",
+        "namespace": "http://moyaproject.com/image",
+        "synopsis": "resize an image to fit in new dimensions, with cropping",
+        "tag_name": "zoom-to-fit",
+        "params": {
+            "resample": {
+                "default_display": "\"antialias\"",
+                "name": "resample",
+                "missing": true,
+                "default": "antialias",
+                "doc": "Method for resampling",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "bilinear",
+                    "nearest",
+                    "bicubic",
+                    "antialias"
+                ]
+            },
+            "image": {
+                "default_display": "image",
+                "name": "image",
+                "missing": true,
+                "default": "image",
+                "doc": "Image to show",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "width": {
+                "default_display": "",
+                "name": "width",
+                "missing": true,
+                "default": null,
+                "doc": "New width",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "height": {
+                "default_display": "",
+                "name": "height",
+                "missing": true,
+                "default": null,
+                "doc": "New height",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/image.zoom-to-fit"
+}

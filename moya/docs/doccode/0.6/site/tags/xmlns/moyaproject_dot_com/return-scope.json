@@ -1,0 +1,61 @@
+{
+    "name": "return-scope",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "return-scope",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nReturn values from the current scope.\n\nThis tag is useful in macros, widgets, and other callable tags where you want to return a number of values in a dictionary.\n\nFor example, the following will return a dictionary containing two keys:\n\n[code xml]\n<return-scope values=\"foo, bar\"/>\n[/code]\n\nThis is equivalent to the following:\n\n[code xml]\n<return value=\"{'foo': foo, 'bar': bar}\"/>\n[/code]\n\nIf you *don't* specify the [c]values[/c] attribute, Moya will read the values from the enclosed text (one key per line).\nThe following code is equivalent to the above:\n\n[code xml]\n<return-scope>\n    foo\n    bar\n</return-scope>\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "return values from the current scope",
+        "tag_name": "return-scope",
+        "params": {
+            "default": {
+                "default_display": "None",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default for missing values",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "values": {
+                "default_display": "",
+                "name": "values",
+                "missing": true,
+                "default": null,
+                "doc": "Values to return",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.return-scope"
+}

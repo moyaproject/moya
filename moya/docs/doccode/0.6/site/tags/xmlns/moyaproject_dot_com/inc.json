@@ -1,0 +1,49 @@
+{
+    "name": "inc",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "inc",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Increment (add 1 to) a value.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "increment a value",
+        "tag_name": "inc",
+        "params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Value to increment",
+                "required": true,
+                "type": "reference",
+                "metavar": "ELEMENTREF",
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <let hobbit_count=\"1\" />\n        <inc dst=\"hobbit_count\" />\n        <echo>${hobbit_count}</echo> <!-- 2 -->\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.inc"
+}

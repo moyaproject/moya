@@ -1,0 +1,97 @@
+{
+    "name": "sort",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "sort",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Sort a sequence",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "sort a sequence",
+        "tag_name": "sort",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source sequence",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "reverse": {
+                "default_display": "no",
+                "name": "reverse",
+                "missing": true,
+                "default": false,
+                "doc": "Reverse order?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "key": {
+                "default_display": "",
+                "name": "key",
+                "missing": true,
+                "default": null,
+                "doc": "Key expression",
+                "required": true,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <dict dst=\"crew\">\n            <dict let:name=\"John\" let:species=\"human\" />\n            <dict let:name=\"Rygel\" let:species=\"hynerian\" />\n            <dict let:name=\"Aeryn\" let:species=\"peacekeeper\" />\n        </dict>\n        <sort src=\"crew\" dst=\"crew\" key=\"lower:name\" />\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.sort"
+}

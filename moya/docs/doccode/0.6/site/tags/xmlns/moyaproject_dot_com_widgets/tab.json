@@ -1,0 +1,97 @@
+{
+    "name": "tab",
+    "doc_namespace": "xmlns.http://moyaproject.com/widgets",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "tab",
+        "lib": "moya.widgets",
+        "namespace_slug": "moyaproject_dot_com_widgets",
+        "defined": "/home/will/projects/moya/moya/libs/widgets/logic/widgets.xml (line 195)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/widgets",
+        "synopsis": "individial tab",
+        "tag_name": "tab",
+        "params": {
+            "title": {
+                "default_display": null,
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "id": {
+                "default_display": null,
+                "name": "id",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "icon": {
+                "default_display": null,
+                "name": "icon",
+                "missing": true,
+                "default": null,
+                "doc": "Icon class",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/widgets.tab"
+}

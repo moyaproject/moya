@@ -1,0 +1,49 @@
+{
+    "name": "set-language",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set-language",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Set the current language",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "set the current language",
+        "tag_name": "set-language",
+        "params": {
+            "language": {
+                "default_display": "",
+                "name": "language",
+                "missing": true,
+                "default": null,
+                "doc": "Language code",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.set-language"
+}

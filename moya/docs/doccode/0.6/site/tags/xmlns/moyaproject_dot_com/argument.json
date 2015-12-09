@@ -1,0 +1,72 @@
+{
+    "name": "argument",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "argument",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "\nDefines an argument to a macro.\n\nThe text of this tag should document the purpose of the argument.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define an argument to a macro",
+        "tag_name": "argument",
+        "params": {
+            "default": {
+                "default_display": "",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "A value to use if the argument is not supplied",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "required": {
+                "default_display": "yes",
+                "name": "required",
+                "missing": true,
+                "default": true,
+                "doc": "Is this argument required?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "check": {
+                "default_display": "",
+                "name": "check",
+                "missing": true,
+                "default": null,
+                "doc": "A boolean expression that the attribute must satisfy",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the attribute",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <macro docname=\"average\">\n            <signature>\n                <argument name=\"numbers\" required=\"yes\" check=\"len:numbers gt 0\">\n                    A list (or other sequence) of numbers\n                </argument>\n            </signature>\n            <return value=\"sum:numbers / len:numbers\" />\n        </macro>\n\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.argument"
+}

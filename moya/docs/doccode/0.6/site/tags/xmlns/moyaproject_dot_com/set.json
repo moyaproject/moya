@@ -1,0 +1,60 @@
+{
+    "name": "set",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Create a [i]set[/i] object. A set is a container, where each item may only appears once. Any data items in the enclosed block are added to the set.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a set object",
+        "tag_name": "set",
+        "params": {},
+        "example": "\n        <set dst=\"hobbits\">\n            <str>Sam</str>\n            <str>Bilbo</str>\n            <str>Frodo</str>\n            <str>Bilbo</str>\n            <str>Sam</str>\n        </set>\n        <!-- Will display 3, because duplicates are removed -->\n        <echo>There are ${len:hobbits} in the set.</echo>\n\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.set"
+}

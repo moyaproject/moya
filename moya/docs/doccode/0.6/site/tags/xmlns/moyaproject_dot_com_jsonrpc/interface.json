@@ -1,0 +1,49 @@
+{
+    "name": "interface",
+    "doc_namespace": "xmlns.http://moyaproject.com/jsonrpc",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "interface",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_jsonrpc",
+        "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+        "doc": "Creates a JSON RPC interface.",
+        "namespace": "http://moyaproject.com/jsonrpc",
+        "synopsis": "create an interface for remote methods",
+        "tag_name": "interface",
+        "params": {
+            "errors": {
+                "default_display": "",
+                "name": "errors",
+                "missing": true,
+                "default": null,
+                "doc": "Optional <enum> of error codes",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/jsonrpc.interface"
+}

@@ -1,0 +1,89 @@
+{
+    "name": "arg",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "arg",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/command.py",
+        "doc": "Defines an argument for a [link commands]command[/link]. An [tag]arg[/tag] tag must appear within the [tag]signature[/tag] tag for a command.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add a positional argument to a command",
+        "tag_name": "arg",
+        "params": {
+            "type": {
+                "default_display": "\"string\"",
+                "name": "type",
+                "missing": true,
+                "default": "string",
+                "doc": "Type of argument",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "string",
+                    "integer",
+                    "float",
+                    "file"
+                ]
+            },
+            "nargs": {
+                "default_display": "",
+                "name": "nargs",
+                "missing": true,
+                "default": null,
+                "doc": "Number of arguments to be consumed",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Argument help text",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Argument name (the variable when the command is execute)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "metavar": {
+                "default_display": "",
+                "name": "metavar",
+                "missing": true,
+                "default": null,
+                "doc": "Argument metavar (shown in the help)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <!-- Should appear within a <signature> tag -->\n        <arg name=\"who\" help=\"Who you want to greet\">\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.arg"
+}

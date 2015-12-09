@@ -1,0 +1,259 @@
+{
+    "name": "moyaproject_dot_com_jsonrpc_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/jsonrpc",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "error",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_jsonrpc",
+                "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+                "doc": "Return an rpc error response.",
+                "prev_tag": "parameter",
+                "namespace": "http://moyaproject.com/jsonrpc",
+                "tag_name": "error",
+                "next_tag": "interface",
+                "synopsis": "return an rpc error",
+                "params": {
+                    "code": {
+                        "default_display": "\"0\"",
+                        "name": "code",
+                        "missing": true,
+                        "default": "0",
+                        "doc": "Error code",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "data": {
+                        "default_display": "None",
+                        "name": "data",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Optional data regarding the error",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "interface",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_jsonrpc",
+                "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+                "doc": "Creates a JSON RPC interface.",
+                "prev_tag": "error",
+                "namespace": "http://moyaproject.com/jsonrpc",
+                "tag_name": "interface",
+                "next_tag": "method",
+                "synopsis": "create an interface for remote methods",
+                "params": {
+                    "errors": {
+                        "default_display": "",
+                        "name": "errors",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Optional <enum> of error codes",
+                        "required": false,
+                        "type": "element reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "method",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_jsonrpc",
+                "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+                "doc": "\nExposes a single method on a JSON RPC interface.\n\nThis tag should appear within a [tag jsonrpc]interface[/tag], or set the [c]interface[/c] attribute to reference an interface.\n\n\n",
+                "prev_tag": "interface",
+                "namespace": "http://moyaproject.com/jsonrpc",
+                "tag_name": "method",
+                "next_tag": "parameter",
+                "synopsis": "define a remote method",
+                "params": {
+                    "interface": {
+                        "default_display": "",
+                        "name": "interface",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Interface",
+                        "required": false,
+                        "type": "element reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "group": {
+                        "default_display": "",
+                        "name": "group",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Method group",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "call": {
+                        "default_display": "",
+                        "name": "call",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Macro to call for functionality",
+                        "required": false,
+                        "type": "element reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": "\"\"",
+                        "name": "description",
+                        "missing": true,
+                        "default": "",
+                        "doc": "Brief description of method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Name of exposed method",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n            <rpc:method name=\"time\">\n                <rpc:parameter name=\"format\" type=\"string\" default=\"medium\" required=\"yes\">\n                    Time format to return\n                </rpc:parameter>\n                <return-str>${.now::format}</return-str>\n            </rpc:method>\n        ",
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "parameter",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_jsonrpc",
+                "defined": "/home/will/projects/moya/moya/libs/jsonrpc/py/jsonrpcelements.py",
+                "doc": "Defines a parameter in an RPC call.",
+                "prev_tag": "method",
+                "namespace": "http://moyaproject.com/jsonrpc",
+                "tag_name": "parameter",
+                "synopsis": "define an rpc parameter",
+                "params": {
+                    "default": {
+                        "default_display": "None",
+                        "name": "default",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Default value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "yes",
+                        "name": "required",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Required?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "type": {
+                        "default_display": "\"anything\"",
+                        "name": "type",
+                        "missing": true,
+                        "default": "anything",
+                        "doc": "Parameter type (number, string, bool, list, object, anything)",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Name of the parameter",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <rpc:error code=\"100\" if=\"format not in ['short', 'medium', 'long', 'full']\">\n            Format parameter is not correct\n        </rpc:error>\n        ",
+                "inherited_params": {}
+            }
+        ],
+        "namespace": "http://moyaproject.com/jsonrpc",
+        "namespace_doc": "\n        Tags for creating [link jsonrpc]JSON RPC[/link] interfaces.\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/jsonrpc.moyaproject_dot_com_jsonrpc_index"
+}

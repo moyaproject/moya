@@ -1,0 +1,49 @@
+{
+    "name": "yield",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "yield",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/tag.py",
+        "doc": "Yield from a tag",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "yield to code block",
+        "tag_name": "yield",
+        "params": {
+            "scope": {
+                "default_display": "None",
+                "name": "scope",
+                "missing": true,
+                "default": null,
+                "doc": "scope to use",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.yield"
+}

@@ -1,0 +1,85 @@
+{
+    "name": "remove-file",
+    "doc_namespace": "xmlns.http://moyaproject.com/fs",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "remove-file",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_fs",
+        "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+        "doc": "Delete a file from a filesystem",
+        "namespace": "http://moyaproject.com/fs",
+        "synopsis": "delete a file",
+        "tag_name": "remove-file",
+        "params": {
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Destination path",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem object",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "ifexists": {
+                "default_display": "",
+                "name": "ifexists",
+                "missing": true,
+                "default": null,
+                "doc": "Only remove if the file exists?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/fs.remove-file"
+}

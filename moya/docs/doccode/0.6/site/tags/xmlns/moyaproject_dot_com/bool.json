@@ -1,0 +1,60 @@
+{
+    "name": "bool",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "bool",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Create a boolean (True or False value).",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a boolean",
+        "tag_name": "bool",
+        "params": {},
+        "example": "\n        <bool dst=\"bool\"/> <!-- False -->\n        <bool dst=\"bool\">yes</bool> <!-- True -->\n        <bool dst=\"bool\">no</bool> <!-- False -->\n        <bool dst=\"bool\" value=\"1\"/> <!--True -->\n        <bool dst=\"bool\" value=\"0\"/> <!-- False -->\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.bool"
+}

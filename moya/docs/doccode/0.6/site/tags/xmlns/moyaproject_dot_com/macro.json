@@ -1,0 +1,36 @@
+{
+    "name": "macro",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "macro",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Defines a [link moyacode#macros]macro[/link].",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define a re-usable block of code",
+        "tag_name": "macro",
+        "params": {},
+        "example": "\n        <macro docname=\"greet\">\n            <echo>Hello, ${name}!<echo>\n        </macro>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.macro"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "return-dict",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "return-dict",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nShortcut to return a dictionary. For example, the following macro returns a dictionary:\n\n[code xml]\n<macro docname=\"get_character\">\n    <return>\n        <dict>\n            <str dst=\"rygel\">Hynerian</str>\n            <str dst=\"john\">Human</str>\n        </dict>\n    </return>\n</macro>\n[/code]\n\nWe could shorten the above using the [tag]return-dict[/tag] as follows:\n\n[code xml]\n<macro docname=\"get_character\">\n    <return-dict>\n        <str dst=\"rygel\">Hynerian</str>\n        <str dst=\"john\">Human</str>\n    </return-dict>\n</macro>\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "shortcut to return a dictionary",
+        "tag_name": "return-dict",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.return-dict"
+}

@@ -1,0 +1,133 @@
+{
+    "name": "table",
+    "doc_namespace": "xmlns.http://moyaproject.com/admin",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "table",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_admin",
+        "defined": "/home/will/projects/moya/moya/libs/admin/logic/tags.xml (line 26)",
+        "doc": "An admin table",
+        "namespace": "http://moyaproject.com/admin",
+        "synopsis": "define a table view in the admin interface",
+        "tag_name": "table",
+        "params": {
+            "search": {
+                "default_display": null,
+                "name": "search",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "description": {
+                "default_display": null,
+                "name": "description",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "title": {
+                "default_display": null,
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "order": {
+                "default_display": null,
+                "name": "order",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "filter": {
+                "default_display": null,
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "widgets/table.html",
+                "name": "template",
+                "missing": true,
+                "default": "widgets/table.html",
+                "doc": "",
+                "required": false,
+                "type": "template path",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": "",
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "slug": {
+                "default_display": null,
+                "name": "slug",
+                "missing": true,
+                "default": null,
+                "doc": "",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/admin.table"
+}

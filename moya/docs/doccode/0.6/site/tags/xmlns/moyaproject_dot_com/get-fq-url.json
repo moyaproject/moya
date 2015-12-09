@@ -1,0 +1,120 @@
+{
+    "name": "get-fq-url",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-fq-url",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Get a [i]fully qualified[/i] (including domain name and scheme) named URL",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "get a fully qualified URL",
+        "tag_name": "get-fq-url",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "from": {
+                "default_display": null,
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "URL name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "base": {
+                "default_display": "",
+                "name": "base",
+                "missing": true,
+                "default": null,
+                "doc": "Base (protocol and domain) of the URL",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "query": {
+                "default_display": "None",
+                "name": "query",
+                "missing": false,
+                "default": null,
+                "doc": "Mapping expression to use as a query string",
+                "required": false,
+                "type": "expression",
+                "metavar": "EXPRESSION",
+                "empty": true,
+                "choices": null
+            },
+            "with": {
+                "default_display": "None",
+                "name": "with",
+                "missing": true,
+                "default": null,
+                "doc": "Extract URL values from this object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.get-fq-url"
+}

@@ -1,0 +1,49 @@
+{
+    "name": "if",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "if",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nConditional [i]IF[/i] tag, executes the enclosing block if a condition evaluates to [i]true[/i]. If the condition evaluates to [i]false[/i], the enclosing block is skipped. May be followed by [tag]else[/tag] or [tag]elif[/tag].\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "execute block if a condition is true",
+        "tag_name": "if",
+        "params": {
+            "test": {
+                "default_display": "None",
+                "name": "test",
+                "missing": true,
+                "default": null,
+                "doc": "Test expression",
+                "required": true,
+                "type": "expression",
+                "metavar": "CONDITION",
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <if test=\"coffee==0\">\n            <echo>Get more coffee</echo>\n        </if>",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.if"
+}

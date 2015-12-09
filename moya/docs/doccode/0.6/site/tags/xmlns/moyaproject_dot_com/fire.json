@@ -1,0 +1,73 @@
+{
+    "name": "fire",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "fire",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "\nFire (broadcast) a signal. Additional data may be provided to the signal handlers, by setting values in the [i]let map[/i]. Signals may be [i]handlers[/i] with the [tag]handle[/tag] tag.\n\nMoya will catch and log any exceptions raised by the signal handler(s).\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "fire a signal",
+        "tag_name": "fire",
+        "params": {
+            "signal": {
+                "default_display": "",
+                "name": "signal",
+                "missing": true,
+                "default": null,
+                "doc": "Signal name, should be in a dotted notation. Names with no dots are reserved by Moya.",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "sender": {
+                "default_display": "",
+                "name": "sender",
+                "missing": true,
+                "default": null,
+                "doc": "Optional element associated with the signal.",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <fire signal=\"mordor.arrived\" let:hobbit=\"Frodo\"/>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.fire"
+}

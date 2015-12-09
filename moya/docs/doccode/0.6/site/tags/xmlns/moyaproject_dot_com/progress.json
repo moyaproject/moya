@@ -1,0 +1,97 @@
+{
+    "name": "progress",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "progress",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Like a for loop but renders an ascii progress bar in the console, which will look something like the following:\n\n    [code]\n    [###        ] 30% working...\n    [/code]\n\n    This is useful for commands that may take some time to execute.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "render an ascii progress bar",
+        "tag_name": "progress",
+        "params": {
+            "filter": {
+                "default_display": "yes",
+                "name": "filter",
+                "missing": true,
+                "default": true,
+                "doc": "If given, then only those values which match this condition will cause the enclosed block to execute.",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "msg": {
+                "default_display": "\"working...\"",
+                "name": "msg",
+                "missing": true,
+                "default": "working...",
+                "doc": "Message on progress bar",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": true,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "steps": {
+                "default_display": "",
+                "name": "steps",
+                "missing": true,
+                "default": null,
+                "doc": "Number of steps in the sequence",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.progress"
+}

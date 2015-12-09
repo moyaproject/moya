@@ -1,0 +1,81 @@
+{
+    "name": "markup",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "markup",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/markup.py",
+        "doc": "Insert markup in to content",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "insert markup in to content",
+        "tag_name": "markup",
+        "params": {
+            "source": {
+                "default_display": "None",
+                "name": "source",
+                "missing": true,
+                "default": null,
+                "doc": "Markup source",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "type": {
+                "default_display": "",
+                "name": "type",
+                "missing": true,
+                "default": "bbcode",
+                "doc": "Markup type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "markdown",
+                    "bbcode",
+                    "moya",
+                    "text",
+                    "summary",
+                    "html",
+                    "markupbasetype"
+                ]
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "obj": {
+                "default_display": "",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "Object to render",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.markup"
+}

@@ -1,0 +1,67 @@
+{
+    "name": "log-debug",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "log-debug",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "See [tag]log[/tag]",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "write information to the log",
+        "tag_name": "log-debug",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "logger": {
+                "default_display": "",
+                "name": "logger",
+                "missing": true,
+                "default": null,
+                "doc": "Logger to write to",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "level": {
+                "default_display": "",
+                "name": "level",
+                "missing": true,
+                "default": null,
+                "doc": "Logging level",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "info",
+                    "warn",
+                    "warning",
+                    "error",
+                    "debug",
+                    "fatal"
+                ]
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.log-debug"
+}

@@ -1,0 +1,539 @@
+{
+    "name": "moyaproject_dot_com_test_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "case",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "A unit test inside a <suite>",
+                "prev_tag": "tear-down",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "case",
+                "next_tag": "fail",
+                "synopsis": "define a test case",
+                "params": {
+                    "slow": {
+                        "default_display": "no",
+                        "name": "slow",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Is this test slow?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": "",
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Short description of test suite",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "fail",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Note a failed test",
+                "prev_tag": "case",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "fail",
+                "next_tag": "get-response",
+                "synopsis": "fail a test case",
+                "params": {},
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-response",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": null,
+                "prev_tag": "fail",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "get-response",
+                "next_tag": "load-project",
+                "synopsis": "get a test response",
+                "params": {
+                    "project": {
+                        "default_display": "\".project\"",
+                        "name": "project",
+                        "missing": true,
+                        "default": ".project",
+                        "doc": "Request object",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "request": {
+                        "default_display": "\"request\"",
+                        "name": "request",
+                        "missing": true,
+                        "default": "request",
+                        "doc": "request object",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "load-project",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Load a moya project",
+                "prev_tag": "get-response",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "load-project",
+                "next_tag": "request",
+                "synopsis": "load a project for testing",
+                "params": {
+                    "settings": {
+                        "default_display": "\"settings.ini\"",
+                        "name": "settings",
+                        "missing": true,
+                        "default": "settings.ini",
+                        "doc": "Settings path within project",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "location": {
+                        "default_display": "\"./testproject\"",
+                        "name": "location",
+                        "missing": true,
+                        "default": "./testproject",
+                        "doc": "Project location (relative to library)",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "server": {
+                        "default_display": "\"main\"",
+                        "name": "server",
+                        "missing": true,
+                        "default": "main",
+                        "doc": "Server name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "request",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Create a mock request",
+                "prev_tag": "load-project",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "request",
+                "next_tag": "require",
+                "synopsis": "make a mock request",
+                "params": {
+                    "url": {
+                        "default_display": "\"/\"",
+                        "name": "url",
+                        "missing": true,
+                        "default": "/",
+                        "doc": "URL for request",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "query": {
+                        "default_display": "None",
+                        "name": "query",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Query data",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "default_environ": {
+                        "default_display": "yes",
+                        "name": "default_environ",
+                        "missing": true,
+                        "default": true,
+                        "doc": "build a default WSGI environ?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "environ": {
+                        "default_display": "None",
+                        "name": "environ",
+                        "missing": true,
+                        "default": null,
+                        "doc": "WSGI environment",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "method": {
+                        "default_display": "\"GET\"",
+                        "name": "method",
+                        "missing": true,
+                        "default": "GET",
+                        "doc": "Request method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "GET",
+                            "POST",
+                            "HEAD",
+                            "PUT"
+                        ]
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "require",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Check code throws an exception",
+                "prev_tag": "request",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "require",
+                "next_tag": "set-up",
+                "synopsis": "require an exception to be thrown in a test case",
+                "params": {
+                    "exception": {
+                        "default_display": "\"*\"",
+                        "name": "exception",
+                        "missing": true,
+                        "default": "*",
+                        "doc": "Type of exception to catch",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "set-up",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Logic to set up unit tests. Must be inside a <suite>",
+                "prev_tag": "require",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "set-up",
+                "next_tag": "suite",
+                "synopsis": "setup code for a test suite",
+                "params": {},
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "suite",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "A suite of unit tests",
+                "prev_tag": "set-up",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "suite",
+                "next_tag": "tear-down",
+                "synopsis": "define a suite of test cases",
+                "params": {
+                    "slow": {
+                        "default_display": "no",
+                        "name": "slow",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Are these tests slow to run?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "group": {
+                        "default_display": "",
+                        "name": "group",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Test group",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "description": {
+                        "default_display": "",
+                        "name": "description",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Short description of test suite",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "tear-down",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_test",
+                "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+                "doc": "Logic to tear down a unit test suite. Must be inside a <suite>",
+                "prev_tag": "suite",
+                "namespace": "http://moyaproject.com/test",
+                "tag_name": "tear-down",
+                "synopsis": "tear down (finalize) code for a test suite",
+                "params": {},
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/test",
+        "namespace_doc": "\n        Tags to build unit tests.\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/test.moyaproject_dot_com_test_index"
+}

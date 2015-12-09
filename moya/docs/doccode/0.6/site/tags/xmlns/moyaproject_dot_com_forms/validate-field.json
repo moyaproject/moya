@@ -1,0 +1,49 @@
+{
+    "name": "validate-field",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "validate-field",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nDefine validation code for a field in a form.\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "validate a field in a form",
+        "tag_name": "validate-field",
+        "params": {
+            "field": {
+                "default_display": "",
+                "name": "field",
+                "missing": true,
+                "default": null,
+                "doc": "Field name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <validate-field field=\"price\">\n            <fail if=\"value lte 0>\n                Price must be greater than 0.00.\n            </fail>\n        </validate-field>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.validate-field"
+}

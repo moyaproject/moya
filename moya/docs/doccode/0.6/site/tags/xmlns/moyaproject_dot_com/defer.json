@@ -1,0 +1,73 @@
+{
+    "name": "defer",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "defer",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Defer to a given element, such as a [tag]macro[/tag]. [i]Deferring[/i] to a macro is similar to calling it, but no new [i]scope[/i] is created. This means that the macro has access to the same variables where defer was called.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "jump to another element",
+        "tag_name": "defer",
+        "params": {
+            "to": {
+                "default_display": "",
+                "name": "to",
+                "missing": true,
+                "default": null,
+                "doc": "Element reference",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "element": {
+                "default_display": "None",
+                "name": "element",
+                "missing": true,
+                "default": null,
+                "doc": "Element",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <macro docname=\"board\">\n            <echo>${character} is on board</echo>\n        </macro>\n\n        <macro docname=\"main\">\n            <let crew=\"['John', 'Rygel', 'Scorpius']\"/>\n            <for src=\"crew\" dst=\"character\">\n                <defer to=\"board\"/>\n            </for>\n        </macro>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.defer"
+}

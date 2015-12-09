@@ -1,0 +1,32 @@
+{
+    "name": "introduction",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Introduction]\n\nMoya is a [i]web application server[/i], which may be used to build dynamic, database-driven websites.\n\n[aside]It wouldn't be accurate to refer to Moya as a [i]web framework[/i] for Python. Moya is written in Python, and can be [i]extended[/i] in Python, but it is not Python that is used to build content. Moya has it's own executable code (Moya code) which is used for content development. However, since it solves the same problems as a web framework, it may be convenient to include it in that category for sake of discussion.[/aside]\n\n[h1]Foreword[/h1]\n\nDevelopers aren't short of ways to build dynamic web sites. There are frameworks and tools to suite every programming language and style -- whether you want a blessed solution to every problem or prefer to mix and match components. So why another way to serve a website?\n\nMoya was borne out of frustration with Python frameworks. Most developers will recognize the phenomena of repetitive [i]patterns[/i] in code. Often they aren't quite similar enough to factor out, but close enough to make it feel like you are repeating yourself. Moya attempts to reduce repetition by making the [i]building blocks[/i] of web development work harder for the developer, while allowing the details to be customized.\n\nMoya adopts the guideline of \"don't make me think\" from the user interface world. Each detail a developer has to commit to memory places a tiny burden on mental compute power that could otherwise be spent on solving the interesting problems -- the problems that make programming enjoyable. Moya attempts to reduce interruptions in the thought process to a bear minimum, so there is less to google for and more that just works as expected.\n\nAnother of Moya's guiding principals is that error messages should go above and beyond what developers have become accustomed to. Wherever possible Moya will let you know where the error [i]really[/i] occurred, and what the problem is -- rather than requiring you to interpret some side effect of the bug. In many cases, Moya can also diagnose the problem itself and propose a solution.\n\nMoya is a relatively young project (although it has been in development since 2011), and may not fully succeed in all its goals. But things are moving fast, and we believe that Moya is already healthy competition for the big web technologies.\n\n[h1]Getting Help[/h1]\n\nHelp is available through the following channels:\n\n[h1]Commercial Support[/h1]\n\nCommercial support is available for Moya.\n\n[h1]Credits[/h1]\n\nMoya benefits greatly from the following projects:",
+        "name": "introduction",
+        "docmap": [
+            [
+                1,
+                "Foreword"
+            ],
+            [
+                1,
+                "Getting Help"
+            ],
+            [
+                1,
+                "Commercial Support"
+            ],
+            [
+                1,
+                "Credits"
+            ]
+        ],
+        "title": "Introduction"
+    },
+    "id": "doc.introduction"
+}

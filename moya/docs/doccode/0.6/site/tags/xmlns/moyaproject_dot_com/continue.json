@@ -1,0 +1,36 @@
+{
+    "name": "continue",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "continue",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "When Moya encounters this tag in a loop, such as [tag]while[/tag] or [tag]for[/tag], it ignores the remaining code in the block and [i]continues[/i] to the next item in the loop.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "skip remaining code in a loop",
+        "tag_name": "continue",
+        "params": {},
+        "example": "\n\n        <let crew=\"['John', 'Rygel', 'Scorpius', 'Aeryn']\"/>\n        <for src=\"crew\" dst=\"character\">\n            <if test=\"character == 'Scorpius'\">\n                <echo>Scorpius is not allowed on board!</eco>\n                <continue/>\n            </if>\n            <echo>${character} is on board</echo>\n        </for>\n\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.continue"
+}

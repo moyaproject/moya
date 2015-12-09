@@ -1,0 +1,36 @@
+{
+    "name": "else",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "else",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Execute the enclosed block if a previous [tag]if[/tag] statement is false.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "execute a block if the previous <if> statement is false",
+        "tag_name": "else",
+        "params": {},
+        "example": "\n<if test=\"coffee==0\">\n    <echo>Get more coffee</echo>\n</if>\n<else>\n    <echo>Have a cup of coffee</echo>\n</else>\n\n",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.else"
+}

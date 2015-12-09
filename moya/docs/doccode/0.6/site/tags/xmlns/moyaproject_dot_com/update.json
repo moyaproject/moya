@@ -1,0 +1,61 @@
+{
+    "name": "update",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "update",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Update a dictionary (or other mapping collection) with keys and values from another dictionary.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add new values to a dictionary",
+        "tag_name": "update",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Collection to update",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "values": {
+                "default_display": "None",
+                "name": "values",
+                "missing": true,
+                "default": null,
+                "doc": "Values to update with",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <dict dst=\"species\"/>\n        <update dst=\"species\" src=\"john='human', scorpius='unknown'\"/>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.update"
+}

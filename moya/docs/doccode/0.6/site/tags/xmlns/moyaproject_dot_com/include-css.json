@@ -1,0 +1,97 @@
+{
+    "name": "include-css",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "include-css",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nAdd a CSS path to be included in the content. The list of paths will be added to a value called [c]include[/c] when the template is rendered. Here's an example:\n\n[code xml]\n<content libname=\"content.front\" template=\"front.html\">\n    <include-css path=\"css/news.css\" />\n</content>\n[/code]\n\nThe CSS paths can be rendered in a template as follows:\n\n[code moyatemplate]\n{% render include.css %}\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "include CSS with content",
+        "tag_name": "include-css",
+        "params": {
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "External URL",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "media": {
+                "default_display": "\"media\"",
+                "name": "media",
+                "missing": true,
+                "default": "media",
+                "doc": "Media name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "type": {
+                "default_display": "\"css\"",
+                "name": "type",
+                "missing": true,
+                "default": "css",
+                "doc": "Type of link",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path to CSS",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.include-css"
+}

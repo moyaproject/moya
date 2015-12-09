@@ -1,0 +1,72 @@
+{
+    "name": "markdown",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "markdown",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/markup.py",
+        "doc": "Add markdown to content",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add markdown to content",
+        "tag_name": "markdown",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "dedent": {
+                "default_display": "yes",
+                "name": "dedent",
+                "missing": true,
+                "default": true,
+                "doc": "De-dent source (remove common leading whitespace)?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "source": {
+                "default_display": "None",
+                "name": "source",
+                "missing": true,
+                "default": null,
+                "doc": "Markup source",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "obj": {
+                "default_display": "",
+                "name": "obj",
+                "missing": true,
+                "default": null,
+                "doc": "Object to render",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.markdown"
+}

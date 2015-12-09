@@ -1,0 +1,121 @@
+{
+    "name": "url",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "url",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "\nAdd a URL route to a [tag]mountpoint[/tag].\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add a url to a mountpoint",
+        "tag_name": "url",
+        "params": {
+            "methods": {
+                "default_display": "GET,POST",
+                "name": "methods",
+                "missing": true,
+                "default": "GET,POST",
+                "doc": "A list of comma separated HTTP methods",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "mount": {
+                "default_display": "",
+                "name": "mount",
+                "missing": true,
+                "default": null,
+                "doc": "Mountpoint to mount on this url",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "handler": {
+                "default_display": "",
+                "name": "handler",
+                "missing": true,
+                "default": [],
+                "doc": "A list of comma separated http status codes",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "mountpoint": {
+                "default_display": "",
+                "name": "mountpoint",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the parent mount point",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "view": {
+                "default_display": "",
+                "name": "view",
+                "missing": true,
+                "default": null,
+                "doc": "View element",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "route": {
+                "default_display": "",
+                "name": "route",
+                "missing": true,
+                "default": null,
+                "doc": "URL route",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "An optional name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.url"
+}

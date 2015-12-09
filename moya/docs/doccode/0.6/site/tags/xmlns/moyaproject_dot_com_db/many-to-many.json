@@ -1,0 +1,192 @@
+{
+    "name": "many-to-many",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "many-to-many",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": null,
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "define a many to may relationship",
+        "tag_name": "many-to-many",
+        "params": {
+            "orderby": {
+                "default_display": "\"id\"",
+                "name": "orderby",
+                "missing": true,
+                "default": "id",
+                "doc": "Default order for admin forms",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "picker": {
+                "default_display": "",
+                "name": "picker",
+                "missing": true,
+                "default": null,
+                "doc": "Admin table to use as a picker control",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "",
+                "name": "lazy",
+                "missing": true,
+                "default": null,
+                "doc": "Specifies how related items should be loaded",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the relationship",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "backlabel": {
+                "default_display": "",
+                "name": "backlabel",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of backref purpose, if used",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "search": {
+                "default_display": "",
+                "name": "search",
+                "missing": true,
+                "default": null,
+                "doc": "DB query referencing search field q",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "label": {
+                "default_display": "",
+                "name": "label",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of field purpose",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "keys": {
+                "default_display": "",
+                "name": "keys",
+                "missing": true,
+                "default": null,
+                "doc": "Foreign keys in association table",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "through": {
+                "default_display": "",
+                "name": "through",
+                "missing": true,
+                "default": null,
+                "doc": "Through model",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "backpicker": {
+                "default_display": "",
+                "name": "backpicker",
+                "missing": true,
+                "default": null,
+                "doc": "Admin table to use as a picker control for the other side of the relationship",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": null,
+                "doc": "Model",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "backref": {
+                "default_display": "",
+                "name": "backref",
+                "missing": true,
+                "default": null,
+                "doc": "Back reference",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "options": {
+                "default_display": "",
+                "name": "options",
+                "missing": true,
+                "default": null,
+                "doc": "Objects to consider in admin forms",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "help": {
+                "default_display": "",
+                "name": "help",
+                "missing": true,
+                "default": null,
+                "doc": "Additional help text for use in object forms",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "<many-to-many name=\"following\" backref=\"followers\" model=\"moya.auth#User\"/>",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com/db.many-to-many"
+}

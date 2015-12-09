@@ -1,0 +1,97 @@
+{
+    "name": "load-project",
+    "doc_namespace": "xmlns.http://moyaproject.com/test",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "load-project",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_test",
+        "defined": "/home/will/projects/moya/moya/tags/unittest.py",
+        "doc": "Load a moya project",
+        "namespace": "http://moyaproject.com/test",
+        "synopsis": "load a project for testing",
+        "tag_name": "load-project",
+        "params": {
+            "settings": {
+                "default_display": "\"settings.ini\"",
+                "name": "settings",
+                "missing": true,
+                "default": "settings.ini",
+                "doc": "Settings path within project",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "location": {
+                "default_display": "\"./testproject\"",
+                "name": "location",
+                "missing": true,
+                "default": "./testproject",
+                "doc": "Project location (relative to library)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "server": {
+                "default_display": "\"main\"",
+                "name": "server",
+                "missing": true,
+                "default": "main",
+                "doc": "Server name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/test.load-project"
+}

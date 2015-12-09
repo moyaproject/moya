@@ -1,0 +1,49 @@
+{
+    "name": "do",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "do",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Repeat a block of code until a condition becomes true, or a [tag]break[/tag] is reached.\n\n    Not that, unlike [tag]while[/tag] this tag will execute the enclosed block at least once.\n\n    If the [c]until[/c] attribute isn't given, the enclosed block will be executed just once.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "repeat a block until a condition becomes true",
+        "tag_name": "do",
+        "params": {
+            "until": {
+                "default_display": "None",
+                "name": "until",
+                "missing": true,
+                "default": null,
+                "doc": "Condition",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n\n        <let i=\"1\"/>\n        <do until=\"i==2\">\n            <echo>${i}</echo>\n            <let i=\"i+1\"/>\n        </do>\n        <!-- prints \"1\" -->\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.do"
+}

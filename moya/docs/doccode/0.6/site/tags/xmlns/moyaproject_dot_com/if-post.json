@@ -1,0 +1,36 @@
+{
+    "name": "if-post",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "if-post",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nExecutes the enclosing block if the current request is a POST request.\n\nBasically a shorthand for:\n\n[code xml]<if test=\".request.method=='POST'\">[/code]\n\nMay be followed by [tag]else[/tag] or [tag]elif[/tag].\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "execute a block if this is a POST request",
+        "tag_name": "if-post",
+        "params": {},
+        "example": "<if-post>\n    <!-- validate form -->\n</if-post>\n<else>\n    <!-- not a post request -->\n</else>",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.if-post"
+}

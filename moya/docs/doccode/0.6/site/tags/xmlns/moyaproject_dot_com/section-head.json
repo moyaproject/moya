@@ -1,0 +1,77 @@
+{
+    "name": "section-head",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "section-head",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add a 'head' content section",
+        "tag_name": "section-head",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "merge": {
+                "default_display": "\"inherit\"",
+                "name": "merge",
+                "missing": true,
+                "default": "inherit",
+                "doc": "Merge method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "inherit",
+                    "append",
+                    "prepend",
+                    "replace"
+                ]
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "The name of the section",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.section-head"
+}

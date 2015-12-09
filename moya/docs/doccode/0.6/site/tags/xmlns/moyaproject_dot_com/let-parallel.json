@@ -1,0 +1,60 @@
+{
+    "name": "let-parallel",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "let-parallel",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nSets multiple variables in parallel.\n\nLike [tag]let[/tag], this tag sets values to the results of expressions, but evaluates all the expressions before assignment.\n\nOne use for this, is to [i]swap[/i] variables without using an intermediate.\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "set values in parallel.",
+        "tag_name": "let-parallel",
+        "params": {},
+        "example": "\n        <str dst=\"a\">foo</str>\n        <str dst=\"b\">bar</str>\n        <let-parallel a=\"b\" b=\"a\" />\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.let-parallel"
+}

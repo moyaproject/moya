@@ -1,0 +1,36 @@
+{
+    "name": "admin-only",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "admin-only",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "\nRespond with a forbidden response if the user is not admin.\n\nThis tag is a shortcut for the following:\n\n[code xml]\n<forbidden if=\"not .permissions.admin\"/>\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "return a forbidden response if the user is not admin",
+        "tag_name": "admin-only",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.admin-only"
+}

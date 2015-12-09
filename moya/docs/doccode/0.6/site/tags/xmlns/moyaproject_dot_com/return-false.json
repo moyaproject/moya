@@ -1,0 +1,36 @@
+{
+    "name": "return-false",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "return-false",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nA shortcut to return False.\n\nThe following two lines are equivalent:\n\n[code xml]\n<return-false/>\n<return value=\"no\" />\n[/code]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "shortcut to return false",
+        "tag_name": "return-false",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.return-false"
+}

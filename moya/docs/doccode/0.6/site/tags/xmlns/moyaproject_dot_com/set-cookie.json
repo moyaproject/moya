@@ -1,0 +1,145 @@
+{
+    "name": "set-cookie",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set-cookie",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/cookie.py",
+        "doc": "Set a new cookie.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "set a cookie",
+        "tag_name": "set-cookie",
+        "params": {
+            "comment": {
+                "default_display": "",
+                "name": "comment",
+                "missing": true,
+                "default": null,
+                "doc": "Comment",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "domain": {
+                "default_display": "",
+                "name": "domain",
+                "missing": true,
+                "default": null,
+                "doc": "Domain",
+                "required": false,
+                "type": "text",
+                "metavar": "DOMAIN",
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Cookie name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "maxage": {
+                "default_display": "",
+                "name": "maxage",
+                "missing": true,
+                "default": null,
+                "doc": "Max age of cookie (in seconds or as timespan)",
+                "required": false,
+                "type": "timespan",
+                "metavar": "AGE",
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "httponly": {
+                "default_display": "no",
+                "name": "httponly",
+                "missing": true,
+                "default": false,
+                "doc": "HTTP Only?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "path": {
+                "default_display": "\"/\"",
+                "name": "path",
+                "missing": true,
+                "default": "/",
+                "doc": "Path",
+                "required": false,
+                "type": "text",
+                "metavar": "PATH",
+                "empty": true,
+                "choices": null
+            },
+            "overwrite": {
+                "default_display": "",
+                "name": "overwrite",
+                "missing": true,
+                "default": false,
+                "doc": "Overwrite?",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "secure": {
+                "default_display": "no",
+                "name": "secure",
+                "missing": true,
+                "default": false,
+                "doc": "Secure",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n            <set-cookie name=\"session\" value=\"${session.key}\" overwrite=\"yes\" />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.set-cookie"
+}

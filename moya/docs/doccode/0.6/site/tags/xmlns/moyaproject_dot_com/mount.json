@@ -1,0 +1,85 @@
+{
+    "name": "mount",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "mount",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Mount a library.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "mount a library on a given URL",
+        "tag_name": "mount",
+        "params": {
+            "priority": {
+                "default_display": "0",
+                "name": "priority",
+                "missing": true,
+                "default": 0,
+                "doc": "Priority (highest priority is checked first)",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "mountpoint": {
+                "default_display": "\"main\"",
+                "name": "mountpoint",
+                "missing": true,
+                "default": "main",
+                "doc": "Mount point",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "app": {
+                "default_display": "",
+                "name": "app",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "url": {
+                "default_display": "",
+                "name": "url",
+                "missing": true,
+                "default": null,
+                "doc": "Url",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.mount"
+}

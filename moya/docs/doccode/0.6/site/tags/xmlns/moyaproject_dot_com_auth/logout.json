@@ -1,0 +1,85 @@
+{
+    "name": "logout",
+    "doc_namespace": "xmlns.http://moyaproject.com/auth",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "logout",
+        "lib": "moya.auth",
+        "namespace_slug": "moyaproject_dot_com_auth",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 95)",
+        "doc": "Log out the currently logged in user, or a given user",
+        "namespace": "http://moyaproject.com/auth",
+        "synopsis": "log out a user",
+        "tag_name": "logout",
+        "params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "user": {
+                "default_display": "None",
+                "name": "user",
+                "missing": true,
+                "default": "None",
+                "doc": "",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/auth.logout"
+}

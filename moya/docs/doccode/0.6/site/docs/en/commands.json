@@ -1,0 +1,28 @@
+{
+    "name": "commands",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Commands]\n\nMoya [i]commands[/i] are a way to write code that may be invoked from the command line. This allows you to write tools that you don't need (or want) to write an HTML user interface for. Commands also allow you to automate project actions with the standard tools your operating system provides.\n\n[h1]Calling Commands[/h1]\n\nYou may already have used a command, if you have run through the tutorial. The following command line is an example of running a command in the [c]auth[/c] application:\n\n[code]\n$ moya auth#cmd.init\n[/code]\n\nIf the first argument to the [c]moya[/c] command contains a hash ([c]#[/c]), moya treats it as an element reference, and runs the command associated with that element.\n\nIf you omit the text after the [c]#[/c], Moya will give you a table of the available commands. For example, run the following to list all the commands in the [c]auth[/c] application:\n\n[code]\n$ moya auth#\n[/code]\n\nIf you add a [c]-h[/c] switch after a command, Moya will show you the help text and options associated with the command. For example:\n\n[code]\n$ moya auth#cmd.listusers -h\n[/code]\n\n[h1]Creating Commands[/h1]\n\nTo create a command, use the [tag]command[/tag] tag. The [c]libname[/c] is used to identify the command at the prompt, and the [c]synopisis[/c] attribute is used when generating documentation. The code inside the [tag]command[/tag] is run when the command is invoked. Here's an example of a very simple command:\n\n[code xml]\n<command libname=\"cmd.sayhello\" synopsis=\"test command\">\n    <doc>Simple example of a command.</doc>\n    <echo>Hello</Echo>\n</command>\n[/code]\n\nIf the command above was in a library installed as [c]example[/c], you could run the command with the following:\n\n[code xml]\n$ moya example#cmd.sayhello\n[/code]\n\nThis should result in the text [c]Hello[/c] being written to the terminal.\n\nCode in a command has full access to the project environment, so you may query the database for example. You will be missing context values related to a request, such as [c].request[/c] itself, since no request is involved when running a command. Tags that depend on such context values may not work as expected.\n\n[h1]Switches and Options[/h1]\n\nYou can add arguments and options to a command to create a more flexible command line interface. Let's add an argument to the example command which allows you to provide a name to greet:\n\n[code xml]\n<command libname=\"cmd.sayhello\" synopsis=\"test command\">\n    <doc>Simple example of a command.</doc>\n    <signature>\n        <arg name=\"name\" metavar=\"NAME\" help=\"A name to greet\" />\n    </signature>\n    <echo>Hello, ${args.name}!</Echo>\n</command>\n[/code]\n\nThe [tag]arg[/tag] tag adds a required argument to the command line. Here's how you cold invoke it:\n\n[code]\n$ moya example#cmd.sayhello John\n[/code]\n\nWhen the above command line runs, Moya creates an object called [c]args[/c], containing arguments parsed from the command line. So [c]args.name[/c] would be set to [c]John[/c], and you would see [c]Hello, John![/c] in the terminal.\n\nYou may add as many arguments as needed inside the [tag]signature[/tag] tag. You can also add [tag]option[/tag] tags which, as the name suggests, are [i]optional[/i]. If you don't include an option, then the value in [c]args[/c] will be set to a default value (if supplied) or to [c]None[/c].\n\nLet's modify the example command to take an option:\n\n[code xml]\n<command libname=\"cmd.sayhello\" synopsis=\"test command\">\n    <doc>Simple example of a command.</doc>\n    <signature>\n        <option name=\"name\" metavar=\"NAME\" help=\"A name to greet\" default=\"User\" />\n    </signature>\n    <echo>Hello, ${args.name}!</Echo>\n</command>\n[/code]\n\nYou can now invoke the command with the following:\n\n[code]\n$ moya example#cmd.sayhello --name John\n[/code]\n\nThis will write the text [c]Hello, John![/c] to the console.\n\nIf you omit the option from the command line, then the [c]args.name[/c] will contain the default value of [c]User[/c], and the command will write the text [c]Hello, User![/c] to the console. Most commands will use a combination of [tag]arg[/tag] and [tag]option[/tag] to create a fully featured command interface.",
+        "name": "commands",
+        "docmap": [
+            [
+                1,
+                "Calling Commands"
+            ],
+            [
+                1,
+                "Creating Commands"
+            ],
+            [
+                1,
+                "Switches and Options"
+            ]
+        ],
+        "title": "Commands"
+    },
+    "id": "doc.commands"
+}

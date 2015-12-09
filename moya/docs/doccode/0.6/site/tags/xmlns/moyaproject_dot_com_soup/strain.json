@@ -1,0 +1,157 @@
+{
+    "name": "strain",
+    "doc_namespace": "xmlns.http://moyaproject.com/soup",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "strain",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_soup",
+        "defined": "/home/will/projects/moya/moya/tags/soup.py",
+        "doc": "\nManipulate HTML with CSS selectors.\n\nThe [c]select[/c] attribute should be a CSS selector which will filter tags from the [c]src[/c] string. The other attributes define what should happen to the matches tags.\n\nThe following example defines a [tag]filter[/tag] which uses [tag]{soup}strain[/tag] to add [c]class=\"lead\"[/c] to the first paragraph of HTML:\n\n[code xml]\n<filter name=\"leadp\" value=\"html\">\n    <doc>Add class=\"lead\" to first paragraph</doc>\n    <soup:strain src=\"html\" select=\"p\" max=\"1\" let:class=\"'lead'\" dst=\"leadp\"/>\n    <return value=\"html:leadp\"/>\n</filter>\n[/code]\n\n",
+        "namespace": "http://moyaproject.com/soup",
+        "synopsis": "modify HTML with CSS selectors",
+        "tag_name": "strain",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "HTML document or fragment",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "max": {
+                "default_display": "",
+                "name": "max",
+                "missing": true,
+                "default": null,
+                "doc": "Maximum number of tags to match",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "remove": {
+                "default_display": "",
+                "name": "remove",
+                "missing": true,
+                "default": null,
+                "doc": "Remove matched element?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "replace": {
+                "default_display": "None",
+                "name": "replace",
+                "missing": true,
+                "default": null,
+                "doc": "markup to replace",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Filter by attributes",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "select": {
+                "default_display": "\"*\"",
+                "name": "select",
+                "missing": true,
+                "default": "*",
+                "doc": "CSS selector",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "prepend": {
+                "default_display": "None",
+                "name": "prepend",
+                "missing": true,
+                "default": null,
+                "doc": "markup to prepend",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "append": {
+                "default_display": "None",
+                "name": "append",
+                "missing": true,
+                "default": null,
+                "doc": "markup to append",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/soup.strain"
+}

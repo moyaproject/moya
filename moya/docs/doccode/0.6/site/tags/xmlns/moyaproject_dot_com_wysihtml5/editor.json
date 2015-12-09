@@ -1,0 +1,133 @@
+{
+    "name": "editor",
+    "doc_namespace": "xmlns.http://moyaproject.com/wysihtml5",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "editor",
+        "lib": "moya.wysihtml5",
+        "namespace_slug": "moyaproject_dot_com_wysihtml5",
+        "defined": "/home/will/projects/moya/moya/libs/wysihtml5/logic/widgets.xml (line 6)",
+        "doc": "A rich text editor.\n\n            The [c]buttons[/c] and [c]rbuttons[/c] attributes may be used to configure the row of buttons at the top of the editor. You can set them to a comma separated list of the following possible values:\n\n            [definitions]\n            [define bold]Bold [b]text[/b][/define]\n            [define italic]Italic [i]text[/i][/define]\n            [define underline]Underline [u]text[/u][/define]\n            [define strike]Strikethrough [s]text[/s][/define]\n            [define h1 - h7]Header level 1 through 7[/define]\n            [define ol]Ordered List[/define]\n            [define ul]Unordered List[/define]\n            [define left]Left align[/define]\n            [define center]Center align[/define]\n            [define right]Right align[/define]\n            [define justify]Justify text[/define]\n            [define quote]Block quote[/define]\n            [define link]Insert a link[/define]\n            [define image]Insert an image[/define]\n            [define view]Switch between rich text and markup view[/define]\n            [/definitions]\n\n            You can also add a bar symbol ([b]|[/b]) which will insert a divider between the buttons.\n\n            The default for buttons is to have all text controls on the left, and the view button on the right.",
+        "namespace": "http://moyaproject.com/wysihtml5",
+        "synopsis": null,
+        "tag_name": "editor",
+        "params": {
+            "rows": {
+                "default_display": "12",
+                "name": "rows",
+                "missing": true,
+                "default": "12",
+                "doc": "Number of rows.",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": "",
+                "doc": "The name attribute of the textarea.",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "breaks": {
+                "default_display": "no",
+                "name": "breaks",
+                "missing": true,
+                "default": "no",
+                "doc": "Use line breaks?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "buttons": {
+                "default_display": "bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image",
+                "name": "buttons",
+                "missing": true,
+                "default": "bold,italic,underline,strike,|,h1,h2,h3,|,ol,ul,|,left,center,right,justify,|,quote,|,link,image",
+                "doc": "A list of buttons.",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Override widget template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "placeholder": {
+                "default_display": "",
+                "name": "placeholder",
+                "missing": true,
+                "default": "",
+                "doc": "Placeholder text to display in empty editor",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "rbuttons": {
+                "default_display": "view",
+                "name": "rbuttons",
+                "missing": true,
+                "default": "view",
+                "doc": "A list of buttons on the right hand side.",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/wysihtml5.editor"
+}

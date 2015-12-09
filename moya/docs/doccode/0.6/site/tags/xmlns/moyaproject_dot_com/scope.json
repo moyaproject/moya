@@ -1,0 +1,49 @@
+{
+    "name": "scope",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "scope",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Creates a new temporary [i]scope[/i] from an object.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a temporary scope",
+        "tag_name": "scope",
+        "params": {
+            "object": {
+                "default_display": "None",
+                "name": "object",
+                "missing": true,
+                "default": null,
+                "doc": "Object",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <dict dst=\"species\">\n            <let john=\"human\"/>\n            <let rygel=\"hynerian\"/>\n        </dict>\n        <scope object=\"species\">\n            John is a ${john}, Rygel is a ${rygel}\n        </scope>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.scope"
+}

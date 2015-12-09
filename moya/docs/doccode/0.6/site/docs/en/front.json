@@ -1,0 +1,15 @@
+{
+    "name": "front",
+    "doc_namespace": "doc",
+    "doc_class": "front",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[class front]\n[title Moya Tutorial]\n",
+        "class": "front",
+        "name": "front",
+        "title": "Moya Tutorial"
+    },
+    "id": "doc.front"
+}

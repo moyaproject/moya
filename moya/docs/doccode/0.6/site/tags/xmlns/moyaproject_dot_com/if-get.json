@@ -1,0 +1,36 @@
+{
+    "name": "if-get",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "if-get",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nExecutes the enclosing block if the current request is a GET request.\n\nBasically a shorthand for:\n\n[code xml]<if test=\".request.method=='GET'\">[/code]\n\nMay be followed by [tag]else[/tag] or [tag]elif[/tag].\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "exectute a block if this is a GET request",
+        "tag_name": "if-get",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.if-get"
+}

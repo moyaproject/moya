@@ -1,0 +1,49 @@
+{
+    "name": "commit",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "commit",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nCommit any pending transaction. This will [i]flush[/i] db operations to the database. If you have create new objects and you want to know their [i]primary key[/i] (id), you will need to commit them to the database.\n\nNote, that if this tag is called from within a [tag db]transaction[/tag] tag, nothing will be committed until the end of the [tag db]transaction[/tag].\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "commit the current transaction",
+        "tag_name": "commit",
+        "params": {
+            "db": {
+                "default_display": "\"_default\"",
+                "name": "db",
+                "missing": true,
+                "default": "_default",
+                "doc": "Database",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <db:create model=\"model.shorturl\" obj=\"form.data\" dst=\"shorturl\"/>\n        <db:commit />\n        <echo>${shorturl.id}</echo>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/db.commit"
+}

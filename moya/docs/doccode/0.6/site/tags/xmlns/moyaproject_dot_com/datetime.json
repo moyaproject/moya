@@ -1,0 +1,133 @@
+{
+    "name": "datetime",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "datetime",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nCreate a Moya [i]datetime[/i] object.\n\nDatetime objects have the following properties:\n\n[definitions]\n    [define year]The year (integer)[/define]\n    [define month]The month (integer) (1 is January)[/define]\n    [define day]The day (integer)[/define]\n    [define hour]The hours in the time[/define]\n    [define minute]The number of minutes in the time[/define]\n    [define second]The number of seconds in the time[/define]\n    [define microseconds]The number of microseconds in the time[/define]\n    [define isoformat]The date/time in [url http://en.wikipedia.org/wiki/ISO_8601]ISO 8601[/url] format[/define]\n    [define next_day]The date/time + 24 hours[/define]\n    [define previous_day]The date/time - 24 hours[/define]\n    [define year_start]January 1st at the beginning of the year[/define]\n    [define day_start]The beginning of the day (midnight)[/define]\n    [define next_year]January 1st of the next year[/define]\n    [define next_month]First day of the next month[/define]\n    [define next_day]The start of the next day[/define]\n    [define previous_day]The start of the previous day[/define]\n    [define previous_year]Jan 1st of the previous year[/define]\n    [define previous_monthy]First date of the previous month[/define]\n    [define days_in_month]Number of days in the current month[/define]\n    [define epoch]Number of seconds since Jan 1st 1970[/define]\n    [define html5_datatime]Date/Time in HTML5 format[/define]\n    [define html5_data]Date in HTML5 format[/define]\n    [define html_time]Time in HTML5 format[/define]\n    [define utc]Date/Time in UTC timezone[/define]\n    [define local]DateTime in local timezone (references [c].tz[/c])[/define]\n[/definitions]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a date/time object",
+        "tag_name": "datetime",
+        "params": {
+            "hour": {
+                "default_display": "0",
+                "name": "hour",
+                "missing": true,
+                "default": 0,
+                "doc": "Hour",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "month": {
+                "default_display": "1",
+                "name": "month",
+                "missing": true,
+                "default": 1,
+                "doc": "Month",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "second": {
+                "default_display": "0",
+                "name": "second",
+                "missing": true,
+                "default": 0,
+                "doc": "Second",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "year": {
+                "default_display": "",
+                "name": "year",
+                "missing": true,
+                "default": null,
+                "doc": "Year",
+                "required": true,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "day": {
+                "default_display": "1",
+                "name": "day",
+                "missing": true,
+                "default": 1,
+                "doc": "Month",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "minute": {
+                "default_display": "0",
+                "name": "minute",
+                "missing": true,
+                "default": 0,
+                "doc": "Minute",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <datetime year=\"1974\" month=\"7\" day=\"5\" dst=\"birthday\" />\n        <echo>Your birthday is ${localize:birthday}</echo>\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.datetime"
+}

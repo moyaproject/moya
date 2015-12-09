@@ -1,0 +1,49 @@
+{
+    "name": "exit",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "exit",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Exit the current command. When Moya sees this tag it stops running the current command and returns an exit code. It will also write any enclosed text to the console.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "exit the current command",
+        "tag_name": "exit",
+        "params": {
+            "code": {
+                "default_display": "0",
+                "name": "code",
+                "missing": true,
+                "default": 0,
+                "doc": "Return code",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "<exit code=\"-5\" if=\"not continue\">User cancelled</exit>",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.exit"
+}

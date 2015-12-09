@@ -1,0 +1,85 @@
+{
+    "name": "map",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "map",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Create a list by mapping an expression on to a sequence",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "map an expression on to sequence",
+        "tag_name": "map",
+        "params": {
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Skip item if this expression is false",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source sequence",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <list dst=\"crew\">\n            <dict let:name=\"'john'\" let:species=\"'human'\" />\n            <dict let:name=\"'rygel'\" let:species=\"'hynerian'\" />\n            <dict let:name=\"'aeryn'\" let:species=\"'peacekeeper'\" />\n        </list>\n        <map src=\"crew\" dst=\"manifest\"\n            value=\"sub:'${title:name} is ${species}'\" />\n        <!-- ['John is human', 'Rygen is hynerian', 'Aeryn is peacekeeper'] -->\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.map"
+}

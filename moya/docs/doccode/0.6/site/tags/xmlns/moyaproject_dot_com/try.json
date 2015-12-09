@@ -1,0 +1,36 @@
+{
+    "name": "try",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "try",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Executes the enclosed block as part of a [tag]try[/tag][tag]catch[/tag] structure. ",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "detect exceptions within a block",
+        "tag_name": "try",
+        "params": {},
+        "example": "\n<try>\n    <echo>${1/0}</echo>  <!-- will throw a math exception -->\n</try>\n<catch exception=\"*\">\n    <echo>The try block threw an exception</echo>\n</catch>\n",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.try"
+}

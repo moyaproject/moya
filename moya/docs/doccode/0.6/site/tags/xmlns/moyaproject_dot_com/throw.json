@@ -1,0 +1,109 @@
+{
+    "name": "throw",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "throw",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Throw a Moya exception. An exception consists of a name in dotted notation with an optional message.\n\n    Custom exceptions should be named to start with the [i]long name[/i] of the library. Moya reserves exceptions with a single dot for internal use. These [i]may[/i] be thrown if appropriate.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "throw an exception",
+        "tag_name": "throw",
+        "params": {
+            "msg": {
+                "default_display": "\"exception thrown\"",
+                "name": "msg",
+                "missing": true,
+                "default": "exception thrown",
+                "doc": "Message",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "exception": {
+                "default_display": "",
+                "name": "exception",
+                "missing": true,
+                "default": null,
+                "doc": "Type of exception",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <try>\n            <throw exception=\"middle.earth.cant\" msg=\"One can't simply do that!\"/>\n        </try>\n        <except exception=\"middle.earth.*\" dst=\"error\">\n            <echo>Error: ${error.msg}</echo>\n        </except>\n\n        ",
+        "inherited_params": {
+            "default": {
+                "default_display": "None",
+                "name": "default",
+                "missing": true,
+                "default": null,
+                "doc": "Default return for missing keys",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "sequence": {
+                "default_display": "None",
+                "name": "sequence",
+                "missing": true,
+                "default": null,
+                "doc": "Optional sequence of key / value pairs to initialize the dict",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.throw"
+}

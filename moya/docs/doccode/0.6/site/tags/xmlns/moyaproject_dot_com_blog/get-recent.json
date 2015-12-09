@@ -1,0 +1,85 @@
+{
+    "name": "get-recent",
+    "doc_namespace": "xmlns.http://moyaproject.com/blog",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "get-recent",
+        "lib": "moya.blog",
+        "namespace_slug": "moyaproject_dot_com_blog",
+        "defined": "/home/will/projects/moya/moya/libs/blog/logic/tags.xml (line 5)",
+        "doc": "",
+        "namespace": "http://moyaproject.com/blog",
+        "synopsis": null,
+        "tag_name": "get-recent",
+        "params": {
+            "count": {
+                "default_display": "10",
+                "name": "count",
+                "missing": true,
+                "default": "10",
+                "doc": "",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/blog.get-recent"
+}

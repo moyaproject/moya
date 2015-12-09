@@ -1,0 +1,28 @@
+{
+    "name": "feedback",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Feedback]\n\nMoya Feedback creates a page to manage a [i]feedback[/i] form. The user may enter their name, email addresses, subject and message; which Moya Feedback will send to an email address configured in settings.\n\n[h1]Introduction[/h1]\n\nA feedback form is a long standing convention for allowing your visitors to contact you, [i]without[/i] using your email address directly. It is a good idea to have a feedback form on most sites.\n\n[h1]Settings[/h1]\n\nThe following settings are supported by Moya Feedback:\n\n[setting]subject_prefix = <prefix>[/setting]\n\nThis sets text that will prefix the subject entered by the users. The default is [c][feedback][/c], so if the user sends a feedback mail regarding the site it could have a subject like [c][feedback] site problems[/c].\n\n[setting]email_to = <email address>[/setting]\n\nThis is the email address where feedback should be sent.\n\n[setting]email_from = <email address>[/setting]\n\nThis is the from email that should be used in feedback emails. Note that, Moya Feedback puts the user's email address in the [c]reply-to[/c] header, so you may respond to the user's feedback by hitting Reply on your email client.\n\n[h1]Defining Subjects[/h1]\n\nThe feedback form contains a select control with the possible subjects to use in the email. The default subjects are as follows:\n\n[code]\nGeneral Feedback\nReport Abuse\nTechnical Issue\n[/code]\n\nYou can change the subjects with a data tag called [tag feedback]subject[/tag]. Simply add one or more of these tags to replace the subject list in the form. Here's an example:\n\n[code xml]\n<feedback:subject text=\"General Feedback\" />\n<feedback:subject text=\"Compliments to the Chef\" />\n<feedback:subject text=\"Where is my order?\" />\n<feedback:subject text=\"I have been hospitalized by eating your fugu-shimi\" />\n[/code]",
+        "name": "feedback",
+        "docmap": [
+            [
+                1,
+                "Introduction"
+            ],
+            [
+                1,
+                "Settings"
+            ],
+            [
+                1,
+                "Defining Subjects"
+            ]
+        ],
+        "title": "Moya Feedback"
+    },
+    "id": "doc.feedback"
+}

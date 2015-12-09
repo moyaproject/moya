@@ -1,0 +1,49 @@
+{
+    "name": "set-locale",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "set-locale",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/server.py",
+        "doc": "Switches the current locale",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "switch the current locale",
+        "tag_name": "set-locale",
+        "params": {
+            "locale": {
+                "default_display": "",
+                "name": "locale",
+                "missing": true,
+                "default": null,
+                "doc": "Locale name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.set-locale"
+}

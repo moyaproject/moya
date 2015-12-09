@@ -1,0 +1,28 @@
+{
+    "name": "deploy",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Deploying]\n\nThe webserver built in to Moya wasn't intended for a production environment. To deploy a Moya site on the internet, we need to use an external webserver which ensures that your site is scalable to a large number of visitors.\n\n[h1]Serving with WSGI[/h1]\n\nMoya uses [url http://en.wikipedia.org/wiki/Web_Server_Gateway_Interface]WSGI[/url] to serve a project with an external http (web) server. WSGI is the standard way of interfacing with Python web applications and there should be an adapter for your favorite front-end web server.\n\nThe WSGI spec requires that a site provides a Python file which exposes a WSGI [i]application[/i] object (not to be confused with Moya's applications). If you created your project with [b]moya start[/b] you should find a file called [c]wsgi.py[/c] in the top level of your project directory. This Python file should look something like the following:\n\n[code]\nfrom moya.wsgi import Application\n\napplication = Application('./', 'production.ini', server='main', logging='prodlogging.ini')\n[/code]\n\nThis tells the Moya to read the project from [c]./[/c] using settings from [c]production.ini[/c], and to serve the [tag]server[/tag] with a docname of [c]main[/c]. It also tells Moya to use logging settings from a file called [c]prodlogging.ini[/c]. Unless you want to expose multiple servers from the same project -- which is entirely possible -- you will be unlikely to change these parameters.\n\nConfiguring your http server is beyond the scope of this project: please see the server's documentation (or google) for details.\n\n[h1]Production Database[/h1]\n\nYou will probably want to use different database settings for a project in production than you have been using for development. You should put these in [c]production.ini[/c].\n\nYou can test your production settings by running a development server and using the [b]-i[/b] switch to point at the production settings. For example:\n\n[code]\n$ moya runserver -i production.ini\n[/code]\n\n[h1]Media[/h1]\n\nIt is often worthwhile letting an http server, such as Apache or Nginx, serve your static files. This is because modern http servers are very good at serving static files and it is more efficient to leave Moya serving just dynamic requests.\n\nUnfortunately such webservers won't be aware of Moya's virtual filesystems and will require that all the static files are in a single directory. If you want to serve your static media in this way, you will first have to copy the media to a single location. You can do this fairly simply with the [b]fs[/b] subcommand. For example, you can copy everything in the [c]media[/c] file system to a directory called [c]staticmedia[/c] with the following:\n\n[code]\n$ moya fs media --copy ./staticmedia\n[/code]\n\nYou will need to do this every time your media changes.",
+        "name": "deploy",
+        "docmap": [
+            [
+                1,
+                "Serving with WSGI"
+            ],
+            [
+                1,
+                "Production Database"
+            ],
+            [
+                1,
+                "Media"
+            ]
+        ],
+        "title": "Deploying"
+    },
+    "id": "doc.deploy"
+}

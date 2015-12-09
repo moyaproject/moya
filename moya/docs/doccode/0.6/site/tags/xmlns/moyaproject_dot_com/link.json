@@ -1,0 +1,61 @@
+{
+    "name": "link",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "link",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Create a [i]link[/i] in the context. Similar to a symlink in the filesystem, a link creates a variable that references another value.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "link variables",
+        "tag_name": "link",
+        "params": {
+            "src": {
+                "default_display": "",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": true,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <str dst=\"foo\">Hello</str>\n        <link src=\"foo\" dst=\"bar\" />\n        <str dst=\"bar\">World</str>\n        <echo>${foo}</bar> <!-- World -->\n        <echo>${bar}</bar> <!-- World -->\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.link"
+}

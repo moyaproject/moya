@@ -1,0 +1,108 @@
+{
+    "name": "model",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "model",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "\nDefines a database [i]model[/i], which maps data stored in a database table on to Moya objects.\n\nModels are referenced by their [i]libname[/i] in database expressions, the [c]name[/c] attribute is used when creating tables. If you convert a model instance to a string, it will return the value of the [c]repr[/c] attribute, with substitutions made with the object context.\n\n",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "define a database model",
+        "tag_name": "model",
+        "params": {
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the model (used internally by the db)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "title": {
+                "default_display": "",
+                "name": "title",
+                "missing": true,
+                "default": null,
+                "doc": "Descriptive title",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "abstract": {
+                "default_display": "no",
+                "name": "abstract",
+                "missing": true,
+                "default": false,
+                "doc": "Is the model abstract?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "db": {
+                "default_display": "",
+                "name": "db",
+                "missing": true,
+                "default": null,
+                "doc": "Database to use (default will use the default database)",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "repr": {
+                "default_display": "",
+                "name": "repr",
+                "missing": true,
+                "default": null,
+                "doc": "Text representation of a model instance (substitution will use the model as a data context)",
+                "required": false,
+                "type": "raw",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "extends": {
+                "default_display": "",
+                "name": "extends",
+                "missing": true,
+                "default": null,
+                "doc": "Extend this model",
+                "required": false,
+                "type": "element reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Optional template to render object",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <model name=\"Permission\" libname=\"Permission\" xmlns=\"http://moyaproject.com/db\"\n            repr=\"Permission '${name}' ${description}\">\n            <string name=\"name\" required=\"yes\" null=\"no\" blank=\"no\" length=\"30\" unique=\"yes\"/>\n            <text name=\"description\" null=\"no\" default=\"\"/>\n        </model>\n\n        ",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com/db.model"
+}

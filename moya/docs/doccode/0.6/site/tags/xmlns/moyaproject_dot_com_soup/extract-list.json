@@ -1,0 +1,108 @@
+{
+    "name": "extract-list",
+    "doc_namespace": "xmlns.http://moyaproject.com/soup",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "extract-list",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_soup",
+        "defined": "/home/will/projects/moya/moya/tags/soup.py",
+        "doc": "\nExtract a list of markup fragments from HTML\n\n",
+        "namespace": "http://moyaproject.com/soup",
+        "synopsis": "extract a list of markup fragments from HTML",
+        "tag_name": "extract-list",
+        "params": {},
+        "example": null,
+        "inherited_params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "HTML document or fragment",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "max": {
+                "default_display": "",
+                "name": "max",
+                "missing": true,
+                "default": null,
+                "doc": "Maximum number of tags to match",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "filter": {
+                "default_display": "",
+                "name": "filter",
+                "missing": true,
+                "default": null,
+                "doc": "Filter by attributes",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "select": {
+                "default_display": "\"*\"",
+                "name": "select",
+                "missing": true,
+                "default": "*",
+                "doc": "CSS selector",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/soup.extract-list"
+}

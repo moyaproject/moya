@@ -1,0 +1,49 @@
+{
+    "name": "sleep",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "sleep",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Do nothing for a period of time",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "wait for while",
+        "tag_name": "sleep",
+        "params": {
+            "for": {
+                "default_display": "",
+                "name": "for",
+                "missing": true,
+                "default": null,
+                "doc": "Amount of time to sleep for",
+                "required": true,
+                "type": "timespan",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "<sleep for=\"10s\"/> <!-- do nothing for 10 seconds -->",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.sleep"
+}

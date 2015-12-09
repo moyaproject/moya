@@ -1,0 +1,85 @@
+{
+    "name": "input",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "input",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "\nGet data from the console.\n\n[alert WARNING]This tag should only be used in an interactive context, such as a [tag]command[/tag] tag.[/alert]\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "ask the user for information in a command",
+        "tag_name": "input",
+        "params": {
+            "default": {
+                "default_display": "\"\"",
+                "name": "default",
+                "missing": true,
+                "default": "",
+                "doc": "Value to use if response is empty",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "password": {
+                "default_display": "no",
+                "name": "password",
+                "missing": true,
+                "default": false,
+                "doc": "Use password input?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <input dst=\"name\">What is your name?</input>\n\n        ",
+        "inherited_params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "None",
+                "name": "value",
+                "missing": true,
+                "default": null,
+                "doc": "Value",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.input"
+}

@@ -1,0 +1,61 @@
+{
+    "name": "bind",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "bind",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nBind a form to data\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "Add data to a form",
+        "tag_name": "bind",
+        "params": {
+            "bind": {
+                "default_display": ".request.method=='POST' ? .request.POST : None",
+                "name": "bind",
+                "missing": true,
+                "default": ".request.method=='POST' ? .request.POST : None",
+                "doc": "Object to bind to (typically .request.POST)",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Source object to fill in fields (the form)",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.bind"
+}

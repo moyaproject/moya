@@ -1,0 +1,78 @@
+{
+    "name": "section",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "section",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/content.py",
+        "doc": "\nDefines a section container for content. A [i]section[/i] is a top level container for content, and is used to break up the content in to function groups, which may be rendered independently. For example, here is a content definition with two sections; 'body' and 'sidebar':\n\n[code xml]\n<content libname=\"content.front\" template=\"front.html\">\n    <section name=\"body\">\n        <!-- main body content goes here -->\n    </section>\n    <section name=\"sidebar\">\n        <!-- sidebar content here -->\n    </section>\n</content>\n[/code]\n\nThe template for the above content would render the sections with the [link templates#render]{% render %}[/link] template tag, For example:\n\n[code moyatemplate]\n<html>\n    <body>\n        <div id=\"sidebar>\n        {% render sections.sidebar %}\n        </div>\n        <h1>Content example</h1>\n        {% render sections.body %}\n    </body>\n</html>\n[/code]\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a content section",
+        "tag_name": "section",
+        "params": {
+            "merge": {
+                "default_display": "\"inherit\"",
+                "name": "merge",
+                "missing": true,
+                "default": "inherit",
+                "doc": "Merge method",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": [
+                    "inherit",
+                    "append",
+                    "prepend",
+                    "replace"
+                ]
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "The name of the section",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.section"
+}

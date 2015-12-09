@@ -1,0 +1,24 @@
+{
+    "name": "wysihtml5",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya WYSIHTML5]\n\nMoya WYSIHTML5 (What You See Is HTML 5) is a wrapper for [url http://xing.github.io/wysihtml5/]wysihtml5[/url], an open source rich text edtor By Xing.\n\n[h1]Installation[/h1]\n\nThis is a built in library may be imported from its Python path, as follows:\n\n[code xml]\n<import py=\"moya.libs.wysihtml5\" />\n[/code]\n\nAnd installed as follows:\n\n[code xml]\n<install name=\"wysihtml5\" lib=\"moya.wysihtml5\" />\n[/code]\n\nThis library doesn't haven any views, and does not need to be mounted.\n\n[h1]Usage[/h1]\n\nThis library supplies a single widget, [tag wysihtml5]editor[/tag] which may be used to replace a textarea in a form with a rich editor that supports bold / italic / links / image etc.\n\nThe easiest way to use this widget is to use it in a form as follows:\n\n[code xml]\n<field name=\"content\" label=\"Page Content\">\n    <wysihtml5:editor/>\n</field>\n[/code]\n\nThis will insert a rich text editor in your form, that writes HTML to a field named [c]content[/c]. The field may be treated as any other when the form is validated, it will contain HTML markup when the form is submitted. Essentially, the above code is equivelent to the following when it comes to processing forms:\n\n[code xml]\n<textarea name=\"content\" label=\"Page Content\"/>\n[/code]\n\nSee [tag wysihtml5]editor[/tag] for how to configure the editor.\n",
+        "name": "wysihtml5",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Usage"
+            ]
+        ],
+        "title": "Moya WYSIHTML5"
+    },
+    "id": "doc.wysihtml5"
+}

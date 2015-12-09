@@ -1,0 +1,246 @@
+{
+    "name": "moyaproject_dot_com_recaptcha_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/recaptcha",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "check",
+                "lib": "moya.google.recaptcha",
+                "namespace_slug": "moyaproject_dot_com_recaptcha",
+                "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 25)",
+                "doc": "Check the setting exists",
+                "prev_tag": "verify",
+                "namespace": "http://moyaproject.com/recaptcha",
+                "tag_name": "check",
+                "next_tag": "recaptcha",
+                "synopsis": null,
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "recaptcha",
+                "lib": "moya.google.recaptcha",
+                "namespace_slug": "moyaproject_dot_com_recaptcha",
+                "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/widgets.xml (line 5)",
+                "doc": "",
+                "prev_tag": "check",
+                "namespace": "http://moyaproject.com/recaptcha",
+                "tag_name": "recaptcha",
+                "next_tag": "verify",
+                "synopsis": "render a reCAPTCHA widget",
+                "params": {
+                    "sitekey": {
+                        "default_display": "",
+                        "name": "sitekey",
+                        "missing": true,
+                        "default": "",
+                        "doc": "Optional override of site key from settings",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "theme": {
+                        "default_display": "light",
+                        "name": "theme",
+                        "missing": true,
+                        "default": "light",
+                        "doc": "",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "light",
+                            "dark"
+                        ]
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "template": {
+                        "default_display": "",
+                        "name": "template",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Override widget template",
+                        "required": false,
+                        "type": "list of template paths",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "verify",
+                "lib": "moya.google.recaptcha",
+                "namespace_slug": "moyaproject_dot_com_recaptcha",
+                "defined": "/home/will/projects/moya/moya/libs/recaptcha/logic/tags.xml (line 6)",
+                "doc": "Verify the response from a re-captcha.",
+                "prev_tag": "recaptcha",
+                "namespace": "http://moyaproject.com/recaptcha",
+                "tag_name": "verify",
+                "synopsis": "verify a recaptcha response",
+                "params": {
+                    "secretkey": {
+                        "default_display": "",
+                        "name": "secretkey",
+                        "missing": true,
+                        "default": "",
+                        "doc": "Optionally override secretkey from settings.",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "response": {
+                        "default_display": null,
+                        "name": "response",
+                        "missing": true,
+                        "default": null,
+                        "doc": "The response value (g-recaptcha-response from form)",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/recaptcha",
+        "namespace_doc": "\n        Tags defined in [link recaptcha]Moya Google Recaptcha[/link].\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/recaptcha.moyaproject_dot_com_recaptcha_index"
+}

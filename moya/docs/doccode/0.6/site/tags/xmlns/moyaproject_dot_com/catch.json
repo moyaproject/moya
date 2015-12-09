@@ -1,0 +1,61 @@
+{
+    "name": "catch",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "catch",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Catches any [link moyacode#exceptions]exceptions[/link] from the previous block.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "catch exceptions from the previous block",
+        "tag_name": "catch",
+        "params": {
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination to store exception object",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "exception": {
+                "default_display": "*",
+                "name": "exception",
+                "missing": true,
+                "default": "*",
+                "doc": "Type of exception to catch",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n<try>\n    <echo>${1/0}</echo>  <!-- will throw a math exception -->\n</try>\n<catch exception=\"math.divistion-error\">\n    <echo>The try block threw an exception</echo>\n</catch>\n\n<!-- A <try> block is only necessary if there are multiple statements you want to catch exceptions for -->\n<echo>${1/0}<echo>\n<catch exception=\"math.division-error\">\n    <echo>You can't divide by zero!</echo>\n</catch>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.catch"
+}

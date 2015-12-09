@@ -1,0 +1,97 @@
+{
+    "name": "serve-file",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "serve-file",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "Serve a static file.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "serve a file",
+        "tag_name": "serve-file",
+        "params": {
+            "path": {
+                "default_display": "",
+                "name": "path",
+                "missing": true,
+                "default": null,
+                "doc": "Path in filesystem",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "ifexists": {
+                "default_display": "",
+                "name": "ifexists",
+                "missing": true,
+                "default": null,
+                "doc": "Only serve a response if the file exists",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fs": {
+                "default_display": "",
+                "name": "fs",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "fsobj": {
+                "default_display": "",
+                "name": "fsobj",
+                "missing": true,
+                "default": null,
+                "doc": "Filesystem object",
+                "required": false,
+                "type": "index",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "filename": {
+                "default_display": "",
+                "name": "filename",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the file being serve",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <serve-file fs=\"static\" path=\"/images/logo.jpg />\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.serve-file"
+}

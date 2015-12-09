@@ -1,0 +1,64 @@
+{
+    "name": "images",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Images]\n\nMoya has support for reading, processing, and writing images. The could be anything from icons, photographs, profile pictures, etc. Image tags may be used for offline processing, via commands, or in the context of a request (to handle image uploads).\n\n[aside]If you are looking to generate [i]thumbnails[/i] for uploaded images, see [doc thumbnail].[/aside]\n\n[h1]Namespace[/h1]\n\nMoya Image tags use the namespace [c]\"http://moyaproject.com/image\"[/c].\n\n[h1]Reading Images[/h1]\n\nYou can read images with [tag image]read[/tag] which reads an image file (such as a .jpg or.png), and creates an [i]image[/i] object.\n\n[code xml]\n<image:read fs=\"media\" filename=\"photos/profile.jpg\" dst=\"photo\" />\n[/code]\n\nThis reads a file called [c]photos/profile.jpg[/c] in the [c]media[/c] filesystem, and creates an image object called [c]photo[/c]. Image objects are used in tags that process the image, and may later be written to a filesystem. Image objects contain the following properties:\n\n[definitions]\n\n[define filename]\nThe original filename of the image (not including the path).\n[/define]\n\n[define mode]\nThe [i]mode[/i] of the image, which specifies the color depth. Typical values are [c]1[/c], [c]L[/c], [c]RGB[/c], or [c]CMYK[/c]. See [url https://pillow.readthedocs.org/handbook/concepts.html#concept-modes]here[/url] for more information on modes.\n[/define]\n\n[define size]\nThe size of the image as a list of [c][WIDTH, HEIGHT][/c]\n[/define]\n\n[/definitions]\n\n[h1]Writing Images[/h1]\n\nYou can use the [tag image]write[/tag] to to write an image to a filesystem. Here's an example:\n\n[code xml]\n<image:write dirpath=\"profiles/${profile.id}/\" filename=\"profile.jpg\" fs=\"media\" />\n[/code]\n\nIf you are saving the images as a jpeg, you can set the quality wit the LET extension as follows:\n\n[code xml]\n<image:write dirpath=\"profiles/${profile.id}/\" filename=\"profile.jpg\" fs=\"media\" let:quality=\"85\"/>\n[/code]\n\nThe value, [c]quality[/c], should be an integer between 0 and 100, where 100 is the maximum quality.\n\n[h1]Creating Blank Images[/h1]\n\nYou can create a new blank image, initialized to a given color, with the [tag image]new[/tag] tag. Here's an example:\n\n[code xml]\n<image:new size=\"[64,64]\" color=\"#00FF00\" dst=\"green_square\" />\n[/code]\n\nThis create a blank 64x64 image set to 100% green.\n\n[h1]Copying[/h1]\n\nYou can copy an image with [tag image]copy[/tag], which takes the image to be copied as [c]image[/c] and the destination for the new image as [c]dst[/c]. Here's an example:\n\n[code xml]\n<image:copy image=\"profile_photo\" dst=\"profile_photo_copy\"/>\n[/code]\n\n[h1]Image Operations[/h1]\n\nMoya supports a number of image operations which you can use to process your images.\n\n[h2]Resize[/h2]\n\nThe [tag image]resize[/tag] tag resized the image to fit in to new dimensions. This can result in [i]stretching[/i] of the image, if you want to ensure that the image doesn't stretch, see [link images#resize-to-fix]Resize To Fit[/link].\n\nThe [c]resample[/c] attribute defines how Moya should scale the image, and should be one of the following values:\n\n[definitions]\n[define nearest]The quickest scaling method, but lowest quality.[/define]\n[define bilinear]Uses bilinear filtering to scale the image. Offers reasonable quality and speed.[/define]\n[define bicubic]Uses bicubic filtering to scale the image. Offers better quality than bilinear, at comparable speeds.[/define]\n[define antialias]The highest quality filtering, but the slowest of the options.[/define]\n[/definitions]\n\nThe default is to use the [c]antialias[/c] because it is usually worth sacrificing speed for quality.\n\n[h2]Resize To Fit[/h2]\n\nThe [tag image]resize-to-fit[/tag] tag resizes an image so that it will fit within the given dimensions. while maintaining the [i]aspect ratio[/i] (the image won't be stretched). This may result in the image having a lower width or height that requested.\n\n[h2]Resize Canvas[/h2]\n\nThe [tag image]resize-canvas[/tag] changes the size of the image without scaling. If you make the image smaller, it will be cropped. If you make the image larger, it will have a border. You may set the color of the border with the [c]color[/c] attribute.\n\n[h2]Square[/h2]\n\nThe [tag image]square[/tag] tag makes the dimensions of the image equal (i.e. a square). This will crop part of the image, if the image was not already a square.\n\n[h2]Crop[/h2]\n\nThe [tag image]crop[/tag] tag crops to a part of the image. The area to crop is specified in the [c]box[/c] attribute, which should be a list. If the list is two items long, the image is cropped to [c][WIDTH, HEIGHT][/c]. If the list is four items long, the image is cropped to [c][X, Y, WIDTH, HEIGHT][/c] where X and Y are the coordinates of the point to start cropping from.\n\nWhen the image is cropped, the new dimensions will be the width and height specified in [c]box[/c].\n\n[h1]Debugging Images[/h1]\n\nWhen debugging, you can use the [tag image]show[/tag] tag which will pop up a window containing the image. You will need [url http://www.imagemagick.org/]ImageMagick[/url] installed for this to work.\n\nThis tag only works in debug, as you wouldn't want or need to show an image in a window on a headless server. If you forget to remove the [tag image]show[/tag] in production, Moya will write a warning to the logs.",
+        "name": "images",
+        "docmap": [
+            [
+                1,
+                "Namespace"
+            ],
+            [
+                1,
+                "Reading Images"
+            ],
+            [
+                1,
+                "Writing Images"
+            ],
+            [
+                1,
+                "Creating Blank Images"
+            ],
+            [
+                1,
+                "Copying"
+            ],
+            [
+                1,
+                "Image Operations"
+            ],
+            [
+                2,
+                "Resize"
+            ],
+            [
+                2,
+                "Resize To Fit"
+            ],
+            [
+                2,
+                "Resize Canvas"
+            ],
+            [
+                2,
+                "Square"
+            ],
+            [
+                2,
+                "Crop"
+            ],
+            [
+                1,
+                "Debugging Images"
+            ]
+        ],
+        "title": "Images"
+    },
+    "id": "doc.images"
+}

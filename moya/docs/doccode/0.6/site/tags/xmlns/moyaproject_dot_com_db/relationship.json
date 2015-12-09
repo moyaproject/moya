@@ -1,0 +1,86 @@
+{
+    "name": "relationship",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "relationship",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Defines a relationship between two tables.",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "define a model relationship that creates a collection",
+        "tag_name": "relationship",
+        "params": {
+            "orderby": {
+                "default_display": "",
+                "name": "orderby",
+                "missing": true,
+                "default": [
+                    "id"
+                ],
+                "doc": "Order by",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "search": {
+                "default_display": "",
+                "name": "search",
+                "missing": true,
+                "default": null,
+                "doc": "DB query referencing search field q",
+                "required": false,
+                "type": "database expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "model": {
+                "default_display": "",
+                "name": "model",
+                "missing": true,
+                "default": null,
+                "doc": "Model",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "backref": {
+                "default_display": "",
+                "name": "backref",
+                "missing": true,
+                "default": null,
+                "doc": "Backref",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the relationship",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "<relationship name=\"links\" model=\"#Link\" orderby=\"-hotness\"/>",
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com/db.relationship"
+}

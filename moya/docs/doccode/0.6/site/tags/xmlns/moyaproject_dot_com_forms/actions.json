@@ -1,0 +1,36 @@
+{
+    "name": "actions",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "actions",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nThis tag a group of [tag forms]submit-button[/tag] or other controls that will be rendered as a group (typically a single row).\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "mark a group of action buttons in a form",
+        "tag_name": "actions",
+        "params": {},
+        "example": "\n        <actions>\n            <submit-button name=\"action\" clicked=\"delete\" text=\"Delete\"/>\n            <submit-button name=\"action\" clicked=\"cancel\" text=\"Cancel\"/>\n        </actions>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.actions"
+}

@@ -1,0 +1,97 @@
+{
+    "name": "import",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "import",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "Import a library. Importing reads the XML associated with a library and makes it available to be installed as an application. This tag must appear within a [tag]server[/tag] tag.\n\n    Libraries can be installed either from a Python module, or directly from a path. For example, this installs a library from a Python module:\n\n    [code xml]\n    <import py=\"moya.libs.auth\"/>\n    [/code]\n\n    And this installs a library from a a relative path:\n\n    [code xml]\n    <import location=\"./local/sushishop/\" />\n    [/code]\n\n    The [c]priority[/c] attribute is used when two element have the same element reference. This is typically used to override an element in another library. For example, let's say we have the following [tag]macro[/tag] in a library called [c]sushifinder.shop[/c], which calculate tax on a shopping cart:\n\n    [code xml]\n    <macro libname=\"macro.get_tax\">\n        <!-- calculate tax for an order-->\n    </macro>\n    [/code]\n\n    We could replace this by defining the following in another library:\n\n    [code xml]\n    <macro libname=\"sushifinder.shop#macro.get_tax\">\n        <!-- custom tax calculator -->\n    </macro>\n    [/code]\n\n    Note the use of a full element reference (including library name) in the [c]libname[/c] attribute. This tells Moya that the macro should go in a library other than the one it was declared in. If the code above is in a library with a higher priority then it will replace the macro in the [c]sushifinder.shop[/c] library.\n\n    The [c]templatepriority[/c] is used when there are conflicting template paths. The template from the library with the highest priority wins. This value takes precedence over the [c]priority[/c] defined in [link library#lib-section]lib.ini[/link].\n\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "import a library",
+        "tag_name": "import",
+        "params": {
+            "priority": {
+                "default_display": "",
+                "name": "priority",
+                "missing": true,
+                "default": null,
+                "doc": "Priority for elements",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "templatepriority": {
+                "default_display": "",
+                "name": "templatepriority",
+                "missing": true,
+                "default": null,
+                "doc": "Priority for templates",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "py": {
+                "default_display": "",
+                "name": "py",
+                "missing": true,
+                "default": null,
+                "doc": "Python import, e.g. widgets.moya.widgetapp",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "location": {
+                "default_display": "",
+                "name": "location",
+                "missing": true,
+                "default": null,
+                "doc": "A path to a Moya library",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Name of the library",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.import"
+}

@@ -1,0 +1,61 @@
+{
+    "name": "extend",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "extend",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/context.py",
+        "doc": "Extend a sequence with values from another sequence.",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "add values from one sequence to another",
+        "tag_name": "extend",
+        "params": {
+            "src": {
+                "default_display": "None",
+                "name": "src",
+                "missing": true,
+                "default": null,
+                "doc": "Collection to append to",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "values": {
+                "default_display": "",
+                "name": "values",
+                "missing": true,
+                "default": null,
+                "doc": "value(s) to extend with",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n        <list dst=\"crew\">\n            <str>John</str>\n        </list>\n        <extend dst=\"crew\" src=\"['Scorpius', 'Aeryn']\"/>\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.extend"
+}

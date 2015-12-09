@@ -1,0 +1,144 @@
+{
+    "name": "widget",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "widget",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/widget.py",
+        "doc": "Create a widget",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "create a re-uasable widget",
+        "tag_name": "widget",
+        "params": {
+            "cachefor": {
+                "default_display": "",
+                "name": "cachefor",
+                "missing": true,
+                "default": null,
+                "doc": "Cache time",
+                "required": false,
+                "type": "timespan",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "container": {
+                "default_display": "yes",
+                "name": "container",
+                "missing": true,
+                "default": true,
+                "doc": "Is this widget a container?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Tag name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "text": {
+                "default_display": "yes",
+                "name": "text",
+                "missing": true,
+                "default": true,
+                "doc": "Include text children?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "undocumented": {
+                "default_display": "no",
+                "name": "undocumented",
+                "missing": true,
+                "default": false,
+                "doc": "Set to yes to disabled documentation for this tag",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "synopsis": {
+                "default_display": "",
+                "name": "synopsis",
+                "missing": true,
+                "default": null,
+                "doc": "Short description of the widget",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "cachekey": {
+                "default_display": "",
+                "name": "cachekey",
+                "missing": true,
+                "default": null,
+                "doc": "Cache key",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "let": {
+                "default_display": "",
+                "name": "let",
+                "missing": true,
+                "default": null,
+                "doc": "Let destination",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "template": {
+                "default_display": "",
+                "name": "template",
+                "missing": true,
+                "default": null,
+                "doc": "Template",
+                "required": false,
+                "type": "list of template paths",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "ns": {
+                "default_display": "",
+                "name": "ns",
+                "missing": true,
+                "default": null,
+                "doc": "XML Namespace",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com.widget"
+}

@@ -1,0 +1,61 @@
+{
+    "name": "serve-xml",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "serve-xml",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/response.py",
+        "doc": "Serve XML",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "serve xml",
+        "tag_name": "serve-xml",
+        "params": {
+            "obj": {
+                "default_display": "None",
+                "name": "obj",
+                "missing": false,
+                "default": null,
+                "doc": "A string of XML, or an object that may be converted to XML",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "content_type": {
+                "default_display": "\"application/xml\"",
+                "name": "content_type",
+                "missing": true,
+                "default": "application/xml",
+                "doc": "Mime type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.serve-xml"
+}

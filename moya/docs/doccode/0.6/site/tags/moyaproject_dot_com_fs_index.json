@@ -1,0 +1,650 @@
+{
+    "name": "moyaproject_dot_com_fs_index",
+    "doc_namespace": "xmlns.http://moyaproject.com/fs",
+    "doc_class": "xmlns_index",
+    "references": [],
+    "data": {
+        "tags": [
+            {
+                "name": "get-info",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": null,
+                "prev_tag": "walk",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "get-info",
+                "next_tag": "get-md5",
+                "synopsis": "get an info object for a file",
+                "params": {
+                    "path": {
+                        "default_display": "None",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path of file",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-md5",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": "Get the MD5 of a file",
+                "prev_tag": "get-info",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "get-md5",
+                "next_tag": "get-size",
+                "synopsis": "get the md5 of a file",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path of file",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-size",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": null,
+                "prev_tag": "get-md5",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "get-size",
+                "next_tag": "get-syspath",
+                "synopsis": "get the size of a file",
+                "params": {
+                    "path": {
+                        "default_display": "None",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Path of file",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "get-syspath",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": "\nGet a system path for a path in a filesystem.\n\nA system path (or 'syspath') is a path that maps to the file on the OS filesystem. Not all filesystems can generate syspaths. If Moya is unable to generate a syspath it will throw a [c]get-syspath.no-syspath[/c] exception.\n\n",
+                "prev_tag": "get-size",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "get-syspath",
+                "next_tag": "remove-file",
+                "synopsis": "get a system path",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination path",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <fs:get-syspath fs=\"templates\" path=\"index.html\" dst=\"index_template_path\"/>\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "remove-file",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": "Delete a file from a filesystem",
+                "prev_tag": "get-syspath",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "remove-file",
+                "next_tag": "set-contents",
+                "synopsis": "delete a file",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination path",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "ifexists": {
+                        "default_display": "",
+                        "name": "ifexists",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Only remove if the file exists?",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "set-contents",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": "Set the contents of a file",
+                "prev_tag": "remove-file",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "set-contents",
+                "next_tag": "walk",
+                "synopsis": "write data to a file",
+                "params": {
+                    "path": {
+                        "default_display": "",
+                        "name": "path",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination path",
+                        "required": true,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "contents": {
+                        "default_display": "None",
+                        "name": "contents",
+                        "missing": false,
+                        "default": null,
+                        "doc": "File contents",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "walk",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_fs",
+                "defined": "/home/will/projects/moya/moya/tags/fstags.py",
+                "doc": "Get a list of files",
+                "prev_tag": "set-contents",
+                "namespace": "http://moyaproject.com/fs",
+                "tag_name": "walk",
+                "synopsis": "go through the files in a directory",
+                "params": {
+                    "dirs": {
+                        "default_display": "",
+                        "name": "dirs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filter directories (function should reference 'name' and return a boolean)",
+                        "required": false,
+                        "type": "function",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "files": {
+                        "default_display": "",
+                        "name": "files",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filter files (function should reference 'name' and return a boolean)",
+                        "required": false,
+                        "type": "function",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "search": {
+                        "default_display": "\"breadth\"",
+                        "name": "search",
+                        "missing": true,
+                        "default": "breadth",
+                        "doc": "Search method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": [
+                            "breadth",
+                            "depth"
+                        ]
+                    },
+                    "fs": {
+                        "default_display": "",
+                        "name": "fs",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "path": {
+                        "default_display": "\"/\"",
+                        "name": "path",
+                        "missing": true,
+                        "default": "/",
+                        "doc": "Path to walk",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "fsobj": {
+                        "default_display": "",
+                        "name": "fsobj",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Filesystem object",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            }
+        ],
+        "namespace": "http://moyaproject.com/fs",
+        "namespace_doc": "\n        Tags for working with [link project#filesystems]filesystems[/link].\n    "
+    },
+    "id": "xmlns.http://moyaproject.com/fs.moyaproject_dot_com_fs_index"
+}

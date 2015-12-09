@@ -1,0 +1,109 @@
+{
+    "name": "add-permission",
+    "doc_namespace": "xmlns.http://moyaproject.com/auth",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "add-permission",
+        "lib": "moya.auth",
+        "namespace_slug": "moyaproject_dot_com_auth",
+        "defined": "/home/will/projects/moya/moya/libs/auth/logic/tags.xml (line 180)",
+        "doc": "Add a permission to a group or user",
+        "namespace": "http://moyaproject.com/auth",
+        "synopsis": "add a permission to a group or user",
+        "tag_name": "add-permission",
+        "params": {
+            "lazy": {
+                "default_display": "no",
+                "name": "lazy",
+                "missing": true,
+                "default": false,
+                "doc": "Enable lazy evaluation",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "group": {
+                "default_display": null,
+                "name": "group",
+                "missing": true,
+                "default": null,
+                "doc": "A group name",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "permission": {
+                "default_display": null,
+                "name": "permission",
+                "missing": true,
+                "default": null,
+                "doc": "Permission name",
+                "required": true,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "dst": {
+                "default_display": "",
+                "name": "dst",
+                "missing": true,
+                "default": null,
+                "doc": "Destination",
+                "required": false,
+                "type": "reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "user": {
+                "default_display": null,
+                "name": "user",
+                "missing": true,
+                "default": null,
+                "doc": "A user object",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "from": {
+                "default_display": "",
+                "name": "from",
+                "missing": true,
+                "default": null,
+                "doc": "Application",
+                "required": false,
+                "type": "application reference",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/auth.add-permission"
+}

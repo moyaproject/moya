@@ -1,0 +1,48 @@
+{
+    "name": "property",
+    "doc_namespace": "xmlns.http://moyaproject.com/db",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "property",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_db",
+        "defined": "/home/will/projects/moya/moya/tags/db.py",
+        "doc": "Add a property to a db object",
+        "namespace": "http://moyaproject.com/db",
+        "synopsis": "add a property to a database object",
+        "tag_name": "property",
+        "params": {
+            "expression": {
+                "default_display": "",
+                "name": "expression",
+                "missing": true,
+                "default": null,
+                "doc": "expression using database object",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Property name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {}
+    },
+    "id": "xmlns.http://moyaproject.com/db.property"
+}

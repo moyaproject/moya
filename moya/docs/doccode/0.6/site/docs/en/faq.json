@@ -1,0 +1,24 @@
+{
+    "name": "faq",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya FAQ]\n\nMoya FAQ creatse a Frequently Asked Questions page that may be edited by admin.\n\n[h1]Installation[/h1]\n\nTHe Moya FAQ library is built in to Moya and may be imported via its Python pass as follows:\n\n[code xml]\n<import py=\"moya.libs.faq\" />\n[/code]\n\nYou can install it as follows:\n\n[code xml]\n<install name=\"faq\" lib=\"moya.faq\" mount=\"/faq/\" />\n[/code]\n\n[h1]Introduction[/h1]\n\nFAQs are fairly ubiquitous, and allow you to present useful information in a questions and answer format. You don't even need to wait until a questions has been asked to add it to the FAQ.\n\nMoya FAQ renders a single-page FAQ. The questions are displayed in a list at the top of the page, with links to the answers. The answers have named anchors so you may send link to individual quesions.",
+        "name": "faq",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Introduction"
+            ]
+        ],
+        "title": "Moya FAQ"
+    },
+    "id": "doc.faq"
+}

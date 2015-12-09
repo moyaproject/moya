@@ -1,0 +1,28 @@
+{
+    "name": "bootstrap",
+    "doc_namespace": "doc",
+    "doc_class": "doc",
+    "references": [
+        "doc.index"
+    ],
+    "data": {
+        "body": "[title Moya Bootstrap]\n\nMoya Bootstrap is a media-only library which contains the [url]Twitter Bootstrap[/url] CSS framework.\n\n[alert NOTE]The long name of this library ([b]moya.twitter.bootstrap[/b]) reflects the fact that although it was packaged in Moya, the author is [url http://twitter.com]Twitter[/url].[/alert]\n\n[h1]Installation[/h1]\n\nYou may import Moya Twitter Bootstrap with the following:\n\n[code xml]\n<import py=\"moya.libs.bootstrap\" />\n[/code]\n\nAnd you can install it with:\n\n[code xml]\n<install name=\"bootstrap\" lib=\"moya.twitter.bootstrap\" />\n[/code]\n\nThis library has no views, and does not need to be mounted.\n\n[h1]Introduction[/h1]\n\nThe Twitter Bootstrap CSS framework is [i]the most popular HTML, CSS and JS framework for developing responsive, mobile first projects on the web[/i].\n\nMoya uses Bootstrap in its built in libraries, since without a CSS framework, your newly created site would be [i]aesthetically challenged[/i]. One advantage of Bootstrap is that it is easy to customize, and there are many drop-in themes available.\n\n[alert NOTE]Moya doesn't [i]require[/i] Bootstrap. It's just used to give you a head start with designing stylesheets.[/alert]\n\n[h1]Media[/h1]\n\nMoya Bootstrap provides a number of media files, which you can list with the following command:\n\n[code]\n$ moya fs media --tree bootstrap-media\n[/code]\n\nThe simplest way to include the Bootstrap CSS would be to add it to your base template:\n\n[code moyatemplate]\n<link href=\"{% media 'css/bootstrap.css' from 'twitter.bootstrap' %}\" rel=\"stylesheet\">\n[/code]\n\nIf you built a Moya project with [c]moya.start[/c], the CSS will have been included for you in the base template. The following command will display the base template in the terminal:\n\n[code]\n$ moya fs templates --cat moya.twitter.bootstrap/starter.html\n[/code]",
+        "name": "bootstrap",
+        "docmap": [
+            [
+                1,
+                "Installation"
+            ],
+            [
+                1,
+                "Introduction"
+            ],
+            [
+                1,
+                "Media"
+            ]
+        ],
+        "title": "Moya Bootstrap"
+    },
+    "id": "doc.bootstrap"
+}

@@ -1,0 +1,61 @@
+{
+    "name": "handle",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "handle",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/config.py",
+        "doc": "\nHandles a [i]signal[/i]. A signal is a way of broadcasting to other parts of the project that a particular event has occurred.\n\nSee [doc signals] for more information.\n\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "respond to a signal",
+        "tag_name": "handle",
+        "params": {
+            "signal": {
+                "default_display": "",
+                "name": "signal",
+                "missing": true,
+                "default": null,
+                "doc": "Signal name to handle. Multiple names may be specified to handle more than one signal.",
+                "required": true,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "sender": {
+                "default_display": "",
+                "name": "sender",
+                "missing": true,
+                "default": null,
+                "doc": "Only handle the signal(s) if sent from this element(s).",
+                "required": false,
+                "type": "comma list",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": "\n\n        <!-- Moya fires a number of signals itself, for various system events -->\n        <handle signal=\"sys.startup\">\n            <log>This code executes on startup, prior to any requests</log>\n        </handle>\n        <!-- Handle a custom signal -->\n        <handle signal=\"mordor.arrived\">\n            <log>${hobbit} has arrived in Mordor!</log>\n        </handle>\n\n        ",
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.handle"
+}

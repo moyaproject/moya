@@ -1,0 +1,85 @@
+{
+    "name": "filter",
+    "doc_namespace": "xmlns.http://moyaproject.com",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "filter",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com",
+        "defined": "/home/will/projects/moya/moya/tags/filter.py",
+        "doc": "\nDefine a [i]filter[/i], which may be used in expressions.\n\nHere's an example of a filter:\n\n[code xml]\n<filter name=\"repeat\">\n    <return-str>${str:value * count}</return-str>\n</filter>\n[/code]\n\nAnd here is how you might use it in an expression:\n\n[code xml]\n<echo>${\"beetlejuice \"|repeat(count=3)}</echo>\n[/code]\n",
+        "namespace": "http://moyaproject.com",
+        "synopsis": "define a filter",
+        "tag_name": "filter",
+        "params": {
+            "expression": {
+                "default_display": "",
+                "name": "expression",
+                "missing": true,
+                "default": null,
+                "doc": "Expression",
+                "required": false,
+                "type": "function",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "name": {
+                "default_display": "",
+                "name": "name",
+                "missing": true,
+                "default": null,
+                "doc": "Filter name",
+                "required": true,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "value": {
+                "default_display": "\"value\"",
+                "name": "value",
+                "missing": true,
+                "default": "value",
+                "doc": "Value name",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "missing": {
+                "default_display": "no",
+                "name": "missing",
+                "missing": true,
+                "default": false,
+                "doc": "Allow missing values?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com.filter"
+}

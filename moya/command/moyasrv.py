@@ -286,7 +286,7 @@ class MoyaSrv(object):
             sys.stdout.write('Added Moya service bash tools to {}\n'.format(TOOLS_PATH))
             sys.stdout.write("Tools will be available when you next log in (or run 'source {})\n".format(bashtools_path))
 
-        sys.stdout.write('Moya server was installed in {}\n'.format(home_dir))
+        sys.stdout.write('Moya service was installed in {}\n'.format(home_dir))
 
 
 def main():

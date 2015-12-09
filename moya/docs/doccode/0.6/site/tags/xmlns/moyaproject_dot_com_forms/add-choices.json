@@ -1,0 +1,49 @@
+{
+    "name": "add-choices",
+    "doc_namespace": "xmlns.http://moyaproject.com/forms",
+    "doc_class": "tag",
+    "references": [
+        "doc.index",
+        "tags.index"
+    ],
+    "data": {
+        "name": "add-choices",
+        "lib": null,
+        "namespace_slug": "moyaproject_dot_com_forms",
+        "defined": "/home/will/projects/moya/moya/libs/forms/py/formelements.py",
+        "doc": "\nAdd choices to a [tag]select[/tag] or [tag]check-select[/tag].\n\n",
+        "namespace": "http://moyaproject.com/forms",
+        "synopsis": "add choices to a select tag",
+        "tag_name": "add-choices",
+        "params": {
+            "choices": {
+                "default_display": "None",
+                "name": "choices",
+                "missing": true,
+                "default": null,
+                "doc": "Possible choices",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        },
+        "example": null,
+        "inherited_params": {
+            "if": {
+                "default_display": "yes",
+                "name": "if",
+                "missing": true,
+                "default": true,
+                "doc": "Conditional expression",
+                "required": false,
+                "type": "expression",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            }
+        }
+    },
+    "id": "xmlns.http://moyaproject.com/forms.add-choices"
+}
