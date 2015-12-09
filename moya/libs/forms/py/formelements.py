@@ -822,6 +822,7 @@ class Validate(LogicElement):
         form = self.src(context)
         if not form.bound:
             return
+        auto_validate = self.autovalidate(context)
 
         extends = [form.element]
         el = form.element
@@ -841,7 +842,7 @@ class Validate(LogicElement):
 
         for field in form.fields:
             new_values[field.name] = field.value
-            if field.required and field.value in ('', None):
+            if auto_validate and field.required and field.value in ('', None):
                 form.add_fail(field.name, "This field is required")
             else:
                 for validate_field in form.get_field_validators(field.name):
@@ -1022,6 +1023,7 @@ class FieldElement(LogicElement):
     dst = Attribute("Destination object index", default=None)
     initial = Attribute("Initial value", type="expression", required=False, default=None)
     required = Attribute("Is a value required for this field?", type="boolean")
+    autovalidate = Attribute("Check for required fields?", type="boolean", default="yes")
     help = Attribute("Help text", required=False, default=None)
     inlinehelp = Attribute("Help text", required=False, default=None)
     template = Attribute("Template", type="template", required=False, default=None)
