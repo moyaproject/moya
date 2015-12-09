@@ -1,3 +1,8 @@
+0.6.1
+-----
+
+Added requiredcheck and requiredmsg parameters to form fields
+
 0.6.0
 ------
 
