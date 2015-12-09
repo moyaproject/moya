@@ -91,6 +91,8 @@ class Field(Node):
         self.style = style
         self.template = template
         self.data = data
+        self.requiredcheck = True
+        self.requiredmsg = ""
         self._choices = []
         self.__dict__.update(params)
         self.is_form_field = True
@@ -822,7 +824,6 @@ class Validate(LogicElement):
         form = self.src(context)
         if not form.bound:
             return
-        auto_validate = self.autovalidate(context)
 
         extends = [form.element]
         el = form.element
@@ -842,8 +843,8 @@ class Validate(LogicElement):
 
         for field in form.fields:
             new_values[field.name] = field.value
-            if auto_validate and field.required and field.value in ('', None):
-                form.add_fail(field.name, "This field is required")
+            if field.requiredcheck and field.required and field.value in ('', None):
+                form.add_fail(field.name, field.requiredmsg)
             else:
                 for validate_field in form.get_field_validators(field.name):
                     with self.closure_call(context,
@@ -1023,7 +1024,8 @@ class FieldElement(LogicElement):
     dst = Attribute("Destination object index", default=None)
     initial = Attribute("Initial value", type="expression", required=False, default=None)
     required = Attribute("Is a value required for this field?", type="boolean")
-    autovalidate = Attribute("Check for required fields?", type="boolean", default="yes")
+    requiredcheck = Attribute("Check for required fields?", type="boolean", default="yes")
+    requiredmsg = Attribute("Field error text for required fields", type="text", default="This field is required")
     help = Attribute("Help text", required=False, default=None)
     inlinehelp = Attribute("Help text", required=False, default=None)
     template = Attribute("Template", type="template", required=False, default=None)
