@@ -1,6 +1,6 @@
 <p>Dear ${subscription.user.username},</p>
 
-<p>A comment was posted to <a href="${.site.url}${subscription.commentobject.object_url}#comment${comment.id}">${subscription.commentobject.object_url}</a></p>
+<p>A comment was posted to <a href="${.site.url}${comment_url}#comment${comment.id}">${subscription.commentobject.object_url}</a></p>
 
 <p>${comment.user.username or comment.commenter_name} said...</p>
 <pre>"${comment.text}"</pre>

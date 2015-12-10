@@ -1,6 +1,6 @@
 Dear ${subscription.user.username},
 
-A comment was posted to ${.site.url}${subscription.commentobject.object_url}#comment${comment.id}
+A comment was posted to ${.site.url}${comment_url}#comment${comment.id}
 
 ${comment.user.username or comment.commenter_name} said...
 

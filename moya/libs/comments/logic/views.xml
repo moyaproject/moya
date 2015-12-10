@@ -45,6 +45,7 @@
 
     <macro libname="check_subscriptions">
         <!-- Sends any subscription related emails -->
+        <let comment_url="comment_url or comment.commentobject.object_url" />
         <if test="not comment.parent">
             <db:query model="#ObjectSubscription" dst="subscriptions"
                 filter="#ObjectSubscription.commentobject==comment.commentobject" distinct="yes" />
@@ -55,7 +56,8 @@
                            let:commentobject="comment.commentobject"
                            let:subscription="sub"
                            let:comment="comment"
-                           dst="email" failsilently="no"/>
+                           let:comment_url="comment_url"
+                           dst="email" failsilently="yes"/>
             </for>
         </if>
         <else>
@@ -66,6 +68,7 @@
                 <email:send email="#email.commentsubscription"
                            to="${sub.email}"
                            let:subscription="sub"
+                           let:comment_url="comment_url"
                            let:comment="comment" dst="email" />
             </for>
         </else>
@@ -108,8 +111,9 @@
                 let:comment="comment"
                 let:name=".user.first_name or .user.username or comment.commenter_name" />
 
-
-            <call macro="#check_subscriptions" let:comment="comment" />
+            <call macro="#check_subscriptions"
+                let:comment="comment"
+                let:comment_url="form.data.object_url"/>
             <redirect-to url="${form.data.object_url}" fragment="comment${comment.id}"/>
         </forms:validate-post>
     </view>
@@ -139,7 +143,9 @@
                  comment.commenter_url="form.data.commenter_url"
                  comment.commenter_email="form.data.commenter_email"/>
             <db:commit />
-            <call macro="#check_subscriptions" let:comment="comment" />
+            <call macro="#check_subscriptions"
+                let:comment="comment"
+                let:comment_url=".session.pendingcomment.object_url" />
 
             <call macro="#subscribe" if="form.data.subscribe"
                 let:email="comment.commenter_email"
@@ -166,7 +172,9 @@
                  comment.user=".user"/>
 
             <db:commit />
-            <call macro="#check_subscriptions" let:comment="comment" />
+            <call macro="#check_subscriptions"
+                let:comment="comment"
+                let:comment_url=".session.pendingcomment.object_url"/>
 
             <let url=".session.pendingcomment.object_url" />
             <none dst=".session.pendingcomment" />

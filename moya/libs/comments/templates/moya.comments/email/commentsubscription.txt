@@ -6,7 +6,7 @@ ${comment.user.username or comment.commenter_name} said...
 
 "${comment.text}"
 
-${.site.url}${comment.commentobject.object_url}#comment${comment.id}
+${.site.url}${comment_url}#comment${comment.id}
 
 Click here to unsubscribe:
 
