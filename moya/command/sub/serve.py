@@ -47,6 +47,8 @@ class Serve(SubCommand):
                             help="server port")
         parser.add_argument('-t', '--templates', dest="serve_templates", action="store_true",
                             help="render and serve .html files as moya templates")
+        parser.add_argument('-d', '--develop', dest="develop", action="store_true",
+                            help="enable develop mode (to track down Python errors)")
 
     def run(self):
         args = self.args
@@ -62,7 +64,7 @@ class Serve(SubCommand):
         else:
             ini = 'settings.ini'
 
-        application = WSGIApplication(location, ini, 'main', disable_autoreload=True)
+        application = WSGIApplication(location, ini, 'main', disable_autoreload=True, develop=args.develop)
         application.archive.filesystems['static'] = fs
 
         server = make_server(args.host,

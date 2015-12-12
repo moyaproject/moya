@@ -100,7 +100,7 @@ class RenderTemplateFS(DataSetter):
         except FSError as e:
             self.throw('render-template-fs.read-fail',
                        "failed to read '{}' from '{}'".format(params.path, template_fs),
-                       text_type(e))
+                       error=text_type(e))
 
         template = Template(template_source, template_fs.desc(params.path), raw_path=params.path)
         template.parse(self)

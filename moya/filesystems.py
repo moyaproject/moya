@@ -57,8 +57,10 @@ class FSContainer(dict):
 
 @implements_to_string
 class FSWrapper(object):
-    def __init__(self, fs):
+    def __init__(self, fs, ref=False):
         self._fs = weakref.ref(fs)
+        if ref:
+            self.ref = self.fs
 
     @property
     def fs(self):
@@ -79,7 +81,7 @@ class FSWrapper(object):
     def __getitem__(self, path):
         if self.fs.isfile(path):
             return self.fs.getcontents(path)
-        return self.__class__(self.fs.opendir(path))
+        return self.__class__(self.fs.opendir(path), ref=True)
 
     def __getattr__(self, name):
         return getattr(self.fs, name)

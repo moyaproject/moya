@@ -466,20 +466,21 @@ def moya_traceback(stack, node, exc, console, message="Logic Error"):
     if isinstance(exc, MoyaException):
         console.nl()("unhandled exception: ", fg="red", bold=True)('{}'.format(exc.type), fg="magenta", bold=True)(" ")('"{}"'.format(exc.msg), fg="green").nl()
 
-    elif isinstance(exc, TemplateError):
-        file_line = 'File \"%s\", line %s, col %s' % (exc.path, exc.lineno, exc.start)
-        console(ErrorLineHighlighter.highlight(file_line)).nl()
-        console.templatesnippet(exc._code,
-                                lineno=exc.lineno,
-                                colno=exc.start,
-                                endcolno=exc.end,
-                                extralines=2)
-        exc = exc.original
-        if isinstance(exc, (ExpressionError, SubstitutionError)):
-            console.exception(exc, tb=False)
-        else:
-            console.nl()
-            console.exception(exc, tb=True)
+    # elif isinstance(exc, TemplateError):
+    #     file_line = 'File \"%s\", line %s, col %s' % (exc.path, exc.lineno, exc.start)
+    #     console(ErrorLineHighlighter.highlight(file_line)).nl()
+    #     console.templatesnippet(exc._code,
+    #                             lineno=exc.lineno,
+    #                             colno=exc.start,
+    #                             endcolno=exc.end,
+    #                             extralines=2)
+    #     exc = exc.original
+    #     if isinstance(exc, (ExpressionError, SubstitutionError)):
+    #         console.exception(exc, tb=False)
+    #     else:
+    #         console.nl()
+    #         console.exception(exc, tb=True)
+    
     # elif isinstance(exc, TemplateError):
     #     console('File "%s", line %s, col %s' % (exc.path, exc.lineno, exc.start)).nl()
     #     console.templatesnippet(exc._code,
