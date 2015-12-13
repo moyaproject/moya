@@ -813,7 +813,7 @@ class _ForeignKey(DBElement):
     #cascade = Attribute("Cascade behaviour of backref", type="text", default="save-update, merge")
 
     owner = Attribute("Does this model own the referenced object?", type="boolean", default=False)
-    owned = Attribute("Is tis model owned by the referenced model?", type="boolean", default=False)
+    owned = Attribute("Is this model owned by the referenced model?", type="boolean", default=False)
 
     def document_finalize(self, context):
         params = self.get_parameters_nonlazy(context)

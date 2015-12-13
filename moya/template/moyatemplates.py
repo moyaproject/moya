@@ -1987,7 +1987,7 @@ class Template(object):
             root_node = self._parse(environment=environment)
         except errors.TokenizerError as e:
             frame = TraceFrame(self.source,
-                               self.path,
+                               self.raw_path,
                                e.lineno,
                                cols=(e.start, e.end),
                                format='moyatemplate')
@@ -1998,7 +1998,7 @@ class Template(object):
                                        trace_frames=[frame])
         except errors.NodeError as e:
             frame = TraceFrame(self.source,
-                               self.path,
+                               self.raw_path,
                                e.lineno,
                                cols=(e.start, e.end),
                                format='moyatemplate')
@@ -2043,6 +2043,13 @@ class Template(object):
                 if tag_name.startswith("end"):
                     closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()
+
+                    if closed_tag.name == 'root':
+                        raise errors.UnmatchedTag("End tag, {{% end{} %}}, has nothing to end".format(closing_tag),
+                                                  node,
+                                                  lineno + 1, pos + 1, endpos,
+                                                  diagnosis="Check the syntax of the tag you are attempting to end (and that it exists).")
+
                     if closing_tag and closing_tag != closed_tag.name:
                         raise errors.UnmatchedTag("End tag, {{% end{} %}}, doesn't match {}".format(closing_tag, closed_tag),
                                                   node,

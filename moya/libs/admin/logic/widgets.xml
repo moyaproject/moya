@@ -129,7 +129,7 @@
     </tag>
 
     <widget name="column" template="widgets/table/column.html" synopsis="define a column in an admin view">
-        <doc>Define a column in a database view"</doc>
+        <doc>Define a column in a database view</doc>
     	<signature>
     		<attribute name="title" type="text" required="no"/>
             <attribute name="sort" type="text" required="no"/>
