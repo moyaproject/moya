@@ -399,8 +399,10 @@ class EvalSliceOp(Evaluator):
             else:
                 return obj[start:stop:step]
         except TypeError:
-            _vars = (context.to_expr(start), context.to_expr(stop), context.to_expr(step))
-            raise ValueError('unable to perform slice operation [{}:{}:{}]; check types are integers or None'.format(*_vars))
+            _vars = (context.to_expr(start) if start is not None else '',
+                     context.to_expr(stop) if stop is not None else '',
+                     context.to_expr(step) if step is not None else '')
+            raise ValueError('unable to perform slice operation [{}:{}:{}]'.format(*_vars))
 
 
 class EvalBraceOp(Evaluator):
