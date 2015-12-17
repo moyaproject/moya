@@ -5,6 +5,7 @@ from ..compat import text_type, number_types, iteritems
 from ..context.missing import MoyaAttributeError
 
 import re
+import time
 
 
 def obj_index(obj, key):
@@ -139,6 +140,7 @@ def set_dynamic(context):
     context.set_dynamic('.clock', lambda c: ExpressionDateTime.moya_utcnow())
     context.set_counter('.counter')
     context.set_dynamic('.app', get_app_from_callstack)
+    context.set_dynamic('.time', lambda c: time.time())
     theme_fs = context.get('.fs.themes', None)
     from ..theme import Theme
     if theme_fs:

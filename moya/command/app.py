@@ -181,8 +181,11 @@ To list all available commands for a given application, omit the libname:
         except IOError:
             self.moyarc = settings.SettingsContainer()
 
-        encoding = sys.stdin.encoding
-        argv = [(v.decode(encoding) if not isinstance(v, text_type) else v)
+        try:
+            encoding = sys.stdin.encoding or locale.getdefaultlocale()[1]
+        except:
+            encoding = sys.getdefaultencoding()
+        argv = [(v.decode(encoding, 'replace') if not isinstance(v, text_type) else v)
                 for v in sys.argv]
 
         if len(argv) > 1 and argv[1].count('#') == 1:
