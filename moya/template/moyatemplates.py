@@ -277,8 +277,6 @@ class TagParser(object):
                 self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
             expression = self.expect_expression()
             map[word] = expression
-            map.setdefault(word + '_list', [])
-            map[word+'_list'].append(expression)
             words.remove(word)
         return map
 
