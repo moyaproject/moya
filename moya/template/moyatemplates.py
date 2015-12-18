@@ -277,6 +277,8 @@ class TagParser(object):
                 self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
             expression = self.expect_expression()
             map[word] = expression
+            map.setdefault(word + '_list', [])
+            map[word+'_list'].append(expression)
             words.remove(word)
         return map
 
@@ -1232,13 +1234,24 @@ class IncludeNode(Node):
             return
 
         path = self.path_expression.eval(context)
+
+        if isinstance(path, text_type):
+            paths = [path]
+        else:
+            paths = path
+
         app = self.from_expression.eval(context) or self.get_app(context)
-        if environment.archive is not None:
-            path = environment.archive.resolve_template_path(path, app)
-        try:
-            template = environment.get_template(path)
-        except errors.MissingTemplateError as e:
-            self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
+        for i, _path in enumerate(paths, 1):
+            if environment.archive is not None:
+                path = environment.archive.resolve_template_path(_path, app)
+            else:
+                path = _path
+            try:
+                template = environment.get_template(path)
+            except errors.MissingTemplateError as e:
+                if i == len(paths):
+                    self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
+
         with template.block(context, self) as frame:
             frame.stack.append(template.get_root_node(environment))
             yield template._render_frame(frame, environment, context, text_escape)

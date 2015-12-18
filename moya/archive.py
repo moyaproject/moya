@@ -879,6 +879,9 @@ class Archive(object):
 
             elif what == "fs":
                 location = section.get("location")
+                if not location:
+                    raise errors.StartupFailedError("a value for 'location' is required in [{}]".format(section_name))
+
                 create = section.get_bool('create', False)
                 self.add_filesystem(name, location, create=create)
 

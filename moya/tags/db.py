@@ -433,6 +433,13 @@ class RelationshipProxy(object):
         return "<{} {}>".format(self.type, self.name)
 
 
+class Doc(DBElement):
+    """
+    Document a model.
+    
+    """
+
+
 class DBModel(DBElement):
     """
     Defines a database [i]model[/i], which maps data stored in a database table on to Moya objects.
