@@ -1,6 +1,8 @@
 0.6.2
 -----
 
+Made {% include %} accept a list of paths, first template that exists will be used
+
 0.6.1
 -----
 

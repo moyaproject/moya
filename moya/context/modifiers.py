@@ -321,7 +321,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def collectids(self, context, v, _lookup_key=ExpressionModifiersBase._lookup_key):
         return [_item for _item in (_lookup_key(item, 'id', Ellipsis) for item in v) if _item is not Ellipsis] if v else []
 
-    def color(sefl, context, v):
+    def color(self, context, v):
         return Color.construct(context, v)
 
     def commalist(self, context, v):
@@ -398,6 +398,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def domain(self, context, v, _get_domain=get_domain):
         return _get_domain(text_type(v))
 
+    # Candidate for removal
     def dropchar(self, context, v):
         return text_type(v)[1:]
 
@@ -489,7 +490,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def ids(self, context, v):
         try:
-            return [item.id for item in v if hasattr(v, 'id')]
+            return [item.id for item in v if hasattr(item, 'id')]
         except:
             return []
 
