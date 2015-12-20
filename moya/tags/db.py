@@ -436,8 +436,10 @@ class RelationshipProxy(object):
 class Doc(DBElement):
     """
     Document a model.
-    
+
     """
+    class Help:
+        synopsis = "document a DB model"
 
 
 class DBModel(DBElement):

@@ -1249,6 +1249,8 @@ class IncludeNode(Node):
             except errors.MissingTemplateError as e:
                 if i == len(paths):
                     self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
+            else:
+                break
 
         with template.block(context, self) as frame:
             frame.stack.append(template.get_root_node(environment))
