@@ -11,3 +11,4 @@
 .tox
 build/
 .DS_Store
+.coverage
