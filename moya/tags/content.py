@@ -75,7 +75,7 @@ class ContentElementMixin(object):
                 return template
 
         if len(templates) == 1:
-            raise errors.ContentError("missing template '{}'".format(template[1]),
+            raise errors.ContentError("missing template '{}'".format(templates[0]),
                                       element=element,
                                       diagnosis="You can check what templates are installed with **moya fs templates --tree**.")
         else:
