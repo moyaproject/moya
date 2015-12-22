@@ -5,9 +5,13 @@ import unittest
 import datetime
 
 from pytz import UTC
+import io
+import re
 
 from moya.context import modifiers
 from moya.context import Context
+from moya.url import URL
+from moya.versioning import Version, VersionSpec
 
 
 class _Choices(object):
@@ -19,6 +23,9 @@ class Mock(object):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    def __moyarenderable__(self, context):
+        return "ok"
 
 
 class Missing(object):
@@ -33,7 +40,18 @@ class TestModifiers(unittest.TestSuite):
     def testModifiers(self):
         m = self.modifiers
 
-        c = Context()
+        c = Context({
+            'call': {
+                'world': "World!"
+            },
+            'permissions': ['read'],
+            'request': {
+                'path_qs': '/foo/bar/baz?page=1',
+                'path': '/foo/bar/baz',
+                'query_string': 'page=1'
+            }
+        })
+        c.push_frame('call')
 
         assert m.abs(c, -5) == 5
         assert m.abs(c, 5) == 5
@@ -177,4 +195,152 @@ class TestModifiers(unittest.TestSuite):
 
         assert m.list(c, 'abc') == ['a', 'b', 'c']
 
+        # missing localize
 
+        assert m.log10(c, 100.0) == 2.0
+
+        assert m.lower(c, 'Hello') == 'hello'
+
+        assert m.lstrip(c, '  \nHello\n') == 'Hello\n'
+
+        assert m.map(c, [['foo', 'bar']]) == {'foo': 'bar'}
+
+        assert m.max(c, [1, 2, 3, 0]) == 3
+
+        assert m.md5(c, 'hello') == '5d41402abc4b2a76b9719d911017c592'
+        assert m.md5(c, io.BytesIO(b'hello')) == '5d41402abc4b2a76b9719d911017c592'
+
+        assert m.min(c, [1, 2, 3, 0]) == 0
+
+        assert not m.missing(c, 'foo')
+        assert m.missing(c, Missing())
+
+        assert m.none(c, 0) is None
+        assert m.none(c, 1) == 1
+
+        assert m.partition(c, ['hello-world', '-']) == ('hello', '-', 'world')
+        assert m.partition(c, 'hello world') == ('hello', ' ', 'world')
+
+        assert m.parsedatetime(c, ['5/7/1974', '%d/%m/%Y']) == datetime.datetime(1974, 7, 5)
+
+        assert m.rpartition(c, ['foo-bar-baz', '-']) == ('foo-bar', '-', 'baz')
+        assert m.rpartition(c, 'foo bar baz') == ('foo bar', ' ', 'baz')
+
+        assert isinstance(m.path(c, 'foo/bar'), modifiers.Path)
+
+        assert m.slashjoin(c, ['foo/', '/bar']) == 'foo/bar'
+
+        assert m.permission(c, 'read')
+        assert not m.permission(c, 'write')
+
+        assert m.prettylist(c, ['foo', 'bar']) == "'foo', 'bar'"
+
+        assert m.qsupdate(c, {'page': '3'}) == 'page=3'
+
+        assert m.quote(c, 'hello') == '"hello"'
+        assert m.relto(c, '/bar') == '../../bar'
+
+        # missing render
+
+        assert m.renderable(c, Mock()) == 'ok'
+
+        assert m.remap(c, {'foo': 'bar', 'baz': 'bar'}) == {'bar': ['foo', 'baz']}
+
+        assert list(m.reversed(c, [1, 3, 4])) == [4, 3, 1]
+
+        assert m.reversesorted(c, [1, 5, 2]) == [5, 2, 1]
+
+        objs = [Mock(id=5), Mock(id=10)]
+        assert m.reversesortedkey(c, [objs, 'id']) == [objs[1], objs[0]]
+
+        assert m.round(c, 3.14) == 3
+        assert m.round(c, [3.14, 1]) == 3.1
+
+        assert m.rstrip(c, '  hello  ') == '  hello'
+        assert m.safe(c, 'test') == 'test'
+        assert hasattr(m.safe(c, 'test'), 'html_safe')
+
+        assert m.seqlast(c, [1, 2]) == [(False, 1), (True, 2)]
+
+        assert m.set(c, [1, 2]) == {1, 2}
+
+        assert isinstance(m.slice(c, [1, 2]), slice)
+
+        assert m.slug(c, 'hello world') == 'hello-world'
+
+        assert m.sorted(c, [1, 3, 0]) == [0, 1, 3]
+
+        objs = [Mock(n=50), Mock(n=0)]
+        assert m.sortedkey(c, [objs, 'n']) == [objs[1], objs[0]]
+
+        assert m.split(c, 'foo bar baz') == ['foo', 'bar', 'baz']
+        assert m.split(c, ['foo-bar-baz', '-']) == ['foo', 'bar', 'baz']
+
+        assert m.splitfirst(c, 'foo bar baz') == 'foo'
+        assert m.splitlast(c, 'foo bar baz') == 'baz'
+
+        assert m.splitlines(c, 'foo\nbar') == ['foo', 'bar']
+        assert m.squote(c, 'Hello') == "'Hello'"
+
+        assert m.str(c, 5) == '5'
+
+        assert m.strip(c, ' \nfoo \n ') == 'foo'
+
+        assert m.striptags(c, '<p>Hello</p>') == ' Hello'
+        assert m.sub(c, 'Hello ${world}') == 'Hello World!'
+
+        assert m.sum(c, [1, 2, 3]) == 6
+
+        assert m.swapcase(c, 'Hello') == 'hELLO'
+
+        assert m.time(c, '09:45:30.0') == datetime.time(9, 45, 30)
+        assert m.time(c, 'notatime') is None
+
+        assert m.trim(c, ['longlonglong', 3]) == 'lon'
+
+        assert m.ctime(c, 'Sun Jul  5 00:00:00 2015') == datetime.datetime(2015, 7, 5)
+
+        assert m.timespan(c, '1d').hours == 24
+
+        assert m.title(c, 'hello world') == 'Hello World'
+
+        assert len(m.token(c, 3)) == 3
+
+        assert m.json(c, [5]) == "[5]"
+        assert m.type(c, 5) is type(5)
+
+        assert m.unique(c, [1, 1, 2, 3]) == [1, 2, 3]
+
+        assert m.upper(c, 'hello') == 'HELLO'
+
+        assert isinstance(m.url(c, 'http://www.moyaproject.com'), URL)
+
+        assert m.urldecode(c, 'foo=bar').copy() == {'foo': ['bar']}
+
+        assert 'foo=egg' in m.urlupdate(c, {'foo': 'egg'})
+
+        assert m.urlunquote(c, '%20') == ' '
+        assert m.urlquote(c, ' ') == '%20'
+
+        re_uuid = re.compile(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
+        assert re_uuid.match(m.uuid(c, 1))
+        assert re_uuid.match(m.uuid(c, 4))
+        assert re_uuid.match(m.uuid(c, [3, 'http://www.moyaproject']))
+
+        assert m.validfloat(c, '5')
+        assert m.validfloat(c, '3.14')
+        assert not m.validfloat(c, '3.14.3')
+
+        assert m.validint(c, '5')
+        assert m.validint(c, 5)
+        assert not m.validint(c, '5.3')
+
+        assert m.values(c, {'foo': 'bar'}) == ['bar']
+
+        assert m.version(c, '3.2.3').major == 3
+        assert isinstance(m.version(c, '3.2.3'), Version)
+
+        assert m.zip(c, [[1, 2], [3, 4]]) == [(1, 3), (2, 4)]
+
+        assert m.versionspec(c, 'moya.tests==1.0.0').name == 'moya.tests'
+        assert isinstance(m.versionspec(c, 'moya.tests==1.0.0'), VersionSpec)

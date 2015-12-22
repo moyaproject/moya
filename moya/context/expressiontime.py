@@ -280,7 +280,9 @@ class ExpressionTime(time, interface.Proxy):
 
             if '.' in second:
                 second, fraction = second.split('.', 1)
-                microsecond = int((1.0 / fraction) * 1000000)
+                fraction = float(fraction)
+                if fraction:
+                    microsecond = int((1.0 / fraction) * 1000000)
             time_obj = time(int(hour), int(minute), int(second), int(microsecond))
             return cls.from_time(time_obj)
         except:

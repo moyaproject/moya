@@ -242,7 +242,7 @@ class ExpressionModifiersBase(object):
         """Iterate over a sequence, returning the item and a flag that indicates if it is the last item"""
         seq = list(v)
         last = len(v) - 1
-        return [(i == last, i) for i, l in enumerate(seq)]
+        return [(i == last, l) for i, l in enumerate(seq)]
 
     @classmethod
     def _count(cls, seq):
@@ -562,7 +562,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def localize(self, context, v):
         return self.moya_localize(context, v)
 
-    def log10(self, content, v):
+    def log10(self, context, v):
         return log(float(v), 10)
 
     def lower(self, context, v):
@@ -571,6 +571,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def lstrip(self, context, v):
         return text_type(v).lstrip()
 
+    # Deprecate?
     def map(self, context, v):
         return self._map(v)
 
@@ -613,7 +614,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
                 split_on = text_type(v[1])
                 v = text_type(v[0])
             except IndexError:
-                pass
+                raise ValueError('partition expects string or [<string>, <partition>]')
         else:
             v = text_type(v)
         a, b, c = v.partition(split_on)
@@ -623,7 +624,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             date_string, _format = v
         except ValueError:
-            return ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
+            raise ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
         return ExpressionDateTime.parse(date_string, _format)
 
     def rpartition(self, context, v):
@@ -633,7 +634,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
                 split_on = text_type(v[1])
                 v = text_type(v[0])
             except IndexError:
-                pass
+                raise ValueError('rpartition expects string or [<string>, <partition>]')
         else:
             v = text_type(v)
         a, b, c = v.rpartition(split_on)
@@ -713,6 +714,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def set(self, context, v):
         return set(v)
 
+    # Candidate for deprecation
     def slice(self, context, v):
         return slice(*v)
 
@@ -792,6 +794,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def time(self, context, v):
         return ExpressionTime.from_isoformat(v)
 
+    # Candidate for deprecation
     def trim(self, context, v):
         try:
             v, maxlength = v
@@ -880,7 +883,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
                 raise ValueError('invalid params for uuid: modifier')
             if version not in (3, 5):
                 raise ValueError('uuid: modifer uuid type must be 1, 2, 4, or 5')
-            return make_uuid(context, version, nstype=nstype, nsname=nsname)
+            return make_uuid(context, version, nstype=nstype, nsname=nsname.encode('utf-8'))
 
     def validfloat(self, context, v):
         return self._validfloat(context, v)
