@@ -51,7 +51,7 @@ Pinned Pillow at 2.9.0 due to bug in _getexif
 0.5.27
 ------
 
-Fix for fs dependancy requirement
+Fix for fs dependency requirement
 
 0.5.26
 ------
