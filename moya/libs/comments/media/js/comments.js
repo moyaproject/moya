@@ -5,7 +5,7 @@
 
         $this.find('form.moya-comment-reply-form,form.moya-comment-form').each(function(){
             var $form = $(this);
-            var $submit_button = $form.find('input[type=submit]');
+            var $submit_button = $form.find('input[type=submit],button[type=submit]');
             var $text = $form.find('textarea[name=text]');
             var check_button = function()
             {

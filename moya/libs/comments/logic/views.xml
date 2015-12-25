@@ -40,6 +40,9 @@
             <let commentobject.count="commentobject.count+1"
                 commentobject.updates="commentobject.updates+1" />
         </db:transaction>
+        <fire signal="moya.comments.new-comment"
+            let:commentobject="commentobject"
+            let:comment="comment"/>
         <return value="comment" />
     </macro>
 
