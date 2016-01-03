@@ -57,6 +57,7 @@ class Path(text_type):
 
 
 def _slashjoin(paths):
+    paths = [text_type(p) for p in paths]
     _paths = [paths.pop(0).rstrip('/')]
     for p in paths:
         _paths.append('/')

@@ -1335,14 +1335,20 @@ class Select(FieldElement):
     multiple = Attribute("Multiple select?", required=False, default=False)
     choices = Attribute("Possible choices", type="expression", required=False, default=None)
 
-    @classmethod
-    def add_choices(cls, select, select_choices):
-        for group, choices in select_choices:
-            if isinstance(choices, text_type):
-                select.add_option(group, choices)
-            else:
-                for choice, choice_label in choices:
-                    select.add_option(choice, choice_label, group=group)
+
+    def add_choices(self, select, select_choices):
+        try:
+            for group, choices in select_choices:
+                if isinstance(choices, text_type):
+                    select.add_option(group, choices)
+                else:
+                    for choice, choice_label in choices:
+                        select.add_option(choice, choice_label, group=group)
+        except Exception as e:
+            self.throw('moya.forms.choices-error',
+                       'unable to add choices to {}'.format(select),
+                       diagnosis="Check the format of your choices. It should a a sequence of (&lt;choice&gt;, &lt;label&gt;).",
+                       choices=select_choices)
 
     def logic(self, context):
         form = context['_return']
@@ -1446,7 +1452,7 @@ class Option(LogicElement):
             value = text
         params = self.get_parameters(context)
         context['_select'].add_option(value,
-                                      text,
+                                      text or value,
                                       group=params.group,
                                       help=params.help,
                                       renderable=params.renderable)
