@@ -9,6 +9,7 @@ from .. import serve
 from .. import errors
 from .. import interface
 from .. import urltools
+from .. import moyajson
 from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse, quote_plus
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
@@ -131,9 +132,29 @@ class ServeFile(LogicElement):
 
 
 class ServeJSON(LogicElement):
-    """Serve an object encoded as JSON"""
+    """
+
+    Serve an object encoded as JSON.
+
+    This tag with either serialize an object ([i]obj[/i]) if provided, or serve the tag text as JSON.
+
+    Like other serve- tags, this will return a response and stop processing the view.
+
+    """
 
     class Help:
+        example = """
+        <!-- serialize an object -->
+        <serve-json obj="{'status': 'ok'}"/>
+
+        <!-- just serve the contents -->
+        <serve-json>
+        {
+            "crew": ["john", "scorpius"]
+        }
+        </serv-json>
+
+        """
         synopsis = """serve an object as JSON"""
 
     obj = Attribute("Object to build JSON from", type="expression", required=False, default=None, missing=False)
@@ -142,7 +163,10 @@ class ServeJSON(LogicElement):
     def logic(self, context):
         if self.has_parameter('obj'):
             obj = self.obj(context)
-            json_obj = json.dumps(obj, indent=self.indent(context))
+            try:
+                json_obj = moyajson.dumps(obj, indent=self.indent(context))
+            except Exception as e:
+                self.throw('serve-json.fail', text_type(e))
         else:
             json_obj = context.sub(self.text)
         response = MoyaResponse(content_type=b'application/json' if PY2 else 'application/json',

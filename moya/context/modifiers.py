@@ -650,6 +650,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def permission(self, context, v):
         return self._permission(context, v)
 
+    def prettyjson(self, context, v):
+        return moyajson.dumps(v,
+                              sort_keys=True,
+                              indent=4,
+                              separators=(',', ': '))
+
     def prettylist(self, context, v):
         return ", ".join("'{}'".format(text_type(s)) for s in v)
 
