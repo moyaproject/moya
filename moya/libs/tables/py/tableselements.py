@@ -207,8 +207,15 @@ class Rows(LogicElement):
         if self.has_parameter('src'):
             objects, dst = self.get_parameters(context, 'src', 'dst')
 
+            try:
+                iter_objects = iter(objects)
+            except:
+                self.throw('bad-value.src',
+                           "row objects attribute {} is not a sequence".format(context.to_expr(objects)),
+                           diagnosis="Check the value of the 'objects' attribute is a valid sequence.")
+
             with content.template_node('rows', app.resolve_template(params.template)):
-                for obj in objects:
+                for obj in iter_objects:
                     _cols = itertools.chain(cols, itertools.repeat(default_col))
                     if dst:
                         context[dst] = obj

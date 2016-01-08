@@ -276,6 +276,9 @@ class TableClassBase(object):
         table += table_body
         console.table(table)
 
+    def __iter__(self):
+        raise NotImplementedError('not iterable')
+
     def moya_render(self, archive, context, target, options):
         if target != 'html':
             return repr(self)

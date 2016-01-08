@@ -185,13 +185,16 @@ class Content(interface.AttributeExposer):
                     include_list.append(item)
         merge_methods = defaultdict(lambda: "append")
         self.template = content.template or self.template
-        for section_name, merge_section in content.sections.items():
-            if ignore_sections is not None and section_name in ignore_sections:
-                continue
-            if merge_section.merge_method != "inherit":
-                merge_methods[merge_section.name] = merge_section.merge_method
-            section = self.get_section(section_name)
-            section.merge(merge_section, merge_method=merge_methods[merge_section.name])
+
+        # Possibly deprecated for smarter merge in content object
+
+        # for section_name, merge_section in content.sections.items():
+        #     if ignore_sections is not None and section_name in ignore_sections:
+        #         continue
+        #     if merge_section.merge_method != "inherit":
+        #         merge_methods[merge_section.name] = merge_section.merge_method
+        #     section = self.get_section(section_name)
+        #     section.merge(merge_section, merge_method=merge_methods[merge_section.name])
 
     def new_section(self, name, template, td=None, merge="append"):
         """Create a new section and make it current"""
@@ -469,6 +472,7 @@ class Section(object):
         self.td[name] = value
 
     def merge(self, render_tree, merge_method=None):
+        print("merge")
         merge_method = merge_method or self.merge_method
         if merge_method == "inherit":
             merge_method = render_tree.merge_method

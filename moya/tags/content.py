@@ -135,6 +135,7 @@ class ContentElementMixin(object):
         for _content in merge_content:
             for k, v in _content._section_elements.items():
                 sections[k].extend(v)
+
         for section, elements in list(sections.items()):
             new_elements = []
             merge = 'replace'
@@ -142,8 +143,15 @@ class ContentElementMixin(object):
                 if _merge != 'inherit':
                     merge = _merge
                 if merge == 'replace':
-                    del new_elements[:]
-                new_elements.append((_app, _element, merge))
+                    new_elements[:] = [(_app, _element, merge)]
+                elif merge == 'append':
+                    new_elements.append((_app, _element, merge))
+                elif merge == 'prepend':
+                    new_elements.insert(0, (_app, _element, merge))
+
+                # if merge == 'replace':
+                #     del new_elements[:]
+                # new_elements.append((_app, _element, merge))
             sections[section][:] = new_elements
 
         content = merge_content[0]
