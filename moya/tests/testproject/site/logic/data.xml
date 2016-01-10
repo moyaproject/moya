@@ -1,0 +1,10 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:links="http://moyaproject.com/links">
+    <!-- Data tags go here -->
+    <links:link text="About" from="pages" name="showpage" with="{'pagename': 'about'}" if=".apps.pages"/>
+    <links:link text="Blog" from="blog" name="list" if=".apps.blog" />
+    <links:link text="Contact" from="pages" name="showpage" with="{'pagename': 'contact'}" if=".apps.pages"/>
+    <links:link text="Feedback" from="feedback" name="feedback" if=".apps.feedback" />
+    <links:link text="Debug" from="debug" name="intro" if=".apps.debug" />
+</moya>
+

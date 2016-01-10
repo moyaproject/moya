@@ -484,7 +484,7 @@ class RenderContent(DataSetter, ContentElementMixin):
                 new_kwargs.update(kwargs)
                 kwargs = new_kwargs
             td.update(kwargs)
-        kwargs.update(let)
+        td.update(let)
 
         for defer in self.generate_content(context, content, app, td=td):
             yield defer

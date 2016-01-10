@@ -229,7 +229,7 @@ class TagParser(object):
         word = self.get_word()
         if word is None:
             words_list = " or ".join(w.upper() for w in words)
-            self.syntax_error("expected %s" % (words_list))
+            self.syntax_error("expected %s" % (words_list or 'a word'))
         elif words and word not in words:
             words_list = " or ".join("'%s'" % w for w in words)
             self.syntax_error("expected %s, not '%s'" % (words_list, word))

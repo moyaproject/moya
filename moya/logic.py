@@ -393,8 +393,8 @@ def _logic_loop(context,
 
             except Exception as logic_exception:
                 # Dump exception
-                # import traceback; traceback.print_exc(logic_exception)
-                # raise
+                import traceback; traceback.print_exc(logic_exception)
+                raise
                 if on_exception:
                     on_exception(node_stack, node, logic_exception)
                 request = context.get('.request', None)

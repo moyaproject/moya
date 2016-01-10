@@ -6,6 +6,7 @@ from fs.opener import fsopendir
 from moya.context import Context
 from moya.console import Console
 from moya.archive import Archive
+from moya.content import Content
 
 
 class TestContent(unittest.TestCase):
@@ -27,3 +28,4 @@ class TestContent(unittest.TestCase):
 
         self.archive('moya.tests#test_render_content_2', self.context, None)
         self.assertEqual(self.context['.html'], "<em>emphasize</em>")
+
