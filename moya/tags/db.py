@@ -110,6 +110,7 @@ class MoyaQuerySet(interface.AttributeExposer):
 
     __moya_exposed_attributes__ = ['sql',
                                    'first',
+                                   'last',
                                    'list',
                                    'count',
                                    'exists']
@@ -158,6 +159,13 @@ class MoyaQuerySet(interface.AttributeExposer):
     @property
     def first(self):
         return self._qs.first()
+
+    @property
+    def last(self):
+        """Get the last item in the qs"""
+        # There doesn't seem to be a more efficient way of doing this
+        last = self.count - 1
+        return self._qs[last - 1]
 
     @property
     def list(self):
