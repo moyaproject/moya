@@ -750,7 +750,6 @@ class Render(DataSetter, ContentElementMixin):
 
         if content_container is not None:
             content_container.add_renderable(self._tag_name, RenderProxy(obj, td, target))
-            #content_container.add_renderable(self._tag_name, RenderProxy(obj, td, target) if hasattr(obj, 'moya_render') else obj)
         else:
             rendered = render_object(obj, self.archive, context, target)
             self.set_context(context, dst, rendered)

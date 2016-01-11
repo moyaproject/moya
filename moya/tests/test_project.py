@@ -50,3 +50,6 @@ class TestProject(unittest.TestCase):
 
         html = self.archive('site#render_content', self.context, app, content="#content.tests.merge.prepend")
         assert "[MERGE TEST][B][A][END MERGE TEST]" in html
+
+        html = self.archive('site#render_content', self.context, app, content="#content.tests.node", var="FOO")
+        assert "TEMPLATE VAR FOO" in html
