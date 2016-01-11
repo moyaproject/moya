@@ -148,13 +148,10 @@ class ContentElementMixin(object):
                     new_elements.append((_app, _element, merge))
                 elif merge == 'prepend':
                     new_elements.insert(0, (_app, _element, merge))
-
-                # if merge == 'replace':
-                #     del new_elements[:]
-                # new_elements.append((_app, _element, merge))
+                else:
+                    raise ValueError('unknown merge value ({})'.format(merge))
+        
             sections[section][:] = new_elements
-
-        print(sections)
 
         content = merge_content[0]
         for extended_content in merge_content[1:]:
