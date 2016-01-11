@@ -9,5 +9,22 @@
     <content libname="content.tests.base" final="yes" template="/tests.html">
     	<title>[TESTS]</title>
     </content>
+
+    <content libname="content.tests.merge" extends="#content.tests.base">
+        <section name="main"><text>[A]</text></section>
+    </content>
+
+    <content libname="content.tests.merge.replace" extends="#content.tests.merge">
+        <section name="main" merge="replace"><text>[B]</text></section>
+    </content>
+
+    <content libname="content.tests.merge.append" extends="#content.tests.merge">
+        <section name="main" merge="append"><text>[B]</text></section>
+    </content>
+
+    <content libname="content.tests.merge.prepend" extends="#content.tests.merge">
+        <section name="main" merge="prepend"><text>[B]</text></section>
+    </content>
+
 </moya>
 

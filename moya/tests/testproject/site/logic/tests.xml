@@ -9,7 +9,6 @@
     	<signature>
     		<argument name="content"/>
     	</signature>
-
     	<return>
     		<render-content content="${content}" withscope="yes"/>
     	</return>

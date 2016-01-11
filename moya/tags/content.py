@@ -154,6 +154,8 @@ class ContentElementMixin(object):
                 # new_elements.append((_app, _element, merge))
             sections[section][:] = new_elements
 
+        print(sections)
+
         content = merge_content[0]
         for extended_content in merge_content[1:]:
             content.merge(extended_content)
@@ -291,29 +293,20 @@ class SectionElement(LogicElement, ContentElementMixin):
     template = Attribute("Template", required=False, default=None)
     merge = Attribute("Merge method", default="inherit", choices=["inherit", "append", "prepend", "replace"])
 
-    preserve_attributes = ['_merge']
-
     class Meta:
         tag_name = "section"
 
     def logic(self, context):
-        name = self.name(context)
-        name, template = self.get_parameters(context, 'name', 'template')
+        name, template, merge = self.get_parameters(context, 'name', 'template', 'merge')
         content = self.get_content(context)
         app = self.get_app(context)
-        content.add_section_element(name, app, self, self._merge)
-        #with content.section(name):
-        #    yield logic.DeferNodeContents(self)
+        content.add_section_element(name, app, self, merge)
 
     def generate(self, context, content, app, merge):
-        name = self.name(context)
-        template = self.template(context)
+        name, template = self.get_parameters(context, 'name', 'template')
         content.new_section(name, app.resolve_template(template), merge=merge)
         with content.section(name):
             yield logic.DeferNodeContents(self)
-
-    def post_build(self, context):
-        self._merge = self.merge(context)
 
 
 def make_default_section(name):

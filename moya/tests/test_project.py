@@ -4,8 +4,6 @@ from __future__ import print_function
 import unittest
 import os
 
-from fs.opener import fsopendir
-
 from moya import db
 from moya.wsgi import WSGIApplication
 from moya.console import Console
@@ -27,7 +25,7 @@ class TestProject(unittest.TestCase):
         self.archive = self.application.archive
         db.sync_all(self.archive, console)
         self.context = context = Context()
-        
+
         self.application.populate_context(context)
         set_dynamic(context)
         context['.console'] = console
@@ -36,10 +34,19 @@ class TestProject(unittest.TestCase):
         del self.archive
         del self.application
 
-    def test_title(self):
+    def test_content(self):
+        """Test content in a project"""
         app = self.archive.apps['site']
         html = self.archive('site#render_content', self.context, app, content="#content.tests.base")
 
         assert '[TESTS]' in html
         assert '<title>[TESTS]</title>' in html
-        
+
+        html = self.archive('site#render_content', self.context, app, content="#content.tests.merge.replace")
+        assert "[MERGE TEST][B][END MERGE TEST]" in html
+
+        html = self.archive('site#render_content', self.context, app, content="#content.tests.merge.append")
+        assert "[MERGE TEST][A][B][END MERGE TEST]" in html
+
+        html = self.archive('site#render_content', self.context, app, content="#content.tests.merge.prepend")
+        assert "[MERGE TEST][B][A][END MERGE TEST]" in html
