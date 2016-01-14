@@ -393,8 +393,8 @@ def _logic_loop(context,
 
             except Exception as logic_exception:
                 # Dump exception
-                import traceback; traceback.print_exc(logic_exception)
-                raise
+                #import traceback; traceback.print_exc(logic_exception)
+                #raise
                 if on_exception:
                     on_exception(node_stack, node, logic_exception)
                 request = context.get('.request', None)
@@ -480,7 +480,7 @@ def moya_traceback(stack, node, exc, console, message="Logic Error"):
     #     else:
     #         console.nl()
     #         console.exception(exc, tb=True)
-    
+
     # elif isinstance(exc, TemplateError):
     #     console('File "%s", line %s, col %s' % (exc.path, exc.lineno, exc.start)).nl()
     #     console.templatesnippet(exc._code,
