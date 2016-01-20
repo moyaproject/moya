@@ -825,6 +825,8 @@ class Validate(LogicElement):
         if not form.bound:
             return
 
+        extra_params = self.get_let_map(context)
+
         extends = [form.element]
         el = form.element
         while 1:
@@ -847,14 +849,18 @@ class Validate(LogicElement):
                 form.add_fail(field.name, field.requiredmsg)
             else:
                 for validate_field in form.get_field_validators(field.name):
+                    params = extra_params.copy()
+                    params.update({
+                        "_field": field,
+                        "form": form,
+                        "value": values[field.name],
+                        "values": values,
+                        "field": field.value
+                    })
                     with self.closure_call(context,
                                            app,
                                            validate_field.data,
-                                           _field=field,
-                                           form=form,
-                                           value=values[field.name],
-                                           values=values,
-                                           field=field.value):
+                                           **params):
                         yield logic.DeferNodeContents(validate_field.element)
 
         if not form.errors:
@@ -867,12 +873,16 @@ class Validate(LogicElement):
             for field in form.fields:
                 for adapt_field in form.get_field_adapters(field.name):
                     value = new_values[field.name]
+                    params = extra_params.copy()
+                    params.update({
+                        "form": form,
+                        "values": values,
+                        "value": value
+                    })
                     with self.closure_call(context,
                                            app,
                                            adapt_field.data,
-                                           form=form,
-                                           values=values,
-                                           value=value) as call:
+                                           **params) as call:
                         yield logic.DeferNodeContents(adapt_field.element)
 
                     if call.has_return:
