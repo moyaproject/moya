@@ -41,7 +41,7 @@ from sqlalchemy import (Table,
 
 from sqlalchemy.sql import text
 from sqlalchemy.orm import mapper, relationship, backref
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound, UnmappedInstanceError
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
@@ -1841,12 +1841,16 @@ class Delete(ContextElementBase, DBMixin):
         db, src = self.get_parameters(context, 'db', 'src')
         dbsession = self.get_session(context, db)
 
-        with dbsession.manage(self):
-            if isinstance(src, MoyaQuerySet):
-                for item in src:
-                    dbsession.delete(item)
-            else:
-                dbsession.delete(src)
+        try:
+            with dbsession.manage(self):
+                if isinstance(src, MoyaQuerySet):
+                    for item in src:
+                        dbsession.delete(item)
+                else:
+                    dbsession.delete(src)
+        except UnmappedInstanceError as e:
+            self.throw('db.delete.fail',
+                       'Object {} is not stored in the db and could not be deleted'.format(context.to_expr(src)))
 
 
 class Get(DBDataSetter):
