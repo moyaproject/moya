@@ -1,2 +1,2 @@
 
-<textarea {% attrib (id=field.id, class=['form-control', field.class], name=field.name, rows=field.rows, maxlength=field.maxlength) %} {% if field.disabled %} disabled{% endif %}>${field.value or ''}</textarea>
+<textarea {% attrib (id=field.id, class=['form-control', field.class], name=field.name, rows=field.rows, maxlength=field.maxlength, placeholder=field.placeholder) %} {% if field.disabled %} disabled{% endif %}>${field.value or ''}</textarea>

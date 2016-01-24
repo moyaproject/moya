@@ -1236,6 +1236,7 @@ class TextArea(FieldElement):
         synopsis = "add a textarea to a form"
 
     fieldname = Attribute("Field name", required=False, default="text-area")
+    placeholder = Attribute("Placeholder text", required=False, default=None)
     rows = Attribute("Number of rows", required=False, default=8, type="integer")
     _class = Attribute("Extra class for input", required=False, default="input-block-level")
 
