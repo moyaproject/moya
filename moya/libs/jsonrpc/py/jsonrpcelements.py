@@ -84,11 +84,12 @@ class InvalidParamDefault(ParamError):
 class Param(object):
     valid_param_types = ["string", "number", "bool", "list", "object", "anything"]
 
-    def __init__(self, name, type, default=None, required=False, doc=None):
+    def __init__(self, name, type, default=None, null=False, required=False, doc=None):
         #assert type in self.valid_param_types
         self.name = name
         self.type = type
         self.default = default
+        self.null = null
         self.required = required
         self.doc = doc or ''
         super(Param, self).__init__()
@@ -106,6 +107,8 @@ class Param(object):
                 raise MissingParam("'{}' is a required parameter".format(self.name))
             #return self.make_default(context)
             return self.default
+        if self.null and value is None:
+            return value
         return getattr(self, 'check_' + self.type)(value)
 
     def check(self, value):
@@ -637,6 +640,7 @@ class ParameterTag(ElementBase):
 
     name = Attribute("Name of the parameter", required=True)
     type = Attribute("Parameter type (number, string, bool, list, object, anything)", required=False, default="anything")
+    null = Attribute("Also permit a null value? (None in Moya)", required=False, default=False)
     default = Attribute("Default value", type="expression", required=False)
     required = Attribute("Required?", type="boolean", required=False, default=True)
 
@@ -717,10 +721,12 @@ class MethodTag(LogicElement):
             (param_name,
              _type,
              default,
+             null,
              required) = param_tag.get_parameters(context,
                                                   'name',
                                                   'type',
                                                   'default',
+                                                  'null',
                                                   'required')
             if param_tag.has_parameter('default'):
                 required = False
@@ -729,6 +735,7 @@ class MethodTag(LogicElement):
                                                 _type,
                                                 default=default,
                                                 required=required,
+                                                null=null,
                                                 doc=doc)
             # if not required:
             #     try:

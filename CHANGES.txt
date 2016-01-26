@@ -5,6 +5,7 @@ Made {% include %} accept a list of paths, first template that exists will be us
 Added prettyjson: modifier
 Added queryset.last to get the last item in a queryset
 Enabled passing of parameters in forms:validate to field validators
+Added null option to jsonrpc parameters
 
 0.6.1
 -----
