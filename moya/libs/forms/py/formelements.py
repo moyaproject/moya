@@ -1346,8 +1346,8 @@ class Select(FieldElement):
     multiple = Attribute("Multiple select?", required=False, default=False)
     choices = Attribute("Possible choices", type="expression", required=False, default=None)
 
-
-    def add_choices(self, select, select_choices):
+    @classmethod
+    def add_choices(cls, element, select, select_choices):
         try:
             for group, choices in select_choices:
                 if isinstance(choices, text_type):
@@ -1356,7 +1356,7 @@ class Select(FieldElement):
                     for choice, choice_label in choices:
                         select.add_option(choice, choice_label, group=group)
         except Exception as e:
-            self.throw('moya.forms.choices-error',
+            element.throw('moya.forms.choices-error',
                        'unable to add choices to {}'.format(select),
                        diagnosis="Check the format of your choices. It should a a sequence of (&lt;choice&gt;, &lt;label&gt;).",
                        choices=select_choices)
@@ -1370,7 +1370,7 @@ class Select(FieldElement):
         select_choices = self.choices(context)
 
         if select_choices:
-            self.add_choices(select, select_choices)
+            self.add_choices(self, select, select_choices)
 
         yield logic.DeferNodeContents(self)
         del context['_select']
@@ -1395,7 +1395,7 @@ class AddChoices(LogicElement):
         if select is None:
             self.throw('add-choices.no-select',
                        'this tag must appear inside a <select>')
-        Select.add_choices(select, self.choices(context))
+        Select.add_choices(self, select, self.choices(context))
 
 
 class CheckSelect(FieldElement):
@@ -1422,7 +1422,7 @@ class CheckSelect(FieldElement):
 
         select_choices = self.choices(context)
         if select_choices:
-            Select.add_choices(select, select_choices)
+            Select.add_choices(self, select, select_choices)
 
         yield logic.DeferNodeContents(self)
         del context['_select']
