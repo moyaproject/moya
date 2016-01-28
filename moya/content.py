@@ -174,8 +174,18 @@ class Content(interface.AttributeExposer):
         """Get, or create, a section"""
         self.current_section = self.sections[name]
 
-    def merge(self, content, ignore_sections=None):
-        """Merge this content with another"""
+    def merge(self, content):
+        """Merge this content"""
+        #self.app = content.app
+        #self.merge_td(content.td)
+        for k, v in iteritems(content._include):
+            include_list = self._include[k]
+            for item in v:
+                if item not in include_list:
+                    include_list.append(item)
+
+    def merge_content(self, content):
+        """Merge this content with another content object"""
         self.app = content.app
         self.merge_td(content.td)
         for k, v in iteritems(content._include):

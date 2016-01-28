@@ -155,7 +155,7 @@ class ContentElementMixin(object):
 
         content = merge_content[0]
         for extended_content in merge_content[1:]:
-            content.merge(extended_content)
+            content.merge_content(extended_content)
 
         for section, elements in sections.items():
             for app, section_el, merge in elements:

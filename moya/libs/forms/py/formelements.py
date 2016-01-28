@@ -407,7 +407,7 @@ class Form(AttributeExposer):
         return self
 
     def on_content_insert(self, content):
-        content.merge(self.content, ignore_sections=["fields"])
+        content.merge(self.content)
 
     def update_field_value(self, name, value):
         for field in self._fields[name]:
@@ -1273,7 +1273,7 @@ class Radio(FieldElement):
         synopsis = "add a radio button to a field"
 
     fieldname = Attribute("Field name", required=False, default="radio")
-    text = Attribute("Text associated with checkbox", required=False, default='', map_to="rtext")
+    text = Attribute("Text associated with checkbox", required=False, default='')
     on = Attribute("Value when selected", required=True)
 
     def logic(self, context):
@@ -1281,7 +1281,7 @@ class Radio(FieldElement):
             return super(Radio, self).logic(context)
         radiogroup = context['_radiogroup']
         on = self.on(context)
-        text = self.rtext(context) or context.sub(self.text)
+        text = self.text(context)
         radiogroup.add_option(on or text, text)
 
 

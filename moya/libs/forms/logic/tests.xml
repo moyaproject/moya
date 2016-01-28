@@ -12,6 +12,7 @@
 
     <view libname="view.tests" content="#content.formtests">
         <forms:get form="#form.test1" dst="form" style="${url.style}"/>
+        <forms:get form="#form.custom" dst="custom_form"/>
         <if-post>
             <forms:validate src="form">
                 <fs:set-contents fs="uploads" path="${form.data.file.filename}" contents="form.data.file" />
@@ -23,9 +24,14 @@
         <section name="body">
             <forms:formswitcher/>
             <forms:formresult form="form" />
+            <render src="custom_form"/>
             <render src="form"/>
         </section>
     </content>
+
+    <form xmlns="http://moyaproject.com/forms" template="/custom.html" libname="form.custom" legend="Custom">
+        <input name="text" />
+    </form>
 
     <form xmlns="http://moyaproject.com/forms" xmlns:moya="http://moyaproject.com" libname="form.test1" legend="Test all the fields!" action="${.request.path}">
         <upload placeholder="upload here" name="file" label="Upload something" required="yes"/>
