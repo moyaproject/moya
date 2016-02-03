@@ -179,7 +179,7 @@
                         initial="object[column.dbname]">
                         <forms:radio on="" if="column.null"> --- not set --- </forms:radio>
                         <moya:for src="intchoices:choice_enum" dst="choice_value,choice_label">
-                            <forms:radio on="${choice_value}">${choice_label}</forms:radio>
+                            <forms:radio on="${choice_value}" text="${choice_label}"/>
                         </moya:for>
                     </forms:radio-group>
                 </if>

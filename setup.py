@@ -2,7 +2,8 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.6.4a"
+VERSION = "0.6.4"
+
 # Don't forget to update version in moya/__init__.py
 
 classifiers = [
@@ -45,7 +46,7 @@ setup(
 
     classifiers=classifiers,
     install_requires=[
-        'pyparsing==2.0.5',
+        'pyparsing >= 2.0.7',
         'webob',
         'sqlalchemy',
         'pytz',
@@ -55,10 +56,10 @@ setup(
         'babel==1.3',
         'postmarkup',
         'polib',
-        'pillow==2.9.0',
+        'pillow == 2.9.0',
         'pymysql',
         'passlib',
-        'commonmark',
+        'commonmark >= 0.6.3',
         'requests',
         'lxml',
         'colorama',
