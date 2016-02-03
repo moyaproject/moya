@@ -134,8 +134,8 @@ class MarkdownMarkup(MarkupBase):
     title = "Markdown (CommonMark variety)"
 
     def create(self, options):
-        self.parser = CommonMark.DocParser()
-        self.renderer = CommonMark.HTMLRenderer()
+        self.parser = CommonMark.Parser()
+        self.renderer = CommonMark.HtmlRenderer()
 
     def process_html(self, archive, context, text, target, options):
         ast = self.parser.parse(text)
