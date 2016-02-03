@@ -32,7 +32,7 @@ class Missing(object):
     moya_missing = True
 
 
-class TestModifiers(unittest.TestSuite):
+class TestModifiers(unittest.TestCase):
 
     def setUp(self):
         self.modifiers = modifiers.ExpressionModifiers()
@@ -244,7 +244,7 @@ class TestModifiers(unittest.TestSuite):
 
         assert m.renderable(c, Mock()) == 'ok'
 
-        assert m.remap(c, {'foo': 'bar', 'baz': 'bar'}) == {'bar': ['foo', 'baz']}
+        assert m.remap(c, {'foo': 'bar', 'baz': 'bar'}) in [{'bar': ['foo', 'baz']}, {'bar': ['baz', 'foo']}]
 
         assert list(m.reversed(c, [1, 3, 4])) == [4, 3, 1]
 
