@@ -895,10 +895,11 @@ class Validate(LogicElement):
         if form.ok:
             #with self.call(context, app, **context.obj) as call:
             yield logic.DeferNodeContents(self)
-            yield logic.SkipNext((namespaces.default, "else"))
             if '_return' in context:
-                context['_return'] = call.return_value
+                #context['_return'] = call.return_value
                 raise logic.Unwind()
+
+            yield logic.SkipNext((namespaces.default, "else"))
 
 
 class ValidatePost(Validate):

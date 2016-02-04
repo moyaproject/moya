@@ -1,4 +1,6 @@
-<moya xmlns="http://moyaproject.com">
+<moya xmlns="http://moyaproject.com"
+    xmlns:forms="http://moyaproject.com/forms"
+    xmlns:let="http://moyaproject.com/let">
 
     <!-- Libraries will typically define a mountpoint to add URLs -->
     <mountpoint name="main">
@@ -7,6 +9,16 @@
         <url route="/test-rewrite/">
             <rewrite-to path="/about/"/>
         </url>
+        <url route="/form/" view="#view.form"/>
     </mountpoint>
 
+    <view libname="view.form" template="/form.html">
+        <forms:get form="#form.test" dst="form"/>
+        <forms:validate src="form">
+            <return-dict let:form="form" let:success="yes"/>
+            <echo>validate exit</echo>
+        </forms:validate>
+        <echo>View exit</echo>
+
+    </view>
 </moya>

@@ -1,0 +1,8 @@
+<moya xmlns="http://moyaproject.com">
+
+    <form libname="form.test" xmlns="http://moyaproject.com/forms">
+        <input name="name"/>
+        <submit-button text="submit" />
+    </form>
+
+</moya>
