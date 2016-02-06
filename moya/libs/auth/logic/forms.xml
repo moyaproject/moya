@@ -5,7 +5,8 @@
     xmlns:moya="http://moyaproject.com"
     xmlns:w="http://moyaproject.com/widgets"
     xmlns:html="http://moyaproject.com/html"
-    xmlns:auth="http://moyaproject.com/auth">
+    xmlns:auth="http://moyaproject.com/auth"
+    xmlns:forms="http://moyaproject.com/forms">
 
     <form libname="form.login" xmlns="http://moyaproject.com/forms"
         legend="Please Sign In" style="basic" action="${.urls.auth.login}" class="moya-auth-signin" >

@@ -2489,12 +2489,16 @@ class Query(DBDataSetter):
             joins = params.join.eval(self.archive, context)
             if not isinstance(joins, list):
                 joins = [joins]
-            for j in joins:
-                if isinstance(j, (tuple, list)):
-                    qs = qs.join(*j)
-                else:
-                    qs = qs.join(j)
-            qs = qs.join(*joins)
+            try:
+                for j in joins:
+                    if isinstance(j, (tuple, list)):
+                        qs = qs.join(*j)
+                    else:
+                        qs = qs.join(j)
+                qs = qs.join(*joins)
+            except Exception as e:
+                self.throw('db.bad-join',
+                           text_type(e))
 
         if params.groupby is not None:
             group_by = [DBExpression(g).eval(self.archive, context, app) for g in params.groupby]

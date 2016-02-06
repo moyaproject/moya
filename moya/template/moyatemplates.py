@@ -228,10 +228,10 @@ class TagParser(object):
     def expect_word(self, *words):
         word = self.get_word()
         if word is None:
-            words_list = " or ".join(w.upper() for w in words)
+            words_list = ", ".join(w.upper() for w in words)
             self.syntax_error("expected %s" % (words_list or 'a word'))
         elif words and word not in words:
-            words_list = " or ".join("'%s'" % w for w in words)
+            words_list = ", ".join("'%s'" % w for w in words)
             self.syntax_error("expected %s, not '%s'" % (words_list, word))
         return word
 
@@ -240,7 +240,7 @@ class TagParser(object):
         if word is None:
             return word
         if word not in words:
-            words_list = " or ".join("'%s'" % w for w in words)
+            words_list = ",".join("'%s'" % w for w in words)
             self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
         return word
 
@@ -258,7 +258,7 @@ class TagParser(object):
                 flags.remove(word)
                 continue
             if word not in words:
-                words_list = " or ".join("'%s'" % w for w in words)
+                words_list = ", ".join("'%s'" % w for w in words)
                 self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
             expression = self.expect_expression()
             map[word] = expression
@@ -273,7 +273,7 @@ class TagParser(object):
             if word is None:
                 break
             if word not in words:
-                words_list = " or ".join("'%s'" % w for w in words)
+                words_list = ", ".join("'%s'" % w for w in words)
                 self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
             expression = self.expect_expression()
             map[word] = expression
@@ -512,22 +512,23 @@ class EscapeNode(Node):
     """Escape enclosed text"""
     tag_name = "escape"
 
-    def on_create(self, environment, parser):
-        self.text = []
+    # def on_create(self, environment, parser):
+    #     self.text = []
 
-    def process_token(self, token_type, text, token_text):
-        if token_type == "tag":
-            if self._parse_tag_name(text) == "endescape":
-            #if text.strip().split(' ', 1)[0] == "endescape":
-                return False
-        self.text.append(token_text)
-        return True
+    # def process_token(self, token_type, text, token_text):
+    #     if token_type == "tag":
+    #         if self._parse_tag_name(text) == "endescape":
+    #         #if text.strip().split(' ', 1)[0] == "endescape":
+    #             return False
+    #     self.text.append(token_text)
+    #     return True
 
-    def finalize(self, environment, template):
-        self.text = ''.join(self.text)
+    # def finalize(self, environment, template):
+    #     self.text = ''.join(self.text)
 
     def render(self, environment, context, template, text_escape):
-        return text_escape(self.text)
+        return text_escape(self.render_contents(environment, context, template, text_escape))
+        #return text_escape(text)
 
 
 class _EscapeCodeWrap(Node):
