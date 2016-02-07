@@ -1,6 +1,8 @@
 0.6.6
 -----
 
+Added groupsof: modifer
+
 0.6.5
 -----
 

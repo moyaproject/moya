@@ -479,6 +479,25 @@ class ExpressionModifiers(ExpressionModifiersBase):
             result.setdefault(k, []).append(item)
         return result
 
+    def groupsof(self, context, v):
+        try:
+            seq, group_size = v
+        except:
+            raise ValueError('groupsof: operatore requests pair of [<sequence>, <group size>')
+        seq = list(seq)
+        try:
+            group_size = int(group_size)
+        except:
+            raise ValueError("group size must be an integer (not '{}')".format(context.to_expr(group_size)))
+        if group_size <= 0:
+            raise ValueError("group size must be a positive integer")
+
+        grouped = [
+            seq[i: i + group_size]
+            for i in range(0, len(seq), group_size)]
+
+        return grouped
+
     def hasdata(self, context, v):
         try:
             data_fs = context['.fs']['data']
