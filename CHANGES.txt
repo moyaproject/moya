@@ -2,6 +2,8 @@
 -----
 
 Added groupsof: modifer
+Added changes: modifer
+Gave w:tab-panel and w:tab simple defaults
 
 0.6.5
 -----

@@ -9,7 +9,7 @@ from ..compat import (text_type,
                       int_types,
                       number_types,
                       unichr)
-from ..html import slugify, textilize, linebreaks
+from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
 from ..context.expressiontime import (TimeSpan,
@@ -430,6 +430,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
             raise ValueError('unable to convert {} to a number'.format(context.to_expr(v)))
         dt = epoch_to_datetime(v)
         return ExpressionDateTime.from_datetime(dt)
+
+    def escape(self, context, v):
+        return escape(text_type(v))
 
     def eval(self, context, v):
         from .expression import Expression
