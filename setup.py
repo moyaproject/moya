@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.6.6a"
+VERSION = "0.6.7a"
 
 # Don't forget to update version in moya/__init__.py
 

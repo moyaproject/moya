@@ -1,9 +1,14 @@
+0.6.7
+-----
+
+
 0.6.6
 -----
 
 Added groupsof: modifer
 Added changes: modifer
 Gave w:tab-panel and w:tab simple defaults
+Fix for forms with widgets
 
 0.6.5
 -----
