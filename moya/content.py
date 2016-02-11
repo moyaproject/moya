@@ -176,6 +176,8 @@ class Content(interface.AttributeExposer):
 
     def merge(self, content):
         """Merge this content"""
+        # Insert a content object, such as a form, and update sections / includes
+
         #self.app = content.app
         #self.merge_td(content.td)
         for k, v in iteritems(content._include):
@@ -183,6 +185,8 @@ class Content(interface.AttributeExposer):
             for item in v:
                 if item not in include_list:
                     include_list.append(item)
+        for section_name, section in iteritems(content.sections):
+            self.get_section(section_name).merge(section, 'append')
 
     def merge_content(self, content):
         """Merge this content with another content object"""
@@ -471,7 +475,6 @@ class Section(object):
         self.td[name] = value
 
     def merge(self, render_tree, merge_method=None):
-        print("merge")
         merge_method = merge_method or self.merge_method
         if merge_method == "inherit":
             merge_method = render_tree.merge_method

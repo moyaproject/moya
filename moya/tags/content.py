@@ -150,7 +150,7 @@ class ContentElementMixin(object):
                     new_elements.insert(0, (_app, _element, merge))
                 else:
                     raise ValueError('unknown merge value ({})'.format(merge))
-        
+
             sections[section][:] = new_elements
 
         content = merge_content[0]
