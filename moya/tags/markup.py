@@ -63,6 +63,10 @@ class ProcessMarkup(DataSetter):
             self.throw('markup.unsupported', "markup type '{}' is not supported".format(type))
         options = self.get_let_map(context)
         source_text = self.src(context) if self.has_parameter('src') else self.text
+        if not isinstance(source_text, text_type):
+            self.throw('bad-value.unsupported-type',
+                       "the 'src' parameter should be a a string (not {})".format(context.to_expr(source_text)))
+
         text = self.src(context) or Markup.sub(type, context, source_text, options)
         markup = Markup(text, type, options)
         result = markup.process(self.archive, context)
