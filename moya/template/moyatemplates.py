@@ -708,7 +708,7 @@ class WithNode(Node):
                 for k, v in value.items():
                     with_frame[k] = v
             else:
-                self.render_error("with takes a key/value pair or a mapping (not %r)" % value)
+                self.render_error("{{% with %}} takes a key/value pair or a mapping (not {})".format(context.to_expr(value)))
 
         scopes = context.set_new_call('._scopes', list)
         index = "._scopes.%i" % len(scopes)
