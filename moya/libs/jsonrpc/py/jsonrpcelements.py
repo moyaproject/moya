@@ -718,16 +718,19 @@ class MethodTag(LogicElement):
             param_tags = self.children((namespaces.jsonrpc, "parameter"))
 
         for param_tag in param_tags:
-            (param_name,
-             _type,
-             default,
-             null,
-             required) = param_tag.get_parameters(context,
-                                                  'name',
-                                                  'type',
-                                                  'default',
-                                                  'null',
-                                                  'required')
+            try:
+                (param_name,
+                 _type,
+                 default,
+                 null,
+                 required) = param_tag.get_parameters(context,
+                                                      'name',
+                                                      'type',
+                                                      'default',
+                                                      'null',
+                                                      'required')
+            except Exception as e:
+                raise errors.ElementError(text_type(e), element=param_tag)
             if param_tag.has_parameter('default'):
                 required = False
             doc = context.sub(param_tag.text.strip())
