@@ -14,7 +14,7 @@ from collections import namedtuple, defaultdict
 from operator import attrgetter
 from .compat import quote
 
-from pyparsing import Literal, QuotedString, Word, OneOrMore, printables
+from pyparsing import Literal, QuotedString, Word, OneOrMore, printables, ParseException
 import pyparsing
 pyparsing.ParserElement.enablePackrat()
 
@@ -394,7 +394,10 @@ class URLMapper(object):
                       target=target,
                       name=name,
                       order=self._get_order(priority))
-        route.re_route
+        try:
+            route.re_route
+        except ParseException as e:
+            raise ValueError("failed to parse route, {}".format(text_type(e).lower()))
         self._routes.append(route)
         if name is not None:
             self._named_routes[name].append(route)
