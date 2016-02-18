@@ -36,7 +36,7 @@ class ResponseTag(DataSetter):
         tag_name = "response"
 
     status = Attribute("Status code", type="httpstatus", required=False, default=200)
-    content_type = Attribute("Content Type", default="text/html; charset=UTF-8")
+    contenttype = Attribute("Content Type", default="text/html; charset=UTF-8")
     body = Attribute("Response body", type="expression", default=None)
     charset = Attribute("Character set", default="utf-8")
     headers = Attribute("Headers", type="dict", default=None)
@@ -49,7 +49,7 @@ class ResponseTag(DataSetter):
          charset,
          headers) = self.get_parameters(context,
                                         'status',
-                                        'content_type',
+                                        'contenttype',
                                         'body',
                                         'charset',
                                         'headers')
@@ -70,6 +70,28 @@ class ResponseTag(DataSetter):
         if headers:
             response.headers.update(headers)
         return response
+
+
+class Respond(ResponseTag):
+    """
+    Immediatley return a response.
+
+    Useful for more esoteric status codes.
+
+    """ 
+
+    class Help:
+        synopsis = """serve a response"""
+        example = """
+        <respond code="im_a_teapot" />
+        """
+
+    class Meta:
+        tag_name = "respond"
+
+    def logic(self, context):
+        response = self.get_value(context)
+        raise logic.EndLogic(response)
 
 
 class Serve(LogicElement):
