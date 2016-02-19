@@ -180,7 +180,7 @@ class ServeJSON(LogicElement):
         synopsis = """serve an object as JSON"""
 
     obj = Attribute("Object to build JSON from", type="expression", required=False, default=None, missing=False)
-    indent = Attribute("Indent to make JSON more readable", required=False, default=4)
+    indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
 
     def logic(self, context):
         if self.has_parameter('obj'):
@@ -203,7 +203,7 @@ class ServeJsonObject(LogicElement):
 
     Like other serve- tags, this will return a response and stop processing the view.
 
-    Keys in the json object can be passed in via the let extension. Here's an example:
+    Keys in the json object can be given via the let extension. Here's an example:
     [code xml]
     <serve-json-object let:success="yes" let:message="'upload was successful'"/>
     [/code]
@@ -215,16 +215,26 @@ class ServeJsonObject(LogicElement):
         "message": "upload was successful"
     }
     [/code]
+
+    You can also create the json object as you would a [tag]dict[/tag]. The following returns the same response as above:
+    [code xml]
+    <serve-json-object>
+        <let success="yes"/>
+        <let-str msg="upload was successful"/>
+    </serve-json-object/>
+    [/code]
     """
 
     class Help:
         synopsis = """serve an dict as JSON"""
 
-    indent = Attribute("Indent to make JSON more readable", required=False, default=4)
+    indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
 
     def logic(self, context):
         obj = self.get_let_map(context)
-        
+        with context.data_scope(obj):
+            yield logic.DeferNodeContents(self)
+
         try:
             json_obj = moyajson.dumps(obj, indent=self.indent(context))
         except Exception as e:
