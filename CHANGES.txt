@@ -2,6 +2,7 @@
 -----
 
 Added <respond> tag
+Added <serve-json-object> tag
 
 
 0.6.6

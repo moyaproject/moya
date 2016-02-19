@@ -196,6 +196,45 @@ class ServeJSON(LogicElement):
         raise logic.EndLogic(response)
 
 
+class ServeJsonObject(LogicElement):
+    """
+
+    Serve a dict encoded as a JSON object.
+
+    Like other serve- tags, this will return a response and stop processing the view.
+
+    Keys in the json object can be passed in via the let extension. Here's an example:
+    [code xml]
+    <serve-json-object let:success="yes" let:message="'upload was successful'"/>
+    [/code]
+
+    This will serve the following JSON:
+    [code]
+    {
+        "success": true,
+        "message": "upload was successful"
+    }
+    [/code]
+    """
+
+    class Help:
+        synopsis = """serve an dict as JSON"""
+
+    indent = Attribute("Indent to make JSON more readable", required=False, default=4)
+
+    def logic(self, context):
+        obj = self.get_let_map(context)
+        
+        try:
+            json_obj = moyajson.dumps(obj, indent=self.indent(context))
+        except Exception as e:
+            self.throw('serve-json-object.fail', text_type(e))
+
+        response = MoyaResponse(content_type=b'application/json' if PY2 else 'application/json',
+                                body=json_obj)
+        raise logic.EndLogic(response)
+
+
 class ServeXML(LogicElement):
     """Serve XML"""
 
