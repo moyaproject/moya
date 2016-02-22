@@ -71,9 +71,11 @@ class StatusCode(Enum):
 class RespondWith(object):
     status = StatusCode.ok
 
-    def __init__(self, status=None):
+    def __init__(self, status=None, headers=None):
         if status is not None:
+            # Derivce classes can supply status as class variable
             self.status = status
+        self.headers = headers
 
     def __unicode__(self):
         return get_status_description(self.status)
@@ -88,6 +90,10 @@ class RespondNotFound(RespondWith):
 
 class RespondForbidden(RespondWith):
     status = StatusCode.forbidden
+
+
+class RespondUnauthorized(RespondWith):
+    status = StatusCode.unauthorized
 
 
 def get_status_description(status):
@@ -117,7 +123,7 @@ _standard_html = """<!DOCTYPE html>
     <pre>Moya was unable to return a response for resource <strong>{path}</strong></pre>
     <hr/>
     <small>Moya {version}</small>
-    <small><a href="http://moyaproject.com">http://moyaproject.com</a></small>
+    <small><a href="https://www.moyaproject.com">http://moyaproject.com</a></small>
 </body>
 """
 
@@ -139,7 +145,7 @@ _debug_html = """<!DOCTYPE html>
     <pre>{trace}</pre>
         <hr/>
     <small>Moya {version}</small>
-    <small><a href="http://moyaproject.com">http://moyaproject.com</a></small>
+    <small><a href="https://www.moyaproject.com">http://moyaproject.com</a></small>
 </body>
 """
 

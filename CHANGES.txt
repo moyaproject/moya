@@ -3,6 +3,8 @@
 
 Added <respond> tag
 Added <serve-json-object> tag
+Added base64encode: and base64decode: modifiers
+Added <auth-check> and <denied> tag
 
 
 0.6.6

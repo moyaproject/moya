@@ -18,6 +18,7 @@ from ..urlmapper import MissingURLParameter, RouteError
 from webob.response import Response
 
 from datetime import datetime
+import base64
 import pytz
 import json
 import logging
@@ -292,6 +293,78 @@ class Forbidden(LogicElement):
 
     def logic(self, context):
         raise logic.EndLogic(http.RespondForbidden())
+
+
+class Denied(LogicElement):
+    """
+    Reject basic auth. Generally used in conjunction with [tag]auth-check[/tag].
+
+    """
+
+    realm = Attribute('Basic auth realm', type="text", required=False)
+
+    class Help:
+        synopsis = "reject basic authorization"
+
+    def logic(self, context):
+        if self.has_parameter('realm'):
+            realm = self.realm(context) or 'restricted'
+        else:
+            context['_realm'] or 'restricted'
+        headers = {'WWW-Authenticate': 'Basic realm="{}:"'.format(realm)}
+        raise logic.EndLogic(http.RespondUnauthorized(headers=headers))
+
+
+class AuthCheck(LogicElement):
+    """
+    Perform a basic auth check.
+
+    This tag returns a 401 response if basic auth isn't supplied.
+
+    If basic auth credentials are included in the request, they are decoded and the enclosed block is executed with the variables [c]username[/c] and [c]password[/c]. The enclosed block can then use the [tag]denied[/tag] tag to reject bad credentials. Here is an example:
+
+    [code xml]
+    <auth-check>
+        <denied if="[username, password] != ['john', 'iloveaeryn']" />
+    </auth-check>
+    [/code]
+
+    """
+
+    realm = Attribute('Basic auth realm', type="text", default='restricted')
+
+    class Help:
+        synopsis = "perform basic auth check"
+
+    def logic(self, context):
+        realm = self.realm(context)
+        authorization = context['.request.authorization']
+        if not authorization:
+            self.denied(realm)
+
+        auth_method, auth = authorization
+        if auth_method.lower() != 'basic':
+            self.denied(realm)
+
+        try:
+            username, _, password = base64.b64decode(auth).partition(':')
+        except:
+            self.denied(realm)
+
+        if not username or not password:
+            self.denied(realm)
+
+        scope = {
+            'username': username,
+            'password': password,
+            '_realm': realm
+        }
+        with context.data_scope(scope):
+            yield logic.DeferNodeContents(self)
+
+    def denied(self, realm):
+        headers = {'WWW-Authenticate': 'Basic realm="{}:"'.format(realm)}
+        raise logic.EndLogic(http.RespondUnauthorized(headers=headers))
 
 
 class AdminOnly(LogicElement):

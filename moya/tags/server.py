@@ -558,7 +558,8 @@ class Server(LogicElement):
             return self.dispatch_handler(archive,
                                          context,
                                          request,
-                                         result.status)
+                                         status=result.status,
+                                         headers=result.headers)
         if not isinstance(result, Response):
             response = MoyaResponse(charset=py2bytes('utf8'), status=status)
             html = render_object(result, archive, context, "html")
@@ -769,6 +770,7 @@ class Server(LogicElement):
                          context,
                          request,
                          status=404,
+                         headers=None,
                          error=None,
                          exc_info=None):
         """Respond to a status code"""
@@ -777,7 +779,10 @@ class Server(LogicElement):
                             '.td',
                             '._td',
                             '.contentstack',
-                            '.content')
+                            '.content',
+                            '.headers')
+        if headers is not None:
+            context.root['headers'] = headers
         moya_trace = None
         error2 = None
         moya_trace2 = None

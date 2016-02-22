@@ -38,6 +38,7 @@ import hashlib
 import urllib
 import copy
 import collections
+from base64 import b64decode, b64encode
 from decimal import Decimal
 from collections import OrderedDict
 from datetime import datetime
@@ -274,6 +275,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
         else:
             app = v
         return app
+
+    def base64encode(self, context, v):
+        return b64encode(text_type(v))
+
+    def base64decode(self, context, v):
+        return b64decode(text_type(v))
 
     def basename(self, context, v):
         return basename(v)
