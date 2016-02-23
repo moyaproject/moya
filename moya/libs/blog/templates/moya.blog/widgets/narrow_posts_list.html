@@ -3,7 +3,9 @@
 <div class="list-group">
 {%- for post in posts %}
     <a href="{% url 'showpost' with slug=post.slug %}" class="list-group-item">
+        {% if post.published_date %}
         <em>${localize:(.now - post.published_date)} ago</em>
+        {% endif %}
         {% if .user and post.published and (.user.previous_login is None or .user.previous_login lt post.published_date) %}
         <span class="label label-info pull-right">new!</span>
         {% endif %}

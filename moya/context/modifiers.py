@@ -100,6 +100,8 @@ class ExpressionModifiersBase(object):
 
     @classmethod
     def moya_localize(cls, context, obj):
+        if obj is None:
+            return ''
         locale = context.get('.locale', None)
         if isinstance(obj, datetime):
             obj = ExpressionDateTime.from_datetime(obj)

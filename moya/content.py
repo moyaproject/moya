@@ -270,6 +270,14 @@ class Node(object):
     def __str__(self):
         return "<node>"
 
+    # def __getitem__(self, index):
+    #     if isinstance(index, text_type):
+    #         for child in self.children:
+    #             if getattr(child, 'name', None) == index:
+    #                 return child
+    #         raise KeyError(index)
+    #     return self.children[index]
+
     def add_child(self, node, group=None):
         node.parent = self
         self.children.append(node)
@@ -277,7 +285,7 @@ class Node(object):
             self._groups[group].append(node)
 
     def moya_render(self, archive, context, target, options):
-        raise NotImplementedError
+        return ''
 
 
 @implements_to_string
