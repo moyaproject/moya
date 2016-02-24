@@ -875,6 +875,12 @@ class Context(object):
             return default
         return Missing(index)
 
+    @synchronize
+    def pop(self, index, default=Ellipsis):
+        value = self.get(index, default=default)
+        self.safe_delete(index)
+        return value 
+
     def get_simple(self, index):
         """Get a single index key"""
         objs = [scope.obj for scope in self._stack._current_frame]

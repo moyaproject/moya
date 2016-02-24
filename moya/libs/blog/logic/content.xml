@@ -7,12 +7,10 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:w="http://moyaproject.com/widgets">
 
-
     <handle signal="db.pre-update,db.pre-insert" sender="#Post">
         <let post="signal.data.object"/>
         <let post.updated_date=".now" />
     </handle>
-
 
     <content libname="content.list-posts" template="list.html">
         <title>${.app.settings.name}</title>

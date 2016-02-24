@@ -625,7 +625,8 @@ class Archive(object):
         return self.apps[apps[0]]
 
     def find_app(self, name):
-        """Find an app from either its name or its lib name.
+        """
+        Find an app from either its name or its lib name.
 
         If a lib name is supplied and there are more than one app, an AmbiguousAppError is raise
 
@@ -647,6 +648,14 @@ class Archive(object):
                 return self.apps[name]
         except KeyError:
             raise errors.UnknownAppError(app=name)
+
+    def get_app_settings(self, name):
+        """
+        Get settings object for an application.
+
+        """
+        app = self.find_app(name)
+        return app.settings
 
     def detect_app(self, context, name):
         """
