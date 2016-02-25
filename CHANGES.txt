@@ -6,6 +6,7 @@ Added <serve-json-object> tag
 Added base64encode: and base64decode: modifiers
 Added <auth-check> and <denied> tag
 Added a 'datapriority' attribute to <import> which overrides priority set on library data
+Added 'moya show' command
 
 
 0.6.6

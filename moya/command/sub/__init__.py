@@ -21,4 +21,5 @@ __all__ = ['call',
            'new',
            'init',
            'showini',
-           'precache']
+           'precache',
+           'show']

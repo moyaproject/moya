@@ -616,7 +616,6 @@ class ElementBaseType(object):
         self._attributes = OrderedDict()
         self._children = []
         self.source_line = source_line
-        self.priorty = 0
         self.insert_order = 0
         self._libid = None
         self._location = document.location
