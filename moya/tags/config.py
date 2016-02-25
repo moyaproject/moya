@@ -119,6 +119,7 @@ class Import(LogicElement):
     py = Attribute("Python import, e.g. widgets.moya.widgetapp")
     priority = Attribute("Priority for elements", type="integer", required=False, default=None)
     templatepriority = Attribute("Priority for templates", type="integer", required=False, default=None)
+    datapriority = Attribute("Priority for library data", type="integer", required=False, default=None)
 
     def logic(self, context):
         start = time()
@@ -126,12 +127,14 @@ class Import(LogicElement):
          _location,
          py,
          priority,
-         template_priority) = self.get_parameters(context,
-                                                  'name',
-                                                  'location',
-                                                  'py',
-                                                  'priority',
-                                                  'templatepriority')
+         template_priority,
+         data_priority) = self.get_parameters(context,
+                                              'name',
+                                              'location',
+                                              'py',
+                                              'priority',
+                                              'templatepriority',
+                                              'datapriority')
         if template_priority is None:
             template_priority = priority
         archive = self.document.archive
@@ -174,6 +177,7 @@ class Import(LogicElement):
             lib = archive.load_library(import_fs,
                                        priority=priority,
                                        template_priority=template_priority,
+                                       data_priority=data_priority,
                                        long_name=name,
                                        rebuild=context.root.get('_rebuild', False))
             if lib.failed_documents:

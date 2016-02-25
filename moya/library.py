@@ -98,6 +98,7 @@ class Library(object):
 
         self.priority = 0
         self.template_priority = 0
+        self.data_priority = None
         self.built = False
         self.finalized = False
         self.imported_tests = False

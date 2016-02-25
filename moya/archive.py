@@ -159,7 +159,6 @@ class CallableElement(ContextElementBase):
                 finally:
                     call = self.pop_call(context)
 
-
         if self._return_value is None:
             self._return_value = call.get('_return')
         if hasattr(self._return_value, 'get_return_value'):
@@ -529,11 +528,12 @@ class Archive(object):
     def has_library(self, library_name):
         return library_name in self.libs
 
-    def load_library(self, import_fs, priority=None, template_priority=None, long_name=None, rebuild=False):
+    def load_library(self, import_fs, priority=None, template_priority=None, data_priority=None, long_name=None, rebuild=False):
         """Load a new library in to the archive"""
         lib = self.create_library(import_fs, long_name=long_name, rebuild=rebuild)
         if priority is not None:
             lib.priority = priority
+        lib.data_priority = data_priority
 
         if lib.templates_info:
             fs_url = lib.templates_info['location']
@@ -1001,8 +1001,11 @@ class Archive(object):
     def init_data(self):
         data_fs = self.data_fs
         for lib in itervalues(self.libs):
+            data_priority = lib.data_info.get('priority', 0)
+            if lib.data_priority is not None:
+                data_priority = lib.data_priority
             if lib.data_fs is not None:
-                data_fs.addfs(lib.long_name, lib.data_fs, priority=lib.data_info.get('priorty', 0))
+                data_fs.addfs(lib.long_name, lib.data_fs, priority=data_priority)
 
     def get_media_url(self, context, app, media, path='', url_index=None):
         """Get a URL to media in a given app"""

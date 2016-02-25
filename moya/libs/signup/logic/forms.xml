@@ -25,7 +25,7 @@
                 <html:a target="_blank" href="${.app.settings.terms_and_conditions}">Terms and Conditions</html:a>
             </field>
         </moya:if>
-        <submit-button text="Create User" />
+        <submit-button text="Sign Up" />
 
         <validate-field field="g-recaptcha-response">
             <recaptcha:verify response="value" dst="human"/>
@@ -35,8 +35,11 @@
         </validate-field>
 
         <validate-field field="username">
-            <fail if="len:value lt 3">
-                Username should be at least 3 characters
+            <fail if="len:value lt .app.settings.min_username_length.int">
+                Username should be at least ${.app.settings.min_username_length.int} characters
+            </fail>
+            <fail if="value in data:'reserved_usernames.json'">
+                Sorry, this username is reserved
             </fail>
             <db:get model="auth#User" let:username="value" dst="user"/>
             <fail if="user">
