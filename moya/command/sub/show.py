@@ -37,9 +37,14 @@ class Show(SubCommand):
         sibling = element.older_sibling
 
         start = element.source_line
-        end = max(start, sibling.source_line) if sibling else None
 
-        from ...logic import ErrorLineHighlighter
+        node = element
+        while node:
+            if node.older_sibling:
+                node = node.older_sibling
+                break
+            node = node.parent
+        end = node.source_line if node else None
 
         file_line = 'File "{}", line {}'.format(element._location, start)
         self.console(file_line).nl()
