@@ -10,4 +10,14 @@
         <return value="posts" />
     </tag>
 
+    <tag name="get-new-count">
+        <doc>Get new posts since the user has logged in</doc>
+        <return value="0" if="not .user or not.user.last_login"/>
+        <db:query model="#Post" dst="posts"
+            let:published="yes"
+            filter="#Post.published_date gt .user.last_login"/>
+        <return value="posts.count"/>
+    </tag>
+
+
 </moya>

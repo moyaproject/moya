@@ -7,7 +7,7 @@ Added base64encode: and base64decode: modifiers
 Added <auth-check> and <denied> tag
 Added a 'datapriority' attribute to <import> which overrides priority set on library data
 Added 'moya show' command
-
+Added <get-new-count>  to moya.blog
 
 0.6.6
 -----
