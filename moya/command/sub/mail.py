@@ -3,6 +3,8 @@ from ...wsgi import WSGIApplication
 from ...compat import text_type, raw_input
 
 import sys
+import json
+import urlparse
 
 try:
     import readline
@@ -34,8 +36,8 @@ class Email(SubCommand):
                                          help="send a test email",
                                          description="send a test email (useful for debugging)"))
         render_parser = subparsers.add_parser("render",
-                                             help="render an email",
-                                             description="render and email to the console")
+                                              help="render an email",
+                                              description="render and email to the console")
         add_common(render_parser)
         render_parser.add_argument(dest="emailelement", metavar="ELEMENTREF",
                                    help="email element to render")
@@ -47,6 +49,10 @@ class Email(SubCommand):
                                    help="open the email in the browser")
         render_parser.add_argument('--let', dest='params', nargs="*",
                                    help="parameters in the form foo=bar")
+        render_parser.add_argument('--data', dest='datafile', default=None,
+                                   help="path to JSON file containing email template data")
+        render_parser.add_argument('--url', dest='url', default="http://127.0.0.1:8000",
+                                   help="emulate email sent from this URL")
 
         return parser
 
@@ -139,6 +145,17 @@ class Email(SubCommand):
                 k, v = p.split('=', 1)
                 params[k] = v
 
+        if args.datafile:
+            try:
+                with open(args.datafile, 'rb') as f:
+                    td_json = f.read()
+            except IOError as e:
+                self.error(e)
+                return -1
+
+            td = json.loads(td_json)
+            params.update(td)
+
         from moya.mail import Email
         from moya.context import Context
 
@@ -147,12 +164,16 @@ class Email(SubCommand):
         email.subject = "Render Email"
         email.email_element = element
 
+        url_parsed = urlparse.urlparse(args.url)
+        host = "{}://{}".format(url_parsed.scheme, url_parsed.netloc)
+
         context = Context()
         archive.populate_context(context)
         context['.app'] = app
         from moya.request import MoyaRequest
-        request = MoyaRequest({})
+        request = MoyaRequest.blank(args.url)
         application.server._populate_context(archive, context, request)
+        application.server.set_site(archive, context, request)
 
         context.root['settings'] = archive.settings
 

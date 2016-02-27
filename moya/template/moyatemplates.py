@@ -2212,7 +2212,7 @@ class Template(object):
     def on_error(self, context, current_node, exc):
         frames = []
         t_stack = context['._t_stack']
-        base = context.get('.sys.base', '')
+        base = context.get('.sys.base', '') or ''
 
         recent_node = current_node
 

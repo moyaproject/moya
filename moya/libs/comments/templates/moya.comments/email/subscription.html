@@ -9,9 +9,6 @@
 <pre>"${comment.text}"</pre>
 <p>
 	Don't want any more of these emails?
-	<a href="${.site.url}{% url "subscription" with comment_object_id=commentobject.id %}?action=unsubscribe">Unsubscribe here</a>.
+	<a href="{% url "subscription" with comment_object_id=commentobject.id base .site.url %}?action=unsubscribe">Unsubscribe here</a>.
 </p>
-
-<p>--</p>
-<p><a href="http://moyaproject.com">Moya Comments</a></p>
 {% endblock %}

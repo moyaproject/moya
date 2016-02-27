@@ -3,13 +3,16 @@
 {% block "content" %}
 <p>Dear ${name},</p>
 
-<p>Please click the following button to validate to your email:</p>
-
 <p>
-    <a class="action-link" href="{% url "validate_email" base site_url query token=token %}">Validate Email</a>
+    Please click the following button to validate to your email.
 </p>
 
 <p>
     If you did not create a ${project_title} account, please ignore this email.
 </p>
+
+<p>
+    <a class="action-link" href="{% url "validate_email" base site_url query token=token %}">Validate Email</a>
+</p>
+
 {% end-block %}
