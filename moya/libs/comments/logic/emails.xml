@@ -1,10 +1,10 @@
 <moya xmlns="http://moyaproject.com">
 
-    <email libname="email.commentsubscription" xmlns="http://moyaproject.com/email"
+    <email libname="email.comment.subscription" xmlns="http://moyaproject.com/email"
         from="${.app.settings.email_from}"
         subject="Reply to your comment">
-        <text template="email/commentsubscription.txt" />
-        <html template="email/commentsubscription.html" />
+        <text template="email/comment_subscription.txt" />
+        <html template="email/comment_subscription.html" />
     </email>
 
 	<email libname="email.subscription" xmlns="http://moyaproject.com/email"

@@ -68,7 +68,7 @@
                 filter="#Subscription.comment==comment.parent" distinct="yes" />
             <for src="subscriptions" dst="sub">
                 <log level="debug">Send email to ${sub.email}</log>
-                <email:send email="#email.commentsubscription"
+                <email:send email="#email.comment.subscription"
                            to="${sub.email}"
                            let:subscription="sub"
                            let:comment_url="comment_url"
