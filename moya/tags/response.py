@@ -79,7 +79,7 @@ class Respond(ResponseTag):
 
     Useful for more esoteric status codes.
 
-    """ 
+    """
 
     class Help:
         synopsis = """serve a response"""
@@ -310,7 +310,7 @@ class Denied(LogicElement):
         if self.has_parameter('realm'):
             realm = self.realm(context) or 'restricted'
         else:
-            context['_realm'] or 'restricted'
+            realm = context['_realm'] or 'restricted'
         headers = {'WWW-Authenticate': 'Basic realm="{}:"'.format(realm)}
         raise logic.EndLogic(http.RespondUnauthorized(headers=headers))
 
