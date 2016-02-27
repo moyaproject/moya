@@ -1,3 +1,6 @@
+{% extends 'base.txt' %}
+
+{% block 'content' -%}
 Feedback sent from ${.request.path_url}
 
 Name: ${name}
@@ -6,5 +9,4 @@ Subject: ${subject}
 
 Message:
 ${message}
---
-Moya Feedback
+{% endblock %}

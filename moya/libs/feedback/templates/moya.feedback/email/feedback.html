@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block 'content' %}
 <p>Feedback sent from ${.request.path_url}</p>
 
 <table>
@@ -16,5 +19,4 @@
 </table>
 <br/>
 <pre>${message}</pre>
-<pre>--</pre>
-<small><a href="http://moyaproject.com">Moya Feedback</a></small>
+{% endblock %}

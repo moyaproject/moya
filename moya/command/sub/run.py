@@ -76,7 +76,7 @@ class Run(SubCommand):
         if args.params:
             for p in args.params:
                 if '=' not in p:
-                    sys.stderr.write("{} is not in the form <name>=<expression>\n")
+                    sys.stderr.write("{} is not in the form <name>=<expression>\n".format(p))
                     return -1
                 k, v = p.split('=', 1)
                 params[k] = v

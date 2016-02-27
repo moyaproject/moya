@@ -40,7 +40,7 @@ class Text(LogicElement, ContentElementMixin):
 
     template = Attribute("Template path", type="template", required=False)
     content = Attribute("Content Element", required=False, type="elementref")
-    from_ = Attribute("From email", required=False, default=None, name="from")
+    #from_ = Attribute("From email", required=False, default=None, name="from")
 
     def logic(self, context):
         template, content = self.get_parameters(context, 'template', 'content')

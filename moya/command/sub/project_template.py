@@ -623,4 +623,18 @@ The filenames used here are just a suggestion of how to organize your Moya code 
 This folder contains the 'site' library. The site library is for functionality that is highly specific to the site, and is generally used to customize functionality of other libraries.
 @WRAPTEXT /startup/readme.txt
 This folder contains the first XML files read by Moya, which will typically contain one or more <server> declarations.
+@TEXT /templates/email/base.txt
+{# You can customize email text templates here %}
+{%- block "content" %}{% endblock -%}
+--
+${.settings.project_title}
+@TEXT /templates/email/base.html
+{#
+    By convention, Moya's (html) email templates extend from this template.
+
+    You can theme all default emails by modfying this template. 
+#}
+{%- block "content" %}{% endblock -%}
+<p>--</p>
+<p>${.settings.project_title}</p>
 """

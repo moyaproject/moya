@@ -2101,17 +2101,6 @@ class Template(object):
                             node = new_node
 
         self.parsed = True
-
-        # visited = {self.raw_path}
-        # template = self
-        # while template._extend.path:
-        #     template = environment.get_template(template._extend.path)
-        #     if template.raw_path in visited:
-        #         raise errors.RecursiveExtends("Recursive extends directive detected (in '{}')".format(template.raw_path),
-        #                                       self._extend.node,
-        #                                       *self._extend.node.location)
-        #     visited.add(template.raw_path)
-
         self.valid = True
         return self.root_node
 

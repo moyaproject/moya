@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block 'content' -%}
 <p>Dear ${subscription.user.username},</p>
 
 <p>A comment was posted to <a href="${.site.url}${comment_url}#comment${comment.id}">${subscription.commentobject.object_url}</a></p>
@@ -11,3 +14,4 @@
 
 <p>--</p>
 <p><a href="http://moyaproject.com">Moya Comments</a></p>
+{% endblock %}

@@ -1,3 +1,6 @@
+{% extends "base.txt" %}
+
+{% block "content" -%}
 Dear ${name},
 
 Please click the following link to your email:
@@ -5,7 +8,4 @@ Please click the following link to your email:
 {% url "validate_email" base site_url query token=token %}
 
 If you did not create a ${project_title} account, please ignore this email.
-
----
-${project_title} Admin
-${site_url}
+{% endblock %}

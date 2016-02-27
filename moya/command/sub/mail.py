@@ -2,6 +2,8 @@ from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...compat import text_type, raw_input
 
+import sys
+
 try:
     import readline
 except ImportError:
@@ -17,7 +19,7 @@ class Email(SubCommand):
             parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",
                                 help="location of the Moya server code")
             parser.add_argument("-i", "--ini", dest="settings", default=None, metavar="SETTINGSPATH",
-                                help="Relative path to settings file")
+                                help="relative path to settings file")
 
         subparsers = parser.add_subparsers(title="email sub-commands",
                                            dest="email_subcommand",
@@ -28,9 +30,23 @@ class Email(SubCommand):
         add_common(subparsers.add_parser("check",
                                          help="check smtp servers",
                                          description="list smtp servers and check connectivity"))
-        add_common(subparsers.add_parser("send",
-                                         help="send an email",
-                                         description="Send an email (useful for debugging)"))
+        add_common(subparsers.add_parser("test",
+                                         help="send a test email",
+                                         description="send a test email (useful for debugging)"))
+        render_parser = subparsers.add_parser("render",
+                                             help="render an email",
+                                             description="render and email to the console")
+        add_common(render_parser)
+        render_parser.add_argument(dest="emailelement", metavar="ELEMENTREF",
+                                   help="email element to render")
+        render_parser.add_argument('--text', dest="text", action="store_true",
+                                   help='render email text')
+        render_parser.add_argument('--html', dest="html", action="store_true",
+                                   help='render email html')
+        render_parser.add_argument('-b', '--open-in-browser', dest="open", action="store_true",
+                                   help="open the email in the browser")
+        render_parser.add_argument('--let', dest='params', nargs="*",
+                                   help="parameters in the form foo=bar")
 
         return parser
 
@@ -74,7 +90,7 @@ class Email(SubCommand):
             table.append([k, server.host, server.port, status])
         self.console.table(table)
 
-    def sub_send(self):
+    def sub_test(self):
         application = WSGIApplication(self.location, self.get_settings())
         archive = application.archive
 
@@ -101,3 +117,68 @@ class Email(SubCommand):
         self.console.text("Sending mail with server {}".format(server), fg="black", bold=True)
         server.send(email, fail_silently=False)
         self.console.text("Email was sent successfully", fg="green", bold=True)
+
+    def sub_render(self):
+        application = WSGIApplication(self.location, self.get_settings(), disable_autoreload=True)
+        archive = application.archive
+
+        args = self.args
+
+        try:
+            app, element = archive.get_element(args.emailelement)
+        except Exception as e:
+            self.error(text_type(e))
+            return -1
+
+        params = {}
+        if args.params:
+            for p in args.params:
+                if '=' not in p:
+                    sys.stderr.write("{} is not in the form <name>=<expression>\n".format(p))
+                    return -1
+                k, v = p.split('=', 1)
+                params[k] = v
+
+        from moya.mail import Email
+        from moya.context import Context
+
+        email = Email(data=params)
+        email.app = app
+        email.subject = "Render Email"
+        email.email_element = element
+
+        context = Context()
+        archive.populate_context(context)
+        context['.app'] = app
+        from moya.request import MoyaRequest
+        request = MoyaRequest({})
+        application.server._populate_context(archive, context, request)
+
+        context.root['settings'] = archive.settings
+
+        email_callable = archive.get_callable_from_element(element, app=app)
+        try:
+            email_callable(context, app=email.app, email=email)
+        except Exception as e:
+            if hasattr(e, '__moyaconsole__'):
+                e.__moyaconsole__(self.console)
+                return -1
+            raise
+
+        if not args.html and not args.text:
+            table = []
+            table.append(['text', email.text])
+            table.append(['html', email.html])
+            self.console.table(table)
+        elif args.text:
+            self.console(email.text)
+        else:
+            self.console(email.html)
+
+        if args.open:
+            import webbrowser
+            import tempfile
+            path = tempfile.mktemp(prefix='moyaemail', suffix=".html")
+            with open(path, 'wt') as f:
+                f.write(email.html)
+            webbrowser.open('file://{}'.format(path))

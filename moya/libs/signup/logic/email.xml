@@ -3,7 +3,8 @@
     <email libname="email.validate_email" xmlns="http://moyaproject.com/email"
         from="${.app.settings.email_from}"
         subject="Validate email for your ${project_title} account">
-        <text template="email/validateemail.txt"/>
+        <text template="email/validate_email.txt"/>
+        <html template="email/validate_email.html"/>
     </email>
 
 </moya>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block "content" %}
+{%- markup-block as 'markdown' -%}
+Dear ${name},
+
+Please click the following link to your email:
+
+[{% url "validate_email" base site_url query token=token %}]({% url "validate_email" base site_url query token=token %})
+
+If you did not create a ${project_title} account, please ignore this email.
+{% end-markup-block %}
+{% end-block %}
