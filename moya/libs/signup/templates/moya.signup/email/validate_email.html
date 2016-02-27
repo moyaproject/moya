@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block "content" %}
-{%- markup-block as 'markdown' -%}
-Dear ${name},
+<p>Dear ${name},</p>
 
-Please click the following link to your email:
+<p>Please click the following button to validate to your email:</p>
 
-[{% url "validate_email" base site_url query token=token %}]({% url "validate_email" base site_url query token=token %})
+<p>
+    <a class="action-link" href="{% url "validate_email" base site_url query token=token %}">Validate Email</a>
+</p>
 
-If you did not create a ${project_title} account, please ignore this email.
-{% end-markup-block %}
+<p>
+    If you did not create a ${project_title} account, please ignore this email.
+</p>
 {% end-block %}
