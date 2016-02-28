@@ -48,7 +48,7 @@
             <forms:validate src="form">
                 <try>
                     <auth:login username="form.data.username" password="form.data.password"/>
-                    <redirect-to url="${form.data.fwd or '/'}" />
+                    <redirect-to url="${form.data.fwd or .app.settings.default_fwd or '/'}" />
                 </try>
                 <catch exception="moya.auth.no-user,moya.auth.password-fail">
                     <forms:error src="form">No user with those credentials.</forms:error>
