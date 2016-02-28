@@ -10,7 +10,7 @@
 
     <email libname="email.exception" xmlns="http://moyaproject.com/email"
         from="${.app.settings.email_from}">
-        <html template="email/exception.html" premailer="yes" />
+        <html template="email/exception.html" />
     </email>
 
     <handle signal="sys.unhandled-exception">
