@@ -72,10 +72,9 @@ class HTML(LogicElement, ContentElementMixin):
     template = Attribute("Template path", type="template", required=False)
     content = Attribute("Content element", required=False, type="elementref")
     #from_ = Attribute("From email", required=False, default=None, name="from")
-    _premailer = Attribute("Post process html email?", required=False, default=False, type="boolean")
 
     def logic(self, context):
-        template, content, _premailer = self.get_parameters(context, 'template', 'content', 'premailer')
+        template, content = self.get_parameters(context, 'template', 'content')
         app = self.get_app(context)
         email = context['email']
         if template:
@@ -88,17 +87,6 @@ class HTML(LogicElement, ContentElementMixin):
                 yield defer
             content = context['_content']
             html = render_object(content, self.archive, context, "html")
-        if _premailer:
-            # premailer is slow to import, particularly on rpi
-            # Do it at runtime to avoid delaying startup
-            import premailer
-            try:
-                html = premailer.transform(html,
-                                           base_url=context.get('.request.url', None))
-            except Exception:
-                log.exception('premailer transform failed')
-                self.throw('email.premailer-fail',
-                           msg="failed to post-process html for email, please see logs")
         email.html = html
 
 

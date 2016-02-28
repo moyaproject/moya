@@ -553,6 +553,27 @@ class CodeNode(Node):
                    for child in self.children)
 
 
+class PremailerNode(Node):
+    """Transform HTML to be suitable for email clients"""
+    tag_name = "premailer"
+
+    def render(self, environment, context, template, text_escape):
+        html = self.render_contents(environment, context, template, text_escape)
+        # premailer is slow to import, particularly on rpi
+        # Do it at runtime to avoid delaying startup
+        try:
+            import premailer
+        except ImportError:
+            self.render_error("{% premailer %} requires 'premailer' Python module")
+        base_url = context.get('.request.url', None)
+        try:
+            html = premailer.transform(html, base_url=base_url)
+        except Exception as e:
+            log.exception('premailer transform failed')
+            self.render_error("failed to post-process html for email ({}), please see logs".format(text_type(e)))
+        yield html
+
+
 class RootNode(Node):
     tag_name = "root"
 
