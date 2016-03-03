@@ -7,7 +7,7 @@
 
     <macro docname="login_button">
         <if test=".session.pendingcomment and 'moya.comments' in .libs">
-            <w:button-link name="login" app="moya.auth" query="(fwd=.urls[app:'moya.comments'].pendingcomment)">Sign In</w:button-link>
+            <w:button-link name="login" app="moya.auth" query="(fwd=.urls[appname:'moya.comments'].pendingcomment)">Sign In</w:button-link>
             <markdown>
                 *Your pending comment will be posted when you sign in*
             </markdown>

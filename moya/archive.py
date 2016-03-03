@@ -649,6 +649,12 @@ class Archive(object):
         except KeyError:
             raise errors.UnknownAppError(app=name)
 
+    def find_app_default(self, name, default=None):
+        try:
+            return self.find_app(name)
+        except errors.UnknownAppError:
+            return default
+
     def get_app_settings(self, name):
         """
         Get settings object for an application.

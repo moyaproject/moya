@@ -1,5 +1,5 @@
 <moya xmlns="http://moyaproject.com"
-    xmlns:moya="http://moyaproject.com"
+    xmlns:m="http://moyaproject.com"
     xmlns:let="http://moyaproject.com/let"
     xmlns:db="http://moyaproject.com/db"
     xmlns:w="http://moyaproject.com/widgets"
@@ -19,12 +19,12 @@
             <recaptcha:recaptcha/>
         </field>
 
-        <moya:if test=".app.settings.terms_and_conditions">
+        <m:if test=".app.settings.terms_and_conditions">
             <checkbox name="agree" label="Terms and conditions" text="I Agree" required="yes"/>
             <field>
                 <html:a target="_blank" href="${.app.settings.terms_and_conditions}">Terms and Conditions</html:a>
             </field>
-        </moya:if>
+        </m:if>
         <submit-button text="Sign Up" />
 
         <validate-field field="g-recaptcha-response">
@@ -35,10 +35,11 @@
         </validate-field>
 
         <validate-field field="username">
-            <fail if="len:value lt .app.settings.min_username_length.int">
-                Username should be at least ${.app.settings.min_username_length.int} characters
+            <m:let auth="app:'moya.auth'"/>
+            <fail if="len:value lt auth.settings.min_username_length.int">
+                Username should be at least ${auth.settings.min_username_length.int} characters
             </fail>
-            <fail if="value in data:'reserved_usernames.json'">
+            <fail if="value in data:['moya.auth', 'reserved_usernames.json']">
                 Sorry, this username is reserved
             </fail>
             <db:get model="auth#User" let:username="value" dst="user"/>
@@ -47,8 +48,9 @@
             </fail>
         </validate-field>
         <validate-field field="password">
-            <fail if="len:value lt .app.settings.min_password_length.int">
-                Password should be at least ${.app.settings.min_password_length} characters in length
+            <m:let auth="app:'moya.auth'"/>
+            <fail if="len:value lt auth.settings.min_password_length.int">
+                Password should be at least ${auth.settings.min_password_length.int} characters in length
             </fail>
         </validate-field>
         <validate-field field="password2">

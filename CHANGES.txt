@@ -11,7 +11,9 @@ Added <get-new-count>  to moya.blog
 Added new email template convention
 Added 'moya email render' command for testing templated emails
 Added default_fwd settings to moya.auth
-Removed premailer option on <{email}html> tag ad added {% premailer %} template tat
+Removed premailer option on <{email}html> tag and added {% premailer %} template tag
+Added app: appname: and appsettings: modifiers
+Modified data: modifier to accept a list of [<app>, <path>] in addition to just path
 
 0.6.6
 -----

@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
-from __future__ import print_function
 from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
 from ..versioning import Version, VersionSpec
 from ..url import URL, get_domain, urlencode
@@ -243,7 +243,9 @@ class ExpressionModifiersBase(object):
 
     @classmethod
     def _seqlast(cls, v, context):
-        """Iterate over a sequence, returning the item and a flag that indicates if it is the last item"""
+        """
+        Iterate over a sequence, returning the item and a flag that indicates if it is the last item.
+        """
         seq = list(v)
         last = len(v) - 1
         return [(i == last, l) for i, l in enumerate(seq)]
@@ -267,16 +269,37 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return any(bool(i) for i in v)
 
     def app(self, context, v):
+        """Get an application from a name or object."""
+        app_name = v
+        if hasattr(v, '__moya_application__'):
+            return v.__moya_application__()
+        app_name = text_type(v)
+        archive = context['.app.archive']
+        app = archive.find_app_default(app_name)
+        return app
+
+    def appname(self, context, v):
+        """Get an application name."""
         if not isinstance(v, text_type):
             app = getattr(v, 'name', None)
         elif '.' in v:
             archive = context['.app.archive']
-            app = archive.get_app_from_lib_default(v)
+            app = archive.find_app_default(v)
             if app is not None:
                 app = app.name
         else:
             app = v
         return app
+
+    def appsettings(self, context, v):
+        """Get an application from a name or object."""
+        app_name = v
+        if hasattr(v, '__moya_application__'):
+            return v.__moya_application__()
+        app_name = text_type(v)
+        archive = context['.app.archive']
+        app = archive.find_app_default(app_name)
+        return getattr(app, 'settings')
 
     def base64encode(self, context, v):
         return b64encode(text_type(v))
@@ -364,12 +387,27 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return Decimal(v)
 
     def data(self, context, v):
+        if isinstance(v, list):
+            try:
+                app_name, path = v
+            except:
+                raise ValueError('data: requires list [<app>, <path]')
+            path = text_type(path)
+        else:
+            app_name = None
+            path = text_type(v)
+
         try:
             data_fs = context['.fs']['data']
         except KeyError:
             raise ValueError("missing 'data' filesystem")
+        if app_name is not None:
+            archive = context['.app.archive']
+            app = archive.find_app_default(app_name)
+        else:
+            app = context.get('.app', None)
         try:
-            data = data_fs.reader.read(v, app=context.get('.app', None))
+            data = data_fs.reader.read(path, app=app)
         except ReaderError:
             raise
         return data

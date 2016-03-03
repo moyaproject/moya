@@ -49,6 +49,9 @@ class Application(object):
         log = logging.getLogger('moya.app.{}'.format(self.name))
         return log
 
+    def __moya_application__(self):
+        return self
+
     def resolve_template(self, template, check=False):
         if template is None:
             return None
