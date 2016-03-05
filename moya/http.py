@@ -143,7 +143,7 @@ _debug_html = """<!DOCTYPE html>
     <p><em>Moya was unable to render "{status}.html" in order to display a more detailed response</em></p>
 
     <pre>{trace}</pre>
-        <hr/>
+    <hr/>
     <small>Moya {version}</small>
     <small><a href="https://www.moyaproject.com">http://moyaproject.com</a></small>
 </body>
