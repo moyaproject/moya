@@ -125,7 +125,7 @@
 
 
     <content libname="content.table.edit" extends="#content.table">
-        <title>Edit ${object.title}</title>
+        <title>Edit ${object}</title>
         <section name="breadcrumbs">
             <admin:crumb text="Edit ${object}"/>
         </section>
