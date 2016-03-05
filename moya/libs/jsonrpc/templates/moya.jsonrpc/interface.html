@@ -124,14 +124,14 @@ $(function(){
     <table class="table table-condensed">
         <head>
             <th>code</th>
-            <th>label</th>
+            <th>name</th>
             <th>meaning</th>
         </head>
         <body>
             {%- for value in interface.errors %}
             <tr>
                 <td>${value.id}</td>
-                <td>${value.label}</td>
+                <td>${value.name}</td>
                 <td>${value.description}</td>
             </tr>
             {%- endfor %}
