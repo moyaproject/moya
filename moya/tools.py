@@ -180,6 +180,11 @@ def as_dict(value):
     return dict(iteritems(value))
 
 
+def as_text(value):
+    """Convert to string, treating None as empty string."""
+    return '' if value is None else text_type(value)
+
+
 def quote(text):
     """Return a string surrounded by quotes"""
     # This may be trivial, but it can make code more self-documenting

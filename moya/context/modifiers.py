@@ -21,7 +21,7 @@ from .color import Color
 from ..containers import QueryData
 from ..context.tools import to_expression
 from ..context.missing import Missing
-from ..tools import unique
+from ..tools import unique, as_text
 from ..reader import ReaderError
 from ..render import render_object
 from .. import connectivity
@@ -91,11 +91,11 @@ def make_uuid(context, version, nstype="url", nsname=None):
 
 
 class ExpressionModifiersBase(object):
-    """Implementations for expression filters"""
+    """Implementations for expression filters."""
 
     @classmethod
     def is_missing(cls, val):
-        """Check if a value is the special 'missing' value"""
+        """Check if a value is the special 'missing' value."""
         return getattr(val, 'moya_missing', False)
 
     @classmethod
@@ -177,7 +177,7 @@ class ExpressionModifiersBase(object):
 
     @classmethod
     def _to_query_list(cls, d):
-        """Ensures a dictionary contains lists"""
+        """Ensure a dictionary contains lists."""
         return [(k, v if isinstance(v, list) else [v]) for k, v in d.items()]
 
     @classmethod
@@ -217,7 +217,6 @@ class ExpressionModifiersBase(object):
     def _permission(cls, context, v):
         if not v:
             return True
-            #return bool(context['.user'])
         permissions = context['.permissions']
         if isinstance(v, list):
             return all(text_type(p) in permissions for p in v)
@@ -243,9 +242,7 @@ class ExpressionModifiersBase(object):
 
     @classmethod
     def _seqlast(cls, v, context):
-        """
-        Iterate over a sequence, returning the item and a flag that indicates if it is the last item.
-        """
+        """Iterate over a sequence, returning the item and a flag that indicates if it is the last item."""
         seq = list(v)
         last = len(v) - 1
         return [(i == last, l) for i, l in enumerate(seq)]
@@ -258,6 +255,7 @@ class ExpressionModifiersBase(object):
 
 
 class ExpressionModifiers(ExpressionModifiersBase):
+    """Functions exposed as modifiers in Moya expressions."""
 
     def abs(self, context, v):
         return abs(v)
@@ -677,16 +675,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return None
         return v
 
-    def partition(self, context, v):
+    def partition(self, context, v, _as_text=as_text):
         split_on = ' '
         if isinstance(v, list):
             try:
-                split_on = text_type(v[1])
-                v = text_type(v[0])
+                split_on = _as_text(v[1])
+                v = _as_text(v[0])
             except IndexError:
                 raise ValueError('partition expects string or [<string>, <partition>]')
         else:
-            v = text_type(v)
+            v = _as_text(v)
         a, b, c = v.partition(split_on)
         return a, b, c
 
@@ -697,16 +695,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
             raise ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
         return ExpressionDateTime.parse(date_string, _format)
 
-    def rpartition(self, context, v):
+    def rpartition(self, context, v, _as_text=as_text):
         split_on = ' '
         if isinstance(v, list):
             try:
-                split_on = text_type(v[1])
-                v = text_type(v[0])
+                split_on = _as_text(v[1])
+                v = _as_text(v[0])
             except IndexError:
                 raise ValueError('rpartition expects string or [<string>, <partition>]')
         else:
-            v = text_type(v)
+            v = _as_text(v)
         a, b, c = v.rpartition(split_on)
         return a, b, c
 
