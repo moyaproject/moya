@@ -383,8 +383,8 @@ class URLMapper(object):
             self._named_urls = _NamedURLs(self)
         return self._named_urls
 
-    def map(self, url, target, methods=None, handlers=None, defaults=None, name=None, priority=0):
-        """Map a url on to a target object"""
+    def map(self, url, target, methods=None, handlers=None, defaults=None, name=None, priority=0, final=False):
+        """Map a url on to a target object."""
         route = Route(self,
                       url,
                       partial=False,
@@ -393,7 +393,8 @@ class URLMapper(object):
                       handlers=handlers,
                       target=target,
                       name=name,
-                      order=self._get_order(priority))
+                      order=self._get_order(priority),
+                      final=final)
         try:
             route.re_route
         except ParseException as e:
@@ -405,7 +406,7 @@ class URLMapper(object):
         return route
 
     def mount(self, url, mapper, defaults=None, name=None, priority=0):
-        """Mount a sub-mapper on a url"""
+        """Mount a sub-mapper on a url."""
         if url:
             if not url.startswith('/'):
                 url = '/' + url
@@ -468,6 +469,8 @@ class URLMapper(object):
                         route_data = route.parse(url)
                         if route_data is not None:
                             add_route_match(RouteMatch(route_data, route.target, route.name))
+                            if route.final:
+                                break
 
             self._route_cache[route_key] = route_matches
         return iter(route_matches)
@@ -514,7 +517,8 @@ class Route(object):
                  handlers=None,
                  target=None,
                  name=None,
-                 order=(0, 0)):
+                 order=(0, 0),
+                 final=False):
         self.mapper = mapper
         self._route = route
         self.route = route
@@ -525,6 +529,7 @@ class Route(object):
         self.target = target
         self.name = name
         self.order = order
+        self.final = final
 
         self.component_names = []
         self.component_callables = {}

@@ -111,6 +111,10 @@ class URL(LogicElement):
                      required=False,
                      default=None)
 
+    final = Attribute("Ignore further URLs if this route matches?",
+                      type="boolean",
+                      default=False)
+
     def lib_finalize(self, context):
         if not self.check(context):
             return
@@ -168,7 +172,8 @@ class URL(LogicElement):
                                           methods=methods,
                                           handlers=handlers or None,
                                           name=params.name,
-                                          defaults=defaults)
+                                          defaults=defaults,
+                                          final=params.final)
             except ValueError as e:
                 raise errors.ElementError(text_type(e), element=self)
 
