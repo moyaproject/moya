@@ -18,7 +18,7 @@ from .. import trace
 from .. import __version__
 from ..content import Content
 from ..tags.content import ContentElementMixin
-from ..tools import get_return
+from ..tools import get_return, as_text
 from .. import syntax
 from ..timezone import Timezone
 from ..context.tools import to_expression, set_dynamic
@@ -234,7 +234,6 @@ class Mount(LogicElement):
     app = Attribute('Application', required=True)
     url = Attribute("Url", required=True)
     mountpoint = Attribute("Mount point", required=False, default="main")
-    #name = Attribute("Name", required=False)
     priority = Attribute("Priority (highest priority is checked first)", type="integer", required=False, default=0)
 
     def logic(self, context):
@@ -327,6 +326,61 @@ class GetFqURL(GetURL):
             base = context['.sys.site.host'] or context['.request.host_url']
         url = base + url
         return url
+
+
+class Trace(DataSetter):
+    """
+    Extract route information from a URL path.
+
+    Returns route matches in a list of dictionaries. Route matches have three keys;
+    [c]data[/c] is the url data (as returned in [c].url[/c]), [c]targets[/c] is a list of element references,
+    [c]name[/c] is the name of the matching URL.
+
+    If [c]app[/c] is provided, this tag will return the first url route from the given app.
+
+    """
+
+    class Help:
+        synopsis = "extract routing information from mounted URL paths"
+        example = """
+        <trace path=".request.path" dst="matches"/>
+        """
+
+    server = Attribute("Server containing URL routes", type="expression", default=".server", evaldefault=True)
+    path = Attribute("URL path to parse", type="expression", required=True, missing=False)
+    method = Attribute("HTTP method", type="text", default="GET")
+
+    app = Attribute("Application name", required=False, default=None, type="text")
+    name = Attribute("Route name to find", required=False, type="text", default=None)
+
+    def get_value(self, context):
+        params = self.get_parameters(context)
+        server, path, method, app, name = self.get_parameters(context, 'server', 'path', 'method', 'app', 'name')
+
+        if '://' in path:
+            _, _, path = path.partition('://')
+        if not path.startswith('/'):
+            path = '/' + path
+
+        if app is None and name is None:
+            routes = []
+            for route_match in server.urlmapper.iter_routes(path, method):
+                if route_match is not None:
+                    data, targets, name = route_match
+                    routes.append({'data': data, 'targets': targets, 'name': name})
+            return routes
+        else:
+            for route_match in server.urlmapper.iter_routes(path, method):
+                data, targets, _name = route_match
+                if app is not None:
+                    if data.get('app', None) != app:
+                        continue
+                if name is not None:
+                    if _name != name:
+                        continue
+                return {'data': data, 'targets': targets, 'name': name}
+            else:
+                return None
 
 
 def wrap_element_error(f):
