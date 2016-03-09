@@ -31,7 +31,7 @@
 
         <redirect-to path="${commentobject.object_url}" if="commentobject.hide or not commentobject.allow_new" />
         <db:get model="#Comment" dst="parent" if="parentid" let:id="parentid" />
-        <db:transaction>
+        <db:atomic>
             <db:create model="#Comment" dst="comment"
                 let:commenter_ip=".request.client_addr"
                 let:parent="parent or None"
@@ -39,7 +39,7 @@
                 let:level="parent ? parent.level + 1 : 0" />
             <let commentobject.count="commentobject.count+1"
                 commentobject.updates="commentobject.updates+1" />
-        </db:transaction>
+        </db:atomic>
         <fire signal="moya.comments.new-comment"
             let:commentobject="commentobject"
             let:comment="comment"/>
@@ -98,16 +98,17 @@
         <forms:get form="#form.comment" dst="form"/>
         <redirect-to url="${form.raw_data.object_url}" if="not form.csrf_check"/>
         <forms:validate-post src="form">
-            <call macro="#create_comment" dst="comment"
-                let:parentid="form.data.parentid"
-                let:object="form.data.object"
-                let:namespace="form.data.namespace"
-                let:object_url="form.data.object_url"/>
-            <let comment.user=".user"
-                 comment.moderated="yes"
-                 comment.text="form.data.text[:.app.settings.max_comment_length.int]"
-                 comment.format="comment.commentobject.markup"/>
-            <db:commit/>
+            <db:atomic>
+                <call macro="#create_comment" dst="comment"
+                    let:parentid="form.data.parentid"
+                    let:object="form.data.object"
+                    let:namespace="form.data.namespace"
+                    let:object_url="form.data.object_url"/>
+                <let comment.user=".user"
+                    comment.moderated="yes"
+                    comment.text="form.data.text[:.app.settings.max_comment_length.int]"
+                    comment.format="comment.commentobject.markup"/>
+            </db:atomic>
 
             <call macro="#subscribe" if="form.data.subscribe"
                 let:email=".user.email or comment.commenter_email"
@@ -185,53 +186,60 @@
         </forms:validate>
     </view>
 
-    <view libname="view.commentaction.get" content="#content.confirmation">
+    <view libname="view.commentaction.get" content="#content.confirmation" requires="permission:'admin'">
         <db:get-required model="#CommentObject" dst="comment"
             let:namespace=".request.GET.namespace"
             let:object=".request.GET.object" />
         <let action=".request.GET.action" />
         <let url=".request.GET.url or comment.object_url" />
-        <if test="action=='disable'">
+
+        <switch on="action">
+            <case>disable</case>
             <render dst="message"><bbcode>Disable comments for [b]${url}[/b]?</bbcode></render>
             <str dst="button">Disable</str>
-        </if>
-        <if test="action=='enable'">
+
+            <case>enable</case>
             <render dst="message"><bbcode>Enable comments for [b]${url}[/b]?</bbcode></render>
             <str dst="button">Enable</str>
-        </if>
-        <if test="action=='hide'">
+
+            <case>hide</case>
             <render dst="message"><bbcode>Hide comments for [b]${url}[/b]?</bbcode></render>
             <str dst="button">Hide</str>
-        </if>
-        <if test="action=='show'">
+
+            <case>show</case>
             <render dst="message"><bbcode>Show comments for [b]${url}[/b]?</bbcode></render>
             <str dst="button">Show</str>
-        </if>
+
+            <default-case/>
+            <redirect-to url="${url}"/>
+
+        </switch>
+
         <forms:get form="#form.confirm" dst="form"
             let:message="message" let:button="button" let:comment_id="comment.id" let:action="action" let:url="url"/>
     </view>
 
-    <view libname="view.commentaction.post">
+    <view libname="view.commentaction.post" requires="permission:'admin'">
         <db:get-required model="#CommentObject" dst="commentobject"
             let:id=".request.POST.comment_id" />
         <let url=".request.POST.url"/>
         <redirect-to path="${url}" if=".request.POST.cancel" />
         <let action=".request.POST.action" />
 
-        <db:transaction>
+        <db:atomic>
             <let commentobject.allow_new="False" if="action=='disable'"/>
             <let commentobject.allow_new="True" if="action=='enable'"/>
             <let commentobject.hide="False" if="action=='show'"/>
             <let commentobject.hide="True" if="action=='hide'"/>
             <let commentobject.updates="commentobject.updates+1" />
-        </db:transaction>
+        </db:atomic>
         <redirect-to path="${url}#comments" />
     </view>
 
     <view libname="view.unsubscribe" content="#content.unsubscribe">
         <db:get model="#Subscription" let:uid="url.uid" dst="subscription" />
         <forms:get form="#form.unsubscribe" dst="form" let:subscription="subscription"/>
-        <forms:validate src="form" if=".request.method == 'POST'">
+        <forms:validate-post src="form">
             <if test="form.data.all">
                 <db:query model="#Subscription" let:email="subscription.email" dst="subs" />
             </if>
@@ -240,7 +248,7 @@
             </else>
             <db:delete src="subs" />
             <let success="True" />
-        </forms:validate>
+        </forms:validate-post>
     </view>
 
     <view libname="view.subscription" content="#content.objectsubscription" requires=".user">
@@ -248,29 +256,36 @@
         <let action=".request.GET.action" />
         <let url="comment_object.object_url or .request.GET.url" />
 
-        <if test="action=='subscribe'">
+        <switch on="action">
+            <case>subscribe</case>
             <render dst="message"><bbcode>Subscribe to comments on [b]${url}[/b]?</bbcode></render>
             <str dst="button">Subscribe</str>
-        </if>
-        <if test="action=='unsubscribe'">
+
+            <case>unsubscribe</case>
             <render dst="message"><bbcode>Unsubscribe from comments on [b]${url}[/b]?</bbcode></render>
             <str dst="button">Unsubscribe</str>
-        </if>
+
+            <default-case/>
+            <redirect-to path="${url}" />
+        </switch>
+
         <forms:get form="#form.confirm" dst="form" src="page"
             let:message="message" let:button="button" let:action="action" let:url="url"/>
 
-        <forms:validate src="form" if=".request.method == 'POST'">
+        <forms:validate-post src="form">
             <redirect-to path="${form.data.url or url}" if="form.data.cancel" />
             <let action="form.data.action" url="form.data.url or url" />
             <if test="action=='subscribe'">
-                <db:create model="#ObjectSubscription" let:user=".user" let:commentobject="comment_object"/>
+                <db:create model="#ObjectSubscription"
+                    let:user=".user" let:commentobject="comment_object"/>
                 <catch/>
             </if>
             <else>
-                <db:query  model="#ObjectSubscription" let:user=".user" let:commentobject="comment_object" action="delete" />
+                <db:query model="#ObjectSubscription" action="delete"
+                    let:user=".user" let:commentobject="comment_object" />
             </else>
             <redirect-to path="${url}" />
-        </forms:validate>
+        </forms:validate-post>
     </view>
 
 </moya>

@@ -40,4 +40,18 @@
         <return value="comment_object.count or 0" />
     </tag>
 
+    <tag name="subscribe" synopsis="subscribe a user to a comment object">
+        <signature>
+            <attribute name="user" type="expression">User to subscribe</attribute>
+            <attribute name="commentobject" type="expression">Comment object</attribute>
+        </signature>
+        <db:create model="moya.comments#ObjectSubscription" dst="sub"
+            let:user="user" let:commentobject="commentobject"/>
+        <catch exception="db.integrity-error">
+            <log-debug>${user} already subscribed to ${commentobject}</log-debug>
+            <return/>
+        </catch>
+        <log-debug>Subscribed ${user} to ${commentobject}</log-debug>
+    </tag>
+
 </moya>

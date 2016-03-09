@@ -9,6 +9,7 @@
         slug="moya-comments" title="Comments" description="Manage users and permissions">
         <link to="#table.commentobjects" title="Comment Objects" />
         <link to="#table.comments" title="Comments"/>
+        <link to="#table.object-subscriptions" title="Object Subscriptions"/>
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
@@ -34,7 +35,15 @@
         <column title="Moderated?" sort="moderated">
             <check ticked="object.moderated" />
         </column>
+    </table>
 
+    <table xmlns="http://moyaproject.com/admin" order="-id"
+        model="#ObjectSubscription"
+        libname="table.object-subscriptions" slug="object-subscriptions" title="Object Subscriptions"
+        description="User's subcriptions">
+        <column title="ID" link="yes" sort="id">${object.id}</column>
+        <column title="User" sort="user.username"><moya:render src="object.user"/></column>
+        <column title="Comment Object" sort="commentobject.object">${object.commentobject}</column>
     </table>
 
 </moya>
