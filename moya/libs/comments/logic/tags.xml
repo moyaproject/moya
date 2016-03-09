@@ -45,7 +45,7 @@
             <attribute name="user" type="expression">User to subscribe</attribute>
             <attribute name="commentobject" type="expression">Comment object</attribute>
         </signature>
-        <db:create model="moya.comments#ObjectSubscription" dst="sub"
+        <db:create model="#ObjectSubscription" dst="sub"
             let:user="user" let:commentobject="commentobject"/>
         <catch exception="db.integrity-error">
             <log-debug>${user} already subscribed to ${commentobject}</log-debug>
