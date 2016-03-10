@@ -1600,6 +1600,31 @@ class MarkupBlockNode(Node):
         return html
 
 
+class MarkdownNode(Node):
+    tag_name = "markdown"
+
+    def on_create(self, environment, parser):
+        exp_map = parser.expect_word_expression_map('target', 'set')
+        self.options_expression = exp_map.get('set', DefaultExpression({}))
+        self.target_expression = exp_map.get('target', DefaultExpression("html"))
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        markup = self.render_contents(environment, context, template, text_escape)
+        target = self.target_expression.eval(context)
+        options = self.options_expression.eval(context)
+        try:
+            markup_renderable = Markup(markup, 'markdown')
+            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+        except MarkupError as e:
+            self.render_error("unable to render markup ({})".format(e))
+        except Exception as e:
+            import traceback
+            traceback.print_exc(e)
+            self.render_error("{}".format(e))
+        return html
+
+
 class ExtractNode(Node):
     tag_name = "extract"
 

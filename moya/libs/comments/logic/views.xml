@@ -266,7 +266,9 @@
             <str dst="button">Unsubscribe</str>
 
             <default-case/>
-            <redirect-to path="${url}" />
+            <if-get>
+                <redirect-to path="${url}" />
+            </if-get>
         </switch>
 
         <forms:get form="#form.confirm" dst="form" src="page"

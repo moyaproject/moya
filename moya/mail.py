@@ -77,9 +77,9 @@ class Email(object):
         if _from:
             table.append([(Cell("From:", bold=True)), _from])
         if self.text:
-            table.append(['text', summarize_text(self.text, max_length=300)])
+            table.append(['text', summarize_text(self.text, max_length=3000)])
         if self.html:
-            table.append(['html', summarize_text(self.html, max_length=300)])
+            table.append(['html', summarize_text(self.html, max_length=3000)])
         console.table(table, header=False, dividers=False)
 
     def set_from(self, value):

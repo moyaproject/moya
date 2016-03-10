@@ -16,6 +16,7 @@ Added app: appname: and appsettings: modifiers
 Modified data: modifier to accept a list of [<app>, <path>] in addition to just path
 Added <trace> tag
 Added `final` attribute to <url> tags
+Added {% markdown %} template tag
 
 0.6.6
 -----
