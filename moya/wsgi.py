@@ -27,6 +27,7 @@ from fs.path import splitext
 from fs.opener import fsopendir
 from fs.errors import FSError
 
+import io
 import gc
 import random
 from time import time, clock, sleep
@@ -354,16 +355,27 @@ class WSGIApplication(object):
 
         return response
 
+    def slow_iter(self, response_iter):
+        """A generator that yields data slowly."""
+        response_file = io.BytesIO(b''.join(response_iter))
+        while 1:
+            chunk = response_file.read(16384)
+            if not chunk:
+                break
+            sleep(0.1)
+            yield chunk
+
     def __call__(self,
                  environ,
                  start_response):
-        """Build the request"""
+        """Build the request."""
 
         if self.rebuild_required and not is_debugging():
             with debug_lock:
                 self.do_rebuild()
 
-        if self.simulate_slow_network:
+        slow = self.simulate_slow_network
+        if slow:
             sleep(random.uniform(.2, .5))
 
         start = time()
@@ -390,13 +402,14 @@ class WSGIApplication(object):
             if request.method == 'HEAD':
                 return []
             else:
-                return response.app_iter
+                if slow:
+                    return self.slow_iter(response.app_iter)
+                else:
+                    return response.app_iter
         finally:
-
             self.archive.fire(context,
                               "request.end",
                               data={'response': response})
-
             context.root = {}
 
 
