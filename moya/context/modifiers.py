@@ -5,9 +5,12 @@ from __future__ import unicode_literals
 from ..versioning import Version, VersionSpec
 from ..url import URL, get_domain, urlencode
 from ..compat import (text_type,
+                      py2bytes,
                       string_types,
                       int_types,
                       number_types,
+                      quote,
+                      unquote,
                       unichr)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
@@ -26,6 +29,7 @@ from ..reader import ReaderError
 from ..render import render_object
 from .. import connectivity
 from .. import moyajson
+from ..import compat
 
 from fs.path import (basename,
                      pathjoin,
@@ -35,7 +39,6 @@ from fs.path import (basename,
 
 import uuid
 import hashlib
-import urllib
 import copy
 import collections
 from base64 import b64decode, b64encode
@@ -49,7 +52,8 @@ from math import ceil, floor, log
 
 
 class Path(text_type):
-    """Magic for paths"""
+    """Magic for paths."""
+
     def __truediv__(self, other):
         return Path(pathjoin(self, text_type(other)))
 
@@ -936,10 +940,10 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return text_type(url)
 
     def urlunquote(self, context, v):
-        return urllib.unquote(text_type(v))
+        return compat.unquote(text_type(v))
 
     def urlquote(self, context, v):
-        return urllib.quote(text_type(v))
+        return compat.quote(text_type(v))
 
     def uuid(self, context, v):
         if v in (1, 4):
@@ -957,7 +961,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
                 raise ValueError('invalid params for uuid: modifier')
             if version not in (3, 5):
                 raise ValueError('uuid: modifer uuid type must be 1, 2, 4, or 5')
-            return make_uuid(context, version, nstype=nstype, nsname=nsname.encode('utf-8'))
+            return make_uuid(context, version, nstype=nstype, nsname=py2bytes(nsname))
 
     def validfloat(self, context, v):
         return self._validfloat(context, v)
@@ -981,4 +985,4 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return None
 
     def zip(self, content, v):
-        return zip(*v)
+        return list(zip(*v))

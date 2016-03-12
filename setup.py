@@ -47,7 +47,7 @@ setup(
     classifiers=classifiers,
     install_requires=[
         'pyparsing >= 2.0.7',
-        'webob',
+        'webob>=1.5,<2',
         'sqlalchemy',
         'pytz',
         'pygments',

@@ -340,7 +340,7 @@ class TestModifiers(unittest.TestCase):
         assert m.version(c, '3.2.3').major == 3
         assert isinstance(m.version(c, '3.2.3'), Version)
 
-        assert m.zip(c, [[1, 2], [3, 4]]) == [(1, 3), (2, 4)]
+        self.assertEqual(m.zip(c, [[1, 2], [3, 4]]), [(1, 3), (2, 4)])
 
         assert m.versionspec(c, 'moya.tests==1.0.0').name == 'moya.tests'
         assert isinstance(m.versionspec(c, 'moya.tests==1.0.0'), VersionSpec)
