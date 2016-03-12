@@ -9,7 +9,7 @@
 
 	<email libname="email.subscription" xmlns="http://moyaproject.com/email"
         from="${.app.settings.email_from}"
-        subject="Reply to your comment">
+        subject="New comment">
         <text template="email/subscription.txt" />
         <html template="email/subscription.html" />
     </email>
