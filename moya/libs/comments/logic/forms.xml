@@ -65,12 +65,12 @@
         <validate-field field="commenter_name">
             <fail if="not strip:value">Please enter your name</fail>
         </validate-field>
-        <validate-field field="email">
-            <fail if="value and ('@' not in value or '.' not in value)">
+        <validate-field field="commenter_email">
+            <fail if="value and not isemail:value">
                 Please enter a valid email address
             </fail>
         </validate-field>
-        <validate-field field="url">
+        <validate-field field="commenter_url">
             <fail if="value and not (value ^= 'http://' or value ^= 'https://')">
                 URL must start with http:// or https://
             </fail>
