@@ -118,7 +118,7 @@ To list all available commands for a given application, omit the libname:
         settings = self.args.settings
 
         moya_service = os.environ.get('MOYA_SERVICE_PROJECT', None)
-        if moya_service is not None:
+        if moya_service is not None and self.master_settings is not None:
             settings = self.master_settings.get('service', 'ini', None)
         if not settings:
             settings = os.environ.get('MOYA_PROJECT_INI', None) or self.moyarc.get('defaults', 'ini', 'settings.ini').strip()

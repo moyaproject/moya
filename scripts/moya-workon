@@ -1,4 +1,6 @@
 #!/bin/sh
-
-export MOYA_SERVICE_PROJECT="$1"
-$SHELL -i
+moya-srv where $1
+if [ $? -eq 0 ]; then
+    export MOYA_SERVICE_PROJECT="$1"
+    $SHELL -i
+fi
