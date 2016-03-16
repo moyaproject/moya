@@ -204,7 +204,9 @@ class MoyaSrv(object):
                 location = settings.get('service', 'location', None)
         if location is None:
             self.error("no project '{}'".format(name))
+            return -1
         sys.stdout.write(location)
+        return 0
 
     def run_restart(self):
         name = self.args.name
