@@ -412,6 +412,10 @@ class View(ContextElementBase, ContentElementMixin):
     requires = Attribute("Permission expression", type="expression", required=False, default=None)
     withscope = Attribute("Use scope as template / content data?", type="boolean", required=False, default=True)
 
+
+    def extend_context(self, context):
+        """Hook to extend the context."""
+
     @wrap_element_error
     def run(self, context):
         (content,
@@ -427,6 +431,7 @@ class View(ContextElementBase, ContentElementMixin):
             if not requires:
                 raise logic.EndLogic(http.RespondForbidden())
 
+        self.extend_context(context)
         yield logic.DeferNodeContents(self)
 
         if '_return' in context:
@@ -441,7 +446,6 @@ class View(ContextElementBase, ContentElementMixin):
             app = self.get_app(context)
             template = self.resolve_templates(app, templates)
             if content is not None:
-                #self.get_element(content)
                 if not hasattr(scope, 'items'):
                     self.throw("view.bad-return",
                                "View should return a dict or other mapping object (not {})".format(to_expression(scope)))

@@ -14,6 +14,7 @@ __all__ = ['cookie',
            'tag',
            'email',
            'elements',
+           'generic',
            'highlight',
            'inspect',
            'markup',
@@ -44,6 +45,7 @@ from . import html
 from . import tag
 from . import email
 from . import elements
+from . import generic
 from . import highlight
 from . import inspect
 from . import markup

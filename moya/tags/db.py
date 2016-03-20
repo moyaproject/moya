@@ -1652,7 +1652,7 @@ class GetOrCreate(DBDataSetter):
     """
     Get an object from the db if it exists, create it if it doesn't.
 
-    If the object is create, the code in the enclosed block is executed.
+    If the object is created, the code in the enclosed block is executed.
 
     """
 
@@ -1691,8 +1691,6 @@ class GetOrCreate(DBDataSetter):
         created = False
         dst = params.dst
         let_map = self.get_let_map(context, check_missing=True)
-        #query = [getattr(table_class, k) == dbobject(v)
-        #         for k, v in let_map.items()]
         query = Get._get_attributes_query(self, context, table_class, let_map)
         qs = dbsession.query(table_class).filter(*query)
         if params.forupdate:
@@ -1854,12 +1852,16 @@ class Delete(ContextElementBase, DBMixin):
 
 
 class Get(DBDataSetter):
-    """Get an object from the database."""
+    """
+    Get an object from the database.
+
+    This tag will return a dagabase object if it exists, otherwise `None`. Additionally, if the object exists, the enclosed block will be executed.
+    """
 
     class Help:
         synopsis = """get an object in the database."""
         example = """
-            <db:getrequired model="#Topic" let:slug="url.topic" dst="topic"/>
+            <db:get model="#Topic" let:slug="url.topic" dst="topic"/>
         """
 
     class Meta:
@@ -1929,19 +1931,12 @@ For example **let:{k}="name or 'anonymous'"**
                 self.throw("db.unknown-field",
                            "the value '{}' is not a valid attribute for this model".format(k))
 
-        #query = ((getattr(table_class, k) == v) for k, v in query.items())
-
-
         query = self._get_attributes_query(self, context, table_class, query)
 
         if params.src:
             src = params.src
             qs = self._qs(context, dbsession, src)
             qs = qs.filter(*query)
-            # if hasattr(src, '_get_query_set'):
-            #     qs = src._get_query_set()
-            # else:
-            #     qs = src
         else:
             qs = dbsession.query(table_class).filter(*query)
 
@@ -1959,6 +1954,9 @@ For example **let:{k}="name or 'anonymous'"**
         self.check_value(context, value)
 
         self.set_context(context, self.dst(context), value)
+
+        if value:
+            yield logic.DeferNodeContents(self)
 
     def get_value(self, context, qs):
         return qs.first()
@@ -2090,34 +2088,6 @@ def query_flatten(qs):
                 yield item
         else:
             yield obj
-
-
-# class GetModel(DBDataSetter):
-#     xmlns = namespaces.db
-
-#     _from = Attribute("Model app", type="application", required=False, default=None)
-#     model = Attribute("Model reference", required=True)
-
-#     def logic(self, context):
-#         params = self.get_parameters(context)
-#         app = self.get_app(context)
-#         model_app, model = self.get_element(params.name, app=app)
-#         table_class = model.get_table_class(model_app)
-#         self.set_context(context, params.dst, table_class)
-
-
-# class GetTable(DBDataSetter):
-#     xmlns = namespaces.db
-
-#     _from = Attribute("Model app", type="application", required=False, default=None)
-#     model = Attribute("Model", type="expression", required=False, default=None)
-
-#     def logic(self, context):
-#         params = self.get_parameters(context)
-#         app = self.get_app(context)
-#         #model_app, model = self.get_element(params.name, app=app)
-#         table_class = params.model.get_table_class(app)
-#         self.set_context(context, params.dst, table_class)
 
 
 class GetColumn(DBDataSetter):
@@ -2412,11 +2382,6 @@ class Query(DBDataSetter):
                 sort_col, exp_context = DBExpression(field).eval2(archive, context, app)
                 if qs is not None:
                     qs = exp_context.process_qs(qs)
-                    # for j in exp_context.joins:
-                    #     if isinstance(j, (tuple, list)):
-                    #         qs = qs.join(*j)
-                    #     else:
-                    #         qs = qs.join(j)
                 if reverse or descending:
                     sort_col = desc(sort_col)
                 order.append(sort_col)
@@ -2453,11 +2418,6 @@ class Query(DBDataSetter):
 
         if params.src is not None:
             qs = self._qs(context, dbsession, params.src)
-            #src = params.src
-            #if hasattr(src, '_get_query_set'):
-            #    qs = src._get_query_set()
-            #else:
-            #    qs = src
             table_class = getattr(dbobject(params.src), 'table_class', None)
             if table_class is None:
                 raise errors.ElementError('src attribute must be a database object, not {}'.format(context.to_expr(params.src)), element=self)

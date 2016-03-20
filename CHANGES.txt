@@ -18,6 +18,7 @@ Added <trace> tag
 Added `final` attribute to <url> tags
 Added {% markdown %} template tag
 Improved --slow option to slow down delivery of response as well as delay first byte
+Made <db:get> execute block if an object is returned
 
 0.6.6
 -----
