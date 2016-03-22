@@ -110,7 +110,7 @@ class GetMarkupChoices(DataSetter):
 
 
 class MarkupInsert(LogicElement):
-    """A callable invokef from Moya maarkup"""
+    """A callable invoked from Moya markup"""
     _moya_markup_insert = True
 
     class Help:

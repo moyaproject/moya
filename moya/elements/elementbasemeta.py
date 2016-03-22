@@ -48,7 +48,7 @@ class ElementBaseMeta(type):
         new_class._tag_attributes = attributes
         new_class._tag_attributes_set = frozenset(chain(iterkeys(attributes), ('libname', 'docname', 'if')))
         new_class._required_tag_attributes = frozenset(attribute.name for attribute in itervalues(new_class._tag_attributes) if attribute.required)
-        new_class._tag_doc = new_class.__doc__
+        new_class._tag_doc = getattr(new_class, '__moya_doc__', new_class.__doc__)
 
         new_class._definition = inspect.getsourcefile(new_class)
 

@@ -310,38 +310,40 @@ def make_default_section(name):
     _name = name
 
     class _Section(SectionElement):
-        """
-        Define a content [tag]section[/tag] called '{name}'.
+        __moya_doc__ = """
+            Define a content [tag]section[/tag] called '{name}'.
 
-        This is a shortcut for the following:
-        [code xml]
-        <section name="{name}">
-            <!-- content tags here... -->
-        </section>
-        [/code]
-        """
+            This is a shortcut for the following:
+            [code xml]
+            <section name="{name}">
+                <!-- content tags here... -->
+            </section>
+            [/code]""".format(name=_name)
 
         class Help:
             synopsis = "add a '{}' content section".format(_name)
+            example = """
+            <section-{}">
+            <!-- content tags here... -->
+            </section>
+            """.format(_name)
 
         class Meta:
             tag_name = "section-" + _name
 
         name = Attribute("The name of the section", required=False, default=_name)
 
-    _Section.__doc__ = _Section.__doc__.format(name=_name)
-
     return _Section
 
 SectionHead = make_default_section('head')
-SectionHead = make_default_section('css')
-SectionHead = make_default_section('includecss')
-SectionHead = make_default_section('js')
-SectionHead = make_default_section('jsfoot')
-SectionHead = make_default_section('includejs')
-SectionHead = make_default_section('body')
-SectionHead = make_default_section('content')
-SectionHead = make_default_section('footer')
+SectionCss = make_default_section('css')
+SectionIncludecss = make_default_section('includecss')
+SectionJs = make_default_section('js')
+SectionJsfoot = make_default_section('jsfoot')
+SectionIncludejs = make_default_section('includejs')
+SectionBody = make_default_section('body')
+SectionContent = make_default_section('content')
+SectionFooter = make_default_section('footer')
 
 
 class Node(LogicElement, ContentElementMixin):
