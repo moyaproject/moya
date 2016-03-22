@@ -485,12 +485,12 @@ class Form(AttributeExposer):
         self.current_node.add_child(renderable)
 
     def add_fail(self, field, msg):
-        """Add a message to a list of errors for a given field"""
+        """Add a message to a list of errors for a given field."""
         self._fields[field][0].errors.append(msg)
         self.errors[field].append(msg)
 
     def set_fail(self, field, msg):
-        """Replace the current list of errors for a field"""
+        """Replace the current list of errors for a field."""
         self._fields[field][0].errors[:] = [msg]
         self.errors[field][:] = [msg]
 
@@ -523,12 +523,6 @@ class Form(AttributeExposer):
 
         if not self.csrf_check:
             console.text('CSRF check failed -- form did not originate from here!', fg="red", bold=True)
-
-    # def fill_initial(self, context):
-    #     for field in self.all_fields:
-    #         if field.initial is not None:
-    #             value = field.initial
-    #             field.value = self.raw_data[field.value] = value
 
     def get_initial_binding(self, context):
         binding = {}
