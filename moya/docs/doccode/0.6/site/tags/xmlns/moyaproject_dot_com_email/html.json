@@ -39,18 +39,6 @@
                 "metavar": null,
                 "empty": true,
                 "choices": null
-            },
-            "premailer": {
-                "default_display": "no",
-                "name": "premailer",
-                "missing": true,
-                "default": false,
-                "doc": "Post process html email?",
-                "required": false,
-                "type": "boolean",
-                "metavar": null,
-                "empty": true,
-                "choices": null
             }
         },
         "example": null,

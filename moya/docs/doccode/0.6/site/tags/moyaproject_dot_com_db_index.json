@@ -1099,7 +1099,7 @@
                 "prev_tag": "delete",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "delete-all",
-                "next_tag": "float",
+                "next_tag": "doc",
                 "synopsis": "delete all objects in a table",
                 "params": {
                     "model": {
@@ -1144,12 +1144,27 @@
                 }
             },
             {
+                "name": "doc",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com_db",
+                "defined": "/home/will/projects/moya/moya/tags/db.py",
+                "doc": "\nDocument a model.\n\n",
+                "prev_tag": "delete-all",
+                "namespace": "http://moyaproject.com/db",
+                "tag_name": "doc",
+                "next_tag": "float",
+                "synopsis": "document a DB model",
+                "params": {},
+                "example": null,
+                "inherited_params": {}
+            },
+            {
                 "name": "float",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
                 "doc": "Defines a [i]floating point[/i] field. Must appear within a <model> tag.",
-                "prev_tag": "delete-all",
+                "prev_tag": "doc",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "float",
                 "next_tag": "foreign-key",
@@ -1380,7 +1395,7 @@
                         "name": "owned",
                         "missing": true,
                         "default": false,
-                        "doc": "Is tis model owned by the referenced model?",
+                        "doc": "Is this model owned by the referenced model?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,
@@ -1616,7 +1631,7 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
-                "doc": "Get an object from the database.",
+                "doc": "\nGet an object from the database.\n\nThis tag will return a dagabase object if it exists, otherwise `None`. Additionally, if the object exists, the enclosed block will be executed.\n",
                 "prev_tag": "generic-key",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "get",
@@ -1720,7 +1735,7 @@
                         "choices": null
                     }
                 },
-                "example": "\n            <db:getrequired model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
+                "example": "\n            <db:get model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
                 "inherited_params": {
                     "dst": {
                         "default_display": "",
@@ -1873,7 +1888,7 @@
                 "next_tag": "get-one",
                 "synopsis": "get an object in the database.",
                 "params": {},
-                "example": "\n            <db:getrequired model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
+                "example": "\n            <db:get model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
                 "inherited_params": {
                     "orderby": {
                         "default_display": "",
@@ -2162,7 +2177,7 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com_db",
                 "defined": "/home/will/projects/moya/moya/tags/db.py",
-                "doc": "\nGet an object from the db if it exists, create it if it doesn't.\n\nIf the object is create, the code in the enclosed block is executed.\n\n",
+                "doc": "\nGet an object from the db if it exists, create it if it doesn't.\n\nIf the object is created, the code in the enclosed block is executed.\n\n",
                 "prev_tag": "get-one",
                 "namespace": "http://moyaproject.com/db",
                 "tag_name": "get-or-create",
@@ -3334,7 +3349,7 @@
                         "name": "owned",
                         "missing": true,
                         "default": false,
-                        "doc": "Is tis model owned by the referenced model?",
+                        "doc": "Is this model owned by the referenced model?",
                         "required": false,
                         "type": "boolean",
                         "metavar": null,

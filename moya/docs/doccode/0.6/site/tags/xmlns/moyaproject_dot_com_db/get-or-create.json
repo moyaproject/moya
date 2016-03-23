@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com_db",
         "defined": "/home/will/projects/moya/moya/tags/db.py",
-        "doc": "\nGet an object from the db if it exists, create it if it doesn't.\n\nIf the object is create, the code in the enclosed block is executed.\n\n",
+        "doc": "\nGet an object from the db if it exists, create it if it doesn't.\n\nIf the object is created, the code in the enclosed block is executed.\n\n",
         "namespace": "http://moyaproject.com/db",
         "synopsis": "get an object from the database, or create it if it doesn't exist.",
         "tag_name": "get-or-create",

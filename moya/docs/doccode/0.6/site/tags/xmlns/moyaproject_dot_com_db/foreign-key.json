@@ -105,7 +105,7 @@
                 "name": "owned",
                 "missing": true,
                 "default": false,
-                "doc": "Is tis model owned by the referenced model?",
+                "doc": "Is this model owned by the referenced model?",
                 "required": false,
                 "type": "boolean",
                 "metavar": null,

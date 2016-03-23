@@ -10,7 +10,7 @@
                 "lib": "moya.admin",
                 "namespace_slug": "moyaproject_dot_com_admin",
                 "defined": "/home/will/projects/moya/moya/libs/admin/logic/widgets.xml (line 131)",
-                "doc": "Define a column in a database view\"",
+                "doc": "Define a column in a database view",
                 "prev_tag": "upload-file",
                 "namespace": "http://moyaproject.com/admin",
                 "tag_name": "column",

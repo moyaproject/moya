@@ -16,26 +16,14 @@
         "synopsis": "import a library",
         "tag_name": "import",
         "params": {
-            "priority": {
+            "name": {
                 "default_display": "",
-                "name": "priority",
+                "name": "name",
                 "missing": true,
                 "default": null,
-                "doc": "Priority for elements",
+                "doc": "Name of the library",
                 "required": false,
-                "type": "integer",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
-            "templatepriority": {
-                "default_display": "",
-                "name": "templatepriority",
-                "missing": true,
-                "default": null,
-                "doc": "Priority for templates",
-                "required": false,
-                "type": "integer",
+                "type": "text",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -52,6 +40,18 @@
                 "empty": true,
                 "choices": null
             },
+            "priority": {
+                "default_display": "",
+                "name": "priority",
+                "missing": true,
+                "default": null,
+                "doc": "Priority for elements",
+                "required": false,
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "location": {
                 "default_display": "",
                 "name": "location",
@@ -64,14 +64,26 @@
                 "empty": true,
                 "choices": null
             },
-            "name": {
+            "templatepriority": {
                 "default_display": "",
-                "name": "name",
+                "name": "templatepriority",
                 "missing": true,
                 "default": null,
-                "doc": "Name of the library",
+                "doc": "Priority for templates",
                 "required": false,
-                "type": "text",
+                "type": "integer",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "datapriority": {
+                "default_display": "",
+                "name": "datapriority",
+                "missing": true,
+                "default": null,
+                "doc": "Priority for library data",
+                "required": false,
+                "type": "integer",
                 "metavar": null,
                 "empty": true,
                 "choices": null

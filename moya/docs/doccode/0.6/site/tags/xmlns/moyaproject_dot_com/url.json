@@ -16,14 +16,26 @@
         "synopsis": "add a url to a mountpoint",
         "tag_name": "url",
         "params": {
-            "methods": {
-                "default_display": "GET,POST",
-                "name": "methods",
+            "name": {
+                "default_display": "",
+                "name": "name",
                 "missing": true,
-                "default": "GET,POST",
-                "doc": "A list of comma separated HTTP methods",
+                "default": null,
+                "doc": "An optional name",
                 "required": false,
-                "type": "comma list",
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "route": {
+                "default_display": "",
+                "name": "route",
+                "missing": true,
+                "default": null,
+                "doc": "URL route",
+                "required": true,
+                "type": "text",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -76,26 +88,26 @@
                 "empty": true,
                 "choices": null
             },
-            "route": {
-                "default_display": "",
-                "name": "route",
+            "final": {
+                "default_display": "no",
+                "name": "final",
                 "missing": true,
-                "default": null,
-                "doc": "URL route",
-                "required": true,
-                "type": "text",
+                "default": false,
+                "doc": "Ignore further URLs if this route matches?",
+                "required": false,
+                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null
             },
-            "name": {
-                "default_display": "",
-                "name": "name",
+            "methods": {
+                "default_display": "GET,POST",
+                "name": "methods",
                 "missing": true,
-                "default": null,
-                "doc": "An optional name",
+                "default": "GET,POST",
+                "doc": "A list of comma separated HTTP methods",
                 "required": false,
-                "type": "text",
+                "type": "comma list",
                 "metavar": null,
                 "empty": true,
                 "choices": null

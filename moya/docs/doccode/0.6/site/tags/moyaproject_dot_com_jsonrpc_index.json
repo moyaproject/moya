@@ -211,14 +211,14 @@
                         "empty": true,
                         "choices": null
                     },
-                    "required": {
-                        "default_display": "yes",
-                        "name": "required",
+                    "null": {
+                        "default_display": "",
+                        "name": "null",
                         "missing": true,
-                        "default": true,
-                        "doc": "Required?",
+                        "default": false,
+                        "doc": "Also permit a null value? (None in Moya)",
                         "required": false,
-                        "type": "boolean",
+                        "type": "text",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -243,6 +243,18 @@
                         "doc": "Name of the parameter",
                         "required": true,
                         "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "required": {
+                        "default_display": "yes",
+                        "name": "required",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Required?",
+                        "required": false,
+                        "type": "boolean",
                         "metavar": null,
                         "empty": true,
                         "choices": null

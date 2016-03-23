@@ -28,18 +28,6 @@
                 "empty": true,
                 "choices": null
             },
-            "from": {
-                "default_display": "",
-                "name": "from",
-                "missing": true,
-                "default": null,
-                "doc": "From email",
-                "required": false,
-                "type": "text",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
             "template": {
                 "default_display": "",
                 "name": "template",

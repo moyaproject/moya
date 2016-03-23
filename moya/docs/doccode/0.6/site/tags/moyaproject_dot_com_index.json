@@ -494,7 +494,7 @@
                 "prev_tag": "attempt",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "attribute",
-                "next_tag": "bbcode",
+                "next_tag": "auth-check",
                 "synopsis": "define an attribute in a custom tag",
                 "params": {
                     "name": {
@@ -623,12 +623,53 @@
                 "inherited_params": {}
             },
             {
+                "name": "auth-check",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/response.py",
+                "doc": "\nPerform a basic auth check.\n\nThis tag returns a 401 response if basic auth isn't supplied.\n\nIf basic auth credentials are included in the request, they are decoded and the enclosed block is executed with the variables [c]username[/c] and [c]password[/c]. The enclosed block can then use the [tag]denied[/tag] tag to reject bad credentials. Here is an example:\n\n[code xml]\n<auth-check>\n    <denied if=\"[username, password] != ['john', 'iloveaeryn']\" />\n</auth-check>\n[/code]\n\n",
+                "prev_tag": "attribute",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "auth-check",
+                "next_tag": "bbcode",
+                "synopsis": "perform basic auth check",
+                "params": {
+                    "realm": {
+                        "default_display": "\"restricted\"",
+                        "name": "realm",
+                        "missing": true,
+                        "default": "restricted",
+                        "doc": "Basic auth realm",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "bbcode",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/markup.py",
                 "doc": "Add bbcode to content",
-                "prev_tag": "attribute",
+                "prev_tag": "auth-check",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "bbcode",
                 "next_tag": "bool",
@@ -2008,7 +2049,7 @@
                 "prev_tag": "defer",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "delete-cookie",
-                "next_tag": "dict",
+                "next_tag": "denied",
                 "synopsis": "delete a cookie",
                 "params": {
                     "name": {
@@ -2041,12 +2082,53 @@
                 }
             },
             {
+                "name": "denied",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/response.py",
+                "doc": "\nReject basic auth. Generally used in conjunction with [tag]auth-check[/tag].\n\n",
+                "prev_tag": "delete-cookie",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "denied",
+                "next_tag": "dict",
+                "synopsis": "reject basic authorization",
+                "params": {
+                    "realm": {
+                        "default_display": "",
+                        "name": "realm",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Basic auth realm",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "dict",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/context.py",
                 "doc": "Create a [i]dictionary[/i] object. A dictionary maps [i]keys[/i] on to [i]values[/i]. The keys and values are defined in the enclosing block, or via the [i]let map[/i].",
-                "prev_tag": "delete-cookie",
+                "prev_tag": "denied",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "dict",
                 "next_tag": "do",
@@ -4753,26 +4835,14 @@
                 "next_tag": "inc",
                 "synopsis": "import a library",
                 "params": {
-                    "priority": {
+                    "name": {
                         "default_display": "",
-                        "name": "priority",
+                        "name": "name",
                         "missing": true,
                         "default": null,
-                        "doc": "Priority for elements",
+                        "doc": "Name of the library",
                         "required": false,
-                        "type": "integer",
-                        "metavar": null,
-                        "empty": true,
-                        "choices": null
-                    },
-                    "templatepriority": {
-                        "default_display": "",
-                        "name": "templatepriority",
-                        "missing": true,
-                        "default": null,
-                        "doc": "Priority for templates",
-                        "required": false,
-                        "type": "integer",
+                        "type": "text",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -4789,6 +4859,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "priority": {
+                        "default_display": "",
+                        "name": "priority",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Priority for elements",
+                        "required": false,
+                        "type": "integer",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "location": {
                         "default_display": "",
                         "name": "location",
@@ -4801,14 +4883,26 @@
                         "empty": true,
                         "choices": null
                     },
-                    "name": {
+                    "templatepriority": {
                         "default_display": "",
-                        "name": "name",
+                        "name": "templatepriority",
                         "missing": true,
                         "default": null,
-                        "doc": "Name of the library",
+                        "doc": "Priority for templates",
                         "required": false,
-                        "type": "text",
+                        "type": "integer",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "datapriority": {
+                        "default_display": "",
+                        "name": "datapriority",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Priority for library data",
+                        "required": false,
+                        "type": "integer",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -6541,7 +6635,7 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/markup.py",
-                "doc": "A callable invokef from Moya maarkup",
+                "doc": "A callable invoked from Moya markup",
                 "prev_tag": "markup",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "markup-insert",
@@ -9288,7 +9382,7 @@
                 "prev_tag": "request-post",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "resolve-template",
-                "next_tag": "response",
+                "next_tag": "respond",
                 "synopsis": "resolve a relative template path",
                 "params": {
                     "path": {
@@ -9357,12 +9451,124 @@
                 }
             },
             {
+                "name": "respond",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/response.py",
+                "doc": "\nImmediatley return a response.\n\nUseful for more esoteric status codes.\n\n",
+                "prev_tag": "resolve-template",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "respond",
+                "next_tag": "response",
+                "synopsis": "serve a response",
+                "params": {},
+                "example": "\n        <respond code=\"im_a_teapot\" />\n        ",
+                "inherited_params": {
+                    "body": {
+                        "default_display": "None",
+                        "name": "body",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Response body",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "status": {
+                        "default_display": "",
+                        "name": "status",
+                        "missing": true,
+                        "default": 200,
+                        "doc": "Status code",
+                        "required": false,
+                        "type": "http status code",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "contenttype": {
+                        "default_display": "\"text/html; charset=UTF-8\"",
+                        "name": "contenttype",
+                        "missing": true,
+                        "default": "text/html; charset=UTF-8",
+                        "doc": "Content Type",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "charset": {
+                        "default_display": "\"utf-8\"",
+                        "name": "charset",
+                        "missing": true,
+                        "default": "utf-8",
+                        "doc": "Character set",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "headers": {
+                        "default_display": "None",
+                        "name": "headers",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Headers",
+                        "required": false,
+                        "type": "dict expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "response",
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/response.py",
                 "doc": "Create a response object",
-                "prev_tag": "resolve-template",
+                "prev_tag": "respond",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "response",
                 "next_tag": "return",
@@ -9404,6 +9610,18 @@
                         "empty": true,
                         "choices": null
                     },
+                    "contenttype": {
+                        "default_display": "\"text/html; charset=UTF-8\"",
+                        "name": "contenttype",
+                        "missing": true,
+                        "default": "text/html; charset=UTF-8",
+                        "doc": "Content Type",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "status": {
                         "default_display": "",
                         "name": "status",
@@ -9412,18 +9630,6 @@
                         "doc": "Status code",
                         "required": false,
                         "type": "http status code",
-                        "metavar": null,
-                        "empty": true,
-                        "choices": null
-                    },
-                    "content_type": {
-                        "default_display": "\"text/html; charset=UTF-8\"",
-                        "name": "content_type",
-                        "missing": true,
-                        "default": "text/html; charset=UTF-8",
-                        "doc": "Content Type",
-                        "required": false,
-                        "type": "text",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -10021,14 +10227,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'body'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"body\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-body",
                 "next_tag": "section-content",
                 "synopsis": "add a 'body' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-body\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10090,14 +10296,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'content'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"content\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-body",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-content",
                 "next_tag": "section-css",
                 "synopsis": "add a 'content' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-content\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10159,14 +10365,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'css'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"css\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-content",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-css",
                 "next_tag": "section-footer",
                 "synopsis": "add a 'css' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-css\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10228,14 +10434,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'footer'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"footer\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-css",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-footer",
                 "next_tag": "section-head",
                 "synopsis": "add a 'footer' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-footer\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10297,14 +10503,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'head'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"head\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-footer",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-head",
                 "next_tag": "section-includecss",
                 "synopsis": "add a 'head' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-head\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10366,14 +10572,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'includecss'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"includecss\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-head",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-includecss",
                 "next_tag": "section-includejs",
                 "synopsis": "add a 'includecss' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-includecss\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10435,14 +10641,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'includejs'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"includejs\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-includecss",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-includejs",
                 "next_tag": "section-js",
                 "synopsis": "add a 'includejs' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-includejs\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10504,14 +10710,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'js'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"js\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-includejs",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-js",
                 "next_tag": "section-jsfoot",
                 "synopsis": "add a 'js' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-js\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10573,14 +10779,14 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/content.py",
-                "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+                "doc": "\nDefine a content [tag]section[/tag] called 'jsfoot'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"jsfoot\">\n    <!-- content tags here... -->\n</section>\n[/code]",
                 "prev_tag": "section-js",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "section-jsfoot",
                 "next_tag": "serve",
                 "synopsis": "add a 'jsfoot' content section",
                 "params": {},
-                "example": null,
+                "example": "\n            <section-jsfoot\">\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10849,11 +11055,11 @@
                 "lib": null,
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/response.py",
-                "doc": "Serve an object encoded as JSON",
+                "doc": "\n\nServe an object encoded as JSON.\n\nThis tag with either serialize an object ([i]obj[/i]) if provided, or serve the tag text as JSON.\n\nLike other serve- tags, this will return a response and stop processing the view.\n\n",
                 "prev_tag": "serve-file",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "serve-json",
-                "next_tag": "serve-template",
+                "next_tag": "serve-json-object",
                 "synopsis": "serve an object as JSON",
                 "params": {
                     "obj": {
@@ -10869,13 +11075,54 @@
                         "choices": null
                     },
                     "indent": {
-                        "default_display": "",
+                        "default_display": "4",
                         "name": "indent",
                         "missing": true,
                         "default": 4,
                         "doc": "Indent to make JSON more readable",
                         "required": false,
-                        "type": "text",
+                        "type": "integer",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <!-- serialize an object -->\n        <serve-json obj=\"{'status': 'ok'}\"/>\n\n        <!-- just serve the contents -->\n        <serve-json>\n        {\n            \"crew\": [\"john\", \"scorpius\"]\n        }\n        </serv-json>\n\n        ",
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "serve-json-object",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/response.py",
+                "doc": "\n\nServe a dict encoded as a JSON object.\n\nLike other serve- tags, this will return a response and stop processing the view.\n\nKeys in the json object can be given via the let extension. Here's an example:\n[code xml]\n<serve-json-object let:success=\"yes\" let:message=\"'upload was successful'\"/>\n[/code]\n\nThis will serve the following JSON:\n[code]\n{\n    \"success\": true,\n    \"message\": \"upload was successful\"\n}\n[/code]\n\nYou can also create the json object as you would a [tag]dict[/tag]. The following returns the same response as above:\n[code xml]\n<serve-json-object>\n    <let success=\"yes\"/>\n    <let-str msg=\"upload was successful\"/>\n</serve-json-object/>\n[/code]\n",
+                "prev_tag": "serve-json",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "serve-json-object",
+                "next_tag": "serve-template",
+                "synopsis": "serve an dict as JSON",
+                "params": {
+                    "indent": {
+                        "default_display": "4",
+                        "name": "indent",
+                        "missing": true,
+                        "default": 4,
+                        "doc": "Indent to make JSON more readable",
+                        "required": false,
+                        "type": "integer",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -10903,7 +11150,7 @@
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/renderable.py",
                 "doc": "Render and serve a template",
-                "prev_tag": "serve-json",
+                "prev_tag": "serve-json-object",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "serve-template",
                 "next_tag": "serve-template-fs",
@@ -12465,11 +12712,124 @@
                 "prev_tag": "timer",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "title",
-                "next_tag": "true",
+                "next_tag": "trace",
                 "synopsis": "set content title",
                 "params": {},
                 "example": null,
                 "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "trace",
+                "lib": null,
+                "namespace_slug": "moyaproject_dot_com",
+                "defined": "/home/will/projects/moya/moya/tags/server.py",
+                "doc": "\nExtract route information from a URL path.\n\nReturns route matches in a list of dictionaries. Route matches have three keys;\n[c]data[/c] is the url data (as returned in [c].url[/c]), [c]targets[/c] is a list of element references,\n[c]name[/c] is the name of the matching URL.\n\nIf [c]app[/c] is provided, this tag will return the first url route from the given app.\n\n",
+                "prev_tag": "title",
+                "namespace": "http://moyaproject.com",
+                "tag_name": "trace",
+                "next_tag": "true",
+                "synopsis": "extract routing information from mounted URL paths",
+                "params": {
+                    "path": {
+                        "default_display": "None",
+                        "name": "path",
+                        "missing": false,
+                        "default": null,
+                        "doc": "URL path to parse",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "app": {
+                        "default_display": "",
+                        "name": "app",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application name",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "server": {
+                        "default_display": ".server",
+                        "name": "server",
+                        "missing": true,
+                        "default": ".server",
+                        "doc": "Server containing URL routes",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "method": {
+                        "default_display": "\"GET\"",
+                        "name": "method",
+                        "missing": true,
+                        "default": "GET",
+                        "doc": "HTTP method",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Route name to find",
+                        "required": false,
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": "\n        <trace path=\".request.path\" dst=\"matches\"/>\n        ",
+                "inherited_params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "value": {
+                        "default_display": "None",
+                        "name": "value",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Value",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
                     "if": {
                         "default_display": "yes",
                         "name": "if",
@@ -12490,7 +12850,7 @@
                 "namespace_slug": "moyaproject_dot_com",
                 "defined": "/home/will/projects/moya/moya/tags/context.py",
                 "doc": "Creates a boolean with a value of True.",
-                "prev_tag": "title",
+                "prev_tag": "trace",
                 "namespace": "http://moyaproject.com",
                 "tag_name": "true",
                 "next_tag": "try",
@@ -12629,14 +12989,26 @@
                 "next_tag": "value",
                 "synopsis": "add a url to a mountpoint",
                 "params": {
-                    "methods": {
-                        "default_display": "GET,POST",
-                        "name": "methods",
+                    "name": {
+                        "default_display": "",
+                        "name": "name",
                         "missing": true,
-                        "default": "GET,POST",
-                        "doc": "A list of comma separated HTTP methods",
+                        "default": null,
+                        "doc": "An optional name",
                         "required": false,
-                        "type": "comma list",
+                        "type": "text",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "route": {
+                        "default_display": "",
+                        "name": "route",
+                        "missing": true,
+                        "default": null,
+                        "doc": "URL route",
+                        "required": true,
+                        "type": "text",
                         "metavar": null,
                         "empty": true,
                         "choices": null
@@ -12689,26 +13061,26 @@
                         "empty": true,
                         "choices": null
                     },
-                    "route": {
-                        "default_display": "",
-                        "name": "route",
+                    "final": {
+                        "default_display": "no",
+                        "name": "final",
                         "missing": true,
-                        "default": null,
-                        "doc": "URL route",
-                        "required": true,
-                        "type": "text",
+                        "default": false,
+                        "doc": "Ignore further URLs if this route matches?",
+                        "required": false,
+                        "type": "boolean",
                         "metavar": null,
                         "empty": true,
                         "choices": null
                     },
-                    "name": {
-                        "default_display": "",
-                        "name": "name",
+                    "methods": {
+                        "default_display": "GET,POST",
+                        "name": "methods",
                         "missing": true,
-                        "default": null,
-                        "doc": "An optional name",
+                        "default": "GET,POST",
+                        "doc": "A list of comma separated HTTP methods",
                         "required": false,
-                        "type": "text",
+                        "type": "comma list",
                         "metavar": null,
                         "empty": true,
                         "choices": null

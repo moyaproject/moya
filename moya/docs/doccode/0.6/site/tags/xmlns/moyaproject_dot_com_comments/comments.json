@@ -41,10 +41,10 @@
                 "choices": null
             },
             "markup": {
-                "default_display": "bbcode",
+                "default_display": "",
                 "name": "markup",
                 "missing": true,
-                "default": "bbcode",
+                "default": "",
                 "doc": "",
                 "required": false,
                 "type": "text",

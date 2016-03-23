@@ -16,7 +16,7 @@
         "synopsis": "get an object in the database.",
         "tag_name": "get-exist",
         "params": {},
-        "example": "\n            <db:getrequired model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
+        "example": "\n            <db:get model=\"#Topic\" let:slug=\"url.topic\" dst=\"topic\"/>\n        ",
         "inherited_params": {
             "orderby": {
                 "default_display": "",

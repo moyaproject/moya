@@ -11,7 +11,7 @@
                 "namespace_slug": "moyaproject_dot_com_comments",
                 "defined": "/home/will/projects/moya/moya/libs/comments/logic/widgets.xml (line 6)",
                 "doc": "Render comments on a page.",
-                "prev_tag": "get-counts",
+                "prev_tag": "subscribe",
                 "namespace": "http://moyaproject.com/comments",
                 "tag_name": "comments",
                 "next_tag": "get-count",
@@ -42,10 +42,10 @@
                         "choices": null
                     },
                     "markup": {
-                        "default_display": "bbcode",
+                        "default_display": "",
                         "name": "markup",
                         "missing": true,
-                        "default": "bbcode",
+                        "default": "",
                         "doc": "",
                         "required": false,
                         "type": "text",
@@ -204,6 +204,7 @@
                 "prev_tag": "get-count",
                 "namespace": "http://moyaproject.com/comments",
                 "tag_name": "get-counts",
+                "next_tag": "subscribe",
                 "synopsis": "get comment counts",
                 "params": {
                     "namespace": {
@@ -261,6 +262,94 @@
                         "default": "None",
                         "doc": "A sequence of object IDs",
                         "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
+                "name": "subscribe",
+                "lib": "moya.comments",
+                "namespace_slug": "moyaproject_dot_com_comments",
+                "defined": "/home/will/projects/moya/moya/libs/comments/logic/tags.xml (line 43)",
+                "doc": "",
+                "prev_tag": "get-counts",
+                "namespace": "http://moyaproject.com/comments",
+                "tag_name": "subscribe",
+                "synopsis": "subscribe a user to a comment object",
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "commentobject": {
+                        "default_display": null,
+                        "name": "commentobject",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Comment object",
+                        "required": true,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "user": {
+                        "default_display": null,
+                        "name": "user",
+                        "missing": true,
+                        "default": null,
+                        "doc": "User to subscribe",
+                        "required": true,
                         "type": "expression",
                         "metavar": null,
                         "empty": true,

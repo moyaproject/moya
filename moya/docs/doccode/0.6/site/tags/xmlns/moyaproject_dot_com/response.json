@@ -52,6 +52,18 @@
                 "empty": true,
                 "choices": null
             },
+            "contenttype": {
+                "default_display": "\"text/html; charset=UTF-8\"",
+                "name": "contenttype",
+                "missing": true,
+                "default": "text/html; charset=UTF-8",
+                "doc": "Content Type",
+                "required": false,
+                "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "status": {
                 "default_display": "",
                 "name": "status",
@@ -60,18 +72,6 @@
                 "doc": "Status code",
                 "required": false,
                 "type": "http status code",
-                "metavar": null,
-                "empty": true,
-                "choices": null
-            },
-            "content_type": {
-                "default_display": "\"text/html; charset=UTF-8\"",
-                "name": "content_type",
-                "missing": true,
-                "default": "text/html; charset=UTF-8",
-                "doc": "Content Type",
-                "required": false,
-                "type": "text",
                 "metavar": null,
                 "empty": true,
                 "choices": null

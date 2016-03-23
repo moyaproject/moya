@@ -11,12 +11,12 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/content.py",
-        "doc": "\nDefine a content [tag]section[/tag] called '{name}'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"{name}\">\n    <!-- content tags here... -->\n</section>\n[/code]\n",
+        "doc": "\nDefine a content [tag]section[/tag] called 'body'.\n\nThis is a shortcut for the following:\n[code xml]\n<section name=\"body\">\n    <!-- content tags here... -->\n</section>\n[/code]",
         "namespace": "http://moyaproject.com",
         "synopsis": "add a 'body' content section",
         "tag_name": "section-body",
         "params": {},
-        "example": null,
+        "example": "\n            <section-body\">\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",

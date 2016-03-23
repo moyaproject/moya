@@ -6,12 +6,77 @@
     "data": {
         "tags": [
             {
+                "name": "get-new-count",
+                "lib": "moya.blog",
+                "namespace_slug": "moyaproject_dot_com_blog",
+                "defined": "/home/will/projects/moya/moya/libs/blog/logic/tags.xml (line 13)",
+                "doc": "Get new posts since the user has logged in",
+                "prev_tag": "summary",
+                "namespace": "http://moyaproject.com/blog",
+                "tag_name": "get-new-count",
+                "next_tag": "get-recent",
+                "synopsis": null,
+                "params": {
+                    "dst": {
+                        "default_display": "",
+                        "name": "dst",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Destination",
+                        "required": false,
+                        "type": "reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "from": {
+                        "default_display": "",
+                        "name": "from",
+                        "missing": true,
+                        "default": null,
+                        "doc": "Application",
+                        "required": false,
+                        "type": "application reference",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    },
+                    "lazy": {
+                        "default_display": "no",
+                        "name": "lazy",
+                        "missing": true,
+                        "default": false,
+                        "doc": "Enable lazy evaluation",
+                        "required": false,
+                        "type": "boolean",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                },
+                "example": null,
+                "inherited_params": {
+                    "if": {
+                        "default_display": "yes",
+                        "name": "if",
+                        "missing": true,
+                        "default": true,
+                        "doc": "Conditional expression",
+                        "required": false,
+                        "type": "expression",
+                        "metavar": null,
+                        "empty": true,
+                        "choices": null
+                    }
+                }
+            },
+            {
                 "name": "get-recent",
                 "lib": "moya.blog",
                 "namespace_slug": "moyaproject_dot_com_blog",
                 "defined": "/home/will/projects/moya/moya/libs/blog/logic/tags.xml (line 5)",
                 "doc": "",
-                "prev_tag": "summary",
+                "prev_tag": "get-new-count",
                 "namespace": "http://moyaproject.com/blog",
                 "tag_name": "get-recent",
                 "next_tag": "summary",

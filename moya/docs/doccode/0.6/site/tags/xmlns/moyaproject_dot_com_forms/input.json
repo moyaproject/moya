@@ -103,6 +103,18 @@
                 "empty": true,
                 "choices": null
             },
+            "requiredcheck": {
+                "default_display": "",
+                "name": "requiredcheck",
+                "missing": true,
+                "default": "yes",
+                "doc": "Check for required fields?",
+                "required": false,
+                "type": "boolean",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
             "help": {
                 "default_display": "",
                 "name": "help",
@@ -123,6 +135,18 @@
                 "doc": "Field name",
                 "required": false,
                 "type": "text",
+                "metavar": null,
+                "empty": true,
+                "choices": null
+            },
+            "visible": {
+                "default_display": "yes",
+                "name": "visible",
+                "missing": true,
+                "default": true,
+                "doc": "Visible?",
+                "required": false,
+                "type": "boolean",
                 "metavar": null,
                 "empty": true,
                 "choices": null
@@ -199,14 +223,14 @@
                 "empty": true,
                 "choices": null
             },
-            "visible": {
-                "default_display": "yes",
-                "name": "visible",
+            "requiredmsg": {
+                "default_display": "\"This field is required\"",
+                "name": "requiredmsg",
                 "missing": true,
-                "default": true,
-                "doc": "Visible?",
+                "default": "This field is required",
+                "doc": "Field error text for required fields",
                 "required": false,
-                "type": "boolean",
+                "type": "text",
                 "metavar": null,
                 "empty": true,
                 "choices": null

@@ -22,7 +22,7 @@
                 "missing": true,
                 "default": null,
                 "doc": "",
-                "required": true,
+                "required": false,
                 "type": "text",
                 "metavar": null,
                 "empty": true,
@@ -65,10 +65,10 @@
                 "choices": null
             },
             "id": {
-                "default_display": "panel",
+                "default_display": "",
                 "name": "id",
                 "missing": true,
-                "default": "panel",
+                "default": "",
                 "doc": "",
                 "required": false,
                 "type": "text",

@@ -11,7 +11,7 @@
         "lib": null,
         "namespace_slug": "moyaproject_dot_com",
         "defined": "/home/will/projects/moya/moya/tags/markup.py",
-        "doc": "A callable invokef from Moya maarkup",
+        "doc": "A callable invoked from Moya markup",
         "namespace": "http://moyaproject.com",
         "synopsis": "insert code from markup",
         "tag_name": "markup-insert",
