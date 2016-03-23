@@ -323,7 +323,7 @@ def make_default_section(name):
         class Help:
             synopsis = "add a '{}' content section".format(_name)
             example = """
-            <section-{}">
+            <section-{}>
             <!-- content tags here... -->
             </section>
             """.format(_name)

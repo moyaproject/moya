@@ -16,7 +16,7 @@
         "synopsis": "add a 'js' content section",
         "tag_name": "section-js",
         "params": {},
-        "example": "\n            <section-js\">\n            <!-- content tags here... -->\n            </section>\n            ",
+        "example": "\n            <section-js>\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",

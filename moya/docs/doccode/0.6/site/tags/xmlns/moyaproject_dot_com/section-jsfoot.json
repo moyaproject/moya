@@ -16,7 +16,7 @@
         "synopsis": "add a 'jsfoot' content section",
         "tag_name": "section-jsfoot",
         "params": {},
-        "example": "\n            <section-jsfoot\">\n            <!-- content tags here... -->\n            </section>\n            ",
+        "example": "\n            <section-jsfoot>\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",

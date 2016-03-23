@@ -16,7 +16,7 @@
         "synopsis": "add a 'includejs' content section",
         "tag_name": "section-includejs",
         "params": {},
-        "example": "\n            <section-includejs\">\n            <!-- content tags here... -->\n            </section>\n            ",
+        "example": "\n            <section-includejs>\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",

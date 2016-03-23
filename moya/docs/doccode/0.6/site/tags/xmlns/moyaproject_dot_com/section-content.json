@@ -16,7 +16,7 @@
         "synopsis": "add a 'content' content section",
         "tag_name": "section-content",
         "params": {},
-        "example": "\n            <section-content\">\n            <!-- content tags here... -->\n            </section>\n            ",
+        "example": "\n            <section-content>\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",

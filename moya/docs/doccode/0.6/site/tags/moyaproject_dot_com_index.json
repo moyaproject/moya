@@ -10234,7 +10234,7 @@
                 "next_tag": "section-content",
                 "synopsis": "add a 'body' content section",
                 "params": {},
-                "example": "\n            <section-body\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-body>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10303,7 +10303,7 @@
                 "next_tag": "section-css",
                 "synopsis": "add a 'content' content section",
                 "params": {},
-                "example": "\n            <section-content\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-content>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10372,7 +10372,7 @@
                 "next_tag": "section-footer",
                 "synopsis": "add a 'css' content section",
                 "params": {},
-                "example": "\n            <section-css\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-css>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10441,7 +10441,7 @@
                 "next_tag": "section-head",
                 "synopsis": "add a 'footer' content section",
                 "params": {},
-                "example": "\n            <section-footer\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-footer>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10510,7 +10510,7 @@
                 "next_tag": "section-includecss",
                 "synopsis": "add a 'head' content section",
                 "params": {},
-                "example": "\n            <section-head\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-head>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10579,7 +10579,7 @@
                 "next_tag": "section-includejs",
                 "synopsis": "add a 'includecss' content section",
                 "params": {},
-                "example": "\n            <section-includecss\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-includecss>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10648,7 +10648,7 @@
                 "next_tag": "section-js",
                 "synopsis": "add a 'includejs' content section",
                 "params": {},
-                "example": "\n            <section-includejs\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-includejs>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10717,7 +10717,7 @@
                 "next_tag": "section-jsfoot",
                 "synopsis": "add a 'js' content section",
                 "params": {},
-                "example": "\n            <section-js\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-js>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",
@@ -10786,7 +10786,7 @@
                 "next_tag": "serve",
                 "synopsis": "add a 'jsfoot' content section",
                 "params": {},
-                "example": "\n            <section-jsfoot\">\n            <!-- content tags here... -->\n            </section>\n            ",
+                "example": "\n            <section-jsfoot>\n            <!-- content tags here... -->\n            </section>\n            ",
                 "inherited_params": {
                     "merge": {
                         "default_display": "\"inherit\"",

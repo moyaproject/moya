@@ -16,7 +16,7 @@
         "synopsis": "add a 'css' content section",
         "tag_name": "section-css",
         "params": {},
-        "example": "\n            <section-css\">\n            <!-- content tags here... -->\n            </section>\n            ",
+        "example": "\n            <section-css>\n            <!-- content tags here... -->\n            </section>\n            ",
         "inherited_params": {
             "merge": {
                 "default_display": "\"inherit\"",
