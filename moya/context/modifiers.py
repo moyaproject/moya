@@ -242,7 +242,8 @@ class ExpressionModifiersBase(object):
             int(text_type(v))
         except:
             return False
-        return True
+        else:
+            return True
 
     @classmethod
     def _seqlast(cls, v, context):

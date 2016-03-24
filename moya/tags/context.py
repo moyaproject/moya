@@ -2106,7 +2106,7 @@ class While(ContextElementBase):
 class Do(ContextElementBase):
     """Repeat a block of code until a condition becomes true, or a [tag]break[/tag] is reached.
 
-    Not that, unlike [tag]while[/tag] this tag will execute the enclosed block at least once.
+    Note that, unlike [tag]while[/tag] this tag will execute the enclosed block at least once.
 
     If the [c]until[/c] attribute isn't given, the enclosed block will be executed just once.
 

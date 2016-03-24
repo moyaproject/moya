@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.6.8a"
+VERSION = "0.6.8a1"
 
 # Don't forget to update version in moya/__init__.py
 
@@ -56,7 +56,7 @@ setup(
         'babel==1.3',
         'postmarkup',
         'polib',
-        'pillow == 2.9.0',
+        'pillow >= 3.1.1',
         'pymysql',
         'passlib',
         'commonmark >= 0.6.3',

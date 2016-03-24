@@ -21,83 +21,6 @@ from threading import local
 from threading import Thread
 
 
-# @implements_to_string
-# class FrameView(dict):
-#     """Captures a frame (multiple scopes) in a dict-like object"""
-#     def __init__(self, context, scopes):
-#         self.context = context
-#         self.scopes = [(scope.__moyacontext__(context) if hasattr(scope, '__moyacontext__') else scope)
-#                        for scope in scopes]
-
-#     def __repr__(self):
-#         return to_expression(self.context, self)
-
-#     def __str__(self):
-#         return to_expression(self.context, self)
-
-#     @property
-#     def _dict(self):
-#         return {k: self[k] for k in self.keys()}
-
-#     def keys(self):
-#         keys = chain(*[get_keys(s) for s in self.scopes])
-#         return sorted(set(keys),
-#                       key=text_type)
-
-#     iterkeys = keys
-
-#     def values(self):
-#         return [self[k] for k in self.keys()]
-
-#     def itervalues(self):
-#         return (self[k] for k in self.keys())
-
-#     def items(self):
-#         return [(k, self[k]) for k in self.keys()]
-
-#     iteritems = items
-
-#     def __iter__(self):
-#         return (self[k] for k in self.keys())
-
-#     def __getitem__(self, k):
-#         try:
-#             for obj in self.scopes:
-#                 try:
-#                     obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(k)
-#                 except (TypeError, KeyError, IndexError, AttributeError):
-#                     continue
-#                 if hasattr(obj, '__moyacontext__'):
-#                     obj = obj.__moyacontext__(self.context)
-#                 return obj
-#         except (TypeError, KeyError, IndexError, AttributeError):
-#             raise KeyError(k)
-
-#     def __setitem__(self, k, v):
-#         self.scopes[-1][k] = v
-
-#     def __delitem__(self, k):
-#         del self.scopes[-1][k]
-
-#     def get(self, k, default=None):
-#         try:
-#             return self[k]
-#         except KeyError:
-#             return default
-
-#     def __contains__(self, key):
-#         return any((key in get_keys(s)) for s in self.scopes)
-
-#     def __len__(self):
-#         return len(self.keys())
-
-#     def __eq__(self, other):
-#         return self._dict == other
-
-#     def __ne__(self, other):
-#         return self._dict != other
-
-
 @implements_to_string
 class DynamicContextItem(object):
     """A proxy for a dynamic item"""
@@ -879,7 +802,7 @@ class Context(object):
     def pop(self, index, default=Ellipsis):
         value = self.get(index, default=default)
         self.safe_delete(index)
-        return value 
+        return value
 
     def get_simple(self, index):
         """Get a single index key"""

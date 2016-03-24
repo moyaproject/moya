@@ -3,6 +3,8 @@
       xmlns:db="http://moyaproject.com/db"
       xmlns:auth="http://moyaproject.com/auth">
 
+    <!-- Tags add new high-level functionality -->
+
     <tag name="get-permissions" synopsis="query user permissions">
     	<doc>Get list of permissions for a given user</doc>
     	<signature>
@@ -33,7 +35,6 @@
             <attribute name="user"/>
             <attribute name="password"/>
         </signature>
-
         <return>
             <call macro="#checkpassword"
                 let:password="password"

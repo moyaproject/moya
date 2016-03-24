@@ -343,13 +343,18 @@ class TableClassBase(object):
         return any(key == name for name in self._moyadb.dbfields)
 
     def __repr__(self):
+        """Generated from the `repr` attribute, or uses default of '<model> <id>'."""
         r = self._repr
         try:
             with pilot.context.data_scope(self):
                 return "<{}>".format(pilot.context.sub(r))
         except Exception as e:
-            log.error("%s", e)
-            return r
+            log.error("error with repr: %s", e)
+            try:
+                return "<{} #{}>".format(self._model.get_appid(self.app), self.id)
+            except:
+                log.exception("error in default repr")
+                return "<error in repr>"
 
 
 class MoyaDB(object):
