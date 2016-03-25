@@ -1150,9 +1150,10 @@ class ManyToMany(DBElement, DBMixin):
                         return qs
 
                     def __moyaqs__(self, context, dbsession):
+                        table_class = model.get_table_class(app)
                         qs = dbsession.query(getattr(assoc_table.c, left_key))
                         qs = qs.filter(self._instance.id == getattr(assoc_table.c, right_key))
-                        qs = dbsession.query(ref_table_class).filter(ref_table_class.id.in_(qs))
+                        qs = dbsession.query(table_class).filter(table_class.id.in_(qs))
                         return qs
 
                     def __check_type__(self, obj):
@@ -2719,7 +2720,7 @@ class Update(DBDataSetter):
     def logic(self, context):
         params = self.get_parameters(context)
         dbsession = self.get_session(context, params.db)
-        qs = self._qs(context, dbsession, self.src(context))
+        qs = self._qs(context, dbsession, params.src)
         let = self.get_let_map_eval(context, lambda l: DBExpression(l).eval(self.archive, context))
         sync = params.synchronize
         if sync == 'none':
