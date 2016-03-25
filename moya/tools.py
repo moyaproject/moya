@@ -130,7 +130,7 @@ def is_moya_dir(path=None):
 
 
 def file_chunker(f, size=2 * 16 * 1024):
-    """An iterator that reads a file in chunks"""
+    """An iterator that reads a file in chunks."""
     read = f.read
     chunk = read(size)
     while chunk:
@@ -140,10 +140,9 @@ def file_chunker(f, size=2 * 16 * 1024):
 
 
 def make_id():
-    """Make a unique id"""
+    """Make a unique id."""
     _ID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    t = "%0X" % time()
-    return "%s%s" % (t, ''.join(choice(_ID_CHARS) for _ in xrange(6)))
+    return "{:0X}{}".format(int(time() * 1000.0), ''.join(choice(_ID_CHARS) for _ in xrange(6)))
 
 
 def datetime_to_epoch(d):
