@@ -285,6 +285,7 @@ class TestModifiers(unittest.TestCase):
         assert m.str(c, 5) == '5'
 
         assert m.strip(c, ' \nfoo \n ') == 'foo'
+        self.assertEqual(m.stripall(c, ['a', ' b', 'c ', ' d ', '\t  e  \n\n ']), ['a', 'b', 'c', 'd', 'e'])
 
         assert m.striptags(c, '<p>Hello</p>') == ' Hello'
         assert m.sub(c, 'Hello ${world}') == 'Hello World!'

@@ -846,6 +846,12 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def strip(self, context, v):
         return text_type(v).strip()
 
+    def stripall(self, context, v):
+        try:
+            return [text_type(item).strip() for item in v]
+        except TypeError:
+            raise ValueError('stripall: takes a sequence of strings')
+
     def striptags(self, context, v):
         v = text_type(v)
         return textilize(v)
