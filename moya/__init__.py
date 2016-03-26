@@ -1,22 +1,18 @@
 from __future__ import unicode_literals
 
+import decimal
+
+from . import expose
+from .compat import text_type, PY2
+from .moyapilot import Pilot
+from ._version import VERSION as __version__
+
+
 __author__ = "Will McGugan <admin@moyaproject.com>"
-
-__version__ = "0.6.8a1"
-
-# *** Don't forget to update version in setup.py ***
-
 __all__ = ['pilot', 'expose']
 
 
-from . import expose
-from .moyapilot import Pilot
-from .compat import text_type, PY2
-
-
 pilot = Pilot()
-
-import decimal
 
 if PY2:
 
