@@ -51,6 +51,7 @@ import operator
 import re
 from operator import truth
 from fnmatch import fnmatchcase
+import threading
 
 # TODO: is there a better place for this
 import sys
@@ -854,6 +855,7 @@ class Expression(object):
 
     exp_cache = {}
     new_expressions = set()
+    _lock = threading.Lock()
 
     def __init__(self, exp):
         self.exp = exp
@@ -945,14 +947,15 @@ class Expression(object):
 
     @classmethod
     def compile_cache(cls, exp):
-        try:
-            return cls.exp_cache[exp]
-        except KeyError:
+        with cls._lock:
             try:
-                compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
-                return compiled_exp
-            except ParseException as e:
-                raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
+                return cls.exp_cache[exp]
+            except KeyError:
+                try:
+                    compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
+                    return compiled_exp
+                except ParseException as e:
+                    raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
 
     @classmethod
     def get_new_expressions(cls):
@@ -980,6 +983,7 @@ class Expression(object):
             return expression, exp[end:]
 
     _re_substitute_context = re.compile(r'\$\{(.*?)\}')
+
     @classmethod
     def extract(cls, text):
         """Extract and compile expression in substitution syntax"""
