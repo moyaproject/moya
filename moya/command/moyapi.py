@@ -442,11 +442,6 @@ Find, install and manage Moya libraries
             self.server_response(message, fg='green')
         else:
             raise CommandError(message)
-        if result == "success":
-            #self.console.success("package was uploaded")
-            pass
-        else:
-            self.console.error("upload failed")
 
     def run_upload(self):
         args = self.args
