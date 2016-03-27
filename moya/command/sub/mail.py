@@ -1,10 +1,9 @@
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
-from ...compat import text_type, raw_input
+from ...compat import text_type, raw_input, urlparse
 
 import sys
 import json
-import urlparse
 
 try:
     import readline
@@ -164,7 +163,7 @@ class Email(SubCommand):
         email.subject = "Render Email"
         email.email_element = element
 
-        url_parsed = urlparse.urlparse(args.url)
+        url_parsed = urlparse(args.url)
         host = "{}://{}".format(url_parsed.scheme, url_parsed.netloc)
 
         context = Context()
