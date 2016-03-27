@@ -10,6 +10,7 @@ from .console import ConsoleHighlighter
 from .context.tools import to_expression
 
 import re
+import threading
 from collections import namedtuple, defaultdict
 from operator import attrgetter
 from .compat import quote
@@ -537,6 +538,8 @@ class Route(object):
         self._tokens = None
         self._re_route = None
 
+        self._lock = threading.Lock()
+
     @property
     def tokens(self):
         if self._tokens is None:
@@ -553,48 +556,49 @@ class Route(object):
 
     @property
     def re_route(self):
-        if not self._re_route:
-            segments = ['^']
-            append_segment = segments.append
-            escape = re.escape
-            static = True
-            default_pattern = self._patterns.get('')
-            for token_type, token in self.tokens:
-                if token_type == 'extract':
-                    static = False
-                    if token.startswith('*'):
-                        pattern_name, name = self._split_pattern_name(token[1:])
-                        pattern, component_callable = self._patterns.get(pattern_name or '*', default_pattern)
-                        if name:
+        with self._lock:
+            if not self._re_route:
+                segments = ['^']
+                append_segment = segments.append
+                escape = re.escape
+                static = True
+                default_pattern = self._patterns.get('')
+                for token_type, token in self.tokens:
+                    if token_type == 'extract':
+                        static = False
+                        if token.startswith('*'):
+                            pattern_name, name = self._split_pattern_name(token[1:])
+                            pattern, component_callable = self._patterns.get(pattern_name or '*', default_pattern)
+                            if name:
+                                if name in self.component_names:
+                                    raise DuplicatedParameter("URL parameter '{}' was duplicated".format(name))
+                                append_segment('(?P<%s>%s)' % (name, pattern))
+                            else:
+                                append_segment('(.*)')
+                            self.component_names.append(name)
+                        else:
+                            pattern_name, name = self._split_pattern_name(token)
+                            pattern, component_callable = self._patterns.get(pattern_name, default_pattern)
+                            append_segment('(?P<%s>%s)' % (name, pattern))
                             if name in self.component_names:
                                 raise DuplicatedParameter("URL parameter '{}' was duplicated".format(name))
-                            append_segment('(?P<%s>%s)' % (name, pattern))
+                            self.component_names.append(name)
+                        self.component_callables[name] = component_callable
+                    else:
+                        if token == '*':
+                            append_segment('.*?')
                         else:
-                            append_segment('(.*)')
-                        self.component_names.append(name)
-                    else:
-                        pattern_name, name = self._split_pattern_name(token)
-                        pattern, component_callable = self._patterns.get(pattern_name, default_pattern)
-                        append_segment('(?P<%s>%s)' % (name, pattern))
-                        if name in self.component_names:
-                            raise DuplicatedParameter("URL parameter '{}' was duplicated".format(name))
-                        self.component_names.append(name)
-                    self.component_callables[name] = component_callable
-                else:
-                    if token == '*':
-                        append_segment('.*?')
-                    else:
-                        append_segment(escape(token))
+                            append_segment(escape(token))
 
-            if not self.partial:
-                append_segment('$')
+                if not self.partial:
+                    append_segment('$')
 
-            self.static = static
-            self.re_route_text = ''.join(segments)
-            self._re_route = None
-            self._re_route = re.compile(self.re_route_text)
+                self.static = static
+                self.re_route_text = ''.join(segments)
+                self._re_route = None
+                self._re_route = re.compile(self.re_route_text)
 
-        return self._re_route
+            return self._re_route
 
     def __str__(self):
         if isinstance(self.target, tuple):

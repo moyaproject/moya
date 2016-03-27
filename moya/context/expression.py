@@ -855,7 +855,7 @@ class Expression(object):
 
     exp_cache = {}
     new_expressions = set()
-    _lock = threading.Lock()
+    _lock = threading.RLock()
 
     def __init__(self, exp):
         self.exp = exp
@@ -936,14 +936,15 @@ class Expression(object):
 
     @classmethod
     def get_eval(cls, exp, context):
-        try:
-            compiled_exp = cls.exp_cache[exp]
-        except KeyError:
+        with cls._lock:
             try:
-                compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
-            except ParseException as e:
-                raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
-        return compiled_exp[0].eval(context)
+                compiled_exp = cls.exp_cache[exp]
+            except KeyError:
+                try:
+                    compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
+                except ParseException as e:
+                    raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
+            return compiled_exp[0].eval(context)
 
     @classmethod
     def compile_cache(cls, exp):
@@ -970,17 +971,18 @@ class Expression(object):
         the parsed string, and the unparsed string.
 
         """
-        scan = expr.scanString(exp, maxMatches=1)
-        try:
-            compiled_exp, start, end = next(scan)
-        except StopIteration:
-            return '', exp
-        else:
-            if start != 0:
+        with cls._lock:
+            scan = expr.scanString(exp, maxMatches=1)
+            try:
+                compiled_exp, start, end = next(scan)
+            except StopIteration:
                 return '', exp
-            expression = exp[start:end]
-            cls.exp_cache[expression] = compiled_exp.asList()
-            return expression, exp[end:]
+            else:
+                if start != 0:
+                    return '', exp
+                expression = exp[start:end]
+                cls.exp_cache[expression] = compiled_exp.asList()
+                return expression, exp[end:]
 
     _re_substitute_context = re.compile(r'\$\{(.*?)\}')
 
