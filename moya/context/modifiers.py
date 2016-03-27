@@ -904,7 +904,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return TimeSpan(v)
 
     def title(self, context, v):
-        return text_type(v).title()
+        return text_type(v).title().replace('_', ' ')
 
     def token(self, context, v):
         try:

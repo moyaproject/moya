@@ -449,7 +449,7 @@ class Crop(LogicElement):
 
 
 class GaussianBlur(LogicElement):
-    """Guasian blur an image"""
+    """Guassian blur an image."""
     xmlns = namespaces.image
 
     image = Attribute("Image to show", type="expression", default="image", evaldefault=True)
@@ -458,5 +458,7 @@ class GaussianBlur(LogicElement):
     def logic(self, context):
         params = self.get_parameters(context)
         img = params.image._img
+        if img.mode == 'P':
+            img = img.convert('RGB')
         new_image = img.filter(ImageFilter.GaussianBlur(radius=params.radius))
         params.image.replace(new_image)
