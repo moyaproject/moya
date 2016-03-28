@@ -61,12 +61,17 @@ class MoyaImage(object):
         if _exif is None:
             return {}
 
+        exif = {}
         if ExifTags:
-            exif = {
-                ExifTags.TAGS[k]: v
-                for k, v in self._img._getexif().items()
-                if k in ExifTags.TAGS
-            }
+            for k, v in self._img.get_exit.items():
+                try:
+                    key = ExifTags.TAGS.get(k, None)
+                    if key is not None:
+                        value = v.decode('utf-8', 'replace') if isinstance(v, bytes) else v
+                        exif[key] = value
+                except Exception as e:
+                    # EXIF can be full of atrbitrary data
+                    log.debug('exif extract error: %s', e)
         else:
             exif = {}
 
@@ -444,7 +449,7 @@ class Crop(LogicElement):
 
 
 class GaussianBlur(LogicElement):
-    """Guasian blur an image"""
+    """Guassian blur an image."""
     xmlns = namespaces.image
 
     image = Attribute("Image to show", type="expression", default="image", evaldefault=True)
@@ -453,5 +458,7 @@ class GaussianBlur(LogicElement):
     def logic(self, context):
         params = self.get_parameters(context)
         img = params.image._img
+        if img.mode == 'P':
+            img = img.convert('RGB')
         new_image = img.filter(ImageFilter.GaussianBlur(radius=params.radius))
         params.image.replace(new_image)

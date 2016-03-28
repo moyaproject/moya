@@ -40,7 +40,6 @@ else:
 
 
 if PY2:
-    import urlparse
     from urlparse import urlparse, parse_qs, urlunparse
     from urllib import urlencode, quote, unquote, quote_plus
     from itertools import izip_longest as zip_longest
@@ -117,7 +116,6 @@ else:
             return 0
         else:
             return +1
-
 
 class string(object):
     lowercase = 'abcdefghijklmnopqrstuvwxyz'

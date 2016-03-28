@@ -257,6 +257,13 @@ def format_element_type(element_type):
     return "{" + ns + "}" + et
 
 
+def decode_utf8_bytes(text, errors='ignore'):
+    """Decode bytes as utf-8, returns unicode unaltered."""
+    if isinstance(text, bytes):
+        return text.decode('utf-8', errors=errors)
+    return text
+
+
 # def get_ids(seq):
 #     """Get ID attributes from a sequence"""
 #     return [item.id for item in seq if hasattr(seq, 'id')]

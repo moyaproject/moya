@@ -6,7 +6,6 @@ from .context.tools import to_expression
 from .compat import implements_to_string, text_type
 from .context.missing import is_missing
 from .interface import unproxy
-#from moya.db import dbobject
 
 from pyparsing import (Word,
                        WordEnd,
@@ -31,6 +30,7 @@ from sqlalchemy import and_, or_, func
 
 import operator
 import re
+import threading
 
 
 def dbobject(obj):
@@ -458,6 +458,7 @@ expr << operatorPrecedence(operand, [
 @implements_to_string
 class DBExpression(object):
     exp_cache = {}
+    _lock = threading.Lock()
 
     def __init__(self, exp):
         self.exp = exp
@@ -490,15 +491,16 @@ class DBExpression(object):
         return self.compile_cache(self.exp)
 
     def compile_cache(self, exp):
-        try:
-            return self.exp_cache[exp]
-        except KeyError:
+        with self._lock:
             try:
-                compiled_exp = expr.parseString(exp, parseAll=True)
-            except ParseException as e:
-                raise DBExpressionError(exp, text_type(e), col=e.col)
-            eval = self.exp_cache[exp] = compiled_exp[0].eval
-            return eval
+                return self.exp_cache[exp]
+            except KeyError:
+                try:
+                    compiled_exp = expr.parseString(exp, parseAll=True)
+                except ParseException as e:
+                    raise DBExpressionError(exp, text_type(e), col=e.col)
+                eval = self.exp_cache[exp] = compiled_exp[0].eval
+                return eval
 
 
 if __name__ == "__main__":

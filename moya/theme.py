@@ -1,4 +1,3 @@
-
 from .context.context import Context
 from .compat import text_type
 from . import pilot
@@ -44,12 +43,13 @@ DEFAULT = """
 
 
 class Theme(object):
+    """Manage theme data."""
 
     _cache = {}
 
     @classmethod
     def loader(cls, fs):
-        """Automatically add theme to context"""
+        """Automatically add theme to context."""
         def load(context=None):
             if context is None:
                 context = pilot.context
@@ -73,11 +73,11 @@ class Theme(object):
 
     @classmethod
     def dummy_loader(cls, context):
-        """Called when theme is not enabled"""
+        """Called when theme is not enabled."""
         log.warning('theme is not set -- add a theme value to your site settings')
         theme_json = DEFAULT
         hasher = hashlib.md5()
-        hasher.update(theme_json)
+        hasher.update(theme_json.encode('utf-8'))
         theme_hash = hasher.hexdigest()
 
         theme_data = json.loads(theme_json)
@@ -95,9 +95,9 @@ class Theme(object):
             context = Context()
 
         hasher = hashlib.md5()
-        with fs.open(path, 'rb') as f:
+        with fs.open(path, 'rt', encoding="utf-8") as f:
             theme_json = f.read()
-            hasher.update(theme_json)
+            hasher.update(theme_json.encode('utf-8'))
             theme_hash = hasher.hexdigest()
 
             theme_data = json.loads(theme_json)

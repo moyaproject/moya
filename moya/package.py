@@ -55,7 +55,7 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
             if auth_token is None:
                 auth_hash = ""
             else:
-                m.update(auth_token)
+                m.update(auth_token.encode('utf-8'))
                 auth_hash = m.hexdigest()
 
             output_fs.setcontents(path, data)
@@ -95,7 +95,7 @@ class ManifestComparision(object):
 
 
 def get_md5(input_file, chunk_size=1024 * 16):
-    """Get the md5 of a file without reading entire file in to memory"""
+    """Get the md5 of a file without reading entire file in to memory."""
     m = hashlib.md5()
     while 1:
         chunk = input_file.read(chunk_size)

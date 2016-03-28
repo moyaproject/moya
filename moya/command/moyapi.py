@@ -18,7 +18,7 @@ from ..wsgi import WSGIApplication
 from ..console import Console, Cell
 from ..compat import text_type, raw_input
 from ..command import downloader
-from ..tools import get_moya_dir, is_moya_dir, nearest_word
+from ..tools import get_moya_dir, is_moya_dir, nearest_word, decode_utf8_bytes
 from .. import build
 from . import installer
 from . import dependencies
@@ -435,18 +435,13 @@ Find, install and manage Moya libraries
         if response.status_code != 200:
             raise CommandError("upload failed -- server returned {} response".format(response.status_code))
 
-        message = response.headers.get(b'moya-upload-package-message', '').decode('utf-8')
-        result = response.headers.get(b'moya-upload-package-result', '').decode('utf-8')
+        message = decode_utf8_bytes(response.headers.get('moya-upload-package-message', ''))
+        result = decode_utf8_bytes(response.headers.get('moya-upload-package-result', ''))
 
         if result == 'success':
             self.server_response(message, fg='green')
         else:
             raise CommandError(message)
-        if result == "success":
-            #self.console.success("package was uploaded")
-            pass
-        else:
-            self.console.error("upload failed")
 
     def run_upload(self):
         args = self.args
@@ -488,10 +483,8 @@ Find, install and manage Moya libraries
         args = self.args
 
         archive, lib = build.build_lib(args.location, ignore_errors=True)
-        #archive.finalize()
         lib_name = lib.long_name
 
-        #namespaces = list(archive.known_namespaces)
         from ..docgen.extracter import Extracter
 
         extract_fs = TempFS('moyadoc-{}'.format(lib_name))
@@ -525,15 +518,14 @@ Find, install and manage Moya libraries
         if response.status_code != 200:
             raise CommandError("upload failed -- server returned {} response".format(response.status_code))
 
-        message = response.headers.get(b'moya-upload-package-message', '').decode('utf-8')
-        result = response.headers.get(b'moya-upload-package-result', '').decode('utf-8')
+        message = decode_utf8_bytes(response.headers.get('moya-upload-package-message', ''))
+        result = decode_utf8_bytes(response.headers.get('moya-upload-package-result', ''))
 
         if result == 'success':
             self.server_response(message, fg="green")
         else:
             raise CommandError('upload error ({})'.format(message))
         if result == "success":
-            #self.console.success("package was uploaded")
             pass
         else:
             self.console.error("upload failed")
@@ -574,7 +566,7 @@ Find, install and manage Moya libraries
         return location
 
     def select_packages(self, packages):
-        """Select packages from a list of version specs"""
+        """Select packages from a list of version specs."""
         selected = []
         for _package in packages:
             version_spec = versioning.VersionSpec(_package)
@@ -595,7 +587,7 @@ Find, install and manage Moya libraries
         return selected
 
     def check_existing(self, package_installs):
-        """Check if packages are already installed"""
+        """Check if packages are already installed."""
         if not (self.args.force or self.args.download):
             try:
                 application = WSGIApplication(self.location, self.args.settings, disable_autoreload=True, test_build=True)
