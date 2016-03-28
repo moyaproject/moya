@@ -54,7 +54,7 @@ def init_logging_fs(logging_fs, path, disable_existing_loggers=True):
             with logging_fs.open(path, 'rt') as ini_file:
                 s = iniparse.parse(ini_file)
         except FSError:
-            raise errors.LoggingSettingsError('unable to read logging settings file "{}"'.format(path))
+            raise errors.LoggingSettingsError('unable to read logging settings file "{}" from {}'.format(path, logging_fs.desc('/')))
         ini_stack.append(s)
         if "extends" in s['']:
             path = fs.path.join(fs.path.dirname(path), s['']['extends'])

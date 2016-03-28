@@ -12,7 +12,7 @@ from .. import timezone
 
 from fs.path import pathjoin
 from fs.opener import fsopendir
-from fs.errors import FSError
+from fs.errors import FSError, BackReferenceError, ResourceNotFoundError
 
 from os.path import dirname, abspath
 import sys
@@ -167,12 +167,17 @@ class Import(LogicElement):
                         if project_fs.hassyspath('/'):
                             project_path = project_fs.getsyspath('/')
                             import_path = pathjoin(project_path, location)
-                            import_fs = fsopendir(import_path)
+                            try:
+                                import_fs = fsopendir(import_path)
+                            except ResourceNotFoundError:
+                                self.throw("import.fail",
+                                           "location '{}' was not found".format(import_path),
+                                           diagnosis="Check the location is exists and is a directory.")
                         else:
                             import_fs = context['fs'].opendir(location)
-                    except FSError as e:
+                    except (BackReferenceError, FSError) as e:
                         self.throw("import.fail",
-                                   "unable to import library from {}".format(location),
+                                   "unable to import location '{}' from {}".format(location, project_fs),
                                    diagnosis=text_type(e))
             lib = archive.load_library(import_fs,
                                        priority=priority,
