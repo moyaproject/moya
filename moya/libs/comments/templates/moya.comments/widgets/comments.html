@@ -3,7 +3,7 @@
 <div class="moya-comment clearfix level-${comment.level}{% if comment.level > 0 %} reply{% endif %}">
     <div class="moya-comment-body{% if comment.user %} user{% endif %} moya-comment-${comment.id}">
         {%- if comment.commenter_url %}
-        <a href="${comment.commenter_url}">
+        <a href="${comment.commenter_url}" rel="nofollow">
             <img class="gravatar" alt="gravatar" src="//www.gravatar.com/avatar/${md5:lower:(comment.user.email or comment.commenter_email)}?s=${comment.level == 0 ? "36" : "36"}&amp;d=identicon"/>
         </a>
         {%- else %}
@@ -13,7 +13,7 @@
         <div class="text panel panel-default">
             <div class="panel-heading">
                 {%- if comment.commenter_url %}
-                <a href="${comment.commenter_url}" class="name">${comment.user.display_name or comment.commenter_name}</a>
+                <a href="${comment.commenter_url}" class="name" rel="nofollow">${comment.user.display_name or comment.commenter_name}</a>
                 {%- else %}
                 <span class="name">${comment.user.display_name or comment.commenter_name}</span>
                 {%- endif %}
