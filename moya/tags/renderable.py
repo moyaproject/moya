@@ -121,7 +121,7 @@ class ServeTemplateFS(RenderTemplateFS):
     """
     Render and serve a template from a filesystem.
 
-    See [tag]render-template-fs[/tag].
+    See [tag]render-template[/tag].
 
     """
 
