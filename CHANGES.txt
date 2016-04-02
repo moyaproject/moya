@@ -1,6 +1,8 @@
 0.6.10
 ------
 
+Template markup type tags accept a list of markups, the first supported one will be used.
+
 0.6.9
 -----
 

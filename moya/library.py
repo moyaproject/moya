@@ -124,6 +124,10 @@ class Library(object):
             return None
 
     @property
+    def cfg(self):
+        return self._cfg
+
+    @property
     def version_spec(self):
         """Get a version spec for precisely this version"""
         return VersionSpec("{}=={}".format(self.long_name, self.version))

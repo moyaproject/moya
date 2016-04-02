@@ -229,7 +229,7 @@ class Test(SubCommand):
 
         test_libs = []
         for location in args.location:
-            archive, lib = build.build_lib(location)
+            archive, lib = build.build_lib(location, tests=True)
             lib_name = lib.long_name
 
             if archive.failed_documents:
@@ -295,7 +295,6 @@ class Test(SubCommand):
                 tests = list(suite.children((namespaces.test, 'case')))
                 steps += len(tests)
 
-                #test_runner = {"break": args._break}
                 test_runner = {}
                 context = Context({'_test_runner': test_runner})
 
@@ -350,7 +349,6 @@ class Test(SubCommand):
             all_totals['error'] += error
         summary = "{fail} fail(s), {error} error(s), {pass} pass(es)".format(**all_totals)
 
-        #self.console.nl()
         if args.quick:
             console.div("Test results (quick) {}".format(datetime.now().ctime()))
         else:

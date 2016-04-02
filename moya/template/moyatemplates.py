@@ -1557,13 +1557,26 @@ class MarkupNode(Node):
         self.type_expression = exp_map.get('as', DefaultExpression("html"))
         self.target_expression = exp_map.get('target', DefaultExpression("html"))
         self.options_expression = exp_map.get('set', DefaultExpression({}))
+
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = text_type(self.markup_expression.eval(context) or '')
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
+
+        if isinstance(markup_type, list):
+            for _markup_type in markup_type:
+                if Markup.supports(_markup_type):
+                    markup_type = _markup_type
+                    break
+            else:
+                self.render_error("no supported markup in {}".format(tools.textual_list(markup_type)))
+
         options = self.options_expression.eval(context)
+
+        if not Markup.supports(markup_type):
+            self.render_error("markup '{}' is not supported".format(markup_type))
 
         try:
             markup_renderable = Markup(markup, markup_type)
@@ -1588,6 +1601,18 @@ class MarkupBlockNode(Node):
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
         options = self.options_expression.eval(context)
+
+        if isinstance(markup_type, list):
+            for _markup_type in markup_type:
+                if Markup.supports(_markup_type):
+                    markup_type = _markup_type
+                    break
+            else:
+                self.render_error("no supported markup in {}".format(tools.textual_list(markup_type)))
+
+        if not Markup.supports(markup_type):
+            self.render_error("markup '{}' is not supported".format(markup_type))
+
         try:
             markup_renderable = Markup(markup, markup_type)
             html = render_object(markup_renderable, environment.archive, context, target, options=options)
