@@ -164,7 +164,9 @@ class Service(MultiWSGIApplication):
         try:
             init_logging(logging_path)
         except Exception as e:
-            log.exception('error reading logging')
+            log.error("unable to initialize logging from '%s'", logging_path)
+            sys.stderr.write("unable to initialize logging from '{}' ({})\n".format(logging_path, e))
+            return -1
 
         log.debug('read conf from %s', settings_path)
         log.debug('read logging from %s', logging_path)

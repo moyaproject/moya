@@ -172,8 +172,11 @@ def _init_logging(path, ini_stack, disable_existing_loggers=True):
                 kass = eval(klass, vars(logging))
             except (AttributeError, NameError):
                 kass = _resolve(klass)
-            args = get(section_name, "args")
-            args = eval(args, vars(logging))
+            args = get(section_name, "args", "()")
+            try:
+                args = eval(args, vars(logging))
+            except Exception as e:
+                raise errors.LoggingSettingsError("error parsing logger '{}' args {} ({})".format(kass, args, e))
             try:
                 h = kass(*args)
             except Exception as e:

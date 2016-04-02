@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:forms="http://moyaproject.com/forms"
+      xmlns:html="http://moyaproject.com/html">
+
+    <!-- Content is a high level description of a page -->
+    <content libname="content.front" template="base.html">
+        <section name="body">
+            <html:div class="well" if="name">Hello, ${name}!</html:div>
+            <render src="form" />
+        </section>
+    </content>
+
+</moya>

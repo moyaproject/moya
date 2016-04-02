@@ -1,0 +1,4 @@
+{# You can customize email text templates here %}
+{%- block "content" %}{% endblock -%}
+--
+${.settings.project_title}

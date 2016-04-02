@@ -31,6 +31,7 @@ class ServiceCallElement(ContextElementBase):
         self._children = ()
         self._attributes = {}
         self._code = ''  # TODO
+        self._libid = None
         self.source_line = 0
         self._element_type = ('http://moyaproject.com', '')
 

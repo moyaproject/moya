@@ -1,0 +1,9 @@
+<moya xmlns="http://moyaproject.com">
+
+    <!-- Libraries will typically define a mountpoint to add URLs -->
+    <mountpoint name="main">
+        <!-- A simple default view to start you off -->
+        <url route="/" methods="GET,POST" view="#view.front" name="front" />
+    </mountpoint>
+
+</moya>

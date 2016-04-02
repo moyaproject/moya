@@ -33,6 +33,7 @@ class Missing(object):
 
 
 class TestModifiers(unittest.TestCase):
+    """Test modifiers in expressions."""
 
     def setUp(self):
         self.modifiers = modifiers.ExpressionModifiers()

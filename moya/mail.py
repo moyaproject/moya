@@ -149,7 +149,7 @@ class MailServer(object):
         if self.username:
             try:
                 smtp.login(self.username, self.password)
-            except smtp.SMTPExcetion as e:
+            except smtp.SMTPException as e:
                 raise MoyaException("email.auth-fail", text_type(e))
             finally:
                 smtp.quit()

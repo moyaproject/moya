@@ -1,0 +1,27 @@
+{
+    "colors":
+    {
+        "text":
+        {
+            "fg": "#333",
+            "bg": "white"
+        },
+        "highlight":
+        {
+            "fg": "#333",
+            "bg": "#eee"
+        },
+        "selected":
+        {
+            "fg": "#fff",
+            "bg": "#337ab7"
+        },
+        "border":
+        {
+            "normal": "#ccc",
+            "focused": "#ddd"
+        }
+    }
+
+}
+
