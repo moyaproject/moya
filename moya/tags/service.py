@@ -65,7 +65,10 @@ class ServiceCallElement(ContextElementBase):
                     subprocess.Popen(["winpdb"])
                     rpdb2.start_embedded_debugger(password)
 
-            ret = self.service(*args, **call)
+            if getattr(self.service, 'call_with_context', False):
+                ret = self.service(context, *args, **call)
+            else:
+                ret = self.service(*args, **call)
             context["_return"] = ReturnContainer(ret)
         except Exception as e:
             raise

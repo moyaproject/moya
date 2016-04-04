@@ -4,6 +4,8 @@
     <mountpoint name="main">
         <!-- The view for your JSON Remote Procedure Call interface -->
         <url route="/jsonrpc/" methods="GET,POST" view='#jsonrpc.interface' name="jsonrpc" />
+
+        <url route="/hello/" view="#view.hello"/>
     </mountpoint>
 
 </moya>
