@@ -1,7 +1,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-exposed_filters = {}
+from ._exposed import exposed_filters
 
 
 class PyFilter(object):

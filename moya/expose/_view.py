@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from ._macro import exposed_elements
+from ._exposed import exposed_elements
 from ..compat import with_metaclass
 from .. import errors
 

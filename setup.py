@@ -5,7 +5,12 @@ from setuptools import setup, find_packages
 with open('moya/_version.py') as f:
     exec(f.read())
 
-# Don't forget to update version in moya/__init__.py
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except(IOError, ImportError):
+    long_description = open('README.md').read()
+
 
 classifiers = [
     'Intended Audience :: Developers',
@@ -17,13 +22,11 @@ classifiers = [
     "Programming Language :: Python :: 3.5"
 ]
 
-long_desc = """Web development framework"""
-
 setup(
     name='moya',
     version=VERSION,
     description="web development platform",
-    long_description=long_desc,
+    long_description=long_description,
     zip_safe=False,
     license="MIT",
     author="Will McGugan",
@@ -58,7 +61,7 @@ setup(
         'babel==1.3',
         'postmarkup',
         'polib',
-        'pillow >= 3.1.1',
+        'pillow != 3.0.0',  # 3.0.0 version had an incompatible exif change
         'pymysql',
         'passlib',
         'commonmark >= 0.6.3',
