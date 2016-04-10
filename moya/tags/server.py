@@ -341,7 +341,7 @@ class Trace(DataSetter):
     [c]data[/c] is the url data (as returned in [c].url[/c]), [c]targets[/c] is a list of element references,
     [c]name[/c] is the name of the matching URL.
 
-    If [c]app[/c] is provided, this tag will return the first url route from the given app.
+    If [c]app[/c] or [c]name[/c] is provided, this tag will return the first url route matching the given app / named url.
 
     """
 
@@ -356,10 +356,9 @@ class Trace(DataSetter):
     method = Attribute("HTTP method", type="text", default="GET")
 
     app = Attribute("Application name", required=False, default=None, type="text")
-    name = Attribute("Route name to find", required=False, type="text", default=None)
+    name = Attribute("Route name to find", required=False, type="commalist", default=None)
 
     def get_value(self, context):
-        params = self.get_parameters(context)
         server, path, method, app, name = self.get_parameters(context, 'server', 'path', 'method', 'app', 'name')
 
         if '://' in path:
@@ -381,9 +380,9 @@ class Trace(DataSetter):
                     if data.get('app', None) != app:
                         continue
                 if name is not None:
-                    if _name != name:
+                    if _name not in name:
                         continue
-                return {'data': data, 'targets': targets, 'name': name}
+                return {'data': data, 'targets': targets, 'name': _name}
             else:
                 return None
 
