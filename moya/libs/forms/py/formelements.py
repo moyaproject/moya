@@ -1036,7 +1036,7 @@ class FieldElement(LogicElement):
     template = Attribute("Template", type="template", required=False, default=None)
     visible = Attribute("Visible?", type="boolean", required=False, default=True)
     style = Attribute("Override style", required=False, default=None)
-    maxlength = Attribute("Maximum length", required=False, default=None)
+    maxlength = Attribute("Maximum length", type="expression", required=False, default=None)
     adapt = Attribute("Function to adapt field before applying", type="function", default="value", evaldefault=True)
     process = Attribute("Function to process src in to a string", type="function", default="str:value", evaldefault=True)
     disabled = Attribute("Disabled control?", type="boolean", required=False, default=False)
@@ -1343,18 +1343,23 @@ class Select(FieldElement):
 
     @classmethod
     def add_choices(cls, element, select, select_choices):
+        """Add choices in a variety of possible formats."""
         try:
-            for group, choices in select_choices:
-                if isinstance(choices, text_type):
-                    select.add_option(group, choices)
+            for group_choices in select_choices:
+                if isinstance(group_choices, text_type):
+                    select.add_option(group_choices, group_choices)
                 else:
-                    for choice, choice_label in choices:
-                        select.add_option(choice, choice_label, group=group)
+                    group, choices = group_choices
+                    if isinstance(choices, text_type):
+                        select.add_option(group, choices)
+                    else:
+                        for choice, choice_label in choices:
+                            select.add_option(choice, choice_label, group=group)
         except Exception as e:
             element.throw('moya.forms.choices-error',
-                       'unable to add choices to {}'.format(select),
-                       diagnosis="Check the format of your choices. It should a a sequence of (&lt;choice&gt;, &lt;label&gt;).",
-                       choices=select_choices)
+                          'unable to add choices to {}'.format(select),
+                          diagnosis="Check the format of your choices. It should a a sequence of (&lt;choice&gt;, &lt;label&gt;).",
+                          choices=select_choices)
 
     def logic(self, context):
         form = context['_return']

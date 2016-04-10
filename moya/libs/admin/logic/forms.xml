@@ -89,7 +89,7 @@
                 </if>
                 <else>
 				    <forms:input label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}"
-				        initial="str:object[column.name]" maxlength="${column.length}"
+				        initial="str:object[column.name]" maxlength="column.length"
                         required="not column.blank"/>
                 </else>
                 <defer to="adapt_null" />
@@ -122,7 +122,7 @@
                             label="${column.label or column.name|'label'}"
                              required="not column.blank"
                              initial="str:object[column.name]"
-                             maxlength="${column.length}">
+                             maxlength="column.length">
                             <wysihtml5:editor/>
                         </forms:field>
                     </if>
@@ -132,7 +132,7 @@
                             help="${str:column.help}"
                             required="not column.blank"
                             initial="str:object[column.name]"
-                            maxlength="${column.length}"/>
+                            maxlength="column.length"/>
                     </else>
                 </else>
                 <defer to="adapt_null" />
