@@ -9,8 +9,6 @@ from ..compat import (text_type,
                       string_types,
                       int_types,
                       number_types,
-                      quote,
-                      unquote,
                       unichr)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
@@ -31,7 +29,8 @@ from .. import connectivity
 from .. import moyajson
 from ..import compat
 
-from fs.path import (basename,
+from fs.path import (abspath,
+                     basename,
                      pathjoin,
                      relativefrom,
                      dirname,
@@ -62,11 +61,13 @@ class Path(text_type):
 
 
 def _slashjoin(paths):
+    """Join paths with a slash."""
     paths = [text_type(p) for p in paths]
     _paths = [paths.pop(0).rstrip('/')]
+    append = _paths.append
     for p in paths:
-        _paths.append('/')
-        _paths.append(p.lstrip('/'))
+        append('/')
+        append(p.lstrip('/'))
     return ''.join(_paths)
 
 
@@ -264,6 +265,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def abs(self, context, v):
         return abs(v)
+
+    def abspath(self, context, v):
+        return abspath(text_type(v))
 
     def all(self, context, v):
         return all(bool(i) for i in v)
@@ -879,12 +883,19 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def time(self, context, v):
         return ExpressionTime.from_isoformat(v)
 
+    def trailingslash(self, context, v):
+        p = text_type(v)
+        if p.endswith('/'):
+            return p
+        else:
+            return p + '/'
+
     # Candidate for deprecation
     def trim(self, context, v):
         try:
             v, maxlength = v
         except:
-            raise ValueError('trim: requires a collection of [<string>, <max length]')
+            raise ValueError('trim: requires a collection of [<string>, <max length>]')
 
         s = text_type(v)
 
