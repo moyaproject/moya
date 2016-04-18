@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 """Simple text based progress bar"""
 
 
@@ -46,30 +46,26 @@ class Progress(object):
         if msg is not None:
             self.msg = msg
         self.render()
-        # if self.step == self.num_steps:
-        #     self.done()
-        # else:
-        #     self.render()
 
-    def render(self, line_end='\r'):
+    def render(self, line_end='\r', color="magenta"):
+        """Render a passable progress bar."""
         if not self.console.is_terminal():
             return
-        progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
+
+        start_char = '╺'
+        mid_char = '━'
+        end_char = '╸'
+
+        bar = start_char + ((self.width - 2) * mid_char) + end_char
+
         num_bars = int(self.complete * self.width)
-        bars = '=' * num_bars
-        bars = bars.ljust(self.width, ' ')
-        out = "{indent}{progress} [{bars}]".format(indent=self.indent,
-                                                   bars=bars,
-                                                   progress=progress)
-        if self.msg:
-            out = "\r{1} {0}".format(self.msg, out)
-
-        out = out.expandtabs()
-
-        self.max_line_size = max(len(out), self.max_line_size)
-        out = out.ljust(self.max_line_size + 1, ' ') + line_end
-
-        self.console(out).flush()
+        completed = bar[:num_bars]
+        remaining = bar[num_bars:]
+        progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
+        size = 1 + len(self.msg) + 1 + len(self.indent) + len(progress) + len(completed)
+        self.console('\r')(self.indent)(progress)(' ')(completed, color)(remaining, 'white')(' ' + self.msg)
+        self.max_line_size = max(size, self.max_line_size)
+        self.console((self.max_line_size - size) * ' ' + line_end).flush()
 
     def done(self, msg=None):
         if msg is not None:
@@ -86,28 +82,30 @@ class Progress(object):
 
 
 class ProgressContext(object):
+    """Progress context manager."""
+
     def __init__(self, progress):
         self.progress = progress
 
     def __enter__(self):
+        """Hide cursor and render."""
         self.progress.console.show_cursor(False)
         self.progress.render()
         return self.progress
 
     def __exit__(self, *args, **kwargs):
+        """Show 100% resume cursor."""
         self.progress.done()
         self.progress.console.show_cursor(True)
 
 
 if __name__ == "__main__":
-    from time import sleep
     from moya.console import Console
-    c = Console()
-    p = Progress(c, "Extracting...", 100)
-    p.render()
 
-    for step in xrange(100):
-        sleep(.01)
-        p.step()
-    p.render()
-    print
+    c = Console()
+    p = Progress(c, "Extracting...", 100, width=24)
+
+    with ProgressContext(p):
+        for step in xrange(100):
+            sleep(.03)
+            p.step()
