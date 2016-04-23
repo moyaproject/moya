@@ -58,7 +58,7 @@ setup(
         'pygments',
         'fs >= 0.5.4',
         'iso8601',
-        'babel==1.3',
+        'babel>2.0',
         'postmarkup',
         'polib',
         'pillow != 3.0.0',  # 3.0.0 version had an incompatible exif change

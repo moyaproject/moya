@@ -244,17 +244,6 @@ class AttrText(text_type):
             for text, attrs in text:
                 console_out(text, **attrs)
 
-    # def highlight(self, re_attributes, compile=False, default=None):
-    #     if compile:
-    #         re_attributes = compile_highlights(re_attributes)
-    #     if default is not None:
-    #         self.add_span(0, len(self), **default)
-    #     for re_text, attrs in re_attributes:
-    #         for match in re_text.finditer(self):
-    #             self.add_span(match.start(), match.end(), **attrs)
-    #     return self
-
-
 if platform.system() == 'Windows':
 
     def getTerminalSize():
@@ -316,6 +305,7 @@ else:
 
 class Cell(object):
     """A table cell"""
+
     def __init__(self, text, processor=None, **attribs):
         self.text = text_type(text)
         self.processor = processor or (lambda t: t)
@@ -418,7 +408,7 @@ class Cell(object):
 
 
 def make_table_header(*headers):
-    """Creates the first row of headers in a table"""
+    """Create the first row of headers in a table."""
     return [[Cell(h, bold=True) for h in headers]]
 
 
@@ -439,7 +429,7 @@ class _TextOut(object):
 
 
 class _ConsoleFileInterface(object):
-    """A simple writable file-like proxy"""
+    """A simple writable file-like proxy."""
 
     def __init__(self, console, **style):
         self._console = console
@@ -450,7 +440,7 @@ class _ConsoleFileInterface(object):
 
 
 class Console(object):
-    """Write output to the console, with styles and color"""
+    """Write output to the console, with styles and color."""
 
     fg_colors = dict(black=30,
                      red=31,
@@ -473,7 +463,6 @@ class Console(object):
     _lock = RLock()
 
     def __init__(self, out=None, nocolors=False, text=False, width=None, html=False, unicode_borders=True):
-        #self._lock = RLock()
         self.unicode_borders = unicode_borders
         if html:
             self.html = True
@@ -596,9 +585,6 @@ class Console(object):
                  center=False):
         if isinstance(text, AttrText):
             return self.text(text)
-        #if not isinstance(text, string_types):
-        #    self.obj(context, text)
-        #    return self
         if self.html:
             return self._html_out(text,
                                   fg=fg,

@@ -9,7 +9,7 @@ import os
 MOYA_TEMPLATE_XML = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <moya xmlns="http://moyaproject.com"
-    xmlns:moya="http://moyaproject.com"
+    xmlns:m="http://moyaproject.com"
     xmlns:let="http://moyaproject.com/let"
     xmlns:db="http://moyaproject.com/db"
     xmlns:forms="http://moyaproject.com/forms"
