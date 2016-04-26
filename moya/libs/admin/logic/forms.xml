@@ -189,7 +189,7 @@
                         help="${str:column.help}"
                         type="number"
                         initial="str:object[column.name]"
-                        adapt="int:value"
+                        adapt="value is None ? '' : int:value"
                         required="not column.blank"/>
                     <forms:validate-field field="${column.name}">
                         <forms:fail if="(value and not validint:value) or (not value and not column.blank)">
@@ -223,7 +223,7 @@
                 <case if="column.type=='float'"/>
                 <forms:input label="${str:column.label or column.name|'label'}" name="${column.name}" help="${str:column.help}" type="number"
                     initial="str:object[column.name]"
-                    adapt="float:value"
+                    adapt="value is None ? '' : float:value"
                     required="not column.blank" />
                 <forms:validate-field field="${column.name}">
                     <forms:fail if="(value and not validfloat:value) or (not value and not column.blank)">

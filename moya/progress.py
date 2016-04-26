@@ -62,7 +62,7 @@ class Progress(object):
         completed = bar[:num_bars]
         remaining = bar[num_bars:]
         progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
-        size = 1 + len(self.msg) + 1 + len(self.indent) + len(progress) + len(completed)
+        size = 2 + len(self.msg) + 1 + len(self.indent) + len(progress) + len(completed)
         self.console('\r')(self.indent)(progress)(' ')(completed, color)(remaining, 'white')(' ' + self.msg)
         self.max_line_size = max(size, self.max_line_size)
         self.console((self.max_line_size - size) * ' ' + line_end).flush()
