@@ -529,7 +529,11 @@ class Form(AttributeExposer):
         for field in self.all_fields:
             if field.initial is not None:
                 value = field.initial
-                binding[field.name] = field.adapt_value(context, value=value)
+                try:
+                    binding[field.name] = field.adapt_value(context, value=value)
+                except Exception as e:
+                    raise ValueError("unable to bind field value '{}' ({})".format(field.name, e))
+
         return binding
 
     def fill(self, obj):
@@ -776,7 +780,11 @@ class Get(DataSetter):
         if call.has_return:
             form = call.return_value
             bindings = []
-            initial_binding = form.get_initial_binding(context)
+            try:
+                initial_binding = form.get_initial_binding(context)
+            except ValueError as e:
+                raise errors.ElementError(text_type(e),
+                                          element=self)
             if initial_binding:
                 bindings.append(initial_binding)
             if src and context[src]:
