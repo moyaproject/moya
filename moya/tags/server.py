@@ -319,7 +319,8 @@ class GetURL(DataSetter):
 
 
 class GetFqURL(GetURL):
-    """Get a [i]fully qualified[/i] (including domain name and scheme) named URL"""
+    """Get a [i]fully qualified[/i] (including domain name and scheme) named URL."""
+
     base = Attribute("Base (protocol and domain) of the URL", default=None)
 
     class Help:
@@ -795,13 +796,14 @@ class Server(LogicElement):
                     db.commit_sessions(context)
 
         except Exception as e:
-            db.rollback_sessions(context)
+            db.rollback_sessions(context, close=False)
             return self.handle_error(archive, context, request, e, sys.exc_info())
 
         finally:
             for thread in context.get('._threads', []):
                 thread.wait()
             context.safe_delete('._threads')
+            db.close_sessions(context)
 
         root['_urltrace'] = []
 

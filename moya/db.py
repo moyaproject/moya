@@ -200,7 +200,7 @@ def get_session_map(archive):
     return session_map
 
 
-def commit_sessions(context):
+def commit_sessions(context, close=True):
     count = 0
     for dbsession in context['._dbsessions'].values():
         if dbsession.session:
@@ -211,14 +211,15 @@ def commit_sessions(context):
                 db_log.exception('error committing session')
             else:
                 count += 1
-            try:
-                dbsession.close()
-            except:
-                db_log.exception('error closing session')
+            if close:
+                try:
+                    dbsession.close()
+                except:
+                    db_log.exception('error closing session')
     return count
 
 
-def rollback_sessions(context):
+def rollback_sessions(context, close=True):
     count = 0
     for dbsession in context['._dbsessions'].values():
         if dbsession.session:
@@ -229,11 +230,23 @@ def rollback_sessions(context):
                 db_log.exception('error rolling back session')
             else:
                 count += 1
+            if close:
+                try:
+                    dbsession.close()
+                except:
+                    db_log.exception('error closing session')
+    return count
+
+
+def close_sessions(context):
+    """Close db sessions."""
+    for dbsession in context['._dbsessions'].values():
+        if dbsession.session:
             try:
                 dbsession.close()
             except:
                 db_log.exception('error closing session')
-    return count
+
 
 
 def sync_all(archive, console, summary=True):

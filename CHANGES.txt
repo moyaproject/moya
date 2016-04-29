@@ -1,10 +1,14 @@
+0.6.11
+------
+Fix to permit db objects in 500 page
+
 0.6.10
 ------
 
 Template markup type tags accept a list of markups, the first supported one will be used.
 Choices attribute now accept a simple list of strings.
 Added abspath: modifier
-Added trailingslash
+Added trailingslash: modifier
 
 0.6.9
 -----
