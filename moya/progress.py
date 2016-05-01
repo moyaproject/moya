@@ -62,7 +62,7 @@ class Progress(object):
         completed = bar[:num_bars]
         remaining = bar[num_bars:]
         progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
-        size = 2 + len(self.msg) + 1 + len(self.indent) + len(progress) + len(completed)
+        size = len(self.indent) + len(progress) + 1 + len(completed) + len(remaining) + 1 + len(self.msg) + 1
         self.console('\r')(self.indent)(progress)(' ')(completed, color)(remaining, 'white')(' ' + self.msg)
         self.max_line_size = max(size, self.max_line_size)
         self.console((self.max_line_size - size) * ' ' + line_end).flush()
@@ -101,6 +101,7 @@ class ProgressContext(object):
 
 if __name__ == "__main__":
     from moya.console import Console
+    from random import randint
 
     c = Console()
     p = Progress(c, "Extracting...", 100, width=24)
@@ -108,4 +109,4 @@ if __name__ == "__main__":
     with ProgressContext(p):
         for step in xrange(100):
             sleep(.03)
-            p.step()
+            p.step(msg = "Extracting... " + "*" * randint(5, 30) + '|')
