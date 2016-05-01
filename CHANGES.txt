@@ -1,6 +1,7 @@
 0.6.11
 ------
 Fix to permit db objects in 500 page
+Added sentinel: modifier to create singleton sentinels
 
 0.6.10
 ------

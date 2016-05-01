@@ -9,7 +9,8 @@ from ..compat import (text_type,
                       string_types,
                       int_types,
                       number_types,
-                      unichr)
+                      unichr,
+                      implements_to_string)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
@@ -48,6 +49,8 @@ from operator import truth
 from itertools import chain
 import random
 from math import ceil, floor, log
+import threading
+import weakref
 
 
 class Path(text_type):
@@ -58,6 +61,30 @@ class Path(text_type):
 
     def __rtruediv__(self, other):
         return Path(pathjoin(self, text_type(other)))
+
+
+@implements_to_string
+class Sentinel(object):
+    """A singleton sentinel value."""
+
+    _objects = weakref.WeakValueDictionary()
+    _lock = threading.Lock()
+
+    def __new__(cls, name):
+        with cls._lock:
+            if name in cls._objects:
+                return cls._objects[name]
+            else:
+                obj = super(Sentinel, cls).__new__(cls)
+                obj.name = name
+                cls._objects[name] = obj
+                return obj
+
+    def __repr__(self):
+        return "Sentinel('{s}')".format(self.name)
+
+    def __moyarepr__(self, context):
+        return "sentinel:'{}'".format(self.name)
 
 
 def _slashjoin(paths):
@@ -790,6 +817,10 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def safe(self, context, v):
         return Safe(v)
+
+    def sentinel(self, context, v):
+        name = slugify(text_type(v))
+        return Sentinel(name)
 
     def seqlast(self, context, v):
         return self._seqlast(v, context)
