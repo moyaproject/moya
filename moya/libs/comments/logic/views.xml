@@ -78,7 +78,10 @@
     </macro>
 
     <macro libname="subscribe">
-        <log level="debug">subscribing to ${comment}</log>
+        <if test="not email">
+            <log-debug>subscribe failed (no email address)</log-debug>
+            <return/>
+        </if>
         <make-token dst="token" size="16"/>
         <db:create model="#Subscription" dst="subscription" if="email and comment and '@' in email"
             let:email="email" let:name="name" let:comment="comment" let:uid="token"/>

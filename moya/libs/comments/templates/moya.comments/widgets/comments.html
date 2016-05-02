@@ -20,7 +20,9 @@
                 <span class="time pull-right">${localize:comment.time.date} ${comment.time % 'hh:mm a'}</span>
             </div>
             <div class="panel-body">
+                {% cache for 1d key [commentobject.id, comment.id, commentobject.updates] %}
                 {% include "widgets/comment_markup.html" %}
+                {% end-cache %}
 
                 {%- if commentobject.allow_new %}
                 <div class="moya-comment-actions">
@@ -106,13 +108,13 @@
 {%- endwith %}
 
 {%- if comments %}
-{% cache for 1d key [commentobject.id, commentobject.updates, bool:.user] %}
+
 <div class="moya-comments root">
 {%- for comment in commentgraph.root %}
 {%- call "comment"  %}
 {%- endfor %}
 </div>
-{% endcache %}
+
 {%- endif %}
 
 {%- endif %}
