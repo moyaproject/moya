@@ -63,17 +63,15 @@ class MoyaImage(object):
 
         exif = {}
         if ExifTags:
-            for k, v in self._img.get_exit.items():
+            for k, v in _exif.items():
                 try:
                     key = ExifTags.TAGS.get(k, None)
                     if key is not None:
                         value = v.decode('utf-8', 'replace') if isinstance(v, bytes) else v
                         exif[key] = value
                 except Exception as e:
-                    # EXIF can be full of atrbitrary data
+                    # EXIF can be full of arbitrary data
                     log.debug('exif extract error: %s', e)
-        else:
-            exif = {}
 
         return exif
 
