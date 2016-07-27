@@ -23,6 +23,7 @@ from ..compat import (implements_to_string,
                       iterkeys)
 
 import inspect
+import logging
 import weakref
 from textwrap import dedent
 from collections import deque, namedtuple
@@ -30,7 +31,6 @@ from collections import deque, namedtuple
 
 Closure = namedtuple("Closure", ["element", "data"])
 
-import logging
 startup_log = logging.getLogger('moya.startup')
 
 

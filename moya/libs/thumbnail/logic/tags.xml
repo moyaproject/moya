@@ -183,8 +183,8 @@ The code inside the processor transforms that image. The new image is then writt
             <let url="slashjoin:[settings.serve_url, thumb_path]"/>
         </else>
         <if test="overwrite or thumb_path not in thumb_fs">
-            <thread join="yes" scope="yes">
-                <!-- lazy load of the image -->
+
+            <!-- lazy load of the image -->
                 <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
 
                 <!-- make a copy -->
@@ -198,9 +198,27 @@ The code inside the processor transforms that image. The new image is then writt
                     dirpath="${dirname:thumb_path}"
                     filename="${basename:thumb_path}"
                     let:quality="processor.params.quality"/>
-            </thread>
-            <!-- If threads are 'disabled', wait for the thread to continue -->
-            <wait-on-threads if="not .app.settings.threads.bool" />
+
+            <if test="0">
+                <thread join="yes" scope="yes">
+                    <!-- lazy load of the image -->
+                    <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
+
+                    <!-- make a copy -->
+                    <image:copy image="original_image" />
+
+                    <!-- call the processor to modify the image in place -->
+                    <call macro="${processor.element_ref}" let:image="image" />
+
+                    <!-- write the thumbnail -->
+                    <image:write fsobj="thumb_fs"
+                        dirpath="${dirname:thumb_path}"
+                        filename="${basename:thumb_path}"
+                        let:quality="processor.params.quality"/>
+                </thread>
+                <!-- If threads are 'disabled', wait for the thread to continue -->
+                <wait-on-threads if="not .app.settings.threads.bool" />
+            </if>
         </if>
         <return value="url"/>
     </tag>
