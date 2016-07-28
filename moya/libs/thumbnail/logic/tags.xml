@@ -185,7 +185,6 @@ The code inside the processor transforms that image. The new image is then writt
         <if test="overwrite or thumb_path not in thumb_fs">
 
             <thread join="yes" scope="yes">
-
                 <if test="not original_image">
                     <image:read fsobj="fs" path="${path}" dst="image"/>
                 </if>

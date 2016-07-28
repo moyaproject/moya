@@ -248,7 +248,7 @@ class New(DataSetterBase, CheckImageMixin):
         self.set_context(context, params.dst, moya_image)
 
 
-class Copy(DataSetterBase):
+class Copy(DataSetterBase, CheckImageMixin):
     """Create an copy of [c]image[/c] in [c]dst[/c]."""
     xmlns = namespaces.image
 
