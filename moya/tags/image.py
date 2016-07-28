@@ -1,10 +1,14 @@
 from __future__ import unicode_literals
 from __future__ import division
 
+import logging
+import threading
+
 from ..elements.elementbase import LogicElement, Attribute
 from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
+from ..context.tools import to_expression
 
 from fs.path import basename, pathjoin, splitext
 
@@ -14,7 +18,7 @@ try:
 except ImportError:
     ExifTags = None
 
-import logging
+
 log = logging.getLogger('moya.image')
 
 
@@ -25,6 +29,7 @@ class MoyaImage(object):
     def __init__(self, img, filename):
         self._img = img
         self.filename = filename
+        self._lock = threading.RLock()
 
     def __str__(self):
         w, h = self._img.size
@@ -56,24 +61,25 @@ class MoyaImage(object):
 
     @property
     def exif(self):
-        self._img.load()
-        _exif = self._img._getexif()
-        if _exif is None:
-            return {}
+        with self._lock:
+            self._img.load()
+            _exif = self._img._getexif()
+            if _exif is None:
+                return {}
 
-        exif = {}
-        if ExifTags:
-            for k, v in _exif.items():
-                try:
-                    key = ExifTags.TAGS.get(k, None)
-                    if key is not None:
-                        value = v.decode('utf-8', 'replace') if isinstance(v, bytes) else v
-                        exif[key] = value
-                except Exception as e:
-                    # EXIF can be full of arbitrary data
-                    log.debug('exif extract error: %s', e)
+            exif = {}
+            if ExifTags:
+                for k, v in _exif.items():
+                    try:
+                        key = ExifTags.TAGS.get(k, None)
+                        if key is not None:
+                            value = v.decode('utf-8', 'replace') if isinstance(v, bytes) else v
+                            exif[key] = value
+                    except Exception as e:
+                        # EXIF can be full of arbitrary data
+                        log.debug('exif extract error: %s', e)
 
-        return exif
+            return exif
 
 
 class Read(DataSetterBase):
@@ -152,9 +158,21 @@ class GetSize(Read):
     def logic(self, context):
         params = self.get_parameters(context)
         img = self.get_image(context, params)
-        w, h = img.size
-        result = {'width': w, 'height': h}
-        self.set_context(context, params.dst, result)
+        with img._lock:
+            w, h = img.size
+            result = {'width': w, 'height': h}
+            self.set_context(context, params.dst, result)
+
+
+class ImageElement(LogicElement):
+
+    def check_image(self, context, image):
+        if not isinstance(image, MoyaImage):
+            _msg = "attribute 'image' should reference an image object, not {}"
+            self.throw(
+                'bad-value.image',
+                _msg.format(to_expression(image))
+            )
 
 
 class Write(LogicElement):
@@ -188,21 +206,22 @@ class Write(LogicElement):
                 return
         path = pathjoin(params.dirpath, params.filename)
 
-        img = params.image._img
-        img_format = params.format or splitext(params.filename or '')[-1].lstrip('.') or 'jpeg'
+        with params.image._lock:
+            img = params.image._img
+            img_format = params.format or splitext(params.filename or '')[-1].lstrip('.') or 'jpeg'
 
-        if img_format == 'jpeg':
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
+            if img_format == 'jpeg':
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
 
-        save_params = self.get_let_map(context)
-        try:
-            with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
-                with dir_fs.open(params.filename, 'wb') as f:
-                    img.save(f, img_format, **save_params)
-            log.debug("wrote '%s'", params.filename)
-        except Exception as e:
-            self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
+            save_params = self.get_let_map(context)
+            try:
+                with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
+                    with dir_fs.open(params.filename, 'wb') as f:
+                        img.save(f, img_format, **save_params)
+                log.debug("wrote '%s'", params.filename)
+            except Exception as e:
+                self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 
 
 class New(DataSetterBase):
@@ -224,7 +243,7 @@ class New(DataSetterBase):
         self.set_context(context, params.dst, moya_image)
 
 
-class Copy(DataSetterBase):
+class Copy(DataSetterBase, ImageElement):
     """Create an copy of [c]image[/c] in [c]dst[/c]."""
     xmlns = namespaces.image
 
@@ -236,12 +255,14 @@ class Copy(DataSetterBase):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        img = params.image._img
-        moya_image = MoyaImage(img.copy(), params.image.filename)
-        self.set_context(context, params.dst, moya_image)
+        self.check_image(context, params.image)
+        with params.image._lock:
+            img = params.image._img
+            moya_image = MoyaImage(img.copy(), params.image.filename)
+            self.set_context(context, params.dst, moya_image)
 
 
-class Show(LogicElement):
+class Show(ImageElement):
     """Show an image (for debugging purposes). Imagemagick is required for this operation."""
     xmlns = namespaces.image
 
@@ -279,7 +300,7 @@ def _fit_dimensions(image, width, height):
     return int(round(width)), int(round(height))
 
 
-class ResizeToFit(LogicElement):
+class ResizeToFit(ImageElement):
     """Resize image to fit within the given dimensions (maintains aspect ratio)."""
 
     xmlns = namespaces.image
@@ -294,17 +315,19 @@ class ResizeToFit(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        image = params.image._img
-        new_size = _fit_dimensions(image, params.width, params.height)
-        w, h = new_size
-        if not w or not h:
-            self.throw('image.bad-dimensions',
-                       'Invalid image dimensions ({} x {})'.format(params.width, params.height),
-                       diagnosis="Width and / or height should be supplied, and should be non-zero")
-        params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
+        self.check_image(context, params.image)
+        with params.image._lock:
+            image = params.image._img
+            new_size = _fit_dimensions(image, params.width, params.height)
+            w, h = new_size
+            if not w or not h:
+                self.throw('image.bad-dimensions',
+                           'Invalid image dimensions ({} x {})'.format(params.width, params.height),
+                           diagnosis="Width and / or height should be supplied, and should be non-zero")
+            params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
 
 
-class ZoomToFit(LogicElement):
+class ZoomToFit(ImageElement):
     """Resize image to given dimensions, cropping if necessary."""
 
     xmlns = namespaces.image
@@ -319,26 +342,28 @@ class ZoomToFit(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        image = params.image._img
+        self.check_image(context, params.image)
+        with params.image._lock:
+            image = params.image._img
 
-        aspect = image.size[0] / image.size[1]
-        if image.size[0] > image.size[1]:
-            new_size = int(params.height * aspect), params.height
-        else:
-            new_size = params.width, int(params.width / aspect)
+            aspect = image.size[0] / image.size[1]
+            if image.size[0] > image.size[1]:
+                new_size = int(params.height * aspect), params.height
+            else:
+                new_size = params.width, int(params.width / aspect)
 
-        img = image.resize(new_size, _resample_methods[params.resample])
+            img = image.resize(new_size, _resample_methods[params.resample])
 
-        w = params.width
-        h = params.height
-        x = (img.size[0] - w) // 2
-        y = (img.size[1] - h) // 2
+            w = params.width
+            h = params.height
+            x = (img.size[0] - w) // 2
+            y = (img.size[1] - h) // 2
 
-        box = x, y, x + w, y + h
-        params.image.replace(img.crop(box))
+            box = x, y, x + w, y + h
+            params.image.replace(img.crop(box))
 
 
-class Resize(LogicElement):
+class Resize(ImageElement):
     """Resize an image to new dimensions."""
     xmlns = namespaces.image
 
@@ -352,17 +377,19 @@ class Resize(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        image = params.image._img
-        new_size = (params.width, params.height)
-        w, h = new_size
-        if not w or not h:
-            self.throw('image.bad-dimensions',
-                       'Invalid image dimensions ({} x {})'.format(params.width, params.height),
-                       diagnosis="Width and / or height should be supplied, and should be non-zero")
-        params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
+        self.check_image(context, params.image)
+        with params.image._lock:
+            image = params.image._img
+            new_size = (params.width, params.height)
+            w, h = new_size
+            if not w or not h:
+                self.throw('image.bad-dimensions',
+                           'Invalid image dimensions ({} x {})'.format(params.width, params.height),
+                           diagnosis="Width and / or height should be supplied, and should be non-zero")
+            params.image.replace(image.resize(new_size, _resample_methods[params.resample]))
 
 
-class ResizeCanvas(LogicElement):
+class ResizeCanvas(ImageElement):
     """Resize the image canvas."""
 
     xmlns = namespaces.image
@@ -377,22 +404,24 @@ class ResizeCanvas(LogicElement):
 
     def logic(self, context):
         image, w, h, color = self.get_parameters(context, 'image', 'width', 'height', 'color')
-        img = image._img
-        mode = img.mode
-        if color.a != 1:
-            mode = 'RGBA'
-        new_img = Image.new(mode, (w, h), color.as_pillow_tuple())
+        self.check_image(context, image)
+        with image._lock:
+            img = image._img
+            mode = img.mode
+            if color.a != 1:
+                mode = 'RGBA'
+            new_img = Image.new(mode, (w, h), color.as_pillow_tuple())
 
-        iw, ih = img.size
+            iw, ih = img.size
 
-        x = (w - iw) // 2
-        y = (h - ih) // 2
+            x = (w - iw) // 2
+            y = (h - ih) // 2
 
-        new_img.paste(img, (x, y))
-        image.replace(new_img)
+            new_img.paste(img, (x, y))
+            image.replace(new_img)
 
 
-class Square(LogicElement):
+class Square(ImageElement):
     """Square crop an image."""
 
     xmlns = namespaces.image
@@ -404,20 +433,22 @@ class Square(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        img = params.image._img
+        self.check_image(context, params.image)
+        with params.image._lock:
+            img = params.image._img
 
-        w, h = img.size
-        size = min(img.size)
-        x = (w - size) // 2
-        y = (h - size) // 2
+            w, h = img.size
+            size = min(img.size)
+            x = (w - size) // 2
+            y = (h - size) // 2
 
-        new_img = Image.new(img.mode, (size, size))
-        new_img.paste(img, (-x, -y))
+            new_img = Image.new(img.mode, (size, size))
+            new_img.paste(img, (-x, -y))
 
-        params.image.replace(new_img)
+            params.image.replace(new_img)
 
 
-class Crop(LogicElement):
+class Crop(ImageElement):
     """Crop an image to a given area."""
     xmlns = namespaces.image
 
@@ -430,23 +461,24 @@ class Crop(LogicElement):
     def logic(self, context):
         params = self.get_parameters(context)
         size = params.box
+        self.check_image(context, params.image)
+        with params.image._lock:
+            img = params.image._img
+            if len(size) == 2:
+                w, h = size
+                x = (img.size[0] - w) // 2
+                y = (img.size[1] - h) // 2
+            elif len(size) == 4:
+                x, y, w, h = size
+            else:
+                self.throw('bad-value.box-invalid',
+                           "parameter 'box' should be  sequence of 2 or 4 parameters (not {})".format(context.to_expr(size)))
 
-        img = params.image._img
-        if len(size) == 2:
-            w, h = size
-            x = (img.size[0] - w) // 2
-            y = (img.size[1] - h) // 2
-        elif len(size) == 4:
-            x, y, w, h = size
-        else:
-            self.throw('bad-value.box-invalid',
-                       "parameter 'box' should be  sequence of 2 or 4 parameters (not {})".format(context.to_expr(size)))
-
-        box = x, y, x + w, y + h
-        params.image.replace(img.crop(box))
+            box = x, y, x + w, y + h
+            params.image.replace(img.crop(box))
 
 
-class GaussianBlur(LogicElement):
+class GaussianBlur(ImageElement):
     """Guassian blur an image."""
     xmlns = namespaces.image
 
@@ -455,8 +487,10 @@ class GaussianBlur(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        img = params.image._img
-        if img.mode == 'P':
-            img = img.convert('RGB')
-        new_image = img.filter(ImageFilter.GaussianBlur(radius=params.radius))
-        params.image.replace(new_image)
+        self.check_image(context, params.image)
+        with params.image._lock:
+            img = params.image._img
+            if img.mode == 'P':
+                img = img.convert('RGB')
+            new_image = img.filter(ImageFilter.GaussianBlur(radius=params.radius))
+            params.image.replace(new_image)
