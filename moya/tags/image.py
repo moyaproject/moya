@@ -8,7 +8,6 @@ from ..elements.elementbase import LogicElement, Attribute
 from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
-from ..context.tools import to_expression
 
 from fs.path import basename, pathjoin, splitext
 
@@ -164,18 +163,23 @@ class GetSize(Read):
             self.set_context(context, params.dst, result)
 
 
-class ImageElement(LogicElement):
+class CheckImageMixin(object):
+    """Mixin for checking images."""
 
     def check_image(self, context, image):
         if not isinstance(image, MoyaImage):
             _msg = "attribute 'image' should reference an image object, not {}"
             self.throw(
                 'bad-value.image',
-                _msg.format(to_expression(image))
+                _msg.format(context.to_expr(image))
             )
 
 
-class Write(LogicElement):
+class ImageElement(LogicElement, CheckImageMixin):
+    pass
+
+
+class Write(ImageElement):
     """Write an image"""
     xmlns = namespaces.image
 
@@ -195,6 +199,7 @@ class Write(LogicElement):
     def logic(self, context):
 
         params = self.get_parameters(context)
+        self.check_image(context, params.image)
 
         if params.fsobj is not None:
             fs = params.fsobj
@@ -224,7 +229,7 @@ class Write(LogicElement):
                 self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 
 
-class New(DataSetterBase):
+class New(DataSetterBase, CheckImageMixin):
     """Create a blank image."""
     xmlns = namespaces.image
 
@@ -243,7 +248,7 @@ class New(DataSetterBase):
         self.set_context(context, params.dst, moya_image)
 
 
-class Copy(DataSetterBase, ImageElement):
+class Copy(DataSetterBase):
     """Create an copy of [c]image[/c] in [c]dst[/c]."""
     xmlns = namespaces.image
 

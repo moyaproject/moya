@@ -127,12 +127,14 @@ class ThreadElement(DataSetter):
                            "thread parameter {} ('{}') may not be passed to a thread".format(context.to_expr(v), k),
                            diagnosis="Database objects are not [i]thread safe[/i], try retrieving the object again inside the thread.")
 
-        moya_thread = MoyaThread(self,
-                                 context.get('.app', None),
-                                 params.name or self.docname,
-                                 thread_context,
-                                 data=data,
-                                 join_timeout=params.timeout)
+        moya_thread = MoyaThread(
+            self,
+            context.get('.app', None),
+            params.name or self.docname,
+            thread_context,
+            data=data,
+            join_timeout=params.timeout
+        )
         if params.join:
             context.set_new_call('._threads', list).append(moya_thread)
         moya_thread.start()
