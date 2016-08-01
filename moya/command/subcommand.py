@@ -38,12 +38,8 @@ class SubCommandType(object):
 
     def run(self):
         location = self.location
-        # TODO: make logging work from a FS object
         init_logging_fs(self.location_fs, self.args.logging)
         log.debug('project found in "%s"', location)
-
-    # def init_logging(self, location):
-    #     init_logging(logging)
 
     @property
     def location(self):

@@ -112,8 +112,9 @@ class Runserver(SubCommand):
                                  server_class=server_class,
                                  handler_class=RequestHandler)
         except IOError as e:
-            if e.errno == 98:
-                log.error("couldn't run moya server, another process may be running on port %s", args.port)
+            # 98 on Linux, 48 on OSX?
+            if e.errno in (48, 98):
+                log.critical("couldn't run moya server, another process may be running on port %s", args.port)
             raise
 
         if self.args.slow:

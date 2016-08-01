@@ -2,18 +2,52 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import io
-
-from . import iniparse
-from . import errors
-
+from os.path import abspath, join, dirname, normpath
 import logging
 from logging import handlers
-MemoryHandler = handlers.MemoryHandler
 
 import fs.path
 from fs.errors import FSError
 
-from os.path import abspath, join, dirname, normpath
+from . import iniparse
+from . import errors
+
+MemoryHandler = handlers.MemoryHandler
+log = logging.getLogger('moya.startup')
+
+
+DEFAULT_LOGGING = """
+
+[logger:root]
+handlers=moyaconsole
+
+[logger:moya]
+level=DEBUG
+
+[logger:moya.startup]
+
+[logger:moya.signal]
+
+[logger:sqlalchemy.engine]
+handlers=moyaconsole
+level=WARN
+propagate=no
+
+[handler:moyaconsole]
+class=moya.logtools.MoyaConsoleHandler
+formatter=simple
+args=(sys.stdout,)
+
+[handler:stdout]
+class=StreamHandler
+formatter=simple
+args=(sys.stdout,)
+
+[formatter:simple]
+format=%(asctime)s:%(name)s:%(levelname)s: %(message)s
+datefmt=[%d/%b/%Y %H:%M:%S]
+
+"""
 
 
 def _resolve(name):
@@ -45,22 +79,30 @@ _logging_level_names = {0: 'NOTSET',
                         'CRITICAL': 50}
 
 
-def init_logging_fs(logging_fs, path, disable_existing_loggers=True):
+def init_logging_fs(logging_fs, path, disable_existing_loggers=True, use_default=True):
 
     ini_path = path
     ini_stack = []
+    parsed_default = False
+
     while 1:
         try:
             with logging_fs.open(path, 'rt') as ini_file:
                 s = iniparse.parse(ini_file)
         except FSError:
-            raise errors.LoggingSettingsError('unable to read logging settings file "{}" from {}'.format(path, logging_fs.desc('/')))
+            if use_default:
+                s = iniparse.parse(DEFAULT_LOGGING)
+                parsed_default = True
+            else:
+                raise errors.LoggingSettingsError('unable to read logging settings file "{}" from {}'.format(path, logging_fs.desc('/')))
         ini_stack.append(s)
         if "extends" in s['']:
             path = fs.path.join(fs.path.dirname(path), s['']['extends'])
         else:
             break
-    return _init_logging(ini_path, ini_stack, disable_existing_loggers)
+    _init_logging(ini_path, ini_stack, disable_existing_loggers)
+    if parsed_default:
+        log.warn('%s not found, using default logging', path)
 
 
 def init_logging(path, disable_existing_loggers=True):
@@ -84,7 +126,7 @@ def init_logging(path, disable_existing_loggers=True):
             path = join(dirname(path), s['']['extends'])
         else:
             break
-    return _init_logging(ini_path, ini_stack, disable_existing_loggers)
+    _init_logging(ini_path, ini_stack, disable_existing_loggers)
 
 
 def _init_logging(path, ini_stack, disable_existing_loggers=True):

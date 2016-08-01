@@ -5,10 +5,11 @@ import sys
 import os.path
 import argparse
 import logging.config
+import locale
 import io
 import importlib
 
-from ..command.sub import __all__ as SUBCOMMANDS
+from ..command.sub import __all__ as all_subcommands
 from ..console import Console
 from ..context import Context
 from ..context.tools import set_dynamic
@@ -191,10 +192,10 @@ To list all available commands for a given application, omit the libname:
         if len(argv) > 1 and argv[1].count('#') == 1:
             return self.project_invoke(argv[1])
 
-        if len(argv) > 1 and argv[1] in SUBCOMMANDS:
+        if len(argv) > 1 and argv[1] in all_subcommands:
             importlib.import_module('.' + argv[1], 'moya.command.sub')
         else:
-            for name in SUBCOMMANDS:
+            for name in all_subcommands:
                 importlib.import_module('.' + name, 'moya.command.sub')
 
         self.make_subcommands()
