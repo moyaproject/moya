@@ -2,6 +2,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import absolute_import
 
+import os
+
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...console import Cell
@@ -11,8 +13,7 @@ from fs.opener import fsopendir
 from fs.errors import FSError
 from fs.multifs import MultiFS
 from fs.mountfs import MountFS
-
-import os
+from fs.path import dirname
 
 
 def _ls(console, file_paths, dir_paths, format_long=False):
@@ -123,8 +124,10 @@ class FS(SubCommand):
                             help="display the system path of a file")
         parser.add_argument("--open", dest="open", default=None, metavar="PATH",
                             help="open a file")
-        parser.add_argument("--copy", dest="copy", metavar="PATH", nargs='+',
-                            help="copy contents of filesystem to PATH")
+        parser.add_argument("--copy", dest="copy", metavar="DESTINATION or PATH DESTINATION", nargs='+',
+                            help="copy contents of a filesystem to PATH, or a file from PATH to DESTINATION")
+        parser.add_argument('--extract', dest="extract", metavar="PATH DIRECTORY", nargs=2,
+                            help="copy a file from a filesystem, preserving directory structure")
         parser.add_argument("-f", "--force", dest="force", action="store_true", default=False,
                             help="force overwrite of destination even if it is not empty (with --copy)")
         return parser
@@ -191,11 +194,11 @@ class FS(SubCommand):
             elif os.name == 'posix':
                 subprocess.call(('xdg-open', filepath))
             else:
-                self.console.error("Don't know how to open files on this platform (%s)" % os.name)
+                self.console.error("Moya doesn't know how to open files on this platform (%s)" % os.name)
 
         elif args.syspath:
             if fs is None:
-                self.console.error("Filesystem required (use -cat FILESYSTEM)")
+                self.console.error("Filesystem required")
                 return -1
             if not fs.exists(args.syspath):
                 self.console.error("No file called '%s' found in filesystem '%s'" % (args.syspath, args.fs))
@@ -207,6 +210,9 @@ class FS(SubCommand):
                 self.console(syspath).nl()
 
         elif args.copy:
+            if fs is None:
+                self.console.error("Filesystem required")
+                return -1
             if len(args.copy) == 1:
                 src = '/'
                 dst = args.copy[0]
@@ -231,12 +237,33 @@ class FS(SubCommand):
                 with fs.open(src, 'rb') as read_f:
                     if os.path.isdir(dst):
                         dst = os.path.join(dst, os.path.basename(src))
-                    with open(dst, 'wb') as write_f:
-                        while 1:
-                            chunk = read_f.read(16384)
-                            if not chunk:
-                                break
-                            write_f.write(chunk)
+                    try:
+                        os.makedirs(dst)
+                        with open(dst, 'wb') as write_f:
+                            while 1:
+                                chunk = read_f.read(16384)
+                                if not chunk:
+                                    break
+                                write_f.write(chunk)
+                    except IOError as e:
+                        self.error('unable to write to {}'.format(dst))
+
+        elif args.extract:
+            if fs is None:
+                self.console.error("Filesystem required")
+                return -1
+            src_path, dst_dir_path = args.extract
+            src_fs = fs
+            dst_fs = fsopendir(dst_dir_path, create_dir=True)
+
+            if not args.force and dst_fs.exists(src_path):
+                response = raw_input("'%s' exists. Do you want to overwrite? " % src_path)
+                if response.lower() not in ('y', 'yes'):
+                    return 0
+
+            dst_fs.makedir(dirname(src_path), recursive=True, allow_recreate=True)
+            with src_fs.open(src_path, 'rb') as read_file:
+                dst_fs.setcontents(src_path, read_file)
 
         else:
             table = [[Cell("Name", bold=True),

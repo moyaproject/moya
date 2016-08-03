@@ -2,6 +2,8 @@
 ------
 Fix to permit db objects in 500 page
 Added sentinel: modifier to create singleton sentinels
+Added moya fs --extract command option
+Added default logging settings, making logging.ini not required
 
 0.6.10
 ------
