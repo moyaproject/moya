@@ -257,7 +257,7 @@
     <view libname="view.subscription" content="#content.objectsubscription" requires=".user">
         <db:get model="#CommentObject" let:id="url.comment_object_id" dst="comment_object"/>
         <let action=".request.GET.action" />
-        <let url="comment_object.object_url or .request.GET.url" />
+        <let url=".request.GET.url or comment_object.object_url" />
 
         <switch on="action">
             <case>subscribe</case>

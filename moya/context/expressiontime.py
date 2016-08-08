@@ -394,7 +394,6 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return cls.from_datetime(dt)
         except:
             return None
-            raise
 
     @classmethod
     def parse(cls, t, pattern):
@@ -402,7 +401,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             dt = datetime.strptime(t, pattern)
             return cls.from_datetime(dt)
         except:
-            raise
+            #raise
             return None
 
     def __moyarepr__(self, context):
@@ -592,7 +591,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
         @property
         def previous_month(self):
             """First date in the previous month"""
-            dt = self.dt
+            dt = self._dt
             if dt.month == 1:
                 return ExpressionDateTime(dt.year - 1, 12, 1, tzinfo=dt.tzinfo)
             else:
@@ -604,7 +603,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def days_in_month(self):
-            dt = self.dt
+            dt = self._dt
             _, maxdays = monthrange(dt.year, dt.month)
             return maxdays
 
