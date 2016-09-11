@@ -50,6 +50,7 @@ from collections import defaultdict, namedtuple, deque
 import os
 import io
 import re
+import sys
 from time import time
 import weakref
 import logging
@@ -527,6 +528,14 @@ class Archive(object):
 
     def has_library(self, library_name):
         return library_name in self.libs
+
+    def load_library_from_module(self, py, **kwargs):
+        __import__(py)
+        module = sys.modules[py]
+        location = os.path.dirname(os.path.abspath(module.__file__))
+        import_fs = fsopendir(location)
+        lib = self.load_library(import_fs, **kwargs)
+        return lib
 
     def load_library(self, import_fs, priority=None, template_priority=None, data_priority=None, long_name=None, rebuild=False):
         """Load a new library in to the archive"""

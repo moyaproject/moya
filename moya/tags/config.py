@@ -221,6 +221,7 @@ class Install(LogicElement):
     mount = Attribute("URL component to mount, e.g. \"auth\"")
     mountpoint = Attribute("Name of the <mountpoint> tag", required=False, default="main")
     urlpriority = Attribute("Priority for URLs in mountpoint", type="integer", required=False, default=0)
+    server = Attribute('Server object', type="expression", required=False, default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -240,7 +241,7 @@ class Install(LogicElement):
                 raise errors.StartupFailedError("Unable to import lib '%s'" % params.lib)
 
             if params.mount:
-                server = self.get_ancestor('server')
+                server = params.server or self.get_ancestor('server')
                 try:
                     mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint", "name", params.mountpoint)
                 except errors.ElementNotFoundError:

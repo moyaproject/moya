@@ -567,7 +567,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             seq, group_size = v
         except:
-            raise ValueError('groupsof: operatore requests pair of [<sequence>, <group size>')
+            raise ValueError('groupsof: operator requires pair of [<sequence>, <group size>')
         seq = list(seq)
         try:
             group_size = int(group_size)
@@ -578,8 +578,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
         grouped = [
             seq[i: i + group_size]
-            for i in range(0, len(seq), group_size)]
-
+            for i in range(0, len(seq), group_size)
+        ]
         return grouped
 
     def hasdata(self, context, v):
@@ -1009,7 +1009,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
             except (TypeError, ValueError):
                 raise ValueError('invalid params for uuid: modifier')
             if version not in (3, 5):
-                raise ValueError('uuid: modifer uuid type must be 1, 2, 4, or 5')
+                raise ValueError('uuid: modifier uuid type must be 1, 2, 4, or 5')
             return make_uuid(context, version, nstype=nstype, nsname=py2bytes(nsname))
 
     def validfloat(self, context, v):

@@ -919,6 +919,13 @@ class ElementBaseType(object):
             return None
 
     @property
+    def younger_sibling(self):
+        try:
+            return self.siblings[self.siblings.index(self) - 1]
+        except (ValueError, IndexError):
+            return None
+
+    @property
     def next_sibling(self):
         node = self
         while node is not None:

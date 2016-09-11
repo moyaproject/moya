@@ -35,7 +35,6 @@ class Show(SubCommand):
             self.error(text_type(e))
             return -1
         sibling = element.older_sibling
-
         start = element.source_line
 
         node = element

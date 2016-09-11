@@ -124,7 +124,8 @@ class WSGIApplication(object):
                  master_settings=None,
                  test_build=False,
                  develop=False,
-                 load_expression_cache=True):
+                 load_expression_cache=True,
+                 post_build_hook=None):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -141,6 +142,7 @@ class WSGIApplication(object):
         self.test_build = test_build
         self.develop = develop
         self.load_expression_cache = load_expression_cache
+        self.post_build_hook = post_build_hook
 
         if logging is not None:
             with fsopendir(self.filesystem_url) as logging_fs:
@@ -150,6 +152,7 @@ class WSGIApplication(object):
         except Exception as e:
             startup_log.critical(text_type(e))
             raise
+
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
             try:
@@ -198,6 +201,13 @@ class WSGIApplication(object):
                 if Expression.load(parser_cache):
                     log.debug('expression cache loaded')
 
+        if self.post_build_hook is not None:
+            try:
+                self.post_build_hook(self)
+            except:
+                log.exception('post build hook failed')
+                raise
+
         context = Context({"console": self.archive.console,
                            "settings": self.archive.settings,
                            "debug": self.archive.debug,
@@ -241,6 +251,13 @@ class WSGIApplication(object):
             self.archive = new_build.archive
             self.server = new_build.server
             self.archive.finalize()
+
+        if self.post_build_hook is not None:
+            try:
+                self.post_build_hook(self)
+            except:
+                log.exception('post build hook failed')
+                raise
 
         self.rebuild_required = False
         self.archive.console.div("Modified project built successfully", bold=True, fg="green")

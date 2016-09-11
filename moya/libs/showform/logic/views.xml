@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moya xmlns="http://moyaproject.com"
+    xmlns:let="http://moyaproject.com/let"
+    xmlns:forms="http://moyaproject.com/forms"
+    xmlns:html="http://moyaproject.com/html">
+
+    <mountpoint name="main">
+        <url route="/form/{formelement}/" view="#view.showform" name="showform"/>
+        <url route="/" view="#view.index" name="index"/>
+    </mountpoint>
+
+    <macro libname="install">
+        <doc>Install moya.showform lib</doc>
+        <signature>
+            <argument name="server"/>
+        </signature>
+        <install server="server" name="__showform__" lib="moya.showform" mount="/moya-show-form/"/>
+    </macro>
+
+    <view libname="view.showform" content="#content.showform">
+        <let formelement=".url.formelement"/>
+        <forms:get form="${formelement}" dst="form" let:preview_form="yes"/>
+        <if-post>
+            <forms:validate src="form"/>
+        </if-post>
+    </view>
+
+    <view libname="view.index" content="#content.index">
+        <find-app-elements ns="http://moyaproject.com/forms" tag="form" dst="formelements"/>
+    </view>
+
+    <content libname="content.index">
+        <section name="body">
+            <markdown>
+                The following are all the forms installed in the project.
+
+                **Note:** Some forms may not render due to missing values from the context.
+            </markdown>
+            <node template="form_index.html" let:formelements="formelements"/>
+        </section>
+    </content>
+
+    <content libname="content.showform">
+        <section name="body">
+            <markdown>
+                ## Previewing form **${.url.formelement}**
+
+                [Form Index](${.appurls.index})
+            </markdown>
+            <html:hr/>
+            <forms:formresult form="form"/>
+            <render src="form"/>
+        </section>
+    </content>
+
+</moya>

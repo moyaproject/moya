@@ -1,3 +1,8 @@
+0.6.12
+------
+Fix for expressiontime previous_month attribute
+Added showform subcommand
+
 0.6.11
 ------
 Fix to permit db objects in 500 page

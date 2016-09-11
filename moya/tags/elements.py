@@ -63,6 +63,40 @@ class FindElements(DataSetter):
         self.set_context(context, dst, elements)
 
 
+class FindAppElements(DataSetter):
+    """
+    Retrieve information regarding elements of a given type, with an entry per application.
+    """
+
+    class Help:
+        synopsis = "retrieve information regarding elements of a given type"
+
+    tag = Attribute("Element type")
+    ns = Attribute("XML namespace", type="namespace", default=None)
+    dst = Attribute("Destination", type="reference", default=None)
+    _from = Attribute("Application", type="application", default=None)
+
+    def logic(self, context):
+        ns, tag, dst = self.get_parameters(context, 'ns', 'tag', 'dst')
+        app = self.get_app(context)
+        if ns is None:
+            ns = self.lib.namespace
+        let_map = self.get_let_map(context)
+
+        archive = self.archive
+        elements = []
+        for el in archive.get_elements_by_type(ns, tag):
+            for app_name in archive.apps_by_lib[el.lib.long_name]:
+                app = archive.apps[app_name]
+                elements.append(ElementProxy(context, app, el))
+
+        if let_map:
+            elements = [el for el in elements
+                        if all(let_map.get(k, None) == el.params.get(k) for k in let_map)]
+
+        self.set_context(context, dst, elements)
+
+
 class FindElement(DataSetter):
     """Retrieve an element of a given type."""
 

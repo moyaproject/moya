@@ -3,6 +3,7 @@ from ..interface import AttributeExposer
 
 import weakref
 
+
 class ElementProxy(AttributeExposer):
     __moya_exposed_attributes__ = ["app",
                                    "tag",
@@ -52,6 +53,9 @@ class ElementProxy(AttributeExposer):
                           element_ref=self.element_ref)
         console.obj(context, obj_params)
 
+    def qualify(self, app):
+        self.app = app
+        self.element_ref = "{}#{}".format(app.name if app else element.lib.long_name, element.libname)
 
 class DataElementProxy(AttributeExposer):
     __moya_exposed_attributes__ = ["app",
