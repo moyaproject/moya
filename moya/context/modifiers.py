@@ -30,12 +30,12 @@ from .. import connectivity
 from .. import moyajson
 from ..import compat
 
-from fs.path import (abspath,
-                     basename,
-                     pathjoin,
-                     relativefrom,
-                     dirname,
-                     splitext)
+from fs2.path import (abspath,
+                      basename,
+                      pathjoin,
+                      relativefrom,
+                      dirname,
+                      splitext)
 
 import uuid
 import hashlib

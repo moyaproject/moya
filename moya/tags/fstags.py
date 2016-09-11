@@ -7,8 +7,8 @@ from ..elements.elementbase import LogicElement
 from ..tags.context import DataSetter
 from ..compat import text_type
 
-from fs.errors import FSError
-from fs.path import pathjoin, basename, dirname
+from fs2.errors import FSError
+from fs2.path import pathjoin, basename, dirname
 
 import hashlib
 import logging

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from ..elements.elementbase import ElementBase, LogicElement, Attribute
 from ..tags.context import DataSetter
-from ..tools import asint
 from .. import logic
 from .. import errors
 from ..elements.attributetypes import *
@@ -10,9 +9,9 @@ from ..compat import iteritems, text_type, reload
 from .. import tools
 from .. import timezone
 
-from fs.path import pathjoin
-from fs.opener import fsopendir
-from fs.errors import FSError, BackReferenceError, ResourceNotFoundError
+from fs2.path import pathjoin
+from fs2.opener import open_fs
+from fs2.errors import FSError, IllegalBackReference, ResourceNotFound
 
 from os.path import dirname, abspath
 import sys
@@ -157,10 +156,10 @@ class Import(LogicElement):
         try:
 
             if '::/' in location:
-                import_fs = fsopendir(location)
+                import_fs = open_fs(location)
             else:
                 if absolute:
-                    import_fs = fsopendir(location)
+                    import_fs = open_fs(location)
                 else:
                     project_fs = context['fs']
                     try:
@@ -168,14 +167,14 @@ class Import(LogicElement):
                             project_path = project_fs.getsyspath('/')
                             import_path = pathjoin(project_path, location)
                             try:
-                                import_fs = fsopendir(import_path)
-                            except ResourceNotFoundError:
+                                import_fs = open_fs(import_path)
+                            except ResourceNotFound:
                                 self.throw("import.fail",
                                            "location '{}' was not found".format(import_path),
                                            diagnosis="Check the location is exists and is a directory.")
                         else:
                             import_fs = context['fs'].opendir(location)
-                    except (BackReferenceError, FSError) as e:
+                    except (IllegalBackReference, FSError) as e:
                         self.throw("import.fail",
                                    "unable to import location '{}' from {}".format(location, project_fs),
                                    diagnosis=text_type(e))

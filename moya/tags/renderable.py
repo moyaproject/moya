@@ -11,7 +11,7 @@ from ..response import MoyaResponse
 from ..compat import py2bytes, text_type
 
 
-from fs.errors import FSError
+from fs2.errors import FSError
 
 
 class ResolveTemplate(DataSetter):

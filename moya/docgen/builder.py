@@ -11,9 +11,9 @@ from .. import bbcode
 from .. import syntax
 from ..filter import MoyaFilterBase
 
-from fs import utils
-from fs.opener import fsopendir
-from fs.path import *
+from fs2 import utils
+from fs2.opener import fsopendir
+from fs2.path import *
 
 from os.path import join as pathjoin
 from json import loads

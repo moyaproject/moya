@@ -7,9 +7,9 @@ from ..context.expressiontime import datetime_to_epoch
 from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
-from fs.path import abspath, normpath
-from fs.opener import fsopendir
-from fs.errors import ResourceNotFoundError, NoSysPathError
+from fs2.path import abspath, normpath
+from fs2.opener import open_fs
+from fs2.errors import ResourceNotFound, NoSysPath
 
 import weakref
 
@@ -23,7 +23,7 @@ class Environment(object):
 
     def __init__(self, template_fs, archive=None, cache=None):
         if isinstance(template_fs, string_types):
-            template_fs = fsopendir(template_fs)
+            template_fs = open_fs(template_fs)
         self.template_fs = template_fs
         if archive is not None:
             self._archive = weakref.ref(archive)
@@ -38,7 +38,7 @@ class Environment(object):
 
     @classmethod
     def make_default(self):
-        return Environment(fsopendir('mem://'))
+        return Environment(open_fs('mem://'))
 
     @property
     def archive(self):
@@ -60,7 +60,7 @@ class Environment(object):
         if self.cache.enabled:
             try:
                 info = self.template_fs.getinfokeys(template_path, 'modified_time', 'st_mtime')
-            except ResourceNotFoundError:
+            except ResourceNotFound:
                 raise MissingTemplateError(template_path)
             modified_time = info.get('st_mtime', None) or datetime_to_epoch(info.get('modified_time', 0))
             cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, modified_time)
@@ -72,14 +72,14 @@ class Environment(object):
 
         try:
             source = self.template_fs.getcontents(template_path, 'rt', encoding='utf-8')
-        except ResourceNotFoundError:
+        except ResourceNotFound:
             raise MissingTemplateError(template_path)
         except Exception as e:
             raise BadTemplateError(template_path)
 
         try:
             display_path = self.template_fs.getsyspath(template_path)
-        except NoSysPathError:
+        except NoSysPath:
             display_path = template_path
         if self.archive is None:
             lib = None

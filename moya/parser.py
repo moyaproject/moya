@@ -18,7 +18,8 @@ from .containers import OrderedDict
 from .cache.dictcache import DictCache
 from .compat import text_type, string_types, binary_type
 
-from fs.path import abspath
+from fs2.path import abspath
+from fs2.errors import NoSysPath
 
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 
@@ -50,7 +51,10 @@ class Parser(object):
         self.fs = fs
         self.path = abspath(path)
         self.library = library
-        syspath = self.fs.getsyspath(path, allow_none=True)
+        try:
+            syspath = self.fs.getsyspath(path)
+        except NoSysPath:
+            syspath = None
         if syspath is None:
             self.location = self.fs.desc(path)
         else:
@@ -60,7 +64,7 @@ class Parser(object):
     @property
     def xml(self):
         if self._xml is None:
-            xml = self.fs.getcontents(self.path, 'rb')
+            xml = self.fs.getbytes(self.path)
             xml = xml.replace(b'\t', b'    ')
             self._xml = xml
         return self._xml

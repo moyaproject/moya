@@ -17,7 +17,7 @@ from __future__ import print_function
 from ...context import Context
 from ...template.moyatemplates import Template
 
-from fs.path import dirname, join, relpath
+from fs2.path import dirname, join, relpath
 
 import re
 
@@ -99,8 +99,8 @@ ${{message}}
 Bob
     """
 
-    from fs.osfs import OSFS
-    from fs.memoryfs import MemoryFS
+    from fs2.osfs import OSFS
+    from fs2.memoryfs import MemoryFS
 
     fs = OSFS('__test__', create=True)
     fs = MemoryFS()

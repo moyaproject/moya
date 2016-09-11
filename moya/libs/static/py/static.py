@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import moya
 from moya.compat import string_types
 
-from fs.errors import FSError
+from fs2.errors import FSError
 
 import fnmatch
 import re

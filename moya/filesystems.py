@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from fs.errors import FSError
+from fs2.errors import FSError
 from .console import Cell
 from .compat import text_type, implements_to_string
 from .reader import DataReader

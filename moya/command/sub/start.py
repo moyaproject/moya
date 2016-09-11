@@ -33,7 +33,7 @@ def make_name(*names):
 
 def copy_new(src, dst):
     """Copy files from src fs to dst fst only if they don't exist on dst"""
-    from fs.utils import copystructure, copyfile
+    from fs2.utils import copystructure, copyfile
     copystructure(src, dst)
     copied_files = []
     for path in src.walkfiles():
@@ -311,9 +311,9 @@ class Start(SubCommand):
         raise ValueError("Type should be either 'project' or 'library'")
 
     def templatize(self, path):
-        from fs.opener import fsopendir
-        from fs.path import splitext, split
-        fs = fsopendir(path)
+        from fs2.opener import open_fs
+        from fs2.path import splitext, split
+        fs = open_fs(path)
         text_ext = ['', '.py', '.ini', '.xml', '.html', '.txt', '.json']
         bin_ext = ['.png', '.jpg', '.ico', '.gif']
 
@@ -379,14 +379,14 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
                     secret=make_secret())
 
         from ...command.sub import project_template
-        from fs.memoryfs import MemoryFS
-        from fs.opener import fsopendir
+        from fs2.memoryfs import MemoryFS
+        from fs2.opener import open_fs
         memfs = MemoryFS()
         templatebuilder.compile_fs_template(memfs,
                                             project_template.template,
                                             data=data)
 
-        dest_fs = fsopendir(self.args.location or dirname, create_dir=True, writeable=True)
+        dest_fs = open_fs(self.args.location or dirname, create_dir=True, writeable=True)
         continue_overwrite = 'overwrite'
         if not dest_fs.isdirempty('.'):
             if self.args.force:
@@ -397,7 +397,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
                 continue_overwrite = DirNotEmpty.ask(console, default="cancel")
 
         if continue_overwrite == 'overwrite':
-            from fs.utils import copydir
+            from fs2.utils import copydir
             copydir(memfs, dest_fs)
             console.table([[Cell("Project files written successfully!", fg="green", bold=True, center=True)],
                           ["""See readme.txt in the project directory for the next steps.\n\nBrowse to http://moyaproject.com/gettingstarted/ if you need further help."""]])
@@ -464,13 +464,13 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
         actions = []
 
         from ...command.sub import library_template
-        from fs.memoryfs import MemoryFS
-        from fs.opener import fsopendir
+        from fs2.memoryfs import MemoryFS
+        from fs2.opener import open_fs
         memfs = MemoryFS()
         templatebuilder.compile_fs_template(memfs,
                                             library_template.template,
                                             data=data)
-        dest_fs = fsopendir(join(library_path, library["longname"]), create_dir=True, writeable=True)
+        dest_fs = open_fs(join(library_path, library["longname"]), create_dir=True, writeable=True)
 
         continue_overwrite = 'overwrite'
         if not dest_fs.isdirempty('.'):
@@ -483,7 +483,7 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
 
         if continue_overwrite != 'cancel':
             if continue_overwrite == 'overwrite':
-                from fs.utils import copydir
+                from fs2.utils import copydir
                 copydir(memfs, dest_fs)
                 actions.append("Written library files to {}".format(dest_fs.getsyspath('.')))
             elif continue_overwrite == 'new':
@@ -502,7 +502,7 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
                 server_name = "main"
 
                 if location:
-                    with fsopendir(project_path) as project_fs:
+                    with open_fs(project_path) as project_fs:
                         with project_fs.opendir(location) as server_fs:
                             from lxml.etree import fromstring, ElementTree, parse
                             from lxml.etree import XML, Comment

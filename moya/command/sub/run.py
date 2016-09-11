@@ -41,8 +41,8 @@ class Run(SubCommand):
     def run(self):
         args = self.args
 
-        from fs.opener import opener
-        fs, fspath = opener.parse(args.path)
+        from fs2 import opener
+        fs, fspath = opener.open(args.path)
 
         from ...loggingconf import init_logging
         if args.logging and os.path.exists(args.logging):

@@ -5,7 +5,7 @@ from .compat import iteritems
 import logging
 import weakref
 
-from fs.path import abspath, forcedir
+from fs2.path import abspath, forcedir
 
 
 class Application(object):

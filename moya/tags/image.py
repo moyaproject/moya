@@ -9,7 +9,7 @@ from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
 
-from fs.path import basename, pathjoin, splitext
+from fs2.path import basename, pathjoin, splitext
 
 from PIL import Image, ImageFilter
 try:
