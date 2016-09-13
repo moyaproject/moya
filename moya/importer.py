@@ -8,7 +8,8 @@ from .document import Document
 from .elements.registry import ElementRegistry
 from .compat import iteritems
 
-from fs.path import pathcombine, abspath
+from fs2.path import pathcombine, abspath
+from fs2.errors import NoSysPath
 
 from . import expose
 from . import errors
@@ -45,13 +46,13 @@ class LibraryImportHook(object):
 
         path = self._get_path(fullname)
 
-        module_path, type = self._find_module_file(path)
+        module_path, _type = self._find_module_file(path)
         if module_path is not None:
-            return module_path, type, False
+            return module_path, _type, False
 
-        module_path, type = self._find_module_file(pathcombine(path, '__init__'))
+        module_path, _type = self._find_module_file(pathcombine(path, '__init__'))
         if module_path is not None:
-            return module_path, type, True
+            return module_path, _type, True
 
         raise ImportError(fullname)
 
@@ -116,7 +117,6 @@ class LibraryImportHook(object):
         sys.modules[fullname] = mod
         try:
             exec(code, mod.__dict__)
-            #mod.__file__ = self.get_filename(fullname, info)
             if self.is_package(fullname, info):
                 mod.__path__ = []
 
@@ -130,17 +130,18 @@ class LibraryImportHook(object):
         if info is None:
             info = self._get_module_info(fullname)
         path, type, ispkg = info
-        code = self.fs.getcontents(path, 'rb')
+        code = self.fs.getbytes(path)
         if type == imp.PY_SOURCE:
             code = b'\n'.join(code.splitlines())
-            path = self.fs.getsyspath(path, allow_none=True) or path
+            try:
+                path = self.fs.getsyspath(path)
+            except NoSysPath:
+                pass
             return compile(code, path, "exec")
         elif type == imp.PY_COMPILED:
             if code[:4] != imp.get_magic():
                 return None
             return marshal.loads(code[8:])
-        #else:
-        #    return code
         return code
 
 

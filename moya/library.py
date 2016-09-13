@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from fs.errors import FSError
-from fs.opener import fsopendir
+from fs2.errors import FSError
+from fs2.opener import open_fs
+from fs2 import walk
 from collections import defaultdict
 
 from . import errors
@@ -21,7 +22,6 @@ from .context import Context
 import weakref
 from random import choice
 import logging
-import gettext
 import re
 
 
@@ -182,12 +182,18 @@ class Library(object):
         """Imports a number of documents in to the library"""
 
         if isinstance(fs, string_types):
-            fs = fsopendir(fs)
+            fs = open_fs(fs)
         if files is None:
             if recurse:
-                files = sorted(fs.walkfiles(wildcard=wildcard))
+                files = sorted(walk.walk_files(fs, wildcards=[wildcard]))
             else:
-                files = sorted(fs.listdir(wildcard=wildcard, files_only=True))
+                files = sorted(
+                    name
+                    for name, _is_dir in fs.filterdir(
+                        wildcards=[wildcard],
+                        exclude_dirs=True
+                    )
+                )
         else:
             files = sorted(files)
 
@@ -409,7 +415,7 @@ class Library(object):
                                                   exc=e,
                                                   lib=self)
                 if media_fs.hassyspath('/'):
-                    self.media[name] = fsopendir(media_fs.getsyspath('/'))
+                    self.media[name] = open_fs(media_fs.getsyspath('/'))
                 else:
                     self.media[name] = media_fs
 

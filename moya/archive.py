@@ -1011,7 +1011,7 @@ class Archive(object):
                     mount_media = media_sub_fs
                 if name not in self.filesystems:
                     self.filesystems[name] = mount_media
-                media_mount_fs.mountdir(media_path, mount_media)
+                media_mount_fs.mount(media_path, mount_media)
         media_fs.add_fs("media", media_mount_fs)
 
     def init_data(self):
