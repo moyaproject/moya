@@ -28,7 +28,8 @@ class FileCache(Cache):
 
         if namespace:
             sub_dir = namespace.replace('/', '-').replace(' ', '-')
-            fs = fs.makeopendir(sub_dir)
+            fs.makedir(sub_dir)
+            fs = fs.opendir(sub_dir)
         self.fs = fs
         self.max_key_length = 80
 

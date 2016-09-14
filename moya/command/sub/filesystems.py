@@ -9,11 +9,11 @@ from ...wsgi import WSGIApplication
 from ...console import Cell
 from ...compat import text_type, raw_input
 
-from fs.opener import fsopendir
-from fs.errors import FSError
-from fs.multifs import MultiFS
-from fs.mountfs import MountFS
-from fs.path import dirname
+from fs2.opener import open_fs
+from fs2.errors import FSError, NoSysPath
+from fs2.multifs import MultiFS
+from fs2.mountfs import MountFS
+from fs2.path import dirname
 
 
 def _ls(console, file_paths, dir_paths, format_long=False):
@@ -165,8 +165,10 @@ class FS(SubCommand):
                 return -1
 
             dir_fs = fs.opendir(args.listdir)
-            file_paths = dir_fs.listdir(files_only=True)
-            dir_paths = dir_fs.listdir(dirs_only=True)
+            _list = list(dir_fs.filterdir('/'))
+            file_paths = [name for name, is_dir in _list if not is_dir]
+            dir_paths = [name for name, is_dir in _list if is_dir]
+
             _ls(self.console, file_paths, dir_paths)
 
         elif args.cat:
@@ -181,8 +183,9 @@ class FS(SubCommand):
                 self.console.error("Filesystem required")
                 return -1
 
-            filepath = fs.getsyspath(args.open, allow_none=True)
-            if filepath is None:
+            try:
+                filepath = fs.getsyspath(args.open)
+            except NoSysPath:
                 self.console.error("No system path for '%s' in filesystem '%s'" % (args.open, args.fs))
                 return -1
 
@@ -203,8 +206,9 @@ class FS(SubCommand):
             if not fs.exists(args.syspath):
                 self.console.error("No file called '%s' found in filesystem '%s'" % (args.syspath, args.fs))
                 return -1
-            syspath = fs.getsyspath(args.syspath, allow_none=True)
-            if syspath is None:
+            try:
+                syspath = fs.getsyspath(args.syspath)
+            except NoSysPath:
                 self.console.error("No system path for '%s' in filesystem '%s'" % (args.syspath, args.fs))
             else:
                 self.console(syspath).nl()
@@ -224,7 +228,7 @@ class FS(SubCommand):
 
             if fs.isdir(src):
                 src_fs = fs.opendir(src)
-                dst_fs = fsopendir(dst, create_dir=True)
+                dst_fs = open_fs(dst, create=True)
 
                 if not args.force and not dst_fs.isdirempty('/'):
                     response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
@@ -254,14 +258,14 @@ class FS(SubCommand):
                 return -1
             src_path, dst_dir_path = args.extract
             src_fs = fs
-            dst_fs = fsopendir(dst_dir_path, create_dir=True)
+            dst_fs = open_fs(dst_dir_path, create=True)
 
             if not args.force and dst_fs.exists(src_path):
                 response = raw_input("'%s' exists. Do you want to overwrite? " % src_path)
                 if response.lower() not in ('y', 'yes'):
                     return 0
 
-            dst_fs.makedir(dirname(src_path), recursive=True, allow_recreate=True)
+            dst_fs.makedirs(dirname(src_path), recreate=True)
             with src_fs.open(src_path, 'rb') as read_file:
                 dst_fs.setcontents(src_path, read_file)
 
@@ -278,7 +282,7 @@ class FS(SubCommand):
             for name, fs in sorted(list_filesystems):
 
                 if isinstance(fs, MultiFS):
-                    location = '\n'.join(mount_fs.desc('/') for mount_fs in fs.fs_sequence)
+                    location = '\n'.join(mount_fs.desc('/') for name, mount_fs in fs.iterate_fs())
                     fg = "yellow"
                 elif isinstance(fs, MountFS):
                     mount_desc = []
@@ -287,8 +291,9 @@ class FS(SubCommand):
                     location = '\n'.join(mount_desc)
                     fg = "magenta"
                 else:
-                    syspath = fs.getsyspath('/', allow_none=True)
-                    if syspath is not None:
+                    try:
+                        syspath = fs.getsyspath('/')
+                    except NoSysPath:
                         location = syspath
                         fg = "green"
                     else:

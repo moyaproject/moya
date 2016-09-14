@@ -7,6 +7,7 @@ from ..context.expressiontime import datetime_to_epoch
 from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
+from fs2.info import Info as FSInfo
 from fs2.path import abspath, normpath
 from fs2.opener import open_fs
 from fs2.errors import ResourceNotFound, NoSysPath
@@ -59,11 +60,10 @@ class Environment(object):
             return template
         if self.cache.enabled:
             try:
-                info = self.template_fs.getinfokeys(template_path, 'modified_time', 'st_mtime')
+                info = FSInfo(self.template_fs.getinfo(template_path, 'details'))
             except ResourceNotFound:
                 raise MissingTemplateError(template_path)
-            modified_time = info.get('st_mtime', None) or datetime_to_epoch(info.get('modified_time', 0))
-            cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, modified_time)
+            cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, info.modified)
             cached_template = self.cache.get(cache_name, None)
             if cached_template is not None:
                 template = Template.load(cached_template)
@@ -71,10 +71,10 @@ class Environment(object):
                 return template
 
         try:
-            source = self.template_fs.getcontents(template_path, 'rt', encoding='utf-8')
+            source = self.template_fs.gettext(template_path)
         except ResourceNotFound:
             raise MissingTemplateError(template_path)
-        except Exception as e:
+        except Exception:
             raise BadTemplateError(template_path)
 
         try:

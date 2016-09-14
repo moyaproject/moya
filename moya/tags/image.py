@@ -221,11 +221,12 @@ class Write(ImageElement):
 
             save_params = self.get_let_map(context)
             try:
-                with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
+                with fs.makedirs(params.dirpath, recreate=True) as dir_fs:
                     with dir_fs.open(params.filename, 'wb') as f:
                         img.save(f, img_format, **save_params)
                 log.debug("wrote '%s'", params.filename)
             except Exception as e:
+                raise
                 self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 
 

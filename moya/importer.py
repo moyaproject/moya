@@ -10,6 +10,7 @@ from .compat import iteritems
 
 from fs2.path import pathcombine, abspath
 from fs2.errors import NoSysPath
+from fs2.walk import walk_files
 
 from . import expose
 from . import errors
@@ -22,6 +23,7 @@ class LibraryImportHook(object):
     def __init__(self, fs):
         self.fs = fs
         self.module_info = {}
+        self._files = set(walk_files(fs))
 
     def install(self):
         if self not in sys.meta_path:
@@ -67,7 +69,8 @@ class LibraryImportHook(object):
         for (suffix, mode, type) in imp.get_suffixes():
             if type in self._VALID_MODULE_TYPES:
                 check_path = path + suffix
-                if self.fs.isfile(check_path):
+                #if self.fs.isfile(check_path):
+                if check_path in self._files:
                     return (check_path, type)
         return (None, None)
 

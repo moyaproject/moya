@@ -7,12 +7,12 @@ from . import http
 from .tools import md5_hexdigest
 from . import logic
 
-from fs.path import basename
-from fs.errors import FSError
+from fs2.path import basename
+from fs2.errors import FSError
+from fs2.info import Info as FSInfo
 
 from datetime import datetime
 import mimetypes
-from pytz import UTC
 
 
 from . import __version__
@@ -33,8 +33,8 @@ def serve_file(req, fs, path, filename=None):
     serve_file = None
     # Get file info
     try:
-        file_size = fs.getsize(path)
-        info = fs.getinfokeys(path, 'modified_time')
+        info = FSInfo(fs.getinfo(path, 'details'))
+        file_size = info.size
         serve_file = fs.open(path, 'rb')
     except FSError:
         # Files system read failed for some reason
@@ -43,11 +43,7 @@ def serve_file(req, fs, path, filename=None):
         raise logic.EndLogic(http.RespondNotFound())
     else:
         # Make a response
-        mtime = info.get('modified_time', None)
-        if mtime is None:
-            mtime = datetime.utcnow()
-        else:
-            mtime = UTC.localize(mtime)
+        mtime = info.modified or datetime.utcnow()
         res.date = datetime.utcnow()
         res.content_type = py2bytes(mime_type)
         res.last_modified = mtime
