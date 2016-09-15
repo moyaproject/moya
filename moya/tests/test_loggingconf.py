@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from moya import loggingconf
 
-from fs.osfs import OSFS
+from fs2.osfs import OSFS
 
 import os.path
 from os.path import join

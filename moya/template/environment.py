@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import weakref
+
 from ..compat import string_types
 from .errors import MissingTemplateError, BadTemplateError
-from ..context.expressiontime import datetime_to_epoch
 from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
@@ -11,8 +12,6 @@ from fs2.info import Info as FSInfo
 from fs2.path import abspath, normpath
 from fs2.opener import open_fs
 from fs2.errors import ResourceNotFound, NoSysPath
-
-import weakref
 
 
 # Update for backwards incompatible changes, so we don't get old cached templates

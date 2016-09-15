@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import os.path
 import unittest
-from fs.opener import fsopendir
+from fs2.opener import open_fs
 from moya.context import Context
 from moya.archive import Archive
 from moya.console import Console
@@ -18,7 +18,7 @@ class TestLogic(unittest.TestCase):
 
     def setUp(self):
         path = os.path.abspath(os.path.dirname(__file__))
-        self.fs = fsopendir(path)
+        self.fs = open_fs(path)
         self.context = Context()
         self.context['console'] = Console()
         self.archive = Archive()
@@ -105,17 +105,3 @@ class TestLogic(unittest.TestCase):
         call = self.archive.call
         result = call('moya.tests#bf', context, None, program=BF_HELLO)
         self.assertEqual(result, "Hello World!\n")
-
-
-if __name__ == "__main__":
-    fs = fsopendir('../tests')
-    context = Context()
-    archive = Archive()
-    for dirname in fs.listdir(dirs_only=True):
-        import_fs = fs.opendir(dirname)
-        library = archive.load_library(import_fs)
-
-    print(archive.call('moya.tests#macrotest1', context))
-    #print archive.call('archivetest#macroreturnlist', context)
-    #print repr(archive.call('archivetest#testscope1', context))
-    #print archive.call('archivetest#macrotest1', context)

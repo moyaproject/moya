@@ -5,7 +5,7 @@ import os
 import time
 from os.path import join
 
-from fs.opener import fsopendir
+from fs2.opener import open_fs
 from moya.template.moyatemplates import MoyaTemplateEngine
 from moya.archive import Archive
 from moya.settings import SettingsContainer
@@ -15,7 +15,7 @@ class TestTemplates(unittest.TestCase):
     def setUp(self):
         path = os.path.abspath(os.path.dirname(__file__))
         templates_path = join(path, "templates")
-        self.fs = fsopendir(templates_path)
+        self.fs = open_fs(templates_path)
         self.archive = Archive()
         self.archive.init_cache("templates", SettingsContainer.create(type="dict"))
         self.archive.init_cache("fragment", SettingsContainer.create(type="dict"))

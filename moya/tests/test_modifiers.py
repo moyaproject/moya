@@ -129,7 +129,7 @@ class TestModifiers(unittest.TestCase):
 
         assert m.ext('foo.bar', '.bar')
 
-        assert m.filesize(c, 1024) == '1.0kB'
+        assert m.filesize(c, 1024) == '1.0 KB'
         assert m.first(c, 'foo') == 'f'
         assert m.flat(c, [1, [2, 3]]) == [1, 2, 3]
         assert m.float(c, '3.14') == 3.14
