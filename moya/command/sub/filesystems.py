@@ -175,7 +175,7 @@ class FS(SubCommand):
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            contents = fs.getcontents(args.cat)
+            contents = fs.getbytes(args.cat)
             self.console.cat(contents, args.cat)
 
         elif args.open:

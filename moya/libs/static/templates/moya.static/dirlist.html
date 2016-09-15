@@ -22,8 +22,32 @@
 {
     border-bottom:none;
 }
+
+.file-size
+{
+    text-align:right;
+}
+
+td.file-size
+{
+    white-space: nowrap;
+}
+
+td,th
+{
+    padding-right:1em !important;
+}
+
 </style>
 {% endblock %}
+
+{% def "show_date" %}
+{%- compact %}
+{%- if dt %}
+{% if dt.local.date == .now.local.date %}Today{% else %}${localize:dt.local.date}{% endif %}<span class="text-muted">, ${localize:dt.local.time}</span>
+{%- endif %}
+{%- end-compact %}
+{% end-def %}
 
 {% block "content" %}
 <div class="container">
@@ -38,32 +62,32 @@
     <pre>${fs[path]}</pre>
     {% endif %}
 
-    <div class="well">
+    <div>
         <table class="table table-condensed">
             <thead>
             	<tr>
             		<th>Name</th>
-            		<th>Size</th>
+                    <th class="file-size">Size</th>
             		<th>Created</th>
             		<th>Modified</th>
             	</tr>
             </thead>
             <tbody>
-            	{%- for path, info in dirlist.dirs %}
+            	{%- for info in dirlist.dirs %}
             	<tr>
                     <!-- TODO: path.replace('#', '%23') -->
-            		<td><strong><a href="${path}/" title="directory">${path}</a></strong></td>
-            		<td>&nbsp;</td>
-            		<td>{% if info.created_time %}${localize:info.created_time}{% endif %}</td>
-            		<td>{% if info.modified_time %}${localize:info.modified_time}{% endif %}</td>
+            		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
+                    <td class="file-size text-muted">&nbsp;</td>
+                    <td>{% call "show_date" with dt=info.created %}</td>
+                    <td>{% call "show_date" with dt=info.modified %}</td>
             	</tr>
             	{%- endfor %}
-            	{%- for path, info in dirlist.files %}
+            	{%- for info in dirlist.files %}
             	<tr>
-            		<td><a href="${path}" title="file">${path}</a></td>
-            		<td>${filesize:info.size}{% if info.size > 1024 %} <span class="text-muted">(${info.size::','} bytes)</span>{% endif %}</td>
-            		<td>{% if info.created_time %}${localize:info.created_time}{% endif %}</td>
-            		<td>{% if info.modified_time %}${localize:info.modified_time}{% endif %}</td>
+            		<td><a href="${info.name}" title="file">${info.name}</a></td>
+                    <td class="file-size">${filesize:info.size}{% if info.size >= 1024 %} <span class="text-muted">(${info.size::','} bytes)</span>{% endif %}</td>
+                    <td>{% call "show_date" with dt=info.created %}</td>
+                    <td>{% call "show_date" with dt=info.modified %}</td>
             	</tr>
             	{%- endfor %}
             </tbody>

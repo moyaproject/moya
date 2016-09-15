@@ -1,9 +1,11 @@
+from __future__ import unicode_literals
+
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...loggingconf import init_logging
 from ...compat import PY2, socketserver
 
-from fs.opener import fsopendir
+from fs2.opener import open_fs
 import os.path
 from os.path import join as pathjoin
 
@@ -52,7 +54,7 @@ class Serve(SubCommand):
 
     def run(self):
         args = self.args
-        fs = fsopendir(args.fs)
+        fs = open_fs(args.fs)
 
         from ...command.sub import project_serve
         location = os.path.dirname(project_serve.__file__)

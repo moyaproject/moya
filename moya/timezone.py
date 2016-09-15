@@ -5,6 +5,8 @@ import pytz
 from .context.expressiontime import ExpressionDateTime
 from .compat import implements_to_string, text_type, string_types
 
+from tzlocal import get_localzone
+
 common_timezones = pytz.common_timezones
 
 
@@ -44,7 +46,10 @@ class Timezone(object):
         if isinstance(tz, Timezone):
             self.tz = tz.tz
         else:
-            self.tz = pytz.timezone(tz or "UTC")
+            if tz == 'auto':
+                self.tz = get_localzone()
+            else:
+                self.tz = pytz.timezone(tz or "UTC")
 
     def __str__(self):
         return text_type(self.tz.zone)
@@ -52,7 +57,7 @@ class Timezone(object):
     def __repr__(self):
         return '<timezone "{}">'.format(self.tz.zone)
 
-    def __moyafilter__(self, context, dt, params):
+    def __moyafilter__(self, context, app, dt, params):
         if isinstance(dt, string_types):
             dt = ExpressionDateTime.from_isoformat(dt)
         return self(dt)

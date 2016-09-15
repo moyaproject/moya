@@ -8,9 +8,11 @@ from .settings import SettingsContainer
 from babel import Locale
 
 import gettext
+import locale
 import re
 from collections import namedtuple
 import logging
+
 log = logging.getLogger('moya.runtime')
 startup_log = logging.getLogger('moya.startup')
 
@@ -111,10 +113,14 @@ class SiteInstance(AttributeExposer):
         self.head_as_get = _as_bool(get('head_as_get', 'yes'))
         self.language = get('language')
         _locale = get('locale', 'en')
+        if _locale == 'auto':
+            _locale, _ = locale.getdefaultlocale()
+            # TODO: May not be correct on Windows
+            # http://stackoverflow.com/questions/3425294/how-to-detect-the-os-default-language-in-python
         try:
             self.locale = LocaleProxy(_locale)
         except:
-            log.error("unable to get locale '{}', defaulting to 'en'", )
+            log.error("unable to get locale '%s', defaulting to 'en'", _locale)
             self.locale = LocaleProxy('en')
         self.datetime_format = get('datetime_format')
         self.time_format = get('time_format')

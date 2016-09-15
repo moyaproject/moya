@@ -34,15 +34,15 @@ def serve_file(req, fs, path, filename=None):
     # Get file info
     try:
         info = FSInfo(fs.getinfo(path, 'details'))
-        file_size = info.size
         serve_file = fs.open(path, 'rb')
     except FSError:
-        # Files system read failed for some reason
+        # Files system open failed for some reason
         if serve_file is not None:
             serve_file.close()
         raise logic.EndLogic(http.RespondNotFound())
     else:
         # Make a response
+        file_size = info.size
         mtime = info.modified or datetime.utcnow()
         res.date = datetime.utcnow()
         res.content_type = py2bytes(mime_type)

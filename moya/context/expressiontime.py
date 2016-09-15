@@ -396,6 +396,10 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return None
 
     @classmethod
+    def from_epoch(cls, epoch):
+        return cls.ProxyInterface(epoch_to_datetime(epoch))
+
+    @classmethod
     def parse(cls, t, pattern):
         try:
             dt = datetime.strptime(t, pattern)

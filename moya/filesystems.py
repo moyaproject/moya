@@ -3,9 +3,12 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from fs2.errors import FSError
+from fs2.info import Info
+
 from .console import Cell
 from .compat import text_type, implements_to_string
 from .reader import DataReader
+from .context.expressiontime import ExpressionDateTime
 
 import weakref
 import re
@@ -55,6 +58,20 @@ class FSContainer(dict):
         self.clear()
 
 
+class FSInfo(Info):
+    """Custom info class that return Moya datetime objects."""
+
+    @classmethod
+    def _from_epoch(cls, epoch):
+        if epoch is None:
+            return None
+        return ExpressionDateTime.from_epoch(epoch)
+
+    def __init__(self, raw_info):
+        super(FSInfo, self).__init__(raw_info,
+                                     _to_datetime=self._from_epoch)
+
+
 @implements_to_string
 class FSWrapper(object):
     def __init__(self, fs, ref=False):
@@ -80,7 +97,7 @@ class FSWrapper(object):
 
     def __getitem__(self, path):
         if self.fs.isfile(path):
-            return self.fs.getcontents(path)
+            return self.fs.getbytes(path)
         return self.__class__(self.fs.opendir(path), ref=True)
 
     def __getattr__(self, name):

@@ -71,7 +71,8 @@ setup(
         'premailer',
         'watchdog',
         'bleach',
-        'beautifulsoup4'
+        'beautifulsoup4',
+        'tzlocal'
     ],
     extras_require={
         ':sys_platform=="linux2" or sys_platform=="linux3"': ["pyinotify"],

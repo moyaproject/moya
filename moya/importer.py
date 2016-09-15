@@ -8,7 +8,7 @@ from .document import Document
 from .elements.registry import ElementRegistry
 from .compat import iteritems
 
-from fs2.path import pathcombine, abspath
+from fs2.path import combine, abspath
 from fs2.errors import NoSysPath
 from fs2.walk import walk_files
 
@@ -52,7 +52,7 @@ class LibraryImportHook(object):
         if module_path is not None:
             return module_path, _type, False
 
-        module_path, _type = self._find_module_file(pathcombine(path, '__init__'))
+        module_path, _type = self._find_module_file(combine(path, '__init__'))
         if module_path is not None:
             return module_path, _type, True
 
