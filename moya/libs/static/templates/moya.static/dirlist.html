@@ -41,13 +41,15 @@ td,th
 </style>
 {% endblock %}
 
-{% def "show_date" %}
+{% def "show_date" -%}
+{%- cache for 1d key [dt, .now.local.date] %}
 {%- compact %}
 {%- if dt %}
 {% if dt.local.date == .now.local.date %}Today{% else %}${localize:dt.local.date}{% endif %}<span class="text-muted">, ${localize:dt.local.time}</span>
 {%- endif %}
 {%- end-compact %}
-{% end-def %}
+{%- end-cache %}
+{%- end-def %}
 
 {% block "content" %}
 <div class="container">
@@ -62,7 +64,7 @@ td,th
     <pre>${fs[path]}</pre>
     {% endif %}
 
-    <div>
+    <div class="well well-sm">
         <table class="table table-condensed">
             <thead>
             	<tr>
@@ -85,7 +87,7 @@ td,th
             	{%- for info in dirlist.files %}
             	<tr>
             		<td><a href="${info.name}" title="file">${info.name}</a></td>
-                    <td class="file-size">${filesize:info.size}{% if info.size >= 1024 %} <span class="text-muted">(${info.size::','} bytes)</span>{% endif %}</td>
+                    <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
                     <td>{% call "show_date" with dt=info.created %}</td>
                     <td>{% call "show_date" with dt=info.modified %}</td>
             	</tr>
