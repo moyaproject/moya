@@ -8,7 +8,7 @@ from .compat import text_type, string_types, PY2, implements_to_string, implemen
 from . import errors
 from .tools import textual_list
 
-from fs.path import normpath, relpath
+from fs2.path import normpath, relpath
 
 import io
 import os

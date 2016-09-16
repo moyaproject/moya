@@ -171,13 +171,6 @@ class Library(object):
         """Import a single document"""
         return self.import_documents(fs, files=(path,))
 
-    def _make_files_signature(self, fs, files):
-        file_signatures = []
-        for path in files:
-            info = fs.getinfokeys(path, 'modified_time')
-            file_signatures.append("{}_{}".format(path, info["modified_time"]))
-        return "{}__{}".format(self.long_name, ".".join(file_signatures))
-
     def import_documents(self, fs, wildcard="*.xml", recurse=False, files=None):
         """Imports a number of documents in to the library"""
 

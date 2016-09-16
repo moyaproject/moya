@@ -6,8 +6,8 @@ from os.path import abspath, join, dirname, normpath
 import logging
 from logging import handlers
 
-import fs.path
-from fs.errors import FSError
+import fs2.path
+from fs2.errors import FSError
 
 from . import iniparse
 from . import errors
@@ -97,7 +97,7 @@ def init_logging_fs(logging_fs, path, disable_existing_loggers=True, use_default
                 raise errors.LoggingSettingsError('unable to read logging settings file "{}" from {}'.format(path, logging_fs.desc('/')))
         ini_stack.append(s)
         if "extends" in s['']:
-            path = fs.path.join(fs.path.dirname(path), s['']['extends'])
+            path = fs2.path.join(fs2.path.dirname(path), s['']['extends'])
         else:
             break
     _init_logging(ini_path, ini_stack, disable_existing_loggers)

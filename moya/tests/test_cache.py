@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import unittest
 import time
 
-from fs.memoryfs import MemoryFS
+from fs2.memoryfs import MemoryFS
 
 from moya import cache
 
