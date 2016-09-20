@@ -17,14 +17,15 @@ def get_dirlist(app, fs, path):
 
     dirs = []
     files = []
-    for name, _info in dir_fs.scandir('/', "basic", "details"):
-        if wildcard.imatch_any(wildcards, name):
+    resources = dir_fs.scandir('/', namespaces=["details"])
+    for resource in resources:
+        if wildcard.imatch_any(wildcards, resource.name):
             continue
-        info = FSInfo(_info)
-        if info.is_dir:
-            dirs.append(info)
+        resource = FSInfo(resource.raw)
+        if resource.is_dir:
+            dirs.append(resource)
         else:
-            files.append(info)
+            files.append(resource)
 
     def sort_info_key(info):
         return info.name.lower()

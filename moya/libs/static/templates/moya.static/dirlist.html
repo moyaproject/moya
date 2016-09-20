@@ -59,11 +59,9 @@ td,th
     	<a class="btn btn-link" href="../">&crarr; parent directory</a>
     </p>
     {%- endif %}
-
-    {% if .debug %}
+    {% -if .debug %}
     <pre>${fs[path]}</pre>
-    {% endif %}
-
+    {%- endif %}
     <div class="well well-sm">
         <table class="table table-condensed">
             <thead>
