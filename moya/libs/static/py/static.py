@@ -21,7 +21,7 @@ def get_dirlist(app, fs, path):
     for resource in resources:
         if wildcard.imatch_any(wildcards, resource.name):
             continue
-        resource = FSInfo(resource.raw)
+        resource = FSInfo(resource)
         if resource.is_dir:
             dirs.append(resource)
         else:

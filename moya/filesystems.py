@@ -67,7 +67,11 @@ class FSInfo(Info):
             return None
         return ExpressionDateTime.from_epoch(epoch)
 
-    def __init__(self, raw_info):
+    def __init__(self, info):
+        if isinstance(info, Info):
+            raw_info = info.raw
+        else:
+            raw_info = info
         super(FSInfo, self).__init__(raw_info,
                                      _to_datetime=self._from_epoch)
 
