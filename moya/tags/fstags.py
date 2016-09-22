@@ -8,7 +8,7 @@ from ..tags.context import DataSetter
 from ..compat import text_type
 
 from fs2.errors import FSError
-from fs2.path import pathjoin, basename, dirname
+from fs2.path import join, basename, dirname
 
 import hashlib
 import logging
@@ -224,5 +224,5 @@ class Walk(DataSetter):
                                                ignore_errors=True):
 
             for path in dir_paths:
-                add_path(pathjoin(dirname, path))
+                add_path(join(dirname, path))
         self.set_context(context, params.dst, paths)

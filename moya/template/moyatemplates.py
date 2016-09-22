@@ -21,7 +21,7 @@ from ..compat import urlencode, PY2
 from . import lorem
 from ..traceframe import Frame as TraceFrame
 
-from fs2.path import pathjoin, dirname
+from fs2.path import join, dirname
 import bleach
 
 import re
@@ -910,7 +910,7 @@ class ExtendsNode(Node):
                     self.render_error(text_type(e))
 
         else:
-            path = pathjoin(base_path, path)
+            path = join(base_path, path)
 
         self.template.extend(environment, path, self, lib)
         parser.expect_end()

@@ -1,21 +1,20 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+from datetime import datetime
+import mimetypes
+
+from fs2.path import basename
+from fs2.errors import FSError
+
 from .response import MoyaResponse
 from .compat import PY2, py2bytes
 from . import http
 from .tools import md5_hexdigest
 from . import logic
-
-from fs2.path import basename
-from fs2.errors import FSError
-from fs2.info import Info as FSInfo
-
-from datetime import datetime
-import mimetypes
-
-
 from . import __version__
+
+
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
@@ -33,7 +32,7 @@ def serve_file(req, fs, path, filename=None):
     serve_file = None
     # Get file info
     try:
-        info = FSInfo(fs.getinfo(path, 'details'))
+        info = fs.getinfo(path, 'details')
         serve_file = fs.open(path, 'rb')
     except FSError:
         # Files system open failed for some reason

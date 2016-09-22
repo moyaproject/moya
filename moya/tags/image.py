@@ -9,7 +9,7 @@ from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
 
-from fs2.path import basename, pathjoin, splitext
+from fs2.path import basename, join, splitext
 
 from PIL import Image, ImageFilter
 try:
@@ -209,7 +209,7 @@ class Write(ImageElement):
             except KeyError:
                 self.throw("image.no-fs", "No filesystem called '{}'".format(params.fs))
                 return
-        path = pathjoin(params.dirpath, params.filename)
+        path = join(params.dirpath, params.filename)
 
         with params.image._lock:
             img = params.image._img

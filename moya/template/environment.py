@@ -59,7 +59,7 @@ class Environment(object):
             return template
         if self.cache.enabled:
             try:
-                info = FSInfo(self.template_fs.getinfo(template_path, 'details'))
+                info = self.template_fs.getinfo(template_path, 'details')
             except ResourceNotFound:
                 raise MissingTemplateError(template_path)
             cache_name = "%s$%s@%s" % (TEMPLATE_VERSION, template_path, info.modified)

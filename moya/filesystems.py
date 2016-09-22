@@ -7,6 +7,7 @@ from fs2.info import Info
 
 from .console import Cell
 from .compat import text_type, implements_to_string
+from .interface import AttributeExposer
 from .reader import DataReader
 from .context.expressiontime import ExpressionDateTime
 
@@ -58,7 +59,23 @@ class FSContainer(dict):
         self.clear()
 
 
-class FSInfo(Info):
+class _FSInfoProxy(Info, AttributeExposer):
+    __moya_exposed_attributes__ = [
+        "raw",
+        "namespaces",
+        "name",
+        "path",
+        "is_dir",
+        "accessed",
+        "modified",
+        "created",
+        "metadata_changed",
+        "permissions",
+        "size",
+    ]
+
+
+class FSInfo(object):
     """Custom info class that return Moya datetime objects."""
 
     @classmethod
@@ -68,12 +85,54 @@ class FSInfo(Info):
         return ExpressionDateTime.from_epoch(epoch)
 
     def __init__(self, info):
-        if isinstance(info, Info):
-            raw_info = info.raw
-        else:
-            raw_info = info
-        super(FSInfo, self).__init__(raw_info,
-                                     _to_datetime=self._from_epoch)
+        self._info = Info.copy(info, to_datetime=self._from_epoch)
+
+    def __moyarepr__(self, context):
+        return repr(self._info)
+
+    @property
+    def raw(self):
+        return self._info.raw
+
+    @property
+    def namespaces(self):
+        return self._info.namespaces
+
+    @property
+    def name(self):
+        return self._info.name
+
+    @property
+    def path(self):
+        return self._info.path
+
+    @property
+    def is_dir(self):
+        return self._info.is_dir
+
+    @property
+    def accessed(self):
+        return self._info.accessed
+
+    @property
+    def modified(self):
+        return self._info.modified
+
+    @property
+    def created(self):
+        return self._info.created
+
+    @property
+    def metadata_changed(self):
+        return self._info.metadata_changed
+
+    @property
+    def permissions(self):
+        return self._info.permissions
+
+    @property
+    def size(self):
+        return self._info.size
 
 
 @implements_to_string

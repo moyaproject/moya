@@ -15,7 +15,7 @@
 
 .table td
 {
-  border-top:1px dotted #333 !important;
+  border:none !important;
 }
 
 .table > thead > tr > th
@@ -73,7 +73,7 @@ td,th
             	</tr>
             </thead>
             <tbody>
-            	{%- for info in dirlist.dirs %}
+            	{%- for info in sortedby:[dirlist.dirs, {lower:name}] %}
             	<tr>
                     <!-- TODO: path.replace('#', '%23') -->
             		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
@@ -82,7 +82,7 @@ td,th
                     <td>{% call "show_date" with dt=info.modified %}</td>
             	</tr>
             	{%- endfor %}
-            	{%- for info in dirlist.files %}
+            	{%- for info in sortedby:[dirlist.files, {lower:name}] %}
             	<tr>
             		<td><a href="${info.name}" title="file">${info.name}</a></td>
                     <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>

@@ -21,18 +21,13 @@ def get_dirlist(app, fs, path):
     for resource in resources:
         if wildcard.imatch_any(wildcards, resource.name):
             continue
-        resource = FSInfo(resource)
         if resource.is_dir:
             dirs.append(resource)
         else:
             files.append(resource)
 
-    def sort_info_key(info):
-        return info.name.lower()
-    dirs.sort(key=sort_info_key)
-    files.sort(key=sort_info_key)
     dir_list = {
-        "dirs": dirs,
-        "files": files,
+        "dirs": [FSInfo(info) for info in dirs],
+        "files": [FSInfo(info) for info in files],
     }
     return dir_list

@@ -9,7 +9,7 @@ from ..compat import iteritems, text_type, reload
 from .. import tools
 from .. import timezone
 
-from fs2.path import pathjoin
+from fs2.path import join
 from fs2.opener import open_fs
 from fs2.errors import FSError, IllegalBackReference, ResourceNotFound
 
@@ -165,7 +165,7 @@ class Import(LogicElement):
                     try:
                         if project_fs.hassyspath('/'):
                             project_path = project_fs.getsyspath('/')
-                            import_path = pathjoin(project_path, location)
+                            import_path = join(project_path, location)
                             try:
                                 import_fs = open_fs(import_path)
                             except ResourceNotFound:

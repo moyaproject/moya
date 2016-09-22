@@ -249,10 +249,10 @@ class TestModifiers(unittest.TestCase):
 
         assert list(m.reversed(c, [1, 3, 4])) == [4, 3, 1]
 
-        assert m.reversesorted(c, [1, 5, 2]) == [5, 2, 1]
+        assert m.rsorted(c, [1, 5, 2]) == [5, 2, 1]
 
         objs = [Mock(id=5), Mock(id=10)]
-        assert m.reversesortedkey(c, [objs, 'id']) == [objs[1], objs[0]]
+        assert m.rsortedby(c, [objs, 'id']) == [objs[1], objs[0]]
 
         assert m.round(c, 3.14) == 3
         assert m.round(c, [3.14, 1]) == 3.1
@@ -272,7 +272,7 @@ class TestModifiers(unittest.TestCase):
         assert m.sorted(c, [1, 3, 0]) == [0, 1, 3]
 
         objs = [Mock(n=50), Mock(n=0)]
-        assert m.sortedkey(c, [objs, 'n']) == [objs[1], objs[0]]
+        assert m.sortedby(c, [objs, 'n']) == [objs[1], objs[0]]
 
         assert m.split(c, 'foo bar baz') == ['foo', 'bar', 'baz']
         assert m.split(c, ['foo-bar-baz', '-']) == ['foo', 'bar', 'baz']

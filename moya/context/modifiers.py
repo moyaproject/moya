@@ -32,7 +32,7 @@ from ..import compat
 
 from fs2.path import (abspath,
                       basename,
-                      pathjoin,
+                      join,
                       relativefrom,
                       dirname,
                       splitext)
@@ -57,10 +57,10 @@ class Path(text_type):
     """Magic for paths."""
 
     def __truediv__(self, other):
-        return Path(pathjoin(self, text_type(other)))
+        return Path(join(self, text_type(other)))
 
     def __rtruediv__(self, other):
-        return Path(pathjoin(self, text_type(other)))
+        return Path(join(self, text_type(other)))
 
 
 @implements_to_string
@@ -192,10 +192,6 @@ class ExpressionModifiersBase(object):
                     # Nothing we can do but ignore it
                     obj_items.append((k, None))
             return obj_items
-
-    @classmethod
-    def _map(cls, obj):
-        return dict(obj)
 
     @classmethod
     def _flat(cls, obj):
@@ -675,9 +671,14 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def lstrip(self, context, v):
         return text_type(v).lstrip()
 
-    # Deprecate?
     def map(self, context, v):
-        return self._map(v)
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('map: modifier expects [<seq>, <expression>]')
+        if not hasattr(key, '__moyacall__'):
+            raise ValueError('map: requires an expression, e.g. map:[sequence, {name}]')
+        return (key.__moyacall__(item) for item in seq)
 
     def max(self, context, v):
         return max(_item for _item in v if _item is not None)
@@ -792,15 +793,18 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def reversed(self, context, v):
         return list(reversed(v))
 
-    def reversesorted(self, context, v):
+    def rsorted(self, context, v):
         return sorted(v, reverse=True)
 
-    def reversesortedkey(self, context, v):
+    def rsortedby(self, context, v):
         try:
             seq, key = v[0], v[1]
         except:
-            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
-        return sorted(seq, key=lambda value: obj_index(value, key), reverse=True)
+            raise ValueError('rsortedby: requires two arguments [<sequence>, <key>]')
+        if hasattr(key, '__moyacall__'):
+            return sorted(seq, key=key.__moyacall__, reverse=True)
+        else:
+            return sorted(seq, key=lambda value: obj_index(value, key), reverse=True)
 
     def round(self, context, v):
         try:
@@ -838,12 +842,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def sorted(self, context, v):
         return sorted(v)
 
-    def sortedkey(self, context, v):
+    def sortedby(self, context, v):
         try:
             seq, key = v[0], v[1]
         except:
-            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
-        return sorted(seq, key=lambda value: obj_index(value, key))
+            raise ValueError('sortedby: requires two arguments [<sequence>, <key>]')
+        if hasattr(key, '__moyacall__'):
+            return sorted(seq, key=key.__moyacall__)
+        else:
+            return sorted(seq, key=lambda value: obj_index(value, key))
 
     def split(self, context, v):
         split_on = None

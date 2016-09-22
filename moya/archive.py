@@ -42,7 +42,7 @@ from . import settings
 from fs2.opener import open_fs
 from fs2.multifs import MultiFS
 from fs2.mountfs import MountFS
-from fs2.path import pathjoin, abspath, relativefrom
+from fs2.path import join, abspath, relativefrom
 from fs2.errors import FSError
 
 from collections import defaultdict, namedtuple, deque
@@ -1080,7 +1080,7 @@ class Archive(object):
             app = app_name
         else:
             app = self.find_app(text_type(app_name))
-        template_path = abspath(pathjoin(base_path, app.templates_directory, path))
+        template_path = abspath(join(base_path, app.templates_directory, path))
         return template_path
 
     def get_template_lib(self, path, _cache=LRUCache()):
