@@ -53,10 +53,12 @@ td,th
 
 {% block "content" %}
 <div class="container">
-    <h2>${.request.path_info} <small>directory index</small></h2>
+    <h2 class="text-center">${.request.path_info}
+        <small>directory index</small>
+    </h2>
     {%- if path != '/' %}
-    <p>
-    	<a class="btn btn-link" href="../">&crarr; parent directory</a>
+    <p class="text-center">
+        <a class="btn btn-link text-center" href="../">&crarr; parent</a>
     </p>
     {%- endif %}
     {% -if .debug %}
