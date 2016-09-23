@@ -1,27 +1,25 @@
 from __future__ import unicode_literals
 
-from ...command import SubCommand
-from ...wsgi import WSGIApplication
-from ...loggingconf import init_logging
-from ...compat import PY2, socketserver
-
-from fs2.opener import open_fs
+import logging
+import sys
 import os.path
 from os.path import join as pathjoin
-
-import sys
 from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
                                    make_server)
 
+from fs2.opener import open_fs
+
+from ...command import SubCommand
+from ...wsgi import WSGIApplication
+from ...loggingconf import init_logging
+from ...compat import PY2, socketserver
 
 if PY2:
     from thread import interrupt_main
 else:
     from _thread import interrupt_main
 
-
-import logging
 log = logging.getLogger('moya.runtime')
 
 
@@ -51,6 +49,8 @@ class Serve(SubCommand):
                             help="render and serve .html files as moya templates")
         parser.add_argument('-d', '--develop', dest="develop", action="store_true",
                             help="enable develop mode (to track down Python errors)")
+        parser.add_argument('-a', '--show-access', action="store_true",
+                            help="show access (permission) information")
 
     def run(self):
         args = self.args
@@ -66,8 +66,11 @@ class Serve(SubCommand):
         else:
             ini = 'settings.ini'
 
-        application = WSGIApplication(location, ini, 'main', disable_autoreload=True, develop=args.develop)
+        application = WSGIApplication(
+            location, ini, 'main', disable_autoreload=True, develop=args.develop)
         application.archive.filesystems['static'] = fs
+        static_app = application.archive.apps['static']
+        static_app.settings['show_permissions'] = args.show_access
 
         server = make_server(args.host,
                              int(args.port),

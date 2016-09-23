@@ -90,6 +90,9 @@ class FSInfo(object):
     def __moyarepr__(self, context):
         return repr(self._info)
 
+    def __repr__(self):
+        return repr(self._info)
+
     @property
     def raw(self):
         return self._info.raw
@@ -133,6 +136,14 @@ class FSInfo(object):
     @property
     def size(self):
         return self._info.size
+
+    @property
+    def group(self):
+        return self._info.group
+
+    @property
+    def user(self):
+        return self._info.user
 
 
 @implements_to_string

@@ -1,17 +1,13 @@
-38{% extends "dirlistbase.html" %}
+{% extends "dirlistbase.html" %}
 
 {% block "title" %}Directory listing for ${.request.path}{% endblock %}
 
 {% block "head" %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
 
 {% include "bootstrap.css" %}
-{% include "dark.css" %}
 
-.well table
-{
-    margin-bottom:0px;
-}
 
 .table td
 {
@@ -31,76 +27,95 @@
 td.file-size
 {
     white-space: nowrap;
+}å
+
+td.permissions, th.permissions
+{
+    white-space: nowrap;
 }
 
-td,th
+h3.page-header
 {
-    padding-right:1em !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 </style>
 {% endblock %}
 
 {% def "show_date" -%}
-{%- cache for 1d key [dt, .now.local.date] %}
-{%- compact %}
-{%- if dt %}
-{% if dt.local.date == .now.local.date %}Today{% else %}${localize:dt.local.date}{% endif %}<span class="text-muted">, ${localize:dt.local.time}</span>
-{%- endif %}
-{%- end-compact %}
-{%- end-cache %}
+    {%- cache for 1d key [dt, .now.local.date] %} {%- compact %}
+
+    {%- if dt %}
+    {% if dt.local.date == .now.local.date %}Today{% else %}${localize:dt.local.date}{% endif %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
+    {%- endif %}
+
+    {%- end-compact %} {%- end-cache %}
 {%- end-def %}
 
 {% block "content" %}
 <div class="container">
-    <h2 class="text-center">${.request.path_info}
-        <small>directory index</small>
-    </h2>
-    {%- if path != '/' %}
-    <p class="text-center">
-        <a class="btn btn-link text-center" href="../">&crarr; parent</a>
-    </p>
-    {%- endif %}
-    {% -if .debug %}
-    <pre>${fs[path]}</pre>
-    {%- endif %}
-    <div class="well well-sm">
-        <table class="table table-condensed">
-            <thead>
-            	<tr>
-            		<th>Name</th>
-                    <th class="file-size">Size</th>
-            		<th>Created</th>
-            		<th>Modified</th>
-            	</tr>
-            </thead>
-            <tbody>
-            	{%- for info in sortedby:[dirlist.dirs, {lower:name}] %}
-            	<tr>
-                    <!-- TODO: path.replace('#', '%23') -->
-            		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
-                    <td class="file-size text-muted">&nbsp;</td>
-                    <td>{% call "show_date" with dt=info.created %}</td>
-                    <td>{% call "show_date" with dt=info.modified %}</td>
-            	</tr>
-            	{%- endfor %}
-            	{%- for info in sortedby:[dirlist.files, {lower:name}] %}
-            	<tr>
-            		<td><a href="${info.name}" title="file">${info.name}</a></td>
-                    <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
-                    <td>{% call "show_date" with dt=info.created %}</td>
-                    <td>{% call "show_date" with dt=info.modified %}</td>
-            	</tr>
-            	{%- endfor %}
-            </tbody>
-        </table>
-    </div>
 
-    <div>
+
+    <h3 class="page-header text-center" title="${.request.path_info}">
+    {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
+        ${.request.path_info}
+    </h3>
+
+    {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
+    {%- if dirlist.dirs or dirlist.files %}
+    <table class="table table-condensed table-striped">
+        <thead>
+        	<tr>
+        		<th>Name</th>
+                <th class="file-size">Size</th>
+        		<th class="hidden-xs">Created</th>
+        		<th class="hidden-xs">Modified</th>
+                {% if show_permissions or .debug %}
+                <th class="hidden-sm hidden-xs">User</th>
+                <th class="hidden-sm hidden-xs">Group</th>
+                <th class="hidden-sm hidden-xs permissions">Permissions</th>
+                {% endif %}
+        	</tr>
+        </thead>
+        <tbody>
+            <!-- TODO: path.replace('#', '%23') -->
+        	{%- for info in sortedby:[dirlist.dirs, {lower:name}] %}
+        	<tr>
+        		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
+                <td class="file-size text-muted">&nbsp;</td>
+                <td class="hidden-xs">{% call "show_date" with dt=info.created %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=info.modified %}</td>
+                {% if show_permissions or .debug %}
+                <td class="hidden-sm hidden-xs">${info.user}</td>
+                <td class="hidden-sm hidden-xs">${info.group}</td>
+                <td class="hidden-sm hidden-xs permissions"><tt>${info.permissions}</tt></td>
+                {% endif %}
+        	</tr>
+        	{%- endfor %}
+        	{%- for info in sortedby:[dirlist.files, {lower:name}] %}
+        	<tr>
+        		<td><a href="${info.name}" title="file">${info.name}</a></td>
+                <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=info.created %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=info.modified %}</td>
+                {% if show_permissions or .debug %}
+                <td class="hidden-sm hidden-xs">${info.user}</td>
+                <td class="hidden-sm hidden-xs">${info.group}</td>
+                <td class="permissions hidden-sm hidden-xs"><tt>${info.permissions}</tt></td>
+                {% endif %}
+        	</tr>
+        	{%- endfor %}
+        </tbody>
+    </table>
+    {%- endif %}
+    {% with total_bytes=sum:map:[dirlist.files, {size}] or 0 %}
+    <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
-    	${len:dirlist.dirs::','} {% if len:dirlist.dirs == 1 %}directory{% else %}directories{% endif %},
-        ${len:dirlist.files::','} {% if len:dirlist.files == 1 %}file{% else %}files{% endif %}
-    </div>
+        <strong>${filesize:total_bytes}</strong> in ${len:dirlist.files::','} {% if len:dirlist.files == 1 %}file{% else %}files{% endif %}.
+    	${len:dirlist.dirs::','} {% if len:dirlist.dirs == 1 %}directory{% else %}directories{% endif %}.
+    </p>
+    {% end-with %}
     <br/>
 </div>
 {% endblock %}

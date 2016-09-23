@@ -4,7 +4,7 @@ import moya.expose
 from moya.filesystems import FSInfo
 
 from fs2.errors import FSError
-from fs2 import wildcard
+from fs2.wildcard import imatch_any
 
 
 @moya.expose.macro("get_dirlist")
@@ -17,17 +17,15 @@ def get_dirlist(app, fs, path):
 
     dirs = []
     files = []
-    resources = dir_fs.scandir('/', namespaces=["details"])
-    for resource in resources:
-        if wildcard.imatch_any(wildcards, resource.name):
-            continue
-        if resource.is_dir:
-            dirs.append(resource)
-        else:
-            files.append(resource)
+    for resource in dir_fs.scandir('/', namespaces=["details", 'access']):
+        if not imatch_any(wildcards, resource.name):
+            _resource = FSInfo(resource)
+            if resource.is_dir:
+                dirs.append(_resource)
+            else:
+                files.append(_resource)
 
-    dir_list = {
-        "dirs": [FSInfo(info) for info in dirs],
-        "files": [FSInfo(info) for info in files],
+    return {
+        "dirs": dirs,
+        "files": files,
     }
-    return dir_list

@@ -32,6 +32,7 @@
 		<for dst="indexfile" src=".app.settings.index.list">
 			<serve-file fs="${fsname}" path="${path:path + indexfile}" ifexists="yes" />
 		</for>
+		<let show_permissions=".debug or .app.settings.show_permissions.bool"/>
         <!-- Serve the directory listing-->
 		<serve-template template="dirlist.html" withscope="yes" let:app=".app"/>
 	</view>
