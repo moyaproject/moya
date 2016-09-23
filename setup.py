@@ -51,7 +51,7 @@ setup(
 
     classifiers=classifiers,
     install_requires=[
-        'pyparsing >= 2.0.7',
+        'pyparsing == 2.1.5',
         'webob>=1.5,<2',
         'sqlalchemy',
         'pytz',
