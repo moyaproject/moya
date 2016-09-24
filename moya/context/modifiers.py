@@ -522,7 +522,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return splitext(v)[1].lstrip('.')
 
     def filesize(self, context, v):
-        return self._filesize(v)
+        return self._filesize(v or 0)
 
     def first(self, context, v):
         try:

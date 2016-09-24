@@ -735,7 +735,7 @@ dict_operand.setParseAction(EvalDict)
 empty_dict_operand = Literal('{}')
 empty_dict_operand.setParseAction(EvalEmptyDict)
 
-function_operand = Group(Suppress('{') + expr + Suppress('}'))
+function_operand = Group(Suppress('`') + expr + Suppress('`'))
 function_operand.setParseAction(EvalFunction)
 
 key_pair = Group(Regex(r'([a-zA-Z0-9_]+)') + Suppress(Literal('=') + WordEnd('=!+-*/')) + expr)

@@ -80,7 +80,7 @@ h3.page-header
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for info in sortedby:[dirlist.dirs, {lower:name}] %}
+        	{%- for info in sortedby:[dirlist.dirs, `lower:name`] %}
         	<tr>
         		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
                 <td class="file-size text-muted">&nbsp;</td>
@@ -93,7 +93,7 @@ h3.page-header
                 {% endif %}
         	</tr>
         	{%- endfor %}
-        	{%- for info in sortedby:[dirlist.files, {lower:name}] %}
+        	{%- for info in sortedby:[dirlist.files, `lower:name`] %}
         	<tr>
         		<td><a href="${info.name}" title="file">${info.name}</a></td>
                 <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
@@ -109,13 +109,11 @@ h3.page-header
         </tbody>
     </table>
     {%- endif %}
-    {% with total_bytes=sum:map:[dirlist.files, {size}] or 0 %}
     <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
-        <strong>${filesize:total_bytes}</strong> in ${len:dirlist.files::','} {% if len:dirlist.files == 1 %}file{% else %}files{% endif %}.
+        <strong>${filesize:sum:map:[dirlist.files, `size`]}</strong> in ${len:dirlist.files::','} {% if len:dirlist.files == 1 %}file{% else %}files{% endif %}.
     	${len:dirlist.dirs::','} {% if len:dirlist.dirs == 1 %}directory{% else %}directories{% endif %}.
     </p>
-    {% end-with %}
     <br/>
 </div>
 {% endblock %}

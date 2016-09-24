@@ -1,6 +1,6 @@
 0.6.12
 ------
-Added sub-expressions syntax
+Added sub-expressions syntax with backticks
 Fix for expressiontime previous_month attribute
 Added showform subcommand
 
