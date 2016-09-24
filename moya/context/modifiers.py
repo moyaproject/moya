@@ -401,6 +401,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return v.copy()
         return copy.copy(v)
 
+    def count(self, context, v):
+        try:
+            seq, predicate = v
+        except ValueError:
+            raise ValueError('count: modifier expects [<seq>, <expression>]')
+        if not hasattr(predicate, '__moyacall__'):
+            raise ValueError('count: requires an expression, e.g. map:[students, {grade gt "A"}]')
+        return sum(1 for item in seq if predicate.__moyacall__(item))
+
     def csrf(self, context, v):
         user_id = text_type(context['.session_key'] or '')
         form_id = text_type(v)
@@ -523,6 +532,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def filesize(self, context, v):
         return self._filesize(v or 0)
+
+    def filter(self, context, v):
+        try:
+            seq, predicate = v
+        except ValueError:
+            raise ValueError('filter: modifier expects [<seq>, <expression>]')
+        if not hasattr(predicate, '__moyacall__'):
+            raise ValueError('filter: requires an expression, e.g. map:[students, {grade gt "A"}]')
+        return (item for item in seq if predicate.__moyacall__(item))
 
     def first(self, context, v):
         try:
