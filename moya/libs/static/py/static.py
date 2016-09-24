@@ -19,6 +19,6 @@ def get_dirlist(app, fs, path):
     dirlist = [
         FSInfo(resource)
         for resource in dir_fs.scandir('/', namespaces=namespaces)
-        if not imatch_any(hide_wildcards, resource.name)
+        if not (hide_wildcards and imatch_any(hide_wildcards, resource.name))
     ]
     return dirlist

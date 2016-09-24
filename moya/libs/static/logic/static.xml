@@ -23,7 +23,7 @@
 			<var>path</var>
 		</call>
 		<!-- get_dirlist returns None if it is not a directory-->
-		<return if="not dirlist" />
+		<return if="isnone:dirlist" />
 		<!-- 404 if directory listing is disabled -->
 		<not-found if="not .app.settings.dirlist.bool" />
 		<!-- Redirect to a canonical url ending with / -->
