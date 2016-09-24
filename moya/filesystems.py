@@ -138,6 +138,10 @@ class FSInfo(object):
         return self._info.size
 
     @property
+    def type(self):
+        return self._info.type
+
+    @property
     def group(self):
         return self._info.group
 

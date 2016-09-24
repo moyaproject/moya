@@ -40,6 +40,11 @@ h3.page-header
     text-overflow: ellipsis;
 }
 
+a.directory
+{
+    font-weight:bold;
+}
+
 </style>
 {% endblock %}
 
@@ -63,7 +68,7 @@ h3.page-header
     </h3>
 
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
-    {%- if dirlist.dirs or dirlist.files %}
+    {%- if dirlist %}
     <table class="table table-condensed table-striped">
         <thead>
         	<tr>
@@ -80,29 +85,24 @@ h3.page-header
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for info in sortedby:[dirlist.dirs, `lower:name`] %}
+        	{%- for info in sortedby:[dirlist, `[not is_dir, lower:name]`] %}
         	<tr>
-        		<td><strong><a href="${info.name}/" title="directory">${info.name}</a></strong></td>
-                <td class="file-size text-muted">&nbsp;</td>
+        		<td>
+                    <a {% attrib href=info.name + '/', class=info.type.name, title=info.type.name %}>
+                        ${info.name}
+                    </a>
+                </td>
+                {%- if info.is_dir %}
+                <td>&nbsp;</td>
+                {%- else %}
+                <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
+                {%- endif %}
                 <td class="hidden-xs">{% call "show_date" with dt=info.created %}</td>
                 <td class="hidden-xs">{% call "show_date" with dt=info.modified %}</td>
                 {% if show_permissions or .debug %}
                 <td class="hidden-sm hidden-xs">${info.user}</td>
                 <td class="hidden-sm hidden-xs">${info.group}</td>
                 <td class="hidden-sm hidden-xs permissions"><tt>${info.permissions}</tt></td>
-                {% endif %}
-        	</tr>
-        	{%- endfor %}
-        	{%- for info in sortedby:[dirlist.files, `lower:name`] %}
-        	<tr>
-        		<td><a href="${info.name}" title="file">${info.name}</a></td>
-                <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
-                <td class="hidden-xs">{% call "show_date" with dt=info.created %}</td>
-                <td class="hidden-xs">{% call "show_date" with dt=info.modified %}</td>
-                {% if show_permissions or .debug %}
-                <td class="hidden-sm hidden-xs">${info.user}</td>
-                <td class="hidden-sm hidden-xs">${info.group}</td>
-                <td class="permissions hidden-sm hidden-xs"><tt>${info.permissions}</tt></td>
                 {% endif %}
         	</tr>
         	{%- endfor %}
