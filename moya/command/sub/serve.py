@@ -51,6 +51,8 @@ class Serve(SubCommand):
                             help="enable develop mode (to track down Python errors)")
         parser.add_argument('-a', '--show-access', action="store_true",
                             help="show access (permission) information")
+        parser.add_argument('-s', '--show-dot', action="store_true",
+                            help="do not hide dot files (beginning with a period)")
 
     def run(self):
         args = self.args
@@ -71,6 +73,8 @@ class Serve(SubCommand):
         application.archive.filesystems['static'] = fs
         static_app = application.archive.apps['static']
         static_app.settings['show_permissions'] = args.show_access
+        if args.show_dot:
+            static_app.settings['hide'] = ''
 
         server = make_server(args.host,
                              int(args.port),

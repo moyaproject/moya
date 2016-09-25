@@ -11,7 +11,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from fs.path import basename
+from fs2.path import basename
+from fs2 import wildcard
 
 from pyparsing import (Word,
                        WordEnd,
@@ -50,7 +51,6 @@ import operator
 import re
 import sys
 from operator import truth
-from fnmatch import fnmatchcase
 import threading
 
 ParserElement.enablePackrat()
@@ -547,6 +547,13 @@ def _match_re(a, b):
     return truth(re.match(b, text_type(a)))
 
 
+def wildcard_match(name, pattern):
+    if isinstance(pattern, list):
+        return wildcard.match_any(pattern, name)
+    else:
+        return wildcard.match(pattern, name)
+
+
 def _in_operator(a, b):
     try:
         return a in b
@@ -588,7 +595,7 @@ class EvalComparisonOp(Evaluator):
         "instr": _str_in,
         "not instr": lambda a, b: not _str_in(a, b),
         "matches": _match_re,
-        "fnmatches": lambda a, b: truth(fnmatchcase(basename(a), b))
+        "fnmatches": wildcard_match
     }
 
     def build(self, tokens):

@@ -1,52 +1,6 @@
-{% extends "dirlistbase.html" %}
+{% extends "directory_base.html" %}
 
 {% block "title" %}Directory listing for ${.request.path}{% endblock %}
-
-{% block "head" %}
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style type="text/css">
-
-{% include "bootstrap.css" %}
-
-
-.table td
-{
-  border:none !important;
-}
-
-.table > thead > tr > th
-{
-    border-bottom:none;
-}
-
-.file-size
-{
-    text-align:right;
-}
-
-td.file-size
-{
-    white-space: nowrap;
-}å
-
-td.permissions, th.permissions
-{
-    white-space: nowrap;
-}
-
-h3.page-header
-{
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-a.directory
-{
-    font-weight:bold;
-}
-
-</style>
-{% endblock %}
 
 {% def "show_date" -%}
     {%- cache for 1d key [dt, .now.local.date] %} {%- compact %}
@@ -60,18 +14,18 @@ a.directory
 
 {% block "content" %}
 
-{%- let dir_count = count:[dirlist, `is_dir`] %}
-{%- let file_count = len:dirlist - dir_count %}
+{%- let dir_count = count:[directory, `is_dir`] %}
+{%- let file_count = len:directory - dir_count %}
 
 <div class="container">
 
     <h3 class="page-header text-center" title="${.request.path_info}">
-    {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
+        {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
         ${.request.path_info}
     </h3>
 
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
-    {%- if dirlist %}
+    {%- if directory %}
     <table class="table table-condensed table-striped">
         <thead>
         	<tr>
@@ -88,7 +42,7 @@ a.directory
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for info in sortedby:[dirlist, `[not is_dir, lower:name]`] %}
+        	{%- for info in sortedby:[directory, `[not is_dir, lower:name]`] %}
         	<tr>
         		<td>
                     <a {% attrib href=info.name + '/', class=info.type.name, title=info.type.name %}>
@@ -114,7 +68,7 @@ a.directory
     {%- endif %}
     <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
-        <strong>${filesize:sum:map:[dirlist, `is_dir ? 0 : size`]}</strong>
+        <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
         in ${file_count::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
     	${dir_count::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
     </p>
