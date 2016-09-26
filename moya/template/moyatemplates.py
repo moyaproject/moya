@@ -1260,7 +1260,10 @@ class IncludeNode(Node):
         else:
             paths = path
 
-        app = self.from_expression.eval(context) or self.get_app(context)
+        #app = self.from_expression.eval(context) or self.get_app(context)
+        app = self.from_expression.eval(context) or self.template_app(environment.archive, context.get('._t.app', None))
+        if app is None:
+            self.render_error('unable to determine app')
         for i, _path in enumerate(paths, 1):
             if environment.archive is not None:
                 path = environment.archive.resolve_template_path(_path, app)
@@ -1277,9 +1280,6 @@ class IncludeNode(Node):
         with template.block(context, self) as frame:
             frame.stack.append(template.get_root_node(environment))
             yield template._render_frame(frame, environment, context, text_escape)
-        # yield template.render(context=context,
-        #                       environment=environment,
-        #                       app=app)
 
 
 class InsertNode(Node):

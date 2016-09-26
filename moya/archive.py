@@ -1080,6 +1080,7 @@ class Archive(object):
             app = app_name
         else:
             app = self.find_app(text_type(app_name))
+        app = app or self.detect_app()
         template_path = abspath(join(base_path, app.templates_directory, path))
         return template_path
 

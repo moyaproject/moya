@@ -1,2 +1,16 @@
-{% extends "directory_base.html" from "moya.static" %}
+{% extends "directory_base.html" from "static" %}
 
+{% block "content" %}
+<div class="container">
+    <h1 class="page-header">
+        404 - Not Found
+    </h1>
+    <p>
+        The resource <b>${.request.path}</b> was not found on this server.
+    </p>
+    <ht>
+    <p>
+        <div class="pull-right"><a href="${.apps.static.lib.url}">moya.static ${.apps.static.lib.version}</a></div>
+    </p>
+</div>
+{% endblock %}
