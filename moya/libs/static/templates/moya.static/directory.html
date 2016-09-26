@@ -61,11 +61,11 @@
                 {%- endif %}
                 <td class="hidden-xs">{% call "show_date" with dt=resource.created %}</td>
                 <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
-                {% if show_permissions or .debug %}
+                {%- if show_permissions or .debug %}
                 <td class="hidden-sm hidden-xs">${resource.user}</td>
                 <td class="hidden-sm hidden-xs">${resource.group}</td>
                 <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>
-                {% endif %}
+                {%- endif %}
         	</tr>
         	{%- endfor %}
         </tbody>
