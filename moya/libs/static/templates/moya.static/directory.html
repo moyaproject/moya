@@ -44,14 +44,19 @@
             <!-- TODO: path.replace('#', '%23') -->
         	{%- for resource in chain:[resources.dirs, resources.files] %}
         	<tr>
-        		<td>
-                    <a {% attrib href=resource.name + '/', class=resource.type.name, title=resource.type.name %}>
+                {%- if resource.is_dir %}
+                <td>
+                    <a {% attrib href=resource.name + '/', class="directory" %}>
                         ${resource.name}
                     </a>
                 </td>
-                {%- if resource.is_dir %}
                 <td>&nbsp;</td>
                 {%- else %}
+                <td>
+                    <a href="${resource.name}">
+                        ${resource.name}
+                    </a>
+                </td>
                 <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
                 {%- endif %}
                 <td class="hidden-xs">{% call "show_date" with dt=resource.created %}</td>
@@ -67,7 +72,7 @@
     </table>
     {%- endif %}
     <p>
-        <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
+        <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
         <strong>${filesize:sum:map:[resources.files, `size`]}</strong>
         {%- with dir_count=len:resources.dirs, file_count=len:resources.files %}
         in ${file_count::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
