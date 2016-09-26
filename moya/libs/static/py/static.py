@@ -4,7 +4,6 @@ import moya.expose
 from moya.filesystems import FSInfo
 
 from fs2.wildcard import imatch_any
-from fs2.errors import ResourceNotFound
 
 
 @moya.expose.macro("read_directory")
@@ -12,13 +11,8 @@ def read_directory(app, fs, path):
     hide_wildcards = app.settings.get_list("hide")
     show_permissions = app.settings.get_bool('show_permissions')
 
-    try:
-        directory_info = fs.getinfo(path)
-    except ResourceNotFound:
+    if not fs.isdir(path):
         return None
-    else:
-        if not directory_info.is_dir:
-            return None
 
     dir_fs = fs.opendir(path)
 
