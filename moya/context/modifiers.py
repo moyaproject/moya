@@ -569,13 +569,33 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except:
             return None
 
+    # def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    #     seq, key = v
+    #     result = OrderedDict()
+    #     for item in seq:
+    #         k = _get(item, key)
+    #         result.setdefault(k, []).append(item)
+    #     return result
+
     def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
-        seq, key = v
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('group: modifier expects [<sequence>, <expression]')
+        if not hasattr(key, '__moyacall__'):
+            raise ValueError('key must be an expression')
         result = OrderedDict()
-        for item in seq:
-            k = _get(item, key)
-            result.setdefault(k, []).append(item)
+        if hasattr(key, '__moyacall__'):
+            for item in seq:
+                k = key.__moyacall__(item)
+                result.setdefault(k, []).append(item)
+        else:
+            for item in seq:
+                k = _get(item, key)
+                result.setdefault(k, []).append(item)
+
         return result
+
 
     def groupsof(self, context, v):
         try:

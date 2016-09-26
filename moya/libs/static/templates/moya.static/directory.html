@@ -14,8 +14,8 @@
 
 {% block "content" %}
 
-{%- let dir_count = count:[directory, `is_dir`] %}
-{%- let file_count = len:directory - dir_count %}
+{%- let directory = sortedby:[directory, `lower:name`] %}
+{%- let resources = group:[directory, `is_dir ? "dirs" : "files"`] %}
 
 <div class="container">
 
@@ -25,7 +25,7 @@
     </h3>
 
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
-    {%- if directory %}
+    {%- if resources.dirs or resources.files %}
     <table class="table table-condensed table-striped">
         <thead>
         	<tr>
@@ -42,24 +42,24 @@
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for info in sortedby:[directory, `[not is_dir, lower:name]`] %}
+        	{%- for resource in chain:[resources.dirs, resources.files] %}
         	<tr>
         		<td>
-                    <a {% attrib href=info.name + '/', class=info.type.name, title=info.type.name %}>
-                        ${info.name}
+                    <a {% attrib href=resource.name + '/', class=resource.type.name, title=resource.type.name %}>
+                        ${resource.name}
                     </a>
                 </td>
-                {%- if info.is_dir %}
+                {%- if resource.is_dir %}
                 <td>&nbsp;</td>
                 {%- else %}
-                <td class="file-size" title="(${info.size::','} bytes)">${filesize:info.size}</td>
+                <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
                 {%- endif %}
-                <td class="hidden-xs">{% call "show_date" with dt=info.created %}</td>
-                <td class="hidden-xs">{% call "show_date" with dt=info.modified %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=resource.created %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
                 {% if show_permissions or .debug %}
-                <td class="hidden-sm hidden-xs">${info.user}</td>
-                <td class="hidden-sm hidden-xs">${info.group}</td>
-                <td class="hidden-sm hidden-xs permissions"><tt>${info.permissions}</tt></td>
+                <td class="hidden-sm hidden-xs">${resource.user}</td>
+                <td class="hidden-sm hidden-xs">${resource.group}</td>
+                <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>
                 {% endif %}
         	</tr>
         	{%- endfor %}
@@ -68,9 +68,11 @@
     {%- endif %}
     <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static ${app.lib.version}</a></div>
-        <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
+        <strong>${filesize:sum:map:[resources.files, `size`]}</strong>
+        {%- with dir_count=len:resources.dirs, file_count=len:resources.files %}
         in ${file_count::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
     	${dir_count::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
+        {%- endwith %}
     </p>
     <br/>
 </div>
