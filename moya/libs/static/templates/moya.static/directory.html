@@ -2,20 +2,21 @@
 
 {% block "title" %}Directory listing for ${.request.path}{% endblock %}
 
-{% def "show_date" -%}
-    {%- cache for 1d key [dt, .now.local.date] %} {%- compact %}
+{%- def "show_date" -%}
+    {%- cache for 1d key [dt, .now.local.dat, .tz] -%}
 
-    {%- if dt %}
-    {% if dt.local.date == .now.local.date %}Today{% else %}${localize:dt.local.date}{% endif %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
-    {%- endif %}
+    {%- if dt -%}
+    {%- if dt.local.date == .now.local.date -%}
+    Today
+    {%- else -%}
+    ${localize:dt.local.date}
+    {%- endif %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
+    {%- endif -%}
 
-    {%- end-compact %} {%- end-cache %}
+    {%- end-cache -%}
 {%- end-def %}
 
 {% block "content" %}
-
-{%- let directory = sortedby:[directory, `lower:name`] %}
-{%- let resources = group:[directory, `is_dir ? "dirs" : "files"`] %}
 
 <div class="container">
 
@@ -25,7 +26,7 @@
     </h3>
 
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
-    {%- if resources.dirs or resources.files %}
+    {%- if directory %}
     <table class="table table-condensed table-striped">
         <thead>
         	<tr>
@@ -42,15 +43,15 @@
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for resource in chain:[resources.dirs, resources.files] %}
+        	{%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
         	<tr>
                 {%- if resource.is_dir %}
                 <td>
-                    <a {% attrib href=resource.name + '/', class="directory" %}>
+                    <a href="${resource.name}/" class="directory">
                         ${resource.name}
                     </a>
                 </td>
-                <td>&nbsp;</td>
+                <td></td>
                 {%- else %}
                 <td>
                     <a href="${resource.name}">
@@ -73,10 +74,11 @@
     {%- endif %}
     <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
-        <strong>${filesize:sum:map:[resources.files, `size`]}</strong>
-        {%- with dir_count=len:resources.dirs, file_count=len:resources.files %}
-        in ${file_count::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-    	${dir_count::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
+        <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
+
+        {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
+        in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
+    	${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
         {%- endwith %}
     </p>
     <br/>

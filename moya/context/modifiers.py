@@ -407,7 +407,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except ValueError:
             raise ValueError('count: modifier expects [<seq>, <expression>]')
         if not hasattr(predicate, '__moyacall__'):
-            raise ValueError('count: requires an expression, e.g. map:[students, {grade gt "A"}]')
+            raise ValueError('count: requires an expression, e.g. map:[students, {grade lt "A"}]')
         return sum(1 for item in seq if predicate.__moyacall__(item))
 
     def csrf(self, context, v):
@@ -582,8 +582,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
             seq, key = v
         except ValueError:
             raise ValueError('group: modifier expects [<sequence>, <expression]')
-        if not hasattr(key, '__moyacall__'):
-            raise ValueError('key must be an expression')
         result = OrderedDict()
         if hasattr(key, '__moyacall__'):
             for item in seq:
@@ -596,6 +594,23 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
         return result
 
+    def counts(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('counts: modifier expects [<sequence>, <expression]')
+
+        if hasattr(key, '__moyacall__'):
+            counts = collections.Counter(
+                key.__moyacall__(item)
+                for item in seq
+            )
+        else:
+            counts = collections.Counter(
+                _get(item, key)
+                for item in seq
+            )
+        return counts
 
     def groupsof(self, context, v):
         try:
@@ -610,6 +625,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         if group_size <= 0:
             raise ValueError("group size must be a positive integer")
 
+        # TODO: Return a generator rather than a list
         grouped = [
             seq[i: i + group_size]
             for i in range(0, len(seq), group_size)
@@ -673,7 +689,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             join, char = v
         except:
-            raise ValueError("joinwith: expects two values, e.g, joinwith[filenames, ', ']")
+            raise ValueError("joinwith: expects two values, e.g, joinwith:[filenames, ', ']")
         return text_type(char).join(join)
 
     def keys(self, context, v):

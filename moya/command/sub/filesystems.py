@@ -14,6 +14,7 @@ from fs2.errors import FSError, NoSysPath
 from fs2.multifs import MultiFS
 from fs2.mountfs import MountFS
 from fs2.path import dirname
+from fs2 import tree
 
 
 def _ls(console, file_paths, dir_paths, format_long=False):
@@ -116,7 +117,7 @@ class FS(SubCommand):
                             help="server element to use")
         parser.add_argument('--ls', dest="listdir", default=None, metavar="PATH",
                             help="list files / directories")
-        parser.add_argument("--tree", dest="tree", nargs='?', default=None, const='/',
+        parser.add_argument("--tree", dest="tree", default=None,
                             help="display a tree view of the filesystem")
         parser.add_argument("--cat", dest="cat", default=None, metavar="PATH",
                             help="Cat a file to the console")
@@ -155,8 +156,8 @@ class FS(SubCommand):
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            with fs.opendir(args.tree) as tree_fs:
-                tree_fs.tree()
+            with fs.opendir(args.tree or '/') as tree_fs:
+                tree.render(tree_fs)
             return
 
         if args.listdir:
@@ -165,9 +166,9 @@ class FS(SubCommand):
                 return -1
 
             dir_fs = fs.opendir(args.listdir)
-            _list = list(dir_fs.filterdir('/'))
-            file_paths = [name for name, is_dir in _list if not is_dir]
-            dir_paths = [name for name, is_dir in _list if is_dir]
+            directory = list(dir_fs.scandir('/'))
+            file_paths = [info.name for info in directory if not info.is_dir]
+            dir_paths = [info.name for info in directory if info.is_dir]
 
             _ls(self.console, file_paths, dir_paths)
 
