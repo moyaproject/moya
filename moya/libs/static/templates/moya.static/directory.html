@@ -39,19 +39,18 @@
             </tr>
         </thead>
         <tbody>
-            <!-- TODO: path.replace('#', '%23') -->
             {%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
             <tr>
                 {%- if resource.is_dir %}
                 <td>
-                    <a href="${resource.name}/" class="directory">
+                    <a href="${urlquote:resource.name}/" class="directory">
                         ${resource.name}
                     </a>
                 </td>
                 <td></td>
                 {%- else %}
                 <td>
-                    <a href="${resource.name}">
+                    <a href="${urlquote:resource.name}">
                         ${resource.name}
                     </a>
                 </td>

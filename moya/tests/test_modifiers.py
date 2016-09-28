@@ -204,8 +204,6 @@ class TestModifiers(unittest.TestCase):
 
         assert m.lstrip(c, '  \nHello\n') == 'Hello\n'
 
-        assert m.map(c, [['foo', 'bar']]) == {'foo': 'bar'}
-
         assert m.max(c, [1, 2, 3, 0]) == 3
 
         assert m.md5(c, 'hello') == '5d41402abc4b2a76b9719d911017c592'

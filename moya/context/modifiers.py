@@ -23,7 +23,7 @@ from .color import Color
 from ..containers import QueryData
 from ..context.tools import to_expression
 from ..context.missing import Missing
-from ..tools import unique, as_text
+from ..tools import unique, as_text, MultiReplace
 from ..reader import ReaderError
 from ..render import render_object
 from .. import connectivity
@@ -211,7 +211,7 @@ class ExpressionModifiersBase(object):
     @classmethod
     def _urlencode(cls, data):
         if not hasattr(data, 'items'):
-            raise ValueError("Can't urlencode {!r}".format(data))
+            raise ValueError("Can't urlencode {}".format(data))
         return urlencode(data)
 
     @classmethod
@@ -785,6 +785,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except ValueError:
             raise ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
         return ExpressionDateTime.parse(date_string, _format)
+
+    def replace(self, context, v):
+        try:
+            text, replace_map = v
+        except ValueError:
+            raise ValueError('replace: expects [<text>, <replace dict>]')
+        replace_map = dict(replace_map)
+        text = text_type(text)
+        replacer = MultiReplace(replace_map)
+        return replacer(text)
 
     def rpartition(self, context, v, _as_text=as_text):
         split_on = ' '
