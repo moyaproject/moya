@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 
 import os
+import sys
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
@@ -166,9 +167,13 @@ class FS(SubCommand):
                 return -1
 
             dir_fs = fs.opendir(args.listdir)
-            directory = list(dir_fs.scandir('/'))
-            file_paths = [info.name for info in directory if not info.is_dir]
-            dir_paths = [info.name for info in directory if info.is_dir]
+            file_paths = []
+            dir_paths = []
+            for info in dir_fs.scandir('/'):
+                if info.is_dir:
+                    dir_paths.append(info.name)
+                else:
+                    file_paths.append(info.name)
 
             _ls(self.console, file_paths, dir_paths)
 
@@ -191,11 +196,12 @@ class FS(SubCommand):
                 return -1
 
             import subprocess
-            if os.name == 'mac':
+            system = sys.platform
+            if system == 'darwin':
                 subprocess.call(('open', filepath))
-            elif os.name == 'nt':
+            elif system == 'win32':
                 subprocess.call(('start', filepath), shell=True)
-            elif os.name == 'posix':
+            elif system == 'linux2':
                 subprocess.call(('xdg-open', filepath))
             else:
                 self.console.error("Moya doesn't know how to open files on this platform (%s)" % os.name)
@@ -268,7 +274,7 @@ class FS(SubCommand):
 
             dst_fs.makedirs(dirname(src_path), recreate=True)
             with src_fs.open(src_path, 'rb') as read_file:
-                dst_fs.setcontents(src_path, read_file)
+                dst_fs.setfile(src_path, read_file)
 
         else:
             table = [[Cell("Name", bold=True),

@@ -8,7 +8,7 @@ from ...template.moyatemplates import Template
 
 from datetime import datetime
 
-from fs.path import pathjoin
+from fs2.path import join
 import os.path
 from collections import defaultdict
 
@@ -159,7 +159,7 @@ class Extract(SubCommand):
                     locale_fs.makeopendir("{}/LC_MESSAGES/".format(lang), recursive=True)
 
                 table.append([lib.long_name,
-                              Cell(pathjoin(lib.translations_location, filename), fg="green", bold=True),
+                              Cell(join(lib.translations_location, filename), fg="green", bold=True),
                               Cell(len(po), bold=True)])
 
         self.console.table(table, header_row=["lib", "file", "no. strings"])

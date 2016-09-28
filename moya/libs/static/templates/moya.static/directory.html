@@ -3,7 +3,7 @@
 {% block "title" %}Directory listing for ${.request.path}{% endblock %}
 
 {%- def "show_date" -%}
-    {%- cache for 1d key [dt, .now.local.dat, .tz] -%}
+    {%- cache for 1d key [dt, .now.local.date, .tz] -%}
 
     {%- if dt -%}
     {%- if dt.local.date == .now.local.date -%}
@@ -17,34 +17,31 @@
 {%- end-def %}
 
 {% block "content" %}
-
 <div class="container">
-
     <h3 class="page-header text-center" title="${.request.path_info}">
         {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
         ${.request.path_info}
     </h3>
-
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
     {%- if directory %}
     <table class="table table-condensed table-striped">
         <thead>
-        	<tr>
-        		<th>Name</th>
+            <tr>
+                <th>Name</th>
                 <th class="file-size">Size</th>
-        		<th class="hidden-xs">Created</th>
-        		<th class="hidden-xs">Modified</th>
-                {% if show_permissions or .debug %}
+                <th class="hidden-xs">Created</th>
+                <th class="hidden-xs">Modified</th>
+                {%- if show_permissions or .debug %}
                 <th class="hidden-sm hidden-xs">User</th>
                 <th class="hidden-sm hidden-xs">Group</th>
                 <th class="hidden-sm hidden-xs permissions">Permissions</th>
-                {% endif %}
-        	</tr>
+                {%- endif %}
+            </tr>
         </thead>
         <tbody>
             <!-- TODO: path.replace('#', '%23') -->
-        	{%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
-        	<tr>
+            {%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
+            <tr>
                 {%- if resource.is_dir %}
                 <td>
                     <a href="${resource.name}/" class="directory">
@@ -67,18 +64,18 @@
                 <td class="hidden-sm hidden-xs">${resource.group}</td>
                 <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>
                 {%- endif %}
-        	</tr>
-        	{%- endfor %}
+            </tr>
+            {%- endfor %}
         </tbody>
     </table>
-    {%- endif %}
+    {%- endif directory %}
     <p>
         <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
         <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
 
         {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
         in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-    	${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
+        ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
         {%- endwith %}
     </p>
     <br/>

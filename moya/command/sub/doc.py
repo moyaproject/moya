@@ -3,10 +3,10 @@ from ...tools import get_moya_dir
 from ... import build
 from ...console import Console
 
-from fs.path import join
-from fs.opener import fsopendir
-from fs.tempfs import TempFS
-from fs.osfs import OSFS
+from fs2.path import join
+from fs2.opener import open_fs
+from fs2.tempfs import TempFS
+from fs2.osfs import OSFS
 
 import sys
 import os.path
@@ -47,10 +47,8 @@ class Doc(SubCommand):
             parser.add_argument(dest="location", default='.', metavar="PATH",
                                 help="location of library (directory containing lib.ini) or a python import if preceded by 'py:', e.g. py:moya.libs.auth")
 
-
         build_args(build_parser)
         build_args(view_parser)
-
 
         build_parser.add_argument('-o', '--output', dest="output", metavar="PATH", default=None,
                                   help="path for documentation output, defaults to ./documentation in project root")
@@ -68,8 +66,7 @@ class Doc(SubCommand):
     def get_fs(self, path):
         if path is None:
             path = join(get_moya_dir(), './documentation')
-        fs = fsopendir(path, create_dir=True)
-        fs.dir_mode = int('777', 8)
+        fs = open_fs(path, create=True)
         return fs
 
     def run(self):
@@ -92,7 +89,7 @@ class Doc(SubCommand):
             elif action == 'build':
                 if args.source is not None:
                     self.console.text("Building docs from {}...".format(args.source))
-                    extract_fs = fsopendir(args.source)
+                    extract_fs = open_fs(args.source)
                 else:
                     archive, lib = build.build_lib(args.location, ignore_errors=True)
                     self.console.text("Building docs for {}...".format(lib.long_name))
@@ -102,7 +99,7 @@ class Doc(SubCommand):
             elif action == 'view':
                 if args.source is not None:
                     self.console.text("Building docs from {}...".format(args.source))
-                    extract_fs = fsopendir(args.source)
+                    extract_fs = open_fs(args.source)
                 else:
                     archive, lib = build.build_lib(args.location, ignore_errors=True)
                     self.console.text("Building docs for {}...".format(lib.long_name))
