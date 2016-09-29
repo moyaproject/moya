@@ -5,17 +5,17 @@ from __future__ import absolute_import
 import os
 import sys
 
-from ...command import SubCommand
-from ...wsgi import WSGIApplication
-from ...console import Cell
-from ...compat import text_type, raw_input
-
 from fs2.opener import open_fs
 from fs2.errors import FSError, NoSysPath
 from fs2.multifs import MultiFS
 from fs2.mountfs import MountFS
 from fs2.path import dirname
 from fs2 import tree
+
+from ...command import SubCommand
+from ...wsgi import WSGIApplication
+from ...console import Cell
+from ...compat import text_type, raw_input
 
 
 def _ls(console, file_paths, dir_paths, format_long=False):
@@ -287,7 +287,6 @@ class FS(SubCommand):
                 list_filesystems = [(args.fs, fs)]
 
             for name, fs in sorted(list_filesystems):
-
                 if isinstance(fs, MultiFS):
                     location = '\n'.join(mount_fs.desc('/') for name, mount_fs in fs.iterate_fs())
                     fg = "yellow"
@@ -311,8 +310,9 @@ class FS(SubCommand):
                             fg = "red"
                         else:
                             fg = "blue"
-                table.append([Cell(name),
-                             Cell(type(fs).__name__),
-                             Cell(location, bold=True, fg=fg)
-                              ])
+                table.append([
+                    Cell(name),
+                    Cell(type(fs).__name__),
+                    Cell(location, bold=True, fg=fg)
+                ])
             self.console.table(table, header=True)
