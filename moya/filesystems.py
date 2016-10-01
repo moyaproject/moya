@@ -106,10 +106,6 @@ class FSInfo(object):
         return self._info.name
 
     @property
-    def path(self):
-        return self._info.path
-
-    @property
     def is_dir(self):
         return self._info.is_dir
 

@@ -56,7 +56,7 @@
                 </td>
                 <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
                 {%- endif %}
-                <td class="hidden-xs">{% call "show_date" with dt=resource.created %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=(resource.created or resource.metadata_changed) %}</td>
                 <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
                 {%- if show_permissions or .debug %}
                 <td class="hidden-sm hidden-xs">${resource.user}</td>

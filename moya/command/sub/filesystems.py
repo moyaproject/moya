@@ -158,7 +158,7 @@ class FS(SubCommand):
                 self.console.error("Filesystem required")
                 return -1
             with fs.opendir(args.tree or '/') as tree_fs:
-                tree.render(tree_fs)
+                tree.render(tree_fs, max_levels=None)
             return
 
         if args.listdir:
