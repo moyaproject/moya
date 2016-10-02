@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
+import six
 from fs2.errors import FSError
 from fs2.info import Info
 
@@ -161,7 +162,7 @@ class FSWrapper(object):
         return type(self.fs).__name__
 
     def __str__(self):
-        return self.fs.desc('')
+        return self.fs.desc('/')
 
     def __repr__(self):
         return repr(self.fs)

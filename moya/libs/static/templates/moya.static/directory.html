@@ -23,6 +23,7 @@
         ${.request.path_info}
     </h3>
     {%- if .debug %}<pre>${fs[path]}</pre>{% endif %}
+
     {%- if directory %}
     <table class="table table-condensed table-striped">
         <thead>
@@ -31,7 +32,7 @@
                 <th class="file-size">Size</th>
                 <th class="hidden-xs">Created</th>
                 <th class="hidden-xs">Modified</th>
-                {%- if show_permissions or .debug %}
+                {%- if show_permissions %}
                 <th class="hidden-sm hidden-xs">User</th>
                 <th class="hidden-sm hidden-xs">Group</th>
                 <th class="hidden-sm hidden-xs permissions">Permissions</th>
@@ -58,7 +59,7 @@
                 {%- endif %}
                 <td class="hidden-xs">{% call "show_date" with dt=(resource.created or resource.metadata_changed) %}</td>
                 <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
-                {%- if show_permissions or .debug %}
+                {%- if show_permissions %}
                 <td class="hidden-sm hidden-xs">${resource.user}</td>
                 <td class="hidden-sm hidden-xs">${resource.group}</td>
                 <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>

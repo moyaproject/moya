@@ -16,8 +16,9 @@
 
 	<view docname="servedir">
 		<!-- Call our Python macro to get the directory listing -->
-        <let fs=".fs[fsname]"/>
-		<call macro="#read_directory" dst="directory">
+        <let fs=".fs[fsname]"
+        	show_permissions=".debug or .app.settings.show_permissions.bool"/>
+		<call macro="#read_directory" dst="directory" let:permissions="show_permissions">
 			<var>fs</var>
 			<var>path</var>
 		</call>
@@ -31,7 +32,7 @@
 		<for dst="indexfile" src=".app.settings.index.list">
 			<serve-file fs="${fsname}" path="${path:path + indexfile}" ifexists="yes" />
 		</for>
-		<let show_permissions=".debug or .app.settings.show_permissions.bool"/>
+
         <!-- Serve the directory listing-->
 		<serve-template template="directory.html" withscope="yes" let:app=".app"/>
 	</view>

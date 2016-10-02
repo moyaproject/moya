@@ -7,20 +7,12 @@ from fs2.wildcard import imatch_any
 
 
 @moya.expose.macro("read_directory")
-def read_directory(app, fs, path):
-    hide_wildcards = app.settings.get_list("hide")
-    show_permissions = app.settings.get_bool('show_permissions')
-
+def read_directory(app, fs, path, permissions=True):
     if not fs.isdir(path):
         return None
-
+    hide_wildcards = app.settings.get_list("hide")
+    namespaces = ['details', 'access'] if permissions else ['details']
     dir_fs = fs.opendir(path)
-
-    if show_permissions:
-        namespaces = ["details", "access"]
-    else:
-        namespaces = ["details"]
-
     directory = [
         FSInfo(resource)
         for resource in dir_fs.scandir('/', namespaces=namespaces)
