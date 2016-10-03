@@ -36,8 +36,8 @@ class SetContents(LogicElement):
         else:
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
         try:
-            dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
-            dst_fs.setcontents(params.path, params.contents)
+            dst_fs.makedirs(dirname(params.path), recreate=True)
+            dst_fs.settext(params.path, params.contents)
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
         log.debug("setcontents '%s'", params.path)
@@ -211,6 +211,7 @@ class Walk(DataSetter):
         else:
             walk_fs = self.archive.get_filesystem(params.fs)
 
+        # TODO: Fix
         wildcard = lambda name: params.files(context, name=basename(name)) if self.has_parameter('files') else lambda name: True
         dir_wildcard = lambda name: params.dirs(context, name=basename(name)) if self.has_parameter('dirs') else lambda name: True
 

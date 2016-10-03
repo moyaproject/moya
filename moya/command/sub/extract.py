@@ -138,7 +138,7 @@ class Extract(SubCommand):
 
             if lib.translations_location:
 
-                lib.load_fs.makedir(lib.translations_location, allow_recreate=True)
+                lib.load_fs.makedir(lib.translations_location, recreate=True)
 
                 translations_location = lib.load_fs.getsyspath(lib.translations_location)
                 translation_path = os.path.join(translations_location, filename)

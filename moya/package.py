@@ -38,7 +38,7 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
 
     paths = []
     for dirpath, files in package_fs.walk():
-        output_fs.makedir(dirpath, allow_recreate=True)
+        output_fs.makedir(dirpath, recreate=True)
         for filename in files:
             path = pathjoin(dirpath, filename)
             if not match_wildcards(path):

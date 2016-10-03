@@ -12,7 +12,7 @@ from .. import syntax
 from ..filter import MoyaFilterBase
 
 from fs2 import utils
-from fs2.opener import fsopendir
+from fs2.opener import open_fs
 from fs2.path import *
 
 from os.path import join as pathjoin
@@ -87,7 +87,7 @@ class Builder(object):
         self.process_indices(urls)
 
         assets_source_path = self.theme.get_relative_path(self.theme.get('assets', 'source', './assets'))
-        assets_fs = fsopendir(assets_source_path)
+        assets_fs = open_fs(assets_source_path)
 
         with pilot.console.progress("Copying theme assets", None) as progress:
             def copy_progress(step, num_steps):
@@ -213,5 +213,5 @@ class Builder(object):
             html = self.template_engine.render(template, context['data'], base_context=context)
             html = self.sub_indices(context, html)
 
-            self.output_fs.makedir(output_dir, allow_recreate=True, recursive=True)
+            self.output_fs.makedirs(output_dir, recreate=True)
             self.output_fs.setcontents(output_path, html)

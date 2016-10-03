@@ -386,7 +386,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
                                             project_template.template,
                                             data=data)
 
-        dest_fs = open_fs(self.args.location or dirname, create_dir=True, writeable=True)
+        dest_fs = open_fs(self.args.location or dirname, create=True, writeable=True)
         continue_overwrite = 'overwrite'
         if not dest_fs.isdirempty('.'):
             if self.args.force:
