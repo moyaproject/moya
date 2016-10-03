@@ -71,12 +71,13 @@
     {%- endif directory %}
 
     <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
-    <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
-
-    {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
-    in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-    ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
-    {%- endwith %}
+    <p>
+        <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
+        {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
+        in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
+        ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
+        {%- endwith %}
+    </p>
 
     <br/>
 </div>

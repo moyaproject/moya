@@ -30,9 +30,7 @@ class FSContainer(dict):
                   Cell("Type", bold=True),
                   Cell("Location", bold=True)]]
 
-        list_filesystems = self.items()
-
-        for name, fs in sorted(list_filesystems):
+        for name, fs in sorted(self.items()):
             syspath = fs.getsyspath('/', allow_none=True)
             if syspath is not None:
                 location = syspath
@@ -45,10 +43,11 @@ class FSContainer(dict):
                     fg = "red"
                 else:
                     fg = "blue"
-            table.append([Cell(name),
-                          Cell(fs.get_type_name()),
-                          Cell('%s' % location, bold=True, fg=fg)
-                          ])
+            table.append([
+                Cell(name),
+                Cell(fs.get_type_name()),
+                Cell('%s' % location, bold=True, fg=fg)
+            ])
         console.table(table, header=True)
 
     def close_all(self):
