@@ -237,7 +237,7 @@ class FS(SubCommand):
                 src_fs = fs.opendir(src)
                 dst_fs = open_fs(dst, create=True)
 
-                if not args.force and not dst_fs.isdirempty('/'):
+                if not args.force and not dst_fs.isempty('/'):
                     response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
                     if response.lower() not in ('y', 'yes'):
                         return 0

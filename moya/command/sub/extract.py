@@ -156,7 +156,7 @@ class Extract(SubCommand):
                 locale_fs = lib.load_fs.opendir(lib.translations_location)
 
                 for lang in lib.languages:
-                    locale_fs.makeopendir("{}/LC_MESSAGES/".format(lang), recursive=True)
+                    locale_fs.makedirs("{}/LC_MESSAGES/".format(lang), recreate=True)
 
                 table.append([lib.long_name,
                               Cell(join(lib.translations_location, filename), fg="green", bold=True),

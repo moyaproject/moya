@@ -179,7 +179,7 @@ class MoyaDoc(object):
                 extracter.extract_tags(builtin_tags, const_data=const_data)
 
             for language in languages:
-                with extract_fs.makeopendir("site/docs") as language_fs:
+                with extract_fs.makedirs("site/docs", recreate=True) as language_fs:
                     doc_extracter = Extracter(None, language_fs)
                     docs_fs = base_docs_fs.opendir(language)
                     doc_extracter.extract_site_docs(docs_fs, dirname=language)
@@ -201,7 +201,7 @@ class MoyaDoc(object):
                 output_base_fs = OSFS(dst_path, create=True)
             else:
                 output_root_base_fs = fsopendir(output_path)
-                output_base_fs = output_root_base_fs.makeopendir(dst_path, recursive=True)
+                output_base_fs = output_root_base_fs.makedirs(dst_path, recreate=True)
 
             #output_base_fs = OSFS(join('html', version), create=True)
             utils.remove_all(output_base_fs, '/')
@@ -214,8 +214,8 @@ class MoyaDoc(object):
                     lib_info[long_name] = moya_build.get_lib_info(lib)
                     lib_paths[long_name] = output_base_fs.getsyspath(join('libs', long_name, 'index.html'))
                 for language in languages:
-                    docs_fs = base_docs_fs.makeopendir(language)
-                    output_fs = output_base_fs.makeopendir(language)
+                    docs_fs = base_docs_fs.makedirs(language)
+                    output_fs = output_base_fs.makedirs(language)
                     utils.remove_all(output_fs, '/')
 
                     with extract_fs.opendir("site") as extract_site_fs:

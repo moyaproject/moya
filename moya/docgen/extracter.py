@@ -6,7 +6,7 @@ from .. import namespaces
 from ..compat import text_type
 
 
-from fs.path import *
+from fs2.path import join, splitext
 
 from collections import defaultdict
 from operator import itemgetter
@@ -26,13 +26,13 @@ class Extracter(object):
 
     def _get_namespace_fs(self, ns):
         path = self._namespace_to_path(ns)
-        namespace_fs = self.fs.makeopendir(path, recursive=True)
+        namespace_fs = self.fs.makedirs(path)
         return namespace_fs
 
     def _get_lib_fs(self, libname):
         libname = libname.replace('.', '_')
         path = "libs/{libname}/docs".format(libname=libname)
-        lib_fs = self.fs.makeopendir(path, recursive=True)
+        lib_fs = self.fs.makedirs(path)
         return lib_fs
 
     def slugify_namespace(self, ns):
@@ -43,7 +43,7 @@ class Extracter(object):
     def extract_docs(self, libname, docs_fs, const_data=None):
         docs = docs_fs.listdir(wildcard="*.txt")
         index = []
-        docs_output_fs = self.fs.makeopendir(join("docs/{}".format(libname)), recursive=True)
+        docs_output_fs = self.fs.makedirs("docs/{}".format(libname))
         with pilot.console.progress("extracting {} docs".format(libname), len(docs)) as progress:
             for doc_name in progress(docs):
                 default_name = splitext(doc_name)[0]
@@ -63,7 +63,7 @@ class Extracter(object):
     def extract_site_docs(self, docs_fs, const_data=None, dirname="docs"):
         docs = docs_fs.listdir(wildcard="*.txt")
         index = []
-        docs_output_fs = self.fs.makeopendir(dirname, recursive=True)
+        docs_output_fs = self.fs.makedirs(dirname)
         with pilot.console.progress("extracting site docs", len(docs)) as progress:
             for doc_name in progress(docs):
                 default_name = splitext(doc_name)[0]
@@ -151,7 +151,7 @@ class Extracter(object):
             progress.step()
 
     def extract_commands(self, elements, const_data=None):
-        commands_output_fs = self.fs.makeopendir('commands')
+        commands_output_fs = self.fs.makedir('commands')
 
         command_index = []
         with pilot.console.progress("extracting commands", len(elements) + 1) as progress:

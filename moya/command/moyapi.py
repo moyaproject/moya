@@ -374,7 +374,7 @@ Find, install and manage Moya libraries
 
         lib_fs = fsopendir(args.location)
 
-        package_destination_fs = lib_fs.makeopendir('__moyapackage__')
+        package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
         if not args.force and package_destination_fs.exists(package_filename):
             raise CommandError("package '{}' exists, use --force to overwrite".format(package_filename))
@@ -467,7 +467,7 @@ Find, install and manage Moya libraries
         upload_url = upload_info['url']
 
         lib_fs = fsopendir(args.location)
-        package_destination_fs = lib_fs.makeopendir('__moyapackage__')
+        package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
         if not package_destination_fs.exists(package_filename):
             raise CommandError("package '{}' does not exist, run 'moya-pm build'".format(package_filename))
@@ -688,7 +688,7 @@ Find, install and manage Moya libraries
 
             with download_fs.open(filename, 'rb') as package_file:
                 with ZipFS(package_file, 'r') as package_fs:
-                    with output_fs.makeopendir(package_select['name']) as lib_fs:
+                    with output_fs.makedir(package_select['name'], recreate=True) as lib_fs:
                         fs.utils.remove_all(lib_fs, '/')
                         fs.utils.copydir(package_fs, lib_fs)
                         installed.append((package_select, mount))
