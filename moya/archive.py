@@ -293,7 +293,7 @@ class Archive(object):
     def open_fs(self, fs_url, create=False):
         if isinstance(fs_url, text_type):
             if '://' in fs_url:
-                fs = open_fs(fs_url, create_dir=create)
+                fs = open_fs(fs_url, create=create)
             else:
                 if create:
                     self.project_fs.makedirs(fs_url, recreate=True)

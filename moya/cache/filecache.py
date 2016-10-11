@@ -22,13 +22,13 @@ class FileCache(Cache):
                                         compress_min=compress_min,
                                         thread_safe=True)
         if fs is None:
-            fs = open_fs('filecache', create_dir=True)
+            fs = open_fs('filecache', create=True)
         elif isinstance(fs, string_types):
-            fs = open_fs(fs, create_dir=True)
+            fs = open_fs(fs, create=True)
 
         if namespace:
             sub_dir = namespace.replace('/', '-').replace(' ', '-')
-            fs.makedir(sub_dir)
+            fs.makedir(sub_dir, recreate=True)
             fs = fs.opendir(sub_dir)
         self.fs = fs
         self.max_key_length = 80

@@ -7,7 +7,12 @@ template = """@TEXT /wsgi.py
 from __future__ import unicode_literals
 from moya.wsgi import Application
 
-application = Application('./', ['local.ini', 'production.ini'], server='main', logging='prodlogging.ini')
+application = Application(
+    './',  # project directory
+    ['local.ini', 'production.ini'],  # project settings files to load
+    server='main',  # <server> tag to load
+    logging='prodlogging.ini'  # logging settings
+)
 @TEXT /logging.ini
 
 # This file tells moya what to do with log information it generates
