@@ -8,10 +8,10 @@ from .errors import MissingTemplateError, BadTemplateError
 from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
-from fs2.info import Info as FSInfo
-from fs2.path import abspath, normpath
-from fs2.opener import open_fs
-from fs2.errors import ResourceNotFound, NoSysPath
+from fs.info import Info as FSInfo
+from fs.path import abspath, normpath
+from fs.opener import open_fs
+from fs.errors import ResourceNotFound, NoSysPath
 
 
 # Update for backwards incompatible changes, so we don't get old cached templates

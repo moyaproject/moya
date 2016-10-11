@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from fs2.errors import FSError
-from fs2.opener import open_fs
-from fs2 import walk
+from fs.errors import FSError
+from fs.opener import open_fs
+from fs import walk
 from collections import defaultdict
 
 from . import errors

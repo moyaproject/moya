@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.utils import open_atomic_write
 
 
@@ -10,7 +10,7 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
     from lxml.etree import XML, Comment
 
     changes = 0
-    with fsopendir(project_path) as project_fs:
+    with open_fs(project_path) as project_fs:
         with project_fs.opendir(server_xml_location) as server_fs:
 
             with server_fs.open(server_xml, 'rb') as server_xml_file:

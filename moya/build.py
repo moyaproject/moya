@@ -12,9 +12,9 @@ from .compat import text_type, string_types, iteritems
 from .tools import textual_list
 from . import pilot
 
-from fs2.opener import open_fs
-from fs2.osfs import OSFS
-from fs2.multifs import MultiFS
+from fs.opener import open_fs
+from fs.osfs import OSFS
+from fs.multifs import MultiFS
 
 import gc
 import os

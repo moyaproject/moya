@@ -9,9 +9,9 @@ from ..compat import iteritems, text_type, reload
 from .. import tools
 from .. import timezone
 
-from fs2.path import join
-from fs2.opener import open_fs
-from fs2.errors import FSError, IllegalBackReference, ResourceNotFound
+from fs.path import join
+from fs.opener import open_fs
+from fs.errors import FSError, IllegalBackReference, ResourceNotFound
 
 from os.path import dirname, abspath
 import sys

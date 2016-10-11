@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from fs2.errors import FSError
-from fs2.info import Info
+from fs.errors import FSError
+from fs.info import Info
 
 from .console import Cell
 from .compat import text_type, implements_to_string

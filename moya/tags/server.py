@@ -33,8 +33,8 @@ from .. import pilot
 
 from webob import Response
 
-from fs2.path import splitext
-from fs2.errors import NoSysPath
+from fs.path import splitext
+from fs.errors import NoSysPath
 import pytz
 
 import sys

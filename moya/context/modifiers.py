@@ -30,7 +30,7 @@ from .. import connectivity
 from .. import moyajson
 from ..import compat
 
-from fs2.path import (abspath,
+from fs.path import (abspath,
                       basename,
                       join,
                       relativefrom,

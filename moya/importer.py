@@ -8,9 +8,9 @@ from .document import Document
 from .elements.registry import ElementRegistry
 from .compat import iteritems
 
-from fs2.path import combine, abspath
-from fs2.errors import NoSysPath
-from fs2.walk import walk_files
+from fs.path import combine, abspath
+from fs.errors import NoSysPath
+from fs.walk import walk_files
 
 from . import expose
 from . import errors

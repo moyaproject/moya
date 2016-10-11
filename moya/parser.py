@@ -18,8 +18,8 @@ from .containers import OrderedDict
 from .cache.dictcache import DictCache
 from .compat import text_type, string_types, binary_type
 
-from fs2.path import abspath
-from fs2.errors import NoSysPath
+from fs.path import abspath
+from fs.errors import NoSysPath
 
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 

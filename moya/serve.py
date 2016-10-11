@@ -4,8 +4,8 @@ from __future__ import print_function
 from datetime import datetime
 import mimetypes
 
-from fs2.path import basename
-from fs2.errors import FSError
+from fs.path import basename
+from fs.errors import FSError
 
 from .response import MoyaResponse
 from .compat import PY2, py2bytes

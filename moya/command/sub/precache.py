@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from fs2.walk import walk_files
+from fs.walk import walk_files
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication

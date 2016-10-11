@@ -3,10 +3,10 @@ from ...tools import get_moya_dir
 from ... import build
 from ...console import Console
 
-from fs2.path import join
-from fs2.opener import open_fs
-from fs2.tempfs import TempFS
-from fs2.osfs import OSFS
+from fs.path import join
+from fs.opener import open_fs
+from fs.tempfs import TempFS
+from fs.osfs import OSFS
 
 import sys
 import os.path

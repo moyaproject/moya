@@ -5,12 +5,12 @@ from __future__ import absolute_import
 import os
 import sys
 
-from fs2.opener import open_fs
-from fs2.errors import FSError, NoSysPath
-from fs2.multifs import MultiFS
-from fs2.mountfs import MountFS
-from fs2.path import dirname
-from fs2 import tree
+from fs.opener import open_fs
+from fs.errors import FSError, NoSysPath
+from fs.multifs import MultiFS
+from fs.mountfs import MountFS
+from fs.path import dirname
+from fs import tree
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication

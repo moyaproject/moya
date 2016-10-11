@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from fs2.opener import open_fs
+from fs.opener import open_fs
 
 from moya.context import Context
 from moya.console import Console

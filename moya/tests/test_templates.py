@@ -5,7 +5,7 @@ import os
 import time
 from os.path import join
 
-from fs2.opener import open_fs
+from fs.opener import open_fs
 from moya.template.moyatemplates import MoyaTemplateEngine
 from moya.archive import Archive
 from moya.settings import SettingsContainer

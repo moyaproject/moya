@@ -4,8 +4,8 @@ from __future__ import print_function
 from ..cache import Cache
 from ..compat import text_type, string_types
 
-from fs2.opener import open_fs
-from fs2.errors import FSError
+from fs.opener import open_fs
+from fs.errors import FSError
 
 from time import time as get_time
 import codecs

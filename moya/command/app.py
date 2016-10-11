@@ -24,7 +24,7 @@ from .. import errors
 
 from .. import __version__ as version
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 
 import logging
 logging.raiseExceptions = False
@@ -163,7 +163,7 @@ To list all available commands for a given application, omit the libname:
     @property
     def location_fs(self):
         if self._location_fs is None:
-            self._location_fs = fsopendir(self.location)
+            self._location_fs = open_fs(self.location)
         return self._location_fs
 
     def debug(self, text):

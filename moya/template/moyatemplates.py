@@ -21,7 +21,7 @@ from ..compat import urlencode, PY2
 from . import lorem
 from ..traceframe import Frame as TraceFrame
 
-from fs2.path import join, dirname
+from fs.path import join, dirname
 import bleach
 
 import re

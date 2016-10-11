@@ -8,7 +8,7 @@ from ...template.moyatemplates import Template
 
 from datetime import datetime
 
-from fs2.path import join
+from fs.path import join
 import os.path
 from collections import defaultdict
 

@@ -11,8 +11,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from fs2.path import basename
-from fs2 import wildcard
+from fs.path import basename
+from fs import wildcard
 
 from pyparsing import (Word,
                        WordEnd,

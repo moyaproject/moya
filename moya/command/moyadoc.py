@@ -8,9 +8,8 @@ from .. import build as moya_build
 
 from fs.osfs import OSFS
 from fs.path import join, splitext
-from fs.watch import CREATED, MODIFIED, REMOVED, MOVED_DST, MOVED_SRC
 from fs import utils
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.errors import FSError
 
 import sys
@@ -193,14 +192,14 @@ class MoyaDoc(object):
             if theme_path is None:
                 theme_fs = OSFS('theme')
             else:
-                theme_fs = fsopendir(theme_path)
+                theme_fs = open_fs(theme_path)
 
             output_path = cfg.get('paths', 'output', None)
 
             if output_path is None:
                 output_base_fs = OSFS(dst_path, create=True)
             else:
-                output_root_base_fs = fsopendir(output_path)
+                output_root_base_fs = open_fs(output_path)
                 output_base_fs = output_root_base_fs.makedirs(dst_path, recreate=True)
 
             #output_base_fs = OSFS(join('html', version), create=True)

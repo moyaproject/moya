@@ -1,5 +1,5 @@
 from .. import iniparse
-from fs2.path import dirname, pathjoin
+from fs.path import dirname, pathjoin
 
 
 class Page(object):

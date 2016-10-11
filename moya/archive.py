@@ -39,11 +39,11 @@ from .context.tools import to_expression
 from . import logtools
 from . import settings
 
-from fs2.opener import open_fs
-from fs2.multifs import MultiFS
-from fs2.mountfs import MountFS
-from fs2.path import join, abspath, relativefrom
-from fs2.errors import FSError
+from fs.opener import open_fs
+from fs.multifs import MultiFS
+from fs.mountfs import MountFS
+from fs.path import join, abspath, relativefrom
+from fs.errors import FSError
 
 from collections import defaultdict, namedtuple, deque
 import os

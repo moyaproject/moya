@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-import fs2.copy
-from fs2.opener import open_fs
-from fs2 import walk
+import fs.copy
+from fs.opener import open_fs
+from fs import walk
 
 from ...command import SubCommand
 from ...console import Cell
@@ -39,11 +39,11 @@ def make_name(*names):
 
 def copy_new(src, dst):
     """Copy files from src fs to dst fst only if they don't exist on dst"""
-    fs2.copy.copy_structure(src, dst)
+    fs.copy.copy_structure(src, dst)
     copied_files = []
     for path in walk.walk_files(src):
         if not dst.exists(path):
-            fs2.copy.copy_file(src, path, dst, path)
+            fs.copy.copy_file(src, path, dst, path)
             copied_files.append(path)
     return copied_files
 
@@ -316,8 +316,8 @@ class Start(SubCommand):
         raise ValueError("Type should be either 'project' or 'library'")
 
     def templatize(self, path):
-        from fs2.opener import open_fs
-        from fs2.path import splitext, split
+        from fs.opener import open_fs
+        from fs.path import splitext, split
         fs = open_fs(path)
         text_ext = ['', '.py', '.ini', '.xml', '.html', '.txt', '.json']
         bin_ext = ['.png', '.jpg', '.ico', '.gif']
@@ -404,7 +404,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
                 continue_overwrite = DirNotEmpty.ask(console, default="cancel")
 
         if continue_overwrite == 'overwrite':
-            fs2.copy.copy_dir(memfs, '/', dest_fs, '/')
+            fs.copy.copy_dir(memfs, '/', dest_fs, '/')
             console.table([[Cell("Project files written successfully!", fg="green", bold=True, center=True)],
                           ["""See readme.txt in the project directory for the next steps.\n\nBrowse to http://moyaproject.com/gettingstarted/ if you need further help."""]])
             return 0
@@ -488,7 +488,7 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
 
         if continue_overwrite != 'cancel':
             if continue_overwrite == 'overwrite':
-                fs2.copy.copy_dir(memfs, '/', dest_fs, '/')
+                fs.copy.copy_dir(memfs, '/', dest_fs, '/')
                 actions.append("Written library files to {}".format(dest_fs.getsyspath('.')))
             elif continue_overwrite == 'new':
                 files_copied = copy_new(memfs, dest_fs)

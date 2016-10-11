@@ -8,7 +8,7 @@ from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
                                    make_server)
 
-from fs2.opener import open_fs
+from fs.opener import open_fs
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication

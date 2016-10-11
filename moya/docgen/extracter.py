@@ -6,7 +6,7 @@ from .. import namespaces
 from ..compat import text_type
 
 
-from fs2.path import join, splitext
+from fs.path import join, splitext
 
 from collections import defaultdict
 from operator import itemgetter

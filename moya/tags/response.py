@@ -22,7 +22,7 @@ import base64
 import pytz
 import logging
 
-from fs2.path import dirname
+from fs.path import dirname
 
 GMT = pytz.timezone('GMT')
 log = logging.getLogger('moya.runtime')

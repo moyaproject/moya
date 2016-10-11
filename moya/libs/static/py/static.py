@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import moya.expose
 from moya.filesystems import FSInfo
 
-from fs2.wildcard import imatch_any
+from fs.wildcard import imatch_any
 
 
 @moya.expose.macro("read_directory")

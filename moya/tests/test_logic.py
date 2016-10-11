@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import os.path
 import unittest
-from fs2.opener import open_fs
+from fs.opener import open_fs
 from moya.context import Context
 from moya.archive import Archive
 from moya.console import Console

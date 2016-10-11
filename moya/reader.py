@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, print_function
 
-from fs.path import pathjoin, basename
+from fs.path import join, basename
 from fs.errors import FSError
 
 import mimetypes
@@ -33,7 +33,7 @@ class DataReader(object):
         if not path.startswith('/'):
             if app is None:
                 raise RelativePathError("Can't use relative data paths with an application")
-            path = pathjoin(app.data_directory, path)
+            path = join(app.data_directory, path)
 
         filename = basename(path)
         if mime_type is None:
@@ -71,7 +71,7 @@ class DataReader(object):
         if not path.startswith('/'):
             if app is None:
                 raise RelativePathError("Can't use relative data paths with an application")
-            path = pathjoin(app.data_directory, path)
+            path = join(app.data_directory, path)
         try:
             return self.fs.isfile(path)
         except FSError:
