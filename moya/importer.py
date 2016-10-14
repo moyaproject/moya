@@ -188,8 +188,8 @@ def fs_import(lib, fs, name):
 
 
 if __name__ == "__main__":
-    from fs.opener import fsopendir
-    m = fsopendir("mem://")
+    from fs.opener import open_fs
+    m = open_fs("mem://")
     m.createfile('__init__.py')
     m.makedir("test")
     m.setcontents('test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')

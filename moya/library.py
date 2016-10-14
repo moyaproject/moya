@@ -1,9 +1,15 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import weakref
+from random import choice
+import logging
+import re
+
 from fs.errors import FSError
 from fs.opener import open_fs
 from fs import walk
+from fs import wrap
 from collections import defaultdict
 
 from . import errors
@@ -18,11 +24,6 @@ from . import translations
 from .versioning import Version, VersionSpec
 from .compat import iteritems, implements_to_string, string_types, text_type, xrange, PY2
 from .context import Context
-
-import weakref
-from random import choice
-import logging
-import re
 
 
 log = logging.getLogger("moya")
@@ -176,6 +177,7 @@ class Library(object):
 
         if isinstance(fs, string_types):
             fs = open_fs(fs)
+        #fs = wrap.DirCache(fs)
         if files is None:
             if recurse:
                 files = sorted(walk.walk_files(fs, wildcards=[wildcard]))
@@ -247,12 +249,10 @@ class Library(object):
         self.finalized = True
 
     def on_archive_finalize(self):
-        #startup_log.debug('%r finalized', self)
         for libname, elements in iteritems(self.replace_nodes):
             winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
             existing = self.get_named_element(libname)
             if existing and existing.lib.priority < winner.lib.priority:
-                #startup_log.debug('%r replaced with %r', existing, winner)
                 existing.replace(winner)
                 self.elements_by_name[existing.libname] = winner
                 element_type = (existing.xmlns, existing._tag_name)

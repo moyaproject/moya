@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from lxml import etree
-element_fromstring = etree.fromstring
+
 
 import re
 from collections import defaultdict
 import io
-from time import time
+import logging
+
 
 from . import errors
 from . import tags
@@ -24,7 +25,7 @@ from fs.errors import NoSysPath
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 
 
-import logging
+element_fromstring = etree.fromstring
 log = logging.getLogger("moya.startup")
 
 

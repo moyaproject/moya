@@ -25,7 +25,7 @@ from . import dependencies
 
 import fs.utils
 from fs.path import relativefrom, pathjoin
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 from fs.osfs import OSFS
@@ -372,7 +372,7 @@ Find, install and manage Moya libraries
         exclude_wildcards = lib_settings.get_list("package", "exclude")
         exclude_wildcards.append('__moyapackage__/*')
 
-        lib_fs = fsopendir(args.location)
+        lib_fs = open_fs(args.location)
 
         package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
@@ -466,7 +466,7 @@ Find, install and manage Moya libraries
         upload_info = self.call('package.get-upload-info')
         upload_url = upload_info['url']
 
-        lib_fs = fsopendir(args.location)
+        lib_fs = open_fs(args.location)
         package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
         if not package_destination_fs.exists(package_filename):
@@ -750,7 +750,7 @@ Find, install and manage Moya libraries
                     raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
 
             if args.download:
-                with fsopendir(args.download) as dest_fs:
+                with open_fs(args.download) as dest_fs:
                     fs.utils.copyfile(download_fs, filename, dest_fs, package_filename)
 
         return packages

@@ -132,6 +132,12 @@ class FS(SubCommand):
                             help="copy a file from a filesystem, preserving directory structure")
         parser.add_argument("-f", "--force", dest="force", action="store_true", default=False,
                             help="force overwrite of destination even if it is not empty (with --copy)")
+        parser.add_argument("--serve", dest="serve", default=None, action="store_true",
+                            help="statically serve a filesystem")
+        parser.add_argument('--host', dest='host', default='127.0.0.1',
+                            help="server host")
+        parser.add_argument('-p', '--port', default='8000',
+                            help="server port")
         return parser
 
     def run(self):
@@ -275,6 +281,18 @@ class FS(SubCommand):
             dst_fs.makedirs(dirname(src_path), recreate=True)
             with src_fs.open(src_path, 'rb') as read_file:
                 dst_fs.setfile(src_path, read_file)
+
+        elif args.serve:
+
+            from .serve import Serve
+            Serve.run_server(
+                args.host,
+                args.port,
+                fs,
+                show_access=True,
+                develop=False,
+                debug=True
+            )
 
         else:
             table = [[Cell("Name", bold=True),
