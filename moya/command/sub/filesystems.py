@@ -241,15 +241,13 @@ class FS(SubCommand):
 
             if fs.isdir(src):
                 src_fs = fs.opendir(src)
-                dst_fs = open_fs(dst, create=True)
-
-                if not args.force and not dst_fs.isempty('/'):
-                    response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
-                    if response.lower() not in ('y', 'yes'):
-                        return 0
-
-                from fs.utils import copydir
-                copydir(src_fs, dst_fs)
+                from fs.copy import copy_dir
+                with open_fs(dst, create=True) as dst_fs:
+                    if not args.force and not dst_fs.isempty('/'):
+                        response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
+                        if response.lower() not in ('y', 'yes'):
+                            return 0
+                    copy_dir(src_fs, '/', dst_fs, '/')
             else:
                 with fs.open(src, 'rb') as read_f:
                     if os.path.isdir(dst):

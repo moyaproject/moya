@@ -26,9 +26,9 @@
     {%- if .debug %}
     <dl class="dl-horizontal">
         <dt>fs</dt>
-        <dd><tt class="text text-info">${debug:fs}</tt></dd>
+        <dd><tt class="text text-success">${debug:fs}</tt></dd>
         <dt>location</dt>
-        <dd><tt class="text text-info" style="word-wrap:break-word;">${fs[path]}</tt></dd>
+        <dd><tt class="text text-success" style="word-wrap:break-word;">${fs[path]}</tt></dd>
     </dl>
     {%- endif %}
 
@@ -83,7 +83,7 @@
         <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
         {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
         in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-        ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.
+        {%- if dir_count %}${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.{% endif %}
         {%- endwith %}
     </p>
 
