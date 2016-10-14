@@ -135,9 +135,9 @@ class FS(SubCommand):
         parser.add_argument("--serve", dest="serve", default=None, action="store_true",
                             help="statically serve a filesystem")
         parser.add_argument('--host', dest='host', default='127.0.0.1',
-                            help="server host")
+                            help="server host (with --serve)")
         parser.add_argument('-p', '--port', default='8000',
-                            help="server port")
+                            help="server port (with --serve)")
         return parser
 
     def run(self):
