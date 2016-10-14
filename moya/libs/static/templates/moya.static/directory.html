@@ -20,10 +20,17 @@
 <div class="container">
     <h3 class="page-header text-center" title="${.request.path_info}">
         {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
-        {% if debug %}${debug:fs[path]}{% else %}${.request.path}{% endif %}
+        ${.request.path}
     </h3>
 
-    {%- if .debug %}<p class="text text-info"><tt><b>location:</b> ${fs[path]}</tt></p>{% endif %}
+    {%- if .debug %}
+    <dl class="dl-horizontal">
+        <dt>fs</dt>
+        <dd><tt class="text text-info">${debug:fs}</tt></dd>
+        <dt>location</dt>
+        <dd><tt class="text text-info">${fs[path]}</tt></dd>
+    </dl>
+    {%- endif %}
 
     {%- if directory %}
     <table class="table table-condensed table-striped">

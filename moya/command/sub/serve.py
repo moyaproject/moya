@@ -53,6 +53,8 @@ class Serve(SubCommand):
                             help="show access (permission) information")
         parser.add_argument('-d', '--show-dot', action="store_true",
                             help="do not hide dot files (beginning with a period)")
+        parser.add_argument('-s', '--show-debug', action="store_true",
+                            help="show additional debug information in directory list")
 
     @classmethod
     def run_server(self, host, port, fs, serve_templates=False, develop=False, show_access=False, show_dot=True, debug=False):
@@ -107,5 +109,6 @@ class Serve(SubCommand):
             serve_templates=args.serve_templates,
             develop=args.develop,
             show_access=args.show_access,
-            show_dot=args.show_dot
+            show_dot=args.show_dot,
+            debug=args.show_debug,
         )
