@@ -192,7 +192,7 @@ if __name__ == "__main__":
     m = open_fs("mem://")
     m.createfile('__init__.py')
     m.makedir("test")
-    m.setcontents('test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')
+    m.setbytes(b'test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')
     m.tree()
 
     hook = LibraryImportHook(m)

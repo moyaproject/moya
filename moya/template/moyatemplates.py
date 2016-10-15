@@ -1307,7 +1307,7 @@ class InsertNode(Node):
             fs = environment.archive.get_filesystem(fs_name)
         except KeyError:
             self.render_error("no filesystem called '{}'".format(fs_name))
-        content = fs.getcontents(path, 'rt')
+        content = fs.gettext(path)
         if self.escape:
             content = text_escape(content)
         return content

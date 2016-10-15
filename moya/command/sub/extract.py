@@ -105,7 +105,7 @@ class Extract(SubCommand):
                         with lib.load_fs.opendir(lib.templates_info['location']) as templates_fs:
                             for path in templates_fs.walkfiles():
                                 sys_path = templates_fs.getsyspath(path, allow_none=True) or path
-                                contents = templates_fs.getcontents(path)
+                                contents = templates_fs.getbytes(path)
                                 template = Template(contents, path)
                                 template.parse(engine.env)
 

@@ -47,7 +47,7 @@ class Extracter(object):
         with pilot.console.progress("extracting {} docs".format(libname), len(docs)) as progress:
             for doc_name in progress(docs):
                 default_name = splitext(doc_name)[0]
-                code = docs_fs.getcontents(doc_name, 'rt')
+                code = docs_fs.gettext(doc_name)
                 html, data = bbcode.parser.render(code)
                 doc_name = data.get('name', default_name)
                 data.update(body=code, name=doc_name, libname=libname, source=docs_fs.getsyspath(doc_name))
@@ -67,7 +67,7 @@ class Extracter(object):
         with pilot.console.progress("extracting site docs", len(docs)) as progress:
             for doc_name in progress(docs):
                 default_name = splitext(doc_name)[0]
-                code = docs_fs.getcontents(doc_name, 'rt')
+                code = docs_fs.gettext(doc_name)
                 html, data = bbcode.parser.render(code, path=docs_fs.getsyspath(doc_name))
                 doc_name = data.get('name', default_name)
                 data.update(body=code, name=doc_name)

@@ -214,4 +214,4 @@ class Builder(object):
             html = self.sub_indices(context, html)
 
             self.output_fs.makedirs(output_dir, recreate=True)
-            self.output_fs.setcontents(output_path, html)
+            self.output_fs.setbytes(output_path, html)
