@@ -83,7 +83,7 @@
         <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
         {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
         in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-        {%- if dir_count %}${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.{% endif %}
+        {%- if dir_count %} ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.{% endif %}
         {%- endwith %}
     </p>
 
