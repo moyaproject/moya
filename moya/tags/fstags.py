@@ -37,7 +37,12 @@ class SetContents(LogicElement):
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
         try:
             dst_fs.makedirs(dirname(params.path), recreate=True)
-            dst_fs.settext(params.path, params.contents)
+            if hasattr(params.contents, 'read'):
+                dst_fs.setfile(params.path, params.contents)
+            elif isinstance(params.contents, bytes):
+                dst_fs.setfile(params.path, params.contents)
+            elif isinstance(params.contents, text_type):
+                dst_fs.settext(params.path, params.contents)
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
         log.debug("setcontents '%s'", params.path)
