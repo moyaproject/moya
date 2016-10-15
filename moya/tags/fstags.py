@@ -197,6 +197,7 @@ class GetSize(DataSetter):
 class Walk(DataSetter):
     """Get a list of files"""
     xmlns = namespaces.fs
+    # TODO: update to fs2
 
     class Help:
         synopsis = "go through the files in a directory"
