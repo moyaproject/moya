@@ -44,7 +44,6 @@ from fs.multifs import MultiFS
 from fs.mountfs import MountFS
 from fs.path import join, abspath, relativefrom
 from fs.errors import FSError
-from fs import wrap
 
 from collections import defaultdict, namedtuple, deque
 import os

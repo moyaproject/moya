@@ -28,18 +28,16 @@
             </for>
             <exit/>
         </if>
-        <let types="['jpg','jpeg','png']" />
-
         <list dst="failed" />
-        <fs:walk fs="uploads" dst="files"
-            dirs="name != thumb_dir"
-            files="lower:ext:name in types" />
+        <fs:walk-files fs="uploads" dst="files"
+            files="*.jpg, *.jpeg, *.png"
+            excludedirs="${thumb_dir}"/>
         <let count="len:files" />
         <for src="thumbnails" dst="thumbnail">
             <echo style="bold blue">Writing thumbnails for ${thumbnail}</echo>
             <timer console="yes">
-                <progress src="list:enumerate:files" dst="i,path" msg="generating ${basename:path}">
-                    <progress-msg>${i+1} of ${count}</progress-msg>
+                <progress src="list:enumerate1:files" dst="i,path" msg="generating ${basename:path}">
+                    <progress-msg>thumbnail ${i} of ${count}</progress-msg>
                     <tn:generate thumbnails="${thumbnail}" path="path" overwrite="args.overwrite"/>
                     <catch exception="image.*,moya.thumbnail.*" dst="error">
                         <append src="failed" value="[path, error.msg]"/>

@@ -751,7 +751,7 @@ Find, install and manage Moya libraries
 
             if args.download:
                 with open_fs(args.download) as dest_fs:
-                    fs.utils.copyfile(download_fs, filename, dest_fs, package_filename)
+                    fs.copy.copy_file(download_fs, filename, dest_fs, package_filename)
 
         return packages
 

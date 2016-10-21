@@ -302,6 +302,10 @@ class FS(SubCommand):
             else:
                 list_filesystems = [(args.fs, fs)]
 
+            def get_type_name(name):
+                name = type(fs).__name__
+                return name[:-2].lower() if name.endswith('FS') else name.lower()
+
             for name, fs in sorted(list_filesystems):
                 if isinstance(fs, MultiFS):
                     location = '\n'.join(mount_fs.desc('/') for name, mount_fs in fs.iterate_fs())
@@ -328,7 +332,7 @@ class FS(SubCommand):
                             fg = "blue"
                 table.append([
                     Cell(name),
-                    Cell(type(fs).__name__),
+                    Cell(get_type_name(fs)),
                     Cell(location, bold=True, fg=fg)
                 ])
             self.console.table(table, header=True)
