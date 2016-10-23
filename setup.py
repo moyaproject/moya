@@ -56,7 +56,7 @@ setup(
         'sqlalchemy',
         'pytz',
         'pygments',
-        'fs >= 2.0.0a0',
+        'fs>=2.0.0a1',
         'iso8601',
         'babel>2.0',
         'postmarkup',
