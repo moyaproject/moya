@@ -32,7 +32,7 @@ def serve_file(req, fs, path, filename=None):
     serve_file = None
     # Get file info
     try:
-        info = fs.getinfo(path, 'details')
+        info = fs.getdetails(path)
         serve_file = fs.open(path, 'rb')
     except FSError:
         # Files system open failed for some reason
