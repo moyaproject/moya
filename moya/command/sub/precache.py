@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from fs.walk import walk_files
-
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...compat import text_type
@@ -35,7 +33,7 @@ class PreCache(SubCommand):
             self.error("templates filesystem not found")
         else:
             template_engine = archive.get_template_engine()
-            paths = list(walk_files(templates_fs, wildcards=['*.html']))
+            paths = list(templates_fs.walk.files(filter=['*.html']))
 
             console.text('pre-caching templates', bold=True)
 

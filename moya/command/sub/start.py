@@ -41,7 +41,7 @@ def copy_new(src, dst):
     """Copy files from src fs to dst fst only if they don't exist on dst"""
     fs.copy.copy_structure(src, dst)
     copied_files = []
-    for path in walk.walk_files(src):
+    for path in src.walk.files():
         if not dst.exists(path):
             fs.copy.copy_file(src, path, dst, path)
             copied_files.append(path)
@@ -326,7 +326,7 @@ class Start(SubCommand):
             dirname, filename = split(path)
             return filename not in [".svn", ".hg"]
 
-        for path in walk.walk_files(fs):
+        for path in fs.walk.files():
             if check_path(path):
                 continue
             _, ext = splitext(path)

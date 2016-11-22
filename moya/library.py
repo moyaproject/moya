@@ -180,12 +180,12 @@ class Library(object):
         #fs = wrap.DirCache(fs)
         if files is None:
             if recurse:
-                files = sorted(walk.walk_files(fs, wildcards=[wildcard]))
+                files = sorted(fs.walk.files(filter=[wildcard]))
             else:
                 files = sorted(
                     name
                     for name, _is_dir in fs.filterdir(
-                        wildcards=[wildcard],
+                        files=[wildcard],
                         exclude_dirs=True
                     )
                 )

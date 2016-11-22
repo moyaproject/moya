@@ -51,12 +51,13 @@ setup(
 
     classifiers=classifiers,
     install_requires=[
-        'pyparsing == 2.1.5',
+        'cssselect==1.0.0',
+        'pyparsing==2.1.10',
         'webob>=1.5,<2',
         'sqlalchemy',
         'pytz',
         'pygments',
-        'fs>=2.0.0a1',
+        'fs>=2.0.0a2',
         'iso8601',
         'babel>2.0',
         'postmarkup',

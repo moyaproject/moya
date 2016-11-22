@@ -59,7 +59,7 @@ class Builder(object):
     def build(self, build_data=None):
 
         source_fs = self.source_fs
-        paths = list(source_fs.walkfiles(wildcard="*.json"))
+        paths = list(source_fs.walk.files(filter=["*.json"]))
 
         urls = defaultdict(dict)
 

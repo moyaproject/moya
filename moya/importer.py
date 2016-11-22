@@ -10,7 +10,6 @@ from .compat import iteritems
 
 from fs.path import combine, abspath
 from fs.errors import NoSysPath
-from fs.walk import walk_files
 
 from . import expose
 from . import errors
@@ -23,7 +22,7 @@ class LibraryImportHook(object):
     def __init__(self, fs):
         self.fs = fs
         self.module_info = {}
-        self._files = set(walk_files(fs))
+        self._files = set(fs.walk.files())
 
     def install(self):
         if self not in sys.meta_path:

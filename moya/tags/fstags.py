@@ -236,11 +236,11 @@ class WalkFiles(DataSetter):
         else:
             walker = fs.walk.Walker()
         paths = list(
-            walker.walk_files(
+            walker.files(
                 walk_fs,
                 params.path,
                 search=params.search,
-                wildcards=params.files or None
+                filter=params.files or None
             )
         )
         self.set_context(context, params.dst, paths)
