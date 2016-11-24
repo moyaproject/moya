@@ -12,6 +12,7 @@ from .compat import text_type, string_types, iteritems
 from .tools import textual_list
 from . import pilot
 
+from fs.errors import NoSysPath
 from fs.opener import open_fs
 from fs.osfs import OSFS
 from fs.multifs import MultiFS
@@ -58,7 +59,7 @@ def build(fs,
 
     try:
         syspath = fs.getsyspath('/')
-    except errors.NoSysPath:
+    except NoSysPath:
         syspath = None
 
     cwd = os.getcwd()
@@ -80,13 +81,13 @@ def build(fs,
                 cfg = SettingsContainer.read(customize_fs, settings_path, master=cfg)
 
                 overlay_fs = MultiFS()
-                overlay_fs.addfs('project', fs)
-                overlay_fs.addfs('custom', customize_fs, write=True)
+                overlay_fs.add_fs('project', fs)
+                overlay_fs.add_fs('custom', customize_fs, write=True)
                 fs = overlay_fs
 
                 try:
                     syspath = fs.getsyspath('/', allow_none=True)
-                except errors.NoSysPath:
+                except NoSysPath:
                     pass
                 else:
                     if syspath is not None:

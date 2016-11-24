@@ -4,6 +4,7 @@ Added sub-expressions syntax with backticks
 Fix for expressiontime previous_month attribute
 Added showform subcommand
 Added --serve to moya serve command
+Upgrade PyFilesystem
 
 0.6.11
 ------
