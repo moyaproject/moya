@@ -61,7 +61,7 @@ class DataReader(object):
             }
             raise MoyaException("data.read-fail",
                                 "unable to read data from {path} ({e})".format(path=path, e=e),
-                                diagnosis="check the data exists with **moya fs data --tree**",
+                                diagnosis="check the data exists with **moya fs data --tree /**",
                                 info=info)
 
         return data
