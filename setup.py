@@ -51,7 +51,7 @@ setup(
 
     classifiers=classifiers,
     install_requires=[
-        'babel~=2.4.0',
+        'babel~=2.3.4',
         'beautifulsoup4~=4.5.1',
         'bleach~=1.5.0',
         'colorama~=0.3.3',
