@@ -3,12 +3,11 @@ from __future__ import print_function
 
 import weakref
 
-from ..compat import string_types
+from ..compat import text_type, string_types
 from .errors import MissingTemplateError, BadTemplateError
 from .moyatemplates import Template
 from ..cache.dictcache import DictCache
 
-from fs.info import Info as FSInfo
 from fs.path import abspath, normpath
 from fs.opener import open_fs
 from fs.errors import ResourceNotFound, NoSysPath
@@ -73,8 +72,8 @@ class Environment(object):
             source = self.template_fs.gettext(template_path)
         except ResourceNotFound:
             raise MissingTemplateError(template_path)
-        except Exception:
-            raise BadTemplateError(template_path)
+        except Exception as error:
+            raise BadTemplateError(template_path, diagnosis=text_type(error))
 
         try:
             display_path = self.template_fs.getsyspath(template_path)
