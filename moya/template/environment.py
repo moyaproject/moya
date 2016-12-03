@@ -73,7 +73,7 @@ class Environment(object):
         except ResourceNotFound:
             raise MissingTemplateError(template_path)
         except Exception as error:
-            raise BadTemplateError(template_path, diagnosis="{!r} - {}".format(self.template_fs, text_type(error)))
+            raise BadTemplateError(template_path, diagnosis="{!r} - {}".format(self.template_fs.which(template_path), text_type(error)))
 
         try:
             display_path = self.template_fs.getsyspath(template_path)
