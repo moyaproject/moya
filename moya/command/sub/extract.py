@@ -8,7 +8,7 @@ from ...template.moyatemplates import Template
 
 from datetime import datetime
 
-from fs.path import pathjoin
+from fs.path import join
 import os.path
 from collections import defaultdict
 
@@ -103,9 +103,9 @@ class Extract(SubCommand):
                     if 'location' in lib.templates_info:
                         engine = archive.get_template_engine('moya')
                         with lib.load_fs.opendir(lib.templates_info['location']) as templates_fs:
-                            for path in templates_fs.walkfiles():
+                            for path in templates_fs.walk.files():
                                 sys_path = templates_fs.getsyspath(path, allow_none=True) or path
-                                contents = templates_fs.getcontents(path)
+                                contents = templates_fs.getbytes(path)
                                 template = Template(contents, path)
                                 template.parse(engine.env)
 
@@ -138,7 +138,7 @@ class Extract(SubCommand):
 
             if lib.translations_location:
 
-                lib.load_fs.makedir(lib.translations_location, allow_recreate=True)
+                lib.load_fs.makedir(lib.translations_location, recreate=True)
 
                 translations_location = lib.load_fs.getsyspath(lib.translations_location)
                 translation_path = os.path.join(translations_location, filename)
@@ -156,10 +156,10 @@ class Extract(SubCommand):
                 locale_fs = lib.load_fs.opendir(lib.translations_location)
 
                 for lang in lib.languages:
-                    locale_fs.makeopendir("{}/LC_MESSAGES/".format(lang), recursive=True)
+                    locale_fs.makedirs("{}/LC_MESSAGES/".format(lang), recreate=True)
 
                 table.append([lib.long_name,
-                              Cell(pathjoin(lib.translations_location, filename), fg="green", bold=True),
+                              Cell(join(lib.translations_location, filename), fg="green", bold=True),
                               Cell(len(po), bold=True)])
 
         self.console.table(table, header_row=["lib", "file", "no. strings"])

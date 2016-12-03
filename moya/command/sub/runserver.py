@@ -1,24 +1,25 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from ...command import SubCommand
-from ...wsgi import WSGIApplication
-from ...compat import socketserver
+import sys
+import logging
 
 from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
                                    make_server)
 
-import sys
-import logging
-log = logging.getLogger('moya.runtime')
-
+from ...command import SubCommand
+from ...wsgi import WSGIApplication
+from ...compat import socketserver
 from ...compat import PY2
+
 
 if PY2:
     from thread import interrupt_main
 else:
     from _thread import interrupt_main
+
+log = logging.getLogger('moya.runtime')
 
 
 # import gc

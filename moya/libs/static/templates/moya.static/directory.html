@@ -1,0 +1,92 @@
+{% extends "directory_base.html" %}
+
+{% block "title" %}Directory listing for ${.request.path}{% endblock %}
+
+{%- def "show_date" -%}
+    {%- cache for 1d key [dt, .now.local.date, .tz] -%}
+
+    {%- if dt -%}
+    {%- if dt.local.date == .now.local.date -%}
+    Today
+    {%- else -%}
+    ${localize:dt.local.date}
+    {%- endif %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
+    {%- endif -%}
+
+    {%- end-cache -%}
+{%- end-def %}
+
+{% block "content" %}
+<div class="container">
+    <h3 class="page-header text-center" title="${.request.path_info}">
+        {%- if path != '/' %}<a class="btn btn-link pull-left" href="../">&crarr; parent</a>{% endif %}
+        ${.request.path}
+    </h3>
+
+    {%- if .debug %}
+    <dl class="dl-horizontal">
+        <dt>fs</dt>
+        <dd><tt class="text text-success">${debug:fs}</tt></dd>
+        <dt>location</dt>
+        <dd><tt class="text text-success" style="word-wrap:break-word;">${fs[path]}</tt></dd>
+    </dl>
+    {%- endif %}
+
+    {%- if directory %}
+    <table class="table table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th class="file-size">Size</th>
+                <th class="hidden-xs">Created</th>
+                <th class="hidden-xs">Modified</th>
+                {%- if show_permissions %}
+                <th class="hidden-sm hidden-xs">User</th>
+                <th class="hidden-sm hidden-xs">Group</th>
+                <th class="hidden-sm hidden-xs permissions">Permissions</th>
+                {%- endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
+            <tr>
+                {%- if resource.is_dir %}
+                <td>
+                    <a href="${urlquote:resource.name}/" class="directory">
+                        ${resource.name}
+                    </a>
+                </td>
+                <td></td>
+                {%- else %}
+                <td>
+                    <a href="${urlquote:resource.name}">
+                        ${resource.name}
+                    </a>
+                </td>
+                <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
+                {%- endif %}
+                <td class="hidden-xs">{% call "show_date" with dt=(resource.created or resource.metadata_changed) %}</td>
+                <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
+                {%- if show_permissions %}
+                <td class="hidden-sm hidden-xs">${resource.user}</td>
+                <td class="hidden-sm hidden-xs">${resource.group}</td>
+                <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>
+                {%- endif %}
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+    {%- endif directory %}
+
+    <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
+    <p>
+        <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
+        {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
+        in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
+        {%- if dir_count %} ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.{% endif %}
+        {%- endwith %}
+    </p>
+
+    <br/>
+</div>
+{% endblock %}

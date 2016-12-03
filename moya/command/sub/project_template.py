@@ -7,7 +7,12 @@ template = """@TEXT /wsgi.py
 from __future__ import unicode_literals
 from moya.wsgi import Application
 
-application = Application('./', ['local.ini', 'production.ini'], server='main', logging='prodlogging.ini')
+application = Application(
+    './',  # project directory
+    ['local.ini', 'production.ini'],  # project settings files to load
+    server='main',  # <server> tag to load
+    logging='prodlogging.ini'  # logging settings
+)
 @TEXT /logging.ini
 
 # This file tells moya what to do with log information it generates
@@ -483,19 +488,15 @@ This folder should contain libraries that are local to the project, i.e. authore
 Getting Started
 ===============
 
-This file was created by running the command 'moya start project'. The other files in this directory contain a Moya project tailored to your requirements, based on your responses to the start project command.
+This file was created by running the command 'moya start project'. The other files in this directory contain a Moya project tailored to your requirements.
 
 There are a few quick steps you need to run before you can begin developing your website. If you haven't already done so, open up a terminal and navigate to the same directory that contains this file.
 
 If you opted for a database, review the database settings in 'settings.ini'. The default settings will automatically create an sqlite database in this directory.
 
-After you have reviewed the database settings run the following command to 'synchronize' the database (i.e. create required tables):
+Next, run the following to create the database and initialize any tables:
 
-    moya db sync
-
-If you enabled Moya auth support, run the following command to create initial permissions / groups and an admin user:
-
-    moya auth#cmd.init
+    moya init
 
 Use the following command to run a development server:
 
@@ -632,7 +633,7 @@ ${.settings.project_title}
 {#
     By convention, Moya's (html) email templates extend from this template.
 
-    You can theme all default emails by modfying this template. 
+    You can theme all default emails by modfying this template.
 #}
 {%- block "content" %}{% endblock -%}
 <p>--</p>

@@ -1,8 +1,15 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import weakref
+from random import choice
+import logging
+import re
+
 from fs.errors import FSError
-from fs.opener import fsopendir
+from fs.opener import open_fs
+from fs import walk
+from fs import wrap
 from collections import defaultdict
 
 from . import errors
@@ -17,12 +24,6 @@ from . import translations
 from .versioning import Version, VersionSpec
 from .compat import iteritems, implements_to_string, string_types, text_type, xrange, PY2
 from .context import Context
-
-import weakref
-from random import choice
-import logging
-import gettext
-import re
 
 
 log = logging.getLogger("moya")
@@ -171,23 +172,23 @@ class Library(object):
         """Import a single document"""
         return self.import_documents(fs, files=(path,))
 
-    def _make_files_signature(self, fs, files):
-        file_signatures = []
-        for path in files:
-            info = fs.getinfokeys(path, 'modified_time')
-            file_signatures.append("{}_{}".format(path, info["modified_time"]))
-        return "{}__{}".format(self.long_name, ".".join(file_signatures))
-
     def import_documents(self, fs, wildcard="*.xml", recurse=False, files=None):
         """Imports a number of documents in to the library"""
 
         if isinstance(fs, string_types):
-            fs = fsopendir(fs)
+            fs = open_fs(fs)
+        #fs = wrap.DirCache(fs)
         if files is None:
             if recurse:
-                files = sorted(fs.walkfiles(wildcard=wildcard))
+                files = sorted(fs.walk.files(filter=[wildcard]))
             else:
-                files = sorted(fs.listdir(wildcard=wildcard, files_only=True))
+                files = sorted(
+                    name
+                    for name, _is_dir in fs.filterdir(
+                        files=[wildcard],
+                        exclude_dirs=True
+                    )
+                )
         else:
             files = sorted(files)
 
@@ -248,12 +249,10 @@ class Library(object):
         self.finalized = True
 
     def on_archive_finalize(self):
-        #startup_log.debug('%r finalized', self)
         for libname, elements in iteritems(self.replace_nodes):
             winner = sorted(elements, key=lambda e: e.lib.priority)[-1]
             existing = self.get_named_element(libname)
             if existing and existing.lib.priority < winner.lib.priority:
-                #startup_log.debug('%r replaced with %r', existing, winner)
                 existing.replace(winner)
                 self.elements_by_name[existing.libname] = winner
                 element_type = (existing.xmlns, existing._tag_name)
@@ -409,7 +408,7 @@ class Library(object):
                                                   exc=e,
                                                   lib=self)
                 if media_fs.hassyspath('/'):
-                    self.media[name] = fsopendir(media_fs.getsyspath('/'))
+                    self.media[name] = open_fs(media_fs.getsyspath('/'))
                 else:
                     self.media[name] = media_fs
 

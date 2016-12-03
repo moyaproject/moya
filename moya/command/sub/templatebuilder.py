@@ -63,10 +63,10 @@ def compile_fs_template(fs, template_text, data=None, path=None):
             if path:
                 path_spec = join(path, relpath(path_spec))
             if path_spec.endswith('/'):
-                fs.makedir(path_spec, allow_recreate=True, recursive=True)
+                fs.makedirs(path_spec, recreate=True)
                 out_filename = None
             else:
-                fs.makedir(dirname(path_spec), allow_recreate=True, recursive=True)
+                fs.makedirs(dirname(path_spec), recreate=True)
                 out_filename = path_spec
             continue
         if out_filename:

@@ -1,25 +1,25 @@
-from ...command import SubCommand
-from ...wsgi import WSGIApplication
-from ...loggingconf import init_logging
-from ...compat import PY2, socketserver
+from __future__ import unicode_literals
 
-from fs.opener import fsopendir
+import logging
+import sys
 import os.path
 from os.path import join as pathjoin
-
-import sys
 from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
                                    make_server)
 
+from fs.opener import open_fs
+
+from ...command import SubCommand
+from ...wsgi import WSGIApplication
+from ...loggingconf import init_logging
+from ...compat import PY2, socketserver, text_type
 
 if PY2:
     from thread import interrupt_main
 else:
     from _thread import interrupt_main
 
-
-import logging
 log = logging.getLogger('moya.runtime')
 
 
@@ -47,32 +47,45 @@ class Serve(SubCommand):
                             help="server port")
         parser.add_argument('-t', '--templates', dest="serve_templates", action="store_true",
                             help="render and serve .html files as moya templates")
-        parser.add_argument('-d', '--develop', dest="develop", action="store_true",
+        parser.add_argument('--develop', dest="develop", action="store_true",
                             help="enable develop mode (to track down Python errors)")
+        parser.add_argument('-a', '--show-access', action="store_true",
+                            help="show access (permission) information")
+        parser.add_argument('-d', '--show-dot', action="store_true",
+                            help="do not hide dot files (beginning with a period)")
+        parser.add_argument('-s', '--show-debug', action="store_true",
+                            help="show additional debug information in directory list")
 
-    def run(self):
-        args = self.args
-        fs = fsopendir(args.fs)
+    @classmethod
+    def run_server(self, host, port, fs, serve_templates=False, develop=False, show_access=False, show_dot=True, debug=False):
 
         from ...command.sub import project_serve
         location = os.path.dirname(project_serve.__file__)
 
         init_logging(pathjoin(location, 'logging.ini'))
 
-        if args.serve_templates:
+        if serve_templates:
             ini = 'templatesettings.ini'
         else:
             ini = 'settings.ini'
 
-        application = WSGIApplication(location, ini, 'main', disable_autoreload=True, develop=args.develop)
+        application = WSGIApplication(
+            location, ini, 'main', disable_autoreload=True, develop=develop)
         application.archive.filesystems['static'] = fs
+        application.archive.debug = debug
+        static_app = application.archive.apps['static']
+        static_app.settings['show_permissions'] = show_access
 
-        server = make_server(args.host,
-                             int(args.port),
+        if show_dot:
+            static_app.settings['hide'] = ''
+
+        server = make_server(host,
+                             int(port),
                              application,
                              server_class=ThreadedWSGIServer,
                              handler_class=RequestHandler)
-        log.info("server started on http://{}:{}".format(args.host, args.port))
+        log.info("{} opened".format(fs))
+        log.info("server started on http://{}:{}".format(host, port))
 
         def handle_error(request, client_address):
             _type, value, tb = sys.exc_info()
@@ -84,3 +97,18 @@ class Serve(SubCommand):
             server.serve_forever()
         finally:
             application.close()
+
+    def run(self):
+        args = self.args
+        fs = open_fs(args.fs)
+
+        self.run_server(
+            args.host,
+            args.port,
+            fs,
+            serve_templates=args.serve_templates,
+            develop=args.develop,
+            show_access=args.show_access,
+            show_dot=args.show_dot,
+            debug=args.show_debug,
+        )

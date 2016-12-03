@@ -7,7 +7,7 @@ from os.path import abspath, dirname
 from urllib import urlencode, quote
 import webbrowser
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 
 from ...context import Context
 from ...command import SubCommand

@@ -4,6 +4,7 @@ from ...console import ConsoleHighlighter
 from ...tools import url_join
 from ...http import StatusCode
 
+
 class URLHighlight(ConsoleHighlighter):
     styles = {
         None: "bold blue",

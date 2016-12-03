@@ -4,12 +4,13 @@
       xmlns:html="http://moyaproject.com/html">
 
     <macro libname="get_comment_object">
-        <db:transaction>
-            <db:get-or-create model="#CommentObject" dst="commentobject"
-                let:namespace="namespace"
-                let:object="object"
-                initial="markup=markup, object_url=object_url"/>
-        </db:transaction>
+        <db:get-or-create
+            model="#CommentObject"
+            dst="commentobject"
+            let:namespace="namespace"
+            let:object="object"
+            initial="markup=markup"/>
+        <let commentobject.object_url="object_url"/>
         <return value="commentobject"/>
     </macro>
 

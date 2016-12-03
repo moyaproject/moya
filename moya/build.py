@@ -57,7 +57,10 @@ def build(fs,
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
 
-    syspath = fs.getsyspath('/', allow_none=True)
+    try:
+        syspath = fs.getsyspath('/')
+    except NoSysPath:
+        syspath = None
 
     cwd = os.getcwd()
 

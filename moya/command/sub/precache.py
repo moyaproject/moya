@@ -33,7 +33,7 @@ class PreCache(SubCommand):
             self.error("templates filesystem not found")
         else:
             template_engine = archive.get_template_engine()
-            paths = list(templates_fs.walkfiles(wildcard="*.html"))
+            paths = list(templates_fs.walk.files(filter=['*.html']))
 
             console.text('pre-caching templates', bold=True)
 
