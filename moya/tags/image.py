@@ -9,7 +9,7 @@ from ..tags.context import DataSetterBase
 from .. import namespaces
 from ..compat import implements_to_string
 
-from fs.path import basename, pathjoin, splitext
+from fs.path import basename, join, splitext
 
 from PIL import Image, ImageFilter
 try:
@@ -209,7 +209,7 @@ class Write(ImageElement):
             except KeyError:
                 self.throw("image.no-fs", "No filesystem called '{}'".format(params.fs))
                 return
-        path = pathjoin(params.dirpath, params.filename)
+        path = join(params.dirpath, params.filename)
 
         with params.image._lock:
             img = params.image._img
@@ -221,11 +221,12 @@ class Write(ImageElement):
 
             save_params = self.get_let_map(context)
             try:
-                with fs.makeopendir(params.dirpath, recursive=True) as dir_fs:
+                with fs.makedirs(params.dirpath, recreate=True) as dir_fs:
                     with dir_fs.open(params.filename, 'wb') as f:
                         img.save(f, img_format, **save_params)
                 log.debug("wrote '%s'", params.filename)
             except Exception as e:
+                raise
                 self.throw('image.write-fail', "Failed to write {} to '{}' in {!r} ({})".format(params.image, path, fs, e))
 
 

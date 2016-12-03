@@ -142,7 +142,7 @@ class MoyaRequest(Request, AttributeExposer):
         'scheme',
         'server_name',
         'server_port',
-        'upath_info',
+        'path_info',
         'url',
         'url_encoding',
         'urlargs',

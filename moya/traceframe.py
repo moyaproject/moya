@@ -4,6 +4,7 @@ from __future__ import print_function
 import os
 from . import syntax
 
+
 class Frame(object):
     def __init__(self,
                  code,

@@ -10,7 +10,7 @@ from .compat import (text_type,
                      iteritems,
                      pickle)
 
-from fs.path import dirname, pathjoin
+from fs.path import dirname, join
 
 import re
 import weakref
@@ -402,7 +402,7 @@ class Document(object):
 
     def resolve_relative_path(self, path):
         document_dirname = dirname(self.path)
-        new_path = pathjoin(document_dirname, path)
+        new_path = join(document_dirname, path)
         return new_path
 
     def finalize(self, context):

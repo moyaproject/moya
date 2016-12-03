@@ -11,7 +11,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from . import elements
-elements
 from .library import Library
 from . import logic
 from .tags.context import ContextElementBase
@@ -40,10 +39,10 @@ from .context.tools import to_expression
 from . import logtools
 from . import settings
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.multifs import MultiFS
 from fs.mountfs import MountFS
-from fs.path import pathjoin, abspath, relativefrom
+from fs.path import join, abspath, relativefrom
 from fs.errors import FSError
 
 from collections import defaultdict, namedtuple, deque
@@ -294,10 +293,12 @@ class Archive(object):
     def open_fs(self, fs_url, create=False):
         if isinstance(fs_url, text_type):
             if '://' in fs_url:
-                fs = fsopendir(fs_url, create_dir=create)
+                fs = open_fs(fs_url, create=create)
             else:
                 if create:
-                    fs = self.project_fs.makeopendir(fs_url, recursive=True)
+                    self.project_fs.makedirs(fs_url, recreate=True)
+                    fs = self.project_fs.opendir(fs_url)
+
                 else:
                     fs = self.project_fs.opendir(fs_url)
         else:
@@ -533,7 +534,7 @@ class Archive(object):
         __import__(py)
         module = sys.modules[py]
         location = os.path.dirname(os.path.abspath(module.__file__))
-        import_fs = fsopendir(location)
+        import_fs = open_fs(location)
         lib = self.load_library(import_fs, **kwargs)
         return lib
 
@@ -554,10 +555,10 @@ class Archive(object):
                     template_priority = 0
             lib.template_priority = template_priority
             if '://' in fs_url:
-                fs = fsopendir(fs_url)
+                fs = open_fs(fs_url)
             else:
                 fs = import_fs.opendir(fs_url)
-            self.templates_fs.addfs(lib.long_name, fs, priority=template_priority)
+            self.templates_fs.add_fs(lib.long_name, fs, priority=template_priority)
 
         return lib
 
@@ -830,7 +831,7 @@ class Archive(object):
     def init_templates(self, name, location, priority):
         templates_fs = self.filesystems.get("templates")
         fs = self.open_fs(location)
-        templates_fs.addfs(name, fs, priority=priority)
+        templates_fs.add_fs(name, fs, priority=priority)
         #startup_log.debug("added templates filesystem, priority %s", priority)
 
     def get_template_engine(self, engine="moya"):
@@ -912,9 +913,9 @@ class Archive(object):
             elif what == "data":
                 location = section.get("location")
                 data_fs = self.open_fs(location)
-                self.data_fs.addfs('archive',
-                                   data_fs,
-                                   priority=section.get_int('priority', 0))
+                self.data_fs.add_fs('archive',
+                                    data_fs,
+                                    priority=section.get_int('priority', 0))
 
             elif what == "cache":
                 self.init_cache(name, section)
@@ -936,7 +937,7 @@ class Archive(object):
                 location = section["location"]
                 static_media_fs = self.open_fs(location)
                 media_fs = MultiFS()
-                media_fs.addfs("static", static_media_fs, priority=priority)
+                media_fs.add_fs("static", static_media_fs, priority=priority)
                 self.add_filesystem('media', media_fs)
 
                 self.media_urls = section.get_list('url')
@@ -1010,8 +1011,8 @@ class Archive(object):
                     mount_media = media_sub_fs
                 if name not in self.filesystems:
                     self.filesystems[name] = mount_media
-                media_mount_fs.mountdir(media_path, mount_media)
-        media_fs.addfs("media", media_mount_fs)
+                media_mount_fs.mount(media_path, mount_media)
+        media_fs.add_fs("media", media_mount_fs)
 
     def init_data(self):
         data_fs = self.data_fs
@@ -1020,7 +1021,7 @@ class Archive(object):
             if lib.data_priority is not None:
                 data_priority = lib.data_priority
             if lib.data_fs is not None:
-                data_fs.addfs(lib.long_name, lib.data_fs, priority=data_priority)
+                data_fs.add_fs(lib.long_name, lib.data_fs, priority=data_priority)
 
     def get_media_url(self, context, app, media, path='', url_index=None):
         """Get a URL to media in a given app"""
@@ -1079,7 +1080,8 @@ class Archive(object):
             app = app_name
         else:
             app = self.find_app(text_type(app_name))
-        template_path = abspath(pathjoin(base_path, app.templates_directory, path))
+        app = app or self.detect_app()
+        template_path = abspath(join(base_path, app.templates_directory, path))
         return template_path
 
     def get_template_lib(self, path, _cache=LRUCache()):

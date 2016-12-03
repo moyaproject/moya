@@ -12,7 +12,7 @@ from .. import syntax
 from ..filter import MoyaFilterBase
 
 from fs import utils
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.path import *
 
 from os.path import join as pathjoin
@@ -59,7 +59,7 @@ class Builder(object):
     def build(self, build_data=None):
 
         source_fs = self.source_fs
-        paths = list(source_fs.walkfiles(wildcard="*.json"))
+        paths = list(source_fs.walk.files(filter=["*.json"]))
 
         urls = defaultdict(dict)
 
@@ -87,7 +87,7 @@ class Builder(object):
         self.process_indices(urls)
 
         assets_source_path = self.theme.get_relative_path(self.theme.get('assets', 'source', './assets'))
-        assets_fs = fsopendir(assets_source_path)
+        assets_fs = open_fs(assets_source_path)
 
         with pilot.console.progress("Copying theme assets", None) as progress:
             def copy_progress(step, num_steps):
@@ -213,5 +213,5 @@ class Builder(object):
             html = self.template_engine.render(template, context['data'], base_context=context)
             html = self.sub_indices(context, html)
 
-            self.output_fs.makedir(output_dir, allow_recreate=True, recursive=True)
-            self.output_fs.setcontents(output_path, html)
+            self.output_fs.makedirs(output_dir, recreate=True)
+            self.output_fs.setbytes(output_path, html)

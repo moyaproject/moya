@@ -12,6 +12,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from fs.path import basename
+from fs import wildcard
 
 from pyparsing import (Word,
                        WordEnd,
@@ -31,7 +32,6 @@ from pyparsing import (Word,
                        Regex,
                        delimitedList,
                        Optional)
-ParserElement.enablePackrat()
 
 from .. import __version__
 from ..context import dataindex
@@ -49,15 +49,14 @@ from operator import methodcaller
 
 import operator
 import re
+import sys
 from operator import truth
-from fnmatch import fnmatchcase
 import threading
 
-# TODO: is there a better place for this
-import sys
+ParserElement.enablePackrat()
 sys.setrecursionlimit(10000)
 
-VERSION = 1
+VERSION = 2
 
 
 @implements_to_string
@@ -136,10 +135,6 @@ class EvalConstant(Evaluator):
         self.eval = lambda context: value
 
 
-    # def eval(self, context):
-    #     return self.value
-
-
 class EvalVariable(Evaluator):
     """Class to evaluate a parsed variable"""
     def build(self, tokens):
@@ -149,9 +144,6 @@ class EvalVariable(Evaluator):
             self.eval = methodcaller('__getitem__', self._index)
         else:
             self.eval = methodcaller('get_simple', self.key)
-
-    #def eval(self, context):
-    #    return self._getter(context)
 
 
 class EvalLiteralIndex(Evaluator):
@@ -221,18 +213,12 @@ class EvalInteger(Evaluator):
         value = self.value = int(tokens[0])
         self.eval = lambda context: value
 
-    #def eval(self, context):
-    #    return self.value
-
 
 class EvalReal(Evaluator):
     """Class to evaluate a real number value"""
     def build(self, tokens):
         value = self.value = float(tokens[0])
         self.eval = lambda context: value
-
-    #def eval(self, context):
-    #    return self.value
 
 
 class EvalTripleString(Evaluator):
@@ -242,9 +228,6 @@ class EvalTripleString(Evaluator):
         value = self.value = _decode(tokens[0][3:-3])
         self.eval = lambda context: value
 
-    # def eval(self, context):
-    #     return self.value
-
 
 class EvalString(Evaluator):
     """Class to evaluate a string"""
@@ -252,9 +235,6 @@ class EvalString(Evaluator):
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][1:-1])
         self.eval = lambda context: value
-
-    #def eval(self, context):
-    #    return self.value
 
 
 class EvalSignOp(Evaluator):
@@ -277,9 +257,6 @@ class EvalNotOp(Evaluator):
         sign, value = tokens[0]
         _eval = self._eval = value.eval
         self.eval = lambda context: not _eval(context)
-
-    # def eval(self, context):
-    #     return not self._eval(context)
 
 
 class EvalList(Evaluator):
@@ -316,6 +293,30 @@ class EvalDict(Evaluator):
 
     def eval(self, context):
         return {k(context): v(context) for k, v in self._item_eval}
+
+
+class ExpFunction(object):
+    def __init__(self, context, text, eval):
+        self.context = context
+        self.text = text
+        self._eval = eval
+        self._context = None
+
+    def __repr__(self):
+        return "<expression>"
+
+    def __moyacall__(self, params):
+        with self.context.data_scope(params):
+            return self._eval(self.context)
+
+
+class EvalFunction(Evaluator):
+
+    def build(self, tokens):
+        self._eval = tokens[0][0].eval
+
+    def eval(self, context):
+        return ExpFunction(context, '', self._eval)
 
 
 class EvalKeyPairDict(Evaluator):
@@ -546,6 +547,13 @@ def _match_re(a, b):
     return truth(re.match(b, text_type(a)))
 
 
+def wildcard_match(name, pattern):
+    if isinstance(pattern, list):
+        return wildcard.match_any(pattern, name)
+    else:
+        return wildcard.match(pattern, name)
+
+
 def _in_operator(a, b):
     try:
         return a in b
@@ -587,7 +595,7 @@ class EvalComparisonOp(Evaluator):
         "instr": _str_in,
         "not instr": lambda a, b: not _str_in(a, b),
         "matches": _match_re,
-        "fnmatches": lambda a, b: truth(fnmatchcase(basename(a), b))
+        "fnmatches": wildcard_match
     }
 
     def build(self, tokens):
@@ -734,6 +742,9 @@ dict_operand.setParseAction(EvalDict)
 empty_dict_operand = Literal('{}')
 empty_dict_operand.setParseAction(EvalEmptyDict)
 
+function_operand = Group(Suppress('`') + expr + Suppress('`'))
+function_operand.setParseAction(EvalFunction)
+
 key_pair = Group(Regex(r'([a-zA-Z0-9_]+)') + Suppress(Literal('=') + WordEnd('=!+-*/')) + expr)
 key_pair_dict_operand = delimitedList(key_pair)
 key_pair_dict_operand.setParseAction(EvalKeyPairDict)
@@ -748,22 +759,24 @@ sliceop = _slice
 
 literalindex = Regex(r'\.([a-zA-Z0-9\._]+)')
 
-operand = (timespan |
-           real_operand |
-           integer_operand |
-           triple_string_operand |
-           string_operand |
-           regexp |
-           constant |
-           key_pair_dict_operand |
-           current_scope_operand |
-           explicit_variable_operand |
-           variable_operand |
-           empty_list_operand |
-           empty_dict_operand |
-           list_operand |
-           dict_operand
-           )
+operand = (
+   timespan |
+   real_operand |
+   integer_operand |
+   triple_string_operand |
+   string_operand |
+   regexp |
+   constant |
+   function_operand |
+   key_pair_dict_operand |
+   current_scope_operand |
+   explicit_variable_operand |
+   variable_operand |
+   empty_list_operand |
+   empty_dict_operand |
+   list_operand |
+   dict_operand
+)
 
 comparisonop = (oneOf("< <= > >= != == ~= ^= $=") |
                 (Literal('not in') + WordEnd()) |
@@ -1074,16 +1087,11 @@ if __name__=='__main__':
     #main()
 
     from moya.context import Context
-    c = Context({'l': "Hello, World"})
+    c = Context({'name': "Will"})
     c['.develop'] = True
+    print(c.eval('{upper:name}'))
 
-    tests = ["l[-1]", "l[3]", "l[:3]", "l[3:]", "l[:]", "l[::-1]", "l[1:2:'a']"]
+    print(c.eval('{upper:name}(name="will")'))
 
-    for test in tests:
-        e = Expression(test)
-        print(e.eval(c))
-    # e = Expression("l[3]")
-    # e = Expression("l[:3]")
-    # e = Expression("l[0:3]")
-    # e = Expression("l[3]")
-    # print(e.eval(c))
+    exp = """list:map:[['one', 'two', 'three'], {upper:$$}]"""
+    print(c.eval(exp))

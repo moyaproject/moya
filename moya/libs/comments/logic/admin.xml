@@ -3,7 +3,8 @@
         xmlns:let="http://moyaproject.com/let"
         xmlns:auth="http://moyaproject.com/auth"
         xmlns:admin="http://moyaproject.com/admin"
-        xmlns:html="http://moyaproject.com/html">
+        xmlns:html="http://moyaproject.com/html"
+        xmlns:w="http://moyaproject.com/widgets">
 
     <module xmlns="http://moyaproject.com/admin"
         slug="moya-comments" title="Comments" description="Manage users and permissions">
@@ -13,9 +14,12 @@
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
-        search="#CommentObject.namespace == q or #CommentObject.object == q"
+        search="#CommentObject.namespace == q or #CommentObject.object == q or #CommentObject.object_url icontains q"
         libname="table.commentobjects" slug="commentobjects" title="Comment Objects" model="#CommentObject" description="Comment Objects">
-        <column title="Comment Object" sort="id" link="yes">Comment Object #${object.id}</column>
+        <column title="ID" sort="id" link="yes">#${object.id}</column>
+        <column title="URL" sort="object_url">
+            <w:link target="_blank" url="${object.object_url}">${object.object_url}</w:link>
+        </column>
         <column title="Namespace" sort="namespace">${object.namespace}</column>
         <column title="Object" sort="object">${object.object}</column>
     </table>

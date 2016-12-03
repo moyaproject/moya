@@ -322,7 +322,7 @@ class TestContext(unittest.TestCase):
                  ("d:'5' + 1", 6),
                  ("d:'5' + d:'1'", 6),
                  ('debug:d:5', "d:'5'"),
-                 ('filesize:1024', '1.0kB'),
+                 ('filesize:1024', '1.0 KB'),
                  ('abs:-3.14', 3.14),
                  ('basename:"/foo/bar/baz"', "baz"),
                  ('bool:""', False),

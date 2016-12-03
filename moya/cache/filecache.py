@@ -4,7 +4,7 @@ from __future__ import print_function
 from ..cache import Cache
 from ..compat import text_type, string_types
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.errors import FSError
 
 from time import time as get_time
@@ -22,13 +22,14 @@ class FileCache(Cache):
                                         compress_min=compress_min,
                                         thread_safe=True)
         if fs is None:
-            fs = fsopendir('filecache', create_dir=True)
+            fs = open_fs('filecache', create=True)
         elif isinstance(fs, string_types):
-            fs = fsopendir(fs, create_dir=True)
+            fs = open_fs(fs, create=True)
 
         if namespace:
             sub_dir = namespace.replace('/', '-').replace(' ', '-')
-            fs = fs.makeopendir(sub_dir)
+            fs.makedir(sub_dir, recreate=True)
+            fs = fs.opendir(sub_dir)
         self.fs = fs
         self.max_key_length = 80
 
@@ -90,7 +91,9 @@ class FileCache(Cache):
 
     def evict(self):
         t = get_time()
-        for path in self.fs.listdir(wildcard="*.cache"):
+        for path in self.fs.listdir():
+            if not path.endswith('.cache'):
+                continue
             try:
                 with self.fs.open(path, 'rb') as f:
                     try:

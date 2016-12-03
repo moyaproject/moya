@@ -7,17 +7,18 @@ Package tools
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from .compat import implements_bool
-from .console import Console
-
-import fs.utils
-from fs.path import pathjoin
-from fs.zipfs import ZipFS
-from fs.tempfs import TempFS
-
 import fnmatch
 import hashlib
 import csv
+from itertools import chain
+
+import fs.copy
+from fs.zipfs import ZipFS
+from fs.tempfs import TempFS
+from fs import walk
+
+from .compat import implements_bool
+from .console import Console
 
 
 def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
@@ -37,10 +38,10 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
     console = Console()
 
     paths = []
-    for dirpath, files in package_fs.walk():
-        output_fs.makedir(dirpath, allow_recreate=True)
-        for filename in files:
-            path = pathjoin(dirpath, filename)
+    for dir_path, _, files in walk.walk(package_fs):
+        output_fs.makedir(dir_path, recreate=True)
+        for info in files:
+            path = info.make_path(dir_path)
             if not match_wildcards(path):
                 continue
             paths.append(path)
@@ -48,7 +49,7 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
     with console.progress("building package...", len(paths)) as progress:
         for path in sorted(paths):
             progress.step()
-            data = package_fs.getcontents(path)
+            data = package_fs.getbytes(path)
             m = hashlib.md5()
             m.update(data)
             file_hash = m.hexdigest()
@@ -58,7 +59,7 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
                 m.update(auth_token.encode('utf-8'))
                 auth_hash = m.hexdigest()
 
-            output_fs.setcontents(path, data)
+            output_fs.setbytes(path, data)
             manifest.append((path, file_hash, auth_hash))
 
     return manifest
@@ -70,7 +71,7 @@ def export_manifest(manifest, output_fs, filename="manifest.csv"):
     for path, file_hash, auth_hash in manifest:
         lines.append('"{}",{},{}'.format(path.replace('"', '\\"'), file_hash, auth_hash))
     manifest_data = "\n".join(lines)
-    output_fs.setcontents(filename, manifest_data, encoding="utf-8")
+    output_fs.settext(filename, manifest_data, encoding="utf-8")
 
 
 def read_manifest(manifest_fs, manifest_filename):
@@ -116,7 +117,7 @@ def make_package(package_fs, output_fs, output_path, exclude_wildcards, auth_tok
 
         with output_fs.open(output_path, 'wb') as dest_file:
             with ZipFS(dest_file, 'w') as zip_fs:
-                fs.utils.copydir(temp_fs, zip_fs)
+                fs.copy.copy_dir(temp_fs, '/', zip_fs, '/')
                 export_manifest(manifest, zip_fs, filename=manifest_filename)
 
         # with output_fs.open(output_path, 'rb') as zip_file:

@@ -8,7 +8,9 @@ from ..tags.context import DataSetter
 from ..compat import text_type
 
 from fs.errors import FSError
-from fs.path import pathjoin, basename, dirname
+from fs.path import dirname
+import fs.walk
+from fs import wildcard
 
 import hashlib
 import logging
@@ -36,8 +38,13 @@ class SetContents(LogicElement):
         else:
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
         try:
-            dst_fs.makedir(dirname(params.path), recursive=True, allow_recreate=True)
-            dst_fs.setcontents(params.path, params.contents)
+            dst_fs.makedirs(dirname(params.path), recreate=True)
+            if hasattr(params.contents, 'read'):
+                dst_fs.setfile(params.path, params.contents)
+            elif isinstance(params.contents, bytes):
+                dst_fs.setfile(params.path, params.contents)
+            elif isinstance(params.contents, text_type):
+                dst_fs.settext(params.path, params.contents)
         except Exception as e:
             self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
         log.debug("setcontents '%s'", params.path)
@@ -75,7 +82,10 @@ class GetSyspath(DataSetter):
     """
     Get a system path for a path in a filesystem.
 
-    A system path (or 'syspath') is a path that maps to the file on the OS filesystem. Not all filesystems can generate syspaths. If Moya is unable to generate a syspath it will throw a [c]get-syspath.no-syspath[/c] exception.
+    A system path (or 'syspath') is a path that maps to the file on the
+    OS filesystem. Not all filesystems can generate syspaths. If Moya is
+    unable to generate a syspath it will throw a [c]get-syspath.no-
+    syspath[/c] exception.
 
     """
     xmlns = namespaces.fs
@@ -189,19 +199,28 @@ class GetSize(DataSetter):
             return info
 
 
-class Walk(DataSetter):
-    """Get a list of files"""
+class MoyaWalker(fs.walk.Walker):
+
+    def __init__(self, exclude_dirs):
+        self.exclude_dirs = exclude_dirs
+
+    def check_open_dir(self, fs, info):
+        return not self.exclude_dirs(info.name)
+
+
+class WalkFiles(DataSetter):
+    """Recursively get a list of files in a filesystem."""
     xmlns = namespaces.fs
 
     class Help:
-        synopsis = "go through the files in a directory"
+        synopsis = "recursively list files in a directory"
 
     fsobj = Attribute("Filesystem object", required=False, default=None)
     path = Attribute("Path to walk", required=False, default="/")
     fs = Attribute("Filesystem name", required=False, default=None)
-    dirs = Attribute("Filter directories (function should reference 'name' and return a boolean)", type="function", default=None)
-    files = Attribute("Filter files (function should reference 'name' and return a boolean)", type="function", default=None)
-    search = Attribute("Search method", default="breadth", choices=["breadth", "depth"])
+    files = Attribute('One or more wildcards to filter results by, e.g "*.py, *.js"', type="commalist", default='*')
+    excludedirs = Attribute('Directory wildcards to exclude form walk, e.g. "*.git, *.svn"', type="commalist", default=None)
+    search = Attribute("Search method ('breadth' or 'depth')" , default="breadth", choices=["breadth", "depth"])
     dst = Attribute("Destination", required=True, type="reference")
 
     def logic(self, context):
@@ -210,19 +229,18 @@ class Walk(DataSetter):
             walk_fs = params.fsobj
         else:
             walk_fs = self.archive.get_filesystem(params.fs)
-
-        wildcard = lambda name: params.files(context, name=basename(name)) if self.has_parameter('files') else lambda name: True
-        dir_wildcard = lambda name: params.dirs(context, name=basename(name)) if self.has_parameter('dirs') else lambda name: True
-
-        paths = []
-        add_path = paths.append
-
-        for dirname, dir_paths in walk_fs.walk(path=params.path,
-                                               search=params.search,
-                                               wildcard=wildcard,
-                                               dir_wildcard=dir_wildcard,
-                                               ignore_errors=True):
-
-            for path in dir_paths:
-                add_path(pathjoin(dirname, path))
+        if params.excludedirs:
+            walker = MoyaWalker(
+                wildcard.get_matcher(params.excludedirs, True)
+            )
+        else:
+            walker = fs.walk.Walker()
+        paths = list(
+            walker.files(
+                walk_fs,
+                params.path,
+                search=params.search,
+                filter=params.files or None
+            )
+        )
         self.set_context(context, params.dst, paths)

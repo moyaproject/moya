@@ -3,17 +3,19 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 
 import os
+import sys
+
+from fs.opener import open_fs
+from fs.errors import FSError, NoSysPath
+from fs.multifs import MultiFS
+from fs.mountfs import MountFS
+from fs.path import dirname
+from fs import tree
 
 from ...command import SubCommand
 from ...wsgi import WSGIApplication
 from ...console import Cell
 from ...compat import text_type, raw_input
-
-from fs.opener import fsopendir
-from fs.errors import FSError
-from fs.multifs import MultiFS
-from fs.mountfs import MountFS
-from fs.path import dirname
 
 
 def _ls(console, file_paths, dir_paths, format_long=False):
@@ -116,7 +118,7 @@ class FS(SubCommand):
                             help="server element to use")
         parser.add_argument('--ls', dest="listdir", default=None, metavar="PATH",
                             help="list files / directories")
-        parser.add_argument("--tree", dest="tree", nargs='?', default=None, const='/',
+        parser.add_argument("--tree", dest="tree", default=None,
                             help="display a tree view of the filesystem")
         parser.add_argument("--cat", dest="cat", default=None, metavar="PATH",
                             help="Cat a file to the console")
@@ -130,6 +132,12 @@ class FS(SubCommand):
                             help="copy a file from a filesystem, preserving directory structure")
         parser.add_argument("-f", "--force", dest="force", action="store_true", default=False,
                             help="force overwrite of destination even if it is not empty (with --copy)")
+        parser.add_argument("--serve", dest="serve", default=None, action="store_true",
+                            help="statically serve a filesystem")
+        parser.add_argument('--host', dest='host', default='127.0.0.1',
+                            help="server host (with --serve)")
+        parser.add_argument('-p', '--port', default='8000',
+                            help="server port (with --serve)")
         return parser
 
     def run(self):
@@ -155,8 +163,8 @@ class FS(SubCommand):
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            with fs.opendir(args.tree) as tree_fs:
-                tree_fs.tree()
+            with fs.opendir(args.tree or '/') as tree_fs:
+                tree.render(tree_fs, max_levels=None)
             return
 
         if args.listdir:
@@ -165,15 +173,21 @@ class FS(SubCommand):
                 return -1
 
             dir_fs = fs.opendir(args.listdir)
-            file_paths = dir_fs.listdir(files_only=True)
-            dir_paths = dir_fs.listdir(dirs_only=True)
+            file_paths = []
+            dir_paths = []
+            for info in dir_fs.scandir('/'):
+                if info.is_dir:
+                    dir_paths.append(info.name)
+                else:
+                    file_paths.append(info.name)
+
             _ls(self.console, file_paths, dir_paths)
 
         elif args.cat:
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            contents = fs.getcontents(args.cat)
+            contents = fs.getbytes(args.cat)
             self.console.cat(contents, args.cat)
 
         elif args.open:
@@ -181,17 +195,19 @@ class FS(SubCommand):
                 self.console.error("Filesystem required")
                 return -1
 
-            filepath = fs.getsyspath(args.open, allow_none=True)
-            if filepath is None:
+            try:
+                filepath = fs.getsyspath(args.open)
+            except NoSysPath:
                 self.console.error("No system path for '%s' in filesystem '%s'" % (args.open, args.fs))
                 return -1
 
             import subprocess
-            if os.name == 'mac':
+            system = sys.platform
+            if system == 'darwin':
                 subprocess.call(('open', filepath))
-            elif os.name == 'nt':
+            elif system == 'win32':
                 subprocess.call(('start', filepath), shell=True)
-            elif os.name == 'posix':
+            elif system == 'linux2':
                 subprocess.call(('xdg-open', filepath))
             else:
                 self.console.error("Moya doesn't know how to open files on this platform (%s)" % os.name)
@@ -203,8 +219,9 @@ class FS(SubCommand):
             if not fs.exists(args.syspath):
                 self.console.error("No file called '%s' found in filesystem '%s'" % (args.syspath, args.fs))
                 return -1
-            syspath = fs.getsyspath(args.syspath, allow_none=True)
-            if syspath is None:
+            try:
+                syspath = fs.getsyspath(args.syspath)
+            except NoSysPath:
                 self.console.error("No system path for '%s' in filesystem '%s'" % (args.syspath, args.fs))
             else:
                 self.console(syspath).nl()
@@ -224,15 +241,13 @@ class FS(SubCommand):
 
             if fs.isdir(src):
                 src_fs = fs.opendir(src)
-                dst_fs = fsopendir(dst, create_dir=True)
-
-                if not args.force and not dst_fs.isdirempty('/'):
-                    response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
-                    if response.lower() not in ('y', 'yes'):
-                        return 0
-
-                from fs.utils import copydir
-                copydir(src_fs, dst_fs)
+                from fs.copy import copy_dir
+                with open_fs(dst, create=True) as dst_fs:
+                    if not args.force and not dst_fs.isempty('/'):
+                        response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
+                        if response.lower() not in ('y', 'yes'):
+                            return 0
+                    copy_dir(src_fs, '/', dst_fs, '/')
             else:
                 with fs.open(src, 'rb') as read_f:
                     if os.path.isdir(dst):
@@ -254,16 +269,28 @@ class FS(SubCommand):
                 return -1
             src_path, dst_dir_path = args.extract
             src_fs = fs
-            dst_fs = fsopendir(dst_dir_path, create_dir=True)
+            dst_fs = open_fs(dst_dir_path, create=True)
 
             if not args.force and dst_fs.exists(src_path):
                 response = raw_input("'%s' exists. Do you want to overwrite? " % src_path)
                 if response.lower() not in ('y', 'yes'):
                     return 0
 
-            dst_fs.makedir(dirname(src_path), recursive=True, allow_recreate=True)
+            dst_fs.makedirs(dirname(src_path), recreate=True)
             with src_fs.open(src_path, 'rb') as read_file:
-                dst_fs.setcontents(src_path, read_file)
+                dst_fs.setfile(src_path, read_file)
+
+        elif args.serve:
+
+            from .serve import Serve
+            Serve.run_server(
+                args.host,
+                args.port,
+                fs,
+                show_access=True,
+                develop=False,
+                debug=True
+            )
 
         else:
             table = [[Cell("Name", bold=True),
@@ -275,10 +302,13 @@ class FS(SubCommand):
             else:
                 list_filesystems = [(args.fs, fs)]
 
-            for name, fs in sorted(list_filesystems):
+            def get_type_name(name):
+                name = type(fs).__name__
+                return name[:-2].lower() if name.endswith('FS') else name.lower()
 
+            for name, fs in sorted(list_filesystems):
                 if isinstance(fs, MultiFS):
-                    location = '\n'.join(mount_fs.desc('/') for mount_fs in fs.fs_sequence)
+                    location = '\n'.join(mount_fs.desc('/') for name, mount_fs in fs.iterate_fs())
                     fg = "yellow"
                 elif isinstance(fs, MountFS):
                     mount_desc = []
@@ -287,8 +317,9 @@ class FS(SubCommand):
                     location = '\n'.join(mount_desc)
                     fg = "magenta"
                 else:
-                    syspath = fs.getsyspath('/', allow_none=True)
-                    if syspath is not None:
+                    try:
+                        syspath = fs.getsyspath('/')
+                    except NoSysPath:
                         location = syspath
                         fg = "green"
                     else:
@@ -299,8 +330,9 @@ class FS(SubCommand):
                             fg = "red"
                         else:
                             fg = "blue"
-                table.append([Cell(name),
-                             Cell(type(fs).__name__),
-                             Cell(location, bold=True, fg=fg)
-                              ])
+                table.append([
+                    Cell(name),
+                    Cell(get_type_name(fs)),
+                    Cell(location, bold=True, fg=fg)
+                ])
             self.console.table(table, header=True)

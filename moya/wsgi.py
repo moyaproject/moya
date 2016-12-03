@@ -24,7 +24,7 @@ from .context.expression import Expression
 from webob import Response
 
 from fs.path import splitext
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.errors import FSError
 
 import io
@@ -145,7 +145,7 @@ class WSGIApplication(object):
         self.post_build_hook = post_build_hook
 
         if logging is not None:
-            with fsopendir(self.filesystem_url) as logging_fs:
+            with open_fs(self.filesystem_url) as logging_fs:
                 init_logging_fs(logging_fs, logging)
         try:
             self.build(breakpoint=breakpoint_startup, strict=strict)
@@ -161,7 +161,7 @@ class WSGIApplication(object):
                 log.warning('project filesystem has no syspath, disabling autoreload')
             else:
                 watch_location = os.path.join(location, self.archive.cfg.get('autoreload', 'location', ''))
-                self.watcher = ReloadChangeWatcher(fsopendir(watch_location), self)
+                self.watcher = ReloadChangeWatcher(open_fs(watch_location), self)
 
     @classmethod
     def on_close(cls, application_weakref):
