@@ -164,7 +164,11 @@ def fs_import(lib, fs, name):
         try:
             module = __import__(module_name)
         except ImportError as e:
-            raise errors.StartupFailedError("import error raised for Python extension '{}' ({})".format(name, e))
+            raise errors.StartupFailedError(
+                "import error raised for Python extension '{}' ({})".format(name, e),
+                diagnosis="This error can occur if an extension has a missing dependency.\n\n"
+                "You may need to pip install something."
+            )
 
         add_module = getattr(module, name)
         lib.py[name] = add_module
