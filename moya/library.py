@@ -183,10 +183,10 @@ class Library(object):
                 files = sorted(fs.walk.files(filter=[wildcard]))
             else:
                 files = sorted(
-                    name
-                    for name, _is_dir in fs.filterdir(
+                    info.name
+                    for info in fs.filterdir(
                         files=[wildcard],
-                        exclude_dirs=True
+                        exclude_dirs=['*']
                     )
                 )
         else:
