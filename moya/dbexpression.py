@@ -24,7 +24,6 @@ from pyparsing import (Word,
                        Suppress,
                        Optional,
                        Regex)
-ParserElement.enablePackrat()
 
 from sqlalchemy import and_, or_, func
 

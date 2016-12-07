@@ -67,7 +67,7 @@ setup(
         'premailer~=2.9.3',
         'pygments~=2.1.3',
         'pymysql~=0.6.6',
-        'pyparsing~=2.1.10',
+        'pyparsing==2.1.10',
         'pytz>=2016.7',
         'requests~=2.9.1',
         'sqlalchemy~=1.0.8',

@@ -53,7 +53,8 @@ import sys
 from operator import truth
 import threading
 
-ParserElement.enablePackrat()
+ParserElement.enablePackrat(None)
+
 sys.setrecursionlimit(10000)
 
 VERSION = 2
