@@ -24,7 +24,7 @@ from .context.expression import Expression
 from webob import Response
 
 from fs.path import splitext
-from fs.opener import fsopendir
+from fs.opener import open_fs
 from fs.errors import FSError
 
 import io
@@ -124,7 +124,8 @@ class WSGIApplication(object):
                  master_settings=None,
                  test_build=False,
                  develop=False,
-                 load_expression_cache=True):
+                 load_expression_cache=True,
+                 post_build_hook=None):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -141,15 +142,17 @@ class WSGIApplication(object):
         self.test_build = test_build
         self.develop = develop
         self.load_expression_cache = load_expression_cache
+        self.post_build_hook = post_build_hook
 
         if logging is not None:
-            with fsopendir(self.filesystem_url) as logging_fs:
+            with open_fs(self.filesystem_url) as logging_fs:
                 init_logging_fs(logging_fs, logging)
         try:
             self.build(breakpoint=breakpoint_startup, strict=strict)
         except Exception as e:
             startup_log.critical(text_type(e))
             raise
+
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
             try:
@@ -158,7 +161,7 @@ class WSGIApplication(object):
                 log.warning('project filesystem has no syspath, disabling autoreload')
             else:
                 watch_location = os.path.join(location, self.archive.cfg.get('autoreload', 'location', ''))
-                self.watcher = ReloadChangeWatcher(fsopendir(watch_location), self)
+                self.watcher = ReloadChangeWatcher(open_fs(watch_location), self)
 
     @classmethod
     def on_close(cls, application_weakref):
@@ -197,6 +200,13 @@ class WSGIApplication(object):
                 parser_cache = self.archive.get_cache('parser')
                 if Expression.load(parser_cache):
                     log.debug('expression cache loaded')
+
+        if self.post_build_hook is not None:
+            try:
+                self.post_build_hook(self)
+            except:
+                log.exception('post build hook failed')
+                raise
 
         context = Context({"console": self.archive.console,
                            "settings": self.archive.settings,
@@ -241,6 +251,13 @@ class WSGIApplication(object):
             self.archive = new_build.archive
             self.server = new_build.server
             self.archive.finalize()
+
+        if self.post_build_hook is not None:
+            try:
+                self.post_build_hook(self)
+            except:
+                log.exception('post build hook failed')
+                raise
 
         self.rebuild_required = False
         self.archive.console.div("Modified project built successfully", bold=True, fg="green")

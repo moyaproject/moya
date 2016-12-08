@@ -8,7 +8,8 @@ from .document import Document
 from .elements.registry import ElementRegistry
 from .compat import iteritems
 
-from fs.path import pathcombine, abspath
+from fs.path import combine, abspath
+from fs.errors import NoSysPath
 
 from . import expose
 from . import errors
@@ -21,6 +22,7 @@ class LibraryImportHook(object):
     def __init__(self, fs):
         self.fs = fs
         self.module_info = {}
+        self._files = set(fs.walk.files())
 
     def install(self):
         if self not in sys.meta_path:
@@ -45,13 +47,13 @@ class LibraryImportHook(object):
 
         path = self._get_path(fullname)
 
-        module_path, type = self._find_module_file(path)
+        module_path, _type = self._find_module_file(path)
         if module_path is not None:
-            return module_path, type, False
+            return module_path, _type, False
 
-        module_path, type = self._find_module_file(pathcombine(path, '__init__'))
+        module_path, _type = self._find_module_file(combine(path, '__init__'))
         if module_path is not None:
-            return module_path, type, True
+            return module_path, _type, True
 
         raise ImportError(fullname)
 
@@ -66,7 +68,8 @@ class LibraryImportHook(object):
         for (suffix, mode, type) in imp.get_suffixes():
             if type in self._VALID_MODULE_TYPES:
                 check_path = path + suffix
-                if self.fs.isfile(check_path):
+                #if self.fs.isfile(check_path):
+                if check_path in self._files:
                     return (check_path, type)
         return (None, None)
 
@@ -116,7 +119,6 @@ class LibraryImportHook(object):
         sys.modules[fullname] = mod
         try:
             exec(code, mod.__dict__)
-            #mod.__file__ = self.get_filename(fullname, info)
             if self.is_package(fullname, info):
                 mod.__path__ = []
 
@@ -130,17 +132,18 @@ class LibraryImportHook(object):
         if info is None:
             info = self._get_module_info(fullname)
         path, type, ispkg = info
-        code = self.fs.getcontents(path, 'rb')
+        code = self.fs.getbytes(path)
         if type == imp.PY_SOURCE:
             code = b'\n'.join(code.splitlines())
-            path = self.fs.getsyspath(path, allow_none=True) or path
+            try:
+                path = self.fs.getsyspath(path)
+            except NoSysPath:
+                pass
             return compile(code, path, "exec")
         elif type == imp.PY_COMPILED:
             if code[:4] != imp.get_magic():
                 return None
             return marshal.loads(code[8:])
-        #else:
-        #    return code
         return code
 
 
@@ -161,7 +164,11 @@ def fs_import(lib, fs, name):
         try:
             module = __import__(module_name)
         except ImportError as e:
-            raise errors.StartupFailedError("import error raised for Python extension '{}' ({})".format(name, e))
+            raise errors.StartupFailedError(
+                "import error raised for Python extension '{}' ({})".format(name, e),
+                diagnosis="This error can occur if an extension has a missing dependency.\n\n"
+                "You may need to pip install something."
+            )
 
         add_module = getattr(module, name)
         lib.py[name] = add_module
@@ -184,11 +191,11 @@ def fs_import(lib, fs, name):
 
 
 if __name__ == "__main__":
-    from fs.opener import fsopendir
-    m = fsopendir("mem://")
+    from fs.opener import open_fs
+    m = open_fs("mem://")
     m.createfile('__init__.py')
     m.makedir("test")
-    m.setcontents('test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')
+    m.setbytes(b'test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')
     m.tree()
 
     hook = LibraryImportHook(m)

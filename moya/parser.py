@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from lxml import etree
-element_fromstring = etree.fromstring
+
 
 import re
 from collections import defaultdict
 import io
-from time import time
+import logging
+
 
 from . import errors
 from . import tags
@@ -19,11 +20,12 @@ from .cache.dictcache import DictCache
 from .compat import text_type, string_types, binary_type
 
 from fs.path import abspath
+from fs.errors import NoSysPath
 
 _re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
 
 
-import logging
+element_fromstring = etree.fromstring
 log = logging.getLogger("moya.startup")
 
 
@@ -50,7 +52,10 @@ class Parser(object):
         self.fs = fs
         self.path = abspath(path)
         self.library = library
-        syspath = self.fs.getsyspath(path, allow_none=True)
+        try:
+            syspath = self.fs.getsyspath(path)
+        except NoSysPath:
+            syspath = None
         if syspath is None:
             self.location = self.fs.desc(path)
         else:
@@ -60,7 +65,7 @@ class Parser(object):
     @property
     def xml(self):
         if self._xml is None:
-            xml = self.fs.getcontents(self.path, 'rb')
+            xml = self.fs.getbytes(self.path)
             xml = xml.replace(b'\t', b'    ')
             self._xml = xml
         return self._xml

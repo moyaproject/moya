@@ -1,16 +1,16 @@
-<!doctype HTML>
-<html>
-    <head>
-        <title>404 - Not Found</title>
-        <style>
-            body{
-            font-family:arial;
-            }
+{% extends "directory_base.html" from "static" %}
 
-        </style>
-    </head>
-    <body>
-    <h1>404 - Not Found</h1>
-    <p>The file <strong>${.request.path}</strong> was not found on this server</p>
-    </body>
-</html>
+{% block "content" %}
+<div class="container">
+    <h1 class="page-header">
+        404 - Not Found
+    </h1>
+    <p>
+        The resource <b>${.request.path}</b> was not found on this server.
+    </p>
+    <ht>
+    <p>
+        <div class="pull-right"><a href="${.apps.static.lib.url}">moya.static</a></div>
+    </p>
+</div>
+{% endblock %}

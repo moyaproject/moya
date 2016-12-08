@@ -23,9 +23,9 @@ from .. import build
 from . import installer
 from . import dependencies
 
-import fs.utils
-from fs.path import relativefrom, pathjoin
-from fs.opener import fsopendir
+import fs.copy
+from fs.path import relativefrom, join
+from fs.opener import open_fs
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 from fs.osfs import OSFS
@@ -372,9 +372,9 @@ Find, install and manage Moya libraries
         exclude_wildcards = lib_settings.get_list("package", "exclude")
         exclude_wildcards.append('__moyapackage__/*')
 
-        lib_fs = fsopendir(args.location)
+        lib_fs = open_fs(args.location)
 
-        package_destination_fs = lib_fs.makeopendir('__moyapackage__')
+        package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
         if not args.force and package_destination_fs.exists(package_filename):
             raise CommandError("package '{}' exists, use --force to overwrite".format(package_filename))
@@ -466,8 +466,8 @@ Find, install and manage Moya libraries
         upload_info = self.call('package.get-upload-info')
         upload_url = upload_info['url']
 
-        lib_fs = fsopendir(args.location)
-        package_destination_fs = lib_fs.makeopendir('__moyapackage__')
+        lib_fs = open_fs(args.location)
+        package_destination_fs = lib_fs.makedir('__moyapackage__', recreate=True)
 
         if not package_destination_fs.exists(package_filename):
             raise CommandError("package '{}' does not exist, run 'moya-pm build'".format(package_filename))
@@ -494,7 +494,7 @@ Find, install and manage Moya libraries
 
         _fh, temp_filename = tempfile.mkstemp('moyadocs')
         with ZipFS(temp_filename, 'w') as docs_zip_fs:
-            fs.utils.copydir(extract_fs, docs_zip_fs)
+            fs.copy.copy_dir(extract_fs, '/', docs_zip_fs, '/')
 
         package_filename = "{}-{}.docs.zip".format(lib_name, lib_version)
 
@@ -661,7 +661,7 @@ Find, install and manage Moya libraries
             archive = application.archive
             logic_location = archive.cfg.get('project', 'location')
             server_xml = archive.cfg.get('project', 'startup')
-            server_xml = archive.project_fs.getsyspath(pathjoin(logic_location, server_xml))
+            server_xml = archive.project_fs.getsyspath(join(logic_location, server_xml))
 
             if changed_server:
                 self.console.text("moya-pm modified '{}' -- please check changes".format(server_xml), fg="green", bold="yes")
@@ -681,16 +681,16 @@ Find, install and manage Moya libraries
             #package_filename = download_url.rsplit('/', 1)[-1]
 
             install_location = relativefrom(self.location,
-                                            pathjoin(self.location,
-                                                     args.output,
-                                                     package_select['name']))
+                                            join(self.location,
+                                                 args.output,
+                                                 package_select['name']))
             package_select['location'] = install_location
 
             with download_fs.open(filename, 'rb') as package_file:
-                with ZipFS(package_file, 'r') as package_fs:
-                    with output_fs.makeopendir(package_select['name']) as lib_fs:
-                        fs.utils.remove_all(lib_fs, '/')
-                        fs.utils.copydir(package_fs, lib_fs)
+                with ZipFS(package_file) as package_fs:
+                    with output_fs.makedir(package_select['name'], recreate=True) as lib_fs:
+                        lib_fs.removetree('/')
+                        fs.copy.copy_dir(package_fs, '/', lib_fs, '/')
                         installed.append((package_select, mount))
 
             if not args.no_add:
@@ -750,8 +750,8 @@ Find, install and manage Moya libraries
                     raise CommandError("md5 checksum of download doesn't match server! download={}, server={}".format(checksum, package_select['md5']))
 
             if args.download:
-                with fsopendir(args.download) as dest_fs:
-                    fs.utils.copyfile(download_fs, filename, dest_fs, package_filename)
+                with open_fs(args.download) as dest_fs:
+                    fs.copy.copy_file(download_fs, filename, dest_fs, package_filename)
 
         return packages
 
@@ -762,9 +762,9 @@ Find, install and manage Moya libraries
         package_installs = [(p['name'], versioning.Version(p['version']))
                             for _spec, p in selected_packages]
         application = self.check_existing(package_installs)
-        output_path = args.download if args.download is not None else pathjoin(self.location, args.output)
+        output_path = args.download if args.download is not None else join(self.location, args.output)
 
-        output_fs = OSFS(output_path, create=True, dir_mode=int('775', 8))
+        output_fs = OSFS(output_path, create=True)
 
         self.install_packages(output_fs, selected_packages, application=application)
 

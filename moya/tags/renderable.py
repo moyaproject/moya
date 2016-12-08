@@ -96,7 +96,7 @@ class RenderTemplateFS(DataSetter):
 
         template_fs = self.archive.get_filesystem(params.fs)
         try:
-            template_source = template_fs.getcontents(params.path, 'rt')
+            template_source = template_fs.gettext(params.path)
         except FSError as e:
             self.throw('render-template-fs.read-fail',
                        "failed to read '{}' from '{}'".format(params.path, template_fs),

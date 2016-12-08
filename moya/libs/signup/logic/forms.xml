@@ -9,7 +9,7 @@
     <form libname="form.signup" legend="New User Signup" style="horizontal" xmlns="http://moyaproject.com/forms">
         <input label="First name(s)" class="input-xlarge" name="first_name" type="text" dst="newuser.first_name" required="yes"/>
         <input label="Last name" class="input-xlarge" name="last_name" type="text" dst="newuser.last_name" initial="''"/>
-        <input label="Email address" class="input-xlarge" name="email" type="text" dst="newuser.email" required="yes" />
+        <input label="Email address" maxlength="300" class="input-xlarge" name="email" type="text" dst="newuser.email" required="yes" />
         <input label="Confirm email" class="input-xlarge" name="email2" type="text" required="yes" />
         <input label="Desired username" help="Must be at least 3 characters" name="username" type="text" dst="newuser.username" required="yes" adapt="strip:value"/>
         <input label="Password" class="input-xlarge" name="password" type="password" dst="newuser.password" required="yes"/>

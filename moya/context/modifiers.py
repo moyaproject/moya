@@ -9,7 +9,8 @@ from ..compat import (text_type,
                       string_types,
                       int_types,
                       number_types,
-                      unichr)
+                      unichr,
+                      implements_to_string)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
 from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
@@ -22,7 +23,7 @@ from .color import Color
 from ..containers import QueryData
 from ..context.tools import to_expression
 from ..context.missing import Missing
-from ..tools import unique, as_text
+from ..tools import unique, as_text, MultiReplace
 from ..reader import ReaderError
 from ..render import render_object
 from .. import connectivity
@@ -30,11 +31,11 @@ from .. import moyajson
 from ..import compat
 
 from fs.path import (abspath,
-                     basename,
-                     pathjoin,
-                     relativefrom,
-                     dirname,
-                     splitext)
+                      basename,
+                      join,
+                      relativefrom,
+                      dirname,
+                      splitext)
 
 import uuid
 import hashlib
@@ -48,16 +49,42 @@ from operator import truth
 from itertools import chain
 import random
 from math import ceil, floor, log
+import threading
+import weakref
 
 
 class Path(text_type):
     """Magic for paths."""
 
     def __truediv__(self, other):
-        return Path(pathjoin(self, text_type(other)))
+        return Path(join(self, text_type(other)))
 
     def __rtruediv__(self, other):
-        return Path(pathjoin(self, text_type(other)))
+        return Path(join(self, text_type(other)))
+
+
+@implements_to_string
+class Sentinel(object):
+    """A singleton sentinel value."""
+
+    _objects = weakref.WeakValueDictionary()
+    _lock = threading.Lock()
+
+    def __new__(cls, name):
+        with cls._lock:
+            if name in cls._objects:
+                return cls._objects[name]
+            else:
+                obj = super(Sentinel, cls).__new__(cls)
+                obj.name = name
+                cls._objects[name] = obj
+                return obj
+
+    def __repr__(self):
+        return "Sentinel('{s}')".format(self.name)
+
+    def __moyarepr__(self, context):
+        return "sentinel:'{}'".format(self.name)
 
 
 def _slashjoin(paths):
@@ -167,10 +194,6 @@ class ExpressionModifiersBase(object):
             return obj_items
 
     @classmethod
-    def _map(cls, obj):
-        return dict(obj)
-
-    @classmethod
     def _flat(cls, obj):
         result = []
         for value in obj:
@@ -188,7 +211,7 @@ class ExpressionModifiersBase(object):
     @classmethod
     def _urlencode(cls, data):
         if not hasattr(data, 'items'):
-            raise ValueError("Can't urlencode {!r}".format(data))
+            raise ValueError("Can't urlencode {}".format(data))
         return urlencode(data)
 
     @classmethod
@@ -205,8 +228,8 @@ class ExpressionModifiersBase(object):
             size = int(size)
         except:
             raise ValueError("filesize requires a numeric value, not {!r}".format(size))
-        suffixes = ('kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')
-        base = 1024
+        suffixes = ('KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')
+        base = 1024.0
         if size == 1:
             return '1 byte'
         elif size < base:
@@ -215,8 +238,8 @@ class ExpressionModifiersBase(object):
         for i, suffix in enumerate(suffixes):
             unit = base ** (i + 2)
             if size < unit:
-                return "{:,.01f}{}".format((base * size / unit), suffix)
-        return "{:,.01f}{}".format((base * size / unit), suffix)
+                return "{:,.1f} {}".format((base * size / unit), suffix)
+        return "{:,.1f} {}".format((base * size / unit), suffix)
 
     @classmethod
     def _permission(cls, context, v):
@@ -378,6 +401,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return v.copy()
         return copy.copy(v)
 
+    def count(self, context, v):
+        try:
+            seq, predicate = v
+        except ValueError:
+            raise ValueError('count: modifier expects [<seq>, <expression>]')
+        if not hasattr(predicate, '__moyacall__'):
+            raise ValueError('count: requires an expression, e.g. map:[students, {grade lt "A"}]')
+        return sum(1 for item in seq if predicate.__moyacall__(item))
+
     def csrf(self, context, v):
         user_id = text_type(context['.session_key'] or '')
         form_id = text_type(v)
@@ -499,7 +531,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return splitext(v)[1].lstrip('.')
 
     def filesize(self, context, v):
-        return self._filesize(v)
+        return self._filesize(v or 0)
+
+    def filter(self, context, v):
+        try:
+            seq, predicate = v
+        except ValueError:
+            raise ValueError('filter: modifier expects [<seq>, <expression>]')
+        if not hasattr(predicate, '__moyacall__'):
+            raise ValueError('filter: requires an expression, e.g. map:[students, {grade gt "A"}]')
+        return (item for item in seq if predicate.__moyacall__(item))
 
     def first(self, context, v):
         try:
@@ -528,19 +569,54 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except:
             return None
 
+    # def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    #     seq, key = v
+    #     result = OrderedDict()
+    #     for item in seq:
+    #         k = _get(item, key)
+    #         result.setdefault(k, []).append(item)
+    #     return result
+
     def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
-        seq, key = v
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('group: modifier expects [<sequence>, <expression]')
         result = OrderedDict()
-        for item in seq:
-            k = _get(item, key)
-            result.setdefault(k, []).append(item)
+        if hasattr(key, '__moyacall__'):
+            for item in seq:
+                k = key.__moyacall__(item)
+                result.setdefault(k, []).append(item)
+        else:
+            for item in seq:
+                k = _get(item, key)
+                result.setdefault(k, []).append(item)
+
         return result
+
+    def counts(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('counts: modifier expects [<sequence>, <expression]')
+
+        if hasattr(key, '__moyacall__'):
+            counts = collections.Counter(
+                key.__moyacall__(item)
+                for item in seq
+            )
+        else:
+            counts = collections.Counter(
+                _get(item, key)
+                for item in seq
+            )
+        return counts
 
     def groupsof(self, context, v):
         try:
             seq, group_size = v
         except:
-            raise ValueError('groupsof: operatore requests pair of [<sequence>, <group size>')
+            raise ValueError('groupsof: operator requires pair of [<sequence>, <group size>')
         seq = list(seq)
         try:
             group_size = int(group_size)
@@ -549,10 +625,11 @@ class ExpressionModifiers(ExpressionModifiersBase):
         if group_size <= 0:
             raise ValueError("group size must be a positive integer")
 
+        # TODO: Return a generator rather than a list
         grouped = [
             seq[i: i + group_size]
-            for i in range(0, len(seq), group_size)]
-
+            for i in range(0, len(seq), group_size)
+        ]
         return grouped
 
     def hasdata(self, context, v):
@@ -612,7 +689,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         try:
             join, char = v
         except:
-            raise ValueError("joinwith: expects two values, e.g, joinwith[filenames, ', ']")
+            raise ValueError("joinwith: expects two values, e.g, joinwith:[filenames, ', ']")
         return text_type(char).join(join)
 
     def keys(self, context, v):
@@ -648,9 +725,14 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def lstrip(self, context, v):
         return text_type(v).lstrip()
 
-    # Deprecate?
     def map(self, context, v):
-        return self._map(v)
+        try:
+            seq, key = v
+        except ValueError:
+            raise ValueError('map: modifier expects [<seq>, <expression>]')
+        if not hasattr(key, '__moyacall__'):
+            raise ValueError('map: requires an expression, e.g. map:[sequence, {name}]')
+        return (key.__moyacall__(item) for item in seq)
 
     def max(self, context, v):
         return max(_item for _item in v if _item is not None)
@@ -703,6 +785,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except ValueError:
             raise ValueError('parsedatetime: modifier requires [<datestring>, <dateformat>]')
         return ExpressionDateTime.parse(date_string, _format)
+
+    def replace(self, context, v):
+        try:
+            text, replace_map = v
+        except ValueError:
+            raise ValueError('replace: expects [<text>, <replace dict>]')
+        replace_map = dict(replace_map)
+        text = text_type(text)
+        replacer = MultiReplace(replace_map)
+        return replacer(text)
 
     def rpartition(self, context, v, _as_text=as_text):
         split_on = ' '
@@ -765,15 +857,18 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def reversed(self, context, v):
         return list(reversed(v))
 
-    def reversesorted(self, context, v):
+    def rsorted(self, context, v):
         return sorted(v, reverse=True)
 
-    def reversesortedkey(self, context, v):
+    def rsortedby(self, context, v):
         try:
             seq, key = v[0], v[1]
         except:
-            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
-        return sorted(seq, key=lambda value: obj_index(value, key), reverse=True)
+            raise ValueError('rsortedby: requires two arguments [<sequence>, <key>]')
+        if hasattr(key, '__moyacall__'):
+            return sorted(seq, key=key.__moyacall__, reverse=True)
+        else:
+            return sorted(seq, key=lambda value: obj_index(value, key), reverse=True)
 
     def round(self, context, v):
         try:
@@ -791,6 +886,10 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def safe(self, context, v):
         return Safe(v)
 
+    def sentinel(self, context, v):
+        name = slugify(text_type(v))
+        return Sentinel(name)
+
     def seqlast(self, context, v):
         return self._seqlast(v, context)
 
@@ -807,12 +906,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def sorted(self, context, v):
         return sorted(v)
 
-    def sortedkey(self, context, v):
+    def sortedby(self, context, v):
         try:
             seq, key = v[0], v[1]
         except:
-            raise ValueError('sortedkey: requires two arguments [<sequence>, <key>]')
-        return sorted(seq, key=lambda value: obj_index(value, key))
+            raise ValueError('sortedby: requires two arguments [<sequence>, <key>]')
+        if hasattr(key, '__moyacall__'):
+            return sorted(seq, key=key.__moyacall__)
+        else:
+            return sorted(seq, key=lambda value: obj_index(value, key))
 
     def split(self, context, v):
         split_on = None
@@ -978,7 +1080,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
             except (TypeError, ValueError):
                 raise ValueError('invalid params for uuid: modifier')
             if version not in (3, 5):
-                raise ValueError('uuid: modifer uuid type must be 1, 2, 4, or 5')
+                raise ValueError('uuid: modifier uuid type must be 1, 2, 4, or 5')
             return make_uuid(context, version, nstype=nstype, nsname=py2bytes(nsname))
 
     def validfloat(self, context, v):

@@ -1,24 +1,25 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-from ...command import SubCommand
-from ...wsgi import WSGIApplication
-from ...compat import socketserver
+import sys
+import logging
 
 from wsgiref.simple_server import (WSGIServer,
                                    WSGIRequestHandler,
                                    make_server)
 
-import sys
-import logging
-log = logging.getLogger('moya.runtime')
-
+from ...command import SubCommand
+from ...wsgi import WSGIApplication
+from ...compat import socketserver
 from ...compat import PY2
+
 
 if PY2:
     from thread import interrupt_main
 else:
     from _thread import interrupt_main
+
+log = logging.getLogger('moya.runtime')
 
 
 # import gc
@@ -112,8 +113,9 @@ class Runserver(SubCommand):
                                  server_class=server_class,
                                  handler_class=RequestHandler)
         except IOError as e:
-            if e.errno == 98:
-                log.error("couldn't run moya server, another process may be running on port %s", args.port)
+            # 98 on Linux, 48 on OSX?
+            if e.errno in (48, 98):
+                log.critical("couldn't run moya server, another process may be running on port %s", args.port)
             raise
 
         if self.args.slow:

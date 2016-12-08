@@ -23,6 +23,7 @@ from ..compat import (implements_to_string,
                       iterkeys)
 
 import inspect
+import logging
 import weakref
 from textwrap import dedent
 from collections import deque, namedtuple
@@ -30,7 +31,6 @@ from collections import deque, namedtuple
 
 Closure = namedtuple("Closure", ["element", "data"])
 
-import logging
 startup_log = logging.getLogger('moya.startup')
 
 
@@ -915,6 +915,13 @@ class ElementBaseType(object):
     def older_sibling(self):
         try:
             return self.siblings[self.siblings.index(self) + 1]
+        except (ValueError, IndexError):
+            return None
+
+    @property
+    def younger_sibling(self):
+        try:
+            return self.siblings[self.siblings.index(self) - 1]
         except (ValueError, IndexError):
             return None
 

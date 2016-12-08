@@ -183,12 +183,14 @@ The code inside the processor transforms that image. The new image is then writt
             <let url="slashjoin:[settings.serve_url, thumb_path]"/>
         </else>
         <if test="overwrite or thumb_path not in thumb_fs">
-            <thread join="yes" scope="yes">
-                <!-- lazy load of the image -->
-                <image:read fsobj="fs" path="${path}" dst="original_image" if="not original_image"/>
 
-                <!-- make a copy -->
-                <image:copy image="original_image" />
+            <thread join="yes" scope="yes">
+                <if test="not original_image">
+                    <image:read fsobj="fs" path="${path}" dst="image"/>
+                </if>
+                <else>
+                    <image:copy image="original_image" />
+                </else>
 
                 <!-- call the processor to modify the image in place -->
                 <call macro="${processor.element_ref}" let:image="image" />
@@ -201,6 +203,7 @@ The code inside the processor transforms that image. The new image is then writt
             </thread>
             <!-- If threads are 'disabled', wait for the thread to continue -->
             <wait-on-threads if="not .app.settings.threads.bool" />
+
         </if>
         <return value="url"/>
     </tag>

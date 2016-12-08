@@ -3,7 +3,7 @@
 	  xmlns:let="http://moyaproject.com/let">
 
 	<mountpoint name="main">
-        <url route="/" name="root" />
+		<url route="/" view="serve" name="root" let:path="'/'"/>
 		<url route="{*path}" view="serve" name="serve"/>
 	</mountpoint>
 
@@ -17,32 +17,40 @@
 
 	<view docname="servedir">
 		<!-- Call our Python macro to get the directory listing -->
-        <let fs=".fs[fsname]"/>
-		<call macro="#get_dirlist" dst="dirlist">
+        <let fs=".fs[fsname]"
+        	show_permissions=".debug or .app.settings.show_permissions.bool"/>
+		<call macro="#read_directory" dst="directory" let:permissions="show_permissions">
 			<var>fs</var>
 			<var>path</var>
 		</call>
-		<!-- get_dirlist returns None if it is not a directory-->
-		<return if="not dirlist" />
+		<!-- read_directory returns None if it is not a directory-->
+		<return if="isnone:directory" />
 		<!-- 404 if directory listing is disabled -->
-		<not-found if="not .app.settings.dirlist.bool" />
+		<not-found if="not .app.settings.auto_index.bool" />
 		<!-- Redirect to a canonical url ending with / -->
 		<redirect-to url="${.request.path}/" if="not .request.path $= '/'" />
 		<!-- Serve an index file if enabled in settings -->
 		<for dst="indexfile" src=".app.settings.index.list">
 			<serve-file fs="${fsname}" path="${path:path + indexfile}" ifexists="yes" />
 		</for>
+
         <!-- Serve the directory listing-->
-		<serve-template template="dirlist.html" withscope="yes" let:app=".app"/>
+		<serve-template template="directory.html" withscope="yes" let:app=".app"/>
 	</view>
 
 	<view docname="servefile">
 		<!-- 404 if the path matches hidden wildcards -->
-		<for dst="wildcard" src=".app.settings.hide.list">
-			<not-found if="basename:path fnmatches wildcard" />
-		</for>
-        <serve-template-fs fs=".app.settings.fs" path="${path}" if="ext:path=='html' and .app.settings.serve_templates.bool"/>
+		<let hide_wildcards=".app.settings.hide.list"
+			serve_templates=".app.settings.serve_templates.bool"/>
+
+		<!-- 404 if file is a hidden wildcard -->
+		<not-found if="hide_wildcards and basename:path fnmatches hide_wildcards"/>
+
+		<!-- Serve as template if serve_template setting is True -->
+        <serve-template-fs fs=".app.settings.fs" path="${path}"
+        	if="serve_templates and ext:path=='html'"/>
         <catch exception="render-template-fs.read-fail" />
+
 		<!-- Serve file if it exists -->
 		<serve-file fs="${fsname}" path="${path}" ifexists="yes"/>
 		<not-found/>

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from ..elements.elementbase import ElementBase, LogicElement, Attribute
 from ..tags.context import DataSetter
-from ..tools import asint
 from .. import logic
 from .. import errors
 from ..elements.attributetypes import *
@@ -10,9 +9,9 @@ from ..compat import iteritems, text_type, reload
 from .. import tools
 from .. import timezone
 
-from fs.path import pathjoin
-from fs.opener import fsopendir
-from fs.errors import FSError, BackReferenceError, ResourceNotFoundError
+from fs.path import join
+from fs.opener import open_fs
+from fs.errors import FSError, IllegalBackReference, ResourceNotFound
 
 from os.path import dirname, abspath
 import sys
@@ -157,25 +156,25 @@ class Import(LogicElement):
         try:
 
             if '::/' in location:
-                import_fs = fsopendir(location)
+                import_fs = open_fs(location)
             else:
                 if absolute:
-                    import_fs = fsopendir(location)
+                    import_fs = open_fs(location)
                 else:
                     project_fs = context['fs']
                     try:
                         if project_fs.hassyspath('/'):
                             project_path = project_fs.getsyspath('/')
-                            import_path = pathjoin(project_path, location)
+                            import_path = join(project_path, location)
                             try:
-                                import_fs = fsopendir(import_path)
-                            except ResourceNotFoundError:
+                                import_fs = open_fs(import_path)
+                            except ResourceNotFound:
                                 self.throw("import.fail",
                                            "location '{}' was not found".format(import_path),
                                            diagnosis="Check the location is exists and is a directory.")
                         else:
                             import_fs = context['fs'].opendir(location)
-                    except (BackReferenceError, FSError) as e:
+                    except (IllegalBackReference, FSError) as e:
                         self.throw("import.fail",
                                    "unable to import location '{}' from {}".format(location, project_fs),
                                    diagnosis=text_type(e))
@@ -221,6 +220,7 @@ class Install(LogicElement):
     mount = Attribute("URL component to mount, e.g. \"auth\"")
     mountpoint = Attribute("Name of the <mountpoint> tag", required=False, default="main")
     urlpriority = Attribute("Priority for URLs in mountpoint", type="integer", required=False, default=0)
+    server = Attribute('Server object', type="expression", required=False, default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -240,7 +240,7 @@ class Install(LogicElement):
                 raise errors.StartupFailedError("Unable to import lib '%s'" % params.lib)
 
             if params.mount:
-                server = self.get_ancestor('server')
+                server = params.server or self.get_ancestor('server')
                 try:
                     mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint", "name", params.mountpoint)
                 except errors.ElementNotFoundError:

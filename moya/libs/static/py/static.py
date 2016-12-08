@@ -1,32 +1,21 @@
 from __future__ import unicode_literals
 
-import moya
-from moya.compat import string_types
+import moya.expose
+from moya.filesystems import FSInfo
 
-from fs.errors import FSError
-
-import fnmatch
-import re
+from fs.wildcard import imatch_any
 
 
-@moya.expose.macro("get_dirlist")
-def get_dirlist(app, fs, path):
-    wildcards = app.settings.get_list("hide")
-    try:
-        dir_fs = fs.opendir(path)
-    except FSError:
+@moya.expose.macro("read_directory")
+def read_directory(app, fs, path, permissions=True):
+    if not fs.isdir(path):
         return None
-
-    wildcard = lambda f: True
-    if wildcards:
-        if isinstance(wildcards, string_types):
-            wildcards = [wildcards]
-        match = re.compile('|'.join(fnmatch.translate(wc) for wc in wildcards), re.UNICODE).match
-        wildcard = lambda f: not match(f)
-
-    dirs = dir_fs.listdirinfo(dirs_only=True, wildcard=wildcard)
-    files = dir_fs.listdirinfo(files_only=True, wildcard=wildcard)
-
-    ret = {'dirs': sorted(dirs, key=lambda i: i[0].lower()),
-           'files': sorted(files, key=lambda i: i[0].lower())}
-    return ret
+    hide_wildcards = app.settings.get_list("hide")
+    namespaces = ['details', 'access'] if permissions else ['details']
+    dir_fs = fs.opendir(path)
+    directory = [
+        FSInfo(resource)
+        for resource in dir_fs.scandir('/', namespaces=namespaces)
+        if not (hide_wildcards and imatch_any(hide_wildcards, resource.name))
+    ]
+    return directory

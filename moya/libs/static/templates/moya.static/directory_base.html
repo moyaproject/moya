@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block "title" %}{% endblock %}</title>
+
+    {% block "head" %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+
+    {% include "bootstrap.css" %}
+
+    .table td
+    {
+      border:none !important;
+    }
+
+    .table > thead > tr > th
+    {
+        border-bottom:none;
+    }
+
+    .file-size
+    {
+        text-align:right;
+    }
+
+    td.file-size
+    {
+        white-space: nowrap;
+    }
+
+    td.permissions, th.permissions
+    {
+        white-space: nowrap;
+    }
+
+    h3.page-header
+    {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    a.directory
+    {
+        font-weight:bold;
+    }
+
+    </style>
+    {% endblock %}
+
+</head>
+<body>
+	{% emptyblock "content" %}
+</body>
+</html>

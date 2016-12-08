@@ -20,11 +20,12 @@ class Check(SubCommand):
         try:
             build_result = build_server(self.location,
                                         self.get_settings(),
-                                        server_element=args.server,
-                                        disable_autoreload=True)
+                                        server_element=args.server)
         except Exception as e:
             self.console.exception(e, tb=args.debug)
         else:
             if build_result:
                 self.console("Server check ok", fg="green", bold=True).nl()
                 self.console.xml(text_type(build_result.server))
+            return 0
+        return -1

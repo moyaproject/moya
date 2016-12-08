@@ -18,7 +18,7 @@ from .. import trace
 from .. import __version__
 from ..content import Content
 from ..tags.content import ContentElementMixin
-from ..tools import get_return, as_text
+from ..tools import get_return
 from .. import syntax
 from ..timezone import Timezone
 from ..context.tools import to_expression, set_dynamic
@@ -34,6 +34,7 @@ from .. import pilot
 from webob import Response
 
 from fs.path import splitext
+from fs.errors import NoSysPath
 import pytz
 
 import sys
@@ -319,7 +320,8 @@ class GetURL(DataSetter):
 
 
 class GetFqURL(GetURL):
-    """Get a [i]fully qualified[/i] (including domain name and scheme) named URL"""
+    """Get a [i]fully qualified[/i] (including domain name and scheme) named URL."""
+
     base = Attribute("Base (protocol and domain) of the URL", default=None)
 
     class Help:
@@ -683,7 +685,10 @@ class Server(LogicElement):
             return None
 
         context.root['sys']['site'] = site_instance
-        context.root['sys']['base'] = archive.project_fs.getsyspath('/', None)
+        try:
+            context.root['sys']['base'] = archive.project_fs.getsyspath('/')
+        except NoSysPath:
+            context.root['sys']['base'] = None
         context.root['site'] = site_instance._data
 
         return site_instance
@@ -795,13 +800,14 @@ class Server(LogicElement):
                     db.commit_sessions(context)
 
         except Exception as e:
-            db.rollback_sessions(context)
+            db.rollback_sessions(context, close=False)
             return self.handle_error(archive, context, request, e, sys.exc_info())
 
         finally:
             for thread in context.get('._threads', []):
                 thread.wait()
             context.safe_delete('._threads')
+            db.close_sessions(context)
 
         root['_urltrace'] = []
 

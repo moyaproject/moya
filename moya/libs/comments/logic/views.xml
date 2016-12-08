@@ -78,7 +78,10 @@
     </macro>
 
     <macro libname="subscribe">
-        <log level="debug">subscribing to ${comment}</log>
+        <if test="not email">
+            <log-debug>subscribe failed (no email address)</log-debug>
+            <return/>
+        </if>
         <make-token dst="token" size="16"/>
         <db:create model="#Subscription" dst="subscription" if="email and comment and '@' in email"
             let:email="email" let:name="name" let:comment="comment" let:uid="token"/>
@@ -254,7 +257,7 @@
     <view libname="view.subscription" content="#content.objectsubscription" requires=".user">
         <db:get model="#CommentObject" let:id="url.comment_object_id" dst="comment_object"/>
         <let action=".request.GET.action" />
-        <let url="comment_object.object_url or .request.GET.url" />
+        <let url=".request.GET.url or comment_object.object_url" />
 
         <switch on="action">
             <case>subscribe</case>

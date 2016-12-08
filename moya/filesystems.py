@@ -3,9 +3,13 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from fs.errors import FSError
+from fs.info import Info
+
 from .console import Cell
 from .compat import text_type, implements_to_string
+from .interface import AttributeExposer
 from .reader import DataReader
+from .context.expressiontime import ExpressionDateTime
 
 import weakref
 import re
@@ -25,9 +29,7 @@ class FSContainer(dict):
                   Cell("Type", bold=True),
                   Cell("Location", bold=True)]]
 
-        list_filesystems = self.items()
-
-        for name, fs in sorted(list_filesystems):
+        for name, fs in sorted(self.items()):
             syspath = fs.getsyspath('/', allow_none=True)
             if syspath is not None:
                 location = syspath
@@ -40,10 +42,11 @@ class FSContainer(dict):
                     fg = "red"
                 else:
                     fg = "blue"
-            table.append([Cell(name),
-                          Cell(fs.get_type_name()),
-                          Cell('%s' % location, bold=True, fg=fg)
-                          ])
+            table.append([
+                Cell(name),
+                Cell(fs.get_type_name()),
+                Cell('%s' % location, bold=True, fg=fg)
+            ])
         console.table(table, header=True)
 
     def close_all(self):
@@ -53,6 +56,93 @@ class FSContainer(dict):
             except:
                 pass
         self.clear()
+
+
+class _FSInfoProxy(Info, AttributeExposer):
+    __moya_exposed_attributes__ = [
+        "raw",
+        "namespaces",
+        "name",
+        "path",
+        "is_dir",
+        "accessed",
+        "modified",
+        "created",
+        "metadata_changed",
+        "permissions",
+        "size",
+    ]
+
+
+class FSInfo(object):
+    """Custom info class that return Moya datetime objects."""
+
+    @classmethod
+    def _from_epoch(cls, epoch):
+        if epoch is None:
+            return None
+        return ExpressionDateTime.from_epoch(epoch)
+
+    def __init__(self, info):
+        self._info = Info.copy(info, to_datetime=self._from_epoch)
+
+    def __moyarepr__(self, context):
+        return repr(self._info)
+
+    def __repr__(self):
+        return repr(self._info)
+
+    @property
+    def raw(self):
+        return self._info.raw
+
+    @property
+    def namespaces(self):
+        return self._info.namespaces
+
+    @property
+    def name(self):
+        return self._info.name
+
+    @property
+    def is_dir(self):
+        return self._info.is_dir
+
+    @property
+    def accessed(self):
+        return self._info.accessed
+
+    @property
+    def modified(self):
+        return self._info.modified
+
+    @property
+    def created(self):
+        return self._info.created
+
+    @property
+    def metadata_changed(self):
+        return self._info.metadata_changed
+
+    @property
+    def permissions(self):
+        return self._info.permissions
+
+    @property
+    def size(self):
+        return self._info.size
+
+    @property
+    def type(self):
+        return self._info.type
+
+    @property
+    def group(self):
+        return self._info.group
+
+    @property
+    def user(self):
+        return self._info.user
 
 
 @implements_to_string
@@ -70,17 +160,17 @@ class FSWrapper(object):
         return type(self.fs).__name__
 
     def __str__(self):
-        return self.fs.desc('')
+        return self.fs.desc('/')
 
-    def __repr__(self):
-        return repr(self.fs)
+    def __moyarepr__(self, context):
+        return text_type(self.fs)
 
     def __contains__(self, path):
         return self.fs.isfile(path)
 
     def __getitem__(self, path):
         if self.fs.isfile(path):
-            return self.fs.getcontents(path)
+            return self.fs.getbytes(path)
         return self.__class__(self.fs.opendir(path), ref=True)
 
     def __getattr__(self, name):

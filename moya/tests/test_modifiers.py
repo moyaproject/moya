@@ -129,7 +129,7 @@ class TestModifiers(unittest.TestCase):
 
         assert m.ext('foo.bar', '.bar')
 
-        assert m.filesize(c, 1024) == '1.0kB'
+        assert m.filesize(c, 1024) == '1.0 KB'
         assert m.first(c, 'foo') == 'f'
         assert m.flat(c, [1, [2, 3]]) == [1, 2, 3]
         assert m.float(c, '3.14') == 3.14
@@ -204,8 +204,6 @@ class TestModifiers(unittest.TestCase):
 
         assert m.lstrip(c, '  \nHello\n') == 'Hello\n'
 
-        assert m.map(c, [['foo', 'bar']]) == {'foo': 'bar'}
-
         assert m.max(c, [1, 2, 3, 0]) == 3
 
         assert m.md5(c, 'hello') == '5d41402abc4b2a76b9719d911017c592'
@@ -249,10 +247,10 @@ class TestModifiers(unittest.TestCase):
 
         assert list(m.reversed(c, [1, 3, 4])) == [4, 3, 1]
 
-        assert m.reversesorted(c, [1, 5, 2]) == [5, 2, 1]
+        assert m.rsorted(c, [1, 5, 2]) == [5, 2, 1]
 
         objs = [Mock(id=5), Mock(id=10)]
-        assert m.reversesortedkey(c, [objs, 'id']) == [objs[1], objs[0]]
+        assert m.rsortedby(c, [objs, 'id']) == [objs[1], objs[0]]
 
         assert m.round(c, 3.14) == 3
         assert m.round(c, [3.14, 1]) == 3.1
@@ -272,7 +270,7 @@ class TestModifiers(unittest.TestCase):
         assert m.sorted(c, [1, 3, 0]) == [0, 1, 3]
 
         objs = [Mock(n=50), Mock(n=0)]
-        assert m.sortedkey(c, [objs, 'n']) == [objs[1], objs[0]]
+        assert m.sortedby(c, [objs, 'n']) == [objs[1], objs[0]]
 
         assert m.split(c, 'foo bar baz') == ['foo', 'bar', 'baz']
         assert m.split(c, ['foo-bar-baz', '-']) == ['foo', 'bar', 'baz']

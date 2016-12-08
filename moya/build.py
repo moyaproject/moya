@@ -12,7 +12,8 @@ from .compat import text_type, string_types, iteritems
 from .tools import textual_list
 from . import pilot
 
-from fs.opener import fsopendir
+from fs import open_fs
+from fs.errors import NoSysPath
 from fs.osfs import OSFS
 from fs.multifs import MultiFS
 
@@ -31,7 +32,7 @@ startup_log = logging.getLogger('moya.startup')
 def read_config(fs, settings_path="settings.ini"):
     """Just read the config for a project"""
     if '://' in fs:
-        fs = fsopendir(fs)
+        fs = open_fs(fs)
     else:
         fs = OSFS(fs)
     cfg = SettingsContainer.read(fs, settings_path)
@@ -49,14 +50,17 @@ def build(fs,
     """Build a project"""
     if isinstance(fs, string_types):
         if '://' in fs:
-            fs = fsopendir(fs)
+            fs = open_fs(fs)
         else:
             fs = OSFS(fs)
 
     if isinstance(settings_path, string_types):
         settings_path = [settings_path]
 
-    syspath = fs.getsyspath('/', allow_none=True)
+    try:
+        syspath = fs.getsyspath('/')
+    except NoSysPath:
+        syspath = None
 
     cwd = os.getcwd()
 
@@ -72,17 +76,20 @@ def build(fs,
             if customize_location:
                 settings_path = cfg.get('customize', "settings", 'settings.ini')
                 startup_log.info("customizing '%s'", customize_location)
-                customize_fs = fsopendir(cfg.get('customize', 'location'))
+                customize_fs = open_fs(cfg.get('customize', 'location'))
 
                 cfg = SettingsContainer.read(customize_fs, settings_path, master=cfg)
 
                 overlay_fs = MultiFS()
-                overlay_fs.addfs('project', fs)
-                overlay_fs.addfs('custom', customize_fs, write=True)
+                overlay_fs.add_fs('project', fs)
+                overlay_fs.add_fs('custom', customize_fs, write=True)
                 fs = overlay_fs
 
-                syspath = fs.getsyspath('/', allow_none=True)
-                if syspath is not None:
+                try:
+                    syspath = fs.getsyspath('/')
+                except NoSysPath:
+                    pass
+                else:
                     os.chdir(syspath)
 
         if archive is None:
@@ -163,7 +170,7 @@ def build_lib(location, archive=None, dependancies=None, ignore_errors=False, te
         module = sys.modules[py]
         location = dirname(abspath(module.__file__))
 
-    with fsopendir(location) as import_fs:
+    with open_fs(location) as import_fs:
         lib = archive.load_library(import_fs)
 
     if tests:
@@ -178,7 +185,7 @@ def build_lib(location, archive=None, dependancies=None, ignore_errors=False, te
                 location = dirname(abspath(module.__file__))
             else:
                 location = require_lib
-            with fsopendir(location) as import_fs:
+            with open_fs(location) as import_fs:
                 _lib = archive.load_library(import_fs)
 
     archive.finalize(ignore_errors=ignore_errors)
@@ -196,7 +203,7 @@ def get_lib_info(location, archive=None):
         module = sys.modules[py]
         location = dirname(abspath(module.__file__))
 
-    with fsopendir(location) as import_fs:
+    with open_fs(location) as import_fs:
         cfg = SettingsContainer.read(import_fs, 'lib.ini')
 
     return cfg
@@ -253,7 +260,7 @@ def build_server(fs,
     if project_fs is None:
         if isinstance(fs, string_types):
             if '://' in fs:
-                fs = fsopendir(fs)
+                fs = open_fs(fs)
             else:
                 fs = OSFS(fs)
     archive.project_fs = project_fs

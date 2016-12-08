@@ -36,7 +36,7 @@ def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
         package_select = rpc.call('package.select', package=package)
 
         if dependancy and package_select['version'] is None:
-            console.text("dependency '{}'' has no installation candidate".format(package), fg="red")
+            console.text("dependency '{}' has no installation candidate".format(package), fg="red")
             continue
 
         name_version = "{} {}".format(package_select['name'], package_select['version'])

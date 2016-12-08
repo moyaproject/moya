@@ -21,7 +21,7 @@ from ..compat import urlencode, PY2
 from . import lorem
 from ..traceframe import Frame as TraceFrame
 
-from fs.path import pathjoin, dirname
+from fs.path import join, dirname
 import bleach
 
 import re
@@ -910,7 +910,7 @@ class ExtendsNode(Node):
                     self.render_error(text_type(e))
 
         else:
-            path = pathjoin(base_path, path)
+            path = join(base_path, path)
 
         self.template.extend(environment, path, self, lib)
         parser.expect_end()
@@ -1260,7 +1260,10 @@ class IncludeNode(Node):
         else:
             paths = path
 
-        app = self.from_expression.eval(context) or self.get_app(context)
+        #app = self.from_expression.eval(context) or self.get_app(context)
+        app = self.from_expression.eval(context) or self.template_app(environment.archive, context.get('._t.app', None))
+        if app is None:
+            self.render_error('unable to determine app')
         for i, _path in enumerate(paths, 1):
             if environment.archive is not None:
                 path = environment.archive.resolve_template_path(_path, app)
@@ -1277,9 +1280,6 @@ class IncludeNode(Node):
         with template.block(context, self) as frame:
             frame.stack.append(template.get_root_node(environment))
             yield template._render_frame(frame, environment, context, text_escape)
-        # yield template.render(context=context,
-        #                       environment=environment,
-        #                       app=app)
 
 
 class InsertNode(Node):
@@ -1307,7 +1307,7 @@ class InsertNode(Node):
             fs = environment.archive.get_filesystem(fs_name)
         except KeyError:
             self.render_error("no filesystem called '{}'".format(fs_name))
-        content = fs.getcontents(path, 'rt')
+        content = fs.gettext(path)
         if self.escape:
             content = text_escape(content)
         return content

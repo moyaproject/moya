@@ -2,6 +2,10 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
+import fs.copy
+from fs.opener import open_fs
+from fs import walk
+
 from ...command import SubCommand
 from ...console import Cell
 from ...command.sub import templatebuilder
@@ -26,19 +30,20 @@ def make_secret(size=64, allowed_chars='0123456789abcdefghijklmnopqrstuvwxyzABCD
 
 
 def make_name(*names):
-    names = [''.join(c for c in name.lower() if c.isalpha() or c.isdigit())
-             for name in names]
+    names = [
+        ''.join(c for c in name.lower() if c.isalpha() or c.isdigit())
+        for name in names
+    ]
     return '.'.join(names)
 
 
 def copy_new(src, dst):
     """Copy files from src fs to dst fst only if they don't exist on dst"""
-    from fs.utils import copystructure, copyfile
-    copystructure(src, dst)
+    fs.copy.copy_structure(src, dst)
     copied_files = []
-    for path in src.walkfiles():
+    for path in src.walk.files():
         if not dst.exists(path):
-            copyfile(src, path, dst, path)
+            fs.copy.copy_file(src, path, dst, path)
             copied_files.append(path)
     return copied_files
 
@@ -311,9 +316,9 @@ class Start(SubCommand):
         raise ValueError("Type should be either 'project' or 'library'")
 
     def templatize(self, path):
-        from fs.opener import fsopendir
+        from fs.opener import open_fs
         from fs.path import splitext, split
-        fs = fsopendir(path)
+        fs = open_fs(path)
         text_ext = ['', '.py', '.ini', '.xml', '.html', '.txt', '.json']
         bin_ext = ['.png', '.jpg', '.ico', '.gif']
 
@@ -321,7 +326,9 @@ class Start(SubCommand):
             dirname, filename = split(path)
             return filename not in [".svn", ".hg"]
 
-        for path in fs.walkfiles(wildcard=check_path):
+        for path in fs.walk.files():
+            if check_path(path):
+                continue
             _, ext = splitext(path)
             ext = ext.lower()
             if ext in text_ext:
@@ -373,22 +380,22 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
         dirname = longname.split('.', 1)[-1].replace('.', '_')
         dirname = ProjectDirName.ask(console, default="./" + dirname)
 
-        data = dict(author=author,
-                    project=project,
-                    timezone=self.get_timezone(),
-                    secret=make_secret())
+        data = {
+            "author": author,
+            "project": project,
+            "timezone": self.get_timezone(),
+            "secret": make_secret()
+        }
 
         from ...command.sub import project_template
-        from fs.memoryfs import MemoryFS
-        from fs.opener import fsopendir
-        memfs = MemoryFS()
+        memfs = open_fs('mem://')
         templatebuilder.compile_fs_template(memfs,
                                             project_template.template,
                                             data=data)
 
-        dest_fs = fsopendir(self.args.location or dirname, create_dir=True, writeable=True)
+        dest_fs = open_fs(self.args.location or dirname, create=True, writeable=True)
         continue_overwrite = 'overwrite'
-        if not dest_fs.isdirempty('.'):
+        if not dest_fs.isempty('.'):
             if self.args.force:
                 continue_overwrite = 'overwrite'
             elif self.args.new:
@@ -397,8 +404,7 @@ Default values are shown in blue (hit return to accept defaults). Some defaults 
                 continue_overwrite = DirNotEmpty.ask(console, default="cancel")
 
         if continue_overwrite == 'overwrite':
-            from fs.utils import copydir
-            copydir(memfs, dest_fs)
+            fs.copy.copy_dir(memfs, '/', dest_fs, '/')
             console.table([[Cell("Project files written successfully!", fg="green", bold=True, center=True)],
                           ["""See readme.txt in the project directory for the next steps.\n\nBrowse to http://moyaproject.com/gettingstarted/ if you need further help."""]])
             return 0
@@ -464,16 +470,15 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
         actions = []
 
         from ...command.sub import library_template
-        from fs.memoryfs import MemoryFS
-        from fs.opener import fsopendir
-        memfs = MemoryFS()
+
+        memfs = open_fs('mem://')
         templatebuilder.compile_fs_template(memfs,
                                             library_template.template,
                                             data=data)
-        dest_fs = fsopendir(join(library_path, library["longname"]), create_dir=True, writeable=True)
+        dest_fs = open_fs(join(library_path, library["longname"]), create=True, writeable=True)
 
         continue_overwrite = 'overwrite'
-        if not dest_fs.isdirempty('.'):
+        if not dest_fs.isempty('/'):
             if self.args.force:
                 continue_overwrite = 'overwrite'
             elif self.args.new:
@@ -483,8 +488,7 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
 
         if continue_overwrite != 'cancel':
             if continue_overwrite == 'overwrite':
-                from fs.utils import copydir
-                copydir(memfs, dest_fs)
+                fs.copy.copy_dir(memfs, '/', dest_fs, '/')
                 actions.append("Written library files to {}".format(dest_fs.getsyspath('.')))
             elif continue_overwrite == 'new':
                 files_copied = copy_new(memfs, dest_fs)
@@ -502,7 +506,7 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
                 server_name = "main"
 
                 if location:
-                    with fsopendir(project_path) as project_fs:
+                    with open_fs(project_path) as project_fs:
                         with project_fs.opendir(location) as server_fs:
                             from lxml.etree import fromstring, ElementTree, parse
                             from lxml.etree import XML, Comment
@@ -523,7 +527,6 @@ Default values are shown in grey (simply hit return to accept defaults). Some de
 
                             def has_child(node, tag, **attribs):
                                 for el in node.findall(tag):
-                                    #items = dict(el.items())
                                     if all(el.get(k, None) == v for k, v in attribs.items()):
                                         return True
                                 return False

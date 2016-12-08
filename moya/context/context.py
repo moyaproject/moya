@@ -2,23 +2,19 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from moya.compat import implements_to_string, text_type, string_types, number_types
+import re
+import weakref
+from threading import local, Thread
 
+from ..compat import implements_to_string, text_type, string_types, number_types
 from . import dataindex
 from .dataindex import parse, join, join_parsed, is_from_root
 from .expression import Expression
 from .errors import ContextKeyError, SubstitutionError
 from .missing import Missing
-from .tools import get_keys, to_expression
+from .tools import to_expression
 from ..tools import lazystr
 from ..moyaexceptions import MoyaException
-
-import re
-import weakref
-
-from itertools import chain
-from threading import local
-from threading import Thread
 
 
 @implements_to_string

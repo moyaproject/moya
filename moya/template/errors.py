@@ -26,6 +26,7 @@ class MissingTemplateError(Exception):
 
 @implements_to_string
 class BadTemplateError(MissingTemplateError):
+    hide_py_traceback = False
     error_type = "Bad Template"
 
     def __str__(self):

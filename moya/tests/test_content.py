@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from fs.opener import fsopendir
+from fs.opener import open_fs
 
 from moya.context import Context
 from moya.console import Console
@@ -14,7 +14,7 @@ class TestContent(unittest.TestCase):
     def setUp(self):
         self.called = False
         path = os.path.abspath(os.path.dirname(__file__))
-        self.fs = fsopendir(path)
+        self.fs = open_fs(path)
         self.context = Context()
         self.context['console'] = Console()
         self.archive = Archive()

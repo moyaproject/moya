@@ -1,0 +1,7 @@
+<ul>
+{%- for form in formelements %}
+    <li>
+        <a href="{% url 'showform' with formelement=form.element_ref %}">${form.element_ref}</a>
+    </li>
+{%- endfor %}
+</ul>

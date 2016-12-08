@@ -20,8 +20,9 @@ from webob.response import Response
 from datetime import datetime
 import base64
 import pytz
-import json
 import logging
+
+from fs.path import dirname
 
 GMT = pytz.timezone('GMT')
 log = logging.getLogger('moya.runtime')

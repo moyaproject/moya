@@ -135,7 +135,6 @@
                     <dict dst="apply_data" />
                     <forms:apply src="form" dst="apply_data" />
                     <db:create model="${table.params.model}" obj="apply_data" from="${.url.appname}" dst="obj"/>
-
                 </db:transaction>
                 <catch exception="db.*" dst="exc">
                     <forms:error>Can't create object: ${exc.msg}</forms:error>
