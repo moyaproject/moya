@@ -11,6 +11,7 @@
         <link to="#table.commentobjects" title="Comment Objects" />
         <link to="#table.comments" title="Comments"/>
         <link to="#table.object-subscriptions" title="Object Subscriptions"/>
+        <link to="#table.subscriptions" title="Subscriptions"/>
     </module>
 
     <table xmlns="http://moyaproject.com/admin"
@@ -48,6 +49,18 @@
         <column title="ID" link="yes" sort="id">${object.id}</column>
         <column title="User" sort="user.username"><moya:render src="object.user"/></column>
         <column title="Comment Object" sort="commentobject.object">${object.commentobject}</column>
+    </table>
+
+    <table xmlns="http://moyaproject.com/admin" order="-id"
+        model="#Subscription"
+        libname="table.subscriptions" slug="subscriptions" title="Subscriptions"
+        description="Subcriptions">
+        <column title="UID" sort="uid" link="yes">${object.uid}</column>
+        <column title="Comment" sort="comment">
+            <w:link url="${object.url}">${object.url}</w:link>
+        </column>
+        <column title="Name" sort="name">${object.name}</column>
+        <column title="Email" sort="email">${object.email}</column>
     </table>
 
 </moya>

@@ -26,7 +26,7 @@
     <model name="Comment" libname="Comment" xmlns="http://moyaproject.com/db"
             repr="Comment #${id} by ${user.username or commenter_name or 'anon'} on ${commentobject.object_url}">
 
-        <foreign-key label="Comment object" name="commentobject" model="#CommentObject" null="no" />
+        <foreign-key label="Comment object" name="commentobject" model="#CommentObject" null="no"/>
         <foreign-key label="Parent" name="parent" model="#Comment" null="yes" blank="yes"/>
 
         <string label="Comment Format" name="format" length="20" default="text" />
@@ -45,17 +45,18 @@
 
     <model name="Subscription" libname="Subscription" xmlns="http://moyaproject.com/db">
         <unique-together>
-            <foreign-key name="comment" model="#Comment" null="no" />
+            <foreign-key name="comment" model="#Comment" null="no" picker="#table.commentobjects"/>
             <string name="name" length="50" null="no" />
         </unique-together>
         <string name="uid" length="16"/>
         <string name="email" length="300" null="no"/>
+        <property name="url" expression="comment.commentobject.object_url"/>
      </model>
 
     <model name="ObjectSubscription" libname="ObjectSubscription" xmlns="http://moyaproject.com/db" title="Object Subscription">
         <unique-together>
             <foreign-key name="user" model="auth#User" null="yes" />
-            <foreign-key name="commentobject" model="#CommentObject" null="yes" />
+            <foreign-key name="commentobject" model="#CommentObject" null="yes"/>
         </unique-together>
     </model>
 
