@@ -101,6 +101,7 @@ class ExpressionEvalError(ExpressionError):
 
 class Evaluator(object):
     """Base class mainly to make expressions pickleable"""
+    __slots__ = ['col', 'tokens']
     def __init__(self, s, loc, tokens):
         self.col = loc
         self.tokens = tokens.asList()
@@ -124,6 +125,7 @@ class Evaluator(object):
 
 class EvalConstant(Evaluator):
     """Evaluates a constant"""
+    __slots__ = ['key', 'value', 'eval']
     constants = {"None": None,
                  "True": True,
                  "False": False,
@@ -138,6 +140,7 @@ class EvalConstant(Evaluator):
 
 class EvalVariable(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['eval', 'key', '_index']
     def build(self, tokens):
         self.key = tokens[0]
         self._index = index = dataindex.parse(self.key)
@@ -148,6 +151,7 @@ class EvalVariable(Evaluator):
 
 
 class EvalLiteralIndex(Evaluator):
+    __slots__ = ['scope', 'indices']
     def build(self, tokens):
         self.scope = tokens[0][0].eval
         self.indices = [dataindex.parse(t[1:]) for t in tokens[0][1:]]
@@ -193,6 +197,7 @@ class EvalTimespan(Evaluator):
 
 class EvalCurrentScope(Evaluator):
     """Class to eval the current scope"""
+    __slots__ = []
 
     def eval(self, context):
         return context.obj
@@ -201,6 +206,7 @@ class EvalCurrentScope(Evaluator):
 
 class EvalExplicitVariable(Evaluator):
     """Class to evaluate a parsed constant or explicit variable (beginning with $)"""
+    __slots__ = ['index']
     def build(self, tokens):
         self.index = parseindex(tokens[1])
 
@@ -210,6 +216,7 @@ class EvalExplicitVariable(Evaluator):
 
 class EvalInteger(Evaluator):
     """Class to evaluate an integer value"""
+    __slots__ = ['value', 'eval']
     def build(self, tokens):
         value = self.value = int(tokens[0])
         self.eval = lambda context: value
@@ -217,6 +224,7 @@ class EvalInteger(Evaluator):
 
 class EvalReal(Evaluator):
     """Class to evaluate a real number value"""
+    __slots__ = ['value', 'eval']
     def build(self, tokens):
         value = self.value = float(tokens[0])
         self.eval = lambda context: value
@@ -224,7 +232,7 @@ class EvalReal(Evaluator):
 
 class EvalTripleString(Evaluator):
     """Class to evaluate a triple quoted string"""
-
+    __slots__ = ['value', 'eval']
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][3:-3])
         self.eval = lambda context: value
@@ -232,7 +240,7 @@ class EvalTripleString(Evaluator):
 
 class EvalString(Evaluator):
     """Class to evaluate a string"""
-
+    __slots__ = ['value', 'eval']
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][1:-1])
         self.eval = lambda context: value
@@ -254,6 +262,7 @@ class EvalSignOp(Evaluator):
 
 class EvalNotOp(Evaluator):
     """Class to evaluate expressions with logical NOT"""
+    __slots__ = ['_eval', 'eval']
     def build(self, tokens):
         sign, value = tokens[0]
         _eval = self._eval = value.eval
@@ -262,6 +271,7 @@ class EvalNotOp(Evaluator):
 
 class EvalList(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['list_tokens']
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -271,6 +281,7 @@ class EvalList(Evaluator):
 
 class EvalSimpleList(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['list_tokens']
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -279,6 +290,7 @@ class EvalSimpleList(Evaluator):
 
 
 class EvalEmptyList(Evaluator):
+    __slots__ = []
 
     def build(self, tokens):
         pass
@@ -288,6 +300,7 @@ class EvalEmptyList(Evaluator):
 
 
 class EvalDict(Evaluator):
+    __slots__ = ['_item_eval']
 
     def build(self, tokens):
         self._item_eval = [(k.eval, v.eval) for k, v in tokens[0]]
@@ -297,6 +310,7 @@ class EvalDict(Evaluator):
 
 
 class ExpFunction(object):
+    __slots__ = ['context', 'text', '_eval', '_context']
     def __init__(self, context, text, eval):
         self.context = context
         self.text = text
@@ -312,6 +326,7 @@ class ExpFunction(object):
 
 
 class EvalFunction(Evaluator):
+    __slots__ = ['_eval']
 
     def build(self, tokens):
         self._eval = tokens[0][0].eval
@@ -321,6 +336,7 @@ class EvalFunction(Evaluator):
 
 
 class EvalKeyPairDict(Evaluator):
+    __slots__ = ['_item_eval']
 
     def build(self, tokens):
         self._item_eval = [(k, v.eval) for k, v in tokens]
@@ -330,6 +346,7 @@ class EvalKeyPairDict(Evaluator):
 
 
 class EvalEmptyDict(Evaluator):
+    __slots__ = []
     def build(self, tokens):
         pass
 
@@ -339,7 +356,7 @@ class EvalEmptyDict(Evaluator):
 
 class EvalModifierOp(Evaluator):
     """Class to evaluate expressions with a leading filter function"""
-
+    __slots__ = ['value', '_eval', 'eval', 'filter_func']
     modifiers = ExpressionModifiers()
 
     def build(self, tokens):
@@ -359,6 +376,7 @@ class EvalModifierOp(Evaluator):
 
 
 class EvalFilterOp(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -409,6 +427,7 @@ class EvalSliceOp(Evaluator):
 
 
 class EvalBraceOp(Evaluator):
+    __slots__ = ['value_eval', 'index_eval']
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.index_eval = [(t[0], t[1].eval) for t in tokens[0][1:]]
@@ -448,6 +467,8 @@ def pairs(tokenlist):
 class EvalMultOp(Evaluator):
     "Class to evaluate multiplication and division expressions"
 
+    __slots__ = ['value', '_eval', 'operator_eval', 'eval']
+
     ops = {"*": operator.mul,
            "/": operator.truediv,
            "//": operator.floordiv,
@@ -483,6 +504,7 @@ class EvalMultOp(Evaluator):
 
 class EvalAddOp(Evaluator):
     "Class to evaluate addition and subtraction expressions"
+    __slots__ = ['operator_eval', 'value', '_eval', 'eval']
 
     ops = {'+': operator.add,
            '-': operator.sub}
@@ -1018,11 +1040,11 @@ class DefaultExpression(object):
     but returns a pre-determined value.
 
     """
-    return_value = None
+    __slots__ = ['return_value']
+    #return_value = None
 
-    def __init__(self, return_value=Ellipsis):
-        if return_value is not Ellipsis:
-            self.return_value = return_value
+    def __init__(self, return_value=None):
+        self.return_value = return_value
 
     def __repr__(self):
         return 'DefaultExpression(%r)' % self.return_value
@@ -1033,12 +1055,14 @@ class DefaultExpression(object):
 
 class TrueExpression(DefaultExpression):
     """A default expression that returns True"""
+    __slots__ = []
     def eval(self, context):
         return True
 
 
 class FalseExpression(DefaultExpression):
     """A default expression that returns False"""
+    __slots__ = []
     def eval(self, context):
         return False
 

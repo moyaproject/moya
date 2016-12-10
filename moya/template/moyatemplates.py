@@ -108,7 +108,7 @@ class MoyaTemplateEngine(TemplateEngine):
 
 
 class _TemplateStackFrame(interface.AttributeExposer):
-    #__slots__ = ['app', 'data', 'stack', 'current_node']
+    __slots__ = ['app', 'data', 'stack', 'current_node']
     __moya_exposed_attributes__ = ['app', 'data']
 
     def __init__(self, app, data=None):
@@ -408,6 +408,7 @@ class Node(with_metaclass(NodeMeta, NodeType)):
 
 class TextNode(Node):
     """A single line of text that requires substitution"""
+    __slots__ = ['text']
 
     def __init__(self, template, name, extra, location, text):
         super(TextNode, self).__init__(template, name, extra, location)
@@ -742,6 +743,7 @@ class WithNode(Node):
 
 
 class ElseNode(Node):
+    __slots__ = []
     tag_name = "else"
     is_clause = True
 
@@ -750,6 +752,7 @@ class ElseNode(Node):
 
 
 class EmptyNode(Node):
+    __slots__ = []
     tag_name = "empty"
     is_clause = True
 
@@ -758,6 +761,7 @@ class EmptyNode(Node):
 
 
 class ElifNode(Node):
+    __slots__ = []
     tag_name = "elif"
     is_clause = True
 
@@ -1181,6 +1185,7 @@ class MediaNode(Node):
 
 class AttribNode(Node):
     """Renders a sequence of html attributes from a mapping expression"""
+    __slots__ = ['attribs_expression']
     tag_name = "attrib"
     auto_close = True
     _prefix = ""
@@ -1213,6 +1218,7 @@ class AttribNode(Node):
 
 class DataAttribNode(AttribNode):
     """Renders a sequence of html data attributes from a mapping expression"""
+    __slots__ = []
     tag_name = "dataattrib"
     auto_close = True
     _prefix = "data-"
