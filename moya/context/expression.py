@@ -402,6 +402,7 @@ class EvalFilterOp(Evaluator):
 
 
 class EvalSliceOp(Evaluator):
+    __slots__ = ['value_eval', 'slice_eval']
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.slice_eval = [t.eval if t is not None else (lambda c: None) for t in tokens[0][1]]
@@ -534,6 +535,7 @@ class EvalAddOp(Evaluator):
 
 
 class EvalRangeOp(Evaluator):
+    __slots__ = ['_evals']
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
 
@@ -543,6 +545,8 @@ class EvalRangeOp(Evaluator):
 
 
 class EvalExclusiveRangeOp(Evaluator):
+    __slots__ = ['_evals']
+
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
 
@@ -552,6 +556,7 @@ class EvalExclusiveRangeOp(Evaluator):
 
 
 class EvalTernaryOp(Evaluator):
+    __slots__ = ['evals']
 
     def build(self, tokens):
         self.evals = [t.eval for t in tokens[0][::2]]
@@ -596,6 +601,7 @@ def _str_in(value, seq):
 
 class EvalComparisonOp(Evaluator):
     "Class to evaluate comparison expressions"
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     opMap = {
         "<": operator.lt,
@@ -637,7 +643,7 @@ class EvalComparisonOp(Evaluator):
 
 
 class EvalFormatOp(Evaluator):
-
+    __slots__ = ['value', '_eval', 'evals']
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -655,6 +661,7 @@ class EvalFormatOp(Evaluator):
 
 
 class EvalLogicOpOR(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -674,6 +681,7 @@ class EvalLogicOpOR(Evaluator):
 
 
 class EvalLogicOpAND(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -852,6 +860,7 @@ class DummyLock(object):
 
 
 class Function(object):
+    __slots__ = ['expression', 'scope']
     def __init__(self, expression, scope=None):
         self.expression = expression
         if scope is None:
@@ -888,7 +897,7 @@ class Function(object):
 @implements_to_string
 class Expression(object):
     """Evaluate an arithmetic expression of context values"""
-
+    __slots__ = ['exp', 'compiled_exp', '_eval']
     exp_cache = {}
     new_expressions = set()
     _lock = threading.RLock()
