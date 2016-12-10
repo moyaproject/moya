@@ -109,7 +109,7 @@ class AttributeTypeBase(object):
 
 
 class AttributeType(with_metaclass(AttributeTypeMeta, AttributeTypeBase)):
-    pass
+    __slots__ = []
 
 
 class Constant(AttributeType):
@@ -228,7 +228,7 @@ class Index(AttributeType):
 
 class Reference(AttributeType):
     type_display = "reference"
-    __slots__ = []
+    __slots__ = ['reference']
 
     def __init__(self, element, attribute_name, text):
         super(Reference, self).__init__(element, attribute_name, text)

@@ -798,7 +798,7 @@ class Template(RenderBase):
         self.template = MoyaTemplate(self.text, self._location)
 
     def logic(self, context):
-        rendered_content = self.template.render(context)
+        rendered_content = self.template.render(context.obj, context=context)
         markup = Markup(rendered_content, self.markup(context))
         context['.content'].add_renderable(self._tag_name, markup)
 
