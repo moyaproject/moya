@@ -1,6 +1,7 @@
 0.6.13
 ------
 Optimized start up time and memory usage
+Fix for comment subscriptions
 
 
 0.6.12
