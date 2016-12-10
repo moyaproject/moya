@@ -10,7 +10,7 @@
     </choices>
 
     <model name="CommentObject" libname="CommentObject" xmlns="http://moyaproject.com/db"
-        repr="CommentObject ${object_url} (${namespace}.${object})" title="Comment Object">
+        repr="CommentObject ${namespace} ${object}" title="Comment Object">
         <unique-together>
             <string label="Object Namespace" name="namespace" length="100" />
             <string label="Object ID" name="object" length="100" />
@@ -26,8 +26,8 @@
     <model name="Comment" libname="Comment" xmlns="http://moyaproject.com/db"
             repr="Comment #${id} by ${user.username or commenter_name or 'anon'} on ${commentobject.object_url}">
 
-        <foreign-key label="Comment object" name="commentobject" model="#CommentObject" null="no"/>
-        <foreign-key label="Parent" name="parent" model="#Comment" null="yes" blank="yes"/>
+        <foreign-key label="Comment object" name="commentobject" model="#CommentObject" null="no" picker="#table.commentobjects"/>
+        <foreign-key label="Parent" name="parent" model="#Comment" null="yes" blank="yes" picker="#table.comments"/>
 
         <string label="Comment Format" name="format" length="20" default="text" />
         <text label="Comment Text" name="text" default="" />
@@ -36,7 +36,8 @@
         <integer label="Comment Level" name="level" null="no" default="0" />
         <datetime label="Commented posted time" name="time" auto="yes" />
 
-        <foreign-key label="Commenter user account" name="user" model="auth#User" blank="yes" null="yes" orderby="username"/>
+        <foreign-key label="Commenter user account" name="user" model="auth#User" picker="auth#admintable.users"
+            blank="yes" null="yes" orderby="username"/>
         <string label="Commenter Name" name="commenter_name" length="50" null="yes" />
         <string label="Commenter Email" name="commenter_email" length="300" null="yes" />
         <string label="Commenter URL" name="commenter_url" length="300" null="yes" />

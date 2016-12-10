@@ -19,7 +19,7 @@
         libname="table.commentobjects" slug="commentobjects" title="Comment Objects" model="#CommentObject" description="Comment Objects">
         <column title="ID" sort="id" link="yes">#${object.id}</column>
         <column title="URL" sort="object_url">
-            <w:link target="_blank" url="${object.object_url}">${object.object_url}</w:link>
+            <w:link target="_blank" url="${object.object_url}">${basename:dirname:object.object_url}</w:link>
         </column>
         <column title="Namespace" sort="namespace">${object.namespace}</column>
         <column title="Object" sort="object">${object.object}</column>
@@ -28,15 +28,14 @@
     <table xmlns="http://moyaproject.com/admin" order="-time"
         search="#Comment.commenter_ip == q or #Comment.commenter_name contains q"
         libname="table.comments" slug="comments" title="Comments" model="#Comment" description="User Comments">
-        <column title="Comment" sort="id" link="yes">Comment #${object.id}</column>
+        <column title="ID" sort="id" link="yes">#${object.id}</column>
         <column title="Page" >
-            <html:a href="${object.commentobject.object_url}#comment${object.id}">${object.commentobject.object_url}</html:a>
+            <html:a href="${object.commentobject.object_url}#comment${object.id}">${basename:dirname:object.commentobject.object_url}</html:a>
         </column>
-        <column title="Commenter name" sort="commenter_name">${object.user.username or object.commenter_name or ''}</column>
-        <column title="Commenter IP" sort="commenter_ip">${object.commenter_ip or ''}</column>
-        <column title="User" sort="#Comment.user.username">${object.user.username}</column>
-        <column title="Object" sort="#Comment.commentobject.id">${object.commentobject}</column>
-        <column title="Posted" sort="time">${localize:object.time}</column>
+        <column title="Commenter" sort="commenter_name">${object.user.username or object.commenter_name or ''}</column>
+        <column title="IP" sort="commenter_ip">${object.commenter_ip or ''}</column>
+        <column title="User" sort="#Comment.user.username"><moya:render src="object.user"/></column>
+        <column title="Posted" sort="time">${object.time % 'short'}</column>
         <column title="Moderated?" sort="moderated">
             <check ticked="object.moderated" />
         </column>
@@ -56,7 +55,7 @@
         libname="table.subscriptions" slug="subscriptions" title="Subscriptions"
         description="Subcriptions">
         <column title="UID" sort="uid" link="yes">${object.uid}</column>
-        <column title="Comment" sort="comment">
+        <column title="URL" sort="url">
             <w:link url="${object.url}">${object.url}</w:link>
         </column>
         <column title="Name" sort="name">${object.name}</column>
