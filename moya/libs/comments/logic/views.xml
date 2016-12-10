@@ -171,14 +171,19 @@
                 let:parentid="form.data.parentid"
                 let:object="form.data.object"
                 let:namespace="form.data.namespace"
-                let:object_url="form.data.object_url"
-                let:subscribe="form.data.subscribe" />
+                let:object_url="form.data.object_url"/>
 
             <let comment.text="form.data.text[:.app.settings.max_comment_length.int]"
                  comment.format="comment.commentobject.markup"
                  comment.user=".user"/>
 
             <db:commit />
+
+            <call macro="#subscribe" if="form.data.subscribe"
+                let:email=".user.email"
+                let:comment="comment"
+                let:name=".user.first_name"/>
+
             <call macro="#check_subscriptions"
                 let:comment="comment"
                 let:comment_url=".session.pendingcomment.object_url"/>

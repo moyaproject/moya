@@ -357,7 +357,7 @@ class DBExpressionAttribute(AttributeType):
 class Boolean(ExpressionAttribute):
     type_display = "boolean"
     name = "boolean"
-    __slots__ = ['attribute_name', 'ex']
+    __slots__ = ['attribute_name', 'text', 'exp']
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
