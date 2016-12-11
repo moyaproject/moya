@@ -73,7 +73,7 @@ def serve_file(req, fs, path, filename=None):
             res.status = 304
             serve_file.close()
         else:
-            res.body = serve_file.read()
+            res.app_iter = file_chunker(serve_file)
             # res.app_iter = file_chunker(serve_file)
             # if 'wsgi.file_wrapper' in req.environ:
             #     res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
