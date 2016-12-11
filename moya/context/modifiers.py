@@ -31,11 +31,13 @@ from .. import moyajson
 from ..import compat
 
 from fs.path import (abspath,
-                      basename,
-                      join,
-                      relativefrom,
-                      dirname,
-                      splitext)
+                     basename,
+                     join,
+                     normpath,
+                     relativefrom,
+                     dirname,
+                     splitext,
+                     split)
 
 import uuid
 import hashlib
@@ -814,6 +816,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def slashjoin(self, context, v):
         return _slashjoin(v)
+
+    def pathsplit(self, context, v):
+        return split(normpath(text_type(v)))
 
     def permission(self, context, v):
         return self._permission(context, v)

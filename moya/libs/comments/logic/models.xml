@@ -21,6 +21,7 @@
         <boolean label="Allow new comments?" name="allow_new" default="yes" null="no"/>
         <integer name="updates" default="0" null="no" blank="yes" />
         <string name="markup" label="Markup to use in comments" default="bbcode" choices="#choices.markup" null="no" length="20" />
+        <property name="url" expression="object_url"/>
     </model>
 
     <model name="Comment" libname="Comment" xmlns="http://moyaproject.com/db"
@@ -42,6 +43,8 @@
         <string label="Commenter Email" name="commenter_email" length="300" null="yes" />
         <string label="Commenter URL" name="commenter_url" length="300" null="yes" />
         <string label="Commenter IP" name="commenter_ip" length="39" null="yes" />
+
+        <property name="url" expression="commentobject.object_url"/>
     </model>
 
     <model name="Subscription" libname="Subscription" xmlns="http://moyaproject.com/db">
