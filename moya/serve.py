@@ -13,7 +13,7 @@ from fs.errors import FSError
 from .response import MoyaResponse
 from .compat import PY2, py2bytes
 from . import http
-from .tools import md5_hexdigest
+from .tools import md5_hexdigest, file_chunker
 from . import logic
 from . import __version__
 
@@ -91,9 +91,9 @@ def serve_file(req, fs, path, filename=None):
         else:
             # Use high performance file wrapper if available
             if 'wsgi.file_wrapper' in req.environ:
-                res.body_file = req.environ['wsgi.file_wrapper'](serve_file)
+                res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
             else:
-                res.body_file = serve_file
+                res.app_iter = file_chunker(serve_file)
         # Set content length
         if not status304:
             res.content_length = file_size
