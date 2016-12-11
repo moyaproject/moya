@@ -74,13 +74,13 @@ def serve_file(req, fs, path, filename=None):
             res.status = 304
             serve_file.close()
         else:
+            try:
+                serve_file.fileno()
+            except:
+                # Fixes broken behaviour in Gunciron with BytesIO
+                serve_file = _Reader(serve_file)
             # Use high performance file wrapper if available
             if 'wsgi.file_wrapper' in req.environ:
-                try:
-                    serve_file.fileno()
-                except:
-                    # Fixes broken behaviour in Gunciron with BytesIO
-                    serve_file = _Reader(serve_file)
                 res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
             else:
                 res.body_file = serve_file
