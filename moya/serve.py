@@ -76,11 +76,12 @@ def serve_file(req, fs, path, filename=None):
         else:
 
             serve_file = _Reader(serve_file)
+            res.body_file = serve_file
             # Use high performance file wrapper if available
-            if 'wsgi.file_wrapper' in req.environ:
-                res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
-            else:
-                res.body_file = serve_file
+            # if 'wsgi.file_wrapper' in req.environ:
+            #     res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
+            # else:
+            #     res.body_file = serve_file
         # Set content length
         if not status304:
             res.content_length = file_size
