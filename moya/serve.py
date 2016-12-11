@@ -2,10 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from datetime import datetime
-import io
 import mimetypes
-
-import six
 
 from fs.path import basename
 from fs.errors import FSError
@@ -21,29 +18,16 @@ from . import __version__
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
-class _Reader(object):
-
-    def __init__(self, file):
-        self._file = file
-        if six.callable(file.fileno):
-            try:
-                fileno = file.fileno()
-            except:
-                fileno = None
-        else:
-            fileno = file.fileno
-        self._fileno = fileno
-
-    def read(self, size):
-        return self._file.read(size)
-
-    def tell(self):
-        return self._file.tell()
-
-    def fileno(self):
-        if self._fileno is None:
-            raise io.UnsupportedOperation
-        return self._fileno
+def file_chunker(file, size=16384):
+    """An iterator that reads a file in chunks."""
+    read = file.read
+    try:
+        chunk = read(size)
+        while chunk:
+            yield chunk
+            chunk = read(size)
+    finally:
+        file.close()
 
 
 def serve_file(req, fs, path, filename=None):
@@ -89,8 +73,8 @@ def serve_file(req, fs, path, filename=None):
             res.status = 304
             serve_file.close()
         else:
-            # Use high performance file wrapper if available
-            res.app_iter = file_chunker(serve_file)
+            res.body = serve_file.read()
+            # res.app_iter = file_chunker(serve_file)
             # if 'wsgi.file_wrapper' in req.environ:
             #     res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
             # else:
