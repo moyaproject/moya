@@ -18,7 +18,8 @@
 	<view docname="servedir">
 		<!-- Call our Python macro to get the directory listing -->
         <let fs=".fs[fsname]"
-        	show_permissions=".debug or .app.settings.show_permissions.bool"/>
+        	show_permissions=".debug or .app.settings.show_permissions.bool"
+        	show_debug=".debug or .app.settings.show_debug.bool"/>
 		<call macro="#read_directory" dst="directory" let:permissions="show_permissions">
 			<var>fs</var>
 			<var>path</var>
