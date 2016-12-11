@@ -18,4 +18,4 @@ def read_directory(app, fs, path, permissions=True):
         for resource in dir_fs.scandir('/', namespaces=namespaces)
         if not (hide_wildcards and imatch_any(hide_wildcards, resource.name))
     ]
-    return directory
+    return {'fs': dir_fs, "directory": directory}

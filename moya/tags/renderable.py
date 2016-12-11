@@ -46,9 +46,9 @@ class RenderTemplate(DataSetter):
         template = app.resolve_template(params.template)
         value = RenderContainer.create(app,
                                        template=template)
-        value.update(self.get_let_map(context))
         if params.withscope:
             value.update(context['.call'])
+        value.update(self.get_let_map(context))
         with context.data_scope(value):
             yield DeferNodeContents(self)
         self.on_value(context, value)
