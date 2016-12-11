@@ -582,39 +582,28 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except:
             return None
 
-    def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    def group(self, context, v):
         try:
             seq, key = v
         except ValueError:
             raise ValueError('group: modifier expects [<sequence>, <expression]')
         result = OrderedDict()
-        if hasattr(key, '__moyacall__'):
-            for item in seq:
-                k = key.__moyacall__(item)
-                result.setdefault(k, []).append(item)
-        else:
-            for item in seq:
-                k = _get(item, key)
-                result.setdefault(k, []).append(item)
-
+        get_key = make_key_getter(key)
+        for item in seq:
+            result.setdefault(get_key(item), []).append(item)
         return result
 
-    def counts(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    def counts(self, context, v):
         try:
             seq, key = v
         except ValueError:
             raise ValueError('counts: modifier expects [<sequence>, <expression]')
 
-        if hasattr(key, '__moyacall__'):
-            counts = collections.Counter(
-                key.__moyacall__(item)
-                for item in seq
-            )
-        else:
-            counts = collections.Counter(
-                _get(item, key)
-                for item in seq
-            )
+        get_key = make_key_getter(key)
+        counts = collections.Counter(
+            get_key(item)
+            for item in seq
+        )
         return counts
 
     def groupsof(self, context, v):
@@ -630,7 +619,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
         if group_size <= 0:
             raise ValueError("group size must be a positive integer")
 
-        # TODO: Return a generator rather than a list
         grouped = [
             seq[i: i + group_size]
             for i in range(0, len(seq), group_size)
