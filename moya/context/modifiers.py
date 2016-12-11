@@ -13,7 +13,7 @@ from ..compat import (text_type,
                       implements_to_string)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
-from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
+from ..context.tools import get_moya_interface, get_moya_attribute, obj_index, obj_index_getter
 from ..context.expressiontime import (TimeSpan,
                                       ExpressionDateTime,
                                       ExpressionDate,
@@ -47,6 +47,7 @@ from base64 import b64decode, b64encode
 from decimal import Decimal
 from collections import OrderedDict
 from datetime import datetime
+from functools import partial
 from operator import truth
 from itertools import chain
 import random
@@ -122,6 +123,14 @@ def make_uuid(context, version, nstype="url", nsname=None):
         _uuid = uuid.uuid5(namespace, nsname)
 
     return text_type(_uuid)
+
+
+def make_key_getter(key):
+    """Get a callable that extracts a key or sub-expression."""
+    if hasattr(key, '__moyacall__'):
+        return key.__moyacall__
+    else:
+        return obj_index_getter(key)
 
 
 class ExpressionModifiersBase(object):
@@ -369,14 +378,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def collect(self, context, v):
         seq, key = v
-        return [obj_index(obj, key) for obj in seq]
+        get_key = make_key_getter(key)
+        return [get_key(obj) for obj in seq]
 
     def collectmap(self, context, v):
         seq, key = v
         result = {}
+        get_key = make_key_getter(key)
         for obj in seq:
             try:
-                k = obj_index(obj, key)
+                k = get_key(obj)
             except:
                 pass
             else:
@@ -409,7 +420,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except ValueError:
             raise ValueError('count: modifier expects [<seq>, <expression>]')
         if not hasattr(predicate, '__moyacall__'):
-            raise ValueError('count: requires an expression, e.g. map:[students, {grade lt "A"}]')
+            raise ValueError('count: requires a sub expression, e.g. map:[students, `grade lt "A"`]')
         return sum(1 for item in seq if predicate.__moyacall__(item))
 
     def csrf(self, context, v):
@@ -570,14 +581,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
             return connectivity.get(v)
         except:
             return None
-
-    # def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
-    #     seq, key = v
-    #     result = OrderedDict()
-    #     for item in seq:
-    #         k = _get(item, key)
-    #         result.setdefault(k, []).append(item)
-    #     return result
 
     def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
         try:
