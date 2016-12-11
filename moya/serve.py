@@ -18,6 +18,19 @@ from . import __version__
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
+class _Reader(object):
+    """File-link for WSGI purposes."""
+
+    def __init__(self, file):
+        self._file = file
+
+    def read(self, size):
+        return self._file.read()
+
+    def close(self):
+        self._file.close()
+
+
 def serve_file(req, fs, path, filename=None):
     """Serve a static file"""
     res = MoyaResponse()
@@ -63,6 +76,11 @@ def serve_file(req, fs, path, filename=None):
         else:
             # Use high performance file wrapper if available
             if 'wsgi.file_wrapper' in req.environ:
+                try:
+                    serve_file.fileno()
+                except:
+                    # Fixes broken behaviour in Gunciron with BytesIO
+                    serve_file = _Reader(serve_file)
                 res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
             else:
                 res.body_file = serve_file
