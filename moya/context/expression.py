@@ -167,6 +167,7 @@ class EvalLiteralIndex(Evaluator):
 @implements_to_string
 class EvalRegExp(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['regexp', '_re', 'match']
     def build(self, tokens):
         self.regexp = tokens[0]
         self._re = re.compile(tokens[0])
@@ -185,6 +186,7 @@ class EvalRegExp(Evaluator):
 @implements_to_string
 class EvalTimespan(Evaluator):
     """Evaluate a timespan spec"""
+    __slots__ = ['ts']
     def build(self, tokens):
         self.ts = TimeSpan(tokens[0])
 
