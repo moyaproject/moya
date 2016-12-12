@@ -4,6 +4,7 @@ from __future__ import print_function
 from datetime import datetime
 import io
 import mimetypes
+import tempfile
 
 from fs.path import basename
 from fs.errors import FSError
@@ -31,7 +32,7 @@ def file_chunker(file, size=65536):
         file.close()
 
 
-def serve_file(req, fs, path, filename=None, from_memory=False):
+def serve_file(req, fs, path, filename=None, copy=False):
     """Serve a static file"""
     res = MoyaResponse()
     mime_type, encoding = mimetypes.guess_type(basename(path))
@@ -53,8 +54,11 @@ def serve_file(req, fs, path, filename=None, from_memory=False):
             serve_file.close()
         raise logic.EndLogic(http.RespondNotFound())
     else:
-        if from_memory:
-            serve_file = io.BytesIO(serve_file.read())
+        if copy:
+            new_serve_file = tempfile.TemporaryFile(prefix='moyaserve')
+            new_serve_file.write(serve_file.read())
+            new_serve_file.seek(0)
+            serve_file = new_serve_file
         # Make a response
         file_size = info.size
         mtime = info.modified or datetime.utcnow()
