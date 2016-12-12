@@ -1,6 +1,7 @@
 <moya xmlns="http://moyaproject.com"
       xmlns:bootstrap="http://moyaproject.com/bootstrap"
       xmlns:html="http://moyaproject.com/html"
+      xmlns:comments="http://moyaproject.com/comments"
       xmlns:w="http://moyaproject.com/widgets">
 
     <content libname="content.pending.error" template="base.html">

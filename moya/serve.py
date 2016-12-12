@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from datetime import datetime
-import io
 import mimetypes
 import tempfile
 
