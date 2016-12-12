@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from datetime import datetime
+import io
 import mimetypes
 
 from fs.path import basename
@@ -30,7 +31,7 @@ def file_chunker(file, size=65536):
         file.close()
 
 
-def serve_file(req, fs, path, filename=None):
+def serve_file(req, fs, path, filename=None, from_memory=False):
     """Serve a static file"""
     res = MoyaResponse()
     mime_type, encoding = mimetypes.guess_type(basename(path))
@@ -52,6 +53,8 @@ def serve_file(req, fs, path, filename=None):
             serve_file.close()
         raise logic.EndLogic(http.RespondNotFound())
     else:
+        if from_memory:
+            serve_file = io.BytesIO(serve_file.read())
         # Make a response
         file_size = info.size
         mtime = info.modified or datetime.utcnow()
