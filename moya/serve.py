@@ -8,6 +8,7 @@ import tempfile
 
 from fs.path import basename
 from fs.errors import FSError
+from fs.tools import copy_file_data
 
 from .response import MoyaResponse
 from .compat import PY2, py2bytes
@@ -56,7 +57,7 @@ def serve_file(req, fs, path, filename=None, copy=False):
     else:
         if copy:
             new_serve_file = tempfile.TemporaryFile(prefix='moyaserve')
-            new_serve_file.write(serve_file.read())
+            copy_file_data(serve_file, new_serve_file)
             new_serve_file.seek(0)
             serve_file = new_serve_file
         # Make a response
