@@ -18,7 +18,7 @@ from . import __version__
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
-def file_chunker(file, size=16384):
+def file_chunker(file, size=65536):
     """An iterator that reads a file in chunks."""
     read = file.read
     try:
