@@ -4,10 +4,14 @@ from __future__ import unicode_literals
 from . import pilot
 from .console import ConsoleHighlighter
 
+import os
 import sys
 import io
 import logging
 import logging.handlers
+
+
+runtime_log = logging.getLogger('moya.runtime')
 
 
 class LogHighlighter(ConsoleHighlighter):
@@ -79,6 +83,7 @@ class MoyaFileHandler(logging.Handler):
 
     def __init__(self, filename):
         self._filename = filename
+        self._access_check = False
         super(MoyaFileHandler, self).__init__()
 
     def emit(self, record):
@@ -86,9 +91,23 @@ class MoyaFileHandler(logging.Handler):
         try:
             with io.open(self._filename, 'at', encoding="utf-8") as f:
                 f.write(text + '\n')
-        except IOError:
-            # paranoia
-            pass
+        except Exception as error:
+            # Check if it was permissions related
+            if not self._access_check:
+                self._access_check = True
+                if not os.access(self._filename, os.W_OK):
+                    self._access_check = True
+                    runtime_log.error(
+                        "no permission to write to log file '%s'",
+                        self._filename
+                    )
+                else:
+                    runtime_log.error(
+                        "unable to write to log file '%s' (%s)'",
+                        self._filename,
+                        error
+                    )
+
 
 
 class MoyaSysLogHandler(logging.handlers.SysLogHandler):
