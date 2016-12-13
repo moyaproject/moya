@@ -11,7 +11,6 @@ from .html import escape
 import json
 
 
-@implements_to_string
 class HTML(text_type):
     html_safe = True
 
