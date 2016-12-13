@@ -899,7 +899,6 @@ class Function(object):
 @implements_to_string
 class Expression(object):
     """Evaluate an arithmetic expression of context values"""
-    __slots__ = ['exp', 'compiled_exp', '_eval']
     exp_cache = {}
     new_expressions = set()
     _lock = threading.RLock()
@@ -1051,9 +1050,6 @@ class DefaultExpression(object):
     but returns a pre-determined value.
 
     """
-    __slots__ = ['return_value']
-    #return_value = None
-
     def __init__(self, return_value=None):
         self.return_value = return_value
 
@@ -1066,14 +1062,12 @@ class DefaultExpression(object):
 
 class TrueExpression(DefaultExpression):
     """A default expression that returns True"""
-    __slots__ = []
     def eval(self, context):
         return True
 
 
 class FalseExpression(DefaultExpression):
     """A default expression that returns False"""
-    __slots__ = []
     def eval(self, context):
         return False
 
