@@ -108,11 +108,13 @@ class RenderTemplateFS(DataSetter):
         scope = {}
         if params.withscope:
             scope.update(context['.call'])
+
+
         params = {'app': context['.app']}
         params.update(self.get_let_map(context))
 
         engine = self.archive.get_template_engine("moya")
-        html = engine.render_template(template, scope, **params)
+        html = engine.render_template(template, scope, base_context=context, **params)
 
         self.on_value(context, html)
 

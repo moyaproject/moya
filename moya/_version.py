@@ -1,4 +1,4 @@
 from __future__ import unicode_literals
 
-VERSION = "0.6.14a0"
+VERSION = "0.6.15a0"
 
