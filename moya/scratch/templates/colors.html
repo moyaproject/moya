@@ -1,0 +1,10 @@
+{% let start = color:'lime' %}
+{% let end = color:'#0000ff' %}
+
+{% for i in 1..100 %}
+{% let color = start + (end - start) * (i / 100) %}
+
+<div style="background-color:${color};font-size:12px;">
+${color.rgb}
+</div>
+{% end-for %}

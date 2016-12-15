@@ -1,0 +1,5 @@
+{%- with time_till_xmas = datetime:'2016-12-25' - .now.utc.day_start %}
+<h1>
+    ${int:time_till_xmas.days} days to XMas
+</h1>
+{%- end-with %}

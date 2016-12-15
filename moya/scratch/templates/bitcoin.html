@@ -1,0 +1,5 @@
+<ul>
+{% for k, v in sorted:items:parsejson:get:"https://www.bitstamp.net/api/ticker/" %}
+<li><b>${k}</b> ${v}
+{% endfor %}
+</ul>

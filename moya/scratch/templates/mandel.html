@@ -1,0 +1,20 @@
+<style>
+table {border-spacing:0px;}
+td {width:8px; height:8px;}
+</style>
+<table>
+{% let xsize=80, ysize=60, max_iteration=50, color=color:'red' %}
+{% for pixy in 1..ysize %}
+    {%- let y0 = (pixy / ysize) * 2 - 1 %}
+    <tr>
+    {%- for pixx in 1..xsize %}
+        {%- let x0 = (pixx / xsize) * 3 - 2, x=0, y=0, iteration=0  %}
+        {%- while x * x + y * y < 4 and iteration < max_iteration %}
+            {%- let x = x * x - y * y + x0, y = 2 * x * y + y0 %}
+            {%- let iteration = iteration + 1 %}
+        {%- end-while %}
+        <td style="background-color:${color * (iteration / max_iteration)}"></td>
+    {%- end-for %}
+    </tr>
+{% end-for %}
+</table>

@@ -775,11 +775,12 @@ class _EmptySequence(object):
 
 
 class WhileNode(Node):
+    """A (probably inadvisable) while loop."""
     tag_name = "while"
-
 
     def on_create(self, environment, parser):
         self.condition = parser.expect_expression()
+        parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         while 1:
