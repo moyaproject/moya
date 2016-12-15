@@ -116,6 +116,9 @@ class _TemplateStackFrame(interface.AttributeExposer):
         self.stack = []
         self.current_node = None
 
+    def __repr__(self):
+        return "<stackframe app='{}'>".format(self.app.name)
+
 
 @implements_to_string
 class _TemplateFrameContextManager(object):
@@ -769,6 +772,21 @@ class _EmptySequence(object):
     """An always empty iterator"""
     def next(self):
         raise StopIteration
+
+
+class WhileNode(Node):
+    tag_name = "while"
+
+
+    def on_create(self, environment, parser):
+        self.condition = parser.expect_expression()
+
+    def render(self, environment, context, template, text_escape):
+        while 1:
+            value = self.condition.eval(context)
+            if not value:
+                break
+            yield iter(self.children)
 
 
 _last_value = object()

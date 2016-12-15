@@ -1133,7 +1133,7 @@ class Console(object):
                 self.text(context.to_expr(obj, max_size=1000), **kwargs)
             elif isinstance(obj, dict):
                 table = []
-                for k, v in obj.items():
+                for k, v in sorted(obj.items()):
                     table.append([k, context.to_expr(v, max_size=1000)])
                 self.table(table, header_row=["key", "value"])
             elif isinstance(obj, (list, tuple)):
