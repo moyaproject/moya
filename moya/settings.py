@@ -8,7 +8,7 @@ from .compat import text_type, string_types, PY2, implements_to_string, implemen
 from . import errors
 from .tools import textual_list
 
-from fs.path import normpath, relpath
+from fs.path import dirname, join, normpath, relpath
 
 import io
 import os
@@ -65,7 +65,8 @@ class SettingsContainer(OrderedDict):
             visited.append(path)
             settings_stack.append(s)
             if "extends" in s['']:
-                path = s['']['extends']
+                #path = s['']['extends']
+                path = join(dirname(path), s['']['extends'])
             else:
                 break
         settings_stack = settings_stack[::-1]

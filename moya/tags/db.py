@@ -766,24 +766,35 @@ class DBModel(DBElement):
 
 
 class _PropertyCallable(object):
-    def __init__(self, element, expression):
+    def __init__(self, element, name, expression, cache=False):
         self._element = weakref.ref(element)
+        self._name = name
         self._expression = expression
+        self._cache = cache
 
     def __call__(self, app, model):
         if self._expression is not None:
             expression = self._expression
             def expression_property(obj):
                 return expression.call(pilot.context, obj)
-            return expression_property
+            _property = expression_property
         else:
             def moya_code_property(obj):
                 element = self._element()
                 _call = element.archive.get_callable_from_element(element, app=app)
                 result = _call(pilot.context, object=obj)
                 return result
-            return moya_code_property
-
+            _property = moya_code_property
+        if self._cache:
+            def cache_property(obj):
+                try:
+                    return getattr(obj, '_prop_cache_' + self._name)
+                except AttributeError:
+                    result = _property(obj)
+                    setattr(obj, '_prop_cache_' + self._name, result)
+                    return result
+            return cache_property
+        return _property
 
 
 class Property(DBElement):
@@ -797,12 +808,16 @@ class Property(DBElement):
 
     _name = Attribute("Property name", required=True)
     expression = Attribute("expression using database object", type="function", default=None)
+    cache = Attribute("cache result on object?", type="boolean", default=False)
 
     def document_finalize(self, context):
         params = self.get_parameters(context)
         model = self.get_ancestor((self.xmlns, "model"))
         expression = params.expression if self.has_parameter('expression') else None
-        model.add_object_property(params.name, _PropertyCallable(self, expression))
+        model.add_object_property(
+            params.name,
+            _PropertyCallable(self, params.name, expression, cache=params.cache)
+        )
 
 
 class _ForeignKey(DBElement):

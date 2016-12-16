@@ -1,3 +1,7 @@
+0.6.16
+------
+Added cache attribute to database properties
+
 0.6.15
 ------
 Added {% while %}
