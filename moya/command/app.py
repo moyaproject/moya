@@ -76,10 +76,10 @@ To list all available commands for a given application, omit the libname:
     moya auth#
 """
 
-    def __init__(self):
+    def __init__(self, fs=None, location=None):
         super(Moya, self).__init__()
-        self._location = None
-        self._location_fs = None
+        self._location_fs = fs
+        self._location = location
         self._master_settings = None
 
     @property
