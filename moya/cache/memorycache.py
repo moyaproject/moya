@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from ..cache import Cache
-from .. import errors
 
 from collections import OrderedDict, namedtuple
 from time import time as get_time
@@ -35,7 +34,7 @@ class MemoryCache(Cache):
             name,
             settings.get('namespace', ''),
             compress=settings.get_bool('compress', True),
-            compress_min=settings.get_int("compress_min", 1024),
+            compress_min=settings.get_int("compress_min", 32 * 1024),
             size=settings.get_int('size', 1024 * 1024),
         )
 
@@ -79,24 +78,18 @@ class MemoryCache(Cache):
         return self.decode_value(value_bytes)
 
     def _set(self, key, value, time):
-        try:
-            value_bytes = self.encode_value(value)
-            value_size = len(value_bytes)
-            if value_size > self.max_size:
+        value_bytes = self.encode_value(value)
+        value_size = len(value_bytes)
+        if value_size > self.max_size:
+            return
+        self.evict_entry(key)
+        if self.size + value_size > self.max_size:
+            if not self.reclaim(self.size + value_size - self.max_size):
                 return
-            self.evict_entry(key)
-            if self.size + value_size > self.max_size:
-                if not self.reclaim(self.size + value_size - self.max_size):
-                    log.debug('unable to reclaim')
-                    return
-            expire_time = None if time is None else get_time() + time / 1000.0
-            self.entries[key] = CacheEntry(value_bytes, expire_time)
-            self.size += value_size
-        finally:
-            log.debug('%r size=%s bytes', self, self.size)
+        expire_time = None if time is None else get_time() + time / 1000.0
+        self.entries[key] = CacheEntry(value_bytes, expire_time)
+        self.size += value_size
 
     def _delete(self, key):
         if key in self.entries:
             self.size -= len(self.entries.pop(key).value)
-        log.debug('%r size=%s bytes', self, self.size)
-
