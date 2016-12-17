@@ -1899,7 +1899,7 @@ class Get(DBDataSetter):
     dst = Attribute("Destination", type="reference", default=None)
     _from = Attribute("Application", type="application", default=None)
     filter = Attribute("Filter expression", type="dbexpression", required=False, default=None)
-    src = Attribute("query set to restrict search", type="expression", required=False, default=None)
+    src = Attribute("query set to restrict search", type="expression", required=False, default=None, missing=False)
     forupdate = Attribute("Issue a select FOR UPDATE?", type="boolean", required=False, default=False)
 
     @classmethod
