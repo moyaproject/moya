@@ -34,8 +34,8 @@ class MemoryCache(Cache):
             name,
             settings.get('namespace', ''),
             compress=settings.get_bool('compress', True),
-            compress_min=settings.get_int("compress_min", 32 * 1024),
-            size=settings.get_int('size', 1024 * 1024),
+            compress_min=settings.get_int("compress_min", 16 * 1024),
+            size=settings.get_int('size', 1024) * 1024,
         )
 
     def evict_entry(self, key):
