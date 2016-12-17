@@ -1,6 +1,7 @@
 0.6.16
 ------
 Added cache attribute to database properties
+Added sub-expression to index operator
 
 0.6.15
 ------

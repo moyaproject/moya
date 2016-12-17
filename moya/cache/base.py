@@ -55,10 +55,7 @@ class CacheType(object):
         self._key_cache = LRUCache(1000)
 
     def __repr__(self):
-        if self.ns:
-            return "<cache:%s '%s' namespace='%s'>" % (self.cache_backend_name, self.name, self.ns)
-        else:
-            return "<cache:%s '%s'>" % (self.cache_backend_name, self.name)
+        return "<cache:%s '%s'>" % (self.cache_backend_name, self.name)
 
     @classmethod
     def create(cls, name, settings):

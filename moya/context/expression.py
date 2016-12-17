@@ -444,6 +444,11 @@ class EvalBraceOp(Evaluator):
                     raise ValueError("unable to look up missing index {!r}".format(index))
                 if hasattr(obj, '__moyacontext__'):
                     obj = obj.__moyacontext__(context)
+                if hasattr(index, '__moyacall__'):
+                    for value in obj:
+                        if index.__moyacall__(value):
+                            return value
+                    return Missing(text_type(index))
                 try:
                     if hasattr(obj, '__getitem__'):
                         obj = obj[index]

@@ -1954,7 +1954,7 @@ For example **let:{k}="name or 'anonymous'"**
 
         query = self._get_attributes_query(self, context, table_class, query)
 
-        if params.src:
+        if self.has_parameter('src'):
             src = params.src
             qs = self._qs(context, dbsession, src)
             qs = qs.filter(*query)
