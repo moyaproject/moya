@@ -9,6 +9,7 @@ from . import db
 from .context import Context
 from . import tags
 from .tags import cookie
+from .logtools import LoggerFile
 from .tools import timer, lazystr
 from .logic import debug_lock, is_debugging
 from .logic import notify
@@ -40,6 +41,7 @@ import os.path
 import logging
 log = logging.getLogger("moya")
 request_log = logging.getLogger("moya.request")
+runtime_log = logging.getLogger('moya.runtime')
 startup_log = logging.getLogger("moya.startup")
 preflight_log = logging.getLogger("moya.preflight")
 
@@ -49,6 +51,12 @@ try:
     import watchdog.observers
 except ImportError:
     watchdog = None
+
+try:
+    import objgraph
+except:
+    objgraph = None
+
 
 if watchdog:
     class ReloadChangeWatcher(watchdog.events.FileSystemEventHandler):
@@ -108,6 +116,24 @@ else:
             pass
 
 
+def memory_tracker(f):
+    def deco(self, *args, **kwargs):
+        if self.debug_memory:
+            objgraph.show_growth(limit=1)
+
+        try:
+            return f(self, *args, **kwargs)
+        finally:
+            if self.debug_memory:
+                runtime_log.info('New objects:')
+                objgraph.show_growth(file=LoggerFile('moya.runtime'))
+                roots = objgraph.get_leaking_objects()
+                runtime_log.info('Unreachable ojects:')
+                objgraph.show_most_common_types(objects=roots, file=LoggerFile('moya.runtime'))
+
+    return deco
+
+
 class WSGIApplication(object):
 
     def __init__(self,
@@ -120,6 +146,7 @@ class WSGIApplication(object):
                  breakpoint_startup=False,
                  validate_db=False,
                  simulate_slow_network=False,
+                 debug_memory=False,
                  strict=False,
                  master_settings=None,
                  test_build=False,
@@ -138,6 +165,7 @@ class WSGIApplication(object):
         self.archive = None
         self._self = weakref.ref(self, self.on_close)
         self.simulate_slow_network = simulate_slow_network
+        self.debug_memory = debug_memory
         self.master_settings = master_settings
         self.test_build = test_build
         self.develop = develop
@@ -152,6 +180,16 @@ class WSGIApplication(object):
         except Exception as e:
             startup_log.critical(text_type(e))
             raise
+
+        if self.archive.debug_memory:
+            self.debug_memory = True
+
+        if self.debug_memory and objgraph is None:
+            self.debug_memory = False
+            log.error('memory debugging requires objgraph (https://pypi.python.org/pypi/objgraph)')
+
+        if self.debug_memory:
+            log.warning('memory debugging is on, this will effect performance')
 
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
@@ -382,11 +420,11 @@ class WSGIApplication(object):
             sleep(0.1)
             yield chunk
 
+    @memory_tracker
     def __call__(self,
                  environ,
                  start_response):
         """Build the request."""
-
         if self.rebuild_required and not is_debugging():
             with debug_lock:
                 self.do_rebuild()

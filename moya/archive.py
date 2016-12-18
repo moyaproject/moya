@@ -250,6 +250,7 @@ class Archive(object):
         self.preflight = False
         self.log_signals = False
         self.debug_echo = False
+        self.debug_memory = False
 
         self.log_logger = None
         self.log_color = True
@@ -850,6 +851,7 @@ class Archive(object):
         self.develop = self.develop or cfg.get_bool('project', 'develop')
         self.log_signals = cfg.get_bool('project', 'log_signals')
         self.debug_echo = cfg.get_bool('project', 'debug_echo')
+        self.debug_memory = cfg.get_bool('project', 'debug_memory')
 
         if 'console' in cfg:
             self.log_logger = cfg.get('console', 'logger', None)

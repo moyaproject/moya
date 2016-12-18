@@ -66,6 +66,8 @@ class Runserver(SubCommand):
                             help="disable auto-reload")
         parser.add_argument("--slow", dest="slow", action="store_true", default=False,
                             help="simulate network latency by inserting delays")
+        parser.add_argument("--debug-memory", dest="debug_memory", action="store_true", default=False,
+                            help="write log information to help identify memory leaks")
         parser.add_argument("--strict", dest='strict', action="store_true", default=False,
                             help="enable 'strict' checking of tag attributes")
         parser.add_argument("-t", "--use-threads", dest='usethreads', action="store_true", default=False,
@@ -93,6 +95,7 @@ class Runserver(SubCommand):
                                       validate_db=not args.novalidate,
                                       disable_autoreload=self.args.noreload,
                                       simulate_slow_network=self.args.slow,
+                                      debug_memory=self.args.debug_memory,
                                       strict=self.args.strict,
                                       develop=self.args.develop)
         application.preflight()
