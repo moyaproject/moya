@@ -127,9 +127,9 @@ def memory_tracker(f):
             if self.debug_memory:
                 runtime_log.info('New objects:')
                 objgraph.show_growth(file=LoggerFile('moya.runtime'))
-                roots = objgraph.get_leaking_objects()
-                runtime_log.info('Unreachable ojects:')
-                objgraph.show_most_common_types(objects=roots, file=LoggerFile('moya.runtime'))
+                # roots = objgraph.get_leaking_objects()
+                # runtime_log.info('Unreachable ojects:')
+                # objgraph.show_most_common_types(objects=roots, file=LoggerFile('moya.runtime'))
 
     return deco
 
@@ -186,10 +186,10 @@ class WSGIApplication(object):
 
         if self.debug_memory and objgraph is None:
             self.debug_memory = False
-            log.error('memory debugging requires objgraph (https://pypi.python.org/pypi/objgraph)')
+            runtime_log.error('memory debugging requires objgraph (https://pypi.python.org/pypi/objgraph)')
 
         if self.debug_memory:
-            log.warning('memory debugging is on, this will effect performance')
+            runtime_log.warning('memory debugging is on, this will effect performance')
 
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
