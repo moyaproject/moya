@@ -70,7 +70,7 @@ setup(
         'pyparsing==2.1.10',
         'pytz>=2016.7',
         'requests~=2.9.1',
-        'sqlalchemy~=1.0.8',
+        'sqlalchemy~=1.1.4',
         'tzlocal~=1.3',
         'watchdog~=0.8.3',
         'webob~=1.6.0',
