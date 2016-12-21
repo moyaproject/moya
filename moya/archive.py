@@ -203,13 +203,6 @@ class SectionWrapper(object):
         return getattr(self.section, key)
 
 
-class _BuildFrame(list):
-    """An element and it's children"""
-    def __init__(self, sequence, element=None):
-        self.element = element
-        super(_BuildFrame, self).__init__(sequence)
-
-
 class Archive(object):
 
     _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
@@ -352,11 +345,10 @@ class Archive(object):
             documents = list(documents)
 
         build_queue = deque()
-        build_queue_appendleft = build_queue.appendleft
 
         for doc in documents:
             if not doc.document_finalized and doc.structure:
-                build_queue.append(_BuildFrame([doc.structure.root_node]))
+                build_queue.append((None, [doc.structure.root_node]))
 
         unbuildable = set()
         unbuildable_clear = unbuildable.clear
@@ -370,14 +362,16 @@ class Archive(object):
         get_doc_id = attrgetter('doc_id')
 
         while build_queue:
-            nodes = build_queue[0]
+            parent_element, nodes = build_queue[0]
             if nodes:
                 node = nodes.pop()
                 context_root['_lib_long_name'] = node.lib_long_name
                 element = node.build(self, context)
                 if element:
                     unbuildable_clear()
-                    build_queue_appendleft(_BuildFrame(sorted(node.children, key=get_doc_id, reverse=True), element=element))
+                    build_queue.appendleft(
+                        (element, sorted(node.children, key=get_doc_id, reverse=True))
+                    )
                 else:
                     if element is not None:
                         if node in unbuildable:
@@ -390,10 +384,10 @@ class Archive(object):
                             build_queue.rotate(-1)
                             unbuildable.add(node)
             else:
-                if nodes.element is not None:
+                if parent_element is not None:
                     unbuildable_clear()
                     try:
-                        nodes.element.finalize(context)
+                        parent_element.finalize(context)
                     except Exception as e:
                         raise
                         failed_doc = FailedDocument(path=node.structure.document.location,

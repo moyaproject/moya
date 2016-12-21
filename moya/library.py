@@ -247,6 +247,8 @@ class Library(object):
             doc.lib_finalize(context)
         self.built = True
         self.finalized = True
+        for doc in self.documents:
+            del doc.structure
 
     def on_archive_finalize(self):
         for libname, elements in iteritems(self.replace_nodes):
