@@ -1,7 +1,11 @@
+0.7.17
+------
+
 0.6.16
 ------
 Added cache attribute to database properties
 Added sub-expression to index operator
+Optimized startup (by about 100ms) and reduced memory usage
 
 0.6.15
 ------
