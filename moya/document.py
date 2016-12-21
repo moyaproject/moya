@@ -48,7 +48,10 @@ def _get_attrs(attr_map):
 
 @implements_to_string
 class DocumentStructure(object):
+    count = 0
     def __init__(self, document, library, xml):
+        DocumentStructure.count += 1
+        print(DocumentStructure.count)
         self.document = document
         self.library = library
         self.xml = xml

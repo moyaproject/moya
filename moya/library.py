@@ -192,7 +192,6 @@ class Library(object):
         else:
             files = sorted(files)
 
-        documents = {}
         import_count = 0
         for filepath in files:
             parser = Parser(self.archive, fs, filepath, library=self)
@@ -201,7 +200,6 @@ class Library(object):
                 if document is not None:
                     self.documents.append(document)
                     import_count += 1
-                    documents[filepath] = document.structure
 
             except errors.ParseError as parse_error:
                 line, col = parse_error.position
