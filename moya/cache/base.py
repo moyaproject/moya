@@ -117,15 +117,15 @@ class CacheType(object):
         """Encodes a value in to a binary string"""
         dump = pickle.dumps(value, pickle.HIGHEST_PROTOCOL)
         if self.compress and len(dump) >= self.compress_min:
-            return zlib.compress(dump) + b'Z'
-        return dump + b" "
+            return zlib.compress(dump) + b'ZZ'
+        return dump + b'XX' if dump.endswith(b'XX') else dump
 
     def decode_value(self, value):
         """Decodes a value encoded by `encode_value`"""
-        if value.endswith(b'Z'):
-            value = zlib.decompress(value[:-1])
-        else:
-            value = value[:-1]
+        if value.endswith(b'ZZ'):
+            value = zlib.decompress(value[:-2])
+        elif value.endswith(b'XX'):
+            value = value[:-2]
         return pickle.loads(value)
 
     def set(self, k, value, time=0):
@@ -137,7 +137,7 @@ class CacheType(object):
             try:
                 self._set(k, value, time=time)
             except Exception as e:
-                log.error("{} SET failed ({})".format(self, e))
+                log.exception("{} SET failed ({})".format(self, e))
 
     def _set(self, k, value, time):
         """Implementation specifics for `set` method"""
@@ -230,7 +230,7 @@ class DebugCacheWrapper(object):
         log.debug(log_msg)
         return self.cache.set(k, value, time=time)
 
-    def get(self, k, default):
+    def get(self, k, default=None):
         value = self.cache.get(k, default)
         log_msg = "{} GET '{}' = {}".format(self.cache, self._get_debug_value(k, 100), self._get_debug_value(value))
         log.debug(log_msg)

@@ -42,7 +42,7 @@ class MemoryCache(Cache):
         """Evict a single key."""
         if key in self.entries:
             entry = self.entries.pop(key)
-            self.size -= entry.value
+            self.size -= len(entry.value)
 
     def reclaim(self, num_bytes):
         """Reclaim at least `num_bytes`"""
@@ -59,13 +59,14 @@ class MemoryCache(Cache):
 
     def _get(self, key, default):
         try:
-            value_bytes = self.entries[key].value
+            entry = self.entries.pop(key)
         except KeyError:
             return default
 
         # Remove entry from cache
-        entry = self.entries.pop(key)
-        self.size -= len(entry.value)
+        value_bytes = entry.value
+        value_size =len(value_bytes)
+        self.size -= value_size
 
         # If it has expired return the default
         if entry.expire_time and get_time() > entry.expire_time:
@@ -73,7 +74,7 @@ class MemoryCache(Cache):
 
         # Otherwise put it back in to the cache at first position
         self.entries[key] = entry
-        self.size += len(entry.value)
+        self.size += value_size
 
         return self.decode_value(value_bytes)
 
@@ -86,10 +87,18 @@ class MemoryCache(Cache):
         if self.size + value_size > self.max_size:
             if not self.reclaim(self.size + value_size - self.max_size):
                 return
-        expire_time = None if time is None else get_time() + time / 1000.0
+        expire_time = None if time == 0 else get_time() + time / 1000.0
         self.entries[key] = CacheEntry(value_bytes, expire_time)
         self.size += value_size
 
     def _delete(self, key):
         if key in self.entries:
             self.size -= len(self.entries.pop(key).value)
+
+
+if __name__ == "__main__":
+    cache = MemoryCache('test', '')
+    cache.set('foo', 'bar')
+    print(cache.get('foo'))
+
+    print(cache.encode_value(b'value'))

@@ -42,6 +42,12 @@ class CacheTests(object):
         self.assertEqual(self.cache.get("key", None), value)
         self.assertEqual(self.cache.get("nokey", None), None)
 
+        self.cache.set('key2', b'ZZZZ')
+        self.assertEqual(self.cache.get('key2'), b'ZZZZ')
+
+        self.cache.set('key2', b'XXXX')
+        self.assertEqual(self.cache.get('key2'), b'XXXX')
+
     def test_set_time(self):
         """Test set with expire time"""
         # Only way to test this is an arbitrary sleep
@@ -93,6 +99,12 @@ class TestDictCache(unittest.TestCase, CacheTests):
 
     def setUp(self):
         self.cache = cache.dictcache.DictCache("test", "")
+
+
+class TestMemoryCache(unittest.TestCase, CacheTests):
+
+    def setUp(self):
+        self.cache = cache.memorycache.MemoryCache('test', '')
 
 
 class TestFileCache(unittest.TestCase, CacheTests, NamespacesTests):

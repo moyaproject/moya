@@ -75,7 +75,6 @@ class FileCache(Cache):
                 if expire is None:
                     f.write(b'\n')
                 else:
-                    text_type(expire)
                     f.write(text_type(expire).encode('utf-8') + b'\n')
                 f.write(value)
         except FSError:
