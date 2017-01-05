@@ -5,6 +5,7 @@ from .interface import AttributeExposer
 from .compat import iteritems, implements_to_string, text_type
 from .settings import SettingsContainer
 from .tools import timer
+from .context.expression import Expression
 
 from babel import Locale
 
@@ -189,6 +190,14 @@ class Site(object):
 
         self.site_data = site_data
         self.custom_data = custom_data
+
+        with Expression._lock:
+            if site_data:
+                for v in site_data.values():
+                    Expression.extract(v)
+            if custom_data:
+                for v in custom_data.values():
+                    Expression.extract(v)
 
         tokens = []
         for token in self._re_domain.split(domain):

@@ -47,11 +47,15 @@ from ..moyaexceptions import MoyaException
 from ..errors import LogicError
 from operator import methodcaller
 
+import logging
 import operator
 import re
 import sys
 from operator import truth
 import threading
+
+
+log = logging.getLogger('moya.runtime')
 
 ParserElement.enablePackrat(None)
 
@@ -923,10 +927,10 @@ class Expression(object):
         self._eval = self.compiled_exp[0].eval
         return self
 
-    def eval(self, context, _hasattr=hasattr):
+    def eval(self, context):
         try:
             obj = self._eval(context)
-            return obj.__moyacontext__(context) if _hasattr(obj, '__moyacontext__') else obj
+            return obj.__moyacontext__(context) if hasattr(obj, '__moyacontext__') else obj
         except (ExpressionError, MoyaException, LogicError):
             raise
         except ArithmeticError as e:
@@ -1043,11 +1047,12 @@ class Expression(object):
         text = text_type(text)
         if not text:
             return
-        for exp in cls._re_substitute_context.findall(text):
-            try:
-                cls.compile_cache(exp.group(1))
-            except:
-                pass
+        with cls._lock:
+            for exp in cls._re_substitute_context.findall(text):
+                try:
+                    cls.compile_cache(exp)
+                except:
+                    log.warning("expression '%s' failed to parse", exp)
 
 
 class DefaultExpression(object):
