@@ -1052,7 +1052,7 @@ class Expression(object):
                 try:
                     cls.compile_cache(exp)
                 except:
-                    log.warning("expression '%s' failed to parse", exp)
+                    log.error("expression '%s' failed to parse", exp)
 
 
 class DefaultExpression(object):
