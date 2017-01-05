@@ -18,7 +18,7 @@ from .. import trace
 from .. import __version__
 from ..content import Content
 from ..tags.content import ContentElementMixin
-from ..tools import get_return, timer
+from ..tools import get_return
 from .. import syntax
 from ..timezone import Timezone
 from ..context.tools import to_expression, set_dynamic

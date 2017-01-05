@@ -4,7 +4,6 @@ from __future__ import print_function
 from .interface import AttributeExposer
 from .compat import iteritems, implements_to_string, text_type
 from .settings import SettingsContainer
-from .tools import timer
 from .context.expression import Expression
 
 from babel import Locale
