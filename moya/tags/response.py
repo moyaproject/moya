@@ -76,7 +76,7 @@ class ResponseTag(DataSetter):
 
 class Respond(ResponseTag):
     """
-    Immediatley return a response.
+    Immediately return a response.
 
     Useful for more esoteric status codes.
 
@@ -153,6 +153,26 @@ class ServeFile(LogicElement):
 
         req = context.root["request"]
         serve.serve_file(req, fs, path, filename=params.filename)
+
+
+class ServeText(LogicElement):
+    """
+    Serve text.
+
+    """
+
+    class Help:
+        synopsis = "serve simple text"
+        example = """
+        <serve-text>Nobody here but us chickens</serve-text>
+        """
+
+    def logic(self, context):
+        response = MoyaResponse(status=200,
+                                content_type=py2bytes('text'),
+                                text=context.sub(self.text),
+                                charset=py2bytes('utf-8'))
+        raise logic.EndLogic(response)
 
 
 class ServeJSON(LogicElement):
