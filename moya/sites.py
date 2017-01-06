@@ -42,10 +42,6 @@ class LocaleProxy(AttributeExposer):
         self._languages = None
         self._months = None
 
-        # self._territories = dict(self._locale.territories)
-        # self._languages = dict(self._locale.languages)
-        # self._months = dict(self._locale.months)
-
         super(LocaleProxy, self).__init__()
 
     def __moyapy__(self):

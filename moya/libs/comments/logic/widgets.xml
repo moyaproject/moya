@@ -13,7 +13,7 @@
         </signature>
         <let markup=".app.settings.default_markup or 'bbcode'" if="not markup"/>
         <include-css path="css/comments.css" />
-        <include-js path="js/comments.js" />
+        <include-js path="js/comments.js" defer="yes"/>
         <call macro="#get_comment_object" dst="commentobject"
             let:object="topic"
             let:markup="markup"
