@@ -170,6 +170,6 @@ class MoyaServiceFormatter(logging.Formatter):
             project = pilot.service.get('name')
 
         if project is not None:
-
-            log_msg = "{}{}".format(project.rjust(12), log_msg)
+            project_prefix = "({})".format(project).ljust(14)
+            log_msg = "{}{}".format(project_prefix, log_msg)
         return log_msg
