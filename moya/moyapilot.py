@@ -146,3 +146,4 @@ class Pilot(ObjectExposer):
         # print(contexts)
 
     _stack = _LocalAttribute("stack", list)
+    service = _LocalAttribute("service", dict)

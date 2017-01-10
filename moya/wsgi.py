@@ -444,8 +444,11 @@ class WSGIApplication(object):
 
         start_response(response.status, response.headerlist)
 
+        log_fmt = '"%s %s %s" %i %s %s'
         taken_ms = lazystr("{:.1f}ms {:.1f}ms".format, taken * 1000, clock_taken * 1000)
-        request_log.info('"%s %s %s" %i %s %s',
+
+
+        request_log.info(log_fmt,
                          request.method,
                          request.path_qs,
                          request.http_version,

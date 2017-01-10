@@ -1,6 +1,8 @@
 0.7.17
 ------
 
+Added logging of service name
+
 0.6.16
 ------
 Added cache attribute to database properties

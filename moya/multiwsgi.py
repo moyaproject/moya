@@ -7,6 +7,7 @@ from moya.settings import SettingsContainer
 from moya.compat import py2bytes, itervalues, text_type
 from moya.loggingconf import init_logging
 from moya.logtools import LoggerFile
+from moya import pilot
 
 try:
     import objgraph
@@ -68,12 +69,16 @@ class Server(object):
     def build(self):
         log.debug('building %r', self)
         try:
-            application = WSGIApplication(self.location,
-                                          self.ini,
-                                          disable_autoreload=True,
-                                          logging=None,
-                                          master_settings=self.master_settings)
-            self.application = application
+            pilot.service['name'] = self.name
+            try:
+                application = WSGIApplication(self.location,
+                                              self.ini,
+                                              disable_autoreload=True,
+                                              logging=None,
+                                              master_settings=self.master_settings)
+                self.application = application
+            finally:
+                del pilot.service['name']
         except:
             log.exception('error building %r', self)
             raise
@@ -155,7 +160,11 @@ class MultiWSGIApplication(object):
                 if self.reload_required(server_name):
                     self.reload(server_name)
                 server = self.servers[server_name]
-            return server.application(environ, start_response)
+            pilot.service['name'] = server_name
+            try:
+                return server.application(environ, start_response)
+            finally:
+                del pilot.service['name']
         except:
             log.exception('error in multiwsgi MultiWSGIApplication.__call__')
             raise

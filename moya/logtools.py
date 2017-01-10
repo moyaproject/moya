@@ -157,3 +157,18 @@ class LoggerFile(object):
 
     def isatty(self):
         return False
+
+
+class MoyaServiceFormatter(logging.Formatter):
+
+    def format(self, record):
+
+        log_msg = super(MoyaServiceFormatter, self).format(record)
+
+        project = getattr(record, 'project', None)
+        if project is None:
+            project = pilot.service.get('name')
+
+        if project is not None:
+            log_msg = "({}) {}".format(project, log_msg)
+        return log_msg
