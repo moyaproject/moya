@@ -171,5 +171,7 @@ class MoyaServiceFormatter(logging.Formatter):
 
         if project is not None:
             project_prefix = "({})".format(project).ljust(14)
-            log_msg = "{}{}".format(project_prefix, log_msg)
+        else:
+            project_prefix = " " * 14
+        log_msg = "{}{}".format(project_prefix, log_msg)
         return log_msg
