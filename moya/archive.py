@@ -184,9 +184,11 @@ class CallableElement(ContextElementBase):
             logic.debug(self.archive, context, self)
         else:
             executor = Executor()
-            job = executor.execute(self.archive, context, self)
-            job.wait()
-            executor.close()
+            try:
+                job = executor.execute(self.archive, context, self)
+                job.wait()
+            finally:
+                executor.close()
             #logic.run_logic(self.archive, context, self)
 
 

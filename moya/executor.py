@@ -3,10 +3,14 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
 from threading import Thread, Event
 from queue import Queue
 
 from . import logic
+
+
+log = logging.getLogger('moya.runtime')
 
 
 class ExecutorJob(object):
