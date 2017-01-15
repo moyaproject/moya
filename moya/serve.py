@@ -3,9 +3,11 @@ from __future__ import print_function
 
 from datetime import datetime
 import mimetypes
+import tempfile
 
 from fs.path import basename
 from fs.errors import FSError
+from fs.tools import copy_file_data
 
 from .response import MoyaResponse
 from .compat import PY2, py2bytes
@@ -18,7 +20,19 @@ from . import __version__
 SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
 
 
-def serve_file(req, fs, path, filename=None):
+def file_chunker(file, size=65536):
+    """An iterator that reads a file in chunks."""
+    read = file.read
+    try:
+        chunk = read(size)
+        while chunk:
+            yield chunk
+            chunk = read(size)
+    finally:
+        file.close()
+
+
+def serve_file(req, fs, path, filename=None, copy=False):
     """Serve a static file"""
     res = MoyaResponse()
     mime_type, encoding = mimetypes.guess_type(basename(path))
@@ -40,6 +54,11 @@ def serve_file(req, fs, path, filename=None):
             serve_file.close()
         raise logic.EndLogic(http.RespondNotFound())
     else:
+        if copy:
+            new_serve_file = tempfile.TemporaryFile(prefix='moyaserve')
+            copy_file_data(serve_file, new_serve_file)
+            new_serve_file.seek(0)
+            serve_file = new_serve_file
         # Make a response
         file_size = info.size
         mtime = info.modified or datetime.utcnow()
@@ -61,11 +80,10 @@ def serve_file(req, fs, path, filename=None):
             res.status = 304
             serve_file.close()
         else:
-            # Use high performance file wrapper if available
             if 'wsgi.file_wrapper' in req.environ:
                 res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
             else:
-                res.body_file = serve_file
+                res.app_iter = file_chunker(serve_file)
         # Set content length
         if not status304:
             res.content_length = file_size

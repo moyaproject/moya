@@ -364,7 +364,15 @@ class Color(AttributeExposer):
 
     @property
     def _rgba(self):
-        return [int(self.r), int(self.g), int(self.b), self.a]
+        return [int(self.r), int(self.g), int(self.b), int(self.a)]
+
+    @property
+    def _rgb_raw(self):
+        return (self._r, self._g, self._b)
+
+    @property
+    def _rgba_raw(self):
+        return (self._r, self._g, self._b, self._a)
 
     @property
     def opaque(self):
@@ -402,25 +410,26 @@ class Color(AttributeExposer):
     def __add__(self, other):
         if not isinstance(other, Color):
             raise ValueError('can only add another color to a color')
-        r, g, b, a = self._rgba
-        _r, _b, _g, _a = other._rgba
+        r, g, b, a = self._rgba_raw
+        _r, _g, _b, _a = other._rgba_raw
         return Color(r + _r, g + _g, b + _b, a)
 
     def __sub__(self, other):
         if not isinstance(other, Color):
             raise ValueError('can only subtract another color from a color')
-        r, g, b, a = self._rgba
-        _r, _b, _g, _a = other._rgba
+        r, g, b, a = self._rgba_raw
+        _r, _g, _b, _a = other._rgba_raw
         return Color(r - _r, g - _g, b - _b, a)
 
     def __mul__(self, other):
         if isinstance(other, (float, int)):
-            r, g, b, a = self._rgba
+            other = float(other)
+            r, g, b, a = self._rgba_raw
             return Color(r * other, g * other, b * other, a)
         if not isinstance(other, Color):
             raise ValueError('can only multiple a color by a number or other color')
-        r, g, b, a = self._rgba
-        _r, _g, _b, _a = other._rgba
+        r, g, b, a = self._rgba_raw
+        _r, _g, _b, _a = other._rgba_raw
         return Color(r * _r, g * _g, b * _b, a)
 
     def __div__(self, other):

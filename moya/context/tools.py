@@ -13,6 +13,11 @@ def obj_index(obj, key):
     return (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(key)
 
 
+def obj_index_getter(key):
+    """Get a callable that extracts a key form an object."""
+    return lambda obj: (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(key)
+
+
 def get_keys(obj):
     """Get context keys from an object"""
     if hasattr(obj, '__getitem__'):

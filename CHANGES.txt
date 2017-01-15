@@ -1,5 +1,28 @@
+0.7.17
+------
+
+Added logging of service name
+
+0.6.16
+------
+Added cache attribute to database properties
+Added sub-expression to index operator
+Optimized startup (by about 100ms) and reduced memory usage
+
+0.6.15
+------
+Added {% while %}
+Some template experiments
+
+0.6.14
+------
+Further memory optimizations
+Added pathsplit: modifier
+
 0.6.13
 ------
+Optimized start up time and memory usage
+Fix for comment subscriptions
 
 0.6.12
 ------

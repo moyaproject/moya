@@ -108,7 +108,6 @@ class MoyaTemplateEngine(TemplateEngine):
 
 
 class _TemplateStackFrame(interface.AttributeExposer):
-    #__slots__ = ['app', 'data', 'stack', 'current_node']
     __moya_exposed_attributes__ = ['app', 'data']
 
     def __init__(self, app, data=None):
@@ -116,6 +115,9 @@ class _TemplateStackFrame(interface.AttributeExposer):
         self.data = data or {}
         self.stack = []
         self.current_node = None
+
+    def __repr__(self):
+        return "<stackframe app='{}'>".format(self.app.name)
 
 
 @implements_to_string
@@ -770,6 +772,22 @@ class _EmptySequence(object):
     """An always empty iterator"""
     def next(self):
         raise StopIteration
+
+
+class WhileNode(Node):
+    """A (probably inadvisable) while loop."""
+    tag_name = "while"
+
+    def on_create(self, environment, parser):
+        self.condition = parser.expect_expression()
+        parser.expect_end()
+
+    def render(self, environment, context, template, text_escape):
+        while 1:
+            value = self.condition.eval(context)
+            if not value:
+                break
+            yield iter(self.children)
 
 
 _last_value = object()
@@ -1813,7 +1831,6 @@ TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])
 
 
 class NodeGenerator(object):
-    #__slots__ = ['node', '_gen']
 
     def __init__(self, node, gen):
         self.node = node

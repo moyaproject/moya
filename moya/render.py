@@ -11,15 +11,11 @@ from .html import escape
 import json
 
 
-@implements_to_string
 class HTML(text_type):
     html_safe = True
 
     def __repr__(self):
         return "HTML(%s)" % super(HTML, self).__repr__()
-
-    def __str__(self):
-        return self
 
 
 class Safe(text_type):

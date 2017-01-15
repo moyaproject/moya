@@ -47,11 +47,15 @@ from ..moyaexceptions import MoyaException
 from ..errors import LogicError
 from operator import methodcaller
 
+import logging
 import operator
 import re
 import sys
 from operator import truth
 import threading
+
+
+log = logging.getLogger('moya.runtime')
 
 ParserElement.enablePackrat(None)
 
@@ -101,6 +105,7 @@ class ExpressionEvalError(ExpressionError):
 
 class Evaluator(object):
     """Base class mainly to make expressions pickleable"""
+    __slots__ = ['col', 'tokens']
     def __init__(self, s, loc, tokens):
         self.col = loc
         self.tokens = tokens.asList()
@@ -124,6 +129,7 @@ class Evaluator(object):
 
 class EvalConstant(Evaluator):
     """Evaluates a constant"""
+    __slots__ = ['key', 'value', 'eval']
     constants = {"None": None,
                  "True": True,
                  "False": False,
@@ -138,6 +144,7 @@ class EvalConstant(Evaluator):
 
 class EvalVariable(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['eval', 'key', '_index']
     def build(self, tokens):
         self.key = tokens[0]
         self._index = index = dataindex.parse(self.key)
@@ -148,6 +155,7 @@ class EvalVariable(Evaluator):
 
 
 class EvalLiteralIndex(Evaluator):
+    __slots__ = ['scope', 'indices']
     def build(self, tokens):
         self.scope = tokens[0][0].eval
         self.indices = [dataindex.parse(t[1:]) for t in tokens[0][1:]]
@@ -163,6 +171,7 @@ class EvalLiteralIndex(Evaluator):
 @implements_to_string
 class EvalRegExp(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['regexp', '_re', 'match']
     def build(self, tokens):
         self.regexp = tokens[0]
         self._re = re.compile(tokens[0])
@@ -181,6 +190,7 @@ class EvalRegExp(Evaluator):
 @implements_to_string
 class EvalTimespan(Evaluator):
     """Evaluate a timespan spec"""
+    __slots__ = ['ts']
     def build(self, tokens):
         self.ts = TimeSpan(tokens[0])
 
@@ -193,6 +203,7 @@ class EvalTimespan(Evaluator):
 
 class EvalCurrentScope(Evaluator):
     """Class to eval the current scope"""
+    __slots__ = []
 
     def eval(self, context):
         return context.obj
@@ -201,6 +212,7 @@ class EvalCurrentScope(Evaluator):
 
 class EvalExplicitVariable(Evaluator):
     """Class to evaluate a parsed constant or explicit variable (beginning with $)"""
+    __slots__ = ['index']
     def build(self, tokens):
         self.index = parseindex(tokens[1])
 
@@ -210,6 +222,7 @@ class EvalExplicitVariable(Evaluator):
 
 class EvalInteger(Evaluator):
     """Class to evaluate an integer value"""
+    __slots__ = ['value', 'eval']
     def build(self, tokens):
         value = self.value = int(tokens[0])
         self.eval = lambda context: value
@@ -217,6 +230,7 @@ class EvalInteger(Evaluator):
 
 class EvalReal(Evaluator):
     """Class to evaluate a real number value"""
+    __slots__ = ['value', 'eval']
     def build(self, tokens):
         value = self.value = float(tokens[0])
         self.eval = lambda context: value
@@ -224,7 +238,7 @@ class EvalReal(Evaluator):
 
 class EvalTripleString(Evaluator):
     """Class to evaluate a triple quoted string"""
-
+    __slots__ = ['value', 'eval']
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][3:-3])
         self.eval = lambda context: value
@@ -232,7 +246,7 @@ class EvalTripleString(Evaluator):
 
 class EvalString(Evaluator):
     """Class to evaluate a string"""
-
+    __slots__ = ['value', 'eval']
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][1:-1])
         self.eval = lambda context: value
@@ -254,6 +268,7 @@ class EvalSignOp(Evaluator):
 
 class EvalNotOp(Evaluator):
     """Class to evaluate expressions with logical NOT"""
+    __slots__ = ['_eval', 'eval']
     def build(self, tokens):
         sign, value = tokens[0]
         _eval = self._eval = value.eval
@@ -262,6 +277,7 @@ class EvalNotOp(Evaluator):
 
 class EvalList(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['list_tokens']
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -271,6 +287,7 @@ class EvalList(Evaluator):
 
 class EvalSimpleList(Evaluator):
     """Class to evaluate a parsed variable"""
+    __slots__ = ['list_tokens']
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -279,6 +296,7 @@ class EvalSimpleList(Evaluator):
 
 
 class EvalEmptyList(Evaluator):
+    __slots__ = []
 
     def build(self, tokens):
         pass
@@ -288,6 +306,7 @@ class EvalEmptyList(Evaluator):
 
 
 class EvalDict(Evaluator):
+    __slots__ = ['_item_eval']
 
     def build(self, tokens):
         self._item_eval = [(k.eval, v.eval) for k, v in tokens[0]]
@@ -297,6 +316,7 @@ class EvalDict(Evaluator):
 
 
 class ExpFunction(object):
+    __slots__ = ['context', 'text', '_eval', '_context']
     def __init__(self, context, text, eval):
         self.context = context
         self.text = text
@@ -312,6 +332,7 @@ class ExpFunction(object):
 
 
 class EvalFunction(Evaluator):
+    __slots__ = ['_eval']
 
     def build(self, tokens):
         self._eval = tokens[0][0].eval
@@ -321,6 +342,7 @@ class EvalFunction(Evaluator):
 
 
 class EvalKeyPairDict(Evaluator):
+    __slots__ = ['_item_eval']
 
     def build(self, tokens):
         self._item_eval = [(k, v.eval) for k, v in tokens]
@@ -330,6 +352,7 @@ class EvalKeyPairDict(Evaluator):
 
 
 class EvalEmptyDict(Evaluator):
+    __slots__ = []
     def build(self, tokens):
         pass
 
@@ -339,7 +362,7 @@ class EvalEmptyDict(Evaluator):
 
 class EvalModifierOp(Evaluator):
     """Class to evaluate expressions with a leading filter function"""
-
+    __slots__ = ['value', '_eval', 'eval', 'filter_func']
     modifiers = ExpressionModifiers()
 
     def build(self, tokens):
@@ -359,6 +382,7 @@ class EvalModifierOp(Evaluator):
 
 
 class EvalFilterOp(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -384,6 +408,7 @@ class EvalFilterOp(Evaluator):
 
 
 class EvalSliceOp(Evaluator):
+    __slots__ = ['value_eval', 'slice_eval']
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.slice_eval = [t.eval if t is not None else (lambda c: None) for t in tokens[0][1]]
@@ -409,6 +434,7 @@ class EvalSliceOp(Evaluator):
 
 
 class EvalBraceOp(Evaluator):
+    __slots__ = ['value_eval', 'index_eval']
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.index_eval = [(t[0], t[1].eval) for t in tokens[0][1:]]
@@ -422,6 +448,11 @@ class EvalBraceOp(Evaluator):
                     raise ValueError("unable to look up missing index {!r}".format(index))
                 if hasattr(obj, '__moyacontext__'):
                     obj = obj.__moyacontext__(context)
+                if hasattr(index, '__moyacall__'):
+                    for value in obj:
+                        if index.__moyacall__(value):
+                            return value
+                    return Missing(text_type(index))
                 try:
                     if hasattr(obj, '__getitem__'):
                         obj = obj[index]
@@ -447,6 +478,8 @@ def pairs(tokenlist):
 
 class EvalMultOp(Evaluator):
     "Class to evaluate multiplication and division expressions"
+
+    __slots__ = ['value', '_eval', 'operator_eval', 'eval']
 
     ops = {"*": operator.mul,
            "/": operator.truediv,
@@ -483,6 +516,7 @@ class EvalMultOp(Evaluator):
 
 class EvalAddOp(Evaluator):
     "Class to evaluate addition and subtraction expressions"
+    __slots__ = ['operator_eval', 'value', '_eval', 'eval']
 
     ops = {'+': operator.add,
            '-': operator.sub}
@@ -512,6 +546,7 @@ class EvalAddOp(Evaluator):
 
 
 class EvalRangeOp(Evaluator):
+    __slots__ = ['_evals']
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
 
@@ -521,6 +556,8 @@ class EvalRangeOp(Evaluator):
 
 
 class EvalExclusiveRangeOp(Evaluator):
+    __slots__ = ['_evals']
+
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
 
@@ -530,6 +567,7 @@ class EvalExclusiveRangeOp(Evaluator):
 
 
 class EvalTernaryOp(Evaluator):
+    __slots__ = ['evals']
 
     def build(self, tokens):
         self.evals = [t.eval for t in tokens[0][::2]]
@@ -574,6 +612,7 @@ def _str_in(value, seq):
 
 class EvalComparisonOp(Evaluator):
     "Class to evaluate comparison expressions"
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     opMap = {
         "<": operator.lt,
@@ -615,7 +654,7 @@ class EvalComparisonOp(Evaluator):
 
 
 class EvalFormatOp(Evaluator):
-
+    __slots__ = ['value', '_eval', 'evals']
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -633,6 +672,7 @@ class EvalFormatOp(Evaluator):
 
 
 class EvalLogicOpOR(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -652,6 +692,7 @@ class EvalLogicOpOR(Evaluator):
 
 
 class EvalLogicOpAND(Evaluator):
+    __slots__ = ['value', '_eval', 'operator_eval']
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -830,6 +871,7 @@ class DummyLock(object):
 
 
 class Function(object):
+    __slots__ = ['expression', 'scope']
     def __init__(self, expression, scope=None):
         self.expression = expression
         if scope is None:
@@ -866,7 +908,6 @@ class Function(object):
 @implements_to_string
 class Expression(object):
     """Evaluate an arithmetic expression of context values"""
-
     exp_cache = {}
     new_expressions = set()
     _lock = threading.RLock()
@@ -886,10 +927,10 @@ class Expression(object):
         self._eval = self.compiled_exp[0].eval
         return self
 
-    def eval(self, context, _hasattr=hasattr):
+    def eval(self, context):
         try:
             obj = self._eval(context)
-            return obj.__moyacontext__(context) if _hasattr(obj, '__moyacontext__') else obj
+            return obj.__moyacontext__(context) if hasattr(obj, '__moyacontext__') else obj
         except (ExpressionError, MoyaException, LogicError):
             raise
         except ArithmeticError as e:
@@ -1006,11 +1047,12 @@ class Expression(object):
         text = text_type(text)
         if not text:
             return
-        for exp in cls._re_substitute_context.findall(text):
-            try:
-                cls.compile_cache(exp.group(1))
-            except:
-                pass
+        with cls._lock:
+            for exp in cls._re_substitute_context.findall(text):
+                try:
+                    cls.compile_cache(exp)
+                except:
+                    log.error("expression '%s' failed to parse", exp)
 
 
 class DefaultExpression(object):
@@ -1018,11 +1060,8 @@ class DefaultExpression(object):
     but returns a pre-determined value.
 
     """
-    return_value = None
-
-    def __init__(self, return_value=Ellipsis):
-        if return_value is not Ellipsis:
-            self.return_value = return_value
+    def __init__(self, return_value=None):
+        self.return_value = return_value
 
     def __repr__(self):
         return 'DefaultExpression(%r)' % self.return_value

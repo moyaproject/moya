@@ -60,6 +60,7 @@ class = moya.logtools.MoyaSysLogHandler
 [formatter:simple]
 format=:%(name)s:%(levelname)s: %(message)s
 datefmt=[%d/%b/%Y %H:%M:%S]
+class = moya.logtools.MoyaServiceFormatter
 
 [formatter:format_referer]
 format=%(asctime)s %(message)s

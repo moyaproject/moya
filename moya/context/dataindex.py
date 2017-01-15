@@ -10,6 +10,9 @@ from operator import truth
 @implements_to_string
 class ParseResult(object):
     """An immutable list like object that stores the results of a parsed index"""
+
+    __slots__ = ['tokens', 'from_root', 'index']
+
     def __init__(self, tokens, from_root):
         self.tokens = tokens
         self.from_root = from_root

@@ -132,11 +132,13 @@ def is_moya_dir(path=None):
 def file_chunker(f, size=2 * 16 * 1024):
     """An iterator that reads a file in chunks."""
     read = f.read
-    chunk = read(size)
-    while chunk:
-        yield chunk
+    try:
         chunk = read(size)
-    f.close()
+        while chunk:
+            yield chunk
+            chunk = read(size)
+    finally:
+        f.close()
 
 
 def make_id():

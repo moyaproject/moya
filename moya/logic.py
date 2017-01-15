@@ -115,6 +115,7 @@ class DeferMeta(object):
 @implements_iterator
 class Defer(object):
     """Base for Defers"""
+    __slots__ = ['_meta', 'node', 'iter', 'app']
 
     def __init__(self, node, app=None):
         self._meta = DeferMeta()
@@ -146,6 +147,7 @@ class Defer(object):
 
 class DeferNode(Defer):
     """Defer to a new node"""
+    __slots__ = []
 
     def __repr__(self):
         return "<DeferNode %r>" % self.node
@@ -157,6 +159,8 @@ class DeferNode(Defer):
 class DeferNodeContents(Defer):
     """Defer to the contexts of a node"""
 
+    __slots__ = []
+
     def __repr__(self):
         return "<DeferNodeContents %r>" % self.node
 
@@ -167,6 +171,7 @@ class DeferNodeContents(Defer):
 
 
 class SkipNext(object):
+    __slots__ = ['_meta', 'element_types']
     def __init__(self, *element_types):
         self._meta = DeferMeta()
         self.element_types = element_types
@@ -200,6 +205,7 @@ def debug(archive, context, root_node):
 
 @implements_iterator
 class NodeGenerator(object):
+    __slots__ = ['node', 'generator', '_meta', '_next']
     def __init__(self, node, generator):
         self.node = node
         self.generator = generator

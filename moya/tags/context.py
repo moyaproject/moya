@@ -468,9 +468,7 @@ class LetParallel(Let):
     _reserved_attribute_names = ['if']
 
     def logic(self, context):
-        values = []
-        for setter, indices, _eval in self.expressions:
-            values.append(_eval(context))
+        values = [_eval(context) for setter, indices, _eval in self.expressions]
         try:
             for (setter, indices, _eval), value in zip(self.expressions, values):
                 setter(context, indices, value)

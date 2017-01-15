@@ -28,10 +28,14 @@
         <column title="Last name" sort="last_name">${object.last_name}</column>
         <column title="Email" sort="email"><html:a href="mailto:${object.email}" if="object.email">${object.email}</html:a></column>
         <column title="Date joined" sort="date_joined">
-            <w:no-wrap><moya:template markup="bbcode">{% if object.date_joined %}${localize:object.date_joined.date}{% else %}[i]Never[/i]{% endif %}</moya:template></w:no-wrap>
+            <w:no-wrap>
+                <moya:template markup="bbcode">{% if object.date_joined %}${localize:object.date_joined.date}{% else %}[i]Never[/i]{% endif %}</moya:template>
+            </w:no-wrap>
         </column>
         <column title="last login" sort="last_login">
-            <w:no-wrap><moya:template markup="bbcode">{% if object.last_login %}${localize:object.last_login}{% else %}[i]Never[/i]{% endif %}</moya:template></w:no-wrap>
+            <w:no-wrap>
+                <moya:template markup="bbcode">{% if object.last_login %}${localize:object.last_login}{% else %}[i]Never[/i]{% endif %}</moya:template>
+            </w:no-wrap>
         </column>
     </table>
 

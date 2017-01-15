@@ -1,0 +1,7 @@
+<ul>
+    {% for date in .now.month_start.date ... .now.next_month.date %}
+    <li>
+        ${localize:date}
+    </li>
+    {% endfor %}
+</ul>

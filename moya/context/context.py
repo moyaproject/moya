@@ -160,6 +160,7 @@ class _ThreadLocalItem(object):
 
 class LinkItem(object):
     """Links on index to another, like a symbolic link"""
+    __slots__ = ['proxy_index']
     def __init__(self, proxy_index):
         self.proxy_index = dataindex.parse(proxy_index)
 
@@ -184,6 +185,7 @@ class LastIndexItem(object):
 
 @implements_to_string
 class Scope(object):
+    __slots__ = ['stack', 'index', 'obj']
     def __init__(self, stack, index, obj=None):
         self.stack = stack
         if obj is None:
@@ -437,7 +439,6 @@ class _DummyLocal(object):
 @implements_to_string
 class Context(object):
     """A meta data structure for indexing nested Python objects"""
-
     _re_substitute_context = re.compile(r'\$\{(.*?)\}')
     _sub = _re_substitute_context.sub
 

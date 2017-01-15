@@ -9,6 +9,7 @@ from . import errors
 from .settings import SettingsContainer
 from .filesystems import FSWrapper
 from .compat import text_type, string_types, iteritems
+from .context.expression import Expression
 from .tools import textual_list
 from . import pilot
 
@@ -226,16 +227,17 @@ def build_server(fs,
     console = archive.console
     project_fs = None
     try:
-        (project_fs,
-         archive,
-         context,
-         doc) = build(fs,
-                      settings_path,
-                      rebuild=rebuild,
-                      strict=strict,
-                      master_settings=master_settings,
-                      test_build=test_build,
-                      develop=develop)
+        with Expression._lock:
+            (project_fs,
+             archive,
+             context,
+             doc) = build(fs,
+                          settings_path,
+                          rebuild=rebuild,
+                          strict=strict,
+                          master_settings=master_settings,
+                          test_build=test_build,
+                          develop=develop)
         console = archive.console
     except errors.ParseError as e:
         if not no_console:

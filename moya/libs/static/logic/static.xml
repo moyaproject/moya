@@ -18,13 +18,15 @@
 	<view docname="servedir">
 		<!-- Call our Python macro to get the directory listing -->
         <let fs=".fs[fsname]"
-        	show_permissions=".debug or .app.settings.show_permissions.bool"/>
-		<call macro="#read_directory" dst="directory" let:permissions="show_permissions">
+        	show_permissions=".debug or .app.settings.show_permissions.bool"
+        	show_debug=".debug or .app.settings.show_debug.bool"/>
+		<call macro="#read_directory" dst="dir" let:permissions="show_permissions">
 			<var>fs</var>
 			<var>path</var>
 		</call>
 		<!-- read_directory returns None if it is not a directory-->
-		<return if="isnone:directory" />
+		<return if="isnone:dir" />
+
 		<!-- 404 if directory listing is disabled -->
 		<not-found if="not .app.settings.auto_index.bool" />
 		<!-- Redirect to a canonical url ending with / -->
@@ -35,7 +37,8 @@
 		</for>
 
         <!-- Serve the directory listing-->
-		<serve-template template="directory.html" withscope="yes" let:app=".app"/>
+		<serve-template template="directory.html" withscope="yes"
+			let:directory="dir.directory" let:app=".app"/>
 	</view>
 
 	<view docname="servefile">

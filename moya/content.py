@@ -17,12 +17,11 @@ from pprint import pprint
 
 @implements_to_string
 class IncludePath(object):
-    def __init__(self, type, path, format, **options):
+    def __init__(self, type, path, **options):
         self.type = type
         self.path = path
-        self._format = format
-        self._html = HTML(self._format.format(path=path))
         self.options = options
+        self._html = None
 
     def __eq__(self, other):
         return self._html == other._html
@@ -35,6 +34,38 @@ class IncludePath(object):
 
     def moya_render(self, archive, context, target, options):
         return self._html
+
+
+class IncludePathCSS(IncludePath):
+
+    _format = """<link href="{path}" rel="stylesheet" type="text/css">"""
+
+    def __init__(self, path, **options):
+        super(IncludePathCSS, self).__init__('css', path, **options)
+        self._html = HTML(self._format.format(path=escape(path)))
+
+    def __repr__(self):
+        return '<includecss "{}">'.format(self.path)
+
+
+class IncludePathJS(IncludePath):
+
+    _format = """<script src="{path}"{flags}></script>"""
+
+    def __init__(self, path, async=False, defer=False, **options):
+        super(IncludePathJS, self).__init__('js', path, **options)
+        self.async = async
+        self.defer = defer
+        flags = ''
+        if async:
+            flags = ' async'
+        elif defer:
+            flags = ' defer'
+        self._html = HTML(self._format.format(path=escape(path), flags=flags))
+
+
+    def __repr__(self):
+        return '<includejs "{}">'.format(self.path)
 
 
 class NodeContextManager(object):

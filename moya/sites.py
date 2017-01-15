@@ -4,6 +4,7 @@ from __future__ import print_function
 from .interface import AttributeExposer
 from .compat import iteritems, implements_to_string, text_type
 from .settings import SettingsContainer
+from .context.expression import Expression
 
 from babel import Locale
 
@@ -12,6 +13,7 @@ import locale
 import re
 from collections import namedtuple
 import logging
+from operator import attrgetter
 
 log = logging.getLogger('moya.runtime')
 startup_log = logging.getLogger('moya.startup')
@@ -35,9 +37,11 @@ class LocaleProxy(AttributeExposer):
     def __init__(self, locale_name='en_US.UTF-8'):
         self._locale_name = locale_name
         self._locale = Locale.parse(locale_name)
-        self._territories = dict(self._locale.territories)
-        self._languages = dict(self._locale.languages)
-        self._months = dict(self._locale.months)
+
+        self._territories = None
+        self._languages = None
+        self._months = None
+
         super(LocaleProxy, self).__init__()
 
     def __moyapy__(self):
@@ -55,6 +59,8 @@ class LocaleProxy(AttributeExposer):
 
     @property
     def languages(self):
+        if self._languages is None:
+            self._languages = dict(self._locale.languages)
         return self._languages
 
     @property
@@ -75,10 +81,14 @@ class LocaleProxy(AttributeExposer):
 
     @property
     def territories(self):
+        if self._territories is None:
+            self._territories = dict(self._locale.territories)
         return self._territories
 
     @property
     def months(self):
+        if self._months is None:
+            self._months = dict(self._locale.months)
         return self._months
 
 
@@ -175,6 +185,14 @@ class Site(object):
 
         self.site_data = site_data
         self.custom_data = custom_data
+
+        with Expression._lock:
+            if site_data:
+                for v in site_data.values():
+                    Expression.extract(v)
+            if custom_data:
+                for v in custom_data.values():
+                    Expression.extract(v)
 
         tokens = []
         for token in self._re_domain.split(domain):
@@ -278,8 +296,8 @@ class Sites(object):
             self._order += 1
             self._sites.append(site)
 
-    def _match(self, domain):
-        self._sites.sort(key=lambda s: s.order, reverse=True)
+    def _match(self, domain, _order_key=attrgetter('order')):
+        self._sites.sort(key=_order_key, reverse=True)
         for site in self._sites:
             site_data, custom_data = site.match(domain)
             if site_data is not None:
@@ -294,10 +312,13 @@ class Sites(object):
         if context is None:
             return custom_data
         sub = context.sub
+
+        # TODO: This takes ~0.5ms May be optimzable
         with context.data_frame(site_data):
             new_site_data = {k: sub(v) for k, v in site_data.items()}
         with context.data_frame(custom_data):
             new_custom_data = {k: sub(v) for k, v in custom_data.items()}
+
         return SiteInstance(site, new_site_data, new_custom_data)
 
     def __contains__(self, domain):

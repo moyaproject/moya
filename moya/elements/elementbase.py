@@ -134,6 +134,7 @@ class Attribute(object):
 
 
 class _Parameters(object):
+    __slots__ = ['__attr_values', '__context', '__cache']
     def __init__(self, attr_values, context, lazy=True):
         self.__attr_values = attr_values
         self.__context = context
@@ -205,6 +206,7 @@ def _childless_tag(tag_name, attrs):
 
 
 class _Eval(object):
+    __slots__ = ['code', 'filename', 'compiled_code']
     def __init__(self, code, filename):
         self.code = code
         self.filename = filename
@@ -236,7 +238,7 @@ class ElementType(tuple):
 
 
 class NoDestination(object):
-
+    __slots__ = []
     def __eq__(self, other):
         return isinstance(other, NoDestination)
 
@@ -246,7 +248,7 @@ no_destination = NoDestination()
 
 
 class NoValue(object):
-
+    __slots__ = []
     def __reduce__(self):
         """So pickle doesn't create a new instance on unpickling"""
         return b'no_value'
@@ -257,6 +259,7 @@ no_value = NoValue()
 
 
 class Getter(object):
+    __slots__ = ['value']
     def __init__(self, value):
         self.value = value
 
@@ -265,6 +268,7 @@ class Getter(object):
 
 
 class Translator(object):
+    __slots__ = ['getter', 'lib']
     def __init__(self, getter, lib):
         self.getter = getter
         self.lib = weakref.proxy(lib)
@@ -278,6 +282,7 @@ class Translator(object):
 
 
 class ChoicesChecker(object):
+    __slots__ = ['name', 'element', 'value_callable', 'choices']
     def __init__(self, value_callable, name, element, choices):
         self.name = name
         self.element = element
@@ -294,6 +299,7 @@ class ChoicesChecker(object):
 
 
 class MissingChecker(object):
+    __slots__ = ['value_callable', 'name', 'element']
     def __init__(self, value_callable, name, element):
         self.value_callable = value_callable
         self.name = name
@@ -309,6 +315,7 @@ class MissingChecker(object):
 
 
 class EmptyChecker(object):
+    __slots__ = ['value_callable', 'name', 'element']
     def __init__(self, value_callable, name, element):
         self.value_callable = value_callable
         self.name = name
@@ -1043,6 +1050,7 @@ class RenderableElement(ElementBase):
 @implements_to_string
 class FunctionCallParams(object):
     """Stores parameters for a function call"""
+    __slots = ['_args', '_kwargs']
     def __init__(self, *args, **kwargs):
         self._args = list(args)
         self._kwargs = dict(kwargs)
@@ -1118,6 +1126,8 @@ class ReturnContainer(object):
     """A container that stores a single return value"""
     # This has the interface of a dict, but only stores the last value
 
+    __slots__ = ['_key', '_value']
+
     def __init__(self, value=None):
         self._key = 'return'
         self._value = value
@@ -1162,6 +1172,7 @@ class ReturnContainer(object):
 
 
 class CallStackEntry(dict):
+    __slots__ = ['element', 'app', 'yield_element', 'yield_frame']
     def __init__(self, element, app, yield_element=None, yield_frame=None):
         self.element = element
         self.app = app

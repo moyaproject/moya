@@ -61,6 +61,7 @@ def lookup(name):
 @implements_to_string
 class AttributeTypeBase(object):
     """Base class for attribute types"""
+    __slots__ = ['attribute_name', 'element', 'text', 'const']
     translate = False
 
     def __init__(self, element, attribute_name, text):
@@ -108,11 +109,12 @@ class AttributeTypeBase(object):
 
 
 class AttributeType(with_metaclass(AttributeTypeMeta, AttributeTypeBase)):
-    pass
+    __slots__ = []
 
 
 class Constant(AttributeType):
     type_display = "constant"
+    __slots__ = ['element', 'attribute_name', 'value']
 
     def __init__(self, element, attribute_name, value):
         self.element = element
@@ -129,6 +131,7 @@ class Constant(AttributeType):
 
 class Text(AttributeType):
     type_display = "text"
+    __slots__ = []
 
     def __call__(self, context):
         if self.const:
@@ -138,6 +141,7 @@ class Text(AttributeType):
 
 class Bytes(AttributeType):
     type_display = "bytes"
+    __slots__ = []
 
     def process(self, text):
         try:
@@ -149,6 +153,7 @@ class Bytes(AttributeType):
 
 class Raw(AttributeType):
     type_display = "raw"
+    __slots__ = []
 
     def __call__(self, context):
         return self.text
@@ -156,6 +161,7 @@ class Raw(AttributeType):
 
 class Number(AttributeType):
     type_display = "number"
+    __slots__ = []
 
     def process(self, text):
         try:
@@ -174,6 +180,7 @@ class Number(AttributeType):
 
 class Integer(AttributeType):
     type_display = "integer"
+    __slots__ = []
 
     def process(self, text):
         try:
@@ -197,6 +204,7 @@ class Integer(AttributeType):
 
 class Color(AttributeType):
     type_display = "color"
+    __slots__ = []
 
     def __call__(self, context):
         return ExpressionColor.parse(context.sub(self.text))
@@ -212,6 +220,7 @@ class Color(AttributeType):
 
 class Index(AttributeType):
     type_display = "index"
+    __slots__ = []
 
     def __call__(self, context):
         return context.get_sub(self.text)
@@ -219,6 +228,7 @@ class Index(AttributeType):
 
 class Reference(AttributeType):
     type_display = "reference"
+    __slots__ = ['reference']
 
     def __init__(self, element, attribute_name, text):
         super(Reference, self).__init__(element, attribute_name, text)
@@ -230,6 +240,7 @@ class Reference(AttributeType):
 
 class Element(AttributeType):
     type_display = "element"
+    __slots__ = []
 
     def __call__(self, context):
         element_ref = context.sub(self.text)
@@ -239,6 +250,7 @@ class Element(AttributeType):
 
 class ElementRef(AttributeType):
     type_display = "element reference"
+    __slots__ = []
 
     def __call__(self, context):
         return context.sub(self.text)
@@ -247,6 +259,7 @@ class ElementRef(AttributeType):
 class ExpressionAttribute(AttributeType):
     type_display = "expression"
     name = "expression"
+    __slots__ = ['element', 'attribute_name', 'exp']
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -273,6 +286,7 @@ class ExpressionAttribute(AttributeType):
 class FunctionAttribute(AttributeType):
     type_display = "function"
     name = "function"
+    __slots__ = ['element', 'attribute_name', 'exp']
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -295,6 +309,7 @@ class FunctionAttribute(AttributeType):
 class ApplicationAttribute(AttributeType):
     type_display = "application reference"
     name = "application"
+    __slots__ = ['element', 'attribute_name', 'text']
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -317,6 +332,7 @@ class ApplicationAttribute(AttributeType):
 class DBExpressionAttribute(AttributeType):
     type_display = "database expression"
     name = "dbexpression"
+    __slots__ = ['element', 'attribute_name', 'text']
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -341,6 +357,7 @@ class DBExpressionAttribute(AttributeType):
 class Boolean(ExpressionAttribute):
     type_display = "boolean"
     name = "boolean"
+    __slots__ = ['attribute_name', 'text', 'exp']
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
@@ -373,6 +390,7 @@ class Boolean(ExpressionAttribute):
 class DictExpression(ExpressionAttribute):
     type_display = "dict expression"
     name = "dict"
+    __slots__ = ['element', 'exp']
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
@@ -397,6 +415,7 @@ class DictExpression(ExpressionAttribute):
 class TimeSpanAttribute(AttributeType):
     type_display = "timespan"
     name = "timespan"
+    __slots__ = []
 
     def process(self, text):
         return TimeSpan(text)
@@ -415,6 +434,7 @@ class TimeSpanAttribute(AttributeType):
 class CommaList(AttributeType):
     type_display = "comma list"
     name = "commalist"
+    __slots__ = []
 
     def process(self, text):
         if ',' in text:
@@ -426,11 +446,13 @@ class CommaList(AttributeType):
 class Namespace(AttributeType):
     type_display = "namespace"
     name = "namespace"
+    __slots__ = []
 
 
 class Templates(AttributeType):
     type_display = "list of template paths"
     name = "templates"
+    __slots__ = []
 
     def __call__(self, context):
         sub = context.sub
@@ -444,6 +466,7 @@ class Templates(AttributeType):
 class Template(AttributeType):
     type_display = "template path"
     name = "template"
+    __slots__ = []
 
     def __call__(self, context):
         text = context.sub(self.text).strip()
@@ -453,6 +476,7 @@ class Template(AttributeType):
 class Version(AttributeType):
     type_display = "version spec"
     name = "version"
+    __slots__ = []
 
     def __call__(self, context):
         text = VersionSpec(self.text)
@@ -471,6 +495,7 @@ class Version(AttributeType):
 class HTTPStatus(AttributeType):
     type_display = "http status code"
     name = "httpstatus"
+    __slots__ = []
 
     def __call__(self, context):
         if self.text.isdigit():

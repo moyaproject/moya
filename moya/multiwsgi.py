@@ -6,6 +6,13 @@ from moya.sites import Sites
 from moya.settings import SettingsContainer
 from moya.compat import py2bytes, itervalues, text_type
 from moya.loggingconf import init_logging
+from moya.logtools import LoggerFile
+from moya import pilot
+
+try:
+    import objgraph
+except:
+    objgraph = None
 
 from webob import Response
 
@@ -62,15 +69,35 @@ class Server(object):
     def build(self):
         log.debug('building %r', self)
         try:
-            application = WSGIApplication(self.location,
-                                          self.ini,
-                                          disable_autoreload=True,
-                                          logging=None,
-                                          master_settings=self.master_settings)
-            self.application = application
+            pilot.service['name'] = self.name
+            try:
+                application = WSGIApplication(self.location,
+                                              self.ini,
+                                              disable_autoreload=True,
+                                              logging=None,
+                                              master_settings=self.master_settings)
+                self.application = application
+            finally:
+                del pilot.service['name']
         except:
             log.exception('error building %r', self)
             raise
+
+
+def memory_tracker(f):
+    def deco(self, *args, **kwargs):
+        if self.debug_memory:
+            objgraph.show_growth(limit=1)
+
+        try:
+            return f(self, *args, **kwargs)
+        finally:
+            if self.debug_memory:
+                log.info('New objects:')
+                objgraph.show_growth(file=LoggerFile('moya.srv'))
+
+    return deco
+
 
 
 class MultiWSGIApplication(object):
@@ -79,6 +106,7 @@ class MultiWSGIApplication(object):
         self.servers = OrderedDict()
         self.sites = Sites()
         self._lock = threading.Lock()
+        self.debug_memory = False
 
     def add_project(self, settings_path, logging_path=None):
         server = Server(settings_path)
@@ -120,6 +148,7 @@ class MultiWSGIApplication(object):
             for server in itervalues(self.servers):
                 self.sites.add(server.domains, name=server.name)
 
+    @memory_tracker
     def __call__(self, environ, start_response):
         try:
             domain = environ['SERVER_NAME']
@@ -131,7 +160,11 @@ class MultiWSGIApplication(object):
                 if self.reload_required(server_name):
                     self.reload(server_name)
                 server = self.servers[server_name]
-            return server.application(environ, start_response)
+            pilot.service['name'] = server_name
+            try:
+                return server.application(environ, start_response)
+            finally:
+                del pilot.service['name']
         except:
             log.exception('error in multiwsgi MultiWSGIApplication.__call__')
             raise
@@ -172,6 +205,7 @@ class Service(MultiWSGIApplication):
         log.debug('read logging from %s', logging_path)
 
         temp_dir_root = self.settings.get('service', 'temp_dir', tempfile.gettempdir())
+        self.debug_memory = objgraph and self.settings.get_bool('service', 'debug_memory', False)
         self.temp_dir = os.path.join(temp_dir_root, 'moyasrv')
         try:
             os.makedirs(self.temp_dir)

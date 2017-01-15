@@ -46,9 +46,9 @@ class RenderTemplate(DataSetter):
         template = app.resolve_template(params.template)
         value = RenderContainer.create(app,
                                        template=template)
-        value.update(self.get_let_map(context))
         if params.withscope:
             value.update(context['.call'])
+        value.update(self.get_let_map(context))
         with context.data_scope(value):
             yield DeferNodeContents(self)
         self.on_value(context, value)
@@ -108,11 +108,13 @@ class RenderTemplateFS(DataSetter):
         scope = {}
         if params.withscope:
             scope.update(context['.call'])
+
+
         params = {'app': context['.app']}
         params.update(self.get_let_map(context))
 
         engine = self.archive.get_template_engine("moya")
-        html = engine.render_template(template, scope, **params)
+        html = engine.render_template(template, scope, base_context=context, **params)
 
         self.on_value(context, html)
 

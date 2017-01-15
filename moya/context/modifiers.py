@@ -13,7 +13,7 @@ from ..compat import (text_type,
                       implements_to_string)
 from ..html import slugify, textilize, linebreaks, escape
 from ..render import HTML, Safe
-from ..context.tools import get_moya_interface, get_moya_attribute, obj_index
+from ..context.tools import get_moya_interface, get_moya_attribute, obj_index, obj_index_getter
 from ..context.expressiontime import (TimeSpan,
                                       ExpressionDateTime,
                                       ExpressionDate,
@@ -31,11 +31,13 @@ from .. import moyajson
 from ..import compat
 
 from fs.path import (abspath,
-                      basename,
-                      join,
-                      relativefrom,
-                      dirname,
-                      splitext)
+                     basename,
+                     join,
+                     normpath,
+                     relativefrom,
+                     dirname,
+                     splitext,
+                     split)
 
 import uuid
 import hashlib
@@ -45,6 +47,7 @@ from base64 import b64decode, b64encode
 from decimal import Decimal
 from collections import OrderedDict
 from datetime import datetime
+from functools import partial
 from operator import truth
 from itertools import chain
 import random
@@ -120,6 +123,14 @@ def make_uuid(context, version, nstype="url", nsname=None):
         _uuid = uuid.uuid5(namespace, nsname)
 
     return text_type(_uuid)
+
+
+def make_key_getter(key):
+    """Get a callable that extracts a key or sub-expression."""
+    if hasattr(key, '__moyacall__'):
+        return key.__moyacall__
+    else:
+        return obj_index_getter(key)
 
 
 class ExpressionModifiersBase(object):
@@ -367,14 +378,16 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def collect(self, context, v):
         seq, key = v
-        return [obj_index(obj, key) for obj in seq]
+        get_key = make_key_getter(key)
+        return [get_key(obj) for obj in seq]
 
     def collectmap(self, context, v):
         seq, key = v
         result = {}
+        get_key = make_key_getter(key)
         for obj in seq:
             try:
-                k = obj_index(obj, key)
+                k = get_key(obj)
             except:
                 pass
             else:
@@ -407,7 +420,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except ValueError:
             raise ValueError('count: modifier expects [<seq>, <expression>]')
         if not hasattr(predicate, '__moyacall__'):
-            raise ValueError('count: requires an expression, e.g. map:[students, {grade lt "A"}]')
+            raise ValueError('count: requires a sub expression, e.g. map:[students, `grade lt "A"`]')
         return sum(1 for item in seq if predicate.__moyacall__(item))
 
     def csrf(self, context, v):
@@ -569,47 +582,28 @@ class ExpressionModifiers(ExpressionModifiersBase):
         except:
             return None
 
-    # def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
-    #     seq, key = v
-    #     result = OrderedDict()
-    #     for item in seq:
-    #         k = _get(item, key)
-    #         result.setdefault(k, []).append(item)
-    #     return result
-
-    def group(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    def group(self, context, v):
         try:
             seq, key = v
         except ValueError:
             raise ValueError('group: modifier expects [<sequence>, <expression]')
         result = OrderedDict()
-        if hasattr(key, '__moyacall__'):
-            for item in seq:
-                k = key.__moyacall__(item)
-                result.setdefault(k, []).append(item)
-        else:
-            for item in seq:
-                k = _get(item, key)
-                result.setdefault(k, []).append(item)
-
+        get_key = make_key_getter(key)
+        for item in seq:
+            result.setdefault(get_key(item), []).append(item)
         return result
 
-    def counts(self, context, v, _get=ExpressionModifiersBase._lookup_key):
+    def counts(self, context, v):
         try:
             seq, key = v
         except ValueError:
             raise ValueError('counts: modifier expects [<sequence>, <expression]')
 
-        if hasattr(key, '__moyacall__'):
-            counts = collections.Counter(
-                key.__moyacall__(item)
-                for item in seq
-            )
-        else:
-            counts = collections.Counter(
-                _get(item, key)
-                for item in seq
-            )
+        get_key = make_key_getter(key)
+        counts = collections.Counter(
+            get_key(item)
+            for item in seq
+        )
         return counts
 
     def groupsof(self, context, v):
@@ -625,7 +619,6 @@ class ExpressionModifiers(ExpressionModifiersBase):
         if group_size <= 0:
             raise ValueError("group size must be a positive integer")
 
-        # TODO: Return a generator rather than a list
         grouped = [
             seq[i: i + group_size]
             for i in range(0, len(seq), group_size)
@@ -814,6 +807,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def slashjoin(self, context, v):
         return _slashjoin(v)
+
+    def pathsplit(self, context, v):
+        return split(normpath(text_type(v)))
 
     def permission(self, context, v):
         return self._permission(context, v)

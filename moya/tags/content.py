@@ -9,7 +9,7 @@ from .. import logic
 from .. import errors
 from ..html import escape
 from ..console import Console
-from ..content import Content, Section, IncludePath
+from ..content import Content, Section, IncludePathCSS, IncludePathJS
 from ..tools import url_join, textual_list
 from ..context.missing import is_missing
 from ..markup import Markup, get_installed_markups
@@ -431,7 +431,7 @@ class RenderBase(LogicElement):
             app = self.archive.get_app_from_lib(app)
         path = self.archive.get_media_url(context, app, media, path)
         content = context['.content']
-        content.include('css', IncludePath('css', path, IncludeCSS.format))
+        content.include('css', IncludePathCSS(path))
 
 
 class RenderContent(DataSetter, ContentElementMixin):
@@ -639,8 +639,6 @@ class IncludeCSS(LogicElement, ContentElementMixin):
     class Meta:
         one_of = [('path', 'url')]
 
-    format = """<link href="{path}" rel="stylesheet" type="text/css">"""
-
     def logic(self, context):
         params = self.get_parameters(context)
         content = self.get_content(context)
@@ -653,7 +651,13 @@ class IncludeCSS(LogicElement, ContentElementMixin):
             else:
                 media_path = self.archive.get_media_url(context, app, params.media)
                 path = url_join(media_path, params.path)
-        content.include(params.type, IncludePath(params.type, path, self.format))
+        self.add_include(context, content, params, path)
+
+    def add_include(self, context, content, params, path):
+        content.include(
+            params.type,
+            IncludePathCSS(path)
+        )
 
 
 class IncludeJS(IncludeCSS):
@@ -683,7 +687,15 @@ class IncludeJS(IncludeCSS):
     # media = Attribute("Media name", required=False, default='media')
     # path = Attribute("Path to JS", required=False, default=None)
     # _from = Attribute("Application", type="application", default=None)
-    format = """<script src="{path}"></script>"""
+
+    defer = Attribute("Defer script execution?", type="boolean", default=False)
+    async = Attribute("Load script asynchronously?", type="boolean", default=False)
+
+    def add_include(self, context, content, params, path):
+        content.include(
+            params.type,
+            IncludePathJS(path, async=params.async, defer=params.defer)
+        )
 
 
 class RenderProxy(object):
@@ -798,7 +810,7 @@ class Template(RenderBase):
         self.template = MoyaTemplate(self.text, self._location)
 
     def logic(self, context):
-        rendered_content = self.template.render(context)
+        rendered_content = self.template.render(context.obj, context=context)
         markup = Markup(rendered_content, self.markup(context))
         context['.content'].add_renderable(self._tag_name, markup)
 

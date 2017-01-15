@@ -546,8 +546,10 @@ class Server(LogicElement):
 
     def post_build(self, context):
         self.urlmapper = URLMapper()
-        self.middleware = dict(request=URLMapper(),
-                               response=URLMapper())
+        self.middleware = {
+            "request": URLMapper(),
+            "response": URLMapper()
+        }
         self.fs = None
         super(Server, self).post_build(context)
 

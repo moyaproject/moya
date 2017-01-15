@@ -40,6 +40,7 @@
         <return value="comment_object.count or 0" />
     </tag>
 
+    <!--
     <tag name="subscribe" synopsis="subscribe a user to a comment object">
         <signature>
             <attribute name="user" type="expression">User to subscribe</attribute>
@@ -53,5 +54,28 @@
         </catch>
         <log-debug>Subscribed ${user} to ${commentobject}</log-debug>
     </tag>
+    -->
 
+    <tag name="subscribe" synopsis="subscribe a user to a comment object">
+        <signature>
+            <attribute name="user" type="expression">
+                User to subscribe
+            </attribute>
+            <attribute name="namespace" type="text">
+                A comment namespace
+            </attribute>
+            <attribute name="topic" type="text">
+                An object id
+            </attribute>
+        </signature>
+        <db:get-or-create model="#CommentObject" dst="commentobject"
+            let:namespace="namespace" let:object="topic"/>
+        <db:create model="#ObjectSubscription" dst="sub"
+            let:user="user" let:commentobject="commentobject"/>
+        <catch exception="db.integrity-error">
+            <log-debug>${user} already subscribed to ${commentobject}</log-debug>
+            <return/>
+        </catch>
+        <log-debug>Subscribed ${user} to ${commentobject}</log-debug>
+    </tag>
 </moya>

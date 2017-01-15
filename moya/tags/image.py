@@ -157,10 +157,9 @@ class GetSize(Read):
     def logic(self, context):
         params = self.get_parameters(context)
         img = self.get_image(context, params)
-        with img._lock:
-            w, h = img.size
-            result = {'width': w, 'height': h}
-            self.set_context(context, params.dst, result)
+        w, h = img.size
+        result = {'width': w, 'height': h}
+        self.set_context(context, params.dst, result)
 
 
 class CheckImageMixin(object):
