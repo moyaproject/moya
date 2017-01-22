@@ -8,6 +8,7 @@ from ..containers import LRUCache
 from ..compat import pickle, text_type, binary_type, with_metaclass, implements_to_string, PY3
 
 from threading import Lock
+from time import time
 import zlib
 import hashlib
 
@@ -231,8 +232,15 @@ class DebugCacheWrapper(object):
         return self.cache.set(k, value, time=time)
 
     def get(self, k, default=None):
+        start = time()
         value = self.cache.get(k, default)
-        log_msg = "{} GET '{}' = {}".format(self.cache, self._get_debug_value(k, 100), self._get_debug_value(value))
+        taken = (time() - start) * 1000.0
+        log_msg = "{} GET '{}' = {} {:.1f}ms".format(
+            self.cache,
+            self._get_debug_value(k, 100),
+            self._get_debug_value(value),
+            taken
+        )
         log.debug(log_msg)
         return value
 
