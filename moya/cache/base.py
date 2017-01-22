@@ -235,7 +235,7 @@ class DebugCacheWrapper(object):
         start = time()
         value = self.cache.get(k, default)
         taken = (time() - start) * 1000.0
-        log_msg = "{} GET '{}' = {} {:.1f}ms".format(
+        log_msg = "{} GET '{}' = {} {:.2f}ms".format(
             self.cache,
             self._get_debug_value(k, 100),
             self._get_debug_value(value),
