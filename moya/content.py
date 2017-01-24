@@ -146,8 +146,8 @@ class Content(interface.AttributeExposer):
         if path not in include_list:
             include_list.append(path)
 
-    def include_css(self, path, format='<link href="{path}" rel="stylesheet" type="text/css">'):
-        self.include('css', IncludePath('css', path, format))
+    def include_css(self, path):
+        self.include('css', IncludePathCSS(path))
 
     def push_section(self, section):
         self.section_stack.append(section)
