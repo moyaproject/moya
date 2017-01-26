@@ -1,7 +1,8 @@
-0.7.17
+0.6.17
 ------
 
 Added logging of service name
+Added defer and async flags to <include-css>
 
 0.6.16
 ------
