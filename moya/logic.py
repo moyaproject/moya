@@ -265,6 +265,7 @@ def _logic_loop(context,
 
     try:
         while node_stack:
+            yield
             try:
                 node = pop_stack()
                 if isinstance(node, _SkipNext):
@@ -417,7 +418,8 @@ def _logic_loop(context,
 def run_logic(archive, context, root_node):
     node_stack = [root_node]
     try:
-        _logic_loop(context, node_stack)
+        for _ in _logic_loop(context, node_stack):
+            pass
     except DebugBreak as debug_break:
         _breakpoint_notify(node_stack[-1].node, suppressed=archive.suppress_breakpoints)
         run_logic_debug(archive, context, debug_break.node, node_stack)
@@ -744,11 +746,12 @@ def run_logic_debug(archive, context, node, node_stack):
     with debug_lock:
         while 1:
             try:
-                _logic_loop(context,
+                for _ in _logic_loop(context,
                             node_stack,
                             debugging=debugging and not archive.suppress_breakpoints,
                             debug_hook=debug_hook,
-                            on_exception=show_exception)
+                            on_exception=show_exception):
+                    pass
             except SystemExit:
                 debugging = False
                 raise

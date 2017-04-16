@@ -170,23 +170,29 @@ class CallableElement(ContextElementBase):
     def call(self, context, args, kwargs):
         self.args = args
         self.kwargs = kwargs
-        if self.breakpoint and not self.archive.suppress_breakpoints:
-            logic.debug(self.archive, context, self)
-        else:
-            logic.run_logic(self.archive, context, self)
+        self._exec(context)
         return self._return_value
 
     def call_frame(self, context, frame):
         self.frame = frame
+        self._exec(context)
+        return self._return_value
+
+    def _exec(self, context):
+        from .executor import Executor
         if self.breakpoint and not self.archive.suppress_breakpoints:
             logic.debug(self.archive, context, self)
         else:
-            logic.run_logic(self.archive, context, self)
-        return self._return_value
+            executor = Executor()
+            job = executor.execute(self.archive, context, self)
+            job.wait()
+            executor.close()
+            #logic.run_logic(self.archive, context, self)
 
 
 class SectionWrapper(object):
-    """Wraps a settings section so that it produces a specific error for missing keys"""
+    """Wrap a settings section so that it produces a specific error for missing keys."""
+
     def __init__(self, section_name, section):
         self.section_name = section_name
         self.section = section
