@@ -162,6 +162,9 @@ class FSWrapper(object):
     def __str__(self):
         return self.fs.desc('/')
 
+    def __repr__(self):
+        return repr(self.fs)
+
     def __moyarepr__(self, context):
         return text_type(self.fs)
 

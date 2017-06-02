@@ -69,7 +69,7 @@ setup(
         'pymysql~=0.7.9',
         'pyparsing==2.2.0',
         'pytz>=2016.7',
-        'requests~=2.9.1',
+        'requests~=2.14.2',
         'sqlalchemy~=1.1.4',
         'tzlocal~=1.3',
         'watchdog~=0.8.3',
