@@ -59,7 +59,7 @@ setup(
         'cssselect~=1.0.0',
         'fs~=2.0.4',
         'iso8601~=0.1.11',
-        'lxml~=3.7.0',
+        'lxml~=3.8.0',
         'passlib~=1.6.5',
         'pillow~=3.4.0',  # 3.0.0 version had an incompatible exif change
         'polib~=1.0.7',
