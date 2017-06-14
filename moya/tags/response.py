@@ -85,7 +85,7 @@ class Respond(ResponseTag):
     class Help:
         synopsis = """serve a response"""
         example = """
-        <respond code="im_a_teapot" />
+        <respond status="im_a_teapot" />
         """
 
     class Meta:
@@ -191,13 +191,11 @@ class ServeJSON(LogicElement):
     class Help:
         example = """
         <!-- serialize an object -->
-        <serve-json obj="{'status': 'ok'}"/>
+        <serve-json obj="{'crew': ['john', 'scorpius']}"/>
 
         <!-- just serve the contents -->
         <serve-json>
-        {
-            "crew": ["john", "scorpius"]
-        }
+            {"crew": ["john", "scorpius"]}
         </serve-json>
 
         """
