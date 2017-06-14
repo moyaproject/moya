@@ -125,6 +125,7 @@ class Content(interface.AttributeExposer):
         self.sections = OrderedDict()
         #self.section_stack = [self.new_section("body", "base.html")]
         self.section_stack = []
+        self.http_status = None
         super(Content, self).__init__()
 
     def __repr__(self):

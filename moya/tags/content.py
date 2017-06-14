@@ -501,15 +501,19 @@ class ServeContent(LogicElement, ContentElementMixin):
     _from = Attribute("Application", type="application", required=False, default=None)
     withscope = Attribute("Use current scope?", default=False, type="boolean")
     template = Attribute("Template", required=False, default=None)
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     class Meta:
         is_call = True
 
     def logic(self, context):
-        content, withscope, template = self.get_parameters(context,
-                                                           'content',
-                                                           'withscope',
-                                                           'template')
+        content, withscope, template =\
+            self.get_parameters(
+                context,
+               'content',
+               'withscope',
+               'template'
+            )
         app = self.get_app(context)
         template = app.resolve_template(template)
         if withscope:
@@ -533,9 +537,10 @@ class ServeContent(LogicElement, ContentElementMixin):
 
         for defer in self.generate_content(context, content, app, td=td):
             yield defer
-        context.copy('_content', '_return')
 
-        raise logic.Unwind()
+        content_obj = context['_content']
+        content_obj.http_status = self.status(context)
+        raise logic.EndLogic(content_obj)
 
 
 class Title(LogicElement):

@@ -610,7 +610,10 @@ class Server(LogicElement):
         return response
 
     def render_response(self, archive, context, obj, status=StatusCode.ok):
-        response = Response(charset=py2bytes('utf8'), status=int(status))
+        response = Response(
+            charset=py2bytes('utf8'),
+            status=int(getattr(obj, 'http_status', status))
+        )
         result = render_object(obj, archive, context, "html")
         response.text = text_type(result)
         return self.process_response(context, response)
@@ -627,6 +630,7 @@ class Server(LogicElement):
                                          status=result.status,
                                          headers=result.headers)
         if not isinstance(result, Response):
+            status = int(getattr(result, 'http_status', None) or status)
             response = MoyaResponse(charset=py2bytes('utf8'), status=status)
             html = render_object(result, archive, context, "html")
             response.text = html

@@ -501,7 +501,7 @@ class HTTPStatus(AttributeType):
         if self.text.isdigit():
             return int(self.text)
         try:
-            status_code = StatusCode(self.text)
+            status_code = StatusCode(self.text.lower())
         except KeyError:
             raise BadValueError("'{}' is not a valid status code".format(self.text))
         status = int(status_code)
@@ -510,11 +510,15 @@ class HTTPStatus(AttributeType):
     @classmethod
     def check(self, value):
         try:
-            StatusCode(value)
+            StatusCode(value.lower())
         except Exception as e:
             return ValueError("'{}' is not a valid status code".format(value))
         else:
             return None
+
+    @classmethod
+    def display(cls, value):
+        return text_type(StatusCode(value)).upper()
 
 if __name__ == "__main__":
 

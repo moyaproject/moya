@@ -57,7 +57,7 @@ setup(
         'colorama~=0.3.3',
         'commonmark~=0.6.3',
         'cssselect~=1.0.0',
-        'fs~=2.0.2',
+        'fs~=2.0.4',
         'iso8601~=0.1.11',
         'lxml~=3.7.0',
         'passlib~=1.6.5',

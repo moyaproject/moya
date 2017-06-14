@@ -62,6 +62,7 @@ class ServeTemplate(RenderTemplate):
     """Render and serve a template"""
 
     content_type = Attribute("Mime Type", required=False, default=None)
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     class Help:
         synopsis = """render and serve a template"""
@@ -69,7 +70,7 @@ class ServeTemplate(RenderTemplate):
     def on_value(self, context, value):
         content_type = self.content_type(context)
         html = render_object(value, self.archive, context, self.format(context))
-        response = MoyaResponse(charset=py2bytes('utf8'))
+        response = MoyaResponse(charset=py2bytes('utf8'), status=self.status(context))
         if content_type:
             response.content_type = py2bytes(content_type)
         response.text = html
@@ -128,13 +129,14 @@ class ServeTemplateFS(RenderTemplateFS):
     """
 
     content_type = Attribute("Mime Type", required=False, default=None)
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     class Help:
         synopsis = """render and serve a template in a filesystem"""
 
     def on_value(self, context, html):
         content_type = self.content_type(context)
-        response = MoyaResponse(charset=py2bytes('utf8'))
+        response = MoyaResponse(charset=py2bytes('utf8'), status=self.status(context))
         if content_type:
             response.content_type = py2bytes(content_type)
         response.text = html

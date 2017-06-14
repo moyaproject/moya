@@ -1,3 +1,9 @@
+0.6.19
+------
+
+Added status attribute to various serve-* tags
+Allowed httpstatus attributes to be upper case
+
 0.6.18
 ------
 

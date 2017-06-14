@@ -135,6 +135,7 @@ class ServeFile(LogicElement):
     ifexists = Attribute("Only serve a response if the file exists", type="boolean")
     filename = Attribute("Name of the file being serve", required=False, default=None)
 
+
     def logic(self, context):
         params = self.get_parameters(context)
 
@@ -160,6 +161,7 @@ class ServeText(LogicElement):
     Serve text.
 
     """
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     class Help:
         synopsis = "serve simple text"
@@ -168,7 +170,7 @@ class ServeText(LogicElement):
         """
 
     def logic(self, context):
-        response = MoyaResponse(status=200,
+        response = MoyaResponse(status=self.status(context),
                                 content_type=py2bytes('text'),
                                 text=context.sub(self.text),
                                 charset=py2bytes('utf-8'))
@@ -196,13 +198,14 @@ class ServeJSON(LogicElement):
         {
             "crew": ["john", "scorpius"]
         }
-        </serv-json>
+        </serve-json>
 
         """
         synopsis = """serve an object as JSON"""
 
     obj = Attribute("Object to build JSON from", type="expression", required=False, default=None, missing=False)
     indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     def logic(self, context):
         if self.has_parameter('obj'):
@@ -213,7 +216,8 @@ class ServeJSON(LogicElement):
                 self.throw('serve-json.fail', text_type(e))
         else:
             json_obj = context.sub(self.text)
-        response = MoyaResponse(content_type=b'application/json' if PY2 else 'application/json',
+        response = MoyaResponse(status=self.status(context),
+                                content_type=b'application/json' if PY2 else 'application/json',
                                 body=json_obj)
         raise logic.EndLogic(response)
 
@@ -251,6 +255,7 @@ class ServeJsonObject(LogicElement):
         synopsis = """serve an dict as JSON"""
 
     indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
+    status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     def logic(self, context):
         obj = self.get_let_map(context)
@@ -262,7 +267,8 @@ class ServeJsonObject(LogicElement):
         except Exception as e:
             self.throw('serve-json-object.fail', text_type(e))
 
-        response = MoyaResponse(content_type=b'application/json' if PY2 else 'application/json',
+        response = MoyaResponse(status=self.status(context),
+                                content_type=b'application/json' if PY2 else 'application/json',
                                 body=json_obj)
         raise logic.EndLogic(response)
 
