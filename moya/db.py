@@ -209,6 +209,7 @@ def commit_sessions(context, close=True):
                 dbsession.session.commit()
             except:
                 db_log.exception('error committing session')
+                raise
             else:
                 count += 1
             if close:

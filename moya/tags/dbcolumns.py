@@ -325,6 +325,7 @@ class ForeignKeyColumn(MoyaDBColumn):
                                 remote_side=lambda: ref_model_table_class().id,
                                 backref=_backref,
                                 cascade=self.cascade,
+                                post_update=self.null,
                                 #lazy="subquery"
                                 )
 
