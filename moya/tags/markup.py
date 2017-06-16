@@ -81,12 +81,20 @@ class BBCode(MarkupTag):
         synopsis = "add bbcode to content"
 
 
+class BB(BBCode):
+    """An alias for [tag]bbcode[/tag]."""
+
+
 class Markdown(MarkupTag):
     """Add markdown to content"""
     markup = "markdown"
 
     class Help:
         synopsis = "add markdown to content"
+
+
+class MD(Markdown):
+    """An alias for [tag]markdown[/tag]."""
 
 
 class GetMarkupTypes(DataSetter):

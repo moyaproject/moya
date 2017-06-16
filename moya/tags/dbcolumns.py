@@ -347,7 +347,7 @@ class FloatColumn(MoyaDBColumn):
     dbtype = Float
 
     def adapt(self, value):
-        return float(value)
+        return None if value is None else float(value)
 
 
 class IntegerColumn(MoyaDBColumn):
@@ -358,7 +358,7 @@ class IntegerColumn(MoyaDBColumn):
         super(IntegerColumn, self).__init__(type, name, *args, **kwargs)
 
     def adapt(self, value):
-        return int(value)
+        return None if value is None else int(value)
 
 
 class DecimalColumn(MoyaDBColumn):

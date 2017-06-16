@@ -372,6 +372,8 @@ class MoyaDB(object):
                          if col.default is not no_default}
 
     def adapt(self, field, value):
+        if value is None:
+            return value
         if field not in self.sa_columns:
             return value
         col = self.sa_columns[field]
@@ -1729,7 +1731,18 @@ class GetOrCreate(DBDataSetter):
             fields = {k: dbobject(v) for k, v in obj.items() if k != 'id'}
             fields.update({k: dbobject(v) for k, v in let_map.items()})
 
-            value = table_class(**fields)
+            try:
+                value = table_class(**fields)
+            except AdaptValueError as e:
+                self.throw('db.create-fail',
+                            "unable to set field '{}' to {}".format(e.k, context.to_expr(e.v)),
+                            fields,
+                            diagnosis="Check the field supports the data type you are setting")
+            except Exception as e:
+                self.throw('db.create-fail',
+                            "unable to create a new {} object ({})".format(model, e),
+                            fields,
+                            diagnosis="Check the field supports the data type you are setting")
 
             signal_params = {'object': value,
                              'model': model.libid,

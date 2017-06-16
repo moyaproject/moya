@@ -820,6 +820,8 @@ class ElementBaseType(object):
         else:
             return self._tag_name == element_type
 
+    check_type = _match_element_type
+
     def find(self, element_type=None, element_class=None, **attrs):
         # 'fast' path
         if not element_type and not element_class:
@@ -919,14 +921,14 @@ class ElementBaseType(object):
                 break
 
     @property
-    def older_sibling(self):
+    def younger_sibling(self):
         try:
             return self.siblings[self.siblings.index(self) + 1]
         except (ValueError, IndexError):
             return None
 
     @property
-    def younger_sibling(self):
+    def older_sibling(self):
         try:
             return self.siblings[self.siblings.index(self) - 1]
         except (ValueError, IndexError):

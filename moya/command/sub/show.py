@@ -34,13 +34,13 @@ class Show(SubCommand):
         except Exception as e:
             self.error(text_type(e))
             return -1
-        sibling = element.older_sibling
+        sibling = element.younger_sibling
         start = element.source_line
 
         node = element
         while node:
-            if node.older_sibling:
-                node = node.older_sibling
+            if node.younger_sibling:
+                node = node.younger_sibling
                 break
             node = node.parent
         end = node.source_line if node else None

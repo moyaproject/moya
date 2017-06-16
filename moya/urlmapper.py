@@ -92,7 +92,10 @@ class URLProxy(object):
         return url
 
     def bind(self, data):
-        self.bound = data
+        if self.bound is not None:
+            self.bound.update(data)
+        else:
+            self.bound = data
 
     def __getitem__(self, name):
         obj = self.evaluate()
@@ -101,13 +104,15 @@ class URLProxy(object):
         if name not in obj.named_routes:
             raise KeyError(name)
         proxy = URLProxy(self.mapper, self.path + [name])
-        #obj = proxy.evaluate()
-        #if isinstance(obj, text_type):
-        #    return obj
+        if self.bound:
+            proxy.bind(self.bound)
         return proxy
 
     def __moyacall__(self, params):
-        self.bound = params
+        if self.bound is not None:
+            self.bound.update(params)
+        else:
+            self.bound = params
         return self
 
     def __str__(self):
@@ -646,8 +651,10 @@ class Route(object):
             m = self.defaults.copy()
             m.update(match.groupdict())
             try:
-                m = dict((k, get_component_callable(k, null_callable)(v))
-                         for k, v in m.items())
+                m = {
+                    k: get_component_callable(k, null_callable)(v)
+                    for k, v in m.items()
+                }
             except ValueError:
                 return None
             return m
@@ -694,26 +701,6 @@ class Route(object):
             else:
                 append(token)
         return matched, ''.join(quote(text_type(s)) for s in segments)
-
-    # def reverse_url(self, params):
-    #     components = []
-    #     route = self
-    #     while route:
-    #         components.append(route.generate(params))
-    #         if route.mapper is None:
-    #             break
-    #         route = route.mapper.route
-    #     url = ''.join(reversed(components)).replace('//', '/')
-    #     if not url.startswith('/'):
-    #         url = '/' + url
-    #     return url
-
-    # def reverse_url_path(self, path, params):
-    #     components = [route.generate(params) for route in path]
-    #     url = ''.join(components).replace('//', '/')
-    #     if not url.startswith('/'):
-    #         url = '/' + url
-    #     return url
 
 
 if __name__ == "__main__":

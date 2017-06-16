@@ -26,6 +26,7 @@ import hashlib
 
 import logging
 security_log = logging.getLogger('moya.security')
+forms_log = logging.getLogger('moya.forms')
 
 
 class SelectOption(object):

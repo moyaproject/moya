@@ -30,6 +30,7 @@ from ..request import ReplaceRequest
 from ..urltools import urlencode as moya_urlencode
 from .. import tools
 from .. import pilot
+from .. import namespaces
 
 from webob import Response
 
@@ -446,6 +447,10 @@ class View(ContextElementBase, ContentElementMixin):
         if scope is not None and not isinstance(scope, Content):
             app = self.get_app(context)
             template = self.resolve_templates(app, templates)
+
+            # if content is None and self.younger_sibling.check_type(namespaces.default, 'content'):
+            #     content = self.younger_sibling
+
             if content is not None:
                 if not hasattr(scope, 'items'):
                     self.throw("view.bad-return",
