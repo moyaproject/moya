@@ -1,3 +1,10 @@
 <div class="moya-widgets-dialog-buttons">
     {% children %}
 </div>
+{#
+<div class="btn-group btn-group-justified moya-widgets-dialog-buttons">
+    {% for child in children if not isstr:child %}
+    <div class="btn-group">{% render child %}</div>
+    {% endfor %}
+</div>
+#}

@@ -35,7 +35,7 @@ def spaceless(s, _re=_re_spaceless):
     return _re.sub("><", s)
 
 
-def summarize(s, max_size=100):
+def summarize(s, max_size=100, mark=' [&hellip; ]'):
     s = textilize(s)
 
     if len(s) > max_size:
@@ -44,7 +44,7 @@ def summarize(s, max_size=100):
             words.pop()
         else:
             words = s[:max_size].split()
-        s = escape(' '.join(words)) + ' [&hellip;]'
+        s = escape(' '.join(words)) + mark
     else:
         s = escape(s)
     return s

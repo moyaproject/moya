@@ -5,6 +5,8 @@ Added status attribute to various serve-* tags
 Allowed httpstatus attributes to be upper case
 Added <md> and <bb> aliases for <markdown> and <bbcode>
 Made chained url expressions work, e.g. .urls.wiki(slug='foo').page_edit
+{% summarize %} template tax now takes a `mark` parameter to change end
+marker of truncated text.
 
 0.6.18
 ------

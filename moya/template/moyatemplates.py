@@ -1811,20 +1811,17 @@ class SummarizeNode(Node):
     tag_name = "summarize"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('chars')
+        exp_map = parser.expect_word_expression_map('chars', 'mark')
         self.max_characters = exp_map.get('chars') or DefaultExpression(200)
+        self.mark = exp_map.get('mark') or ' [&hellip]'
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = self.render_contents(environment, context, template, text_escape)
-
-        target = "html"
-        markup_type = "summary"
-        markup_renderable = Markup(markup, markup_type)
-        options = {"length": self.max_characters.eval(context)}
-
-        html = render_object(markup_renderable, environment.archive, context, target, options=options)
-        return html
+        from ..html import summarize
+        max_chars = self.max_characters.eval(context)
+        mark = self.mark.eval(context)
+        return summarize(markup, max_size=max_chars, mark=mark)
 
 
 TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])

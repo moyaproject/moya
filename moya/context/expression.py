@@ -254,6 +254,7 @@ class EvalString(Evaluator):
 
 class EvalSignOp(Evaluator):
     """Class to evaluate expressions with a leading + or - sign"""
+    __slots__ = ['eval_func', '_eval', 'eval_func']
     def build(self, tokens):
         sign, value = tokens[0]
         if sign == "+":
