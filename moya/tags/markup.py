@@ -121,6 +121,8 @@ class MarkupInsert(LogicElement):
     """A callable invoked from Moya markup"""
     _moya_markup_insert = True
 
+    # name = Attribute(type="text", default=None)
+
     class Help:
         synopsis = "insert code from markup"
 

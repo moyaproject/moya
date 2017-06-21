@@ -116,7 +116,10 @@ def to_expression(context, obj, max_size=None, truncate_text=" [...]"):
             yield ']'
         else:
             # A last resort, may not be a valid Moya expression
-            yield repr(obj)
+            try:
+                yield repr(obj)
+            except Exception as error:
+                yield "<repr failed '{}'>".format(error)
     if max_size is None:
         return ''.join(moya_repr(obj))
 

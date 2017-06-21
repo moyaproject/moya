@@ -1139,7 +1139,7 @@ class Archive(object):
                     _callable = self.get_callable(element_ref, app=app)
                     _callable(context, signal=signal_obj)
                 except errors.LogicError as e:
-                    # We can't risk any unhdefandled exceptions here
+                    # We can't risk any unhandled exceptions here
                     try:
                         log.error("%s unhandled in signal '%s'", e, signal_name)
                     except:

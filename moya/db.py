@@ -73,12 +73,12 @@ def wrap_db_errors(f):
         except OperationalError as e:
             message, info = _get_db_error(e)
             raise logic.MoyaException("db.operational-error", message, info=info)
-        except StatementError as e:
-            message, info = _get_db_error(e)
-            raise logic.MoyaException("db.statement-error", message, info=info, diagnosis="This error can occur if the models haven't been created in the database.\n\nDo you need to run **moya db sync**?")
         except DatabaseError as e:
             message, info = _get_db_error(e)
             raise logic.MoyaException("db.error", message, info=info)
+        except StatementError as e:
+            message, info = _get_db_error(e)
+            raise logic.MoyaException("db.statement-error", message, info=info, diagnosis="This error can occur if the models haven't been created in the database.\n\nDo you need to run **moya db sync**?")
         except Exception as e:
             raise
         else:

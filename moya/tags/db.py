@@ -22,7 +22,7 @@ from ..dbexpression import DBExpression
 from ..template.rendercontainer import RenderContainer
 from .. import timezone
 from .. import http
-from ..compat import text_type, implements_bool, implements_to_string, iteritems, py2bytes, xrange, number_types, string
+from ..compat import PY2, text_type, implements_bool, implements_to_string, iteritems, py2bytes, xrange, number_types, string
 from .. import pilot
 
 from json import loads
@@ -293,7 +293,7 @@ class TableClassBase(object):
         template = self._model.template(context)
 
         if template is None:
-            return repr(self)
+            return self.__moyarepr__(context)
         template = self._app.resolve_template(template)
         render_container = RenderContainer.create(self._app, template=template)
         render_container['self'] = self
@@ -342,16 +342,23 @@ class TableClassBase(object):
     def __contains__(self, key):
         return any(key == name for name in self._moyadb.dbfields)
 
-    def __repr__(self):
+    if PY2:
+        def __unicode__(self):
+            return self.__moyarepr__(pilot.context)
+    else:
+         def __str__(self):
+            return self.__moyarepr__(pilot.context)
+
+    def __moyarepr__(self, context):
         """Generated from the `repr` attribute, or uses default of '<model> <id>'."""
         r = self._repr
         try:
-            with pilot.context.data_scope(self):
+            with context.data_scope(self):
                 return "<{}>".format(pilot.context.sub(r))
         except Exception as e:
             log.error("error with repr: %s", e)
             try:
-                return "<{} #{}>".format(self._model.get_appid(self.app), self.id)
+                return "<{} #{}>".format(self._model.get_appid(self._app), self.id)
             except:
                 log.exception("error in default repr")
                 return "<error in repr>"

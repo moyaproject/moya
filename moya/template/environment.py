@@ -14,7 +14,7 @@ from fs.errors import ResourceNotFound, NoSysPath
 
 
 # Update for backwards incompatible changes, so we don't get old cached templates
-TEMPLATE_VERSION = 9
+TEMPLATE_VERSION = 11
 
 
 class Environment(object):
