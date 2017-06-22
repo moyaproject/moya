@@ -187,23 +187,36 @@ class MoyaMarkup(MarkupBase):
                 write_error(el, "no 'insert' attribute in <moya> markup tag")
 
             app = None
-            app_name = el.attrib.get('app', None) or context.get('.app.name', None)
+            attribs = dict(el.attrib.items())
+            app_name = attribs.pop('app', None) or context.get('.app.name', None)
             if app_name is None:
                 write_error(insert_ref, el, "'app' attribute is required on <moya> tag")
                 continue
 
             # Get data params
-            params = {k.split('-', 1)[-1]: v for k, v in el.attrib.items()
-                      if k.startswith('data-')}
+            params = {
+                k.rsplit('-', 1)[-1]: v
+                for k, v in attribs.items()
+            }
+
             params.update(options)
 
             app = app or context.get('.app', None)
 
-            try:
-                _app, insert_el = archive.get_element(insert_ref, app=app)
-            except ElementNotFoundError as e:
-                write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
-                continue
+            if '#' in insert_ref:
+                try:
+                    _app, insert_el = archive.get_element(insert_ref, app=app)
+                except ElementNotFoundError as e:
+                    write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
+                    continue
+            else:
+                from .tags.markup import MarkupInsert
+                try:
+                    insert_el = MarkupInsert.registry[insert_ref]
+                except KeyError:
+                    write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
+                    continue
+                _app = app
 
             if not getattr(insert_el, '_moya_markup_insert', False):
                 msg = '{} is not safe for markup insertion'.format(html.escape(insert_el))

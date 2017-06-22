@@ -121,10 +121,15 @@ class MarkupInsert(LogicElement):
     """A callable invoked from Moya markup"""
     _moya_markup_insert = True
 
-    # name = Attribute(type="text", default=None)
+    registry = {}
+    name = Attribute("Insert name", type="text", default=None)
 
     class Help:
         synopsis = "insert code from markup"
 
     class Meta:
         is_call = True
+
+    def finalize(self, context):
+        name = self.name(context)
+        self.registry[name] = self

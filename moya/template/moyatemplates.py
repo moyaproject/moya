@@ -1813,7 +1813,7 @@ class SummarizeNode(Node):
     def on_create(self, environment, parser):
         exp_map = parser.expect_word_expression_map('chars', 'mark')
         self.max_characters = exp_map.get('chars') or DefaultExpression(200)
-        self.mark = exp_map.get('mark') or DefaultExpression(' [&hellip]')
+        self.mark = exp_map.get('mark') or DefaultExpression(' [&hellip;]')
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
