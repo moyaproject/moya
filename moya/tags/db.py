@@ -2059,7 +2059,19 @@ class IfExists(ContextElementBase, DBMixin):
             model = params.modelobj
         dbsession = self.get_session(context, params.db)
 
-        query = {k: dbobject(v) for k, v in self.get_let_map(context).items()}
+        let_map = self.get_let_map(context)
+
+        for k, v in let_map.items():
+            if is_missing(v):
+                diagnosis = '''\
+Moya can't except a missing value here. If you intended to use this value (i.e. it wasn't a typo), you should convert it to a non-missing value.
+
+For example **let:{k}="name or 'anonymous'"**
+'''
+                raise errors.ElementError("parameter '{k}' must not be missing (it is {v!r})".format(k=k, v=v),
+                                          diagnosis=diagnosis.format(k=k, v=v))
+
+        query = {k: dbobject(v) for k, v in let_map.items()}
 
         table_class = model.get_table_class(app)
         #query = ((getattr(table_class, k) == v) for k, v in query.items())
