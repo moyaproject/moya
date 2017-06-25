@@ -156,9 +156,8 @@ class MoyaMarkup(MarkupBase):
 
     def process_html(self, archive, context, text, target, options):
         #soup = BeautifulSoup(text, 'html.parser')
-        soup = fragment_fromstring(text, create_parent=True)
+        soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
         escape = html.escape
-
         # return HTML(text)
         console = context['.console']
 
@@ -235,11 +234,10 @@ class MoyaMarkup(MarkupBase):
                 continue
 
             new_el = fromstring(replace_markup)
-            #new_el.head = el.head
             new_el.tail = el.tail
             el.getparent().replace(el, new_el)
 
-        return HTML("".join(tostring(e).decode('utf-8') for e in soup.getchildren()))
+        return HTML("".join(tostring(e).decode('utf-8') for e in soup))
 
 
 @implements_to_string
