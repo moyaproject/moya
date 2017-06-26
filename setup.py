@@ -55,7 +55,7 @@ setup(
         'beautifulsoup4~=4.5.1',
         'bleach~=1.5.0',
         'colorama~=0.3.3',
-        'commonmark~=0.6.3',
+        'commonmark~=0.7.3',
         'cssselect~=1.0.0',
         'fs~=2.0.4',
         'iso8601~=0.1.11',

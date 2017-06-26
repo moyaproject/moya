@@ -1,1 +1,13 @@
-{% children %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="form-horizontal">
+            {%- for field in self.children %}
+            {%- if field.is_form_field %}
+                {% include "styles/horizontal/fields/_field.html" %}
+            {%- else %}
+                {% render field %}
+            {%- endif %}
+            {%- endfor %}
+        </div>
+    </div>
+</div>
