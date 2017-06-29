@@ -2,7 +2,7 @@
     <div class="row">
         <div class="form-horizontal">
             {%- for field in self.children %}
-            {%- if field.is_form_field %}
+            {%- if field.is_form_field and field.visible %}
                 {% include "styles/horizontal/fields/_field.html" %}
             {%- else %}
                 {% render field %}
