@@ -11,7 +11,10 @@ log = logging.getLogger('moya.runtime')
 
 class Timer(LogicElement):
     """
-    Time a block of code, and log the elapsed time. The log will display two time values; the first is the wall time, the second is [i]processor time[/i]. Processor time is more useful for profiling, as it doesn't include the time spent waiting on IO.
+    Time a block of code, and log the elapsed time. The log will display
+    two time values; the first is the wall time, the second is
+    [i]processor time[/i]. Processor time is more useful for profiling,
+    as it doesn't include the time spent waiting on IO.
 
     """
 

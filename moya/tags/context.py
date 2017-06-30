@@ -569,6 +569,43 @@ class Str(DataSetter):
         return context.sub(self.text)
 
 
+class StrReplace(LogicElement):
+    """
+    Replace occurrences of a regex in a string.
+
+    """
+
+    class Help:
+        synopsis = """replace occurances of a regex in a string"""
+        example = """
+<str dst="mail">
+    Dear NAME,
+
+    Welcome!
+</str>
+<str-replace src="mail" regex="NAME">
+    Will
+</str-replace>
+        """
+
+    src = Attribute("Source object to fill in fields", type="reference")
+    regex = Attribute("Regular Expression", type="regex", required=True)
+    count = Attribute("Maximum replacements", type="integer", default=0)
+    strip = Attribute("Strip whitespace from replacement text?", type="boolean", default=True)
+
+    def logic(self, context):
+        (src, regex, count, strip) =\
+            self.get_parameters(context, 'src', 'regex', 'count', 'strip')
+        text = text_type(context.get(src))
+        def repl(match):
+            with context.data_scope(match):
+                replace_text = context.sub(self.text)
+                return replace_text.strip() if strip else replace_text
+
+        result = regex.sub(repl, text, count=count)
+        context.set(src, result)
+
+
 class WrapTag(DataSetter):
     """Wraps text in a HTML tag."""
 

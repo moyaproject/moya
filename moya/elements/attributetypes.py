@@ -15,6 +15,7 @@ from ..compat import (implements_to_string,
                       string_types,
                       with_metaclass)
 
+import re
 
 __all__ = ["Constant",
            "Text",
@@ -490,6 +491,21 @@ class Version(AttributeType):
             return text_type(e)
         else:
             return None
+
+
+class RegEx(AttributeType):
+    type_display = "regular expression"
+    name = "regex"
+    __slots__ = ['_regex']
+
+    def __call__(self, contet):
+        try:
+            regex = re.compile(self.text)
+        except Exception as error:
+            raise BadValueError(
+                "failed to compile '{}' as a regex ({})".format(self.text, error)
+            )
+        return regex
 
 
 class HTTPStatus(AttributeType):
