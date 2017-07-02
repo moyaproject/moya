@@ -10,6 +10,7 @@ from ..context.expressiontime import ExpressionDateTime, TimeSpan
 from ..context import dataindex
 from ..context.errors import ContextKeyError
 from ..containers import OrderedDict
+from ..render import render_object
 from ..progress import Progress
 from ..tools import make_cache_key
 from .. import namespaces
@@ -569,41 +570,54 @@ class Str(DataSetter):
         return context.sub(self.text)
 
 
-class StrReplace(LogicElement):
+class StrReplace(DataSetter):
     """
     Replace occurrences of a regex in a string.
 
     """
 
     class Help:
-        synopsis = """replace occurances of a regex in a string"""
+        synopsis = """replace occurrences of a regex."""
         example = """
-<str dst="mail">
+<str dst="mail_template">
     Dear NAME,
 
     Welcome!
 </str>
-<str-replace src="mail" regex="NAME">
-    Will
+<str-replace src="mail_template" dst="mail" regex="NAME">
+    <str>John</str>
 </str-replace>
         """
 
     src = Attribute("Source object to fill in fields", type="reference")
     regex = Attribute("Regular Expression", type="regex", required=True)
-    count = Attribute("Maximum replacements", type="integer", default=0)
-    strip = Attribute("Strip whitespace from replacement text?", type="boolean", default=True)
 
     def logic(self, context):
-        (src, regex, count, strip) =\
-            self.get_parameters(context, 'src', 'regex', 'count', 'strip')
+        (dst, src, regex) =\
+            self.get_parameters(context, 'dst', 'src', 'regex')
         text = text_type(context.get(src))
-        def repl(match):
-            with context.data_scope(match):
-                replace_text = context.sub(self.text)
-                return replace_text.strip() if strip else replace_text
 
-        result = regex.sub(repl, text, count=count)
-        context.set(src, result)
+        output = []
+        pos = 0
+        end = None
+        for match in regex.finditer(text):
+            start, end = match.span(0)
+            if start > pos:
+                output.append(text[pos:start])
+                pos = end
+
+            _return = ReturnContainer()
+            scope = match.groupdict()
+            with context.data_scope(scope):
+                with context.data_scope(_return):
+                    yield DeferNodeContents(self)
+            repl = text_type(_return._value)
+            output.append(repl)
+
+        if end is not None:
+            output.append(text[end:])
+        new_text = ''.join(output)
+        self.set_context(context, dst, new_text)
 
 
 class WrapTag(DataSetter):
