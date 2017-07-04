@@ -570,7 +570,7 @@ class Str(DataSetter):
         return context.sub(self.text)
 
 
-class StrReplace(DataSetter):
+class Replace(DataSetter):
     """
     Replace occurrences of a regex in a string.
 
@@ -584,13 +584,16 @@ class StrReplace(DataSetter):
 
     Welcome!
 </str>
-<str-replace src="mail_template" dst="mail" regex="NAME">
-    <str>John</str>
-</str-replace>
+<replace src="mail_template" dst="mail" regex="NAME">
+    <return-str>John</return-str>
+</replace>
         """
 
     src = Attribute("Source object to fill in fields", type="reference")
     regex = Attribute("Regular Expression", type="regex", required=True)
+
+    class Meta:
+        is_call = True
 
     def logic(self, context):
         (dst, src, regex) =\
@@ -599,6 +602,7 @@ class StrReplace(DataSetter):
 
         output = []
         pos = 0
+        start = None
         end = None
         for match in regex.finditer(text):
             start, end = match.span(0)
@@ -606,15 +610,31 @@ class StrReplace(DataSetter):
                 output.append(text[pos:start])
                 pos = end
 
-            _return = ReturnContainer()
-            scope = match.groupdict()
-            with context.data_scope(scope):
-                with context.data_scope(_return):
-                    yield DeferNodeContents(self)
-            repl = text_type(_return._value)
-            output.append(repl)
 
-        if end is not None:
+            self.push_call(context, match.groupdict().copy())
+            try:
+                yield DeferNodeContents(self)
+            finally:
+                call = self.pop_call(context)
+            if '_return' in call:
+                value = _return = call['_return']
+                if hasattr(_return, 'get_return_value'):
+                    value = _return.get_return_value()
+            else:
+                value = None
+
+            repl = text_type(value or '')
+
+            # _return = ReturnContainer()
+            # scope = match.groupdict()
+            # with context.data_scope(scope):
+            #     with context.data_scope(_return):
+            #         yield DeferNodeContents(self)
+            # repl = text_type(_return._value)
+            output.append(repl)
+        if start is None:
+            output.append(text)
+        elif end is not None:
             output.append(text[end:])
         new_text = ''.join(output)
         self.set_context(context, dst, new_text)
@@ -682,22 +702,6 @@ class HTMLTag(DataSetter):
         else:
             text = context.sub(self.text)
         return HTML(text)
-
-
-# class GetLet(DataSetter):
-#     """Retrieve the [i]let map[/i] of the enclosing tag."""
-
-#     def get_value(self, context):
-#         let_map = self.parent.get_let_map(context)
-#         return let_map
-
-
-# class RenderBBCode(DataSetter):
-#     default = ''
-
-#     def get_value(self, context):
-#         from postmarkup import render_bbcode
-#         return HTML(render_bbcode(context.sub(self.text)))
 
 
 class _TimeSpan(DataSetter):

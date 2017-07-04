@@ -96,6 +96,7 @@
             <attribute name="icon" required="no" type="text"/>
             <attribute name="size" required="no" choices="sm,md,lg" default="md" type="text"/>
             <attribute name="block" type="boolean" default="no" />
+            <attribute name="target" type="text" default="None"/>
         </signature>
         <dict dst="url_with"/>
         <update values="params" src="url_with"/>

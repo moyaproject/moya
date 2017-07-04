@@ -24,6 +24,7 @@ h5.group-name
 <script type="text/javascript">
 $(function(){
     $('form[name=jsonrpc]').submit(function(){
+        var $this = $(this);
         $('.jsonrpc-result').fadeTo(0, .25);
         var json = $(this).find('textarea[name=json]').val();
         var options = {
@@ -43,7 +44,7 @@ $(function(){
                 }
             }
         };
-        $.ajax('.', options);
+        $.ajax($this.attr('action'), options);
         return false;
     });
     rpc = new JSONRPC('${.request.path}',
@@ -74,7 +75,7 @@ $(function(){
 <h3>Test Call</h3>
 <p>Enter JSON below and click Send to call a RPC method</p>
 
-<form name="jsonrpc" action="." method="POST">
+<form name="jsonrpc" action="${.request.path}" method="POST">
     <div class="form-group">
         <textarea name="json" style="height:150px;" class="form-control input-block-level">{
     "jsonrpc": "2.0",

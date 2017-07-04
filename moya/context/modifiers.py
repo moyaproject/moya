@@ -48,6 +48,7 @@ from decimal import Decimal
 from collections import OrderedDict
 from datetime import datetime
 from functools import partial
+import shlex
 from operator import truth
 from itertools import chain
 import random
@@ -804,6 +805,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def path(self, context, v):
         return Path(v)
+
+    def shlex(self, context, v):
+        return shlex.split(text_type(v))
 
     def slashjoin(self, context, v):
         return _slashjoin(v)
