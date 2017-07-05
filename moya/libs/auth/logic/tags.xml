@@ -169,13 +169,14 @@
     <tag name="new-permission" synopsis="create a new permission">
         <doc>Create a new permission (if it doesn't already exist)</doc>
         <signature>
-            <attribute name="name" required="yes"/>
-            <attribute name="description" required="no" />
+            <attribute name="name" type="text" required="yes"/>
+            <attribute name="description" type="text" required="no" />
         </signature>
         <db:get-or-create model="#Permission"
             let:name="name"
-            initial="{'description':description}"
+            initial="description=description"
             dst="permission" />
+        <return value="permission"/>
     </tag>
 
     <tag name="add-permission" synopsis="add a permission to a group or user">

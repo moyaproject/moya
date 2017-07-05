@@ -27,7 +27,6 @@ class Init(SubCommand):
     def run(self):
         args = self.args
         console = self.console
-        console.text("Initializing site...", bold=True)
 
         application = WSGIApplication(self.location,
                                       self.get_settings(),
@@ -35,6 +34,7 @@ class Init(SubCommand):
                                       disable_autoreload=True,
                                       master_settings=self.master_settings)
         archive = application.archive
+        self.console.div('syncing database')
         db.sync_all(archive, self.console, summary=False)
 
         commands = [command for command in archive.get_elements_by_type(namespaces.default, 'command')
@@ -50,7 +50,10 @@ class Init(SubCommand):
                 app = archive.apps[app_name]
                 app_id = command.get_appid(app=app)
 
-                console.table([["running 'moya {}'".format(app_id), command._synopsis]])
+                #console.div("running 'moya {}'".format(app_id))
+                console.div(command._synopsis)
+                #console.text(command._synopsis, italic=True)
+
                 result = self.moya_command.project_invoke(app_id,
                                                           application=application,
                                                           root_vars={'init': True})
@@ -58,8 +61,10 @@ class Init(SubCommand):
                     fail = result
                     break
 
+        console.nl()
         if not fail:
             msg = '''Site is ready for use!\nRun "moya runserver" from the project directory.'''
+            #console.text(msg, fg="green", bold=True)
             console.table([[Cell(msg, fg="green", bold=True)]])
         else:
             msg = '''A command failed to complete -- check above for any error messages.'''

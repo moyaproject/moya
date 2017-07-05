@@ -9,13 +9,15 @@ from __future__ import division
 from time import sleep
 
 
+from .console import AttrText
+
+
 class Progress(object):
     """Renders a progress bar to the console"""
     def __init__(self, console, msg, num_steps=100, width=12, indent='', vanish=False):
         self.console = console
         self.msg = msg
         self.num_steps = num_steps
-        self.max_line_size = 0
         self.complete = 0.0
         self._step = 0
         self.width = width
@@ -62,10 +64,19 @@ class Progress(object):
         completed = bar[:num_bars]
         remaining = bar[num_bars:]
         progress = "{}%".format(int(self.complete * 100.0)).ljust(4)
-        size = len(self.indent) + len(progress) + 1 + len(completed) + len(remaining) + 1 + len(self.msg) + 1
-        self.console('\r')(self.indent)(progress)(' ')(completed, color)(remaining, 'white')(' ' + self.msg)
-        self.max_line_size = max(size, self.max_line_size)
-        self.console((self.max_line_size - size) * ' ' + line_end).flush()
+
+        bar_progress = AttrText(
+            "\r{} {} {}{} {}".format(
+                self.indent,
+                progress,
+                completed,
+                remaining,
+                self.msg
+            ).ljust(self.console.terminal_width + 1)[:self.console.terminal_width + 1]
+        )
+        bar_progress.add_span(7, end=7+len(completed), fg="magenta")
+        bar_progress.add_span(7+len(completed), end=7+len(bar), fg="white")
+        self.console(bar_progress)(line_end).flush()
 
     def done(self, msg=None):
         if msg is not None:

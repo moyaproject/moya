@@ -8,6 +8,7 @@ Made chained url expressions work, e.g. .urls.wiki(slug='foo').page_edit
 {% summarize %} template tax now takes a `mark` parameter to change end
 marker of truncated text.
 Added shlex: modifier
+Fix for progress bars in small windows
 
 0.6.18
 ------
