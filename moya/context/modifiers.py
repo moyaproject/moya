@@ -979,6 +979,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
             pass
         return first
 
+    def sumexp(self, context, v):
+        try:
+            seq, exp = v
+        except ValueError:
+            raise ValueError('sumexp: modifier expects [<seq>, <expression>]')
+        if not hasattr(exp, '__moyacall__'):
+            raise ValueError('sumexp: requires a sub expression, e.g. map:[students, `len:grades`]')
+        return sum(exp.__moyacall__(item) for item in seq)
+
     def swapcase(self, context, v):
         return text_type(v).swapcase()
 
@@ -1017,7 +1026,7 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return TimeSpan(v)
 
     def title(self, context, v):
-        return text_type(v).title().replace('_', ' ')
+        return text_type(v).replace('_', ' ').replace('-', ' ').title()
 
     def token(self, context, v):
         try:
