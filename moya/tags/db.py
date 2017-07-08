@@ -42,7 +42,7 @@ from sqlalchemy import (Table,
 from sqlalchemy.sql import text
 from sqlalchemy.orm import mapper, relationship, backref
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound, UnmappedInstanceError
-from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.exc import ArgumentError, IntegrityError, OperationalError
 from sqlalchemy.engine import RowProxy, ResultProxy
 from sqlalchemy import event
 
@@ -2000,7 +2000,11 @@ For example **let:{k}="name or 'anonymous'"**
             yield logic.DeferNodeContents(self)
 
     def get_value(self, context, qs):
-        return qs.first()
+        try:
+            return qs.first()
+        except Exception as error:
+            self.throw('db.error',
+                       'failed to query database; {}'.format(error))
 
     def check_value(self, context, value):
         pass
@@ -2451,9 +2455,16 @@ class Query(DBDataSetter):
                     if reverse or descending:
                         sort_col = sort_col.desc()
                     order.append(sort_col)
+
         if order:
             # First cancel any existing order
-            qs = qs.order_by(False).order_by(*order)
+            try:
+                qs = qs.order_by(False).order_by(*order)
+            except ArgumentError:
+                raise errors.ElementError(
+                    "unable to sort by {}".format(', '.join(orderby)),
+                    diagnosis="check all values in orderby are database fields (properties may not be used in orderby argument)"
+                )
         return qs
 
     @wrap_db_errors
