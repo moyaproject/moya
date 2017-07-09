@@ -198,6 +198,33 @@ class ExtractAttrs(Extract):
         self.set_context(context, self.dst(context), result)
 
 
+class HTMLTag(object):
+
+    def __init__(self, el):
+        self._el = el
+        self.name = el.tag
+        self.attribs = dict(el.items())
+        self.text = el.text
+
+    def __repr__(self):
+        return tostring(self._el).decode('utf-8').strip()
+
+
+class ExtractTags(Extract):
+    """
+    Extract tag objects from HTML.
+
+    """
+    xmlns = namespaces.soup
+
+    class Help:
+        synopsis = "extract elements from HTML tags"
+
+    def set_result(self, context, elements):
+        result = [HTMLTag(el) for el in elements]
+        self.set_context(context, self.dst(context), result)
+
+
 class ExtractData(Extract):
     """
     Extract HTML5 data- attributes

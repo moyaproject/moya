@@ -10,6 +10,7 @@ marker of truncated text.
 Added shlex: modifier
 Fix for progress bars in small windows
 Added sumexp: modifier
+Added {soup}extract-tags
 
 0.6.18
 ------
