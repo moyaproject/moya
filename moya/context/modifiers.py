@@ -901,6 +901,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
         return slice(*v)
 
     def slug(self, context, v):
+        if getattr(v, 'moya_missing', False):
+            raise ValueError("slug: can't generate a slug from {}".format(v))
         return slugify(v)
 
     def sorted(self, context, v):

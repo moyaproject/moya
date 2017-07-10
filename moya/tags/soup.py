@@ -4,12 +4,25 @@ from __future__ import print_function
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter
 from ..compat import text_type
+from ..html import slugify
 from .. import namespaces
 
 from lxml.cssselect import CSSSelector
 from lxml.html import tostring, fromstring, fragment_fromstring
 
 import json
+
+
+class HTMLTag(object):
+    """Represents an HTML tag."""
+    def __init__(self, el):
+        self._el = el
+        self.name = el.tag
+        self.attribs = dict(el.items())
+        self.text = el.text
+
+    def __repr__(self):
+        return tostring(self._el).decode('utf-8').strip()
 
 
 class Strain(DataSetter):
@@ -198,18 +211,6 @@ class ExtractAttrs(Extract):
         self.set_context(context, self.dst(context), result)
 
 
-class HTMLTag(object):
-
-    def __init__(self, el):
-        self._el = el
-        self.name = el.tag
-        self.attribs = dict(el.items())
-        self.text = el.text
-
-    def __repr__(self):
-        return tostring(self._el).decode('utf-8').strip()
-
-
 class ExtractTags(Extract):
     """
     Extract tag objects from HTML.
@@ -223,6 +224,65 @@ class ExtractTags(Extract):
     def set_result(self, context, elements):
         result = [HTMLTag(el) for el in elements]
         self.set_context(context, self.dst(context), result)
+
+
+class ExtractToc(DataSetter):
+    """Extract nested headings from HTML fragment."""
+
+    xmlns = namespaces.soup
+
+    src = Attribute("HTML document or fragment", type="expression", required=True)
+
+    def get_value(self, context):
+        html = self.src(context)
+        html_root = fragment_fromstring(html, create_parent=True)
+        selector = CSSSelector('h1,h2,h3,h4,h5,h6,h7')
+
+        root = [{
+            "level": 0,
+            "children": []
+        }]
+
+        for h in selector(html_root):
+            level = int(h.tag.decode('utf-8')[1:])
+            title = h.text.decode('utf-8')
+
+            depth = root
+            while depth and level > depth[-1]["level"]:
+                depth = depth[-1]["children"]
+
+            depth.append({
+                "level": level,
+                "title": title,
+                "children": []
+            })
+
+        return root
+
+
+class AddIdToHeadings(DataSetter):
+    """
+    Adds automatically generated id attributes to headings.
+
+    """
+
+    xmlns = namespaces.soup
+
+    src = Attribute("HTML document or fragment", type="expression", missing=False, required=True)
+    prefix = Attribute("Prefix to add to id", type="text", default="")
+
+    def get_value(self, context):
+        html = self.src(context)
+        prefix = self.prefix(context)
+        html_root = fragment_fromstring(html, create_parent=True)
+        selector = CSSSelector('h1,h2,h3,h4,h5,h6,h7')
+
+        for heading in selector(html_root):
+            heading.attrib['id'] = "{}{}".format(prefix, slugify(heading.text.decode('utf-8')))
+
+        result_markup = "".join(tostring(child).decode('utf-8') for child in html_root.getchildren())
+
+        return result_markup
 
 
 class ExtractData(Extract):
