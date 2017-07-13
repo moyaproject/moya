@@ -244,8 +244,12 @@ class ExtractToc(DataSetter):
         }]
 
         for h in selector(html_root):
+            if not h.text:
+                continue
             level = int(h.tag.decode('utf-8')[1:])
-            title = h.text.decode('utf-8')
+            title = h.text
+            if not isinstance(title, text_type):
+                title = title.decode('utf-8')
 
             depth = root
             while depth and level > depth[-1]["level"]:
@@ -257,7 +261,7 @@ class ExtractToc(DataSetter):
                 "children": []
             })
 
-        return root
+        return root[0]["children"]
 
 
 class AddIdToHeadings(DataSetter):

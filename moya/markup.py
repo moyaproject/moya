@@ -155,10 +155,9 @@ class MoyaMarkup(MarkupBase):
         self.template = Template('<b>moya</b>{% render sections._widget %}')
 
     def process_html(self, archive, context, text, target, options):
-        #soup = BeautifulSoup(text, 'html.parser')
-        soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
+        #soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
+        soup = fragment_fromstring(text.encode('utf-8', 'replace'), create_parent=True)
         escape = html.escape
-        # return HTML(text)
         console = context['.console']
 
         def write_error(insert_ref, el, msg, exc=None):
