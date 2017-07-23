@@ -1504,7 +1504,7 @@ class TransNode(Node):
         if token_type == "tag":
             #tag = text.strip().split(' ', 1)[0]
             tag = self._parse_tag_name(text)
-            if tag in ("endtrans", "end"):
+            if tag in ("endtrans", "end", "/trans"):
                 return False
             else:
                 if self.number_expression is None:
@@ -1557,7 +1557,7 @@ class DataNode(Node):
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            if self._parse_tag_name(text) in ("enddata", "end"):
+            if self._parse_tag_name(text) in ("enddata", "end", "/data"):
                 return False
         self.text.append(token_text)
         return False
@@ -2173,21 +2173,24 @@ class Template(object):
             else:
                 tag_name, _, extra = text.strip().partition(' ')
                 tag_name = tag_name.replace('-', '')
-                if tag_name.startswith("end"):
-                    closing_tag = tag_name[3:].strip()
+                if tag_name.startswith(("end", "/")):
+                    if tag_name[0] == '/':
+                        closing_tag = tag_name[1:].strip()
+                    else:
+                        closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()
 
                     if closed_tag.name == 'root':
-                        raise errors.UnmatchedTag("End tag, {{% end{} %}}, has nothing to end".format(closing_tag),
+                        raise errors.UnmatchedTag("End tag, {{% /{} %}}, has nothing to end".format(closing_tag),
                                                   node,
                                                   lineno + 1, pos + 1, endpos,
                                                   diagnosis="Check the syntax of the tag you are attempting to end (and that it exists).")
 
                     if closing_tag and closing_tag != closed_tag.name:
-                        raise errors.UnmatchedTag("End tag, {{% end{} %}}, doesn't match {}".format(closing_tag, closed_tag),
+                        raise errors.UnmatchedTag("End tag, {{% /{} %}}, doesn't match {}".format(closing_tag, closed_tag),
                                                   node,
                                                   lineno + 1, pos + 1, endpos,
-                                                  diagnosis="The {{% {close} %}} tag requires a corresponding {{% end-{close} %}}".format(close=closing_tag))
+                                                  diagnosis="The {{% {close} %}} tag requires a corresponding {{% /{close} %}}".format(close=closing_tag))
                     node.finalize(environment, self)
                     node = node_stack[-1]
                 else:

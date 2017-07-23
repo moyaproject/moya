@@ -15,6 +15,7 @@ Added {soup}extract-toc
 Added {soup}add-id-to-headings
 Added anypermission: modifier
 Added {% minify %} template tag
+Added {% /tag %} as an alternative way to terminate a template tag
 
 0.6.18
 ------
