@@ -80,7 +80,6 @@ class DBMixin(object):
         try:
             model_app, model = self.get_app_element(model, app=app)
         except errors.ElementNotFoundError as e:
-            raise
             raise errors.ElementError(text_type(e), element=self)
         return model_app, model
 

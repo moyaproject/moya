@@ -946,7 +946,6 @@ class Expression(object):
                 print("In expression.eval {!r}".format(self))
                 import traceback
                 traceback.print_exc(e)
-
             raise ExpressionEvalError(self.exp, original=e)
 
     def make_function(self, context=None):

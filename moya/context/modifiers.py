@@ -253,6 +253,17 @@ class ExpressionModifiersBase(object):
                 return "{:,.1f} {}".format((base * size / unit), suffix)
         return "{:,.1f} {}".format((base * size / unit), suffix)
 
+
+    @classmethod
+    def _anypermission(cls, context, v):
+        if not v:
+            return False
+        permissions = context['.permissions']
+        if isinstance(v, list):
+            return any(text_type(p) in permissions for p in v)
+        else:
+            return text_type(v) in permissions
+
     @classmethod
     def _permission(cls, context, v):
         if not v:
@@ -309,6 +320,9 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def any(self, context, v):
         return any(bool(i) for i in v)
+
+    def anypermission(self, context, v):
+        return self._anypermission(context, v)
 
     def app(self, context, v):
         """Get an application from a name or object."""
@@ -536,6 +550,8 @@ class ExpressionModifiers(ExpressionModifiersBase):
 
     def eval(self, context, v):
         from .expression import Expression
+        if not isinstance(v, text_type):
+            raise ValueError('eval: modifier expects a string (not {})'.format(context.to_expr(v)))
         return Expression(v).eval(context)
 
     def exists(self, context, v):

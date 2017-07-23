@@ -419,6 +419,40 @@ class TextNode(Node):
         return context.sub(self.text, text_escape)
 
 
+class MinifyCSSNode(Node):
+    tag_name = "minify"
+
+    def on_create(self, environment, parser):
+        self.type_expression = parser.expect_expression()
+        expression_map = parser.expect_word_expression_map("if")
+        self.if_expression = expression_map.get('if', TrueExpression())
+        parser.expect_end()
+
+    def render(self, env, context, template, text_escape):
+        minify = self.if_expression.eval(context)
+        if not minify:
+            return self.render_contents(env, context, template, text_escape)
+
+        minify_type = self.type_expression.eval(context)
+        if minify_type not in ('css', 'js'):
+            self.render_error('unknown minify type ({})'.format(context.to_expr(minify_type)))
+
+        if minify_type == 'css':
+            css = self.render_contents(env, context, template, text_escape)
+            from csscompressor import compress
+            try:
+                return compress(css)
+            except Exception as error:
+                self.render_error('css minify failed; {}'.format(error))
+        elif minify_type == 'js':
+            js = self.render_contents(env, context, template, text_escape)
+            from jsmin import jsmin
+            try:
+                return jsmin(js)
+            except Exception as error:
+                self.render_error('js minify failed; {}'.format(error))
+
+
 class ConsoleNode(Node):
     tag_name = "console"
     auto_close = True

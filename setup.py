@@ -56,12 +56,14 @@ setup(
         'bleach~=1.5.0',
         'colorama~=0.3.3',
         'commonmark~=0.7.3',
+        'csscompressor~=0.9.4',
         'cssselect~=1.0.0',
         'fs~=2.0.4',
+        'jsmin~=2.2.2',
         'iso8601~=0.1.11',
         'lxml~=3.8.0',
         'passlib~=1.6.5',
-        'pillow~=3.4.0',  # 3.0.0 version had an incompatible exif change
+        'pillow~=4.2.1',  # 3.0.0 version had an incompatible exif change
         'polib~=1.0.7',
         'postmarkup',
         'premailer~=2.9.3',
