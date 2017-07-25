@@ -584,6 +584,10 @@ class Section(object):
             finally:
                 self.render_stack.pop()
 
+    def __len__(self):
+        node = self.render_stack[-1]
+        return len(getattr(node, 'children', ()))
+
     @property
     def template_self(self):
         return TemplateSectionProxy(self)

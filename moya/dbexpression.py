@@ -25,7 +25,7 @@ from pyparsing import (Word,
                        Optional,
                        Regex)
 
-from sqlalchemy import and_, or_, func
+from sqlalchemy import and_, or_, func, not_
 
 import operator
 import re
@@ -119,7 +119,7 @@ class EvalModifierOp(object):
         try:
             self.filter_func = getattr(self.modifiers, filter[:-1])
         except AttributeError:
-            raise ValueError("unknown filter type '%s'" % filter)
+            raise DBEvalError("unknown filter type '%s'" % filter)
 
     def eval(self, archive, context, app, exp_context):
         return self.filter_func(context, self._eval(archive, context, app, exp_context))
@@ -318,7 +318,10 @@ class EvalComparisonOp(object):
             raise DBEvalError("icontains right hand side should be a string, not {}".format(context.to_expr(b)))
 
         b = "%{}%".format(EvalComparisonOp.escape_like(b))
-        return qs(a).like(b)
+        try:
+            return qs(a).like(b)
+        except:
+            raise DBEvalError("{} may not be used with 'icontains' operator".format(context.to_expr(a)))
 
     def ieq(context, a, b):
         if not isinstance(b, text_type):
@@ -403,6 +406,18 @@ class EvalGroupOp(object):
         return val
 
 
+class EvalNotOp(object):
+    """Class to evaluate expressions with logical NOT"""
+
+    def __init__(self, tokens):
+        self._eval = tokens[0][1].eval
+
+    def eval(self, archive, context, app, exp_context):
+        return not_(
+            self._eval(archive, context, app, exp_context)
+        )
+
+
 integer = Word(nums)
 real = Combine(Word(nums) + '.' + Word(nums))
 
@@ -420,9 +435,12 @@ operand = model_reference | real | integer | constant | string | variable
 
 plusop = oneOf('+ -')
 multop = oneOf('* / // %')
+
 groupop = Literal(',')
 
 expr = Forward()
+
+notop = Literal('not') + WordEnd()
 
 modifier = Combine(Word(alphas + nums) + ':')
 
@@ -442,6 +460,7 @@ logicopOR = Literal('or') + WordEnd()
 logicopAND = Literal('and') + WordEnd()
 
 expr << operatorPrecedence(operand, [
+    (notop, 1, opAssoc.RIGHT, EvalNotOp),
     (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
     (multop, 2, opAssoc.LEFT, EvalMultOp),
     (plusop, 2, opAssoc.LEFT, EvalAddOp),
@@ -470,8 +489,8 @@ class DBExpression(object):
 
     def eval(self, archive, context, app=None):
         exp_context = ExpressionContext(self.exp)
-        eval = self.compile_cache(self.exp)
         try:
+            eval = self.compile_cache(self.exp)
             result = eval(archive, context, app, exp_context)
         except DBEvalError as e:
             raise DBExpressionError(self.exp, text_type(e))
@@ -479,8 +498,8 @@ class DBExpression(object):
 
     def eval2(self, archive, context, app=None):
         exp_context = ExpressionContext(self.exp)
-        eval = self.compile_cache(self.exp)
         try:
+            eval = self.compile_cache(self.exp)
             result = eval(archive, context, app, exp_context)
         except DBEvalError as e:
             raise DBExpressionError(self.exp, text_type(e))

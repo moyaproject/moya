@@ -16,6 +16,7 @@ Added {soup}add-id-to-headings
 Added anypermission: modifier
 Added {% minify %} template tag
 Added {% /tag %} as an alternative way to terminate a template tag
+Added not () operator to db expression
 
 0.6.18
 ------
