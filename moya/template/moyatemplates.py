@@ -1317,7 +1317,7 @@ class IncludeNode(Node):
         if app is None:
             self.render_error(
                 'unable to include template"{}"; could not detect app'.format(path),
-                diagnosis='specify an application with {% include "template" from "<app>" %}'
+                diagnosis='specify an application with {% include "template" from "<app name>" %}'
             )
         for i, _path in enumerate(paths, 1):
             if environment.archive is not None:
