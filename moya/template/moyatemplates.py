@@ -1315,7 +1315,7 @@ class IncludeNode(Node):
         #app = self.from_expression.eval(context) or self.get_app(context)
         app = self.from_expression.eval(context) or self.template_app(environment.archive, context.get('._t.app', None))
         if app is None:
-            self.render_error('unable to determine app')
+            self.render_error('unable to include "{}"; unable to detect app'.format(path))
         for i, _path in enumerate(paths, 1):
             if environment.archive is not None:
                 path = environment.archive.resolve_template_path(_path, app)
