@@ -156,7 +156,7 @@ class MoyaMarkup(MarkupBase):
 
     def process_html(self, archive, context, text, target, options):
         #soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
-        soup = fragment_fromstring(text.encode('utf-8', 'replace'), create_parent=True)
+        soup = fragment_fromstring(text, create_parent=True)
         escape = html.escape
         console = context['.console']
 

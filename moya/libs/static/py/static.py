@@ -11,7 +11,9 @@ def read_directory(app, fs, path, permissions=True):
     if not fs.isdir(path):
         return None
     hide_wildcards = app.settings.get_list("hide")
-    namespaces = ['details', 'access'] if permissions else ['details']
+    namespaces = ['details']
+    if permissions:
+        namespaces.append('access')
     dir_fs = fs.opendir(path)
     directory = [
         FSInfo(resource)

@@ -639,7 +639,7 @@ class Route(object):
                 return True
             return False
         return (self.methods is None or
-                method == '*' or
+                '*' in self.methods or
                 method in self.methods)
 
     def parse(self, url):
