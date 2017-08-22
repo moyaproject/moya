@@ -55,9 +55,17 @@ class Serve(SubCommand):
                             help="do not hide dot files (beginning with a period)")
         parser.add_argument('-s', '--show-debug', action="store_true",
                             help="show additional debug information in directory list")
+        parser.add_argument('-l', '--show-links', action="store_true",
+                            help="show symlink target")
 
     @classmethod
-    def run_server(self, host, port, fs, serve_templates=False, develop=False, show_access=False, show_dot=True, debug=False):
+    def run_server(self, host, port, fs,
+                   serve_templates=False,
+                   develop=False,
+                   show_access=False,
+                   show_links=False,
+                   show_dot=True,
+                   debug=False):
 
         from ...command.sub import project_serve
         location = os.path.dirname(project_serve.__file__)
@@ -75,6 +83,7 @@ class Serve(SubCommand):
         application.archive.debug = debug
         static_app = application.archive.apps['static']
         static_app.settings['show_permissions'] = show_access
+        static_app.settings['show_links'] = show_links
 
         if show_dot:
             static_app.settings['hide'] = ''
@@ -110,5 +119,6 @@ class Serve(SubCommand):
             develop=args.develop,
             show_access=args.show_access,
             show_dot=args.show_dot,
+            show_links=args.show_links,
             debug=args.show_debug,
         )

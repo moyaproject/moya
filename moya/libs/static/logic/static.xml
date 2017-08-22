@@ -19,14 +19,20 @@
 		<!-- Call our Python macro to get the directory listing -->
         <let fs=".fs[fsname]"
         	show_permissions=".debug or .app.settings.show_permissions.bool"
+        	show_links=".debug or .app.settings.show_links.bool"
         	show_debug=".debug or .app.settings.show_debug.bool"/>
-		<call macro="#read_directory" dst="dir" let:permissions="show_permissions">
-			<var>fs</var>
-			<var>path</var>
-		</call>
+        <try>
+			<call macro="#read_directory" dst="dir"
+				let:permissions="show_permissions" let:links="show_links">
+				<var>fs</var>
+				<var>path</var>
+			</call>
+		</try>
+		<catch exception="moya.static.permission-denied">
+			<serve-template template="forbidden.html" status="forbidden"/>
+		</catch>
 		<!-- read_directory returns None if it is not a directory-->
 		<return if="isnone:dir" />
-
 		<!-- 404 if directory listing is disabled -->
 		<not-found if="not .app.settings.auto_index.bool" />
 		<!-- Redirect to a canonical url ending with / -->

@@ -1064,6 +1064,15 @@ class ExpressionModifiers(ExpressionModifiersBase):
     def unique(self, context, v):
         return unique(v)
 
+    def update(self, context, v):
+        try:
+            container, updates = v
+        except:
+            raise ValueError('update: required a sequence of [<dict>, <dict>]')
+        result = container.copy()
+        result.update(updates)
+        return result
+
     def upper(self, context, v):
         return text_type(v).upper()
 

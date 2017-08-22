@@ -129,12 +129,12 @@
     <widget name="dialog-buttons" template="dialogbuttons.html" synopsis="container for dialog buttons"/>
 
     <macro docname="pagination-widget">
-        <not-found if="'page' in .request.GET and not int:.request.GET.page" />
+        <not-found if="'page' in query and isnone:int:query.page" />
         <dict dst="pagination"/>
         <scope object="pagination">
             <let pagesize="pagesize"
                 numitems="len:objects"
-                page="int:.request.GET.page or 1"
+                page="int:page or 1"
                 numpages="(numitems + pagesize - 1) // pagesize"/>
             <let start="(page - 1) * pagesize + 1" />
             <let end="min:[(start + pagesize - 1), numitems]" />
@@ -167,7 +167,10 @@
                 If yes, the enclosed block is called once per item. If no the block is called once, and you must supply content tags to render all the items.
             </attribute>
             <attribute name="fragment" required="no" type="text">
-                Option fragment to add to links.
+                Optional fragment to add to links.
+            </attribute>
+            <attribute name="query" required="no" type="expression" default="dict:.request.GET">
+                Optional query string to update.
             </attribute>
         </signature>
         <let objects="src"/>

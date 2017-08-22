@@ -3,6 +3,8 @@
 
 Fixed '*' wildcard for urls.
 Fixed double encoding in Moya markup
+Added 'lib' attribute to <import>
+Added --show-links to moya serve
 
 0.6.19
 ------

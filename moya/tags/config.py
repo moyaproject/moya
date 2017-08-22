@@ -113,7 +113,11 @@ class Import(LogicElement):
     class Help:
         synopsis = """import a library"""
 
+    class Meta:
+        oneof = ['location', 'py', 'lib']
+
     name = Attribute("Name of the library")
+    lib = Attribute("Library to import e.g. acme.blog==0.1.0")
     location = Attribute("A path to a Moya library")
     py = Attribute("Python import, e.g. widgets.moya.widgetapp")
     priority = Attribute("Priority for elements", type="integer", required=False, default=None)
@@ -124,12 +128,14 @@ class Import(LogicElement):
         start = time()
         (name,
          _location,
+         lib,
          py,
          priority,
          template_priority,
          data_priority) = self.get_parameters(context,
                                               'name',
                                               'location',
+                                              'lib',
                                               'py',
                                               'priority',
                                               'templatepriority',
@@ -138,7 +144,18 @@ class Import(LogicElement):
             template_priority = priority
         archive = self.document.archive
         absolute = False
-        if _location is not None:
+        import_fs = None
+        if lib is not None:
+            import_fs = archive.find_lib(lib)
+            if import_fs is None:
+                self.throw(
+                    "import.fail",
+                    "lib '{}' not found; searched {}".format(
+                        lib,
+                        tools.textual_list(archive.lib_paths, join_word='and')
+                    )
+                )
+        elif _location is not None:
             location = _location
         else:
             if py in sys.modules:
@@ -154,30 +171,30 @@ class Import(LogicElement):
             absolute = True
 
         try:
-
-            if '::/' in location:
-                import_fs = open_fs(location)
-            else:
-                if absolute:
+            if import_fs is None:
+                if '::/' in location:
                     import_fs = open_fs(location)
                 else:
-                    project_fs = context['fs']
-                    try:
-                        if project_fs.hassyspath('/'):
-                            project_path = project_fs.getsyspath('/')
-                            import_path = join(project_path, location)
-                            try:
-                                import_fs = open_fs(import_path)
-                            except ResourceNotFound:
-                                self.throw("import.fail",
-                                           "location '{}' was not found".format(import_path),
-                                           diagnosis="Check the location is exists and is a directory.")
-                        else:
-                            import_fs = context['fs'].opendir(location)
-                    except (IllegalBackReference, FSError) as e:
-                        self.throw("import.fail",
-                                   "unable to import location '{}' from {}".format(location, project_fs),
-                                   diagnosis=text_type(e))
+                    if absolute:
+                        import_fs = open_fs(location)
+                    else:
+                        project_fs = context['fs']
+                        try:
+                            if project_fs.hassyspath('/'):
+                                project_path = project_fs.getsyspath('/')
+                                import_path = join(project_path, location)
+                                try:
+                                    import_fs = open_fs(import_path)
+                                except ResourceNotFound:
+                                    self.throw("import.fail",
+                                               "location '{}' was not found".format(import_path),
+                                               diagnosis="Check the location is exists and is a directory.")
+                            else:
+                                import_fs = context['fs'].opendir(location)
+                        except (IllegalBackReference, FSError) as e:
+                            self.throw("import.fail",
+                                       "unable to import location '{}' from {}".format(location, project_fs),
+                                       diagnosis=text_type(e))
             lib = archive.load_library(import_fs,
                                        priority=priority,
                                        template_priority=template_priority,

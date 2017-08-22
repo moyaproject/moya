@@ -71,6 +71,7 @@ class _FSInfoProxy(Info, AttributeExposer):
         "metadata_changed",
         "permissions",
         "size",
+        "target"
     ]
 
 
@@ -143,6 +144,10 @@ class FSInfo(object):
     @property
     def user(self):
         return self._info.user
+
+    @property
+    def target(self):
+        return self._info.target
 
 
 @implements_to_string

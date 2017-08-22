@@ -36,6 +36,7 @@ from .compat import text_type, iteritems, itervalues, zip_longest
 from .tools import nearest_word
 from .reader import DataReader
 from .context.tools import to_expression
+from . import versioning
 from . import logtools
 from . import settings
 
@@ -43,7 +44,7 @@ from fs.opener import open_fs
 from fs.multifs import MultiFS
 from fs.mountfs import MountFS
 from fs.path import join, abspath, relativefrom
-from fs.errors import FSError
+from fs.errors import FSError, ResourceNotFound
 
 from collections import defaultdict, namedtuple, deque
 import os
@@ -244,6 +245,8 @@ class Archive(object):
         self.log_signals = False
         self.debug_echo = False
         self.debug_memory = False
+        self.lib_paths = None
+        self._lib_database = None
 
         self.log_logger = None
         self.log_color = True
@@ -276,6 +279,27 @@ class Archive(object):
             except IOError:
                 self._moyarc = settings.SettingsContainer()
         return self._moyarc
+
+    @property
+    def lib_database(self):
+        if self._lib_database is None:
+            self._scan_libs()
+        return self._lib_database
+
+    def find_lib(self, version_spec):
+        options = []
+        _version_spec = versioning.VersionSpec(version_spec)
+        for name, version, path, dir_name in self.lib_database:
+            if _version_spec.name != name:
+                continue
+            if _version_spec.comparisons and not _version_spec.compare(version):
+                continue
+            if '://' in path:
+                base_fs = open_fs(path)
+            else:
+                base_fs = self.project_fs.opendir(path)
+            lib_fs = base_fs.opendir(dir_name)
+            return lib_fs
 
     def get_relative_path(self, path):
         """Get a relative path from the project base"""
@@ -311,6 +335,45 @@ class Archive(object):
                           nocolors=not (self.log_color and self.moyarc.get_bool('console', 'color', True)),
                           width=self.log_width or None)
         return console
+
+    def _scan_libs(self):
+        """Read libs from paths."""
+        start = time()
+        libs = self._lib_database = []
+        for path in self.lib_paths:
+            try:
+                if '://' in path:
+                    libs_fs = open_fs(path)
+                else:
+                    libs_fs = self.project_fs.opendir(path)
+            except FSError as error:
+                startup_log.warning(
+                    "unable to read from '%s' (%s)",
+                    path,
+                    error
+                )
+                continue
+            for resource in libs_fs.filterdir('/', exclude_files=['*']):
+                with libs_fs.opendir(resource.name) as lib_fs:
+                    try:
+                        lib_settings = SettingsContainer.read(lib_fs, 'lib.ini')
+                    except ResourceNotFound:
+                        continue
+                    name = lib_settings.get('lib', 'name', None)
+                    if name is None:
+                        continue
+                    version = lib_settings.get('lib', 'version', None)
+                    if version is None:
+                        continue
+                    libs.append(
+                        (name, version, path, resource.name)
+                    )
+        log.debug(
+            '%s scanned %i libs %0.1fms',
+            self,
+            len(libs),
+            (time() - start) * 1000.0
+        )
 
     def build_libs(self, ignore_errors=False):
 
@@ -846,6 +909,7 @@ class Archive(object):
         self.log_signals = cfg.get_bool('project', 'log_signals')
         self.debug_echo = cfg.get_bool('project', 'debug_echo')
         self.debug_memory = cfg.get_bool('project', 'debug_memory')
+        self.lib_paths = cfg.get_list('project', 'paths', './local\n./external')
 
         if 'console' in cfg:
             self.log_logger = cfg.get('console', 'logger', None)

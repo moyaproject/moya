@@ -10,11 +10,11 @@
     Today
     {%- else -%}
     ${localize:dt.local.date}
-    {%- endif %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
-    {%- endif -%}
+    {%- /if %}<span class="text-muted hidden-xs hidden-sm">, ${localize:dt.local.time}</span>
+    {%- /if -%}
 
-    {%- end-cache -%}
-{%- end-def %}
+    {%- /cache -%}
+{%- /def %}
 
 {% block "content" %}
 <div class="container">
@@ -30,63 +30,59 @@
         <dt>location</dt>
         <dd><tt class="text text-success" style="word-wrap:break-word;">${fs[path]}</tt></dd>
     </dl>
-    {%- endif %}
+    {%- /if %}
 
     {%- if directory %}
     <table class="table table-condensed table-striped">
         <thead>
             <tr>
                 <th>Name</th>
-                <th class="file-size">Size</th>
-                <th class="hidden-xs">Created</th>
-                <th class="hidden-xs">Modified</th>
                 {%- if show_permissions %}
                 <th class="hidden-sm hidden-xs">User</th>
                 <th class="hidden-sm hidden-xs">Group</th>
                 <th class="hidden-sm hidden-xs permissions">Permissions</th>
-                {%- endif %}
+                {%- /if %}
+                <th class="file-size">Size</th>
+                <th class="hidden-xs text-right">Created</th>
+                <th class="hidden-xs text-right">Modified</th>
             </tr>
         </thead>
         <tbody>
             {%- for resource in sortedby:[directory, `[not is_dir, lower:name]`] %}
             <tr>
-                {%- if resource.is_dir %}
                 <td>
-                    <a href="${urlquote:resource.name}/" class="directory">
-                        ${resource.name}
-                    </a>
+                    <a{% attrib href=urlquote:resource.name, class=resource.is_dir ? 'directory' : None %}>${resource.name}</a>
+                    {%- if show_links and resource.target -%}
+                    <span> → ${resource.target}</span>
+                    {%- /if %}
                 </td>
-                <td></td>
-                {%- else %}
-                <td>
-                    <a href="${urlquote:resource.name}">
-                        ${resource.name}
-                    </a>
-                </td>
-                <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
-                {%- endif %}
-                <td class="hidden-xs">{% call "show_date" with dt=(resource.created or resource.metadata_changed) %}</td>
-                <td class="hidden-xs">{% call "show_date" with dt=resource.modified %}</td>
                 {%- if show_permissions %}
                 <td class="hidden-sm hidden-xs">${resource.user}</td>
                 <td class="hidden-sm hidden-xs">${resource.group}</td>
                 <td class="hidden-sm hidden-xs permissions"><tt>${resource.permissions}</tt></td>
-                {%- endif %}
+                {%- /if %}
+                {%- if resource.is_dir %}
+                <td></td>
+                {%- else %}
+                <td class="file-size" title="(${resource.size::','} bytes)">${filesize:resource.size}</td>
+                {%- /if %}
+                <td class="hidden-xs text-right">{% call "show_date" with dt=(resource.created or resource.metadata_changed) %}</td>
+                <td class="hidden-xs text-right">{% call "show_date" with dt=resource.modified %}</td>
             </tr>
-            {%- endfor %}
+            {%- /for %}
         </tbody>
     </table>
-    {%- endif directory %}
+    {%- /if directory %}
 
     <div class="pull-right"><a href="${app.lib.url}">moya.static</a></div>
     <p>
         <strong>${filesize:sum:map:[directory, `is_dir ? 0 : size`]}</strong>
         {%- with counts:[directory, `is_dir ? "dir_count" : "file_count"`] %}
         in ${(file_count or 0)::','} {% if file_count == 1 %}file{% else %}files{% endif %}.
-        {%- if dir_count %} ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% endif %}.{% endif %}
-        {%- endwith %}
+        {%- if dir_count %} ${(dir_count or 0)::','} {% if dir_count == 1 %}directory{% else %}directories{% /if %}.{% /if %}
+        {%- /with %}
     </p>
 
     <br/>
 </div>
-{% endblock %}
+{% /block %}

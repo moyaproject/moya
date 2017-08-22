@@ -58,7 +58,7 @@ setup(
         'commonmark~=0.7.3',
         'csscompressor~=0.9.4',
         'cssselect~=1.0.0',
-        'fs~=2.0.7',
+        'fs~=2.0.9',
         'jsmin~=2.2.2',
         'iso8601~=0.1.11',
         'lxml~=3.8.0',

@@ -1,5 +1,7 @@
 {% extends "directory_base.html" from "static" %}
 
+{% block "title" %}Not Found{% /block %}
+
 {% block "content" %}
 <div class="container">
     <h1 class="page-header">
@@ -8,9 +10,8 @@
     <p>
         The resource <b>${.request.path}</b> was not found on this server.
     </p>
-    <ht>
-    <p>
-        <div class="pull-right"><a href="${.apps.static.lib.url}">moya.static</a></div>
+    <p class="text-right">
+        <a href="${.apps.static.lib.url}">moya.static</a>
     </p>
 </div>
 {% endblock %}
