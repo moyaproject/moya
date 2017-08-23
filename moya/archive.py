@@ -11,6 +11,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from . import elements
+from . import libs
 from .library import Library
 from . import logic
 from .tags.context import ContextElementBase
@@ -65,6 +66,14 @@ signal_log = logging.getLogger('moya.signal')
 
 FoundElement = namedtuple("Element", ["app", "element"])
 TagData = namedtuple("TagData", ["app", "data"])
+
+
+_libs_path = libs.__file__
+if isinstance(_libs_path, bytes):
+    _libs_path = _libs_path.decode(sys.getfilesystemencoding())
+MOYA_LIBS_PATH = '://' + os.path.dirname(
+    os.path.abspath(_libs_path)
+)
 
 
 class Signals(object):
@@ -283,7 +292,7 @@ class Archive(object):
     @property
     def lib_database(self):
         if self._lib_database is None:
-            self._scan_libs()
+            self._lib_database = self._scan_libs(self.lib_paths)
         return self._lib_database
 
     def find_lib(self, version_spec):
@@ -336,11 +345,11 @@ class Archive(object):
                           width=self.log_width or None)
         return console
 
-    def _scan_libs(self):
+    def _scan_libs(self, lib_paths):
         """Read libs from paths."""
         start = time()
-        libs = self._lib_database = []
-        for path in self.lib_paths:
+        libs = []
+        for path in lib_paths:
             try:
                 if '://' in path:
                     libs_fs = open_fs(path)
@@ -375,6 +384,7 @@ class Archive(object):
             len(libs),
             (time() - start) * 1000.0
         )
+        return libs
 
     def build_libs(self, ignore_errors=False):
 
@@ -912,13 +922,7 @@ class Archive(object):
         self.debug_memory = cfg.get_bool('project', 'debug_memory')
         self.lib_paths = cfg.get_list('project', 'paths', './local\n./external')
 
-        import moya.libs
-        libs_path = moya.libs.__file__
-        if isinstance(libs_path, bytes):
-            libs_path = libs_path.decode(sys.getfilesystemencoding())
-        libs_path = os.path.abspath(libs_path)
-        libs_path = '://' + os.path.dirname(libs_path)
-        self.lib_paths = self.lib_paths[:] + [libs_path]
+        self.lib_paths = self.lib_paths[:] + [MOYA_LIBS_PATH]
 
         if 'console' in cfg:
             self.log_logger = cfg.get('console', 'logger', None)
