@@ -1,0 +1,17 @@
+{% extends "directory_base.html" from "static" %}
+
+{% block "title" %}Forbidden{% /block %}
+
+{% block "content" %}
+<div class="container">
+    <h1 class="page-header">
+        403 - Forbidden
+    </h1>
+    <p>
+        No permission to access <b>${.request.path}</b> on this server.
+    </p>
+    <p class="text-right">
+        <a href="${.apps.static.lib.url}">moya.static</a>
+    </p>
+</div>
+{% endblock %}

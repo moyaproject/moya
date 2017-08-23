@@ -15,13 +15,13 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
             with server_fs.open(server_xml, 'rb') as server_xml_file:
                 root = parse(server_xml_file)
 
-            import_tag = XML('<import location="{lib_path}"/>'.format(lib_path=lib_path))
+            import_tag = XML('<import lib="{lib_name}"/>'.format(lib_name=lib_name))
             import_tag.tail = "\n"
 
             if app_name is None:
                 install_tag = XML('<install lib="{lib_name}" />'.format(lib_name=lib_name))
             else:
-                install_tag = XML('<install name="{app_name}" lib="{lib_name}" />'.format(app_name=app_name, lib_name=lib_name))
+                install_tag = XML('<install lib="{lib_name}" name="{app_name}"/>'.format(app_name=app_name, lib_name=lib_name))
 
             install_tag.tail = "\n"
 
@@ -36,7 +36,7 @@ def install(project_path, server_xml_location, server_xml, server_name, lib_path
                 def get_comment():
                     comment = Comment('added by moya-pm')
                     return comment
-                if not has_child(server, "{http://moyaproject.com}import", location=lib_path):
+                if not has_child(server, "{http://moyaproject.com}import", lib=lib_name):
                     server.insert(0, import_tag)
                     server.insert(0, get_comment())
                     changes += 1

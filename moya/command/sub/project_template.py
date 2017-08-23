@@ -403,39 +403,39 @@ This folder should contain libraries that are local to the project, i.e. authore
     <server docname="main">
 
         <!-- Import libraries for use in your project -->
-        <import py="moya.libs.debug" if=".debug"/>
-        <import py="moya.libs.diagnostics" if="not .debug"/>
+        <import lib="moya.debug" if=".debug"/>
+        <import lib="moya.diagnostics" if="not .debug"/>
         {{%- if project.auth %}}
-        <import py="moya.libs.auth" />
-        <import py="moya.libs.session" />
+        <import lib="moya.auth" />
+        <import lib="moya.session" />
         {{%- endif %}}
         {{%- if project.signup %}}
-        <import py="moya.libs.signup" />
+        <import lib="moya.signup" />
         {{%- endif %}}
-        <import py="moya.libs.admin" />
-        <import py="moya.libs.static" />
-        <import py="moya.libs.favicon" />
-        <import py="moya.libs.welcome" />
-        <import py="moya.libs.links" />
-        <import py="moya.libs.bootstrap" />
-        <import py="moya.libs.forms" />
-        <import py="moya.libs.widgets" />
+        <import lib="moya.admin" />
+        <import lib="moya.static" />
+        <import lib="moya.favicon" />
+        <import lib="moya.welcome" />
+        <import lib="moya.links" />
+        <import lib="moya.twitter.bootstrap" />
+        <import lib="moya.forms" />
+        <import lib="moya.widgets" />
         {{%- if project.comments %}}
-        <import py="moya.libs.comments" />
+        <import lib="moya.comments" />
         {{%- endif %}}
         {{%- if project.pages %}}
-        <import py="moya.libs.pages" />
+        <import lib="moya.pages" />
         {{%- endif %}}
         {{%- if project.blog %}}
-        <import py="moya.libs.blog" />
+        <import lib="moya.blog" />
         {{%- endif %}}
         {{%- if project.feedback %}}
-        <import py="moya.libs.feedback" />
+        <import lib="moya.feedback" />
         {{%- endif %}}
-        <import py="moya.libs.jsonrpc" />
-        <import py="moya.libs.wysihtml5" />
+        <import lib="moya.jsonrpc" />
+        <import lib="moya.wysihtml5" />
         {{%- if project.signup or project.comments %}}
-        <import py="moya.libs.recaptcha" />
+        <import lib="moya.google.recaptcha" />
         {{%- endif %}}
 
         <!-- The 'site' library, for non reusable content -->
@@ -443,42 +443,42 @@ This folder should contain libraries that are local to the project, i.e. authore
         <install name="site" lib="site.${{slug:project.title}}" mount="/" />
 
         <!-- Install applications (instances of a library) -->
-        <install name="forms" lib="moya.forms" />
-        <install name="widgets" lib="moya.widgets" />
+        <install lib="moya.forms" name="forms"/>
+        <install lib="moya.widgets" name="widgets"/>
         {{%- if project.auth %}}
-        <install name="auth" lib="moya.auth" mount="/auth/" />
+        <install lib="moya.auth" name="auth" mount="/auth/" />
         <mount app="auth" mountpoint="middleware" url="/" />
-        <install name="session" lib="moya.session" mount="/" />
+        <install lib="moya.session" name="session" mount="/" />
         {{%- endif %}}
         {{%- if project.signup %}}
-        <install name="signup" lib="moya.signup" mount="/signup/"/>
+        <install lib="moya.signup" name="signup" mount="/signup/"/>
         {{%- endif %}}
-        <install name="admin" lib="moya.admin" mount="/admin/" />
-        <install name="media" lib="moya.static" mount="/static/" />
-        <install name="debug" lib="moya.debug" mount="/debug/" if=".debug"/>
-        <install name="diagnostics" lib="moya.diagnostics" if="not .debug"/>
-        <install name="bootstrap" lib="moya.twitter.bootstrap" />
-        <install name="welcome" lib="moya.welcome" mount="/" />
-        <install name="links" lib="moya.links" />
-        <install name="favicon" lib="moya.favicon" mount="/" />
+        <install lib="moya.admin" name="admin" mount="/admin/" />
+        <install lib="moya.static" name="media" mount="/static/" />
+        <install lib="moya.debug" name="debug" mount="/debug/" if=".debug"/>
+        <install lib="moya.diagnostics" name="diagnostics" if="not .debug"/>
+        <install lib="moya.twitter.bootstrap" name="bootstrap" />
+        <install lib="moya.welcome" name="welcome" mount="/" />
+        <install lib="moya.links" name="links"/>
+        <install lib="moya.favicon" name="favicon" mount="/" />
         {{%- if project.comments %}}
-        <install name="comments" lib="moya.comments" mount="/comments/" />
+        <install lib="moya.comments" name="comments" mount="/comments/" />
         {{%- endif %}}
         {{%- if project.pages %}}
-        <install name="pages" lib="moya.pages" mount="/" urlpriority="-10"/>
+        <install lib="moya.pages" name="pages" mount="/" urlpriority="-10"/>
         {{%- endif %}}
         {{%- if project.blog %}}
-        <install name="blog" lib="moya.blog" mount="/blog/" />
+        <install lib="moya.blog" name="blog" mount="/blog/" />
         {{%- endif %}}
         {{%- if project.feedback %}}
-        <install name="feedback" lib="moya.feedback" mount="/feedback/" />
+        <install lib="moya.feedback" name="feedback" mount="/feedback/" />
         {{%- endif %}}
         {{%- if project.jsonrpc %}}
-        <install name="jsonrpc" lib="moya.jsonrpc" />
+        <install lib="moya.jsonrpc" name="jsonrpc"/>
         {{%- endif %}}
-        <install name="wysihtml5" lib="moya.wysihtml5" />
+        <install lib="moya.wysihtml5" name="wysihtml5"/>
         {{%- if project.signup or project.comments %}}
-        <install name="recaptcha" lib="moya.google.recaptcha" />
+        <install lib="moya.google.recaptcha" name="recaptcha"/>
         {{%- endif %}}
 
     </server>

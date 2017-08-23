@@ -356,7 +356,8 @@ class Archive(object):
             for resource in libs_fs.filterdir('/', exclude_files=['*']):
                 with libs_fs.opendir(resource.name) as lib_fs:
                     try:
-                        lib_settings = SettingsContainer.read(lib_fs, 'lib.ini')
+                        with lib_fs.open('lib.ini', 'rb') as ini_file:
+                            lib_settings = SettingsContainer.read_from_file(ini_file)
                     except ResourceNotFound:
                         continue
                     name = lib_settings.get('lib', 'name', None)
@@ -910,6 +911,14 @@ class Archive(object):
         self.debug_echo = cfg.get_bool('project', 'debug_echo')
         self.debug_memory = cfg.get_bool('project', 'debug_memory')
         self.lib_paths = cfg.get_list('project', 'paths', './local\n./external')
+
+        import moya.libs
+        libs_path = moya.libs.__file__
+        if isinstance(libs_path, bytes):
+            libs_path = libs_path.decode(sys.getfilesystemencoding())
+        libs_path = os.path.abspath(libs_path)
+        libs_path = '://' + os.path.dirname(libs_path)
+        self.lib_paths = self.lib_paths[:] + [libs_path]
 
         if 'console' in cfg:
             self.log_logger = cfg.get('console', 'logger', None)

@@ -1,0 +1,17 @@
+{% extends "directory_base.html" from "static" %}
+
+{% block "title" %}Internal Error{% /block %}
+
+{% block "content" %}
+<div class="container">
+    <h1 class="page-header">
+        500 - Internal Error
+    </h1>
+    <p>
+        Unable to list directory for <b>${.request.path}</b>
+    </p>
+    <p class="text-right">
+        <a href="${.apps.static.lib.url}">moya.static</a>
+    </p>
+</div>
+{% endblock %}
