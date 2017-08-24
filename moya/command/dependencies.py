@@ -19,8 +19,9 @@ class DependencyError(Exception):
     pass
 
 
-def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
+def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False, ignore_libs=None):
 
+    ignore_libs = ignore_libs or {}
     visited = set()
     package_stack = [(app_name, mount, package)]
 
@@ -32,6 +33,18 @@ def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
         if package in visited:
             continue
         visited.add(package)
+
+        if package in ignore_libs:
+            requirements[package] = (
+                package.rpartition('.')[-1],
+                None,
+                {
+                    'name': package,
+                    'version': ignore_libs[package],
+                    'system': True
+                }
+            )
+            continue
 
         package_select = rpc.call('package.select', package=package)
 
@@ -46,6 +59,7 @@ def gather_dependencies(rpc, app_name, mount, package, console, no_deps=False):
             console.text("selected {}".format(name_version), italic=True)
         name = package_select['name']
 
+        package_select['system'] = False
         requirements[name] = (app_name, mount, package_select)
 
         if no_deps:

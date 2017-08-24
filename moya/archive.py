@@ -292,7 +292,14 @@ class Archive(object):
     @property
     def lib_database(self):
         if self._lib_database is None:
-            self._lib_database = self._scan_libs(self.lib_paths)
+            start = time()
+            self._lib_database = self.scan_libs(self.lib_paths, self.project_fs)
+            log.debug(
+                '%s scanned %i libs %0.1fms',
+                self,
+                len(self._lib_database),
+                (time() - start) * 1000.0
+            )
         return self._lib_database
 
     def find_lib(self, version_spec):
@@ -345,16 +352,16 @@ class Archive(object):
                           width=self.log_width or None)
         return console
 
-    def _scan_libs(self, lib_paths):
+    @classmethod
+    def scan_libs(cls, lib_paths, base_fs):
         """Read libs from paths."""
-        start = time()
         libs = []
         for path in lib_paths:
             try:
                 if '://' in path:
                     libs_fs = open_fs(path)
                 else:
-                    libs_fs = self.project_fs.opendir(path)
+                    libs_fs = base_fs.opendir(path)
             except FSError as error:
                 startup_log.warning(
                     "unable to read from '%s' (%s)",
@@ -378,12 +385,6 @@ class Archive(object):
                     libs.append(
                         (name, version, path, resource.name)
                     )
-        log.debug(
-            '%s scanned %i libs %0.1fms',
-            self,
-            len(libs),
-            (time() - start) * 1000.0
-        )
         return libs
 
     def build_libs(self, ignore_errors=False):

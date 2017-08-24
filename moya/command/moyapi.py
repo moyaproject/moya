@@ -10,6 +10,7 @@ import getpass
 import requests
 import tempfile
 
+from .. import archive
 from .. import settings
 from .. import jsonrpc
 from .. import package
@@ -99,6 +100,7 @@ Find, install and manage Moya libraries
         self._rpc = None
         self._settings = None
         self.console = Console()
+        self.moya_libs = self._get_moya_libs()
 
     @property
     def moyapirc_path(self):
@@ -106,6 +108,15 @@ Find, install and manage Moya libraries
 
     def set_settings_defaults(self, settings):
         pass
+
+    def _get_moya_libs(self):
+        archive.MOYA_LIBS_PATH
+        moya_libs = {
+            name: version
+            for name, version, _, _ in
+            archive.Archive.scan_libs([archive.MOYA_LIBS_PATH], None)
+        }
+        return moya_libs
 
     @property
     def settings(self):
@@ -673,18 +684,22 @@ Find, install and manage Moya libraries
 
         for package_name, (app_name, mount, package_select) in packages.items():
 
-            package_name = package_select['name']
-            install_version = versioning.Version(package_select['version'])
+            if package_select['system']:
+                install_location = None
+                package_select['location'] = '<builtin>'
+            else:
+                package_name = package_select['name']
+                install_version = versioning.Version(package_select['version'])
 
-            filename = "{}-{}.{}".format(package_name, install_version, package_select['md5'])
-            download_url = package_select['download']
-            #package_filename = download_url.rsplit('/', 1)[-1]
+                filename = "{}-{}.{}".format(package_name, install_version, package_select['md5'])
+                download_url = package_select['download']
+                #package_filename = download_url.rsplit('/', 1)[-1]
 
-            install_location = relativefrom(self.location,
-                                            join(self.location,
-                                                 args.output,
-                                                 package_select['name']))
-            package_select['location'] = install_location
+                install_location = relativefrom(self.location,
+                                                join(self.location,
+                                                     args.output,
+                                                     package_select['name']))
+                package_select['location'] = install_location
 
             with download_fs.open(filename, 'rb') as package_file:
                 with ZipFS(package_file) as package_fs:
@@ -723,7 +738,8 @@ Find, install and manage Moya libraries
                                                     mount,
                                                     _install,
                                                     self.console,
-                                                    no_deps=args.no_deps)
+                                                    no_deps=args.no_deps,
+                                                    ignore_libs=self.moya_libs)
 
         if not args.no_add:
             for package_name, (app_name, mount, package_select) in packages.items():
@@ -731,8 +747,10 @@ Find, install and manage Moya libraries
                     raise CommandError("no install candidate for dependency '{}', run 'moya-pm list {}' to see available packages".format(package_name, package_name))
 
         for package_name, (app_name, mount, package_select) in packages.items():
-
+            if package_select['system']:
+                continue
             package_name = package_select['name']
+
             install_version = versioning.Version(package_select['version'])
 
             filename = "{}-{}.{}".format(package_name, install_version, package_select['md5'])
