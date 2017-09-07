@@ -233,7 +233,7 @@ class TableClassBase(object):
             except Exception as e:
                 raise AdaptValueError("unable to adapt field '{}' to {}".format(k, v), k, v)
         for k, v in moyadb.defaults.items():
-            if k not in kwargs:
+            if k not in kwargs and k + '_id' not in kwargs:
                 setattr(self, k, v() if callable(v) else v)
         #args = {k: v() if callable(v) else v for k, v in moyadb.defaults.items() if not hasattr(self, k)}
         super(TableClassBase, self).__init__()
@@ -1002,6 +1002,7 @@ class Relationship(DBElement):
     backref = Attribute("Backref")
     orderby = Attribute("Order by", type="commalist", required=False, default=("id",))
     search = Attribute("DB query referencing search field q", type="dbexpression", required=False, default=None)
+    picker = Attribute("Picker table for admin view", required=False)
 
     def validate(self, app, model):
         try:
@@ -1827,7 +1828,11 @@ class BulkCreate(ContextElementBase, DBMixin):
     def logic(self, context):
 
         params = self.get_parameters(context)
-        json = loads(self.text)
+        try:
+            json = loads(self.text)
+        except ValueError as error:
+            self.throw("bad-value.json-error", text_type(error))
+
         app, model = self.get_model(context, params.model, app=self.get_app(context))
         dbsession = self.get_session(context, params.db)
 

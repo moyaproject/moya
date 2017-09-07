@@ -251,7 +251,7 @@ def _logic_loop(context,
     push_stack = node_stack.append
     pop_stack = node_stack.pop
     breakpoints_enabled = debugging
-    skip = None
+    skip = ()
     _NodeGenerator = NodeGenerator
     _SkipNext = SkipNext
     _ElementBase = ElementBase
@@ -271,14 +271,12 @@ def _logic_loop(context,
                     skip = node.element_types
                     continue
                 if isinstance(node, _ElementBase):
-                    if node._meta.logic_skip:
-                        continue
-                    if skip and node._element_type in skip:
+                    if node._meta.logic_skip or node._element_type in skip:
                         continue
                     if debugging and debug_hook and not getattr(node, '_debug_skip', False):
                         debugging, breakpoints_enabled = debug_hook(node)
                     if not node._ignore_skip:
-                        skip = None
+                        skip = ()
                     if node.check(context):
                         result = node.logic(context)
                         if result:

@@ -1239,9 +1239,6 @@ class LogicElement(ElementBase):
     def logic(self, context):
         yield iter(self.children(element_class="logic"))
 
-    def finalize_logic(self, context, error, **result):
-        pass
-
     def call(self, context, app, **params):
         return _CallContext(self, context, app, params)
 
