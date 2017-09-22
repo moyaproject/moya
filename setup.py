@@ -51,14 +51,14 @@ setup(
 
     classifiers=classifiers,
     install_requires=[
-        'babel~=2.3.4',
+        'babel~=2.5.0',
         'beautifulsoup4~=4.5.1',
         'bleach~=1.5.0',
         'colorama~=0.3.3',
         'commonmark~=0.7.3',
         'csscompressor~=0.9.4',
         'cssselect~=1.0.0',
-        'fs~=2.0.9',
+        'fs~=2.0.10',
         'jsmin~=2.2.2',
         'iso8601~=0.1.11',
         'lxml~=3.8.0',
