@@ -14,7 +14,7 @@ from .context.expressiontime import ExpressionDateTime
 import weakref
 import re
 
-_re_fs_path = re.compile(r'^(?:\{(.*?)\})*(.*$)')
+_re_fs_path = re.compile(r"^(?:\{(.*?)\})*(.*$)")
 
 
 def parse_fs_path(path):
@@ -23,30 +23,35 @@ def parse_fs_path(path):
 
 
 class FSContainer(dict):
-
     def __moyaconsole__(self, console):
-        table = [[Cell("Name", bold=True),
-                  Cell("Type", bold=True),
-                  Cell("Location", bold=True)]]
+        table = [
+            [
+                Cell("Name", bold=True),
+                Cell("Type", bold=True),
+                Cell("Location", bold=True),
+            ]
+        ]
 
         for name, fs in sorted(self.items()):
-            syspath = fs.getsyspath('/', allow_none=True)
+            syspath = fs.getsyspath("/", allow_none=True)
             if syspath is not None:
                 location = syspath
                 fg = "green"
             else:
                 try:
-                    location = fs.desc('/')
+                    location = fs.desc("/")
                 except FSError as e:
                     location = text_type(e)
                     fg = "red"
                 else:
                     fg = "blue"
-            table.append([
-                Cell(name),
-                Cell(fs.get_type_name()),
-                Cell('%s' % location, bold=True, fg=fg)
-            ])
+            table.append(
+                [
+                    Cell(name),
+                    Cell(fs.get_type_name()),
+                    Cell("%s" % location, bold=True, fg=fg),
+                ]
+            )
         console.table(table, header=True)
 
     def close_all(self):
@@ -71,7 +76,7 @@ class _FSInfoProxy(Info, AttributeExposer):
         "metadata_changed",
         "permissions",
         "size",
-        "target"
+        "target",
     ]
 
 
@@ -165,7 +170,7 @@ class FSWrapper(object):
         return type(self.fs).__name__
 
     def __str__(self):
-        return self.fs.desc('/')
+        return self.fs.desc("/")
 
     def __repr__(self):
         return repr(self.fs)
@@ -185,7 +190,7 @@ class FSWrapper(object):
         return getattr(self.fs, name)
 
     def __moyaconsole__(self, console):
-        console((self.fs.desc('.'))).nl()
+        console((self.fs.desc("."))).nl()
         self.fs.tree(max_levels=1)
 
     def keys(self):

@@ -39,9 +39,10 @@ from textwrap import dedent
 import os.path
 
 import logging
+
 log = logging.getLogger("moya")
 request_log = logging.getLogger("moya.request")
-runtime_log = logging.getLogger('moya.runtime')
+runtime_log = logging.getLogger("moya.runtime")
 startup_log = logging.getLogger("moya.startup")
 preflight_log = logging.getLogger("moya.preflight")
 
@@ -59,17 +60,19 @@ except:
 
 
 if watchdog:
-    class ReloadChangeWatcher(watchdog.events.FileSystemEventHandler):
 
+    class ReloadChangeWatcher(watchdog.events.FileSystemEventHandler):
         def __init__(self, watch_fs, app):
             self._app = weakref.ref(app)
-            self.watch_types = app.archive.cfg.get_list("autoreload", "extensions", ".xml\n.ini\n.py")
+            self.watch_types = app.archive.cfg.get_list(
+                "autoreload", "extensions", ".xml\n.ini\n.py"
+            )
             self.watching_fs = watch_fs
             self.observer = None
             try:
-                path = self.watching_fs.getsyspath('/')
+                path = self.watching_fs.getsyspath("/")
             except FSError:
-                startup_log.warning('auto reload not available on this filesystem')
+                startup_log.warning("auto reload not available on this filesystem")
             else:
                 try:
                     observer = watchdog.observers.Observer()
@@ -77,7 +80,9 @@ if watchdog:
                     observer.start()
                     self.observer = observer
                 except:
-                    startup_log.exception('failed to watch "{}" for changes'.format(path))
+                    startup_log.exception(
+                        'failed to watch "{}" for changes'.format(path)
+                    )
                 else:
                     startup_log.debug('watching "{}" for changes'.format(path))
 
@@ -89,7 +94,9 @@ if watchdog:
                 return
 
             if not self.app.rebuild_required:
-                log.info("detected modification to project, rebuild will occur on next request")
+                log.info(
+                    "detected modification to project, rebuild will occur on next request"
+                )
                 self.app.rebuild_required = True
 
         @property
@@ -106,11 +113,17 @@ if watchdog:
                     pass
             self.watching_fs.close()
 
+
 else:
+
     class ReloadChangeWatcher(object):
         def __init__(self, watch_fs, app):
-            startup_log.warning("'watchdog' module could not be imported, autoreload is disabled")
-            startup_log.warning("you might be able to fix this with 'pip install watchdog'")
+            startup_log.warning(
+                "'watchdog' module could not be imported, autoreload is disabled"
+            )
+            startup_log.warning(
+                "you might be able to fix this with 'pip install watchdog'"
+            )
 
         def close(self):
             pass
@@ -125,8 +138,8 @@ def memory_tracker(f):
             return f(self, *args, **kwargs)
         finally:
             if self.debug_memory:
-                runtime_log.info('New objects:')
-                objgraph.show_growth(file=LoggerFile('moya.runtime'))
+                runtime_log.info("New objects:")
+                objgraph.show_growth(file=LoggerFile("moya.runtime"))
                 # roots = objgraph.get_leaking_objects()
                 # runtime_log.info('Unreachable ojects:')
                 # objgraph.show_most_common_types(objects=roots, file=LoggerFile('moya.runtime'))
@@ -135,24 +148,25 @@ def memory_tracker(f):
 
 
 class WSGIApplication(object):
-
-    def __init__(self,
-                 filesystem_url,
-                 settings_path,
-                 server="main",
-                 logging=None,
-                 disable_autoreload=False,
-                 breakpoint=False,
-                 breakpoint_startup=False,
-                 validate_db=False,
-                 simulate_slow_network=False,
-                 debug_memory=False,
-                 strict=False,
-                 master_settings=None,
-                 test_build=False,
-                 develop=False,
-                 load_expression_cache=True,
-                 post_build_hook=None):
+    def __init__(
+        self,
+        filesystem_url,
+        settings_path,
+        server="main",
+        logging=None,
+        disable_autoreload=False,
+        breakpoint=False,
+        breakpoint_startup=False,
+        validate_db=False,
+        simulate_slow_network=False,
+        debug_memory=False,
+        strict=False,
+        master_settings=None,
+        test_build=False,
+        develop=False,
+        load_expression_cache=True,
+        post_build_hook=None,
+    ):
         self.filesystem_url = filesystem_url
         self.settings_path = settings_path
         self.server_ref = server
@@ -186,19 +200,23 @@ class WSGIApplication(object):
 
         if self.debug_memory and objgraph is None:
             self.debug_memory = False
-            runtime_log.error('memory debugging requires objgraph (https://pypi.python.org/pypi/objgraph)')
+            runtime_log.error(
+                "memory debugging requires objgraph (https://pypi.python.org/pypi/objgraph)"
+            )
 
         if self.debug_memory:
-            runtime_log.warning('memory debugging is on, this will effect performance')
+            runtime_log.warning("memory debugging is on, this will effect performance")
 
         self.watcher = None
         if self.archive.auto_reload and not disable_autoreload:
             try:
-                location = self.archive.project_fs.getsyspath('/')
+                location = self.archive.project_fs.getsyspath("/")
             except FSError:
-                log.warning('project filesystem has no syspath, disabling autoreload')
+                log.warning("project filesystem has no syspath, disabling autoreload")
             else:
-                watch_location = os.path.join(location, self.archive.cfg.get('autoreload', 'location', ''))
+                watch_location = os.path.join(
+                    location, self.archive.cfg.get("autoreload", "location", "")
+                )
                 self.watcher = ReloadChangeWatcher(open_fs(watch_location), self)
 
     @classmethod
@@ -215,16 +233,18 @@ class WSGIApplication(object):
         return """<wsgiapplication {} {}>""".format(self.settings_path, self.server_ref)
 
     def build(self, breakpoint=False, strict=False):
-        with timer('startup', output=startup_log.debug):
-            build_result = build_server(self.filesystem_url,
-                                        self.settings_path,
-                                        server_element=self.server_ref,
-                                        validate_db=self.validate_db,
-                                        breakpoint=breakpoint,
-                                        strict=strict,
-                                        master_settings=self.master_settings,
-                                        test_build=self.test_build,
-                                        develop=self.develop)
+        with timer("startup", output=startup_log.debug):
+            build_result = build_server(
+                self.filesystem_url,
+                self.settings_path,
+                server_element=self.server_ref,
+                validate_db=self.validate_db,
+                breakpoint=breakpoint,
+                strict=strict,
+                master_settings=self.master_settings,
+                test_build=self.test_build,
+                develop=self.develop,
+            )
         if build_result is None:
             msg = "Failed to build project"
             raise errors.StartupFailedError(msg)
@@ -234,23 +254,27 @@ class WSGIApplication(object):
         self.server = build_result.server
 
         if self.load_expression_cache:
-            if self.archive.has_cache('parser'):
-                parser_cache = self.archive.get_cache('parser')
+            if self.archive.has_cache("parser"):
+                parser_cache = self.archive.get_cache("parser")
                 if Expression.load(parser_cache):
-                    log.debug('expression cache loaded')
+                    log.debug("expression cache loaded")
 
         if self.post_build_hook is not None:
             try:
                 self.post_build_hook(self)
             except:
-                log.exception('post build hook failed')
+                log.exception("post build hook failed")
                 raise
 
-        context = Context({"console": self.archive.console,
-                           "settings": self.archive.settings,
-                           "debug": self.archive.debug,
-                           "develop": self.develop or self.archive.develop,
-                           "pilot": pilot})
+        context = Context(
+            {
+                "console": self.archive.console,
+                "settings": self.archive.settings,
+                "debug": self.archive.debug,
+                "develop": self.develop or self.archive.develop,
+                "pilot": pilot,
+            }
+        )
 
         self.populate_context(context)
         self.archive.populate_context(context)
@@ -260,20 +284,26 @@ class WSGIApplication(object):
 
     def populate_context(self, context):
         # Called by moya <command>
-        context.root.update(_dbsessions=db.get_session_map(self.archive),
-                            console=self.archive.console,
-                            fs=self.archive.get_context_filesystems())
+        context.root.update(
+            _dbsessions=db.get_session_map(self.archive),
+            console=self.archive.console,
+            fs=self.archive.get_context_filesystems(),
+        )
 
     def do_rebuild(self):
-        self.archive.console.div("Re-building project due to changes", bold=True, fg="blue")
+        self.archive.console.div(
+            "Re-building project due to changes", bold=True, fg="blue"
+        )
 
         error_text = None
         try:
-            new_build = build_server(self.filesystem_url,
-                                     self.settings_path,
-                                     server_element=self.server_ref,
-                                     strict=self.archive.strict,
-                                     validate_db=True)
+            new_build = build_server(
+                self.filesystem_url,
+                self.settings_path,
+                server_element=self.server_ref,
+                strict=self.archive.strict,
+                validate_db=True,
+            )
         except Exception as e:
             error_text = text_type(e)
             log.warning(e)
@@ -281,8 +311,9 @@ class WSGIApplication(object):
 
         if new_build is None:
             self.rebuild_required = False
-            notify("Rebuild Failed",
-                   error_text or "Unable to build project, see console")
+            notify(
+                "Rebuild Failed", error_text or "Unable to build project, see console"
+            )
             return
 
         with self._new_build_lock:
@@ -294,11 +325,13 @@ class WSGIApplication(object):
             try:
                 self.post_build_hook(self)
             except:
-                log.exception('post build hook failed')
+                log.exception("post build hook failed")
                 raise
 
         self.rebuild_required = False
-        self.archive.console.div("Modified project built successfully", bold=True, fg="green")
+        self.archive.console.div(
+            "Modified project built successfully", bold=True, fg="green"
+        )
 
     def preflight(self, report=True):
         app_preflight = []
@@ -306,16 +339,20 @@ class WSGIApplication(object):
         if self.archive.preflight:
             for app in itervalues(self.archive.apps):
                 preflight = []
-                for element in app.lib.get_elements_by_type((namespaces.preflight, "check")):
-                    preflight_callable = self.archive.get_callable_from_element(element, app=app)
+                for element in app.lib.get_elements_by_type(
+                    (namespaces.preflight, "check")
+                ):
+                    preflight_callable = self.archive.get_callable_from_element(
+                        element, app=app
+                    )
 
                     context = Context({"preflight": preflight})
                     self.archive.populate_context(context)
                     self.populate_context(context)
-                    context['.app'] = app
+                    context[".app"] = app
 
                     if not element.check(context):
-                        preflight.append((element, "skip", ''))
+                        preflight.append((element, "skip", ""))
                         continue
 
                     try:
@@ -337,17 +374,17 @@ class WSGIApplication(object):
                         for line in lines:
                             if line:
                                 if status == "warning":
-                                    preflight_log.warning('%s', line)
+                                    preflight_log.warning("%s", line)
                                 elif status == "fail":
-                                    preflight_log.error('%s', line)
+                                    preflight_log.error("%s", line)
                                 elif status == "error":
-                                    preflight_log.critical('%s', line)
+                                    preflight_log.critical("%s", line)
 
                     results = []
                     for status in ("warning", "fail", "error"):
                         if totals[status]:
                             results.append("{} {}(s)".format(totals[status], status))
-                            if status != 'skip':
+                            if status != "skip":
                                 all_ok = False
                     if results:
                         preflight_log.info("%s in %s", ", ".join(results), app)
@@ -355,64 +392,78 @@ class WSGIApplication(object):
                 if all_ok:
                     preflight_log.info("all passed")
                 else:
-                    preflight_log.warning("preflight detected potential problems -- run 'moya preflight' for more information")
+                    preflight_log.warning(
+                        "preflight detected potential problems -- run 'moya preflight' for more information"
+                    )
 
         return app_preflight
 
     def get_response(self, request, context):
         """Get a response object"""
         fire = self.archive.fire
-        fire(context, "request.start", app=None, sender=None, data={'request': request})
+        fire(context, "request.start", app=None, sender=None, data={"request": request})
 
         with pilot.manage_request(request, context):
 
             root = context.root
-            root.update(settings=self.archive.settings,
-                        debug=self.archive.debug,
-                        request=request,
-                        cookiejar=cookie.CookieJar())
+            root.update(
+                settings=self.archive.settings,
+                debug=self.archive.debug,
+                request=request,
+                cookiejar=cookie.CookieJar(),
+            )
             self.populate_context(context)
 
-            fire(context, "request.pre-dispatch", data={'request': request})
+            fire(context, "request.pre-dispatch", data={"request": request})
             while 1:
                 try:
-                    result = self.server.dispatch(self.archive, context, request, breakpoint=self.breakpoint)
+                    result = self.server.dispatch(
+                        self.archive, context, request, breakpoint=self.breakpoint
+                    )
                 except Exception:
                     log.exception("error in dispatch")
                     raise
 
                 if isinstance(result, ReplaceRequest):
-                    context.root['request'] = request = result.request
+                    context.root["request"] = request = result.request
                     continue
                 break
 
-            fire(context, "request.post-dispatch", data={'request': request, 'result': result})
+            fire(
+                context,
+                "request.post-dispatch",
+                data={"request": request, "result": result},
+            )
 
             response = None
             if result is not None:
                 if isinstance(result, text_type):
-                    response = MoyaResponse(charset=py2bytes('utf8'),
-                                            text=text_type(result))
+                    response = MoyaResponse(
+                        charset=py2bytes("utf8"), text=text_type(result)
+                    )
                 elif isinstance(result, Response):
                     response = result
             else:
                 response = context.root.get("response", None)
 
             if response is None:
-                response = MoyaResponse(status=http.StatusCode.not_found,
-                                        text=py2bytes("404 - Not Found"))
+                response = MoyaResponse(
+                    status=http.StatusCode.not_found, text=py2bytes("404 - Not Found")
+                )
 
-            if 'headers' in root:
-                for k, v in root['headers'].items():
-                    response.headers[k.encode('utf-8')] = v.encode('utf-8')
+            if "headers" in root:
+                for k, v in root["headers"].items():
+                    response.headers[k.encode("utf-8")] = v.encode("utf-8")
 
-        fire(context, "request.response", data={'request': request, 'response': response})
+        fire(
+            context, "request.response", data={"request": request, "response": response}
+        )
 
         return response
 
     def slow_iter(self, response_iter):
         """A generator that yields data slowly."""
-        response_file = io.BytesIO(b''.join(response_iter))
+        response_file = io.BytesIO(b"".join(response_iter))
         while 1:
             chunk = response_file.read(16384)
             if not chunk:
@@ -421,9 +472,7 @@ class WSGIApplication(object):
             yield chunk
 
     @memory_tracker
-    def __call__(self,
-                 environ,
-                 start_response):
+    def __call__(self, environ, start_response):
         """Build the request."""
         if self.rebuild_required and not is_debugging():
             with debug_lock:
@@ -431,7 +480,7 @@ class WSGIApplication(object):
 
         slow = self.simulate_slow_network
         if slow:
-            sleep(random.uniform(.2, .5))
+            sleep(random.uniform(0.2, 0.5))
 
         start = time()
         start_clock = clock()
@@ -447,17 +496,18 @@ class WSGIApplication(object):
         log_fmt = '"%s %s %s" %i %s %s'
         taken_ms = lazystr("{:.1f}ms {:.1f}ms".format, taken * 1000, clock_taken * 1000)
 
-
-        request_log.info(log_fmt,
-                         request.method,
-                         request.path_qs,
-                         request.http_version,
-                         response.status_int,
-                         response.content_length or 0,
-                         taken_ms)
+        request_log.info(
+            log_fmt,
+            request.method,
+            request.path_qs,
+            request.http_version,
+            response.status_int,
+            response.content_length or 0,
+            taken_ms,
+        )
 
         try:
-            if request.method == 'HEAD':
+            if request.method == "HEAD":
                 return []
             else:
                 if slow:
@@ -465,9 +515,7 @@ class WSGIApplication(object):
                 else:
                     return response.app_iter
         finally:
-            self.archive.fire(context,
-                              "request.end",
-                              data={'response': response})
+            self.archive.fire(context, "request.end", data={"response": response})
             context.root = {}
 
 

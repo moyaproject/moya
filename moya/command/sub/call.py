@@ -8,24 +8,42 @@ from ... import pilot
 
 class Call(SubCommand):
     """Call moya code in project context"""
+
     help = "call moya code in project context"
 
     def add_arguments(self, parser):
-        parser.add_argument(dest="elementref", metavar="ELEMENTREF",
-                            help="element to call")
-        parser.add_argument(dest="params", metavar="PARAMETER", nargs='*',
-                            help="parameter(s) for call, e.g. moya call app#macro 3.14 foo=bar")
-        parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",
-                            help="location of the Moya server code")
-        parser.add_argument("-i", "--ini", dest="settings", default=None, metavar="SETTINGSPATH",
-                            help="path to project settings file")
+        parser.add_argument(
+            dest="elementref", metavar="ELEMENTREF", help="element to call"
+        )
+        parser.add_argument(
+            dest="params",
+            metavar="PARAMETER",
+            nargs="*",
+            help="parameter(s) for call, e.g. moya call app#macro 3.14 foo=bar",
+        )
+        parser.add_argument(
+            "-l",
+            "--location",
+            dest="location",
+            default=None,
+            metavar="PATH",
+            help="location of the Moya server code",
+        )
+        parser.add_argument(
+            "-i",
+            "--ini",
+            dest="settings",
+            default=None,
+            metavar="SETTINGSPATH",
+            help="path to project settings file",
+        )
         return parser
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location,
-                                      self.get_settings(),
-                                      disable_autoreload=True)
+        application = WSGIApplication(
+            self.location, self.get_settings(), disable_autoreload=True
+        )
         archive = application.archive
         context = application.get_context()
         application.populate_context(context)
@@ -49,19 +67,17 @@ class Call(SubCommand):
         positional_args = []
         keyword_args = {}
         for param in args.params:
-            if '=' in param:
-                k, v = param.split('=', 1)
+            if "=" in param:
+                k, v = param.split("=", 1)
                 k = k.strip()
                 v = v.strip()
                 keyword_args[k] = make_param(v)
             else:
                 positional_args.append(make_param(param))
 
-        ret = archive.call(args.elementref,
-                           context,
-                           None,
-                           *positional_args,
-                           **keyword_args)
+        ret = archive.call(
+            args.elementref, context, None, *positional_args, **keyword_args
+        )
 
         application.finalize(context)
 

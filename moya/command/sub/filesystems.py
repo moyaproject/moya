@@ -64,7 +64,7 @@ def _ls(console, file_paths, dir_paths, format_long=False):
                 else:
                     console(path)
                 if i < len(line) - 1:
-                    console('  ')
+                    console("  ")
             console.nl()
 
     if format_long:
@@ -87,7 +87,9 @@ def _ls(console, file_paths, dir_paths, format_long=False):
             line_width = 0
             for col_no in range(num_cols):
                 try:
-                    col_width = max(path_widths[col_no * col_height: (col_no + 1) * col_height])
+                    col_width = max(
+                        path_widths[col_no * col_height : (col_no + 1) * col_height]
+                    )
                 except ValueError:
                     continue
                 line_width += col_width
@@ -105,48 +107,119 @@ def _ls(console, file_paths, dir_paths, format_long=False):
 
 class FS(SubCommand):
     """Manage project filesystems"""
+
     help = "manage project fsfilesystems"
 
     def add_arguments(self, parser):
-        parser.add_argument(dest="fs", nargs="?", default=None, metavar="FILESYSTEM",
-                            help="filesystem name")
-        parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",
-                            help="location of the Moya server code")
-        parser.add_argument("-i", "--ini", dest="settings", default=None, metavar="SETTINGSPATH",
-                            help="path to project settings")
-        parser.add_argument("--server", dest="server", default='main', metavar="SERVERREF",
-                            help="server element to use")
-        parser.add_argument('--ls', dest="listdir", default=None, metavar="PATH",
-                            help="list files / directories")
-        parser.add_argument("--tree", dest="tree", default=None,
-                            help="display a tree view of the filesystem")
-        parser.add_argument("--cat", dest="cat", default=None, metavar="PATH",
-                            help="Cat a file to the console")
-        parser.add_argument("--syspath", dest="syspath", default=None, metavar="PATH",
-                            help="display the system path of a file")
-        parser.add_argument("--open", dest="open", default=None, metavar="PATH",
-                            help="open a file")
-        parser.add_argument("--copy", dest="copy", metavar="DESTINATION or PATH DESTINATION", nargs='+',
-                            help="copy contents of a filesystem to PATH, or a file from PATH to DESTINATION")
-        parser.add_argument('--extract', dest="extract", metavar="PATH DIRECTORY", nargs=2,
-                            help="copy a file from a filesystem, preserving directory structure")
-        parser.add_argument("-f", "--force", dest="force", action="store_true", default=False,
-                            help="force overwrite of destination even if it is not empty (with --copy)")
-        parser.add_argument("--serve", dest="serve", default=None, action="store_true",
-                            help="statically serve a filesystem")
-        parser.add_argument('--host', dest='host', default='127.0.0.1',
-                            help="server host (with --serve)")
-        parser.add_argument('-p', '--port', default='8000',
-                            help="server port (with --serve)")
+        parser.add_argument(
+            dest="fs",
+            nargs="?",
+            default=None,
+            metavar="FILESYSTEM",
+            help="filesystem name",
+        )
+        parser.add_argument(
+            "-l",
+            "--location",
+            dest="location",
+            default=None,
+            metavar="PATH",
+            help="location of the Moya server code",
+        )
+        parser.add_argument(
+            "-i",
+            "--ini",
+            dest="settings",
+            default=None,
+            metavar="SETTINGSPATH",
+            help="path to project settings",
+        )
+        parser.add_argument(
+            "--server",
+            dest="server",
+            default="main",
+            metavar="SERVERREF",
+            help="server element to use",
+        )
+        parser.add_argument(
+            "--ls",
+            dest="listdir",
+            default=None,
+            metavar="PATH",
+            help="list files / directories",
+        )
+        parser.add_argument(
+            "--tree",
+            dest="tree",
+            default=None,
+            help="display a tree view of the filesystem",
+        )
+        parser.add_argument(
+            "--cat",
+            dest="cat",
+            default=None,
+            metavar="PATH",
+            help="Cat a file to the console",
+        )
+        parser.add_argument(
+            "--syspath",
+            dest="syspath",
+            default=None,
+            metavar="PATH",
+            help="display the system path of a file",
+        )
+        parser.add_argument(
+            "--open", dest="open", default=None, metavar="PATH", help="open a file"
+        )
+        parser.add_argument(
+            "--copy",
+            dest="copy",
+            metavar="DESTINATION or PATH DESTINATION",
+            nargs="+",
+            help="copy contents of a filesystem to PATH, or a file from PATH to DESTINATION",
+        )
+        parser.add_argument(
+            "--extract",
+            dest="extract",
+            metavar="PATH DIRECTORY",
+            nargs=2,
+            help="copy a file from a filesystem, preserving directory structure",
+        )
+        parser.add_argument(
+            "-f",
+            "--force",
+            dest="force",
+            action="store_true",
+            default=False,
+            help="force overwrite of destination even if it is not empty (with --copy)",
+        )
+        parser.add_argument(
+            "--serve",
+            dest="serve",
+            default=None,
+            action="store_true",
+            help="statically serve a filesystem",
+        )
+        parser.add_argument(
+            "--host",
+            dest="host",
+            default="127.0.0.1",
+            help="server host (with --serve)",
+        )
+        parser.add_argument(
+            "-p", "--port", default="8000", help="server port (with --serve)"
+        )
         return parser
 
     def run(self):
         args = self.args
-        application = WSGIApplication(self.location,
-                                      self.get_settings(),
-                                      args.server,
-                                      disable_autoreload=True,
-                                      master_settings=self.master_settings)
+        application = WSGIApplication(
+            self.location,
+            self.get_settings(),
+            args.server,
+            disable_autoreload=True,
+            master_settings=self.master_settings,
+        )
         archive = application.archive
 
         filesystems = archive.filesystems
@@ -163,7 +236,7 @@ class FS(SubCommand):
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
-            with fs.opendir(args.tree or '/') as tree_fs:
+            with fs.opendir(args.tree or "/") as tree_fs:
                 tree.render(tree_fs, max_levels=None)
             return
 
@@ -175,7 +248,7 @@ class FS(SubCommand):
             dir_fs = fs.opendir(args.listdir)
             file_paths = []
             dir_paths = []
-            for info in dir_fs.scandir('/'):
+            for info in dir_fs.scandir("/"):
                 if info.is_dir:
                     dir_paths.append(info.name)
                 else:
@@ -198,31 +271,43 @@ class FS(SubCommand):
             try:
                 filepath = fs.getsyspath(args.open)
             except NoSysPath:
-                self.console.error("No system path for '%s' in filesystem '%s'" % (args.open, args.fs))
+                self.console.error(
+                    "No system path for '%s' in filesystem '%s'" % (args.open, args.fs)
+                )
                 return -1
 
             import subprocess
+
             system = sys.platform
-            if system == 'darwin':
-                subprocess.call(('open', filepath))
-            elif system == 'win32':
-                subprocess.call(('start', filepath), shell=True)
-            elif system == 'linux2':
-                subprocess.call(('xdg-open', filepath))
+            if system == "darwin":
+                subprocess.call(("open", filepath))
+            elif system == "win32":
+                subprocess.call(("start", filepath), shell=True)
+            elif system == "linux2":
+                subprocess.call(("xdg-open", filepath))
             else:
-                self.console.error("Moya doesn't know how to open files on this platform (%s)" % os.name)
+                self.console.error(
+                    "Moya doesn't know how to open files on this platform (%s)"
+                    % os.name
+                )
 
         elif args.syspath:
             if fs is None:
                 self.console.error("Filesystem required")
                 return -1
             if not fs.exists(args.syspath):
-                self.console.error("No file called '%s' found in filesystem '%s'" % (args.syspath, args.fs))
+                self.console.error(
+                    "No file called '%s' found in filesystem '%s'"
+                    % (args.syspath, args.fs)
+                )
                 return -1
             try:
                 syspath = fs.getsyspath(args.syspath)
             except NoSysPath:
-                self.console.error("No system path for '%s' in filesystem '%s'" % (args.syspath, args.fs))
+                self.console.error(
+                    "No system path for '%s' in filesystem '%s'"
+                    % (args.syspath, args.fs)
+                )
             else:
                 self.console(syspath).nl()
 
@@ -231,7 +316,7 @@ class FS(SubCommand):
                 self.console.error("Filesystem required")
                 return -1
             if len(args.copy) == 1:
-                src = '/'
+                src = "/"
                 dst = args.copy[0]
             elif len(args.copy) == 2:
                 src, dst = args.copy
@@ -242,26 +327,30 @@ class FS(SubCommand):
             if fs.isdir(src):
                 src_fs = fs.opendir(src)
                 from fs.copy import copy_dir
+
                 with open_fs(dst, create=True) as dst_fs:
-                    if not args.force and not dst_fs.isempty('/'):
-                        response = raw_input("'%s' is not empty. Copying may overwrite directory contents. Continue? " % dst)
-                        if response.lower() not in ('y', 'yes'):
+                    if not args.force and not dst_fs.isempty("/"):
+                        response = raw_input(
+                            "'%s' is not empty. Copying may overwrite directory contents. Continue? "
+                            % dst
+                        )
+                        if response.lower() not in ("y", "yes"):
                             return 0
-                    copy_dir(src_fs, '/', dst_fs, '/')
+                    copy_dir(src_fs, "/", dst_fs, "/")
             else:
-                with fs.open(src, 'rb') as read_f:
+                with fs.open(src, "rb") as read_f:
                     if os.path.isdir(dst):
                         dst = os.path.join(dst, os.path.basename(src))
                     try:
                         os.makedirs(dst)
-                        with open(dst, 'wb') as write_f:
+                        with open(dst, "wb") as write_f:
                             while 1:
                                 chunk = read_f.read(16384)
                                 if not chunk:
                                     break
                                 write_f.write(chunk)
                     except IOError as e:
-                        self.error('unable to write to {}'.format(dst))
+                        self.error("unable to write to {}".format(dst))
 
         elif args.extract:
             if fs is None:
@@ -272,30 +361,32 @@ class FS(SubCommand):
             dst_fs = open_fs(dst_dir_path, create=True)
 
             if not args.force and dst_fs.exists(src_path):
-                response = raw_input("'%s' exists. Do you want to overwrite? " % src_path)
-                if response.lower() not in ('y', 'yes'):
+                response = raw_input(
+                    "'%s' exists. Do you want to overwrite? " % src_path
+                )
+                if response.lower() not in ("y", "yes"):
                     return 0
 
             dst_fs.makedirs(dirname(src_path), recreate=True)
-            with src_fs.open(src_path, 'rb') as read_file:
+            with src_fs.open(src_path, "rb") as read_file:
                 dst_fs.setfile(src_path, read_file)
 
         elif args.serve:
 
             from .serve import Serve
+
             Serve.run_server(
-                args.host,
-                args.port,
-                fs,
-                show_access=True,
-                develop=False,
-                debug=True
+                args.host, args.port, fs, show_access=True, develop=False, debug=True
             )
 
         else:
-            table = [[Cell("Name", bold=True),
-                      Cell("Type", bold=True),
-                      Cell("Location", bold=True)]]
+            table = [
+                [
+                    Cell("Name", bold=True),
+                    Cell("Type", bold=True),
+                    Cell("Location", bold=True),
+                ]
+            ]
 
             if fs is None:
                 list_filesystems = filesystems.items()
@@ -304,35 +395,39 @@ class FS(SubCommand):
 
             def get_type_name(name):
                 name = type(fs).__name__
-                return name[:-2].lower() if name.endswith('FS') else name.lower()
+                return name[:-2].lower() if name.endswith("FS") else name.lower()
 
             for name, fs in sorted(list_filesystems):
                 if isinstance(fs, MultiFS):
-                    location = '\n'.join(mount_fs.desc('/') for name, mount_fs in fs.iterate_fs())
+                    location = "\n".join(
+                        mount_fs.desc("/") for name, mount_fs in fs.iterate_fs()
+                    )
                     fg = "yellow"
                 elif isinstance(fs, MountFS):
                     mount_desc = []
                     for path, dirmount in fs.mount_tree.items():
-                        mount_desc.append('%s->%s' % (path, dirmount.fs.desc('/')))
-                    location = '\n'.join(mount_desc)
+                        mount_desc.append("%s->%s" % (path, dirmount.fs.desc("/")))
+                    location = "\n".join(mount_desc)
                     fg = "magenta"
                 else:
                     try:
-                        syspath = fs.getsyspath('/')
+                        syspath = fs.getsyspath("/")
                     except NoSysPath:
                         location = syspath
                         fg = "green"
                     else:
                         try:
-                            location = fs.desc('/')
+                            location = fs.desc("/")
                         except FSError as e:
                             location = text_type(e)
                             fg = "red"
                         else:
                             fg = "blue"
-                table.append([
-                    Cell(name),
-                    Cell(get_type_name(fs)),
-                    Cell(location, bold=True, fg=fg)
-                ])
+                table.append(
+                    [
+                        Cell(name),
+                        Cell(get_type_name(fs)),
+                        Cell(location, bold=True, fg=fg),
+                    ]
+                )
             self.console.table(table, header=True)

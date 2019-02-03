@@ -2,9 +2,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from ..elements.elementbase import (LogicElement,
-                                    ReturnContainer,
-                                    Attribute)
+from ..elements.elementbase import LogicElement, ReturnContainer, Attribute
 from ..context import Context, Expression
 from ..context.expressiontime import ExpressionDateTime, TimeSpan
 from ..context import dataindex
@@ -14,13 +12,15 @@ from ..render import render_object
 from ..progress import Progress
 from ..tools import make_cache_key
 from .. import namespaces
-from ..logic import (DeferNodeContents,
-                     SkipNext,
-                     Unwind,
-                     EndLogic,
-                     BreakLoop,
-                     ContinueLoop,
-                     MoyaException)
+from ..logic import (
+    DeferNodeContents,
+    SkipNext,
+    Unwind,
+    EndLogic,
+    BreakLoop,
+    ContinueLoop,
+    MoyaException,
+)
 from ..console import style as console_style
 from ..render import HTML
 from ..html import escape as escape_html
@@ -41,7 +41,8 @@ from textwrap import dedent
 import sys
 import locale
 import logging
-log = logging.getLogger('moya.runtime')
+
+log = logging.getLogger("moya.runtime")
 
 
 try:
@@ -59,6 +60,7 @@ class If(ContextElementBase):
     Conditional [i]IF[/i] tag, executes the enclosing block if a condition evaluates to [i]true[/i]. If the condition evaluates to [i]false[/i], the enclosing block is skipped. May be followed by [tag]else[/tag] or [tag]elif[/tag].
 
     """
+
     class Help:
         synopsis = """execute block if a condition is true"""
         example = """
@@ -66,7 +68,9 @@ class If(ContextElementBase):
             <echo>Get more coffee</echo>
         </if>"""
 
-    test = Attribute("Test expression", required=True, metavar="CONDITION", type="expression")
+    test = Attribute(
+        "Test expression", required=True, metavar="CONDITION", type="expression"
+    )
 
     def logic(self, context):
         if self.test(context):
@@ -85,6 +89,7 @@ class IfPost(ContextElementBase):
     May be followed by [tag]else[/tag] or [tag]elif[/tag].
 
     """
+
     class Help:
         synopsis = """execute a block if this is a POST request"""
         example = """\
@@ -96,7 +101,7 @@ class IfPost(ContextElementBase):
 </else>"""
 
     def logic(self, context):
-        if context.get('.request.method', None) == 'POST':
+        if context.get(".request.method", None) == "POST":
             yield DeferNodeContents(self)
             yield SkipNext((self.xmlns, "else"), (self.xmlns, "elif"))
 
@@ -112,11 +117,12 @@ class IfGet(ContextElementBase):
     May be followed by [tag]else[/tag] or [tag]elif[/tag].
 
     """
+
     class Help:
         synopsis = """exectute a block if this is a GET request"""
 
     def logic(self, context):
-        if context.get('.request.method', None) == 'GET':
+        if context.get(".request.method", None) == "GET":
             yield DeferNodeContents(self)
             yield SkipNext((self.xmlns, "else"), (self.xmlns, "elif"))
 
@@ -142,6 +148,7 @@ class Else(ContextElementBase):
 
 class Elif(ContextElementBase):
     """Executes the enclosed block if a previous [tag]if[/tag] (or [tag]elif[/tag]) statement is false, and another condition is true."""
+
     class Help:
         synopsis = """an <else> with a condition"""
         example = """\
@@ -155,7 +162,10 @@ class Elif(ContextElementBase):
     <echo>There are many hobbits</echo>
 </else>
 """
-    test = Attribute("Test expression", required=True, metavar="CONDITION", type="expression")
+
+    test = Attribute(
+        "Test expression", required=True, metavar="CONDITION", type="expression"
+    )
 
     def logic(self, context):
         if self.test(context):
@@ -165,6 +175,7 @@ class Elif(ContextElementBase):
 
 class Try(ContextElementBase):
     """Executes the enclosed block as part of a [tag]try[/tag][tag]catch[/tag] structure. """
+
     class Meta:
         is_try = True
 
@@ -214,7 +225,9 @@ class Catch(ContextElementBase):
 
         """
 
-    exception = Attribute("Type of exception to catch", type="commalist", default="*", evaldefault=True)
+    exception = Attribute(
+        "Type of exception to catch", type="commalist", default="*", evaldefault=True
+    )
     dst = Attribute("Destination to store exception object", type="reference")
 
     class Meta:
@@ -222,12 +235,10 @@ class Catch(ContextElementBase):
 
     @classmethod
     def compare_exception(cls, type, catch_types):
-        type_tokens = type.split('.')
+        type_tokens = type.split(".")
         for catch_type in catch_types:
-            for c, e in zip_longest(catch_type.split('.'),
-                                    type_tokens,
-                                    fillvalue=None):
-                if c == '*':
+            for c, e in zip_longest(catch_type.split("."), type_tokens, fillvalue=None):
+                if c == "*":
                     return True
                 if c != e:
                     break
@@ -242,9 +253,7 @@ class Catch(ContextElementBase):
     def set_exception(self, context, exception):
         dst = self.dst(context)
         if dst is not None:
-            context[dst] = ExceptionProxy(exception.msg,
-                                          exception.type,
-                                          exception.info)
+            context[dst] = ExceptionProxy(exception.msg, exception.type, exception.info)
 
 
 class Attempt(ContextElementBase):
@@ -267,35 +276,42 @@ class Attempt(ContextElementBase):
 
         """
 
-    times = Attribute("Maximum number of times to repeat attempt block", type="integer", required=True)
-    catch = Attribute("Type of exception to catch", type="commalist", default="*", evaldefault=True)
-    wait = Attribute("Time to wait between syncs (default doesn't wait)", type="timespan", default=None, required=False)
+    times = Attribute(
+        "Maximum number of times to repeat attempt block", type="integer", required=True
+    )
+    catch = Attribute(
+        "Type of exception to catch", type="commalist", default="*", evaldefault=True
+    )
+    wait = Attribute(
+        "Time to wait between syncs (default doesn't wait)",
+        type="timespan",
+        default=None,
+        required=False,
+    )
 
     class Meta:
         trap_exceptions = True
 
     def on_exception(self, context, exception):
-        stack = context.set_new_call('._attempt_stack', list)
+        stack = context.set_new_call("._attempt_stack", list)
         try:
             top = stack[-1]
         except IndexError:
             return None
-        if not Catch.compare_exception(exception.type, top['type']):
+        if not Catch.compare_exception(exception.type, top["type"]):
             return None
-        top['times'] -= 1
-        if top['times'] > 0:
-            if top['wait']:
-                time.sleep(top['wait'])
+        top["times"] -= 1
+        if top["times"] > 0:
+            if top["wait"]:
+                time.sleep(top["wait"])
             return DeferNodeContents(self)
 
     def logic(self, context):
         attempt_times = self.times(context)
         exception_type = self.catch(context)
         wait = self.wait(context)
-        stack = context.set_new_call('._attempt_stack', list)
-        stack.append({'times': attempt_times,
-                      'type': exception_type,
-                      'wait': wait})
+        stack = context.set_new_call("._attempt_stack", list)
+        stack.append({"times": attempt_times, "type": exception_type, "wait": wait})
         try:
             yield DeferNodeContents(self)
         except:
@@ -336,7 +352,7 @@ class DataSetterBase(ContextElementBase):
         try:
             if dst is None:
                 obj = context.obj
-                append = getattr(obj, 'append', None)
+                append = getattr(obj, "append", None)
                 if append is not None:
                     append(value)
                     return text_type(len(obj) - 1)
@@ -347,15 +363,13 @@ class DataSetterBase(ContextElementBase):
                 return dst
         except ValueError as e:
             msg = "unable to set '{key}' to {value} ({e})"
-            msg = msg.format(key=context.to_expr(dst),
-                             value=context.to_expr(value),
-                             e=text_type(e))
-            self.throw('let.fail', msg)
+            msg = msg.format(
+                key=context.to_expr(dst), value=context.to_expr(value), e=text_type(e)
+            )
+            self.throw("let.fail", msg)
 
     def logic(self, context):
-        self.set_context(context,
-                         self.dst(context),
-                         self.get_value(context))
+        self.set_context(context, self.dst(context), self.get_value(context))
 
     def get_value(self, context):
         if self.text:
@@ -385,8 +399,8 @@ class Var(DataSetter):
 """
 
     def logic(self, context):
-        dst, value = self.get_parameters(context, 'dst', 'value')
-        if not self.has_parameter('value'):
+        dst, value = self.get_parameters(context, "dst", "value")
+        if not self.has_parameter("value"):
             value = context.eval(context.sub(self.text))
         self.set_context(context, dst, value)
 
@@ -406,14 +420,12 @@ class SetItem(LogicElement):
     value = Attribute("value to set", type="expression", required=True)
 
     def logic(self, context):
-        src, index, value = self.get_parameters(context, 'src', 'index', 'value')
+        src, index, value = self.get_parameters(context, "src", "index", "value")
         try:
             src[index] = value
         except Exception as error:
-            self.throw(
-                'set-item.fail',
-                'unable to set item; {}'.format(error)
-            )
+            self.throw("set-item.fail", "unable to set item; {}".format(error))
+
 
 class Let(DataSetter):
     """Sets multiple variable from expressions."""
@@ -427,10 +439,17 @@ class Let(DataSetter):
     class Meta:
         all_attributes = True
 
-    _reserved_attribute_names = ['if']
-    preserve_attributes = ['expressions']
+    _reserved_attribute_names = ["if"]
+    preserve_attributes = ["expressions"]
 
-    def post_build(self, context, _parse=dataindex.parse, _Expression=Expression, setter=Context.set, simple_setter=Context.set_simple):
+    def post_build(
+        self,
+        context,
+        _parse=dataindex.parse,
+        _Expression=Expression,
+        setter=Context.set,
+        simple_setter=Context.set_simple,
+    ):
         self.expressions = []
         append = self.expressions.append
         for k, v in self._attributes.items():
@@ -446,8 +465,7 @@ class Let(DataSetter):
             for setter, indices, _eval in self.expressions:
                 setter(context, indices, _eval(context))
         except ContextKeyError as e:
-            self.throw('let.fail',
-                       text_type(e))
+            self.throw("let.fail", text_type(e))
 
 
 class LetParallel(Let):
@@ -470,7 +488,7 @@ class LetParallel(Let):
     class Meta:
         all_attributes = True
 
-    _reserved_attribute_names = ['if']
+    _reserved_attribute_names = ["if"]
 
     def logic(self, context):
         values = [_eval(context) for setter, indices, _eval in self.expressions]
@@ -478,8 +496,7 @@ class LetParallel(Let):
             for (setter, indices, _eval), value in zip(self.expressions, values):
                 setter(context, indices, value)
         except ContextKeyError as e:
-            self.throw('let.fail',
-                       text_type(e))
+            self.throw("let.fail", text_type(e))
 
 
 class LetStr(DataSetter):
@@ -494,8 +511,8 @@ class LetStr(DataSetter):
     class Meta:
         all_attributes = True
 
-    _reserved_attribute_names = ['if']
-    preserve_attributes = ['expressions']
+    _reserved_attribute_names = ["if"]
+    preserve_attributes = ["expressions"]
 
     def post_build(self, context):
         self.expressions = []
@@ -512,6 +529,7 @@ class LetStr(DataSetter):
 
 class Int(DataSetter):
     """Set an integer value."""
+
     default = 0
 
     class Help:
@@ -526,16 +544,15 @@ class Int(DataSetter):
         return int(value)
 
     def logic(self, context):
-        dst, value = self.get_parameters(context, 'dst', 'value')
-        if not self.has_parameter('value'):
+        dst, value = self.get_parameters(context, "dst", "value")
+        if not self.has_parameter("value"):
             value = context.sub(self.text) or 0
-        self.set_context(context,
-                         dst,
-                         int(value))
+        self.set_context(context, dst, int(value))
 
 
 class Float(DataSetter):
     """Set a float value"""
+
     default = 0.0
 
     class Help:
@@ -547,12 +564,10 @@ class Float(DataSetter):
     """
 
     def logic(self, context):
-        dst, value = self.get_parameters(context, 'dst', 'value')
-        if not self.has_parameter('value'):
+        dst, value = self.get_parameters(context, "dst", "value")
+        if not self.has_parameter("value"):
             value = context.sub(self.text) or 0.0
-        self.set_context(context,
-                         dst,
-                         float(value))
+        self.set_context(context, dst, float(value))
 
 
 class Str(DataSetter):
@@ -565,11 +580,11 @@ class Str(DataSetter):
 <str dst="text"/> <!-- defaults to empty string -->
 """
 
-    default = ''
+    default = ""
     value = Attribute("Value", type="expression", default=None)
 
     def get_value(self, context):
-        if self.has_parameter('value'):
+        if self.has_parameter("value"):
             return self.value(context)
         return context.sub(self.text)
 
@@ -600,8 +615,7 @@ class Replace(DataSetter):
         is_call = True
 
     def logic(self, context):
-        (dst, src, regex) =\
-            self.get_parameters(context, 'dst', 'src', 'regex')
+        (dst, src, regex) = self.get_parameters(context, "dst", "src", "regex")
         text = text_type(context.get(src))
 
         output = []
@@ -614,20 +628,19 @@ class Replace(DataSetter):
                 output.append(text[pos:start])
                 pos = end
 
-
             self.push_call(context, match.groupdict().copy())
             try:
                 yield DeferNodeContents(self)
             finally:
                 call = self.pop_call(context)
-            if '_return' in call:
-                value = _return = call['_return']
-                if hasattr(_return, 'get_return_value'):
+            if "_return" in call:
+                value = _return = call["_return"]
+                if hasattr(_return, "get_return_value"):
                     value = _return.get_return_value()
             else:
                 value = None
 
-            repl = text_type(value or '')
+            repl = text_type(value or "")
 
             # _return = ReturnContainer()
             # scope = match.groupdict()
@@ -640,7 +653,7 @@ class Replace(DataSetter):
             output.append(text)
         elif end is not None:
             output.append(text[end:])
-        new_text = ''.join(output)
+        new_text = "".join(output)
         self.set_context(context, dst, new_text)
 
 
@@ -661,10 +674,14 @@ class WrapTag(DataSetter):
         tag = self.tag(context)
         _let = self.get_let_map(context)
         if _let:
-            attribs = " " + " ".join('{}="{}"'.format(k, escape_html(v)) for k, v in _let.items())
+            attribs = " " + " ".join(
+                '{}="{}"'.format(k, escape_html(v)) for k, v in _let.items()
+            )
         else:
             attribs = ""
-        return """<{tag}{attribs}>{text}</{tag}>""".format(tag=tag, attribs=attribs, text=escape_html(context.sub(self.text)))
+        return """<{tag}{attribs}>{text}</{tag}>""".format(
+            tag=tag, attribs=attribs, text=escape_html(context.sub(self.text))
+        )
 
 
 class Dedent(DataSetter):
@@ -701,7 +718,7 @@ class HTMLTag(DataSetter):
         tag_name = "html"
 
     def get_value(self, context):
-        if self.has_parameter('value'):
+        if self.has_parameter("value"):
             text = self.value(context)
         else:
             text = context.sub(self.text)
@@ -722,11 +739,11 @@ class _TimeSpan(DataSetter):
     def get_value(self, context):
         text = self.value(context) or context.sub(self.text)
         if not text:
-            self.throw('time-span.invalid', "no timespan value specified")
+            self.throw("time-span.invalid", "no timespan value specified")
         try:
             return TimeSpan(text)
         except ValueError as e:
-            self.throw('time-span.invalid', text_type(e))
+            self.throw("time-span.invalid", text_type(e))
 
 
 class Datetime(DataSetter):
@@ -781,13 +798,11 @@ class Datetime(DataSetter):
 
     def get_value(self, context):
         try:
-            return ExpressionDateTime(*self.get_parameters(context,
-                                                           "year",
-                                                           "month",
-                                                           "day",
-                                                           "hour",
-                                                           "minute",
-                                                           "second"))
+            return ExpressionDateTime(
+                *self.get_parameters(
+                    context, "year", "month", "day", "hour", "minute", "second"
+                )
+            )
         except Exception as e:
             self.throw("datetime.invalid", text_type(e))
 
@@ -809,12 +824,10 @@ class Bool(DataSetter):
 
     def logic(self, context):
         if self.text:
-            value = self.text.lower() in ('yes', 'true')
+            value = self.text.lower() in ("yes", "true")
         else:
             value = self.value(context)
-        self.set_context(context,
-                         self.dst(context),
-                         bool(value))
+        self.set_context(context, self.dst(context), bool(value))
 
 
 class True_(DataSetter):
@@ -840,6 +853,7 @@ class False_(DataSetter):
         example = """
         <false dst="bool"/> <!-- Always False -->
         """
+
     default = False
 
     def get_value(self, context):
@@ -873,9 +887,7 @@ class Now(DataSetter):
         """
 
     def logic(self, context):
-        self.set_context(context,
-                         self.dst(context),
-                         datetime.utcnow())
+        self.set_context(context, self.dst(context), datetime.utcnow())
 
 
 class List(DataSetter):
@@ -966,6 +978,7 @@ class Sum(DataSetter):
 
 class AppendableSet(set):
     """A set with an 'append' method that is an alias for 'add'"""
+
     def append(self, value):
         return self.add(value)
 
@@ -1013,17 +1026,23 @@ class Dict(DataSetter):
 
         """
 
-    default = Attribute("Default return for missing keys", type="expression", required=False, default=None)
-    sequence = Attribute("Optional sequence of key / value pairs to initialize the dict", type="expression", required=False)
+    default = Attribute(
+        "Default return for missing keys",
+        type="expression",
+        required=False,
+        default=None,
+    )
+    sequence = Attribute(
+        "Optional sequence of key / value pairs to initialize the dict",
+        type="expression",
+        required=False,
+    )
 
-    _default_types = {'dict': OrderedDict,
-                      'list': list,
-                      'int': int,
-                      'float': float}
+    _default_types = {"dict": OrderedDict, "list": list, "int": int, "float": float}
 
     def logic(self, context):
         sequence = self.sequence(context)
-        if self.has_parameter('default'):
+        if self.has_parameter("default"):
             default = self.default(context)
             obj = defaultdict(lambda: copy(default))
         else:
@@ -1036,9 +1055,7 @@ class Dict(DataSetter):
         obj.update(self.get_let_map(context))
         if sequence:
             obj.update(sequence)
-        dst = self.set_context(context,
-                               self.dst(context),
-                               obj)
+        dst = self.set_context(context, self.dst(context), obj)
 
         with context.scope(dst):
             yield DeferNodeContents(self)
@@ -1054,8 +1071,9 @@ class Unpack(DataSetter):
         try:
             items = obj.items()
         except:
-            self.throw('bad-value.map-required',
-                       'a dict or other mapping is required for obj')
+            self.throw(
+                "bad-value.map-required", "a dict or other mapping is required for obj"
+            )
         for k, v in items:
             self.set_context(context, context.escape(k), v)
 
@@ -1069,23 +1087,22 @@ class MakeToken(DataSetter):
         <maketoken dst="authorization_token" size="16" />
         """
 
-    lowercase = Attribute("Use lower case characters", type="boolean", default=True, required=False)
-    uppercase = Attribute("Use upper case characters", type="boolean", default=True, required=False)
+    lowercase = Attribute(
+        "Use lower case characters", type="boolean", default=True, required=False
+    )
+    uppercase = Attribute(
+        "Use upper case characters", type="boolean", default=True, required=False
+    )
     digits = Attribute("Use digits", type="boolean", default=True, required=False)
-    punctuation = Attribute("Use punctuation", type="boolean", default=False, required=False)
+    punctuation = Attribute(
+        "Use punctuation", type="boolean", default=False, required=False
+    )
     size = Attribute("Size", type="integer", default=20, required=False)
 
     def get_value(self, context):
-        (size,
-         lowercase,
-         uppercase,
-         digits,
-         punctuation) = self.get_parameters(context,
-                                            "size",
-                                            "lowercase",
-                                            "uppercase",
-                                            "digits",
-                                            "punctuation")
+        (size, lowercase, uppercase, digits, punctuation) = self.get_parameters(
+            context, "size", "lowercase", "uppercase", "digits", "punctuation"
+        )
         choices = ""
         if lowercase:
             choices += string.lowercase
@@ -1097,7 +1114,7 @@ class MakeToken(DataSetter):
             choices += string.punctuation
         if not choices:
             self.throw("token", "No characters to choice from")
-        token = ''.join(choice(choices) for _ in xrange(size))
+        token = "".join(choice(choices) for _ in xrange(size))
         return token
 
 
@@ -1105,9 +1122,9 @@ class ODict(Dict):
     """Like <dict> but creates an [i]ordered[/i] dictionary (maintains the order data was inserted)/"""
 
     def logic(self, context):
-        dst = self.set_context(context,
-                               self.dst(context),
-                               OrderedDict(self.get_let_map(context)))
+        dst = self.set_context(
+            context, self.dst(context), OrderedDict(self.get_let_map(context))
+        )
         context.push_scope(dst)
         yield DeferNodeContents(self)
 
@@ -1135,9 +1152,9 @@ class Throw(Dict):
     msg = Attribute("Message", default="exception thrown", required=False)
 
     def logic(self, context):
-        exception, msg = self.get_parameters(context, 'exception', 'msg')
-        info = context['_e'] = {}
-        with context.scope('_e'):
+        exception, msg = self.get_parameters(context, "exception", "msg")
+        info = context["_e"] = {}
+        with context.scope("_e"):
             yield DeferNodeContents(self)
         raise MoyaException(exception, msg, info)
 
@@ -1151,11 +1168,18 @@ class Choose(DataSetter):
         <choose dst="hobbit" from="['bilbo','sam','frodo']"/>
         <echo>Hobbit: ${hobbit}</echo>
         """
+
     _from = Attribute("Container", required=True, type="expression")
-    dst = Attribute("Destination", default=None, metavar="DESTINATION", type="reference", required=True)
+    dst = Attribute(
+        "Destination",
+        default=None,
+        metavar="DESTINATION",
+        type="reference",
+        required=True,
+    )
 
     def logic(self, context):
-        _from, dst = self.get_parameters(context, 'from', 'dst')
+        _from, dst = self.get_parameters(context, "from", "dst")
         self.set_context(context, dst, choice(_from))
 
 
@@ -1174,19 +1198,17 @@ class JSON(DataSetter):
         """
 
     def logic(self, context):
-        self.set_context(context,
-                         self.dst(context),
-                         self.get_value(context))
+        self.set_context(context, self.dst(context), self.get_value(context))
 
     def get_value(self, context):
-        if self.has_parameter('src'):
+        if self.has_parameter("src"):
             text = self.src(context)
         else:
             text = self.text
         try:
             return json.loads(text)
         except Exception as e:
-            self.throw('json.invalid', text_type(e))
+            self.throw("json.invalid", text_type(e))
 
 
 # class UpdateURLquery(DataSetter):
@@ -1224,16 +1246,22 @@ class Slice(ContextElementBase):
 
         """
 
-    src = Attribute("Value to slice", required=True, type="reference", metavar="ELEMENTREF")
-    dst = Attribute("Destination for slice", required=True, type="reference", metavar="ELEMENTREF")
+    src = Attribute(
+        "Value to slice", required=True, type="reference", metavar="ELEMENTREF"
+    )
+    dst = Attribute(
+        "Destination for slice", required=True, type="reference", metavar="ELEMENTREF"
+    )
     start = Attribute("Start point", type="expression", default=None)
     stop = Attribute("End point", type="expression", default=None)
 
     def logic(self, context):
-        src, dst, start, stop = self.get_parameters(context, 'src', 'dst', 'start', 'stop')
+        src, dst, start, stop = self.get_parameters(
+            context, "src", "dst", "start", "stop"
+        )
         src_obj = context[src]
 
-        if hasattr(src_obj, 'slice'):
+        if hasattr(src_obj, "slice"):
             context[dst] = src_obj.slice(start or 0, stop)
         else:
             context[dst] = src_obj[start:stop]
@@ -1251,13 +1279,25 @@ class Page(ContextElementBase):
         <page src="results" page="2" pagesize="10" />
         """
 
-    src = Attribute("Value to slice", required=True, type="reference", metavar="ELEMENTREF")
-    dst = Attribute("Destination for slice", required=True, type="reference", metavar="ELEMENTREF")
-    page = Attribute("Page", type="expression", required=False, default=".request.GET.page or 1", evaldefault=True)
+    src = Attribute(
+        "Value to slice", required=True, type="reference", metavar="ELEMENTREF"
+    )
+    dst = Attribute(
+        "Destination for slice", required=True, type="reference", metavar="ELEMENTREF"
+    )
+    page = Attribute(
+        "Page",
+        type="expression",
+        required=False,
+        default=".request.GET.page or 1",
+        evaldefault=True,
+    )
     pagesize = Attribute("Page size", type="expression", required=False, default=10)
 
     def logic(self, context):
-        src, dst, page, pagesize = self.get_parameters(context, 'src', 'dst', 'page', 'pagesize')
+        src, dst, page, pagesize = self.get_parameters(
+            context, "src", "dst", "page", "pagesize"
+        )
         try:
             page = int(page or 1)
         except ValueError:
@@ -1265,7 +1305,7 @@ class Page(ContextElementBase):
         start = (page - 1) * pagesize
         stop = page * pagesize
         src_obj = context[src]
-        if hasattr(src_obj, 'slice'):
+        if hasattr(src_obj, "slice"):
             context[dst] = src_obj.slice(start, stop)
         else:
             context[dst] = src_obj[start:stop]
@@ -1282,14 +1322,15 @@ class Inc(ContextElementBase):
         <echo>${hobbit_count}</echo> <!-- 2 -->
         """
 
-    dst = Attribute("Value to increment", required=True, type="reference", metavar="ELEMENTREF")
+    dst = Attribute(
+        "Value to increment", required=True, type="reference", metavar="ELEMENTREF"
+    )
 
     def logic(self, context):
         try:
             context[self.dst(context)] += 1
         except:
-            self.throw('inc.fail',
-                       'unable to increment')
+            self.throw("inc.fail", "unable to increment")
 
 
 class Dec(ContextElementBase):
@@ -1302,14 +1343,14 @@ class Dec(ContextElementBase):
         <dec dst="hobbit_count" />
         <echo>${hobbit_count}</echo> <!-- 1 -->
         """
+
     dst = Attribute("Value to decrement", required=True, type="reference")
 
     def logic(self, context):
         try:
             context[self.dst(context)] -= 1
         except:
-            self.throw('dec.fail',
-                       'unable to decrement')
+            self.throw("dec.fail", "unable to decrement")
 
 
 class Copy(ContextElementBase):
@@ -1327,7 +1368,7 @@ class Copy(ContextElementBase):
     dst = Attribute("Destination", required=True, type="reference")
 
     def logic(self, context):
-        context.copy(*self.get_parameters(context, 'src', 'dst'))
+        context.copy(*self.get_parameters(context, "src", "dst"))
 
 
 class Link(ContextElementBase):
@@ -1348,7 +1389,7 @@ class Link(ContextElementBase):
     dst = Attribute("Destination", required=True, type="reference")
 
     def logic(self, context):
-        context.link(*self.get_parameters(context, 'dst', 'src'))
+        context.link(*self.get_parameters(context, "dst", "src"))
 
 
 class Append(ContextElementBase):
@@ -1364,28 +1405,41 @@ class Append(ContextElementBase):
         """
 
     class Meta:
-        one_of = [('value', 'values')]
+        one_of = [("value", "values")]
 
-    value = Attribute("Value to append", type="expression", missing=False, required=False)
-    values = Attribute("A sequence of values to append", type="expression", missing=False, required=False)
-    src = Attribute("Collection to append to", type="expression", required=True, missing=False)
+    value = Attribute(
+        "Value to append", type="expression", missing=False, required=False
+    )
+    values = Attribute(
+        "A sequence of values to append",
+        type="expression",
+        missing=False,
+        required=False,
+    )
+    src = Attribute(
+        "Collection to append to", type="expression", required=True, missing=False
+    )
 
     def logic(self, context):
-        value, values, src = self.get_parameters(context, 'value', 'values', 'src')
-        if self.has_parameter('value'):
+        value, values, src = self.get_parameters(context, "value", "values", "src")
+        if self.has_parameter("value"):
             values = [value]
         for v in values:
             try:
                 src.append(v)
             except:
-                if not hasattr(src, 'append'):
-                    self.throw("bad-value.not-supported",
-                               "src does not support append operation",
-                               diagnosis="Not all objects may be appended to, try using a list or list-like object.")
+                if not hasattr(src, "append"):
+                    self.throw(
+                        "bad-value.not-supported",
+                        "src does not support append operation",
+                        diagnosis="Not all objects may be appended to, try using a list or list-like object.",
+                    )
                 else:
-                    self.throw("append.fail",
-                               "unable to append",
-                               diagnosis="Check the value you are appending is the type expected.")
+                    self.throw(
+                        "append.fail",
+                        "unable to append",
+                        diagnosis="Check the value you are appending is the type expected.",
+                    )
 
 
 class Remove(ContextElementBase):
@@ -1402,14 +1456,23 @@ class Remove(ContextElementBase):
         """
 
     class Meta:
-        one_of = [('value', 'values')]
+        one_of = [("value", "values")]
 
-    value = Attribute("Value to remove", type="expression", missing=False, required=False)
-    values = Attribute("A sequence of values to remove", type="expression", missing=False, required=False)
-    src = Attribute("Collection to remove from", type="expression", required=True, missing=False)
+    value = Attribute(
+        "Value to remove", type="expression", missing=False, required=False
+    )
+    values = Attribute(
+        "A sequence of values to remove",
+        type="expression",
+        missing=False,
+        required=False,
+    )
+    src = Attribute(
+        "Collection to remove from", type="expression", required=True, missing=False
+    )
 
     def logic(self, context):
-        value, values, src = self.get_parameters(context, 'value', 'values', 'src')
+        value, values, src = self.get_parameters(context, "value", "values", "src")
         if value is not None:
             values = [value]
         for v in values:
@@ -1419,12 +1482,13 @@ class Remove(ContextElementBase):
                 # removing non-existent value is a nop
                 continue
             except:
-                if not hasattr(src, 'remove'):
-                    self.throw("bad-value.not-supported",
-                               "src does not support remove operation")
+                if not hasattr(src, "remove"):
+                    self.throw(
+                        "bad-value.not-supported",
+                        "src does not support remove operation",
+                    )
                 else:
-                    self.throw("remove.fail",
-                               "unable to remove")
+                    self.throw("remove.fail", "unable to remove")
 
 
 class Extend(ContextElementBase):
@@ -1443,16 +1507,14 @@ class Extend(ContextElementBase):
     values = Attribute("value(s) to extend with", type="reference")
 
     def logic(self, context):
-        src, values = self.get_parameters(context, 'src', 'values')
+        src, values = self.get_parameters(context, "src", "values")
         try:
             src.extend(values)
         except:
-            if not hasattr(src, 'extend'):
-                self.throw('bad-value.not-supported',
-                           'src does not support extend')
+            if not hasattr(src, "extend"):
+                self.throw("bad-value.not-supported", "src does not support extend")
             else:
-                self.throw('extend.fail',
-                           'unable to extend')
+                self.throw("extend.fail", "unable to extend")
 
 
 class Update(ContextElementBase):
@@ -1469,17 +1531,15 @@ class Update(ContextElementBase):
     values = Attribute("Values to update with", type="expression")
 
     def logic(self, context):
-        src, values = self.get_parameters(context, 'src', 'values')
+        src, values = self.get_parameters(context, "src", "values")
 
         try:
             src.update(values)
         except:
-            if not hasattr(src, 'update'):
-                self.throw('bad-value.not-supported',
-                           "src does not support update")
+            if not hasattr(src, "update"):
+                self.throw("bad-value.not-supported", "src does not support update")
             else:
-                self.throw('update.fail',
-                           'failed to update')
+                self.throw("update.fail", "failed to update")
 
 
 class Pop(DataSetter):
@@ -1501,18 +1561,16 @@ class Pop(DataSetter):
     key = Attribute("Key", type="expression", required=False)
 
     def logic(self, context):
-        src, dst, key = self.get_parameters(context, 'src', 'dst', 'key')
+        src, dst, key = self.get_parameters(context, "src", "dst", "key")
         try:
-            if self.has_parameter('key'):
+            if self.has_parameter("key"):
                 value = src.pop(key)
             else:
                 value = src.pop()
         except IndexError:
-            self.throw('pop.empty',
-                       "can't pop from an empty list")
+            self.throw("pop.empty", "can't pop from an empty list")
         except:
-            self.throw('pop.fail',
-                       'unable to pop from src')
+            self.throw("pop.fail", "unable to pop from src")
 
         if dst is not None:
             self.set_context(context, dst, value)
@@ -1525,11 +1583,27 @@ class Echo(ContextElementBase):
         synopsis = """write text to the console"""
         example = """<echo>Hello, World</echo>"""
 
-    obj = Attribute("If given, then the value of this expression will be written to the console",
-                    type="expression", required=False, default=None)
-    table = Attribute("A table to display. If given this value should be a list of lists.", type="expression", required=False, default=None)
-    header = Attribute("A list of headers for the table (if given)", type="commalist", required=False, default=None)
-    indent = Attribute("Number of indents", type="expression", required=False, default=0)
+    obj = Attribute(
+        "If given, then the value of this expression will be written to the console",
+        type="expression",
+        required=False,
+        default=None,
+    )
+    table = Attribute(
+        "A table to display. If given this value should be a list of lists.",
+        type="expression",
+        required=False,
+        default=None,
+    )
+    header = Attribute(
+        "A list of headers for the table (if given)",
+        type="commalist",
+        required=False,
+        default=None,
+    )
+    indent = Attribute(
+        "Number of indents", type="expression", required=False, default=0
+    )
     style = Attribute("Console style", required=False, default="bold cyan")
 
     def logic(self, context):
@@ -1538,14 +1612,15 @@ class Echo(ContextElementBase):
         table = self.table(context)
         header = self.header(context)
         style = console_style(self.style(context))
-        console = context.root.get('console', None)
+        console = context.root.get("console", None)
         if console is None:
             from .. import pilot
+
             console = pilot.console
         if self.archive.debug_echo:
             line_msg = '[file "{}", line {}]\n'.format(self._location, self.source_line)
             console(line_msg, fg="yellow")
-        if self.has_parameter('table'):
+        if self.has_parameter("table"):
             console.table(table, header_row=header)
         else:
             if obj is not None:
@@ -1566,7 +1641,9 @@ class Exit(ContextElementBase):
     def logic(self, context):
         exit_code = self.exit_code(context)
         if self.text.strip():
-            context.root['console'].text(context.sub(self.text.strip()), fg="cyan", bold=True)
+            context.root["console"].text(
+                context.sub(self.text.strip()), fg="cyan", bold=True
+            )
         raise EndLogic(exit_code)
 
 
@@ -1592,7 +1669,7 @@ class Debug(ContextElementBase):
         """
 
     def logic(self, context):
-        if context.get('.debug', False):
+        if context.get(".debug", False):
             yield DeferNodeContents(self)
 
 
@@ -1613,11 +1690,15 @@ class For(ContextElementBase):
 
     src = Attribute("Source sequence", required=True, type="expression")
     dst = Attribute("Destination value", required=True, type="commalist")
-    filter = Attribute("If given, then only those values which match this condition will cause the enclosed block to execute.",
-                       required=False, type="expression", default=True)
+    filter = Attribute(
+        "If given, then only those values which match this condition will cause the enclosed block to execute.",
+        required=False,
+        type="expression",
+        default=True,
+    )
 
     def logic(self, context, _defer=DeferNodeContents):
-        objects, dst = self.get_parameters(context, 'src', 'dst')
+        objects, dst = self.get_parameters(context, "src", "dst")
 
         filter = self.filter
         try:
@@ -1637,7 +1718,10 @@ class For(ContextElementBase):
                         for set_dst, set_value in zip(dst, obj):
                             context[set_dst] = set_value
                     except TypeError:
-                        self.throw("bad-value.not-iterable", "Object in sequence does not support iteration")
+                        self.throw(
+                            "bad-value.not-iterable",
+                            "Object in sequence does not support iteration",
+                        )
                     if filter(context):
                         yield _defer(self)
 
@@ -1706,9 +1790,9 @@ class Switch(ContextElementBase):
     on = Attribute("Value to test", type="expression", required=False)
 
     def logic(self, context):
-        case_tags = [(namespaces.default, 'case'), (namespaces.default, 'default-case')]
+        case_tags = [(namespaces.default, "case"), (namespaces.default, "default-case")]
 
-        if self.has_parameter('on'):
+        if self.has_parameter("on"):
             switch_on = self.on(context)
             iter_children = iter(self)
             while 1:
@@ -1748,7 +1832,7 @@ class Case(ContextElementBase):
         return True
 
     def test(self, context, switch_value):
-        if self.has_parameter('value'):
+        if self.has_parameter("value"):
             value = self.value(context)
         else:
             value = context.sub(self.text.strip())
@@ -1793,8 +1877,12 @@ class ProgressElement(ContextElementBase):
 
     src = Attribute("Source", required=True, type="expression")
     dst = Attribute("Destination", required=True, type="commalist")
-    filter = Attribute("If given, then only those values which match this condition will cause the enclosed block to execute.",
-                       required=False, type="expression", default=True)
+    filter = Attribute(
+        "If given, then only those values which match this condition will cause the enclosed block to execute.",
+        required=False,
+        type="expression",
+        default=True,
+    )
 
     msg = Attribute("Message on progress bar", required=False, default="working...")
     steps = Attribute("Number of steps in the sequence", required=False, type="integer")
@@ -1804,20 +1892,24 @@ class ProgressElement(ContextElementBase):
         is_loop = True
 
     def logic(self, context):
-        objects, dst, msg, steps = self.get_parameters(context, 'src', 'dst', 'msg', 'steps')
-        console = context.root['console']
+        objects, dst, msg, steps = self.get_parameters(
+            context, "src", "dst", "msg", "steps"
+        )
+        console = context.root["console"]
 
         if steps is None:
             try:
                 steps = len(objects)
             except:
-                self.throw('moya.progress.no-length',
-                           "Unable to get length of {!r}".format(objects))
+                self.throw(
+                    "moya.progress.no-length",
+                    "Unable to get length of {!r}".format(objects),
+                )
 
         filter = self.filter
 
         progress = Progress(console, msg, width=20, num_steps=steps)
-        context['.progress'] = progress
+        context[".progress"] = progress
         progress.render()
 
         try:
@@ -1841,8 +1933,10 @@ class ProgressElement(ContextElementBase):
                             for set_dst, set_value in zip(dst, obj):
                                 context[set_dst] = set_value
                         except TypeError:
-                            self.throw("bad-value.not-iterable",
-                                       "Object in sequence does not support iteration")
+                            self.throw(
+                                "bad-value.not-iterable",
+                                "Object in sequence does not support iteration",
+                            )
                         if filter(context):
                             yield DeferNodeContents(self)
                         progress.step()
@@ -1867,7 +1961,7 @@ class ProgressMsg(ContextElementBase):
 
     def logic(self, context):
         msg = context.sub(self.text)
-        context['.progress.msg'] = msg
+        context[".progress.msg"] = msg
 
 
 class Sleep(ContextElementBase):
@@ -1880,7 +1974,7 @@ class Sleep(ContextElementBase):
     _for = Attribute("Amount of time to sleep for", required=True, type="timespan")
 
     def logic(self, context):
-        t = self.get_parameter(context, 'for')
+        t = self.get_parameter(context, "for")
         sleep(float(t))
 
 
@@ -1903,10 +1997,14 @@ class Map(DataSetter):
     src = Attribute("Source sequence", required=True, type="expression")
     dst = Attribute("Destination", required=False, type="reference")
     value = Attribute("Expression", required=True, type="function")
-    _filter = Attribute("Skip item if this expression is false", required=False, type="function")
+    _filter = Attribute(
+        "Skip item if this expression is false", required=False, type="function"
+    )
 
     def get_value(self, context):
-        objects, dst, func, _filter = self.get_parameters(context, 'src', 'dst', 'value', 'filter')
+        objects, dst, func, _filter = self.get_parameters(
+            context, "src", "dst", "value", "filter"
+        )
         func = func.get_scope_callable(context)
         if _filter is None:
             result = [func(obj) for obj in objects]
@@ -1940,11 +2038,15 @@ class Group(DataSetter):
     src = Attribute("Source sequence", required=True, type="expression")
     dst = Attribute("Destination", required=False, type="reference")
     key = Attribute("Key", required=True, type="function")
-    value = Attribute("Expression", required=False, type="function", default="$$", evaldefault=True)
+    value = Attribute(
+        "Expression", required=False, type="function", default="$$", evaldefault=True
+    )
 
     def get_value(self, context):
         result = OrderedDict()
-        objects, dst, _key, _value = self.get_parameters(context, 'src', 'dst', 'key', 'value')
+        objects, dst, _key, _value = self.get_parameters(
+            context, "src", "dst", "key", "value"
+        )
         key_func = _key.get_scope_callable(context)
         value_func = _value.get_scope_callable(context)
         for obj in objects:
@@ -1971,11 +2073,13 @@ class MapDict(DataSetter):
 
     src = Attribute("Source sequence", required=True, type="expression")
     dst = Attribute("Destination", required=False, type="reference")
-    _filter = Attribute("Skip item if this expression is false", required=False, type="function")
+    _filter = Attribute(
+        "Skip item if this expression is false", required=False, type="function"
+    )
 
     def logic(self, context):
 
-        objects, dst, _filter = self.get_parameters(context, 'src', 'dst', 'filter')
+        objects, dst, _filter = self.get_parameters(context, "src", "dst", "filter")
 
         if _filter is None:
             predicate = lambda obj: True
@@ -1991,9 +2095,7 @@ class MapDict(DataSetter):
                 with context.data_scope(value):
                     yield DeferNodeContents(self)
                 map_result.append(value)
-        self.set_context(context,
-                         dst,
-                         map_result)
+        self.set_context(context, dst, map_result)
 
 
 class Max(DataSetter):
@@ -2006,9 +2108,13 @@ class Max(DataSetter):
     key = Attribute("Key", type="function", required=False, default=None, missing=False)
 
     def logic(self, context):
-        objects, dst, key = self.get_parameters(context, 'src', 'dst', 'key')
+        objects, dst, key = self.get_parameters(context, "src", "dst", "key")
         if not objects:
-            self.throw('max.empty', 'src is empty', diagnosis="Moya can't calculate the maximum of an empty sequence.")
+            self.throw(
+                "max.empty",
+                "src is empty",
+                diagnosis="Moya can't calculate the maximum of an empty sequence.",
+            )
         if key is None:
             result = max(objects)
         else:
@@ -2027,9 +2133,13 @@ class Min(DataSetter):
     key = Attribute("Key", type="function", required=False, default=None, missing=False)
 
     def logic(self, context):
-        objects, dst, key = self.get_parameters(context, 'src', 'dst', 'key')
+        objects, dst, key = self.get_parameters(context, "src", "dst", "key")
         if not objects:
-            self.throw('min.empty', 'src is empty', diagnosis="Moya can't calculate the minimum of an empty sequence.")
+            self.throw(
+                "min.empty",
+                "src is empty",
+                diagnosis="Moya can't calculate the minimum of an empty sequence.",
+            )
         if key is None:
             result = min(objects)
         else:
@@ -2059,7 +2169,7 @@ class FilterSeq(DataSetter):
     test = Attribute("Condition", required=True, type="function")
 
     def get_value(self, context):
-        objects, dst, func = self.get_parameters(context, 'src', 'dst', 'test')
+        objects, dst, func = self.get_parameters(context, "src", "dst", "test")
         predicate = func.get_scope_callable(context)
         return [item for item in objects if predicate(item)]
 
@@ -2084,11 +2194,11 @@ class Sort(DataSetter):
     reverse = Attribute("Reverse order?", type="boolean", required=False, default=False)
 
     def get_value(self, context):
-        objects, dst, func, reverse = self.get_parameters(context, 'src', 'dst', 'key', 'reverse')
+        objects, dst, func, reverse = self.get_parameters(
+            context, "src", "dst", "key", "reverse"
+        )
         get_key = func.get_scope_callable(context)
-        return sorted(objects,
-                      reverse=reverse,
-                      key=get_key)
+        return sorted(objects, reverse=reverse, key=get_key)
 
 
 class Repeat(ContextElementBase):
@@ -2107,7 +2217,11 @@ class Repeat(ContextElementBase):
         </repeat>
         """
 
-    times = Attribute("Number of times to repeat (default is infinite)", type="expression", default=None)
+    times = Attribute(
+        "Number of times to repeat (default is infinite)",
+        type="expression",
+        default=None,
+    )
 
     class Meta:
         is_loop = True
@@ -2118,7 +2232,9 @@ class Repeat(ContextElementBase):
             try:
                 times = int(times)
             except:
-                self.throw("bad-value.not-a-number", "'times' must be a number if given")
+                self.throw(
+                    "bad-value.not-a-number", "'times' must be a number if given"
+                )
         if times is None:
             while 1:
                 yield DeferNodeContents(self)
@@ -2188,7 +2304,7 @@ class Do(ContextElementBase):
     until = Attribute("Condition", required=False, type="expression")
 
     def logic(self, context):
-        if not self.has_parameter('until'):
+        if not self.has_parameter("until"):
             yield DeferNodeContents(self)
         else:
             test = self.test
@@ -2255,7 +2371,7 @@ class Macro(ContextElementBase):
         """
 
     def lib_finalize(self, context):
-        for signature in self.children('signature'):
+        for signature in self.children("signature"):
             self.validator = signature.validator
             self.validate_call = self.validator.validate
 
@@ -2300,8 +2416,8 @@ class ReturnDict(ContextElementBase):
 
     def logic(self, context):
         data = self.get_let_map(context).copy()
-        context['_return'] = data
-        with context.scope('_return'):
+        context["_return"] = data
+        with context.scope("_return"):
             yield DeferNodeContents(self)
         raise Unwind()
 
@@ -2336,18 +2452,26 @@ class ReturnScope(ContextElementBase):
 
     """
 
-    values = Attribute("Values to return", type="commalist", required=False, default=None)
-    default = Attribute("Default for missing values", type="expression", required=False, default=None)
+    values = Attribute(
+        "Values to return", type="commalist", required=False, default=None
+    )
+    default = Attribute(
+        "Default for missing values", type="expression", required=False, default=None
+    )
 
     class Help:
         synopsis = "return values from the current scope"
 
     def logic(self, context):
-        names, default = self.get_parameters(context, 'values', 'default')
+        names, default = self.get_parameters(context, "values", "default")
         if names is None:
-            names = [l.strip() for l in context.sub(self.text).splitlines() if not l.isspace()]
+            names = [
+                l.strip()
+                for l in context.sub(self.text).splitlines()
+                if not l.isspace()
+            ]
         get = context.get
-        context['_return'] = {name: get(name, default) for name in names}
+        context["_return"] = {name: get(name, default) for name in names}
         raise Unwind()
 
 
@@ -2363,7 +2487,7 @@ class ReturnStr(ContextElementBase):
         """
 
     def logic(self, context):
-        context['_return'] = context.sub(self.text)
+        context["_return"] = context.sub(self.text)
         raise Unwind()
 
 
@@ -2384,7 +2508,7 @@ class ReturnFalse(ContextElementBase):
         synopsis = "shortcut to return false"
 
     def logic(self, context):
-        context['_return'] = False
+        context["_return"] = False
         raise Unwind
 
 
@@ -2405,7 +2529,7 @@ class ReturnTrue(ContextElementBase):
         synopsis = "shortcut to return true"
 
     def logic(self, context):
-        context['_return'] = True
+        context["_return"] = True
         raise Unwind
 
 
@@ -2443,11 +2567,11 @@ class Return(ContextElementBase):
     value = Attribute("Value to return", type="expression", default=None)
 
     def logic(self, context):
-        if self.has_parameter('value'):
-            context['_return'] = ReturnContainer(value=self.value(context))
+        if self.has_parameter("value"):
+            context["_return"] = ReturnContainer(value=self.value(context))
         else:
-            context['_return'] = ReturnContainer()
-            with context.scope('_return'):
+            context["_return"] = ReturnContainer()
+            with context.scope("_return"):
                 yield DeferNodeContents(self)
         raise Unwind()
 
@@ -2513,23 +2637,22 @@ class CacheReturn(ContextElementBase):
     _for = Attribute("Time to cache for", required=False, default=0, type="timespan")
     key = Attribute("Cache key", required=False)
     keydata = Attribute("Cache data", type="expression", required=False)
-    local = Attribute('Should the value be cached for this tag only?', type="boolean", default=True)
+    local = Attribute(
+        "Should the value be cached for this tag only?", type="boolean", default=True
+    )
 
     class Meta:
         is_call = True
-        one_of = [('key', 'keydata')]
+        one_of = [("key", "keydata")]
 
     def logic(self, context):
-        (cache_name,
-         cache_time,
-         cache_key,
-         cache_key_data,
-         cache_local) = self.get_parameters(context,
-                                            'cache',
-                                            'for',
-                                            'key',
-                                            'keydata',
-                                            'local')
+        (
+            cache_name,
+            cache_time,
+            cache_key,
+            cache_key_data,
+            cache_local,
+        ) = self.get_parameters(context, "cache", "for", "key", "keydata", "local")
         if cache_key is None:
             cache_key = make_cache_key(cache_key_data)
         if cache_local:
@@ -2538,20 +2661,20 @@ class CacheReturn(ContextElementBase):
         cache = self.archive.get_cache(cache_name)
         cache_result = cache.get(cache_key, Ellipsis)
         if cache_result is Ellipsis:
-            call = context.get('.call', {})
+            call = context.get(".call", {})
             yield DeferNodeContents(self)
-            if '_return' in call:
-                value = _return = call['_return']
-                if hasattr(_return, 'get_return_value'):
+            if "_return" in call:
+                value = _return = call["_return"]
+                if hasattr(_return, "get_return_value"):
                     value = _return.get_return_value()
             else:
                 value = None
             cache.set(cache_key, value, time=int(cache_time))
-            context['_return'] = ReturnContainer(value=value)
+            context["_return"] = ReturnContainer(value=value)
             raise Unwind()
 
         else:
-            context['_return'] = ReturnContainer(value=cache_result)
+            context["_return"] = ReturnContainer(value=cache_result)
             raise Unwind()
 
 
@@ -2580,18 +2703,20 @@ class Input(DataSetter):
 
         """
 
-    default = ''
-    _default = Attribute("Value to use if response is empty", default="", map_to="default")
+    default = ""
+    _default = Attribute(
+        "Value to use if response is empty", default="", map_to="default"
+    )
     password = Attribute("Use password input?", default=False, type="boolean")
 
     def logic(self, context):
         default = self.default(context)
-        text = context.sub(self.text) or ''
+        text = context.sub(self.text) or ""
         if default:
             text += " ({})".format(default)
         if text:
-            text += ' '
-        console = context.root['console']
+            text += " "
+        console = context.root["console"]
         if self.password(context):
             response = getpass.getpass(text)
         else:
@@ -2599,14 +2724,14 @@ class Input(DataSetter):
                 if PY3:
                     response = input(text)
                 else:
-                    response = raw_input(text).decode(sys.stdin.encoding or locale.getpreferredencoding(True))
+                    response = raw_input(text).decode(
+                        sys.stdin.encoding or locale.getpreferredencoding(True)
+                    )
             except EOFError:
-                self.throw('input.eof', 'User hit Ctrl+D')
+                self.throw("input.eof", "User hit Ctrl+D")
         if not response:
             response = default
-        self.set_context(context,
-                         self.dst(context),
-                         response)
+        self.set_context(context, self.dst(context), response)
 
 
 class Ask(DataSetter):
@@ -2628,13 +2753,11 @@ class Ask(DataSetter):
 
     def logic(self, context):
         try:
-            response = raw_input("%s (Y/N) " % (self.text.strip() or ''))
+            response = raw_input("%s (Y/N) " % (self.text.strip() or ""))
         except EOFError:
-            self.throw('ask.eof', 'User hit Ctrl+D')
-        response_bool = response.strip().lower() in ('yes', 'y')
-        self.set_context(context,
-                         self.dst(context),
-                         response_bool)
+            self.throw("ask.eof", "User hit Ctrl+D")
+        response_bool = response.strip().lower() in ("yes", "y")
+        self.set_context(context, self.dst(context), response_bool)
 
 
 class _LazyCallable(object):
@@ -2648,7 +2771,7 @@ class _LazyCallable(object):
         context = self.context()
         try:
             with context.frame():
-                if getattr(self.callable, '_require_context', False):
+                if getattr(self.callable, "_require_context", False):
                     result = self.callable(context, *self.args, **self.kwargs)
                 else:
                     result = self.callable(*self.args, **self.kwargs)
@@ -2657,7 +2780,7 @@ class _LazyCallable(object):
             log.exception("lazy error %s", e)
             raise
         else:
-            if hasattr(result, 'get_return_value'):
+            if hasattr(result, "get_return_value"):
                 result = result.get_return_value()
             return result
 
@@ -2674,11 +2797,16 @@ class Call(ContextElementBase):
 
     macro = Attribute("Macro", required=True)
     dst = Attribute("Destination for return value", type="reference")
-    lazy = Attribute("If True the result will be evaluated lazily (i.e. when next referenced)", type="boolean")
+    lazy = Attribute(
+        "If True the result will be evaluated lazily (i.e. when next referenced)",
+        type="boolean",
+    )
     _from = Attribute("Application", default=None, type="application")
 
     def logic(self, context):
-        macro, dst, lazy, app = self.get_parameters(context, 'macro', 'dst', 'lazy', 'from')
+        macro, dst, lazy, app = self.get_parameters(
+            context, "macro", "dst", "lazy", "from"
+        )
         items_map = self.get_let_map(context)
         app = app or self.get_app(context, check=False)
 
@@ -2698,47 +2826,50 @@ class Call(ContextElementBase):
         lazy_callable = None
         if lazy:
             if not dst:
-                self.throw('call.missing-dst', "A value for 'dst' is required for lazy calls")
+                self.throw(
+                    "call.missing-dst", "A value for 'dst' is required for lazy calls"
+                )
             macro_app, macro_element = self.get_element(macro, app)
 
-            if hasattr(macro_element, 'validate_call'):
+            if hasattr(macro_element, "validate_call"):
                 macro_element.validate_call(context, macro_element, kwargs)
 
-            element_callable = self.archive.get_callable_from_element(macro_element,
-                                                                      app=macro_app or app)
+            element_callable = self.archive.get_callable_from_element(
+                macro_element, app=macro_app or app
+            )
             lazy_callable = _LazyCallable(context, element_callable, args, kwargs)
             context.set_lazy(dst, lazy_callable)
 
         else:
             macro_app, macro_element = self.get_element(macro, app)
             if macro_element._meta.app_first_arg:
-                call = {'args': [macro_app] + args}
+                call = {"args": [macro_app] + args}
             else:
                 call = {}
                 if args:
-                    call['args'] = args
+                    call["args"] = args
             call.update(kwargs)
 
-            if hasattr(macro_element, 'validate_call'):
+            if hasattr(macro_element, "validate_call"):
                 macro_element.validate_call(context, macro_element, call)
 
             self.push_call(context, call, app=macro_app)
             try:
-                if hasattr(macro_element, 'run'):
+                if hasattr(macro_element, "run"):
                     for el in macro_element.run(context):
                         yield el
                 else:
                     yield DeferNodeContents(macro_element)
             finally:
                 call = self.pop_call(context)
-            if '_return' in call:
-                value = _return = call['_return']
-                if hasattr(_return, 'get_return_value'):
+            if "_return" in call:
+                value = _return = call["_return"]
+                if hasattr(_return, "get_return_value"):
                     value = _return.get_return_value()
             else:
                 value = None
             if dst is None:
-                getattr(context.obj, 'append', lambda a: None)(value)
+                getattr(context.obj, "append", lambda a: None)(value)
             else:
                 context[dst] = value
 
@@ -2766,14 +2897,15 @@ class CallElement(ContextElementBase):
     dst = Attribute("Destination for return value", type="reference")
 
     def logic(self, context):
-        macro, dst = self.get_parameters(context, 'element', 'dst')
+        macro, dst = self.get_parameters(context, "element", "dst")
 
         try:
             macro_element = macro.__moyaelement__()
             macro_app = macro.app
         except:
-            self.throw('call-element.not_element',
-                       'must be called with an element object')
+            self.throw(
+                "call-element.not_element", "must be called with an element object"
+            )
 
         if self.has_children:
             call = self.push_funccall(context)
@@ -2782,13 +2914,13 @@ class CallElement(ContextElementBase):
             finally:
                 self.pop_funccall(context)
             args, kwargs = call.get_call_params()
-            call = {'args': args}
+            call = {"args": args}
             call.update(kwargs)
             call.update(self.get_let_map(context))
         else:
             call = self.get_let_map(context)
 
-        if hasattr(macro_element, 'validate_call'):
+        if hasattr(macro_element, "validate_call"):
             macro_element.validate_call(context, macro_element, call)
 
         self.push_call(context, call, app=macro_app)
@@ -2796,14 +2928,14 @@ class CallElement(ContextElementBase):
             yield DeferNodeContents(macro_element)
         finally:
             call = self.pop_call(context)
-        if '_return' in call:
-            value = _return = call['_return']
-            if hasattr(_return, 'get_return_value'):
+        if "_return" in call:
+            value = _return = call["_return"]
+            if hasattr(_return, "get_return_value"):
                 value = _return.get_return_value()
         else:
             value = None
         if dst is None:
-            getattr(context.obj, 'append', lambda a: None)(value)
+            getattr(context.obj, "append", lambda a: None)(value)
         else:
             context[dst] = value
 
@@ -2828,21 +2960,31 @@ class Defer(ContextElementBase):
         """
 
     element = Attribute("Element", type="expression", required=False, default=None)
-    _to = Attribute("Element reference", required=False, default=None, map_to="element_ref")
+    _to = Attribute(
+        "Element reference", required=False, default=None, map_to="element_ref"
+    )
     _from = Attribute("Application", default=None, type="application")
 
     def logic(self, context):
-        element, element_ref, app = self.get_parameters(context, 'element', 'element_ref', 'from')
+        element, element_ref, app = self.get_parameters(
+            context, "element", "element_ref", "from"
+        )
 
         app = app or self.get_app(context)
         if element is not None:
-            if not hasattr(element, '__moyaelement__'):
-                self.throw("bad-value.not-an-element", "Can't defer to '{!r}' because it's not an element".format(element))
+            if not hasattr(element, "__moyaelement__"):
+                self.throw(
+                    "bad-value.not-an-element",
+                    "Can't defer to '{!r}' because it's not an element".format(element),
+                )
             element = element.__moyaelement__()
         elif element_ref is not None:
             app, element = self.get_element(element_ref, app)
         else:
-            self.throw("bad-value.missing-element", "No value given for 'element' or 'element_ref'")
+            self.throw(
+                "bad-value.missing-element",
+                "No value given for 'element' or 'element_ref'",
+            )
         if element._element_class != "logic":
             self.throw("defer.not-logic", "This element can not be deferred to")
 

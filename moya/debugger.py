@@ -3,8 +3,10 @@ from __future__ import absolute_import
 
 import sys
 from cmd import Cmd
+
 try:
     import readline
+
     readline  # hides a warning
 except ImportError:
     pass
@@ -18,6 +20,7 @@ from .compat import text_type
 
 def winpdb():
     import rpdb2
+
     rpdb2.start_embedded_debugger("password")
 
 
@@ -33,135 +36,132 @@ class MoyaCmdDebugger(Cmd):
             ' let foo="bar"',
             """
             Set foo to \"bar\" in the context.
-            """
+            """,
         ),
         (
-            ' foo',
+            " foo",
             """
             Evaulate the 'foo' in the current context and display the result. Any valid expression will also work, for example 1 + 1, "Hello," + "World!" etc.
-            """
+            """,
         ),
         (
-            ' foo?',
+            " foo?",
             """
             Convert the value of 'foo' to text.
 
-            """
+            """,
         ),
         (
-            ' foo??',
+            " foo??",
             """
             Convert the value of 'foo' to a Moya expression (if possible).
 
-            """
+            """,
         ),
         (
-            ' foo???',
+            " foo???",
             """
             Covert the value of 'foo' to the internal (Python) representation.
-            """
+            """,
         ),
         (
-            ' $$',
+            " $$",
             """
             Show the current scope
-            """
+            """,
         ),
         (
-            't, stack [EXTRALINES]',
+            "t, stack [EXTRALINES]",
             """
             Show the current call stack. If EXTRALINES is provided, it should be an integer indicating the number of lines of code to show in the stack trace.
-            """
+            """,
         ),
         (
             "s, step",
             """
             Advance to next logic element.
-            """
+            """,
         ),
         (
             "o, over",
             """
             Step over the next logic element.
-            """
+            """,
         ),
         (
-            'u, out',
+            "u, out",
             """
             Step out of the current call.
-            """
+            """,
         ),
         (
             "c, continue",
             """
             Run until the next breakpoint, or to the end of the logic code.
 
-            """
+            """,
         ),
         (
             "help",
             """
             Show this help information.
-            """
+            """,
         ),
         (
             "help TAG",
             """
             Show help information for a given tag.
-            """
+            """,
         ),
         (
             "w, where [EXTRALINES]",
             """
             Show the current position in moya code, if EXTRALINES it provided, it should be an integer indicating the number of additional lines either side of the current position to display.
-            """
+            """,
         ),
         (
             "watch",
             """
             When followed by an expression, it will be added to the watch list (a table of expressions and their results). When given without an argument, the watch list will be reset.
-            """
+            """,
         ),
         (
             "winpdb PASSWORD",
             """
             Launch WinPDB to debug the next Python call.
-            """
+            """,
         ),
         (
             "ctrl+D",
             """
             Exit debugger and continue with moya code execution. Ignores all further breakpoints to the end of the request.
 
-            """
+            """,
         ),
         (
             "<ENTER>",
             """
             Repeat last command.
-            """
+            """,
         ),
         (
             "v, view",
             """
             Display the full view of the currently executing moya code.
 
-            """
+            """,
         ),
         (
             "e, eval",
             """
             Evaluates an expression, or shows the current frame if no argument is given.
-            """
+            """,
         ),
-        (
-            "exit",
-            "Stop execution of Moya code and exit debugger."
-        ),
+        ("exit", "Stop execution of Moya code and exit debugger."),
         (
             "r, run",
-            "Exit debugger and continue with moya code execution. Ignores all further breakpoints in the session."
-        )
+            "Exit debugger and continue with moya code execution. Ignores all further breakpoints in the session.",
+        ),
     ]
 
     def __init__(self, archive, console):
@@ -184,7 +184,7 @@ class MoyaCmdDebugger(Cmd):
         self.usercmd = _previous_command
         return True
 
-    def do_help(self, line=''):
+    def do_help(self, line=""):
         if line:
             ns, tag = extract_namespace(line)
             self.console.div("Help on <%s/>" % tag, fg="blue", bold=True)
@@ -192,15 +192,21 @@ class MoyaCmdDebugger(Cmd):
             return False
 
         self.console.div("Moya Debugger", fg="blue", bold=True)
-        self.console.text("Moya's Debugger http://www.moyaproject.com/debugger/", fg="black", bold=True).nl()
+        self.console.text(
+            "Moya's Debugger http://www.moyaproject.com/debugger/",
+            fg="black",
+            bold=True,
+        ).nl()
         table = [(Cell("Command", bold=True), Cell("Description", bold=True))]
         command_help = sorted(self.command_help, key=lambda h: h[0])
 
         def format_desc(desc):
             lines = [l.strip() for l in desc.splitlines() if l.strip()]
             return "\n".join(lines)
+
         for i, (command, desc) in enumerate(command_help):
-            table.append([Cell(command, bold=True, fg="green"),
-                          Cell(format_desc(desc))])
+            table.append(
+                [Cell(command, bold=True, fg="green"), Cell(format_desc(desc))]
+            )
         self.console.table(table, header=True)
         return False

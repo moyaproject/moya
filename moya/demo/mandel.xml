@@ -12,13 +12,9 @@
         <for src="yrange" dst="pixy">
             <let y0="(pixy/ysize) * 2 - 1" row="''" />
             <for src="xrange" dst="pixx">
-                <let x0="(pixx/xsize) * 3 - 2"
-                     x="0" y="0" dst="0" iteration="0"/>
+                <let x0="(pixx/xsize) * 3 - 2" x="0" y="0" dst="0" iteration="0"/>
                 <while test="(x*x + y*y) lt 4 and iteration lt max_iteration">
-                    <let-parallel
-                        x="x*x - y*y + x0"
-                        y="2*x*y + y0"
-                        iteration="iteration + 1"/>
+                    <let-parallel x="x*x - y*y + x0" y="2*x*y + y0" iteration="iteration + 1"/>
                 </while>
                 <let row="row + chars[iteration % 10]" />
             </for>

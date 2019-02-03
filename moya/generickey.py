@@ -5,11 +5,13 @@ from .errors import ElementNotFoundError
 
 from .compat import text_type
 import logging
-log = logging.getLogger('moya.db')
+
+log = logging.getLogger("moya.db")
 
 
 class GenericKey(object):
     """A generic foreign key"""
+
     def __init__(self, app, model, pk):
         self.app = app
         self.model = model
@@ -18,7 +20,9 @@ class GenericKey(object):
     def __repr__(self):
         if self.app is None:
             return "<generic-key (null)>"
-        return "<generic-key {}#{} {}>".format(self.app.name, self.model.libname, self.pk)
+        return "<generic-key {}#{} {}>".format(
+            self.app.name, self.model.libname, self.pk
+        )
 
     @classmethod
     def from_object(cls, obj):
@@ -31,21 +35,22 @@ class GenericKey(object):
         if not value:
             return cls(None, None, None)
         try:
-            app, model, pk = [v or None for v in value.split(',')]
+            app, model, pk = [v or None for v in value.split(",")]
             pk = int(pk)
         except ValueError:
             # Malformed generic key in the database
             return cls(None, None, None)
         from moya import pilot
+
         # TODO: is there a better way of getting the archive here?
-        archive = pilot.context['.app'].archive
+        archive = pilot.context[".app"].archive
         app = archive.get_app(app)
         if app is None:
             # No such app, treat it as a null
             return cls(None, None, None)
 
         try:
-            app, model = archive.get_element('{}#{}'.format(app.name, model))
+            app, model = archive.get_element("{}#{}".format(app.name, model))
         except:
             # Model doesn't exist, treat it as a null
             return cls(None, None, None)
@@ -68,14 +73,14 @@ class GenericKey(object):
         if self.app is None:
             return None
 
-        element_ref = '{}#{}'.format(self.app.name, self.model.libname)
+        element_ref = "{}#{}".format(self.app.name, self.model.libname)
         try:
             model_app, model = self.app.archive.get_element(element_ref)
         except ElementNotFoundError:
-            log.warning('no model found for generic key {!r}', self)
+            log.warning("no model found for generic key {!r}", self)
             return None
         db = model.get_db()
-        dbsession = context['._dbsessions'][db.name]
+        dbsession = context["._dbsessions"][db.name]
         table_class = model.get_table_class(model_app)
         qs = dbsession.query(table_class).filter(table_class.id == self.pk)
         return qs.first()

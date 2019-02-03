@@ -13,7 +13,7 @@ class ProtocolEnumBase(type):
         reverse_enum = {}
 
         for k, v in iteritems(attrs):
-            if isinstance(v, int) and not k.startswith('_'):
+            if isinstance(v, int) and not k.startswith("_"):
                 enum[k] = v
                 reverse_enum[v] = k
 
@@ -36,7 +36,7 @@ class ProtocolEnumBase(type):
         return new_cls
 
 
-class EnumType():
+class EnumType:
     """A Protocol Enum instance can behave like a string or a number"""
 
     __metaclass__ = ProtocolEnumBase
@@ -51,10 +51,10 @@ class EnumType():
         self.value = int(value)
 
     def __str__(self):
-        return self.lookup(self.value, '?')
+        return self.lookup(self.value, "?")
 
     def __unicode__(self):
-        return self.lookup(self.value, '?')
+        return self.lookup(self.value, "?")
 
     def __int__(self):
         return self.value
@@ -75,9 +75,11 @@ class Enum(with_metaclass(ProtocolEnumBase, EnumType)):
 
 
 if __name__ == "__main__":
+
     class HobbitsEnum(Enum):
         SAM = 0
         BILBO = 1
         FRODO = 1
+
     print(HobbitsEnum(0))
     print(HobbitsEnum(1))

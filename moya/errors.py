@@ -20,7 +20,7 @@ class LogicError(Exception):
 
     @property
     def diagnosis(self):
-        return getattr(self.original, 'diagnosis', None)
+        return getattr(self.original, "diagnosis", None)
 
     def get_moya_frames(self):
         return self.moya_trace.stack
@@ -44,30 +44,33 @@ class MoyaError(Exception):
     message = "{error}"
 
     def _escape_format(cls, text):
-        return text.replace('{', '{{').replace('}', '}}')
+        return text.replace("{", "{{").replace("}", "}}")
 
     def __init__(self, error=None, **kwargs):
         fmt_args = kwargs
-        fmt_args['error'] = error
+        fmt_args["error"] = error
         msg = self.format_error(error, fmt_args)
-        if 'diagnosis' in kwargs:
-            self.diagnosis = kwargs['diagnosis']
+        if "diagnosis" in kwargs:
+            self.diagnosis = kwargs["diagnosis"]
         super(MoyaError, self).__init__(msg)
 
     def format_error(self, error, fmt_args):
         if fmt_args:
-            fmt_args = {k: self._escape_format(text_type(v)) for k, v in fmt_args.items()}
+            fmt_args = {
+                k: self._escape_format(text_type(v)) for k, v in fmt_args.items()
+            }
         if error is None:
             msg = self.default_message.format(**fmt_args)
         else:
             # print error, repr(fmt_args)
             # error = self._escape_format(error)
-            fmt_args['error'] = error.format(**fmt_args)
+            fmt_args["error"] = error.format(**fmt_args)
             msg = self.message.format(**fmt_args)
         return msg
 
     def __moyaconsole__(self, console):
         console.text(text_type(self))
+
     __moyaconsole__.is_default_error_message = True
 
     # def __unicode__(self):
@@ -95,7 +98,7 @@ class ParseError(MoyaError):
 
     def render(self, colour=False):
         line, col = self.position
-        lines = self.code.replace('\t', ' ' * 4).splitlines()
+        lines = self.code.replace("\t", " " * 4).splitlines()
         start = max(0, line - 3)
         end = min(len(lines), line + 2)
         showlines = lines[start:end]
@@ -112,23 +115,25 @@ class ParseError(MoyaError):
                 fmt = " %s %s"
             errorlines.append(fmt % (lineno.ljust(maxline), line))
 
-        print('\n'.join(errorlines))
+        print("\n".join(errorlines))
 
 
 @implements_to_string
 class DocumentError(MoyaError):
     """Raised when there is an error constructing the document"""
-    def __init__(self, element, msg=''):
+
+    def __init__(self, element, msg=""):
         super(DocumentError, self).__init__()
         self.element = element
         self.msg = msg
 
     def __repr__(self):
-        return '%s in %s' % (self.msg, self.element)
+        return "%s in %s" % (self.msg, self.element)
 
 
 class AttributeError(MoyaError):
     """An attribute related parse error"""
+
     hide_py_traceback = True
     error_type = "Attribute error"
 
@@ -152,15 +157,15 @@ class ElementError(MoyaError):
     @property
     def source_line(self):
         if self.element:
-            return getattr(self.element, 'source_line', None)
+            return getattr(self.element, "source_line", None)
         return None
 
     def get_message(self):
         if self.element is None:
             return self.msg
-        #path = self.element._document.path
-        #line = self.element.source_line or '?'
-        return 'in {}, {}'.format(self.element, self.msg)
+        # path = self.element._document.path
+        # line = self.element.source_line or '?'
+        return "in {}, {}".format(self.element, self.msg)
         # return 'Document "%s", line %s, in <%s>: %s' % (path,
         #                                                 line,
         #                                                 self.element._tag_name,
@@ -188,24 +193,31 @@ class ElementNotFoundError(MoyaError):
         self.lib = lib
         diagnosis = None
         if msg is None:
-            if self.elementref and '#' not in self.elementref:
+            if self.elementref and "#" not in self.elementref:
                 diagnosis = """\
 Did you mean **"#{elementref}"** ?
 
 Without the '#' symbol, Moya will look for the element with **docname="{elementref}"** in the current *file*.
 
 Add a # if you meant to reference an element in the current *application*.
-""".format(elementref=self.elementref)
+""".format(
+                    elementref=self.elementref
+                )
             if app or lib:
-                msg = "unable to reference element '{elementref}' in {obj}".format(elementref=self.elementref,
-                                                                         obj=self.app or self.lib,)
+                msg = "unable to reference element '{elementref}' in {obj}".format(
+                    elementref=self.elementref, obj=self.app or self.lib
+                )
             else:
-                msg = "unable to reference element '{elementref}'".format(elementref=self.elementref)
+                msg = "unable to reference element '{elementref}'".format(
+                    elementref=self.elementref
+                )
         else:
-            msg = msg.replace('{', '{{').replace('}', '}}')
+            msg = msg.replace("{", "{{").replace("}", "}}")
         if reason is not None:
             msg = "{} ({})".format(msg, reason)
-        super(ElementNotFoundError, self).__init__(msg, elementref=elementref, diagnosis=diagnosis)
+        super(ElementNotFoundError, self).__init__(
+            msg, elementref=elementref, diagnosis=diagnosis
+        )
 
     # def get_message(self):
     #     if not (self.app or self.lib):
@@ -244,14 +256,13 @@ class UnknownFilterError(MoyaError):
 
 class AttributeTypeError(MoyaError):
     """An error caused by an attribute containing the wrong type of data"""
+
     def __init__(self, element, name, value, type_name):
         self.element = element
         self.name = name
         self.type_name = type_name
         self.value = value
-        msg = "%r attribute should be a valid %s (not %r)" % (name,
-                                                              type_name,
-                                                              value)
+        msg = "%r attribute should be a valid %s (not %r)" % (name, type_name, value)
         super(AttributeTypeError, self).__init__(msg)
 
 
@@ -261,12 +272,13 @@ class ContextError(MoyaError):
 
 class LibraryLoadError(MoyaError):
     """Raised when a lib could not be read"""
+
     hide_py_traceback = True
     default_message = "Unable to load library '{lib}'"
     message = "Unable to load library '{lib}' - {error}"
 
     def __init__(self, error, lib=None, py_exception=None, **kwargs):
-        long_name = getattr(lib, 'long_name', None)
+        long_name = getattr(lib, "long_name", None)
         if long_name is None:
             lib = "<unknown>"
         else:
@@ -295,12 +307,16 @@ class AppError(MoyaError):
 
 
 class AmbiguousAppError(AppError):
-    default_message = "More than one app installed for lib '{lib_name}', choices are {apps}"
+    default_message = (
+        "More than one app installed for lib '{lib_name}', choices are {apps}"
+    )
 
     def __init__(self, lib_name, apps):
         self.lib_name = lib_name
         self.apps = apps
-        super(AmbiguousAppError, self).__init__(lib_name=lib_name, apps=textual_list(apps))
+        super(AmbiguousAppError, self).__init__(
+            lib_name=lib_name, apps=textual_list(apps)
+        )
 
 
 class AppRequiredError(AppError):

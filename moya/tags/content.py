@@ -1023,4 +1023,3 @@ class ConsoleRender(RenderBase):
         html = '<div class="moya-console">{}</div>'.format(text)
         context[".content"].add_renderable(repr(obj), HTML(html))
         self.include_css(context, "media", "moya.debug", "css/debug.css")
-

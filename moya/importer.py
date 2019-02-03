@@ -36,13 +36,13 @@ class LibraryImportHook(object):
 
     def _get_path(self, fullname):
         if fullname == "__moyapy__":
-            return '/'
-        _, path = fullname.split('.', 1)
-        path = abspath(path.replace('.', '/'))
+            return "/"
+        _, path = fullname.split(".", 1)
+        path = abspath(path.replace(".", "/"))
         return path
 
     def _get_module_info(self, fullname):
-        if not fullname.startswith('__moyapy__'):
+        if not fullname.startswith("__moyapy__"):
             raise ImportError(fullname)
 
         path = self._get_path(fullname)
@@ -51,7 +51,7 @@ class LibraryImportHook(object):
         if module_path is not None:
             return module_path, _type, False
 
-        module_path, _type = self._find_module_file(combine(path, '__init__'))
+        module_path, _type = self._find_module_file(combine(path, "__init__"))
         if module_path is not None:
             return module_path, _type, True
 
@@ -68,7 +68,7 @@ class LibraryImportHook(object):
         for (suffix, mode, type) in imp.get_suffixes():
             if type in self._VALID_MODULE_TYPES:
                 check_path = path + suffix
-                #if self.fs.isfile(check_path):
+                # if self.fs.isfile(check_path):
                 if check_path in self._files:
                     return (check_path, type)
         return (None, None)
@@ -104,9 +104,9 @@ class LibraryImportHook(object):
         executes it and returns the created module object.
         """
         #  Reuse an existing module if present.
-        #try:
+        # try:
         #    return sys.modules[fullname]
-        #except KeyError:
+        # except KeyError:
         #    pass
         #  Try to create from source or bytecode.
         info = self.get_module_info(fullname)
@@ -134,7 +134,7 @@ class LibraryImportHook(object):
         path, type, ispkg = info
         code = self.fs.getbytes(path)
         if type == imp.PY_SOURCE:
-            code = b'\n'.join(code.splitlines())
+            code = b"\n".join(code.splitlines())
             try:
                 path = self.fs.getsyspath(path)
             except NoSysPath:
@@ -159,7 +159,7 @@ def fs_import(lib, fs, name):
         module_name = "__moyapy__." + name
         if module_name in sys.modules:
             del sys.modules[module_name]
-            #reload(sys.modules[module_name])
+            # reload(sys.modules[module_name])
 
         try:
             module = __import__(module_name)
@@ -167,7 +167,7 @@ def fs_import(lib, fs, name):
             raise errors.StartupFailedError(
                 "import error raised for Python extension '{}' ({})".format(name, e),
                 diagnosis="This error can occur if an extension has a missing dependency.\n\n"
-                "You may need to pip install something."
+                "You may need to pip install something.",
             )
 
         add_module = getattr(module, name)
@@ -175,7 +175,9 @@ def fs_import(lib, fs, name):
 
         for element_name, element_callable in iteritems(expose.exposed_elements):
             document = Document(lib.archive, lib=lib)
-            element = ServiceCallElement(lib.archive, element_name, element_callable, document)
+            element = ServiceCallElement(
+                lib.archive, element_name, element_callable, document
+            )
             lib.documents.append(document)
             lib.register_element(element)
             lib.register_named_element(element_name, element)
@@ -192,17 +194,18 @@ def fs_import(lib, fs, name):
 
 if __name__ == "__main__":
     from fs.opener import open_fs
+
     m = open_fs("mem://")
-    m.createfile('__init__.py')
+    m.createfile("__init__.py")
     m.makedir("test")
-    m.setbytes(b'test/__init__.py', 'print "Imported!"\ndef run():print "It Works!"')
+    m.setbytes(b"test/__init__.py", 'print "Imported!"\ndef run():print "It Works!"')
     m.tree()
 
     hook = LibraryImportHook(m)
     hook.install()
 
     module = __import__("__moyapy__.test")
-    #print module.test.run
+    # print module.test.run
     module.test.run()
 
-    #print imp.find_module("moyapy.test")
+    # print imp.find_module("moyapy.test")

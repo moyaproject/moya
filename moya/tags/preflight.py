@@ -8,6 +8,7 @@ from .. import logic
 
 class Check(ContextElementBase):
     """A pre-flight check"""
+
     xmlns = namespaces.preflight
 
     class Help:
@@ -25,7 +26,7 @@ class Result(ContextElementBase):
     def logic(self, context):
         check = self.get_ancestor((self.xmlns, "check"))
         text = context.sub(self.text)
-        context['.preflight'].append((check, self.status, text))
+        context[".preflight"].append((check, self.status, text))
         if self.exit(context):
             raise logic.Unwind()
 

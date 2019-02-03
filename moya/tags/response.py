@@ -10,7 +10,16 @@ from .. import errors
 from .. import interface
 from .. import urltools
 from .. import moyajson
-from ..compat import text_type, PY2, py2bytes, urlencode, urlparse, parse_qs, urlunparse, quote_plus
+from ..compat import (
+    text_type,
+    PY2,
+    py2bytes,
+    urlencode,
+    urlparse,
+    parse_qs,
+    urlunparse,
+    quote_plus,
+)
 from ..request import ReplaceRequest
 from ..response import MoyaResponse
 from ..urlmapper import MissingURLParameter, RouteError
@@ -24,8 +33,8 @@ import logging
 
 from fs.path import dirname
 
-GMT = pytz.timezone('GMT')
-log = logging.getLogger('moya.runtime')
+GMT = pytz.timezone("GMT")
+log = logging.getLogger("moya.runtime")
 
 
 class ResponseTag(DataSetter):
@@ -45,30 +54,27 @@ class ResponseTag(DataSetter):
 
     def get_value(self, context):
         let_map = self.get_let_map(context)
-        (status,
-         content_type,
-         body,
-         charset,
-         headers) = self.get_parameters(context,
-                                        'status',
-                                        'contenttype',
-                                        'body',
-                                        'charset',
-                                        'headers')
+        (status, content_type, body, charset, headers) = self.get_parameters(
+            context, "status", "contenttype", "body", "charset", "headers"
+        )
         text = None
         if body is None:
             text = context.sub(self.text)
-        response = MoyaResponse(status=status,
-                                content_type=py2bytes(content_type),
-                                body=body,
-                                text=text,
-                                charset=py2bytes(charset))
+        response = MoyaResponse(
+            status=status,
+            content_type=py2bytes(content_type),
+            body=body,
+            text=text,
+            charset=py2bytes(charset),
+        )
         for k, v in let_map.items():
             try:
                 setattr(response, k, v)
             except:
-                self.throw("bad-value.response-value",
-                           "Can't set {} to {}".format(context.to_expr(k), context.to_expr(v)))
+                self.throw(
+                    "bad-value.response-value",
+                    "Can't set {} to {}".format(context.to_expr(k), context.to_expr(v)),
+                )
         if headers:
             response.headers.update(headers)
         return response
@@ -135,7 +141,6 @@ class ServeFile(LogicElement):
     ifexists = Attribute("Only serve a response if the file exists", type="boolean")
     filename = Attribute("Name of the file being serve", required=False, default=None)
 
-
     def logic(self, context):
         params = self.get_parameters(context)
 
@@ -161,6 +166,7 @@ class ServeText(LogicElement):
     Serve text.
 
     """
+
     status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     class Help:
@@ -170,10 +176,12 @@ class ServeText(LogicElement):
         """
 
     def logic(self, context):
-        response = MoyaResponse(status=self.status(context),
-                                content_type=py2bytes('text'),
-                                text=context.sub(self.text),
-                                charset=py2bytes('utf-8'))
+        response = MoyaResponse(
+            status=self.status(context),
+            content_type=py2bytes("text"),
+            text=context.sub(self.text),
+            charset=py2bytes("utf-8"),
+        )
         raise logic.EndLogic(response)
 
 
@@ -201,22 +209,32 @@ class ServeJSON(LogicElement):
         """
         synopsis = """serve an object as JSON"""
 
-    obj = Attribute("Object to build JSON from", type="expression", required=False, default=None, missing=False)
-    indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
+    obj = Attribute(
+        "Object to build JSON from",
+        type="expression",
+        required=False,
+        default=None,
+        missing=False,
+    )
+    indent = Attribute(
+        "Indent to make JSON more readable", type="integer", required=False, default=4
+    )
     status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     def logic(self, context):
-        if self.has_parameter('obj'):
+        if self.has_parameter("obj"):
             obj = self.obj(context)
             try:
                 json_obj = moyajson.dumps(obj, indent=self.indent(context))
             except Exception as e:
-                self.throw('serve-json.fail', text_type(e))
+                self.throw("serve-json.fail", text_type(e))
         else:
             json_obj = context.sub(self.text)
-        response = MoyaResponse(status=self.status(context),
-                                content_type=b'application/json' if PY2 else 'application/json',
-                                body=json_obj)
+        response = MoyaResponse(
+            status=self.status(context),
+            content_type=b"application/json" if PY2 else "application/json",
+            body=json_obj,
+        )
         raise logic.EndLogic(response)
 
 
@@ -252,7 +270,9 @@ class ServeJsonObject(LogicElement):
     class Help:
         synopsis = """serve an dict as JSON"""
 
-    indent = Attribute("Indent to make JSON more readable", type="integer", required=False, default=4)
+    indent = Attribute(
+        "Indent to make JSON more readable", type="integer", required=False, default=4
+    )
     status = Attribute("Status code", type="httpstatus", required=False, default=200)
 
     def logic(self, context):
@@ -263,11 +283,13 @@ class ServeJsonObject(LogicElement):
         try:
             json_obj = moyajson.dumps(obj, indent=self.indent(context))
         except Exception as e:
-            self.throw('serve-json-object.fail', text_type(e))
+            self.throw("serve-json-object.fail", text_type(e))
 
-        response = MoyaResponse(status=self.status(context),
-                                content_type=b'application/json' if PY2 else 'application/json',
-                                body=json_obj)
+        response = MoyaResponse(
+            status=self.status(context),
+            content_type=b"application/json" if PY2 else "application/json",
+            body=json_obj,
+        )
         raise logic.EndLogic(response)
 
 
@@ -277,7 +299,12 @@ class ServeXML(LogicElement):
     class Help:
         synopsis = """serve xml"""
 
-    obj = Attribute("A string of XML, or an object that may be converted to XML", type="expression", required=True, missing=False)
+    obj = Attribute(
+        "A string of XML, or an object that may be converted to XML",
+        type="expression",
+        required=True,
+        missing=False,
+    )
     content_type = Attribute("Mime type", default="application/xml")
 
     def logic(self, context):
@@ -285,15 +312,18 @@ class ServeXML(LogicElement):
         mime_type = params.content_type
         xml = params.obj
 
-        if hasattr(xml, '__xml__'):
+        if hasattr(xml, "__xml__"):
             try:
                 xml = xml.__xml__()
             except Exception as e:
-                self.throw('serve-xml.fail', 'failed to covert {} to XML ({})'.format(context.to_expr(xml), e))
+                self.throw(
+                    "serve-xml.fail",
+                    "failed to covert {} to XML ({})".format(context.to_expr(xml), e),
+                )
 
         if not isinstance(xml, bytes):
             xml = text_type(xml)
-            xml_bytes = xml.encode('utf-8')
+            xml_bytes = xml.encode("utf-8")
         else:
             xml_bytes = xml
         response = MoyaResponse(content_type=py2bytes(mime_type), body=xml_bytes)
@@ -326,17 +356,17 @@ class Denied(LogicElement):
 
     """
 
-    realm = Attribute('Basic auth realm', type="text", required=False)
+    realm = Attribute("Basic auth realm", type="text", required=False)
 
     class Help:
         synopsis = "reject basic authorization"
 
     def logic(self, context):
-        if self.has_parameter('realm'):
-            realm = self.realm(context) or 'restricted'
+        if self.has_parameter("realm"):
+            realm = self.realm(context) or "restricted"
         else:
-            realm = context['_realm'] or 'restricted'
-        headers = {'WWW-Authenticate': 'Basic realm="{}:"'.format(realm)}
+            realm = context["_realm"] or "restricted"
+        headers = {"WWW-Authenticate": 'Basic realm="{}:"'.format(realm)}
         raise logic.EndLogic(http.RespondUnauthorized(headers=headers))
 
 
@@ -356,39 +386,35 @@ class AuthCheck(LogicElement):
 
     """
 
-    realm = Attribute('Basic auth realm', type="text", default='restricted')
+    realm = Attribute("Basic auth realm", type="text", default="restricted")
 
     class Help:
         synopsis = "perform basic auth check"
 
     def logic(self, context):
         realm = self.realm(context)
-        authorization = context['.request.authorization']
+        authorization = context[".request.authorization"]
         if not authorization:
             self.denied(realm)
 
         auth_method, auth = authorization
-        if auth_method.lower() != 'basic':
+        if auth_method.lower() != "basic":
             self.denied(realm)
 
         try:
-            username, _, password = base64.b64decode(auth).partition(':')
+            username, _, password = base64.b64decode(auth).partition(":")
         except:
             self.denied(realm)
 
         if not username or not password:
             self.denied(realm)
 
-        scope = {
-            'username': username,
-            'password': password,
-            '_realm': realm
-        }
+        scope = {"username": username, "password": password, "_realm": realm}
         with context.data_scope(scope):
             yield logic.DeferNodeContents(self)
 
     def denied(self, realm):
-        headers = {'WWW-Authenticate': 'Basic realm="{}:"'.format(realm)}
+        headers = {"WWW-Authenticate": 'Basic realm="{}:"'.format(realm)}
         raise logic.EndLogic(http.RespondUnauthorized(headers=headers))
 
 
@@ -408,30 +434,25 @@ class AdminOnly(LogicElement):
         synopsis = "return a forbidden response if the user is not admin"
 
     def logic(self, context):
-        if not context['.permissions.admin']:
+        if not context[".permissions.admin"]:
             raise logic.EndLogic(http.RespondForbidden())
 
 
 class RedirectToBase(object):
     def logic(self, context):
-        (url,
-         path,
-         query,
-         fragment) = self.get_parameters(context,
-                                         'url',
-                                         'path',
-                                         'query',
-                                         'fragment')
+        (url, path, query, fragment) = self.get_parameters(
+            context, "url", "path", "query", "fragment"
+        )
 
         if url is not None:
             parsed_url = urlparse(url)
-            url = urlunparse(parsed_url[0:3] + ('', '', ''))
+            url = urlunparse(parsed_url[0:3] + ("", "", ""))
             url_query = parsed_url.query
             query_components = parse_qs(url_query)
         else:
             query_components = {}
 
-        request = context['.request']
+        request = context[".request"]
 
         query_components.update(self.get_let_map(context))
 
@@ -439,7 +460,7 @@ class RedirectToBase(object):
             query_components.update(query)
         if query_components:
             qs = urlencode(query_components, True)
-            url += '?' + qs
+            url += "?" + qs
 
         if url is not None:
             location = url
@@ -461,9 +482,23 @@ class RedirectTo(RedirectToBase, LogicElement):
     """
 
     url = Attribute("Destination URL", metavar="URL", required=False, default=None)
-    path = Attribute("New path portion of the url, may be relative", metavar="PATH", required=False)
-    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default=303, type="httpstatus")
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    path = Attribute(
+        "New path portion of the url, may be relative", metavar="PATH", required=False
+    )
+    code = Attribute(
+        "HTTP response code (use 301 for permanent redirect)",
+        metavar="HTTPCODE",
+        required=False,
+        default=303,
+        type="httpstatus",
+    )
+    query = Attribute(
+        "Mapping expression to use as a query string",
+        metavar="EXPRESSION",
+        required=False,
+        default=None,
+        type="expression",
+    )
     fragment = Attribute("Fragment component in url")
 
     def new_location(self, context, location):
@@ -474,14 +509,10 @@ class RedirectTo(RedirectToBase, LogicElement):
 
 
 class RedirectBase(object):
-
     def logic(self, context):
-        (urlname,
-         query,
-         fragment) = self.get_parameters(context,
-                                         'name',
-                                         'query',
-                                         'fragment')
+        (urlname, query, fragment) = self.get_parameters(
+            context, "name", "query", "fragment"
+        )
         app = self.get_app(context)
 
         if not app:
@@ -490,18 +521,18 @@ class RedirectBase(object):
         app_name = app.name
         url_params = self.get_let_map(context)
         try:
-            url = context['.server'].get_url(app_name, urlname, url_params)
+            url = context[".server"].get_url(app_name, urlname, url_params)
         except MissingURLParameter as e:
-            self.throw('redirect.missing-parameter', text_type(e))
+            self.throw("redirect.missing-parameter", text_type(e))
         except RouteError as e:
-            self.throw('redirect.no-route', text_type(e))
+            self.throw("redirect.no-route", text_type(e))
 
         if query:
             qs = urltools.urlencode(query)
             # qs = "&".join(["{}={}".format(quote_plus(k), quote_plus(v)) if v is not None else quote_plus(k)
             #                for k, v in query.items()])
-            #qs = urlencode(list(query.items()), True)
-            url += '?' + qs
+            # qs = urlencode(list(query.items()), True)
+            url += "?" + qs
 
         location = url
         if fragment:
@@ -518,8 +549,20 @@ class Redirect(RedirectBase, LogicElement):
 
     name = Attribute("URL name", required=True, metavar="URL NAME")
     _from = Attribute("Application", type="application", default=None)
-    code = Attribute("HTTP response code (use 301 for permanent redirect)", metavar="HTTPCODE", required=False, default="303", type="httpstatus")
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    code = Attribute(
+        "HTTP response code (use 301 for permanent redirect)",
+        metavar="HTTPCODE",
+        required=False,
+        default="303",
+        type="httpstatus",
+    )
+    query = Attribute(
+        "Mapping expression to use as a query string",
+        metavar="EXPRESSION",
+        required=False,
+        default=None,
+        type="expression",
+    )
     fragment = Attribute("Fragment component in url")
 
     def new_location(self, context, location):
@@ -542,16 +585,22 @@ class Rewrite(RedirectBase, LogicElement):
 
     name = Attribute("URL name", required=True, metavar="URL NAME")
     _from = Attribute("Application", type="application", default=None)
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    query = Attribute(
+        "Mapping expression to use as a query string",
+        metavar="EXPRESSION",
+        required=False,
+        default=None,
+        type="expression",
+    )
     fragment = Attribute("Fragment component in url")
 
     def new_location(self, context, location):
         url = urlparse(location)
-        request = context['.request']
+        request = context[".request"]
         new_request = request.copy()
-        new_request.environ['QUERY_STRING'] = url.query
-        new_request.environ['PATH_INFO'] = url.path
-        log.debug('rewriting url to %s', location)
+        new_request.environ["QUERY_STRING"] = url.query
+        new_request.environ["PATH_INFO"] = url.path
+        log.debug("rewriting url to %s", location)
         raise logic.EndLogic(ReplaceRequest(new_request))
 
 
@@ -564,8 +613,16 @@ class RewriteTo(RedirectToBase, LogicElement):
     """
 
     url = Attribute("Destination URL", metavar="URL", required=False, default=None)
-    path = Attribute("New path portion of the url, may be relative", metavar="PATH", required=False)
-    query = Attribute("Mapping expression to use as a query string", metavar="EXPRESSION", required=False, default=None, type="expression")
+    path = Attribute(
+        "New path portion of the url, may be relative", metavar="PATH", required=False
+    )
+    query = Attribute(
+        "Mapping expression to use as a query string",
+        metavar="EXPRESSION",
+        required=False,
+        default=None,
+        type="expression",
+    )
     fragment = Attribute("Fragment component in url")
 
     class Help:
@@ -573,11 +630,11 @@ class RewriteTo(RedirectToBase, LogicElement):
 
     def new_location(self, context, location):
         url = urlparse(location)
-        request = context['.request']
+        request = context[".request"]
         new_request = request.copy()
-        new_request.environ['QUERY_STRING'] = url.query
-        new_request.environ['PATH_INFO'] = url.path
-        log.debug('rewriting url to %s', location)
+        new_request.environ["QUERY_STRING"] = url.query
+        new_request.environ["PATH_INFO"] = url.path
+        log.debug("rewriting url to %s", location)
         raise logic.EndLogic(ReplaceRequest(new_request))
 
 
@@ -588,7 +645,7 @@ class SetHeader(LogicElement):
     """
 
     header = Attribute("Header name", required=True)
-    value = Attribute("Header Value", required=False, default='')
+    value = Attribute("Header Value", required=False, default="")
 
     class Help:
         synopsis = "add additional headers"
@@ -597,10 +654,10 @@ class SetHeader(LogicElement):
         """
 
     def logic(self, context):
-        header, value = self.get_parameters(context, 'header', 'value')
-        if not self.has_parameter('value'):
+        header, value = self.get_parameters(context, "header", "value")
+        if not self.has_parameter("value"):
             value = context.sub(self.text).strip()
-        headers = context.set_new_call('.headers', dict)
+        headers = context.set_new_call(".headers", dict)
         headers[header] = value
 
 
@@ -626,29 +683,36 @@ class CheckModified(LogicElement):
         """
 
     def logic(self, context):
-        request = context['.request']
+        request = context[".request"]
 
         if request.method not in ["GET", "HEAD"]:
             return
-        headers = context.set_new_call('.headers', dict)
+        headers = context.set_new_call(".headers", dict)
 
-        if self.has_parameter('time'):
+        if self.has_parameter("time"):
             _dt = self.time(context)
             dt = interface.unproxy(_dt)
             if not isinstance(dt, datetime):
-                self.throw('bad-value.time', "attribute 'time' should be a datetime object, not {}".format(context.to_expr(dt)))
+                self.throw(
+                    "bad-value.time",
+                    "attribute 'time' should be a datetime object, not {}".format(
+                        context.to_expr(dt)
+                    ),
+                )
             gmt_time = GMT.localize(dt)
-            modified_date = gmt_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
-            headers['Last-Modified'] = modified_date
+            modified_date = gmt_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+            headers["Last-Modified"] = modified_date
             if request.if_modified_since and gmt_time >= request.if_modified_since:
-                response = Response(status=http.StatusCode.not_modified,
-                                    headers=headers)
+                response = Response(
+                    status=http.StatusCode.not_modified, headers=headers
+                )
                 raise logic.EndLogic(response)
 
-        if self.has_parameter('etag'):
+        if self.has_parameter("etag"):
             etag = self.etag(context)
-            headers['ETag'] = etag
+            headers["ETag"] = etag
             if etag in request.if_none_match:
-                response = Response(status=http.StatusCode.not_modified,
-                                    headers=headers)
+                response = Response(
+                    status=http.StatusCode.not_modified, headers=headers
+                )
                 raise logic.EndLogic(response)

@@ -4,16 +4,14 @@ import postmarkup
 
 
 class FieldTag(postmarkup.TagBase):
-
     def render_open(self, parser, node_index):
         contents = self.get_contents(parser)
-        parser.tag_data['doc.' + self.name] = contents
+        parser.tag_data["doc." + self.name] = contents
         self.skip_contents(parser)
-        return ''
+        return ""
 
 
 class AsideTag(postmarkup.TagBase):
-
     def __init__(self, name):
         super(AsideTag, self).__init__(name)
 
@@ -21,7 +19,7 @@ class AsideTag(postmarkup.TagBase):
         return '<div class="aside">'
 
     def render_close(self, parser, node_index):
-        return '</div>'
+        return "</div>"
 
 
 doccode = postmarkup.create()
@@ -36,11 +34,10 @@ def render(code):
     body = doccode(code.strip(), paragraphs=True, tag_data=data)
     doc = {}
     for k, v in data.items():
-        if k.startswith('doc.'):
-            doc[k.split('.', 1)[-1]] = v
-    doc['body'] = body
+        if k.startswith("doc."):
+            doc[k.split(".", 1)[-1]] = v
+    doc["body"] = body
     return doc
-
 
 
 if __name__ == "__main__":

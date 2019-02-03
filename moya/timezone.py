@@ -11,7 +11,8 @@ common_timezones = pytz.common_timezones
 
 
 def _make_choice(t):
-    return t, t.replace('_', ' ').replace('/', ' / ')
+    return t, t.replace("_", " ").replace("/", " / ")
+
 
 common_timezones_choices = [_make_choice(t) for t in common_timezones]
 
@@ -20,15 +21,15 @@ def get_common_timezones_groups():
     regions = []
     region_map = {}
     for tz in common_timezones:
-        if '/' in tz:
-            region, label = tz.split('/', 1)
+        if "/" in tz:
+            region, label = tz.split("/", 1)
         else:
-            region = ''
+            region = ""
             label = tz
         if region not in region_map:
             regions.append(region)
             region_map[region] = []
-        region_map[region].append((tz, label.replace('_', ' ').replace('/', ' / ')))
+        region_map[region].append((tz, label.replace("_", " ").replace("/", " / ")))
     regions.sort()
     return [(r, region_map[r]) for r in regions]
 
@@ -36,7 +37,8 @@ def get_common_timezones_groups():
 def write_common_timezones(path):
     from json import dump
     import io
-    with io.open(path, 'wb') as f:
+
+    with io.open(path, "wb") as f:
         dump(get_common_timezones_groups(), f)
 
 
@@ -46,7 +48,7 @@ class Timezone(object):
         if isinstance(tz, Timezone):
             self.tz = tz.tz
         else:
-            if tz == 'auto':
+            if tz == "auto":
                 self.tz = get_localzone()
             else:
                 self.tz = pytz.timezone(tz or "UTC")

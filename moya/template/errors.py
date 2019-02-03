@@ -16,7 +16,10 @@ class MissingTemplateError(Exception):
 
     def __init__(self, path, diagnosis=None):
         self.path = path
-        self.diagnosis = diagnosis or """The referenced template doesn't exists in the templates filesystem. Run the following to see what templates are installed:\n\n **$ moya fs templates --tree**"""
+        self.diagnosis = (
+            diagnosis
+            or """The referenced template doesn't exists in the templates filesystem. Run the following to see what templates are installed:\n\n **$ moya fs templates --tree**"""
+        )
 
     def __str__(self):
         return 'Missing template "{}"'.format(self.path)
@@ -39,20 +42,18 @@ class RecursiveTemplateError(Exception):
         self.path = path
 
     def __str__(self):
-        return "Template '{}' has already been used in an extends directive".format(self.path)
+        return "Template '{}' has already been used in an extends directive".format(
+            self.path
+        )
 
 
 @implements_to_string
 class TemplateError(Exception):
     hide_py_traceback = True
 
-    def __init__(self,
-                 msg,
-                 path,
-                 lineno,
-                 diagnosis=None,
-                 original=None,
-                 trace_frames=None):
+    def __init__(
+        self, msg, path, lineno, diagnosis=None, original=None, trace_frames=None
+    ):
         self.msg = msg
         self.path = path
         self.lineno = lineno
@@ -122,6 +123,8 @@ class TokenizerError(Exception):
 
 class UnmatchedComment(TokenizerError):
     pass
+
+
 #
 # class UnmatchedComment(TokenizeError):
 #     def __init__(self, msg, lineno, start, end, diagnosis=None):
@@ -130,6 +133,7 @@ class UnmatchedComment(TokenizerError):
 #         self.start = start
 #         self.end = end
 #         self.diagnosis = diagnosis
+
 
 @implements_to_string
 class TagError(Exception):

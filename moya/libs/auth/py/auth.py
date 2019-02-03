@@ -7,6 +7,7 @@ from moya.compat import text_type, PY2, py2bytes
 import hashlib
 import random
 import time
+
 try:
     random = random.SystemRandom()
     using_sysrandom = True
@@ -32,9 +33,11 @@ else:
 UNUSABLE_PASSWORD = "!"
 
 
-def get_random_string(length=12,
-                      allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-                      secret=''):
+def get_random_string(
+    length=12,
+    allowed_chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    secret="",
+):
     """
     Returns a securely generated random string.
 
@@ -49,32 +52,28 @@ def get_random_string(length=12,
         # properties of the chosen random sequence slightly, but this
         # is better than absolute predictability.
         random.seed(
-            hashlib.sha256(
-                "%s%s%s" % (
-                    random.getstate(),
-                    time.time(),
-                    secret)
-            ).digest())
-    return ''.join([random.choice(allowed_chars) for i in range(length)])
+            hashlib.sha256("%s%s%s" % (random.getstate(), time.time(), secret)).digest()
+        )
+    return "".join([random.choice(allowed_chars) for i in range(length)])
 
 
 @moya.expose.macro("makesessionkey")
 def makesessionkey(app):
-    return get_random_string(secret=app.settings.get('secret', ''))
+    return get_random_string(secret=app.settings.get("secret", ""))
 
 
 @moya.expose.macro("hashpassword")
 def hashpassword(app, password):
     if password is None:
         return None
-    rounds = app.settings.get_int('rounds', 10000)
-    scheme = text_type(app.settings.get('scheme', 'pbkdf2_sha512'))
+    rounds = app.settings.get_int("rounds", 10000)
+    scheme = text_type(app.settings.get("scheme", "pbkdf2_sha512"))
     try:
-        password_hash = moya_pwd_context.encrypt(password,
-                                                 scheme=py2bytes(scheme),
-                                                 rounds=rounds)
+        password_hash = moya_pwd_context.encrypt(
+            password, scheme=py2bytes(scheme), rounds=rounds
+        )
     except Exception as e:
-        app.throw('moya.auth.password-hash-fail', text_type(e))
+        app.throw("moya.auth.password-hash-fail", text_type(e))
     return password_hash
 
 
@@ -85,6 +84,6 @@ def checkpassword(app, password, stored_password):
     try:
         passed = moya_pwd_context.verify(password, stored_password)
     except Exception:
-        app.log.exception('error when verifying password')
+        app.log.exception("error when verifying password")
         passed = False
     return passed

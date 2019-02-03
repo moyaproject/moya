@@ -27,6 +27,7 @@ from .. import __version__ as version
 from fs.opener import open_fs
 
 import logging
+
 logging.raiseExceptions = False
 
 
@@ -35,15 +36,16 @@ class NoProjectError(Exception):
 
 
 class Command(object):
-    description = ''
+    description = ""
 
     def __init__(self):
         self._console = None
         self.subcommands = {}
 
     def make_subcommands(self):
-        self.subcommands = {name: cls(self)
-                            for name, cls in SubCommandMeta.registry.items()}
+        self.subcommands = {
+            name: cls(self) for name, cls in SubCommandMeta.registry.items()
+        }
 
 
 class MoyaArgumentParser(argparse.ArgumentParser):
@@ -55,7 +57,9 @@ class MoyaArgumentParser(argparse.ArgumentParser):
 
             nearest = nearest_word(value, action.choices)
             if nearest:
-                msg = "invalid choice: '{}' (did you mean '{}')?\n".format(value, nearest)
+                msg = "invalid choice: '{}' (did you mean '{}')?\n".format(
+                    value, nearest
+                )
             else:
                 msg = "invalid choice: '{}'\n".format(value)
             self.print_usage()
@@ -85,32 +89,46 @@ To list all available commands for a given application, omit the libname:
     @property
     def console(self):
         if self._console is None:
-            color = self.moyarc.get_bool('console', 'color', True)
+            color = self.moyarc.get_bool("console", "color", True)
             self._console = Console(nocolors=not color)
         return self._console
 
     def get_default(self, name, default=None):
-        return self.moyarc.get('defaults', name, default)
+        return self.moyarc.get("defaults", name, default)
 
     def get_argparse(self):
-        parser = MoyaArgumentParser(prog=self.__class__.__name__.lower(),
-                                    description=getattr(self, '__doc__', ''),
-                                    formatter_class=argparse.RawDescriptionHelpFormatter,
-                                    epilog="Need help? http://moyaproject.com")
+        parser = MoyaArgumentParser(
+            prog=self.__class__.__name__.lower(),
+            description=getattr(self, "__doc__", ""),
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog="Need help? http://moyaproject.com",
+        )
 
-        parser.add_argument('-v', '--version', action='version', version=version)
-        parser.add_argument('-d', '--debug', dest="debug", action="store_true", default=False,
-                            help='enables debug output')
-        parser.add_argument('--logging', dest="logging", default="logging.ini", help="set logging file")
+        parser.add_argument("-v", "--version", action="version", version=version)
+        parser.add_argument(
+            "-d",
+            "--debug",
+            dest="debug",
+            action="store_true",
+            default=False,
+            help="enables debug output",
+        )
+        parser.add_argument(
+            "--logging", dest="logging", default="logging.ini", help="set logging file"
+        )
 
-        subparsers = parser.add_subparsers(title='available sub-commands',
-                                           dest="subcommand",
-                                           help="sub-command help")
+        subparsers = parser.add_subparsers(
+            title="available sub-commands", dest="subcommand", help="sub-command help"
+        )
 
-        for name, subcommand in sorted(self.subcommands.items(), key=lambda item: item[0]):
-            subparser = subparsers.add_parser(name,
-                                              help=subcommand.help,
-                                              description=getattr(subcommand, '__doc__', None))
+        for name, subcommand in sorted(
+            self.subcommands.items(), key=lambda item: item[0]
+        ):
+            subparser = subparsers.add_parser(
+                name,
+                help=subcommand.help,
+                description=getattr(subcommand, "__doc__", None),
+            )
             subcommand.add_arguments(subparser)
 
         return parser
@@ -118,11 +136,14 @@ To list all available commands for a given application, omit the libname:
     def get_settings(self):
         settings = self.args.settings
 
-        moya_service = os.environ.get('MOYA_SERVICE_PROJECT', None)
+        moya_service = os.environ.get("MOYA_SERVICE_PROJECT", None)
         if moya_service is not None and self.master_settings is not None:
-            settings = self.master_settings.get('service', 'ini', None)
+            settings = self.master_settings.get("service", "ini", None)
         if not settings:
-            settings = os.environ.get('MOYA_PROJECT_INI', None) or self.moyarc.get('defaults', 'ini', 'settings.ini').strip()
+            settings = (
+                os.environ.get("MOYA_PROJECT_INI", None)
+                or self.moyarc.get("defaults", "ini", "settings.ini").strip()
+            )
         if not settings:
             return []
         ini_list = [s.strip() for s in settings.splitlines() if s.strip()]
@@ -132,7 +153,7 @@ To list all available commands for a given application, omit the libname:
     def master_settings(self):
         if self._master_settings is not None:
             return self._master_settings
-        moya_service = os.environ.get('MOYA_SERVICE_PROJECT', None)
+        moya_service = os.environ.get("MOYA_SERVICE_PROJECT", None)
         if moya_service is None:
             self._master_settings = None
         else:
@@ -145,18 +166,24 @@ To list all available commands for a given application, omit the libname:
             return self._location
         location = None
         if self.master_settings:
-            location = self.master_settings.get('service', 'location', None)
-        location = self.args.location or location or os.environ.get('MOYA_PROJECT', None)
+            location = self.master_settings.get("service", "location", None)
+        location = (
+            self.args.location or location or os.environ.get("MOYA_PROJECT", None)
+        )
         if location is None:
-            location = './'
-        if location and '://' in location:
+            location = "./"
+        if location and "://" in location:
             return location
         try:
             location = get_moya_dir(location)
         except ValueError:
-            raise NoProjectError("Moya project directory not found, run this command from a project directory or specify --location")
+            raise NoProjectError(
+                "Moya project directory not found, run this command from a project directory or specify --location"
+            )
         if not is_moya_dir(location):
-            raise NoProjectError("Location is not a moya project (no 'moya' file found)")
+            raise NoProjectError(
+                "Location is not a moya project (no 'moya' file found)"
+            )
         self._location = location
         return location
 
@@ -177,7 +204,7 @@ To list all available commands for a given application, omit the libname:
 
     def run(self):
         try:
-            with io.open(os.path.expanduser("~/.moyarc"), 'rt') as f:
+            with io.open(os.path.expanduser("~/.moyarc"), "rt") as f:
                 self.moyarc = settings.SettingsContainer.read_from_file(f)
         except IOError:
             self.moyarc = settings.SettingsContainer()
@@ -186,17 +213,19 @@ To list all available commands for a given application, omit the libname:
             encoding = sys.stdin.encoding or locale.getdefaultlocale()[1]
         except:
             encoding = sys.getdefaultencoding()
-        argv = [(v.decode(encoding, 'replace') if not isinstance(v, text_type) else v)
-                for v in sys.argv]
+        argv = [
+            (v.decode(encoding, "replace") if not isinstance(v, text_type) else v)
+            for v in sys.argv
+        ]
 
-        if len(argv) > 1 and argv[1].count('#') == 1:
+        if len(argv) > 1 and argv[1].count("#") == 1:
             return self.project_invoke(argv[1])
 
         if len(argv) > 1 and argv[1] in all_subcommands:
-            importlib.import_module('.' + argv[1], 'moya.command.sub')
+            importlib.import_module("." + argv[1], "moya.command.sub")
         else:
             for name in all_subcommands:
-                importlib.import_module('.' + name, 'moya.command.sub')
+                importlib.import_module("." + name, "moya.command.sub")
 
         self.make_subcommands()
 
@@ -224,7 +253,7 @@ To list all available commands for a given application, omit the libname:
                 self.console.div()
             return -1
         except Exception as e:
-            if self.args.debug and hasattr(e, '__moyaconsole__'):
+            if self.args.debug and hasattr(e, "__moyaconsole__"):
                 e.__moyaconsole__(self.console)
             else:
                 if self.args.debug:
@@ -237,23 +266,67 @@ To list all available commands for a given application, omit the libname:
 
     def project_invoke(self, element_ref, application=None, root_vars=None):
 
-        parser = argparse.ArgumentParser(prog=self.__class__.__name__.lower() + " " + element_ref,
-                                         description="Call command %s in moya project" % element_ref,
-                                         add_help=False)
+        parser = argparse.ArgumentParser(
+            prog=self.__class__.__name__.lower() + " " + element_ref,
+            description="Call command %s in moya project" % element_ref,
+            add_help=False,
+        )
 
-        parser.add_argument('-h', '--help', dest="help", action="store_true", default=False,
-                            help="print help information")
-        parser.add_argument('-d', '--debug', dest="debug", action="store_true", default=False,
-                            help='enables debug output')
-        parser.add_argument('-V', '--verbose', dest="verbose", action="store_true", default=False,
-                            help='enables verbose output')
-        parser.add_argument('--logging', dest="logging", default=None, help="path to logging configuration file", metavar="LOGGINGINI")
-        parser.add_argument("-l", "--location", dest="location", default=None, metavar="PATH",
-                            help="location of the Moya server code")
-        parser.add_argument("-i", "--ini", dest="settings", default=None, metavar="SETTINGSPATH",
-                            help="path to project settings file")
-        parser.add_argument("-b", "--breakpoint", dest="breakpoint", action="store_true", default=False,
-                            help="Start debugging at first element")
+        parser.add_argument(
+            "-h",
+            "--help",
+            dest="help",
+            action="store_true",
+            default=False,
+            help="print help information",
+        )
+        parser.add_argument(
+            "-d",
+            "--debug",
+            dest="debug",
+            action="store_true",
+            default=False,
+            help="enables debug output",
+        )
+        parser.add_argument(
+            "-V",
+            "--verbose",
+            dest="verbose",
+            action="store_true",
+            default=False,
+            help="enables verbose output",
+        )
+        parser.add_argument(
+            "--logging",
+            dest="logging",
+            default=None,
+            help="path to logging configuration file",
+            metavar="LOGGINGINI",
+        )
+        parser.add_argument(
+            "-l",
+            "--location",
+            dest="location",
+            default=None,
+            metavar="PATH",
+            help="location of the Moya server code",
+        )
+        parser.add_argument(
+            "-i",
+            "--ini",
+            dest="settings",
+            default=None,
+            metavar="SETTINGSPATH",
+            help="path to project settings file",
+        )
+        parser.add_argument(
+            "-b",
+            "--breakpoint",
+            dest="breakpoint",
+            action="store_true",
+            default=False,
+            help="Start debugging at first element",
+        )
 
         args, remaining = parser.parse_known_args(sys.argv[2:])
         self.args = args
@@ -277,9 +350,9 @@ To list all available commands for a given application, omit the libname:
 
         if application is None:
             try:
-                application = WSGIApplication(self.location_fs,
-                                              self.get_settings(),
-                                              disable_autoreload=True)
+                application = WSGIApplication(
+                    self.location_fs, self.get_settings(), disable_autoreload=True
+                )
             except Exception as e:
                 self.console.exception(e)
                 return -1
@@ -289,12 +362,12 @@ To list all available commands for a given application, omit the libname:
         application.populate_context(context)
         set_dynamic(context)
         # Ignore console settings for commands
-        context['.console'] = self.console
+        context[".console"] = self.console
 
         if root_vars is not None:
             context.root.update(root_vars)
 
-        if element_ref.endswith('#'):
+        if element_ref.endswith("#"):
             app_name = element_ref[:-1]
             try:
                 app = archive.find_app(app_name)
@@ -302,13 +375,19 @@ To list all available commands for a given application, omit the libname:
                 self.error("No app called '%s' -- try 'moya apps'" % app_name)
                 return -1
             commands = []
-            for element in app.lib.get_elements_by_type('command'):
-                commands.append(("moya " + element_ref + element.libname, element.synopsis(context)))
+            for element in app.lib.get_elements_by_type("command"):
+                commands.append(
+                    ("moya " + element_ref + element.libname, element.synopsis(context))
+                )
             if not commands:
                 self.console.text("No commands available in %s" % app)
                 return 0
             commands.sort()
-            self.console.text("%s command(s) available in %s" % (len(commands), app), bold=True, fg="yellow")
+            self.console.text(
+                "%s command(s) available in %s" % (len(commands), app),
+                bold=True,
+                fg="yellow",
+            )
             if commands:
                 self.console.table(commands, header_row=("command", "synopsis"))
             return 0
@@ -316,12 +395,20 @@ To list all available commands for a given application, omit the libname:
         try:
             app, command_element = archive.get_app_element(element_ref)
         except errors.UnknownAppError:
-            appname = element_ref.partition('#')[0]
-            self.error("No app called '{}' -- try 'moya apps' to list available applications".format(appname))
+            appname = element_ref.partition("#")[0]
+            self.error(
+                "No app called '{}' -- try 'moya apps' to list available applications".format(
+                    appname
+                )
+            )
             return -1
         except ElementNotFoundError:
-            appname = element_ref.partition('#')[0]
-            self.error("Command '{}' not found -- try 'moya {}#' to list available commands ".format(element_ref, appname))
+            appname = element_ref.partition("#")[0]
+            self.error(
+                "Command '{}' not found -- try 'moya {}#' to list available commands ".format(
+                    element_ref, appname
+                )
+            )
             return -1
         synopsis = command_element.synopsis(context)
 
@@ -336,22 +423,16 @@ To list all available commands for a given application, omit the libname:
 
         ret = None
         try:
-            context.root['server'] = application.server
+            context.root["server"] = application.server
             archive.populate_context(context)
             with pilot.manage(context):
                 if self.args.breakpoint:
-                    ret = archive.debug_call(element_ref,
-                                             context,
-                                             app,
-                                             args=vars(args))
+                    ret = archive.debug_call(element_ref, context, app, args=vars(args))
                 else:
-                    ret = archive.call(element_ref,
-                                       context,
-                                       app,
-                                       args=vars(args))
-                for thread in context.get('._threads', []):
+                    ret = archive.call(element_ref, context, app, args=vars(args))
+                for thread in context.get("._threads", []):
                     thread.wait()
-                context.safe_delete('._threads')
+                context.safe_delete("._threads")
                 db.commit_sessions(context)
 
         # except LogicError, logic_error:
@@ -361,11 +442,11 @@ To list all available commands for a given application, omit the libname:
         #         self.console.error(unicode(logic_error))
 
         except KeyboardInterrupt:
-            self.console.nl().div('user exit')
+            self.console.nl().div("user exit")
             ret = -2
 
         except Exception as e:
-            if hasattr(e, '__moyaconsole__'):
+            if hasattr(e, "__moyaconsole__"):
                 e.__moyaconsole__(self.console)
             else:
                 if self.args.debug:

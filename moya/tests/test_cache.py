@@ -14,7 +14,7 @@ except:
     pylibmc = None
 
 
-@attr('slow')
+@attr("slow")
 class CacheTests(object):
 
     long_key = "longkey" * 100
@@ -42,11 +42,11 @@ class CacheTests(object):
         self.assertEqual(self.cache.get("key", None), value)
         self.assertEqual(self.cache.get("nokey", None), None)
 
-        self.cache.set('key2', b'ZZZZ')
-        self.assertEqual(self.cache.get('key2'), b'ZZZZ')
+        self.cache.set("key2", b"ZZZZ")
+        self.assertEqual(self.cache.get("key2"), b"ZZZZ")
 
-        self.cache.set('key2', b'XXXX')
-        self.assertEqual(self.cache.get('key2'), b'XXXX')
+        self.cache.set("key2", b"XXXX")
+        self.assertEqual(self.cache.get("key2"), b"XXXX")
 
     def test_set_time(self):
         """Test set with expire time"""
@@ -96,15 +96,13 @@ class NamespacesTests(object):
 
 
 class TestDictCache(unittest.TestCase, CacheTests):
-
     def setUp(self):
         self.cache = cache.dictcache.DictCache("test", "")
 
 
 class TestMemoryCache(unittest.TestCase, CacheTests):
-
     def setUp(self):
-        self.cache = cache.memorycache.MemoryCache('test', '')
+        self.cache = cache.memorycache.MemoryCache("test", "")
 
 
 class TestFileCache(unittest.TestCase, CacheTests, NamespacesTests):
@@ -146,7 +144,9 @@ class TestDictCompressCache(unittest.TestCase, CacheTests):
     __test__ = True
 
     def setUp(self):
-        self.cache = cache.dictcache.DictCache("test", "", compress=True, compress_min=1)
+        self.cache = cache.dictcache.DictCache(
+            "test", "", compress=True, compress_min=1
+        )
 
 
 class TestDebugWrapper(unittest.TestCase, CacheTests):

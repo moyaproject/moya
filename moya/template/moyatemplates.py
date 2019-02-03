@@ -2,7 +2,13 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from ..context import Context, Expression, FalseExpression, TrueExpression, DefaultExpression
+from ..context import (
+    Context,
+    Expression,
+    FalseExpression,
+    TrueExpression,
+    DefaultExpression,
+)
 from ..context.errors import SubstitutionError
 from .. import interface
 from ..markup import Markup
@@ -14,7 +20,13 @@ from ..render import render_object
 from ..context.missing import is_missing
 from ..urlmapper import RouteError
 from ..application import Application
-from ..compat import text_type, string_types, implements_to_string, with_metaclass, implements_bool
+from ..compat import (
+    text_type,
+    string_types,
+    implements_to_string,
+    with_metaclass,
+    implements_bool,
+)
 from ..tools import make_cache_key, nearest_word
 from .. import tools
 from ..compat import urlencode, PY2
@@ -33,14 +45,12 @@ import contextlib
 import json
 
 import logging
-log = logging.getLogger('moya.template')
 
-TranslatableText = namedtuple("TranslatableText",
-                              ["text",
-                               "location",
-                               "comment",
-                               "plural",
-                               "context"])
+log = logging.getLogger("moya.template")
+
+TranslatableText = namedtuple(
+    "TranslatableText", ["text", "location", "comment", "plural", "context"]
+)
 
 
 class MoyaTemplateEngine(TemplateEngine):
@@ -49,6 +59,7 @@ class MoyaTemplateEngine(TemplateEngine):
     def __init__(self, archive, fs, settings):
         super(MoyaTemplateEngine, self).__init__(archive, fs, settings)
         from .environment import Environment
+
         self.env = Environment(fs, archive)
 
     def __repr__(self):
@@ -88,11 +99,9 @@ class MoyaTemplateEngine(TemplateEngine):
         if template is None:
             raise errors.MissingTemplateError(paths[-1])
 
-        return self.render_template(template,
-                                    data,
-                                    base_context=base_context,
-                                    app=app,
-                                    **tdata)
+        return self.render_template(
+            template, data, base_context=base_context, app=app, **tdata
+        )
 
     def render_template(self, template, data, base_context=None, **tdata):
         if base_context is None:
@@ -100,15 +109,14 @@ class MoyaTemplateEngine(TemplateEngine):
 
         data = data.copy()
         data.update(tdata)
-        app = tdata.pop('app')
-        return template.render(data,
-                               context=base_context,
-                               environment=self.env,
-                               app=app)
+        app = tdata.pop("app")
+        return template.render(
+            data, context=base_context, environment=self.env, app=app
+        )
 
 
 class _TemplateStackFrame(interface.AttributeExposer):
-    __moya_exposed_attributes__ = ['app', 'data']
+    __moya_exposed_attributes__ = ["app", "data"]
 
     def __init__(self, app, data=None):
         self.app = app
@@ -122,7 +130,6 @@ class _TemplateStackFrame(interface.AttributeExposer):
 
 @implements_to_string
 class _TemplateFrameContextManager(object):
-
     def __init__(self, template, context, data, app=None):
         self.template = template
         self.context = context
@@ -130,9 +137,7 @@ class _TemplateFrameContextManager(object):
         self.app = app
 
     def __enter__(self):
-        stack_frame = self.template.push_frame(self.context,
-                                               self.app,
-                                               data=self.data)
+        stack_frame = self.template.push_frame(self.context, self.app, data=self.data)
         return stack_frame
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -147,7 +152,7 @@ class NodeMeta(type):
 
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
-        if getattr(new_class, 'tag_name', ''):
+        if getattr(new_class, "tag_name", ""):
             cls.registry[new_class.tag_name] = new_class
 
         return new_class
@@ -158,7 +163,7 @@ class NodeMeta(type):
 class TagParser(object):
     """Parses the contents of a template tag"""
 
-    re_string = re.compile('\"(.*?)\"')
+    re_string = re.compile('"(.*?)"')
 
     def __init__(self, node, text, node_index):
         self.node = node
@@ -166,7 +171,7 @@ class TagParser(object):
         self.node_index = node_index
 
     def __repr__(self):
-        return 'TagParser(%r, %r)' % (self.node, self.text)
+        return "TagParser(%r, %r)" % (self.node, self.text)
 
     def __str__(self):
         return self.text
@@ -175,18 +180,17 @@ class TagParser(object):
         return truth(self.text.strip())
 
     def syntax_error(self, msg, diagnosis=None):
-        raise errors.TagSyntaxError(msg,
-                                    self.node,
-                                    *self.node.location,
-                                    diagnosis=diagnosis)
+        raise errors.TagSyntaxError(
+            msg, self.node, *self.node.location, diagnosis=diagnosis
+        )
 
     def consume(self, count):
         self.text = self.text[count:]
 
     def get_expression(self):
         brackets = False
-        if self.text.lstrip().startswith('('):
-            self.text = self.text.split('(', 1)[1]
+        if self.text.lstrip().startswith("("):
+            self.text = self.text.split("(", 1)[1]
             brackets = True
         try:
             expression, text = Expression.scan(self.text)
@@ -194,8 +198,8 @@ class TagParser(object):
             self.syntax_error("expression error ({})".format(text_type(e)))
         if brackets:
             text = text.lstrip()
-            if not text.startswith(')'):
-                self.syntax_error('expected end parenthesis')
+            if not text.startswith(")"):
+                self.syntax_error("expected end parenthesis")
             text = text[1:]
         self.text = text
         if not expression:
@@ -207,13 +211,13 @@ class TagParser(object):
         if text.startswith(("'", '"')):
             quote = text[0]
             try:
-                word = text[:text.index(quote, 1) + 1]
+                word = text[: text.index(quote, 1) + 1]
             except ValueError:
-                self.syntax_error('expected end quote')
-            self.text = text[len(word) + 1:]
+                self.syntax_error("expected end quote")
+            self.text = text[len(word) + 1 :]
             word = word[1:-1]
         else:
-            word, _, text = self.text.strip().partition(' ')
+            word, _, text = self.text.strip().partition(" ")
             self.text = text.strip()
         return word.strip() or None
 
@@ -231,7 +235,7 @@ class TagParser(object):
         word = self.get_word()
         if word is None:
             words_list = ", ".join(w.upper() for w in words)
-            self.syntax_error("expected %s" % (words_list or 'a word'))
+            self.syntax_error("expected %s" % (words_list or "a word"))
         elif words and word not in words:
             words_list = ", ".join("'%s'" % w for w in words)
             self.syntax_error("expected %s, not '%s'" % (words_list, word))
@@ -243,7 +247,9 @@ class TagParser(object):
             return word
         if word not in words:
             words_list = ",".join("'%s'" % w for w in words)
-            self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
+            self.syntax_error(
+                "expected %s or end of tag, not '%s'" % (words_list, word)
+            )
         return word
 
     def expect(self, flags, words):
@@ -261,7 +267,9 @@ class TagParser(object):
                 continue
             if word not in words:
                 words_list = ", ".join("'%s'" % w for w in words)
-                self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
+                self.syntax_error(
+                    "expected %s or end of tag, not '%s'" % (words_list, word)
+                )
             expression = self.expect_expression()
             map[word] = expression
             words.remove(word)
@@ -276,7 +284,9 @@ class TagParser(object):
                 break
             if word not in words:
                 words_list = ", ".join("'%s'" % w for w in words)
-                self.syntax_error("expected %s or end of tag, not '%s'" % (words_list, word))
+                self.syntax_error(
+                    "expected %s or end of tag, not '%s'" % (words_list, word)
+                )
             expression = self.expect_expression()
             map[word] = expression
             words.remove(word)
@@ -327,7 +337,7 @@ class NodeType(object):
 
     @property
     def code(self):
-        return getattr(self.template, 'source', None)
+        return getattr(self.template, "source", None)
 
     def template_app(self, archive, default):
         if self.lib is None:
@@ -339,9 +349,9 @@ class NodeType(object):
 
     def __repr__(self):
         if self.extra:
-            return '{%% %s %s %%}' % (self.name, self.extra)
+            return "{%% %s %s %%}" % (self.name, self.extra)
         else:
-            return '{%% %s %%}' % (self.name,)
+            return "{%% %s %%}" % (self.name,)
 
     def process_token(self, token, text, token_text):
         return False
@@ -372,14 +382,16 @@ class NodeType(object):
         out_nodes = [nodes.pop(0)]
         append = out_nodes.append
         for node in nodes:
-            if isinstance(node, _string_types) and isinstance(out_nodes[-1], _string_types):
+            if isinstance(node, _string_types) and isinstance(
+                out_nodes[-1], _string_types
+            ):
                 out_nodes[-1] += node
             else:
                 append(node)
         return out_nodes
 
     def _parse_tag_name(self, t):
-        return t.strip().partition(' ')[0].replace('-', '')
+        return t.strip().partition(" ")[0].replace("-", "")
 
     def finalize(self, environment, template):
         self.children = self._combine_text_nodes(self.children)
@@ -390,13 +402,13 @@ class NodeType(object):
         print(indent + "{%% %s %s %%}" % (self.name, self.extra))
         for child in self.children:
             if isinstance(child, string_types):
-                print('%s%s' % (tab * (level + 1), child))
+                print("%s%s" % (tab * (level + 1), child))
             else:
                 child.describe(level + 1)
-                print('%s%s' % (tab * (level + 1), "{% end %}"))
+                print("%s%s" % (tab * (level + 1), "{% end %}"))
 
     def get_app(self, context):
-        return context.get('._t.app', None)
+        return context.get("._t.app", None)
 
     def render_contents(self, environment, context, template, text_escape):
         with template.block(context, self) as frame:
@@ -425,7 +437,7 @@ class MinifyCSSNode(Node):
     def on_create(self, environment, parser):
         self.type_expression = parser.expect_expression()
         expression_map = parser.expect_word_expression_map("if")
-        self.if_expression = expression_map.get('if', TrueExpression())
+        self.if_expression = expression_map.get("if", TrueExpression())
         parser.expect_end()
 
     def render(self, env, context, template, text_escape):
@@ -434,23 +446,27 @@ class MinifyCSSNode(Node):
             return self.render_contents(env, context, template, text_escape)
 
         minify_type = self.type_expression.eval(context)
-        if minify_type not in ('css', 'js'):
-            self.render_error('unknown minify type ({})'.format(context.to_expr(minify_type)))
+        if minify_type not in ("css", "js"):
+            self.render_error(
+                "unknown minify type ({})".format(context.to_expr(minify_type))
+            )
 
-        if minify_type == 'css':
+        if minify_type == "css":
             css = self.render_contents(env, context, template, text_escape)
             from csscompressor import compress
+
             try:
                 return compress(css)
             except Exception as error:
-                self.render_error('css minify failed; {}'.format(error))
-        elif minify_type == 'js':
+                self.render_error("css minify failed; {}".format(error))
+        elif minify_type == "js":
             js = self.render_contents(env, context, template, text_escape)
             from jsmin import jsmin
+
             try:
                 return jsmin(js)
             except Exception as error:
-                self.render_error('js minify failed; {}'.format(error))
+                self.render_error("js minify failed; {}".format(error))
 
 
 class ConsoleNode(Node):
@@ -464,8 +480,9 @@ class ConsoleNode(Node):
     def render(self, environment, context, template, text_escape):
         obj = self.expression.eval(context)
         from .. import pilot
+
         pilot.console.obj(context, obj)
-        return ''
+        return ""
 
 
 class ConsoleRenderNode(Node):
@@ -474,19 +491,20 @@ class ConsoleRenderNode(Node):
 
     def on_create(self, environment, parser):
         self.expression = parser.expect_expression()
-        options_map = parser.expect_word_expression_map('width')
-        self.width = options_map.get('width', DefaultExpression(100))
+        options_map = parser.expect_word_expression_map("width")
+        self.width = options_map.get("width", DefaultExpression(100))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         from ..console import Console
+
         obj = self.expression.eval(context)
         try:
             width = int(self.width.eval(context))
         except:
-            self.render_error('width should be an integer')
+            self.render_error("width should be an integer")
         if width < 10:
-            self.render_error('width is too small')
+            self.render_error("width is too small")
         console = Console(html=True, width=width)
         console.obj(context, obj)
         html = console.get_text()
@@ -498,10 +516,12 @@ class LoremNode(Node):
     auto_close = True
 
     def on_create(self, environment, parser):
-        self.type = parser.expect_word('p', 'paragraphs', 's', 'sentences', 'w', 'words', 't', 'title')
+        self.type = parser.expect_word(
+            "p", "paragraphs", "s", "sentences", "w", "words", "t", "title"
+        )
         self.count = parser.expect_expression()
-        offset_map = parser.expect_word_expression_map('offset')
-        self.offset = offset_map.get('offset', DefaultExpression(0))
+        offset_map = parser.expect_word_expression_map("offset")
+        self.offset = offset_map.get("offset", DefaultExpression(0))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -510,20 +530,20 @@ class LoremNode(Node):
         try:
             count = int(count)
         except:
-            self.render_error('count should be an integer')
+            self.render_error("count should be an integer")
 
         try:
             offset = int(offset)
         except:
-            self.render_error('offset should be an integer')
+            self.render_error("offset should be an integer")
 
-        if self.type in ('p', 'paragraphs'):
+        if self.type in ("p", "paragraphs"):
             return lorem.paragraphs(count, offset)
-        elif self.type in('s', 'sentences'):
+        elif self.type in ("s", "sentences"):
             return lorem.sentences(count, offset)
-        elif self.type in ('w', 'words'):
+        elif self.type in ("w", "words"):
             return lorem.words(count, offset)
-        elif self.type in ('t', 'title'):
+        elif self.type in ("t", "title"):
             return lorem.title(count, offset)
 
 
@@ -538,6 +558,7 @@ class InspectNode(Node):
     def render(self, environment, context, template, text_escape):
         obj = self.expression.eval(context)
         from ..console import Console
+
         c = Console(nocolors=True, text=True, width=120)
         text = c.obj(context, obj).get_text()
         html = "<pre>\n{}</pre>".format(escape(text))
@@ -546,6 +567,7 @@ class InspectNode(Node):
 
 class EscapeNode(Node):
     """Escape enclosed text"""
+
     tag_name = "escape"
 
     # def on_create(self, environment, parser):
@@ -563,12 +585,15 @@ class EscapeNode(Node):
     #     self.text = ''.join(self.text)
 
     def render(self, environment, context, template, text_escape):
-        return text_escape(self.render_contents(environment, context, template, text_escape))
-        #return text_escape(text)
+        return text_escape(
+            self.render_contents(environment, context, template, text_escape)
+        )
+        # return text_escape(text)
 
 
 class _EscapeCodeWrap(Node):
     """Shim to escape all html from a node"""
+
     def __init__(self, node):
         self._node = node
 
@@ -582,15 +607,19 @@ class _EscapeCodeWrap(Node):
 
 class CodeNode(Node):
     """render enclosed code as escaped code"""
+
     tag_name = "code"
 
     def render(self, environment, context, template, text_escape):
-        yield iter(child if isinstance(child, text_type) else _EscapeCodeWrap(child)
-                   for child in self.children)
+        yield iter(
+            child if isinstance(child, text_type) else _EscapeCodeWrap(child)
+            for child in self.children
+        )
 
 
 class PremailerNode(Node):
     """Transform HTML to be suitable for email clients"""
+
     tag_name = "premailer"
 
     def render(self, environment, context, template, text_escape):
@@ -601,12 +630,16 @@ class PremailerNode(Node):
             import premailer
         except ImportError:
             self.render_error("{% premailer %} requires 'premailer' Python module")
-        base_url = context.get('.request.url', None)
+        base_url = context.get(".request.url", None)
         try:
             html = premailer.transform(html, base_url=base_url)
         except Exception as e:
-            log.exception('premailer transform failed')
-            self.render_error("failed to post-process html for email ({}), please see logs".format(text_type(e)))
+            log.exception("premailer transform failed")
+            self.render_error(
+                "failed to post-process html for email ({}), please see logs".format(
+                    text_type(e)
+                )
+            )
         yield html
 
 
@@ -619,14 +652,16 @@ class BlockNode(Node):
 
     def on_create(self, environment, parser):
         self.block_name = parser.expect_word()
-        self.block_type = parser.expect_word_or_end("replace", "append", "prepend") or "replace"
+        self.block_type = (
+            parser.expect_word_or_end("replace", "append", "prepend") or "replace"
+        )
         parser.expect_end()
         self.template.add_block(self.block_name, self)
 
     def render(self, environment, context, template, text_escape):
         nodes = template.get_render_block(environment, self.block_name)
-        #with template.block(context, self):
-        #with template.block(context, self) as frame:
+        # with template.block(context, self):
+        # with template.block(context, self) as frame:
         yield chain.from_iterable(node.children for node in nodes)
 
 
@@ -644,7 +679,7 @@ class DefNode(Node):
         self.template.data["defs"][self.def_name] = self
 
     def render(self, environment, context, template, text_escape):
-        return ''
+        return ""
 
 
 class CallNode(Node):
@@ -655,7 +690,7 @@ class CallNode(Node):
         self.only = False
         self.name_expression = parser.expect_expression()
         self.with_expression = None
-        words = ['with', 'only']
+        words = ["with", "only"]
         while words:
             word = parser.expect_word_or_end(*words)
             if word is None:
@@ -671,12 +706,14 @@ class CallNode(Node):
         call_name = self.name_expression.eval(context)
 
         for data in reversed(self.template.get_extended_data(environment)):
-            node = data['defs'].get(call_name, None)
+            node = data["defs"].get(call_name, None)
             if node is not None:
                 break
 
         if node is None:
-            self.render_error("template function '%s' has not yet been defined" % call_name)
+            self.render_error(
+                "template function '%s' has not yet been defined" % call_name
+            )
         if self.with_expression is not None:
             with_values = self.with_expression.eval(context)
             if not isinstance(with_values, (list, tuple)):
@@ -684,16 +721,19 @@ class CallNode(Node):
             with_frame = {}
 
             for value in with_values:
-                if hasattr(value, 'items'):
+                if hasattr(value, "items"):
                     with_frame.update(value)
                 else:
-                    self.render_error("{% with %} takes a key/value pair or a mapping (not %r)" % value)
+                    self.render_error(
+                        "{% with %} takes a key/value pair or a mapping (not %r)"
+                        % value
+                    )
 
             if self.only:
                 with template.frame(context, with_frame):
                     yield iter(node.children)
             else:
-                scopes = context.set_new('._scopes', [])
+                scopes = context.set_new("._scopes", [])
                 index = "._scopes.%i" % len(scopes)
                 scopes.append(with_frame)
                 try:
@@ -761,13 +801,17 @@ class WithNode(Node):
             with_values = [with_values]
         with_frame = {}
         for value in with_values:
-            if hasattr(value, 'items'):
+            if hasattr(value, "items"):
                 for k, v in value.items():
                     with_frame[k] = v
             else:
-                self.render_error("{{% with %}} takes a key/value pair or a mapping (not {})".format(context.to_expr(value)))
+                self.render_error(
+                    "{{% with %}} takes a key/value pair or a mapping (not {})".format(
+                        context.to_expr(value)
+                    )
+                )
 
-        scopes = context.set_new_call('._scopes', list)
+        scopes = context.set_new_call("._scopes", list)
         index = "._scopes.%i" % len(scopes)
         try:
             scopes.append(with_frame)
@@ -804,12 +848,14 @@ class ElifNode(Node):
 
 class _EmptySequence(object):
     """An always empty iterator"""
+
     def next(self):
         raise StopIteration
 
 
 class WhileNode(Node):
     """A (probably inadvisable) while loop."""
+
     tag_name = "while"
 
     def on_create(self, environment, parser):
@@ -854,12 +900,12 @@ class ForNode(Node):
         match = parser.expect_re(self._re_for, "<items list> in")
         assign = match.groups()[0]
         self.sequence = parser.expect_expression()
-        self.assign = [t.strip() for t in assign.split(',')]
+        self.assign = [t.strip() for t in assign.split(",")]
 
         exp_map = parser.expect(["reverse"], ["if", "sort"])
-        self.if_expression = exp_map.get('if', TrueExpression())
-        self.sort_expression = exp_map.get('sort', None)
-        self.reverse_expression = exp_map.get('reverse', FalseExpression())
+        self.if_expression = exp_map.get("if", TrueExpression())
+        self.sort_expression = exp_map.get("sort", None)
+        self.reverse_expression = exp_map.get("reverse", FalseExpression())
 
     def render(self, environment, context, template, text_escape):
         sequence = self.sequence.eval(context)
@@ -873,62 +919,69 @@ class ForNode(Node):
         if self.sort_expression is not None:
             reverse = bool(self.reverse_expression.eval(context))
             sort_function = self.sort_expression.make_function(context=context)
-            seq_iter = iter(sorted((v for v in seq_iter),
-                                   key=sort_function.get_scope_callable(context),
-                                   reverse=reverse))
+            seq_iter = iter(
+                sorted(
+                    (v for v in seq_iter),
+                    key=sort_function.get_scope_callable(context),
+                    reverse=reverse,
+                )
+            )
 
         if_eval = self.if_expression.eval
 
-        for_stack = context.set_new('._for_stack', [])
-        forloop = {'first': True, 'last': False}
-        for_scope = {'forloop': forloop}
+        for_stack = context.set_new("._for_stack", [])
+        forloop = {"first": True, "last": False}
+        for_scope = {"forloop": forloop}
         for_stack.append(for_scope)
 
-        context['._for'] = for_stack[-1]
+        context["._for"] = for_stack[-1]
         try:
             empty = True
-            with context.scope('._for'):
+            with context.scope("._for"):
                 context_set = for_scope.__setitem__
                 if len(assign) == 1:
                     assign = assign[0]
                     value = next(seq_iter, _last_value)
                     while value is not _last_value:
                         next_value = next(seq_iter, _last_value)
-                        forloop['last'] = next_value is _last_value
+                        forloop["last"] = next_value is _last_value
                         context_set(assign, value)
                         if if_eval(context):
                             empty = False
                             yield iter(children)
-                            forloop['first'] = False
+                            forloop["first"] = False
                         value = next_value
                 else:
                     value = next(seq_iter, _last_value)
                     while value is not _last_value:
                         next_value = next(seq_iter, _last_value)
-                        forloop['last'] = next_value is _last_value
+                        forloop["last"] = next_value is _last_value
                         for name, subvalue in zip(assign, value):
                             context_set(name, subvalue)
                         if if_eval(context):
                             empty = False
                             yield iter(children)
-                            forloop['first'] = False
+                            forloop["first"] = False
                         value = next_value
             if empty and self.empty_children:
                 yield iter(self.empty_children)
 
         except:
-            self.render_error('unable to iterate over {}'.format(context.to_expr(sequence)))
+            self.render_error(
+                "unable to iterate over {}".format(context.to_expr(sequence))
+            )
 
         finally:
             for_stack.pop()
             if for_stack:
-                context['._for'] = for_stack[-1]
+                context["._for"] = for_stack[-1]
             else:
-                context.safe_delete('._for')
+                context.safe_delete("._for")
 
 
 class EmitNode(Node):
     """Emit raw unescaped text """
+
     tag_name = "emit"
     auto_close = True
 
@@ -942,6 +995,7 @@ class EmitNode(Node):
 
 class ExtendsNode(Node):
     """Extends a base template"""
+
     tag_name = "extends"
     auto_close = True
     invisible = True
@@ -949,14 +1003,16 @@ class ExtendsNode(Node):
     def on_create(self, environment, parser):
         base_path = dirname(self.template.raw_path)
         path = parser.expect_word()
-        word = parser.expect_word_or_end('from')
+        word = parser.expect_word_or_end("from")
         lib = self.lib
 
-        if word == 'from':
+        if word == "from":
             app_lib = parser.expect_word()
             if environment.archive is not None:
                 try:
-                    path = environment.archive.resolve_template_path(path, app_lib, base_path=base_path)
+                    path = environment.archive.resolve_template_path(
+                        path, app_lib, base_path=base_path
+                    )
                     lib = environment.archive.get_lib(app_lib)
                 except AppError as e:
                     self.render_error(text_type(e))
@@ -970,6 +1026,7 @@ class ExtendsNode(Node):
 
 class RenderNode(Node):
     """Renders an object"""
+
     tag_name = "render"
     auto_close = True
 
@@ -980,16 +1037,16 @@ class RenderNode(Node):
         self.with_expression = DefaultExpression(None)
         self.render_expression = parser.expect_expression()
         while 1:
-            word = parser.expect_word_or_end('to', 'set', 'with', 'unique')
+            word = parser.expect_word_or_end("to", "set", "with", "unique")
             if word is None:
                 break
-            if word == 'to':
+            if word == "to":
                 self.target_expression = parser.expect_expression()
-            elif word == 'set':
+            elif word == "set":
                 self.options_expression = parser.expect_expression()
-            elif word == 'with':
+            elif word == "with":
                 self.with_expression = parser.expect_expression()
-            elif word == 'unique':
+            elif word == "unique":
                 self.unique = True
         parser.expect_end()
 
@@ -1001,14 +1058,12 @@ class RenderNode(Node):
         target = self.target_expression.eval(context)
         with_ = self.with_expression.eval(context)
         if with_ is not None:
-            options['with'] = with_
-        options['unique'] = self.unique
+            options["with"] = with_
+        options["unique"] = self.unique
         try:
-            yield render_object(render_obj,
-                                environment.archive,
-                                context,
-                                target=target,
-                                options=options)
+            yield render_object(
+                render_obj, environment.archive, context, target=target, options=options
+            )
         except errors.MissingTemplateError as e:
             self.render_error('Missing template: "%s"' % e.path, original=e)
         except errors.TagError as e:
@@ -1026,12 +1081,12 @@ class RenderAllNode(Node):
         self.render_expression = parser.expect_expression()
         self.with_expression = DefaultExpression({})
         while 1:
-            word = parser.expect_word_or_end('to', 'set', "unique", "with")
+            word = parser.expect_word_or_end("to", "set", "unique", "with")
             if word is None:
                 break
-            if word == 'to':
+            if word == "to":
                 self.target_expression = parser.expect_expression()
-            elif word == 'set':
+            elif word == "set":
                 self.options_expression = parser.expect_expression()
             elif word == "unique":
                 self.unique = True
@@ -1043,20 +1098,29 @@ class RenderAllNode(Node):
         render_sequence = self.render_expression.eval(context)
         return render_sequence
 
-    def render(self, environment, context, template, text_escape, _as_dict=tools.as_dict, _render_object=render_object):
+    def render(
+        self,
+        environment,
+        context,
+        template,
+        text_escape,
+        _as_dict=tools.as_dict,
+        _render_object=render_object,
+    ):
         options = _as_dict(self.options_expression.eval(context))
         render_sequence = self.get_renderables(context)
         if not render_sequence:
-            return ''
+            return ""
         target = self.target_expression.eval(context)
         with_map = _as_dict(self.with_expression.eval(context))
         if with_map:
-            options['with'] = with_map
-        renders = [_render_object(render_obj,
-                                  environment.archive,
-                                  context,
-                                  target=target,
-                                  options=options) for render_obj in render_sequence]
+            options["with"] = with_map
+        renders = [
+            _render_object(
+                render_obj, environment.archive, context, target=target, options=options
+            )
+            for render_obj in render_sequence
+        ]
         if self.unique:
             render_set = set()
             unique_renders = []
@@ -1066,7 +1130,7 @@ class RenderAllNode(Node):
                     unique_renders.append(render)
             renders = unique_renders
 
-        return ''.join(renders)
+        return "".join(renders)
 
 
 class ChildrenNode(RenderAllNode):
@@ -1080,12 +1144,12 @@ class ChildrenNode(RenderAllNode):
         self.render_expression = Expression("self.children")
         self.with_expression = DefaultExpression({})
         while 1:
-            word = parser.expect_word_or_end('to', 'set', "unique", "with")
+            word = parser.expect_word_or_end("to", "set", "unique", "with")
             if word is None:
                 break
-            if word == 'to':
+            if word == "to":
                 self.target_expression = parser.expect_expression()
-            elif word == 'set':
+            elif word == "set":
                 self.options_expression = parser.expect_expression()
             elif word == "unique":
                 self.unique = True
@@ -1096,16 +1160,19 @@ class ChildrenNode(RenderAllNode):
 
 class URLNode(Node):
     """Generates a URL from url mappers"""
+
     tag_name = "url"
     auto_close = True
 
     def on_create(self, environment, parser):
         self.url_name_expression = parser.expect_expression()
-        expression_map = parser.expect_word_expression_map("with", "from", "query", 'base')
-        self.params_expression = expression_map.get('with')
-        self.in_expression = expression_map.get('from')
-        self.qs_expression = expression_map.get('query')
-        self.base_expression = expression_map.get('base')
+        expression_map = parser.expect_word_expression_map(
+            "with", "from", "query", "base"
+        )
+        self.params_expression = expression_map.get("with")
+        self.in_expression = expression_map.get("from")
+        self.qs_expression = expression_map.get("query")
+        self.base_expression = expression_map.get("base")
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1114,10 +1181,11 @@ class URLNode(Node):
         base = self.base_expression.eval(context) if self.base_expression else None
 
         if is_missing(url_name):
-            diagnosis_msg = "Did you mean to use a literal? i.e. {{% url \"{name}\" %}} rather than {{% url {name} %}}"
-            diagnosis = diagnosis_msg.format(name=text_type(self.url_name_expression.exp))
-            self.render_error("URL name is missing from context",
-                              diagnosis=diagnosis)
+            diagnosis_msg = 'Did you mean to use a literal? i.e. {{% url "{name}" %}} rather than {{% url {name} %}}'
+            diagnosis = diagnosis_msg.format(
+                name=text_type(self.url_name_expression.exp)
+            )
+            self.render_error("URL name is missing from context", diagnosis=diagnosis)
         try:
             url_name = text_type(url_name)
         except:
@@ -1131,15 +1199,18 @@ class URLNode(Node):
                 try:
                     app = environment.archive.detect_app(context, _in)
                 except Exception as e:
-                    self.render_error(text_type(e),
-                                      original=e,
-                                      diagnosis="Check the 'from' attribute for typos.")
+                    self.render_error(
+                        text_type(e),
+                        original=e,
+                        diagnosis="Check the 'from' attribute for typos.",
+                    )
         else:
-            app = self.template_app(environment.archive, context.get('._t.app', None))
+            app = self.template_app(environment.archive, context.get("._t.app", None))
             if app is None:
-                diagnosis = '''You can specify the app with an 'from' clause, e.g {% url "post" from "blog" %}'''
-                self.render_error("Could not detect app to get url",
-                                  diagnosis=diagnosis)
+                diagnosis = """You can specify the app with an 'from' clause, e.g {% url "post" from "blog" %}"""
+                self.render_error(
+                    "Could not detect app to get url", diagnosis=diagnosis
+                )
 
         if self.params_expression is not None:
             params = self.params_expression.eval(context)
@@ -1148,31 +1219,39 @@ class URLNode(Node):
 
         for k, v in params.items():
             if is_missing(v):
-                self.render_error("URL parameter '{}' must not be missing (it is {!r})".format(k, v),
-                                  diagnosis="Moya is unable to generate a URL because one of the parameters refers to a value that is missing from the context.")
+                self.render_error(
+                    "URL parameter '{}' must not be missing (it is {!r})".format(k, v),
+                    diagnosis="Moya is unable to generate a URL because one of the parameters refers to a value that is missing from the context.",
+                )
 
         try:
-            url = context['.server'].get_url(app.name, url_name, params)
+            url = context[".server"].get_url(app.name, url_name, params)
         except RouteError as e:
-            self.render_error("Named URL '{}' not found in {} ({})".format(url_name, app, e),
-                              diagnosis="Check the URL name for typos. Run 'moya urls' from the command line to see which url names are available.")
+            self.render_error(
+                "Named URL '{}' not found in {} ({})".format(url_name, app, e),
+                diagnosis="Check the URL name for typos. Run 'moya urls' from the command line to see which url names are available.",
+            )
         else:
             if qs:
-                if not hasattr(qs, 'items'):
-                    self.render_error('Query requires a dict or other mapping object')
+                if not hasattr(qs, "items"):
+                    self.render_error("Query requires a dict or other mapping object")
                 try:
                     query_string = urlencode(qs)
                 except:
-                    self.render_error('Unable to encoded query {!r}'.format(qs),
-                                      diagnosos="Convert the query object to a dictionary of strings")
+                    self.render_error(
+                        "Unable to encoded query {!r}".format(qs),
+                        diagnosos="Convert the query object to a dictionary of strings",
+                    )
                 url = "{}?{}".format(url, query_string)
             if base:
                 url = "{}{}".format(base, url)
             return url
 
         if not url:
-            self.render_error("Named URL '{}' not found in {}".format(url_name, app),
-                              diagnosis="Check the URL name for typos. Run 'moya urls' from the command line to see which url names are available.")
+            self.render_error(
+                "Named URL '{}' not found in {}".format(url_name, app),
+                diagnosis="Check the URL name for typos. Run 'moya urls' from the command line to see which url names are available.",
+            )
 
         return url
 
@@ -1183,18 +1262,19 @@ class MediaNode(Node):
 
     def on_create(self, environment, parser):
         self.path_expression = parser.expect_expression()
-        expression_map = parser.expect_word_expression_map('media', 'from', 'index')
-        self.media_expression = expression_map.get('media')
-        self.in_expression = expression_map.get('from')
-        self.index_expression = expression_map.get('index')
+        expression_map = parser.expect_word_expression_map("media", "from", "index")
+        self.media_expression = expression_map.get("media")
+        self.in_expression = expression_map.get("from")
+        self.index_expression = expression_map.get("index")
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        media = 'media'
+        media = "media"
 
         if not environment.archive.is_media_enabled:
-            self.render_error("Media is not enabled",
-                              diagnosis="check [media] section in settings")
+            self.render_error(
+                "Media is not enabled", diagnosis="check [media] section in settings"
+            )
 
         path = text_type(self.path_expression.eval(context))
         if self.index_expression is not None:
@@ -1202,9 +1282,11 @@ class MediaNode(Node):
         else:
             media_url_index = None
 
-        if path.startswith('/'):
-            app = self.template_app(environment.archive, context.get('._t.app', None))
-            media_path = environment.archive.get_media_url(context, None, media, path, url_index=media_url_index)
+        if path.startswith("/"):
+            app = self.template_app(environment.archive, context.get("._t.app", None))
+            media_path = environment.archive.get_media_url(
+                context, None, media, path, url_index=media_url_index
+            )
             return media_path
 
         if self.media_expression is not None:
@@ -1221,18 +1303,22 @@ class MediaNode(Node):
                     self.render_error(text_type(e))
 
         else:
-            app = self.template_app(environment.archive, context.get('._t.app', None))
+            app = self.template_app(environment.archive, context.get("._t.app", None))
             if app is None:
-                diagnosis = '''You can specify the app with an 'from' clause, e.g {{% media "post" from "blog" %}}'''
-                self.render_error("Could not detect app to get media url",
-                                  diagnosis=diagnosis)
+                diagnosis = """You can specify the app with an 'from' clause, e.g {{% media "post" from "blog" %}}"""
+                self.render_error(
+                    "Could not detect app to get media url", diagnosis=diagnosis
+                )
 
-        media_path = environment.archive.get_media_url(context, app, media, path, url_index=media_url_index)
+        media_path = environment.archive.get_media_url(
+            context, app, media, path, url_index=media_url_index
+        )
         return media_path
 
 
 class AttribNode(Node):
     """Renders a sequence of html attributes from a mapping expression"""
+
     tag_name = "attrib"
     auto_close = True
     _prefix = ""
@@ -1243,8 +1329,12 @@ class AttribNode(Node):
 
     def render(self, environment, context, template, text_escape):
         attribs = self.attribs_expression.eval(context)
-        if not hasattr(attribs, 'items'):
-            self.render_error('attribs tag requires a dictionary-like object (not {})'.format(context.to_expr(attribs)))
+        if not hasattr(attribs, "items"):
+            self.render_error(
+                "attribs tag requires a dictionary-like object (not {})".format(
+                    context.to_expr(attribs)
+                )
+            )
         attribs_text = []
         for k, v in attribs.items():
             if is_missing(v) or v is None:
@@ -1265,6 +1355,7 @@ class AttribNode(Node):
 
 class DataAttribNode(AttribNode):
     """Renders a sequence of html data attributes from a mapping expression"""
+
     tag_name = "dataattrib"
     auto_close = True
     _prefix = "data-"
@@ -1272,6 +1363,7 @@ class DataAttribNode(AttribNode):
 
 class URLEncodeNode(Node):
     """Renders a sequence of html attributes from a mapping expression"""
+
     tag_name = "urlencode"
     auto_close = True
 
@@ -1281,24 +1373,29 @@ class URLEncodeNode(Node):
 
     def render(self, environment, context, template, text_escape):
         attribs = self.attribs_expression.eval(context)
-        if not hasattr(attribs, 'items'):
-            self.render_error('urlencode tag requires a dictionary like object (not {})'.format(context.to_expr(attribs)))
+        if not hasattr(attribs, "items"):
+            self.render_error(
+                "urlencode tag requires a dictionary like object (not {})".format(
+                    context.to_expr(attribs)
+                )
+            )
         encoded_url = urlencode(attribs)
         if PY2:
-            encoded_url = encoded_url.decode('ascii')
+            encoded_url = encoded_url.decode("ascii")
         return encoded_url
 
 
 class IncludeNode(Node):
     """Calls another template"""
+
     tag_name = "include"
     auto_close = True
 
     def on_create(self, environment, parser):
         self.path_expression = parser.expect_expression()
         expression_map = parser.expect_word_expression_map("from", "if")
-        self.from_expression = expression_map.get('from', DefaultExpression(None))
-        self.if_expression = expression_map.get('if', DefaultExpression(True))
+        self.from_expression = expression_map.get("from", DefaultExpression(None))
+        self.if_expression = expression_map.get("if", DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1312,12 +1409,14 @@ class IncludeNode(Node):
         else:
             paths = path
 
-        #app = self.from_expression.eval(context) or self.get_app(context)
-        app = self.from_expression.eval(context) or self.template_app(environment.archive, context.get('._t.app', None))
+        # app = self.from_expression.eval(context) or self.get_app(context)
+        app = self.from_expression.eval(context) or self.template_app(
+            environment.archive, context.get("._t.app", None)
+        )
         if app is None:
             self.render_error(
                 'unable to include template"{}"; could not detect app'.format(path),
-                diagnosis='specify an application with {% include "template" from "<app name>" %}'
+                diagnosis='specify an application with {% include "template" from "<app name>" %}',
             )
         for i, _path in enumerate(paths, 1):
             if environment.archive is not None:
@@ -1328,7 +1427,10 @@ class IncludeNode(Node):
                 template = environment.get_template(path)
             except errors.MissingTemplateError as e:
                 if i == len(paths):
-                    self.render_error('unable to include missing template "{}"'.format(e.path), original=e)
+                    self.render_error(
+                        'unable to include missing template "{}"'.format(e.path),
+                        original=e,
+                    )
             else:
                 break
 
@@ -1339,20 +1441,21 @@ class IncludeNode(Node):
 
 class InsertNode(Node):
     """Inserts code directly in to the template"""
+
     tag_name = "insert"
     auto_close = True
 
     def on_create(self, environment, parser):
         self.path_expression = parser.expect_expression()
-        self.fs_expression = DefaultExpression('templates')
+        self.fs_expression = DefaultExpression("templates")
         self.escape = False
         while 1:
-            word = parser.expect_word_or_end('fs', 'escape')
+            word = parser.expect_word_or_end("fs", "escape")
             if word is None:
                 break
-            if word == 'escape':
+            if word == "escape":
                 self.escape = True
-            elif word == 'fs':
+            elif word == "fs":
                 self.fs_expression = parser.expect_expression()
 
     def render(self, environment, context, template, text_escape):
@@ -1370,27 +1473,30 @@ class InsertNode(Node):
 
 class SingleLineNode(Node):
     """Joins all lines in to a single line"""
+
     tag_name = "singleline"
 
     def render(self, environment, context, template, text_escape):
         text = self.render_contents(environment, context, template, text_escape)
-        return ''.join(text.splitlines())
+        return "".join(text.splitlines())
 
 
 class CompactNode(Node):
     """Replace runs of whitespace with a single space"""
+
     tag_name = "compact"
 
     _re_whitespace = re.compile("\s+")
 
     def render(self, environment, context, template, text_escape):
         text = self.render_contents(environment, context, template, text_escape)
-        _text = self._re_whitespace.sub(' ', text)
+        _text = self._re_whitespace.sub(" ", text)
         return _text
 
 
 class SpacelessNode(Node):
     """Remove whitespace between tags."""
+
     tag_name = "spaceless"
 
     def render(self, environment, context, template, text_escape):
@@ -1400,6 +1506,7 @@ class SpacelessNode(Node):
 
 class VerbatimNode(Node):
     """Ignores all tags / substitution"""
+
     tag_name = "verbatim"
 
     def on_create(self, environment, parser):
@@ -1407,13 +1514,13 @@ class VerbatimNode(Node):
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            if text.strip().split(' ', 1)[0] == "endverbatim":
+            if text.strip().split(" ", 1)[0] == "endverbatim":
                 return False
         self.text.append(token_text)
         return True
 
     def finalize(self, environment, template):
-        self.text = ''.join(self.text)
+        self.text = "".join(self.text)
 
     def render(self, environment, context, template, text_escape):
         return self.text
@@ -1424,10 +1531,10 @@ class CacheNode(Node):
 
     def on_create(self, environment, parser):
         self.node_index = parser.node_index
-        words = ['for', 'key', 'in', 'if']
+        words = ["for", "key", "in", "if"]
         self.for_expression = None
-        self.key_expression = DefaultExpression('')
-        self.in_expression = DefaultExpression('fragment')
+        self.key_expression = DefaultExpression("")
+        self.in_expression = DefaultExpression("fragment")
         self.if_expression = DefaultExpression(True)
         while words:
             word = parser.expect_word_or_end(*words)
@@ -1440,7 +1547,7 @@ class CacheNode(Node):
                 self.key_expression = parser.expect_expression()
             elif word == "in":
                 self.in_expression = parser.expect_expression()
-            elif word == 'if':
+            elif word == "if":
                 self.if_expression = parser.expect_expression()
         if self.for_expression is None:
             parser.syntax_error("FOR clause expected here")
@@ -1463,7 +1570,7 @@ class CacheNode(Node):
         else:
             if cached_html is not None:
                 # Appears to happen with memcache
-                log.warning('cache returned non-unicode! %r', cached_html)
+                log.warning("cache returned non-unicode! %r", cached_html)
 
         html = self.render_contents(environment, context, template, text_escape)
 
@@ -1489,32 +1596,36 @@ class TransNode(Node):
         self.plural_clause = False
         self.number_expression = None
         self.text_context = None
-        words = ['comment', 'number', 'context']
+        words = ["comment", "number", "context"]
         self.comment = None
         while 1:
             word = parser.expect_word_or_end(*words)
             if word is None:
                 break
-            if word == 'number':
+            if word == "number":
                 self.number_expression = parser.expect_expression()
-            if word == 'comment':
+            if word == "comment":
                 self.comment = parser.expect_word()
-            if word == 'context':
+            if word == "context":
                 self.text_context = parser.expect_word()
             words.remove(word)
 
     def process_token(self, token_type, text, token_text):
         if token_type == "tag":
-            #tag = text.strip().split(' ', 1)[0]
+            # tag = text.strip().split(' ', 1)[0]
             tag = self._parse_tag_name(text)
             if tag in ("endtrans", "end", "/trans"):
                 return False
             else:
                 if self.number_expression is None:
-                    self.syntax_error("{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute",
-                                      diagnosis="For example; {% trans number post_count %}")
-                if tag != 'plural':
-                    self.render_error("{% trans %} tag may not contain other tags, except for {% plural %}")
+                    self.syntax_error(
+                        "{% plural %} may only be used if the {% trans %} tag contains a 'number' attribute",
+                        diagnosis="For example; {% trans number post_count %}",
+                    )
+                if tag != "plural":
+                    self.render_error(
+                        "{% trans %} tag may not contain other tags, except for {% plural %}"
+                    )
                 self.plural_clause = True
             return True
         if self.plural_clause:
@@ -1524,25 +1635,31 @@ class TransNode(Node):
         return True
 
     def finalize(self, environment, template):
-        text = self.text = ''.join(self.text).strip()
+        text = self.text = "".join(self.text).strip()
         if self.plural_clause:
-            plural_text = self.plural_text = ''.join(self.plural_text).strip()
+            plural_text = self.plural_text = "".join(self.plural_text).strip()
         else:
             plural_text = self.plural_text = None
 
-        translatable_text = TranslatableText(text,
-                                             self.location,
-                                             self.comment,
-                                             plural=plural_text,
-                                             context=self.text_context)
+        translatable_text = TranslatableText(
+            text,
+            self.location,
+            self.comment,
+            plural=plural_text,
+            context=self.text_context,
+        )
         self.template.translatable_text.append(translatable_text)
 
     def render(self, environment, context, template, text_escape):
-        app = self.template_app(environment.archive, context.get('._t.app', None))
-        translations = environment.archive.get_translations(app, context.get('.languages', ['en']))
+        app = self.template_app(environment.archive, context.get("._t.app", None))
+        translations = environment.archive.get_translations(
+            app, context.get(".languages", ["en"])
+        )
         if self.plural_clause:
             number = self.number_expression.eval(context)
-            return context.sub(translations.ngettext(self.text, self.plural_text, number))
+            return context.sub(
+                translations.ngettext(self.text, self.plural_text, number)
+            )
         else:
             return context.sub(translations.gettext(self.text))
 
@@ -1566,7 +1683,7 @@ class DataNode(Node):
         return False
 
     def finalize(self, environment, template):
-        self.text = ''.join(self.text)
+        self.text = "".join(self.text)
 
     def render(self, environment, context, template, text_escape):
         try:
@@ -1580,7 +1697,7 @@ class DataNode(Node):
             context.update(self.data)
         else:
             context[self.data_name] = self.data
-        return ''
+        return ""
 
 
 class LetNode(Node):
@@ -1593,13 +1710,21 @@ class LetNode(Node):
 
     def render(self, environment, context, template, text_escape):
         let = self.let_expression.eval(context)
-        if not hasattr(let, 'items'):
-            self.render_error("{{% let %}} expression must be a mapping type, e.g. foo='bar', not {}".format(context.to_expr(let)))
+        if not hasattr(let, "items"):
+            self.render_error(
+                "{{% let %}} expression must be a mapping type, e.g. foo='bar', not {}".format(
+                    context.to_expr(let)
+                )
+            )
         try:
             context.update_base(let)
         except:
-            self.render_error("{{% let %}} was unable to add {} to the template context".format(context.to_expr(let)))
-        return ''
+            self.render_error(
+                "{{% let %}} was unable to add {} to the template context".format(
+                    context.to_expr(let)
+                )
+            )
+        return ""
 
 
 class MarkupNode(Node):
@@ -1608,15 +1733,15 @@ class MarkupNode(Node):
 
     def on_create(self, environment, parser):
         self.markup_expression = parser.expect_expression()
-        exp_map = parser.expect_word_expression_map('as', 'target', 'set')
-        self.type_expression = exp_map.get('as', DefaultExpression("html"))
-        self.target_expression = exp_map.get('target', DefaultExpression("html"))
-        self.options_expression = exp_map.get('set', DefaultExpression({}))
+        exp_map = parser.expect_word_expression_map("as", "target", "set")
+        self.type_expression = exp_map.get("as", DefaultExpression("html"))
+        self.target_expression = exp_map.get("target", DefaultExpression("html"))
+        self.options_expression = exp_map.get("set", DefaultExpression({}))
 
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
-        markup = text_type(self.markup_expression.eval(context) or '')
+        markup = text_type(self.markup_expression.eval(context) or "")
         target = self.target_expression.eval(context)
         markup_type = self.type_expression.eval(context)
 
@@ -1626,7 +1751,9 @@ class MarkupNode(Node):
                     markup_type = _markup_type
                     break
             else:
-                self.render_error("no supported markup in {}".format(tools.textual_list(markup_type)))
+                self.render_error(
+                    "no supported markup in {}".format(tools.textual_list(markup_type))
+                )
 
         options = self.options_expression.eval(context)
 
@@ -1635,7 +1762,9 @@ class MarkupNode(Node):
 
         try:
             markup_renderable = Markup(markup, markup_type)
-            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+            html = render_object(
+                markup_renderable, environment.archive, context, target, options=options
+            )
         except MarkupError as e:
             self.render_error("unable to render markup ({})".format(e))
         return html
@@ -1645,10 +1774,10 @@ class MarkupBlockNode(Node):
     tag_name = "markupblock"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('as', 'target', 'set')
-        self.type_expression = exp_map.get('as', DefaultExpression("html"))
-        self.target_expression = exp_map.get('target', DefaultExpression("html"))
-        self.options_expression = exp_map.get('set', DefaultExpression({}))
+        exp_map = parser.expect_word_expression_map("as", "target", "set")
+        self.type_expression = exp_map.get("as", DefaultExpression("html"))
+        self.target_expression = exp_map.get("target", DefaultExpression("html"))
+        self.options_expression = exp_map.get("set", DefaultExpression({}))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1663,18 +1792,23 @@ class MarkupBlockNode(Node):
                     markup_type = _markup_type
                     break
             else:
-                self.render_error("no supported markup in {}".format(tools.textual_list(markup_type)))
+                self.render_error(
+                    "no supported markup in {}".format(tools.textual_list(markup_type))
+                )
 
         if not Markup.supports(markup_type):
             self.render_error("markup '{}' is not supported".format(markup_type))
 
         try:
             markup_renderable = Markup(markup, markup_type)
-            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+            html = render_object(
+                markup_renderable, environment.archive, context, target, options=options
+            )
         except MarkupError as e:
             self.render_error("unable to render markup ({})".format(e))
         except Exception as e:
             import traceback
+
             traceback.print_exc(e)
             self.render_error("{}".format(e))
         return html
@@ -1684,9 +1818,9 @@ class MarkdownNode(Node):
     tag_name = "markdown"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('target', 'set')
-        self.options_expression = exp_map.get('set', DefaultExpression({}))
-        self.target_expression = exp_map.get('target', DefaultExpression("html"))
+        exp_map = parser.expect_word_expression_map("target", "set")
+        self.options_expression = exp_map.get("set", DefaultExpression({}))
+        self.target_expression = exp_map.get("target", DefaultExpression("html"))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1694,12 +1828,15 @@ class MarkdownNode(Node):
         target = self.target_expression.eval(context)
         options = self.options_expression.eval(context)
         try:
-            markup_renderable = Markup(markup, 'markdown')
-            html = render_object(markup_renderable, environment.archive, context, target, options=options)
+            markup_renderable = Markup(markup, "markdown")
+            html = render_object(
+                markup_renderable, environment.archive, context, target, options=options
+            )
         except MarkupError as e:
             self.render_error("unable to render markup ({})".format(e))
         except Exception as e:
             import traceback
+
             traceback.print_exc(e)
             self.render_error("{}".format(e))
         return html
@@ -1709,20 +1846,24 @@ class ExtractNode(Node):
     tag_name = "extract"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('as', 'replace', 'if')
-        self.as_expression = exp_map.get('as', None)
-        self.replace_expression = exp_map.get('replace', None)
-        self.if_expression = exp_map.get('if', DefaultExpression(True))
+        exp_map = parser.expect_word_expression_map("as", "replace", "if")
+        self.as_expression = exp_map.get("as", None)
+        self.replace_expression = exp_map.get("replace", None)
+        self.if_expression = exp_map.get("if", DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = self.render_contents(environment, context, template, text_escape)
-        replace_markup = ''
+        replace_markup = ""
         extract_name = None
         if self.as_expression is not None:
             extract_name = self.as_expression.eval(context)
             if not isinstance(extract_name, text_type):
-                self.render_error("name should be a string, not ({})".format(context.to_expr(extract_name)))
+                self.render_error(
+                    "name should be a string, not ({})".format(
+                        context.to_expr(extract_name)
+                    )
+                )
         if self.if_expression.eval(context):
             if extract_name is not None:
                 context[extract_name] = markup
@@ -1738,45 +1879,41 @@ class SanitizeNode(Node):
     tag_name = "sanitize"
 
     _rules = {
-        "tags":
-        [
-            'a',
-            'abbr',
-            'acronym',
-            'b',
-            'blockquote',
-            'pre',
-            'code',
-            'em',
-            'i',
-            'li',
-            'ol',
-            'strong',
-            'ul'
+        "tags": [
+            "a",
+            "abbr",
+            "acronym",
+            "b",
+            "blockquote",
+            "pre",
+            "code",
+            "em",
+            "i",
+            "li",
+            "ol",
+            "strong",
+            "ul",
         ],
-        "attributes":
-        {
-            'a': ['href', 'title'],
-            'abbr': ['title'],
-            'acronym': ['title']
-        },
-        "styles":
-        [
-        ],
+        "attributes": {"a": ["href", "title"], "abbr": ["title"], "acronym": ["title"]},
+        "styles": [],
         "strip": False,
-        "strip_comments": True
+        "strip_comments": True,
     }
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('rules', 'tags', 'attributes', 'styles', 'strip', 'strip_comments', 'if')
-        self.rules_expression = exp_map.get('rules', DefaultExpression(None))
-        self.tags_expression = exp_map.get('tags', DefaultExpression(None))
-        self.attributes_expression = exp_map.get('attributes', DefaultExpression(None))
-        self.styles_expression = exp_map.get('styles', DefaultExpression(None))
-        self.values_expression = exp_map.get('values', DefaultExpression(None))
-        self.strip_expression = exp_map.get('strip', DefaultExpression(None))
-        self.strip_comments_expression = exp_map.get('strip_comments', DefaultExpression(None))
-        self.if_expression = exp_map.get('if', DefaultExpression(True))
+        exp_map = parser.expect_word_expression_map(
+            "rules", "tags", "attributes", "styles", "strip", "strip_comments", "if"
+        )
+        self.rules_expression = exp_map.get("rules", DefaultExpression(None))
+        self.tags_expression = exp_map.get("tags", DefaultExpression(None))
+        self.attributes_expression = exp_map.get("attributes", DefaultExpression(None))
+        self.styles_expression = exp_map.get("styles", DefaultExpression(None))
+        self.values_expression = exp_map.get("values", DefaultExpression(None))
+        self.strip_expression = exp_map.get("strip", DefaultExpression(None))
+        self.strip_comments_expression = exp_map.get(
+            "strip_comments", DefaultExpression(None)
+        )
+        self.if_expression = exp_map.get("if", DefaultExpression(True))
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
@@ -1798,17 +1935,17 @@ class SanitizeNode(Node):
         strip_comments = self.strip_comments_expression.eval(context)
 
         if tags is not None:
-            rules['tags'] = tags
+            rules["tags"] = tags
         if attributes is not None:
-            rules['attributes'] = attributes
+            rules["attributes"] = attributes
         if styles is not None:
-            rules['styles'] = styles
+            rules["styles"] = styles
         if strip is not None:
-            rules['strip'] = bool(strip)
+            rules["strip"] = bool(strip)
         if strip_comments is not None:
-            rules['strip_comments'] = bool(strip_comments)
+            rules["strip_comments"] = bool(strip_comments)
         if values is not None:
-            rules['values'] = values
+            rules["values"] = values
 
         def make_checker(tag, attributes, values):
 
@@ -1823,23 +1960,34 @@ class SanitizeNode(Node):
                                 return False
                         return True
                 return False
+
             return check_value
 
-        if "attributes" in rules and 'values' in rules:
+        if "attributes" in rules and "values" in rules:
             for tag, _attributes in list(rules["attributes"].items()):
-                rules["attributes"][tag] = make_checker(tag, _attributes, rules['values'])
+                rules["attributes"][tag] = make_checker(
+                    tag, _attributes, rules["values"]
+                )
 
         if rules is None:
             clean_markup = bleach.clean(markup)
         else:
             if not isinstance(rules, dict):
-                self.render_error("rules must be a mapping object, not {}".format(context.to_expr(rules)))
+                self.render_error(
+                    "rules must be a mapping object, not {}".format(
+                        context.to_expr(rules)
+                    )
+                )
             try:
-                clean_rules = {k: v for k, v in rules.items() if k in ['attributes', 'tags', 'styles', 'strip', 'strip_comments']}
+                clean_rules = {
+                    k: v
+                    for k, v in rules.items()
+                    if k in ["attributes", "tags", "styles", "strip", "strip_comments"]
+                }
                 clean_markup = bleach.clean(markup, **clean_rules)
             except Exception as e:
-                log.exception('{% sanitize %} template tag failed')
-                self.render_error('failed to clean markup ({})'.format(e))
+                log.exception("{% sanitize %} template tag failed")
+                self.render_error("failed to clean markup ({})".format(e))
 
         return clean_markup
 
@@ -1848,24 +1996,24 @@ class SummarizeNode(Node):
     tag_name = "summarize"
 
     def on_create(self, environment, parser):
-        exp_map = parser.expect_word_expression_map('chars', 'mark')
-        self.max_characters = exp_map.get('chars') or DefaultExpression(200)
-        self.mark = exp_map.get('mark') or DefaultExpression(' [&hellip;]')
+        exp_map = parser.expect_word_expression_map("chars", "mark")
+        self.max_characters = exp_map.get("chars") or DefaultExpression(200)
+        self.mark = exp_map.get("mark") or DefaultExpression(" [&hellip;]")
         parser.expect_end()
 
     def render(self, environment, context, template, text_escape):
         markup = self.render_contents(environment, context, template, text_escape)
         from ..html import summarize
+
         max_chars = self.max_characters.eval(context)
         mark = self.mark.eval(context)
         return summarize(markup, max_size=max_chars, mark=mark)
 
 
-TemplateExtend = namedtuple('TemplateExtend', ['path', 'node', 'lib'])
+TemplateExtend = namedtuple("TemplateExtend", ["path", "node", "lib"])
 
 
 class NodeGenerator(object):
-
     def __init__(self, node, gen):
         self.node = node
         self._gen = gen
@@ -1880,18 +2028,17 @@ class NodeGenerator(object):
         return cls(node, new_node)
 
     @classmethod
-    def render(cls,
-               node,
-               environment,
-               context,
-               template,
-               text_escape,
-               _text_type=text_type,
-               _isinstance=isinstance):
-        gen = node.render(environment,
-                          context,
-                          template,
-                          text_escape)
+    def render(
+        cls,
+        node,
+        environment,
+        context,
+        template,
+        text_escape,
+        _text_type=text_type,
+        _isinstance=isinstance,
+    ):
+        gen = node.render(environment, context, template, text_escape)
         if _isinstance(gen, _text_type):
             return gen
         return cls(node, gen)
@@ -1917,11 +2064,11 @@ class NodeGenerator(object):
 
 class Template(object):
 
-    re_special = re.compile(r'\{\%((?:\".*?\"|\'.*?\'|.|\s)*?)\%\}|(\{\#)|(\#\})')
+    re_special = re.compile(r"\{\%((?:\".*?\"|\'.*?\'|.|\s)*?)\%\}|(\{\#)|(\#\})")
 
-    def __init__(self, source, path='?', raw_path=None, lib=None):
-        self.source = source or ''
-        self.source = self.source.replace('\t', '    ')
+    def __init__(self, source, path="?", raw_path=None, lib=None):
+        self.source = source or ""
+        self.source = self.source.replace("\t", "    ")
         self.path = path
         self.raw_path = path if raw_path is None else raw_path
         self.lib = lib
@@ -1952,13 +2099,16 @@ class Template(object):
                 return Expression(exp).compile()
             except:
                 return None
-        state['compiled_expressions'] = filter(None, [compile(exp) for exp in self.expressions])
+
+        state["compiled_expressions"] = filter(
+            None, [compile(exp) for exp in self.expressions]
+        )
         return state
 
     @classmethod
     def load(cls, template_dump):
         state = template_dump
-        Expression.insert_expressions(state.pop('compiled_expressions'))
+        Expression.insert_expressions(state.pop("compiled_expressions"))
         template = cls.new(state)
         return template
 
@@ -1998,23 +2148,31 @@ class Template(object):
                 break
 
             if path in visited:
-                diagnosis = """A template may not be extended more than once in chain."""
+                diagnosis = (
+                    """A template may not be extended more than once in chain."""
+                )
 
                 frames = []
                 for node in reversed(nodes):
-                    frame = TraceFrame(node.template.source,
-                                       node.template.path,
-                                       node.location[0],
-                                       raw_location=node.template.raw_path,
-                                       cols=node.location[1:],
-                                       format='moyatemplate')
+                    frame = TraceFrame(
+                        node.template.source,
+                        node.template.path,
+                        node.location[0],
+                        raw_location=node.template.raw_path,
+                        cols=node.location[1:],
+                        format="moyatemplate",
+                    )
                     frames.append(frame)
 
-                    raise errors.TemplateError("Recursive extends directive detected in '{}'".format(self.raw_path),
-                                               node.template.path,
-                                               node.location[0],
-                                               diagnosis=diagnosis,
-                                               trace_frames=frames)
+                    raise errors.TemplateError(
+                        "Recursive extends directive detected in '{}'".format(
+                            self.raw_path
+                        ),
+                        node.template.path,
+                        node.location[0],
+                        diagnosis=diagnosis,
+                        trace_frames=frames,
+                    )
 
     def get_extended_data(self, environment):
         extended_data = []
@@ -2033,7 +2191,7 @@ class Template(object):
     def tokenize(self):
         find_special = self.re_special.finditer
         comment = 0
-        lines = self.source.split('\n')
+        lines = self.source.split("\n")
         last_line = len(lines) - 1
         tokens = []
         add_token = tokens.append
@@ -2052,7 +2210,7 @@ class Template(object):
         def pop_whitespace():
             while tokens:
                 token_type, pos, token, text = tokens[-1]
-                if token_type == 'text':
+                if token_type == "text":
                     if text.isspace():
                         tokens.pop()
                         continue
@@ -2067,7 +2225,7 @@ class Template(object):
         remove_whitespace = False
         for lineno, line in enumerate(self.source.splitlines()):
             if lineno != last_line:
-                line += '\n'
+                line += "\n"
             pos = 0
             for match in find_special(line):
                 tag, begin_comment, end_comment = match.groups()
@@ -2078,16 +2236,22 @@ class Template(object):
                 if begin_comment:
                     if not comment and start > pos:
                         text = line[pos:start]
-                        remove_whitespace = add_text((lineno, pos, start), text, text, remove_whitespace)
+                        remove_whitespace = add_text(
+                            (lineno, pos, start), text, text, remove_whitespace
+                        )
                     comment += 1
                     pos = end
                     continue
                 if end_comment:
                     comment -= 1
                     if comment < 0:
-                        raise errors.UnmatchedComment("Unbalanced end comment",
-                                                      lineno + 1, start + 1, end,
-                                                      diagnosis="Check that there is a corresponding {# for every #}")
+                        raise errors.UnmatchedComment(
+                            "Unbalanced end comment",
+                            lineno + 1,
+                            start + 1,
+                            end,
+                            diagnosis="Check that there is a corresponding {# for every #}",
+                        )
                     pos = end
                     continue
                 if comment:
@@ -2095,66 +2259,77 @@ class Template(object):
 
                 if start > pos:
                     text = line[pos:start]
-                    remove_whitespace = add_text((lineno, pos, start), text, text, remove_whitespace)
+                    remove_whitespace = add_text(
+                        (lineno, pos, start), text, text, remove_whitespace
+                    )
 
-                if tag.startswith('-'):
+                if tag.startswith("-"):
                     tag = tag[1:]
                     pop_whitespace()
-                if tag.endswith('-'):
+                if tag.endswith("-"):
                     tag = tag[:-1]
                     remove_whitespace = True
 
-                add_token(("tag", (lineno, start, end), tag, token_text.replace('-', '')))
+                add_token(
+                    ("tag", (lineno, start, end), tag, token_text.replace("-", ""))
+                )
 
                 pos = end
             if pos < len(line):
                 if not comment:
                     text = line[pos:]
-                    remove_whitespace = add_text((lineno, pos, len(line) - pos), text, text, remove_whitespace)
+                    remove_whitespace = add_text(
+                        (lineno, pos, len(line) - pos), text, text, remove_whitespace
+                    )
                 pos = len(line)
         if comment:
-            raise errors.UnmatchedComment("End of comment expected before end of template",
-                                          lineno + 1, start + 1, len(line),
-                                          diagnosis="Check that there is a corresponding {# for every #}")
+            raise errors.UnmatchedComment(
+                "End of comment expected before end of template",
+                lineno + 1,
+                start + 1,
+                len(line),
+                diagnosis="Check that there is a corresponding {# for every #}",
+            )
         return tokens
 
     def parse(self, environment):
         try:
             root_node = self._parse(environment=environment)
         except errors.TokenizerError as e:
-            frame = TraceFrame(self.source,
-                               self.raw_path,
-                               e.lineno,
-                               cols=(e.start, e.end),
-                               format='moyatemplate')
-            raise errors.TemplateError(e.msg,
-                                       self.path,
-                                       e.lineno,
-                                       diagnosis=e.diagnosis,
-                                       trace_frames=[frame])
+            frame = TraceFrame(
+                self.source,
+                self.raw_path,
+                e.lineno,
+                cols=(e.start, e.end),
+                format="moyatemplate",
+            )
+            raise errors.TemplateError(
+                e.msg, self.path, e.lineno, diagnosis=e.diagnosis, trace_frames=[frame]
+            )
         except errors.NodeError as e:
-            frame = TraceFrame(self.source,
-                               self.raw_path,
-                               e.lineno,
-                               cols=(e.start, e.end),
-                               format='moyatemplate')
-            raise errors.TemplateError(e.msg,
-                                       self.path,
-                                       e.lineno,
-                                       diagnosis=e.diagnosis,
-                                       trace_frames=[frame])
+            frame = TraceFrame(
+                self.source,
+                self.raw_path,
+                e.lineno,
+                cols=(e.start, e.end),
+                format="moyatemplate",
+            )
+            raise errors.TemplateError(
+                e.msg, self.path, e.lineno, diagnosis=e.diagnosis, trace_frames=[frame]
+            )
         else:
             return root_node
 
     def _parse(self, environment=None):
         if environment is None:
             from .environment import Environment
+
             environment = Environment.make_default()
         if self.parsed:
             return self.root_node
 
-        self.root_node = node = RootNode(self, 'root', '', (0, 0, 0))
-        #self.parsed = True
+        self.root_node = node = RootNode(self, "root", "", (0, 0, 0))
+        # self.parsed = True
         node_stack = [node]
 
         tokens = self.tokenize()
@@ -2164,36 +2339,52 @@ class Template(object):
             if node_stack[-1].process_token(token_type, text, token_text):
                 continue
             if token_type == "text":
-                if '${' in text:
+                if "${" in text:
                     self.expressions.update(Context.extract_expressions(text))
-                    text_node = TextNode(self, "text", "",
-                                         (lineno, pos, endpos + 1),
-                                         text)
-                    text_node.on_create(environment, TagParser(text_node, "", token_index))
+                    text_node = TextNode(
+                        self, "text", "", (lineno, pos, endpos + 1), text
+                    )
+                    text_node.on_create(
+                        environment, TagParser(text_node, "", token_index)
+                    )
                     node.add_child(text_node)
                 else:
                     node.add_child(text)
             else:
-                tag_name, _, extra = text.strip().partition(' ')
-                tag_name = tag_name.replace('-', '')
+                tag_name, _, extra = text.strip().partition(" ")
+                tag_name = tag_name.replace("-", "")
                 if tag_name.startswith(("end", "/")):
-                    if tag_name[0] == '/':
+                    if tag_name[0] == "/":
                         closing_tag = tag_name[1:].strip()
                     else:
                         closing_tag = tag_name[3:].strip()
                     closed_tag = node_stack.pop()
 
-                    if closed_tag.name == 'root':
-                        raise errors.UnmatchedTag("End tag, {{% /{} %}}, has nothing to end".format(closing_tag),
-                                                  node,
-                                                  lineno + 1, pos + 1, endpos,
-                                                  diagnosis="Check the syntax of the tag you are attempting to end (and that it exists).")
+                    if closed_tag.name == "root":
+                        raise errors.UnmatchedTag(
+                            "End tag, {{% /{} %}}, has nothing to end".format(
+                                closing_tag
+                            ),
+                            node,
+                            lineno + 1,
+                            pos + 1,
+                            endpos,
+                            diagnosis="Check the syntax of the tag you are attempting to end (and that it exists).",
+                        )
 
                     if closing_tag and closing_tag != closed_tag.name:
-                        raise errors.UnmatchedTag("End tag, {{% /{} %}}, doesn't match {}".format(closing_tag, closed_tag),
-                                                  node,
-                                                  lineno + 1, pos + 1, endpos,
-                                                  diagnosis="The {{% {close} %}} tag requires a corresponding {{% /{close} %}}".format(close=closing_tag))
+                        raise errors.UnmatchedTag(
+                            "End tag, {{% /{} %}}, doesn't match {}".format(
+                                closing_tag, closed_tag
+                            ),
+                            node,
+                            lineno + 1,
+                            pos + 1,
+                            endpos,
+                            diagnosis="The {{% {close} %}} tag requires a corresponding {{% /{close} %}}".format(
+                                close=closing_tag
+                            ),
+                        )
                     node.finalize(environment, self)
                     node = node_stack[-1]
                 else:
@@ -2204,16 +2395,24 @@ class Template(object):
                             diagnosis = "Check for typos."
                         else:
                             diagnosis = "Did you mean {{% {} %}} ?".format(nearest)
-                        raise errors.UnknownTag("No such template tag, {{% {} %}}".format(tag_name),
-                                                node,
-                                                lineno + 1, pos + 1, endpos,
-                                                diagnosis=diagnosis)
-                    new_node = new_node_class(self,
-                                              tag_name,
-                                              extra,
-                                              (lineno + 1, pos + 1, endpos),
-                                              lib=self.lib)
-                    new_node.on_create(environment, TagParser(new_node, extra, token_index))
+                        raise errors.UnknownTag(
+                            "No such template tag, {{% {} %}}".format(tag_name),
+                            node,
+                            lineno + 1,
+                            pos + 1,
+                            endpos,
+                            diagnosis=diagnosis,
+                        )
+                    new_node = new_node_class(
+                        self,
+                        tag_name,
+                        extra,
+                        (lineno + 1, pos + 1, endpos),
+                        lib=self.lib,
+                    )
+                    new_node.on_create(
+                        environment, TagParser(new_node, extra, token_index)
+                    )
                     if new_node.is_clause:
                         node.on_clause(new_node)
                     else:
@@ -2247,7 +2446,7 @@ class Template(object):
         block_type, node = next(iter_chain, None)
         nodes = [node]
         for block_type, block in iter_chain:
-            if block_type == 'replace':
+            if block_type == "replace":
                 nodes[:] = [block]
             elif block_type == "append":
                 nodes.append(block)
@@ -2267,40 +2466,50 @@ class Template(object):
         return None
 
     def push_frame(self, context, app, data=None):
-        t_stack = context.set_new_call('._t_stack', list)
+        t_stack = context.set_new_call("._t_stack", list)
         stack_frame = _TemplateStackFrame(app, data=data)
         t_stack.append(stack_frame)
-        context['._t'] = stack_frame
-        context['.td'] = stack_frame.data
-        context.push_frame('.td')
+        context["._t"] = stack_frame
+        context[".td"] = stack_frame.data
+        context.push_frame(".td")
         return stack_frame
 
     def pop_frame(self, context):
-        t_stack = context['._t_stack']
+        t_stack = context["._t_stack"]
         t_stack.pop()
         try:
             last_stack = t_stack[-1]
-            context['.td'] = last_stack.data
-            context['._t'] = last_stack
+            context[".td"] = last_stack.data
+            context["._t"] = last_stack
         except IndexError:
-            context.safe_delete('.td')
+            context.safe_delete(".td")
         context.pop_frame()
 
     def frame(self, context, data=None, app=None):
         if app is None:
-            app = context.get('._t.app', None)
+            app = context.get("._t.app", None)
         return _TemplateFrameContextManager(self, context, data, app=app)
 
     @contextlib.contextmanager
     def block(self, context, node):
-        t_stack = context.set_new_call('._t_stack', list)
+        t_stack = context.set_new_call("._t_stack", list)
         stack_frame = _TemplateStackFrame(node.get_app(context))
         stack_frame.stack.append(NodeGenerator.create(node, iter(node.children)))
         t_stack.append(stack_frame)
         yield stack_frame
         t_stack.pop()
 
-    def _render_frame(self, frame, environment, context, sub_escape, _isinstance=isinstance, _next=next, _text_type=text_type, _Node=Node):
+    def _render_frame(
+        self,
+        frame,
+        environment,
+        context,
+        sub_escape,
+        _isinstance=isinstance,
+        _next=next,
+        _text_type=text_type,
+        _Node=Node,
+    ):
         output = []
         output_text = output.append
 
@@ -2322,7 +2531,7 @@ class Template(object):
                     if new_node is not None:
                         push(node)
                         push(new_node)
-            return ''.join(output)
+            return "".join(output)
 
         except errors.TemplateError:
             # Template errors should 'bubble up'
@@ -2336,29 +2545,33 @@ class Template(object):
 
     def on_error(self, context, current_node, exc):
         frames = []
-        t_stack = context['._t_stack']
-        base = context.get('.sys.base', '') or ''
+        t_stack = context["._t_stack"]
+        base = context.get(".sys.base", "") or ""
 
         recent_node = current_node
 
         def relativefrom(base, path):
             if path.startswith(base):
-                path = "./" + path[len(base):]
+                path = "./" + path[len(base) :]
             return path
 
         last_node = None
         for i, frame in enumerate(t_stack):
-            for _node in chain(frame.stack, [frame.current_node] if (i != len(t_stack) - 1) else []):
+            for _node in chain(
+                frame.stack, [frame.current_node] if (i != len(t_stack) - 1) else []
+            ):
                 node = _node.node if isinstance(_node, NodeGenerator) else _node
                 if not isinstance(node, Node):
                     continue
-                if node.tag_name != 'root' and node is not last_node:
-                    frame = TraceFrame(node.template.source,
-                                       node.template.path,
-                                       node.location[0],
-                                       raw_location=relativefrom(base, node.template.raw_path),
-                                       cols=node.location[1:],
-                                       format='moyatemplate')
+                if node.tag_name != "root" and node is not last_node:
+                    frame = TraceFrame(
+                        node.template.source,
+                        node.template.path,
+                        node.location[0],
+                        raw_location=relativefrom(base, node.template.raw_path),
+                        cols=node.location[1:],
+                        format="moyatemplate",
+                    )
                     frames.append(frame)
                 last_node = node
 
@@ -2368,41 +2581,49 @@ class Template(object):
         if isinstance(exc, SubstitutionError):
             node = t_stack[-1].current_node
             lineno, start, end = node.location
-            frame = TraceFrame(node.template.source,
-                               node.template.path,
-                               lineno + 1,
-                               raw_location=relativefrom(base, node.template.raw_path),
-                               cols=(start + exc.start + 1, start + exc.end),
-                               format='moyatemplate')
+            frame = TraceFrame(
+                node.template.source,
+                node.template.path,
+                lineno + 1,
+                raw_location=relativefrom(base, node.template.raw_path),
+                cols=(start + exc.start + 1, start + exc.end),
+                format="moyatemplate",
+            )
             frames.append(frame)
 
         elif isinstance(exc, NodeRenderError):
-            frame = TraceFrame(exc.node.template.source,
-                               exc.node.template.path,
-                               exc.node.location[0],
-                               raw_location=relativefrom(base, exc.node.template.raw_path),
-                               cols=exc.node.location[1:],
-                               format='moyatemplate')
+            frame = TraceFrame(
+                exc.node.template.source,
+                exc.node.template.path,
+                exc.node.location[0],
+                raw_location=relativefrom(base, exc.node.template.raw_path),
+                cols=exc.node.location[1:],
+                format="moyatemplate",
+            )
             frames.append(frame)
         else:
             if recent_node:
-                frame = TraceFrame(recent_node.template.source,
-                                   recent_node.template.path,
-                                   recent_node.location[0],
-                                   raw_location=relativefrom(base, recent_node.template.raw_path),
-                                   cols=recent_node.location[1:],
-                                   format='moyatemplate')
+                frame = TraceFrame(
+                    recent_node.template.source,
+                    recent_node.template.path,
+                    recent_node.location[0],
+                    raw_location=relativefrom(base, recent_node.template.raw_path),
+                    cols=recent_node.location[1:],
+                    format="moyatemplate",
+                )
                 frames.append(frame)
 
-        if hasattr(exc, 'get_moya_frames'):
+        if hasattr(exc, "get_moya_frames"):
             frames.extend(exc.get_moya_frames())
 
-        raise errors.TemplateError(error_msg,
-                                   current_node.template.path,
-                                   current_node.location[0],
-                                   original=exc,
-                                   diagnosis=diagnosis,
-                                   trace_frames=frames)
+        raise errors.TemplateError(
+            error_msg,
+            current_node.template.path,
+            current_node.location[0],
+            original=exc,
+            diagnosis=diagnosis,
+            trace_frames=frames,
+        )
 
     def _finalize_stack(self, stack):
         pop = stack.pop
@@ -2415,13 +2636,21 @@ class Template(object):
 
     @classmethod
     def _sub_escape(cls, text, _text_type=text_type, _hasattr=hasattr):
-        if _hasattr(text, 'html_safe'):
+        if _hasattr(text, "html_safe"):
             return _text_type(text)
-        return _text_type('' if text is None else text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", "&#39;")
+        return (
+            _text_type("" if text is None else text)
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#39;")
+        )
 
     def render(self, data=None, context=None, environment=None, app=None):
         if environment is None:
             from .environment import Environment
+
             environment = Environment.make_default()
         if context is None:
             context = Context()

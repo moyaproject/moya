@@ -26,30 +26,38 @@ except ImportError:
     pass
 
 
-log = logging.getLogger('moya.runtime')
+log = logging.getLogger("moya.runtime")
 
 debug_lock = RLock()
 
-if sys.platform == 'darwin':
+if sys.platform == "darwin":
     try:
         import pync
     except ImportError:
+
         def notify(title, message):
             pass
+
     else:
+
         def notify(title, message):
             try:
                 pync.Notifier.notify(message, title=title)
             except:
                 pass
+
+
 else:
 
     try:
         import notify2
     except ImportError:
+
         def notify(title, message):
             pass
+
     else:
+
         def notify(title, message):
             """Show a notification message if notify2 is available"""
             try:
@@ -64,8 +72,8 @@ else:
 
 def _breakpoint_notify(node, suppressed=False):
     """Show a notification message about this node"""
-    node = getattr(node, '__node__', node)
-    message = "in file \"%s\"" % node._location
+    node = getattr(node, "__node__", node)
+    message = 'in file "%s"' % node._location
     if suppressed:
         log.debug("<breakpoint> %s ignored", message)
     else:
@@ -74,8 +82,7 @@ def _breakpoint_notify(node, suppressed=False):
 
 
 def debugging_notify():
-    notify("Moya debugger started",
-           "Moya is now in debug mode, please see the console")
+    notify("Moya debugger started", "Moya is now in debug mode, please see the console")
 
 
 def is_debugging():
@@ -115,7 +122,8 @@ class DeferMeta(object):
 @implements_iterator
 class Defer(object):
     """Base for Defers"""
-    __slots__ = ['_meta', 'node', 'iter', 'app']
+
+    __slots__ = ["_meta", "node", "iter", "app"]
 
     def __init__(self, node, app=None):
         self._meta = DeferMeta()
@@ -147,6 +155,7 @@ class Defer(object):
 
 class DeferNode(Defer):
     """Defer to a new node"""
+
     __slots__ = []
 
     def __repr__(self):
@@ -171,7 +180,8 @@ class DeferNodeContents(Defer):
 
 
 class SkipNext(object):
-    __slots__ = ['_meta', 'element_types']
+    __slots__ = ["_meta", "element_types"]
+
     def __init__(self, *element_types):
         self._meta = DeferMeta()
         self.element_types = element_types
@@ -197,15 +207,13 @@ class SuppressException(Exception):
 
 
 def debug(archive, context, root_node):
-    run_logic_debug(archive,
-                    context,
-                    root_node,
-                    [root_node])
+    run_logic_debug(archive, context, root_node, [root_node])
 
 
 @implements_iterator
 class NodeGenerator(object):
-    __slots__ = ['node', 'generator', '_meta', '_next']
+    __slots__ = ["node", "generator", "_meta", "_next"]
+
     def __init__(self, node, generator):
         self.node = node
         self.generator = generator
@@ -237,17 +245,15 @@ class NodeGenerator(object):
 def close_generator(gen, _ElementBase=ElementBase):
     try:
         if not isinstance(gen, _ElementBase):
-            #gen.throw(GeneratorExit)
+            # gen.throw(GeneratorExit)
             gen.close()
     except Exception as e:
-        log.exception('error in close_generator')
+        log.exception("error in close_generator")
 
 
-def _logic_loop(context,
-                node_stack,
-                debugging=False,
-                debug_hook=None,
-                on_exception=None):
+def _logic_loop(
+    context, node_stack, debugging=False, debug_hook=None, on_exception=None
+):
     push_stack = node_stack.append
     pop_stack = node_stack.pop
     breakpoints_enabled = debugging
@@ -273,7 +279,11 @@ def _logic_loop(context,
                 if isinstance(node, _ElementBase):
                     if node._meta.logic_skip or node._element_type in skip:
                         continue
-                    if debugging and debug_hook and not getattr(node, '_debug_skip', False):
+                    if (
+                        debugging
+                        and debug_hook
+                        and not getattr(node, "_debug_skip", False)
+                    ):
                         debugging, breakpoints_enabled = debug_hook(node)
                     if not node._ignore_skip:
                         skip = ()
@@ -288,40 +298,48 @@ def _logic_loop(context,
                         push_stack(next_node)
 
             except MoyaException as moya_exception:
-                callstack = context.get('._callstack', [])[:]
+                callstack = context.get("._callstack", [])[:]
                 exc_node = node
                 exc_type = moya_exception.type
 
                 while node_stack:
-                    enode = getattr(node, 'node', node)
+                    enode = getattr(node, "node", node)
                     if isinstance(enode, ElementBase):
                         if enode._meta.trap_exceptions:
-                            if hasattr(enode, 'on_exception'):
+                            if hasattr(enode, "on_exception"):
                                 new_node = enode.on_exception(context, moya_exception)
                                 if new_node is not None:
                                     push_stack(new_node)
                                 break
-                            moya_trace = trace.build(context,
-                                                     callstack,
-                                                     exc_node,
-                                                     moya_exception,
-                                                     sys.exc_info(),
-                                                     context.get('.request', None))
+                            moya_trace = trace.build(
+                                context,
+                                callstack,
+                                exc_node,
+                                moya_exception,
+                                sys.exc_info(),
+                                context.get(".request", None),
+                            )
                             try:
                                 node.throw(LogicError(moya_exception, moya_trace))
                             except StopIteration:
                                 close_generator(node)
                                 node = pop_stack()
                             break
-                        for sibling in enode.younger_siblings_of_type(("http://moyaproject.com", 'catch')):
+                        for sibling in enode.younger_siblings_of_type(
+                            ("http://moyaproject.com", "catch")
+                        ):
                             if sibling.check_exception_type(context, exc_type):
                                 close_generator(node)
 
                                 node = pop_stack()
                                 sibling.set_exception(context, moya_exception)
 
-                                push_stack(SkipNext(("http://moyaproject.com", "else"),
-                                                    ("http://moyaproject.com", "elif")))
+                                push_stack(
+                                    SkipNext(
+                                        ("http://moyaproject.com", "else"),
+                                        ("http://moyaproject.com", "elif"),
+                                    )
+                                )
                                 push_stack(DeferNodeContents(sibling))
                                 break
                         else:
@@ -336,13 +354,15 @@ def _logic_loop(context,
                     close_generator(node)
                     if on_exception:
                         on_exception(callstack, exc_node, moya_exception)
-                    request = context.get('.request', None)
-                    moya_trace = trace.build(context,
-                                             callstack,
-                                             exc_node,
-                                             moya_exception,
-                                             sys.exc_info(),
-                                             request)
+                    request = context.get(".request", None)
+                    moya_trace = trace.build(
+                        context,
+                        callstack,
+                        exc_node,
+                        moya_exception,
+                        sys.exc_info(),
+                        request,
+                    )
                     raise LogicError(moya_exception, moya_trace)
 
             except BreakLoop:
@@ -398,13 +418,15 @@ def _logic_loop(context,
 
             except Exception as logic_exception:
                 # Dump exception
-                #import traceback; traceback.print_exc(logic_exception)
-                #raise
+                # import traceback; traceback.print_exc(logic_exception)
+                # raise
                 if on_exception:
                     on_exception(node_stack, node, logic_exception)
-                request = context.get('.request', None)
-                callstack = context.get('._callstack', [])[:]
-                moya_trace = trace.build(context, None, node, logic_exception, sys.exc_info(), request)
+                request = context.get(".request", None)
+                callstack = context.get("._callstack", [])[:]
+                moya_trace = trace.build(
+                    context, None, node, logic_exception, sys.exc_info(), request
+                )
                 exc_node = node
                 raise LogicError(logic_exception, moya_trace)
     finally:
@@ -427,11 +449,11 @@ class _TracebackFile(object):
 
     def write(self, text):
         if not isinstance(text, text_type):
-            text = text_type(text, 'utf-8')
+            text = text_type(text, "utf-8")
         self.text.append(text)
 
     def getvalue(self):
-        return ''.join(self.text)
+        return "".join(self.text)
 
 
 class ErrorLineHighlighter(ConsoleHighlighter):
@@ -445,38 +467,48 @@ class ErrorLineHighlighter(ConsoleHighlighter):
     }
 
     highlights = [
-        r'(?P<tag>\<.*?\>)',
-        r'(?P<attribute>\s\S*?=\".*?\")',
-        r'(?P<string>\".*?\")',
-        r'^File \"(?P<line>.*?)\".*$',
+        r"(?P<tag>\<.*?\>)",
+        r"(?P<attribute>\s\S*?=\".*?\")",
+        r"(?P<string>\".*?\")",
+        r"^File \"(?P<line>.*?)\".*$",
     ]
 
 
 def moya_traceback(stack, node, exc, console, message="Logic Error"):
     console.div(message, bold=True, fg="red")
-    node = getattr(node, 'node', node)
+    node = getattr(node, "node", node)
     # if stack is None:
     #     stack = context.get('._callstack', [])
     for s in stack:
-        e = getattr(s, 'element', None)
+        e = getattr(s, "element", None)
         if e and e._code:
-            file_line = 'File "%s", line %s, in %s' % (e._location, e.source_line or 0, e)
+            file_line = 'File "%s", line %s, in %s' % (
+                e._location,
+                e.source_line or 0,
+                e,
+            )
             console(ErrorLineHighlighter.highlight(file_line)).nl()
             console.xmlsnippet(e._code, e.source_line or 0, extralines=2)
-    if hasattr(node, '_location'):
-        file_line = 'File "%s", line %s, in %s' % (node._location, getattr(node, 'source_line', 0) or 0, node)
+    if hasattr(node, "_location"):
+        file_line = 'File "%s", line %s, in %s' % (
+            node._location,
+            getattr(node, "source_line", 0) or 0,
+            node,
+        )
         console(ErrorLineHighlighter.highlight(file_line)).nl()
         console.xmlsnippet(node._code, node.source_line or 0, extralines=2)
 
     if isinstance(exc, MoyaException):
-        console.nl()("unhandled exception: ", fg="red", bold=True)('{}'.format(exc.type), fg="magenta", bold=True)(" ")('"{}"'.format(exc.msg), fg="green").nl()
+        console.nl()("unhandled exception: ", fg="red", bold=True)(
+            "{}".format(exc.type), fg="magenta", bold=True
+        )(" ")('"{}"'.format(exc.msg), fg="green").nl()
 
     else:
         if isinstance(exc, (ExpressionError, SubstitutionError)):
             console.exception(exc, tb=False)
         else:
             console.nl()
-            console.exception(exc, tb=not getattr(exc, 'hide_py_traceback', False))
+            console.exception(exc, tb=not getattr(exc, "hide_py_traceback", False))
 
     console.div()
 
@@ -497,10 +529,11 @@ def run_logic_debug(archive, context, node, node_stack):
     from .debugger import MoyaCmdDebugger
 
     from . import pilot
+
     console = pilot.console
     watches = []
 
-    context['.pilot'] = pilot
+    context[".pilot"] = pilot
 
     div_style = dict(bold=True, fg="black")
     cmd_shell = MoyaCmdDebugger(archive, console)
@@ -508,9 +541,9 @@ def run_logic_debug(archive, context, node, node_stack):
     break_node_stack = []
 
     def view(node):
-        node = getattr(node, '__node__', node)
+        node = getattr(node, "__node__", node)
         console.div()
-        console("In file \"%s\"" % node._location).nl()
+        console('In file "%s"' % node._location).nl()
         try:
             if node._code:
                 console.snippet(node._code, highlight_line=node.source_line).nl()
@@ -524,11 +557,13 @@ def run_logic_debug(archive, context, node, node_stack):
         except:
             extralines = 3
         extralines = max(extralines, 0)
-        node = getattr(node, '__node__', node)
+        node = getattr(node, "__node__", node)
         console.div()
-        console("In file \"%s\"" % node._location).nl()
+        console('In file "%s"' % node._location).nl()
         if node._code:
-            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines).nl()
+            console.xmlsnippet(
+                node._code, node.source_line or 0, extralines=extralines
+            ).nl()
         show_watches()
 
     def show_watches():
@@ -538,7 +573,9 @@ def run_logic_debug(archive, context, node, node_stack):
                 try:
                     val = context.eval(watch)
                     if is_missing(val):
-                        watch_table.append([watch, Cell(context.to_expr(val), italic=True)])
+                        watch_table.append(
+                            [watch, Cell(context.to_expr(val), italic=True)]
+                        )
                     else:
                         watch_table.append([watch, context.to_expr(val)])
                 except Exception as e:
@@ -550,20 +587,24 @@ def run_logic_debug(archive, context, node, node_stack):
             extralines = max(int(params), 0)
         except:
             extralines = 2
-        node = getattr(node, '__node__', node)
+        node = getattr(node, "__node__", node)
         if stack is None:
-            stack = context.get('._callstack', [])
+            stack = context.get("._callstack", [])
         for s in stack:
-            e = getattr(s, 'element', None)
+            e = getattr(s, "element", None)
             if e and e._code:
-                console('File \"%s\", in %s' % (e._location, e)).nl()
-                console.xmlsnippet(e._code, e.source_line or 0, extralines=extralines).nl()
-        if hasattr(node, '_location'):
-            console('File \"%s\", in %s' % (node._location, node)).nl()
-            console.xmlsnippet(node._code, node.source_line or 0, extralines=extralines).nl()
+                console('File "%s", in %s' % (e._location, e)).nl()
+                console.xmlsnippet(
+                    e._code, e.source_line or 0, extralines=extralines
+                ).nl()
+        if hasattr(node, "_location"):
+            console('File "%s", in %s' % (node._location, node)).nl()
+            console.xmlsnippet(
+                node._code, node.source_line or 0, extralines=extralines
+            ).nl()
 
     def show_exception(stack, node, exc):
-        moya_traceback(context.get('._callstack', []), node, exc, console)
+        moya_traceback(context.get("._callstack", []), node, exc, console)
         exc._displayed = True
         debug_hook(node, error_analysis=True)
 
@@ -572,10 +613,10 @@ def run_logic_debug(archive, context, node, node_stack):
             return False, False
         if archive.suppress_breakpoints:
             return False, False
-        node = getattr(node, 'node', node)
+        node = getattr(node, "node", node)
 
         if break_node_stack:
-            if node_stack != break_node_stack[:len(node_stack)]:
+            if node_stack != break_node_stack[: len(node_stack)]:
                 return True, True
             del break_node_stack[:]
 
@@ -588,16 +629,24 @@ def run_logic_debug(archive, context, node, node_stack):
             if isinstance(node, ElementBase):
                 if node.document.lib:
                     if not node.libname:
-                        node_name = "%s:%s" % (node.document.lib.long_name or '', node.docid)
+                        node_name = "%s:%s" % (
+                            node.document.lib.long_name or "",
+                            node.docid,
+                        )
                     else:
-                        node_name = "%s#%s" % (node.document.lib.long_name or '', node.libname)
+                        node_name = "%s#%s" % (
+                            node.document.lib.long_name or "",
+                            node.libname,
+                        )
                 else:
                     node_name = node.document.path
             else:
-                node_name = ''
-            prompt = (console("moya ", bold=True, fg="black", asstr=True) +
-                      console(node_name, bold=True, fg="blue", asstr=True) +
-                      console(" > ", asstr=True))
+                node_name = ""
+            prompt = (
+                console("moya ", bold=True, fg="black", asstr=True)
+                + console(node_name, bold=True, fg="blue", asstr=True)
+                + console(" > ", asstr=True)
+            )
             cmd_shell.prompt = prompt
             try:
                 cmd_shell.cmdloop()
@@ -611,34 +660,34 @@ def run_logic_debug(archive, context, node, node_stack):
                 console.exception(e, tb=True)
                 return False, False
 
-            _cmd = cmd = getattr(cmd_shell, 'usercmd', None)
+            _cmd = cmd = getattr(cmd_shell, "usercmd", None)
             if cmd is None:
                 console.div()
                 return False, False
 
-            if ' ' in cmd:
-                cmd, params = cmd.split(' ', 1)
+            if " " in cmd:
+                cmd, params = cmd.split(" ", 1)
             else:
-                params = ''
-            if cmd in ('s', 'step'):
+                params = ""
+            if cmd in ("s", "step"):
                 return True, True
-            if cmd in ('o', 'over'):
+            if cmd in ("o", "over"):
                 break_node_stack[:] = node_stack[:]
                 return True, True
-            elif cmd in ('u', 'out'):
+            elif cmd in ("u", "out"):
                 break_node_stack[:] = node_stack[:-1]
                 return True, True
-            elif cmd in ('t', 'stack'):
-                console.div('Stack', bold=True)
+            elif cmd in ("t", "stack"):
+                console.div("Stack", bold=True)
                 show_stack(node, params=params)
                 continue
-            elif cmd in ('c', 'cont', 'continue', 'EOF'):
-                if cmd == 'EOF':
+            elif cmd in ("c", "cont", "continue", "EOF"):
+                if cmd == "EOF":
                     console.nl()
                     return False, False
                 console.div("continue", **div_style)
                 return False, True
-            elif cmd in ('watch',):
+            elif cmd in ("watch",):
                 if params:
                     watches.append(params.strip())
                     show_watches()
@@ -646,39 +695,47 @@ def run_logic_debug(archive, context, node, node_stack):
                     del watches[:]
                     console("watches removed", italic=True).nl()
                 continue
-            elif cmd in ('winpdb',):
+            elif cmd in ("winpdb",):
                 try:
                     import rpdb2
+
                     rpdb2
                 except Exception:
-                    console.text('rpdb2 is required to debug with WinPDB', fg="red", bold=True)
+                    console.text(
+                        "rpdb2 is required to debug with WinPDB", fg="red", bold=True
+                    )
                 else:
-                    context['._winpdb_debug'] = True
-                    context['._winpdb_password'] = params.strip() or 'password'
-                    console.text("A WinPDB breakpoint has been set on the next Python call", fg="green")
+                    context["._winpdb_debug"] = True
+                    context["._winpdb_password"] = params.strip() or "password"
+                    console.text(
+                        "A WinPDB breakpoint has been set on the next Python call",
+                        fg="green",
+                    )
                 continue
-            elif cmd in ('v', 'view'):
+            elif cmd in ("v", "view"):
                 view(node)
                 continue
-            elif cmd in ('w', 'where'):
+            elif cmd in ("w", "where"):
                 where(node, params)
                 continue
-            elif cmd in ('e', 'eval'):
+            elif cmd in ("e", "eval"):
                 cmd_eval = params.strip()
                 if cmd_eval:
                     _cmd = cmd_eval
                 else:
                     cmd = params.strip()
-            elif cmd in ('r', 'run'):
+            elif cmd in ("r", "run"):
                 archive.suppress_breakpoints = True
-                console.div("Ignoring all breakpoints for this session", bold=True, fg="green")
+                console.div(
+                    "Ignoring all breakpoints for this session", bold=True, fg="green"
+                )
                 return False, False
-            elif cmd in ('let',):
-                if '=' not in params:
+            elif cmd in ("let",):
+                if "=" not in params:
                     console.error("Must be a key/value pair (i.e. foo='bar')")
                     continue
                 else:
-                    k, v = params.split('=', 1)
+                    k, v = params.split("=", 1)
                     k = k.strip()
                     v = v.strip()
                     try:
@@ -687,35 +744,36 @@ def run_logic_debug(archive, context, node, node_stack):
                         console.obj(context, e)
                     continue
 
-            elif cmd == 'exit':
+            elif cmd == "exit":
                 import sys
+
                 console.div("Goodbye", bold=True)
                 sys.exit(0)
             to_unicode = False
             to_expr = False
             to_repr = False
 
-            if _cmd.endswith('???'):
+            if _cmd.endswith("???"):
                 _cmd = _cmd[:-3]
                 to_repr = True
-            elif _cmd.endswith('??'):
+            elif _cmd.endswith("??"):
                 _cmd = _cmd[:-2]
                 to_expr = True
-            elif _cmd.endswith('?'):
+            elif _cmd.endswith("?"):
                 to_unicode = True
                 _cmd = _cmd[:-1]
 
             try:
                 if not cmd:
-                    #val = context.obj
+                    # val = context.obj
                     val = context.capture_scope()
                 else:
                     val = context.eval(_cmd)
             except SystemExit:
                 raise
             except Exception as e:
-                #from traceback import print_exc
-                #print_exc()
+                # from traceback import print_exc
+                # print_exc()
                 console.exception(e)
             else:
                 try:
@@ -733,7 +791,7 @@ def run_logic_debug(archive, context, node, node_stack):
 
                 except Exception as e:
                     console.exception(e)
-                    #from traceback import print_exc; print_exc()
+                    # from traceback import print_exc; print_exc()
                     continue
 
         return True, True
@@ -742,11 +800,13 @@ def run_logic_debug(archive, context, node, node_stack):
     with debug_lock:
         while 1:
             try:
-                _logic_loop(context,
-                            node_stack,
-                            debugging=debugging and not archive.suppress_breakpoints,
-                            debug_hook=debug_hook,
-                            on_exception=show_exception)
+                _logic_loop(
+                    context,
+                    node_stack,
+                    debugging=debugging and not archive.suppress_breakpoints,
+                    debug_hook=debug_hook,
+                    on_exception=show_exception,
+                )
             except SystemExit:
                 debugging = False
                 raise
@@ -755,6 +815,6 @@ def run_logic_debug(archive, context, node, node_stack):
             else:
                 break
 
-    #if debug and not archive.suppress_breakpoints:
+    # if debug and not archive.suppress_breakpoints:
     #    console.div("Exiting logic loop", **div_style)
     return False, False

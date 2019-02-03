@@ -27,18 +27,22 @@ class FileReader(object):
     @property
     def binary(self):
         try:
-            with io.open(self.path, 'rb') as f:
+            with io.open(self.path, "rb") as f:
                 return f.read()
         except IOError:
-            raise ElementError('unable to read "{}"'.format(self.path), element=self.element)
+            raise ElementError(
+                'unable to read "{}"'.format(self.path), element=self.element
+            )
 
     @property
     def text(self):
         try:
-            with io.open(self.path, 'rt') as f:
+            with io.open(self.path, "rt") as f:
                 return f.read()
         except IOError:
-            raise ElementError('unable to read "{}"'.format(self.path), element=self.element)
+            raise ElementError(
+                'unable to read "{}"'.format(self.path), element=self.element
+            )
 
 
 class Command(ElementBase):
@@ -70,8 +74,14 @@ Hello, World!
 
     _element_class = "command"
     synopsis = Attribute("Command synopsis, displayed when you list commands")
-    init = Attribute("Run this command as part of the init process?", type="boolean", default=False)
-    priority = Attribute("Priority for init process (higher piority commands will be run first)", type="integer", default=0)
+    init = Attribute(
+        "Run this command as part of the init process?", type="boolean", default=False
+    )
+    priority = Attribute(
+        "Priority for init process (higher piority commands will be run first)",
+        type="integer",
+        default=0,
+    )
 
     class Meta:
         logic_skip = True
@@ -81,63 +91,67 @@ Hello, World!
         self._doc = None
         self._init = self.init(context)
         self._priority = self.priority(context)
-        for doc in self.get_children(element_type=(namespaces.default, 'doc')):
+        for doc in self.get_children(element_type=(namespaces.default, "doc")):
             self._doc = doc.text
-        self._signature = _signature = {'options': [],
-                                        'arguments': [],
-                                        'switches': []}
-        for signature in self.children(element_type=(namespaces.default, 'signature')):
+        self._signature = _signature = {"options": [], "arguments": [], "switches": []}
+        for signature in self.children(element_type=(namespaces.default, "signature")):
 
-            for element in signature.children(element_type='option'):
+            for element in signature.children(element_type="option"):
                 params = element.get_all_parameters(context)
-                _signature['options'].append(params)
+                _signature["options"].append(params)
 
-            for element in signature.children(element_type='arg'):
+            for element in signature.children(element_type="arg"):
                 params = element.get_all_parameters(context)
-                _signature['arguments'].append(params)
+                _signature["arguments"].append(params)
 
-            for element in signature.children(element_type='switch'):
+            for element in signature.children(element_type="switch"):
                 params = element.get_all_parameters(context)
-                _signature['switch'].append(params)
+                _signature["switch"].append(params)
 
-        _signature['options'].sort(key=itemgetter('name'))
-        _signature['arguments'].sort(key=itemgetter('name'))
-        _signature['switches'].sort(key=itemgetter('name'))
-        _signature['alloptions'] = _signature['options'] + _signature['switches']
-        _signature['alloptions'].sort(key=itemgetter('name'))
+        _signature["options"].sort(key=itemgetter("name"))
+        _signature["arguments"].sort(key=itemgetter("name"))
+        _signature["switches"].sort(key=itemgetter("name"))
+        _signature["alloptions"] = _signature["options"] + _signature["switches"]
+        _signature["alloptions"].sort(key=itemgetter("name"))
 
     _types = {
         "string": lambda el: text_type,
         "int": lambda el: int,
         "integer": lambda el: int,
         "float": lambda el: float,
-        "file": lambda el: lambda p: FileReader(el, p)
+        "file": lambda el: lambda p: FileReader(el, p),
     }
 
     def update_parser(self, parser, context):
 
-        for signature in self.children(element_type='signature'):
-            for element in signature.children(element_type='option'):
+        for signature in self.children(element_type="signature"):
+            for element in signature.children(element_type="option"):
                 params = element.get_parameters(context)
                 if params.action:
-                    parser.add_argument('--' + params.name,
-                                        dest=params.name,
-                                        default=params.default,
-                                        help=params.help,
-                                        action=params.action)
+                    parser.add_argument(
+                        "--" + params.name,
+                        dest=params.name,
+                        default=params.default,
+                        help=params.help,
+                        action=params.action,
+                    )
                 else:
-                    parser.add_argument('--' + params.name,
-                                        dest=params.name,
-                                        default=params.default,
-                                        help=params.help,
-                                        type=self._types[params.type](self))
-            for element in signature.children(element_type='arg'):
+                    parser.add_argument(
+                        "--" + params.name,
+                        dest=params.name,
+                        default=params.default,
+                        help=params.help,
+                        type=self._types[params.type](self),
+                    )
+            for element in signature.children(element_type="arg"):
                 params = element.get_parameters(context)
-                parser.add_argument(dest=params.name,
-                                    nargs=params.nargs,
-                                    help=params.help,
-                                    metavar=params.metavar,
-                                    type=self._types[params.type](self))
+                parser.add_argument(
+                    dest=params.name,
+                    nargs=params.nargs,
+                    help=params.help,
+                    metavar=params.metavar,
+                    type=self._types[params.type](self),
+                )
             # for element in signature.children(element_type='switch'):
             #     params = element.get_parameters(context)
             #     parser.add_argument('--' + params.name,
@@ -162,7 +176,11 @@ class Arg(ElementBase):
     nargs = Attribute("Number of arguments to be consumed", default=None)
     help = Attribute("Argument help text", default=None)
     metavar = Attribute("Argument metavar (shown in the help)")
-    type = Attribute("Type of argument", choices=["string", 'integer', 'float', 'file'], default="string")
+    type = Attribute(
+        "Type of argument",
+        choices=["string", "integer", "float", "file"],
+        default="string",
+    )
 
     class Meta:
         logic_skip = True
@@ -185,12 +203,16 @@ class Option(ElementBase):
 
     _element_class = "command"
     name = Attribute("Argument name")
-    nargs = Attribute("Number of arguments", default='?')
+    nargs = Attribute("Number of arguments", default="?")
     help = Attribute("Argument help text")
     default = Attribute("Default", default=None)
     metavar = Attribute("Argument metavar")
     action = Attribute("Action", default=None)
-    type = Attribute("Type of argument", choices=["string", 'integer', 'float', 'file'], default="string")
+    type = Attribute(
+        "Type of argument",
+        choices=["string", "integer", "float", "file"],
+        default="string",
+    )
 
     class Meta:
         logic_skip = True

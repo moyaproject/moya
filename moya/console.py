@@ -9,6 +9,7 @@ import warnings
 import re
 from threading import RLock
 from textwrap import wrap, dedent
+
 warnings.filterwarnings("ignore")
 from os.path import splitext
 
@@ -22,7 +23,7 @@ else:
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
-WIN = sys.platform.startswith('win')
+WIN = sys.platform.startswith("win")
 
 if PY3:
     text_type = str
@@ -41,10 +42,10 @@ class ConsoleHighlighter(object):
     highlights = []
 
     @classmethod
-    def highlight(cls, text, default_style=''):
+    def highlight(cls, text, default_style=""):
         cls.compile()
         text = AttrText(text)
-        default_style = style(default_style or cls.styles.get(None, ''))
+        default_style = style(default_style or cls.styles.get(None, ""))
 
         if default_style:
             text.add_span(0, len(text), **default_style)
@@ -59,8 +60,11 @@ class ConsoleHighlighter(object):
 
     @classmethod
     def compile(cls):
-        if not hasattr(cls, '_compiled_highlights'):
-            cls._compiled_highlights = [re.compile(h, re.UNICODE | re.DOTALL | re.MULTILINE) for h in cls.highlights]
+        if not hasattr(cls, "_compiled_highlights"):
+            cls._compiled_highlights = [
+                re.compile(h, re.UNICODE | re.DOTALL | re.MULTILINE)
+                for h in cls.highlights
+            ]
             cls._compiled_styles = {k: style(v) for k, v in cls.styles.items()}
 
 
@@ -73,17 +77,17 @@ class XMLHighlighter(ConsoleHighlighter):
         "substitution": "bold magenta",
         "templatetag": "bold magenta",
         "braced": "bold",
-        "comment": "dim italic not bold"
+        "comment": "dim italic not bold",
     }
 
     highlights = [
-        r'(?P<tag>\<[^\!].*?\>)',
-        r'(?P<attribute>\s\S*?=\".*?\")',
-        r'(?P<string>\".*?\")',
-        r'(?P<braced>\{.*?\})',
-        r'(?P<substitution>\$\{.*?\})',
-        r'(?P<templatetag>\{\%.*?\%\})',
-        r'(?P<comment>\<\!\-\-.*?\-\-\>)',
+        r"(?P<tag>\<[^\!].*?\>)",
+        r"(?P<attribute>\s\S*?=\".*?\")",
+        r"(?P<string>\".*?\")",
+        r"(?P<braced>\{.*?\})",
+        r"(?P<substitution>\$\{.*?\})",
+        r"(?P<templatetag>\{\%.*?\%\})",
+        r"(?P<comment>\<\!\-\-.*?\-\-\>)",
     ]
 
 
@@ -94,26 +98,22 @@ class TemplateHighlighter(ConsoleHighlighter):
         "string": "yellow",
         "substitution": "bold magenta",
         "templatetag": "bold",
-        "comment": "dim white italic"
+        "comment": "dim white italic",
     }
 
     highlights = [
-        r'(?P<templatetag>\{\%.*?\%\})',
-        r'(?P<tag>\<.*?\>)',
-        r'(?P<attr>\s\S*?=\".*?\")',
-        r'(?P<string>\".*?\")',
-        r'(?P<substitution>\$\{.*?\})',
-        r'(?P<comment>\<\!\-\-.*?\-\-\>)',
+        r"(?P<templatetag>\{\%.*?\%\})",
+        r"(?P<tag>\<.*?\>)",
+        r"(?P<attr>\s\S*?=\".*?\")",
+        r"(?P<string>\".*?\")",
+        r"(?P<substitution>\$\{.*?\})",
+        r"(?P<comment>\<\!\-\-.*?\-\-\>)",
     ]
 
 
 class PythonHighlighter(ConsoleHighlighter):
-    styles = {
-        "comment": "dim white italic",
-        "string": "yellow"
-    }
-    highlights = [
-    ]
+    styles = {"comment": "dim white italic", "string": "yellow"}
+    highlights = []
 
 
 class INIHighligher(ConsoleHighlighter):
@@ -125,11 +125,11 @@ class INIHighligher(ConsoleHighlighter):
         "comment": "dim white italic",
     }
     highlights = [
-        r'^(?P<key>\S+?)\s*?\=\s*?(?P<value>.*?)$',
-        r'^\s+?(?P<value>.+?)$',
-        r'(?P<substitution>\$\{.*?\})',
-        r'^(?P<section>\[.*?\])',
-        r'^(?P<comment>\#.*?)$'
+        r"^(?P<key>\S+?)\s*?\=\s*?(?P<value>.*?)$",
+        r"^\s+?(?P<value>.+?)$",
+        r"(?P<substitution>\$\{.*?\})",
+        r"^(?P<section>\[.*?\])",
+        r"^(?P<comment>\#.*?)$",
     ]
 
 
@@ -149,7 +149,7 @@ def style(style_def):
     style = {}
     foreground = True
     style_set = True
-    for s in style_def.split(' '):
+    for s in style_def.split(" "):
         if s == "on":
             foreground = False
         elif s == "not":
@@ -165,22 +165,21 @@ def style(style_def):
 
 class AttrText(text_type):
     """A string with associate console attribute information"""
+
     def __init__(self, text, spans=None, *args, **kwargs):
         super(AttrText, self).__init__()
         self.attr_spans = spans or []
 
     def __repr__(self):
-        return 'AttrText(%r)' % super(AttrText, self).__repr__()
+        return "AttrText(%r)" % super(AttrText, self).__repr__()
 
     def add_span(self, start, end=None, **attrs):
         """Apply attributes to a span in the string"""
-        #if end < 0 or start > len(self):
+        # if end < 0 or start > len(self):
         #    return
         if end is None:
             end = len(self)
-        self.attr_spans.append((max(0, start),
-                                min(len(self), end),
-                                attrs))
+        self.attr_spans.append((max(0, start), min(len(self), end), attrs))
 
     def splitlines(self):
         """Split text in to lines, preserving attributes"""
@@ -192,7 +191,7 @@ class AttrText(text_type):
         find = self.find
         l = len(self)
         while pos < l:
-            line_end = find('\n', pos)
+            line_end = find("\n", pos)
             if line_end == -1:
                 line_end = len(self)  # - 1
             new_lines.append(AttrText(self[pos:line_end]))
@@ -202,10 +201,16 @@ class AttrText(text_type):
             pos = line_end + 1
 
         for start, end, attrs in self.attr_spans:
-            for line_list in lines[start >> bucket_shift:(end >> bucket_shift) + 1]:
+            for line_list in lines[start >> bucket_shift : (end >> bucket_shift) + 1]:
                 for line_start, line_end, line_offset in line_list:
                     line = new_lines[line_offset]
-                    line.attr_spans.append((max(0, start - line_start), min(len(line), end - line_start), attrs))
+                    line.attr_spans.append(
+                        (
+                            max(0, start - line_start),
+                            min(len(line), end - line_start),
+                            attrs,
+                        )
+                    )
 
         return new_lines
 
@@ -228,14 +233,14 @@ class AttrText(text_type):
                 accum_append(c)
             else:
                 if accum:
-                    span_text = ''.join(accum)
+                    span_text = "".join(accum)
                     text_append((span_text, last_attrs))
                 del accum[:]
                 accum_append(c)
                 last_attrs = c_attrs
 
         if accum:
-            span_text = ''.join(accum)
+            span_text = "".join(accum)
             text_append((span_text, last_attrs))
 
         console_out = console.__call__
@@ -244,7 +249,8 @@ class AttrText(text_type):
             for text, attrs in text:
                 console_out(text, **attrs)
 
-if platform.system() == 'Windows':
+
+if platform.system() == "Windows":
 
     def getTerminalSize():
         try:
@@ -261,15 +267,31 @@ if platform.system() == 'Windows':
 
             if res:
                 import struct
-                (bufx, bufy, curx, cury, wattr,
-                 left, top, right, bottom, maxx, maxy) = struct.unpack(b"hhhhHhhhhhh", csbi.raw)
+
+                (
+                    bufx,
+                    bufy,
+                    curx,
+                    cury,
+                    wattr,
+                    left,
+                    top,
+                    right,
+                    bottom,
+                    maxx,
+                    maxy,
+                ) = struct.unpack(b"hhhhHhhhhhh", csbi.raw)
                 sizex = right - left + 1
                 sizey = bottom - top + 1
             else:
-                sizex, sizey = 80, 25  # can't determine actual size - return default values
+                sizex, sizey = (
+                    80,
+                    25,
+                )  # can't determine actual size - return default values
             return sizex, sizey
         except:
             return 80, 25
+
 
 else:
 
@@ -280,13 +302,16 @@ else:
                 import termios
                 import struct
                 import os
-                cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+
+                cr = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
             except:
                 return None
             return cr
+
         cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
         if not cr:
             import os
+
             try:
                 fd = os.open(os.ctermid(), os.O_RDONLY)
                 cr = ioctl_GWINSZ(fd)
@@ -316,7 +341,7 @@ class Cell(object):
         if isinstance(cell, Cell):
             return cell
         if cell is None:
-            return Cell('None', italic=True, dim=True)
+            return Cell("None", italic=True, dim=True)
         try:
             text = text_type(cell)
         except:
@@ -339,32 +364,34 @@ class Cell(object):
         raise IndexError(index)
 
     def __repr__(self):
-        return 'Cell(%r)' % self.text
+        return "Cell(%r)" % self.text
 
     def get_min_length(self):
         try:
-            return min(max(len(token) for token in self.text.split(splitter))
-                       for splitter in (' ', ',', '/'))
+            return min(
+                max(len(token) for token in self.text.split(splitter))
+                for splitter in (" ", ",", "/")
+            )
         except ValueError:
             return 1
 
-    def get_lines(self, max_length=80, continuation='↪'):
+    def get_lines(self, max_length=80, continuation="↪"):
         center = self.attribs.get("center", False)
         if max_length is None:
             return self.text.splitlines()
         lines = []
         if max_length < 8:
-            continuation = ''
+            continuation = ""
 
         def add_line(line):
             if not line:
-                lines.append('')
+                lines.append("")
                 return
             new_lines = []
             while len(line) > max_length:
                 broken_line = line[:max_length]
                 break_pos = max_length
-                for break_char in ' /.-_':
+                for break_char in " /.-_":
                     if break_char in broken_line[8:]:
                         break_pos = broken_line.rindex(break_char)
                         break
@@ -379,7 +406,7 @@ class Cell(object):
             lines.extend(new_lines)
 
         for line in self.text.splitlines():
-            tokens = line.split(' ')[::-1]
+            tokens = line.split(" ")[::-1]
             line_tokens = []
 
             while tokens:
@@ -401,9 +428,11 @@ class Cell(object):
 
         return lines
 
-    def expand(self, max_length=None, continuation='↪'):
+    def expand(self, max_length=None, continuation="↪"):
         lines = self.get_lines(max_length=max_length, continuation=continuation)
-        expanded_lines = [Cell(line, processor=self.processor, **self.attribs) for line in lines]
+        expanded_lines = [
+            Cell(line, processor=self.processor, **self.attribs) for line in lines
+        ]
         return expanded_lines
 
 
@@ -418,14 +447,14 @@ class _TextOut(object):
 
     def write(self, text):
         if not isinstance(text, text_type):
-            text = text_type(text, 'utf-8')
+            text = text_type(text, "utf-8")
         self.text.append(text)
 
     def flush(self):
         pass
 
     def getvalue(self):
-        return ''.join(self.text)
+        return "".join(self.text)
 
 
 class _ConsoleFileInterface(object):
@@ -442,31 +471,29 @@ class _ConsoleFileInterface(object):
 class Console(object):
     """Write output to the console, with styles and color."""
 
-    fg_colors = dict(black=30,
-                     red=31,
-                     green=32,
-                     yellow=33,
-                     blue=34,
-                     magenta=35,
-                     cyan=36,
-                     white=37)
+    fg_colors = dict(
+        black=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37
+    )
 
-    bg_colors = dict(black=40,
-                     red=41,
-                     green=42,
-                     yellow=43,
-                     blue=44,
-                     magenta=45,
-                     cyan=46,
-                     white=47)
+    bg_colors = dict(
+        black=40, red=41, green=42, yellow=43, blue=44, magenta=45, cyan=46, white=47
+    )
 
     _lock = RLock()
 
-    def __init__(self, out=None, nocolors=False, text=False, width=None, html=False, unicode_borders=True):
+    def __init__(
+        self,
+        out=None,
+        nocolors=False,
+        text=False,
+        width=None,
+        html=False,
+        unicode_borders=True,
+    ):
         self.unicode_borders = unicode_borders
         if html:
             self.html = True
-            self.encoding = 'utf-8'
+            self.encoding = "utf-8"
             self.out = _TextOut()
             self.terminal_width = width or 120
             return
@@ -477,12 +504,12 @@ class Console(object):
         self.out = out or sys.stdout
         self.html = html
 
-        self.encoding = getattr(self.out, 'encoding', 'utf-8') or 'utf-8'
+        self.encoding = getattr(self.out, "encoding", "utf-8") or "utf-8"
         if nocolors:
             self.terminal_colors = False
         else:
             self.terminal_colors = self.is_terminal()
-            if sys.platform.startswith('win') and not colorama:
+            if sys.platform.startswith("win") and not colorama:
                 self.terminal_colors = False
         if self.is_terminal():
             w, h = getTerminalSize()
@@ -502,7 +529,7 @@ class Console(object):
 
     def flush(self):
         with self._lock:
-            if hasattr(self.out, 'flush'):
+            if hasattr(self.out, "flush"):
                 self.out.flush()
 
     def update_terminal_width(self):
@@ -524,34 +551,36 @@ class Console(object):
         except AttributeError:
             return False
 
-    def _html_out(self,
-                  text,
-                  fg=None,
-                  bg=None,
-                  bold=False,
-                  underline=False,
-                  dim=False,
-                  reverse=False,
-                  italic=False,
-                  nl=False):
+    def _html_out(
+        self,
+        text,
+        fg=None,
+        bg=None,
+        bold=False,
+        underline=False,
+        dim=False,
+        reverse=False,
+        italic=False,
+        nl=False,
+    ):
         css_classes = []
         append = css_classes.append
         if bold:
-            append('console-bold')
+            append("console-bold")
         if underline:
-            append('console-underline')
+            append("console-underline")
         if dim:
-            append('console-dim')
+            append("console-dim")
         if reverse:
-            append('console-reverse')
+            append("console-reverse")
         if italic:
-            append('console-italic')
+            append("console-italic")
         if fg is not None:
-            append('console-foreground-' + fg)
+            append("console-foreground-" + fg)
         if bg is not None:
-            append('console-background-' + bg)
+            append("console-background-" + bg)
         if italic:
-            append('console-italic')
+            append("console-italic")
 
         class_attrib = " ".join(css_classes)
 
@@ -559,51 +588,55 @@ class Console(object):
             tag = '<span class="{}">'.format(class_attrib)
             self.out.write(tag)
 
-        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        text = text.replace('\n', '<br>')
-        self.out.write(text.encode('utf-8'))
+        text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        text = text.replace("\n", "<br>")
+        self.out.write(text.encode("utf-8"))
 
         if class_attrib:
-            self.out.write('</span>')
+            self.out.write("</span>")
 
         if nl:
-            self.out.write('<br>')
+            self.out.write("<br>")
 
         return self
 
-    def __call__(self,
-                 text,
-                 fg=None,
-                 bg=None,
-                 bold=False,
-                 underline=False,
-                 dim=False,
-                 reverse=False,
-                 italic=False,
-                 nl=False,
-                 asstr=False,
-                 center=False):
+    def __call__(
+        self,
+        text,
+        fg=None,
+        bg=None,
+        bold=False,
+        underline=False,
+        dim=False,
+        reverse=False,
+        italic=False,
+        nl=False,
+        asstr=False,
+        center=False,
+    ):
         if isinstance(text, AttrText):
             return self.text(text)
         if self.html:
-            return self._html_out(text,
-                                  fg=fg,
-                                  bg=bg,
-                                  bold=bold,
-                                  underline=underline,
-                                  dim=dim,
-                                  reverse=reverse,
-                                  italic=italic,
-                                  nl=nl)
+            return self._html_out(
+                text,
+                fg=fg,
+                bg=bg,
+                bold=bold,
+                underline=underline,
+                dim=dim,
+                reverse=reverse,
+                italic=italic,
+                nl=nl,
+            )
         if isinstance(text, lazystr):
             text = text_type(text)
         if isinstance(text, bytes):
-            text = text.decode('ascii', 'replace')
+            text = text.decode("ascii", "replace")
         if PY2:
-            text = text.encode(self.encoding, 'replace')
+            text = text.encode(self.encoding, "replace")
 
         if nl:
-            text += '\n'
+            text += "\n"
         if not self.terminal_colors:
             if asstr:
                 return text
@@ -630,33 +663,50 @@ class Console(object):
         display_attributes = ["%i" % da for da in attrs if da is not None]
 
         if display_attributes:
-            out.append('\x1b[%sm' % ';'.join(display_attributes))
+            out.append("\x1b[%sm" % ";".join(display_attributes))
         out.append(text)
         if display_attributes:
             out.append("\x1b[0m")
         if asstr:
-            return ''.join(out)
+            return "".join(out)
 
         if PY3:
+
             def console_encode(s):
                 """Work around a bug with colorama on Windows"""
-                if self.encoding.lower() != 'utf-8':
-                    return s.encode(self.encoding, 'replace').decode(self.encoding)
+                if self.encoding.lower() != "utf-8":
+                    return s.encode(self.encoding, "replace").decode(self.encoding)
                 return s
+
             with self._lock:
-                self.out.write(''.join(
-                               (text.decode('utf-8', 'replace') if isinstance(text, bytes) else console_encode(text))
-                               for text in out))
+                self.out.write(
+                    "".join(
+                        (
+                            text.decode("utf-8", "replace")
+                            if isinstance(text, bytes)
+                            else console_encode(text)
+                        )
+                        for text in out
+                    )
+                )
         else:
             with self._lock:
-                self.out.write(b''.join(
-                               (text.encode(self.encoding, 'replace') if isinstance(text, text_type) else text)
-                               for text in out))
+                self.out.write(
+                    b"".join(
+                        (
+                            text.encode(self.encoding, "replace")
+                            if isinstance(text, text_type)
+                            else text
+                        )
+                        for text in out
+                    )
+                )
         return self
 
     def progress(self, msg, num_steps=100, width=12):
         """A context manager to manage progress bars"""
         from .progress import Progress, ProgressContext
+
         p = Progress(self, msg, num_steps=num_steps, width=width)
         p.render()
         return ProgressContext(p)
@@ -664,15 +714,15 @@ class Console(object):
     def nl(self, count=1):
         with self._lock:
             if self.html:
-                self.out.write('<br>' * count)
+                self.out.write("<br>" * count)
             else:
-                self.out.write('\n' * count)
+                self.out.write("\n" * count)
         return self
 
     def div(self, msg=None, **attrs):
         """Inserts a horizontal dividing line"""
-        if 'italic' not in attrs:
-            attrs['italic'] = True
+        if "italic" not in attrs:
+            attrs["italic"] = True
         with self._lock:
             self.update_terminal_width()
             if msg is None:
@@ -681,7 +731,7 @@ class Console(object):
                 space = self.terminal_width - len(msg)
                 lspace = space // 2
                 rspace = space - lspace
-                self('-' * lspace, dim=True)(msg, **attrs)('-' * rspace, dim=True).nl()
+                self("-" * lspace, dim=True)(msg, **attrs)("-" * rspace, dim=True).nl()
 
         return self
 
@@ -714,11 +764,13 @@ class Console(object):
                 highlight_columns = None
             _lineno = max(0, lineno - extralines)
 
-            self.snippet(code,
-                         (_lineno, _lineno + extralines * 2 + 1),
-                         highlight_line=lineno,
-                         highlight_columns=highlight_columns,
-                         line_numbers=True)
+            self.snippet(
+                code,
+                (_lineno, _lineno + extralines * 2 + 1),
+                highlight_line=lineno,
+                highlight_columns=highlight_columns,
+                line_numbers=True,
+            )
         return self
 
     def pysnippet(self, code, lineno=1, colno=None, extralines=3, line_numbers=True):
@@ -734,21 +786,23 @@ class Console(object):
 
             highlighter = PythonHighlighter()
 
-            self.snippet(code,
-                         (_lineno, _lineno + extralines * 2 + 1),
-                         highlight_line=lineno,
-                         highlight_columns=highlight_columns,
-                         line_numbers=True,
-                         highlighter=highlighter)
+            self.snippet(
+                code,
+                (_lineno, _lineno + extralines * 2 + 1),
+                highlight_line=lineno,
+                highlight_columns=highlight_columns,
+                line_numbers=True,
+                highlighter=highlighter,
+            )
         return self
 
     def ini(self, code):
         highlighter = INIHighligher()
-        self.snippet(code,
-                     highlighter=highlighter,
-                     line_numbers=False)
+        self.snippet(code, highlighter=highlighter, line_numbers=False)
 
-    def templatesnippet(self, code, lineno=1, colno=None, endcolno=None, extralines=3, line_numbers=True):
+    def templatesnippet(
+        self, code, lineno=1, colno=None, endcolno=None, extralines=3, line_numbers=True
+    ):
         with self._lock:
             if not code:
                 return
@@ -757,16 +811,18 @@ class Console(object):
             else:
                 highlight_columns = None
             _lineno = max(0, lineno - extralines)
-            self.snippet(code,
-                         (_lineno, _lineno + extralines * 2 + 1),
-                         highlight_line=lineno,
-                         highlight_columns=highlight_columns,
-                         highlighter=TemplateHighlighter,
-                         line_numbers=line_numbers)
+            self.snippet(
+                code,
+                (_lineno, _lineno + extralines * 2 + 1),
+                highlight_line=lineno,
+                highlight_columns=highlight_columns,
+                highlighter=TemplateHighlighter,
+                line_numbers=line_numbers,
+            )
         return self
 
     def xml(self, code):
-        code = code.strip('\n') + '\n'
+        code = code.strip("\n") + "\n"
         self.snippet(code, line_numbers=False)
         return self
         # with self._lock:
@@ -815,7 +871,7 @@ class Console(object):
             self.update_terminal_width()
 
             if not tb:
-                if hasattr(exc, 'get_moya_error'):
+                if hasattr(exc, "get_moya_error"):
                     exc_text = exc.get_moya_error()
                 else:
                     exc_text = text_type(exc)
@@ -826,6 +882,7 @@ class Console(object):
                 raw_tb = exc
             else:
                 import traceback
+
                 raw_tb = traceback.format_exc()
 
             if self.terminal_colors:
@@ -838,25 +895,25 @@ class Console(object):
                 else:
                     lexer = Python3TracebackLexer
 
-                htb = highlight(raw_tb,
-                                lexer(),
-                                TerminalFormatter())
+                htb = highlight(raw_tb, lexer(), TerminalFormatter())
                 self(htb)
             else:
                 self(raw_tb)
 
         return self
 
-    def table(self,
-              table,
-              header_row=None,
-              grid=True,
-              header=True,
-              divider_attribs=None,
-              pad=1,
-              border_style=0,
-              dividers=True,
-              cell_processors=None):
+    def table(
+        self,
+        table,
+        header_row=None,
+        grid=True,
+        header=True,
+        divider_attribs=None,
+        pad=1,
+        border_style=0,
+        dividers=True,
+        cell_processors=None,
+    ):
         """Renders a table of cells with an optional ASCII grid
 
         A table should be a list of lists, where each element is either a string
@@ -869,59 +926,66 @@ class Console(object):
                 cell_processors = {}
             if header_row is not None and header:
                 table = make_table_header(*header_row) + table[:]
-            tl = tr = bl = br = ir = it = il = ib = ii = '+'
-            hor = '-'
-            ver = '|'
-            continuation = '...'
+            tl = tr = bl = br = ir = it = il = ib = ii = "+"
+            hor = "-"
+            ver = "|"
+            continuation = "..."
             if self.unicode_borders:
-                continuation = '↪  '
+                continuation = "↪  "
                 if border_style == 0:
-                    tl = '╭'
-                    tr = '╮'
-                    bl = '╰'
-                    br = '╯'
-                    il = '├'
-                    ir = '┤'
-                    it = '┬'
-                    ib = '┴'
-                    hor = '─'
-                    ver = '│'
-                    ii = '┼'
+                    tl = "╭"
+                    tr = "╮"
+                    bl = "╰"
+                    br = "╯"
+                    il = "├"
+                    ir = "┤"
+                    it = "┬"
+                    ib = "┴"
+                    hor = "─"
+                    ver = "│"
+                    ii = "┼"
                 elif border_style == 1:
-                    tl = '╔'
-                    tr = '╗'
-                    bl = '╚'
-                    br = '╝'
-                    il = '╠'
-                    ir = '╣'
-                    it = '╦'
-                    ib = '╩'
-                    hor = '═'
-                    ver = '║'
-                    ii = '╬'
+                    tl = "╔"
+                    tr = "╗"
+                    bl = "╚"
+                    br = "╝"
+                    il = "╠"
+                    ir = "╣"
+                    it = "╦"
+                    ib = "╩"
+                    hor = "═"
+                    ver = "║"
+                    ii = "╬"
                 elif border_style == 2:
-                    tl = '┏'
-                    tr = '┓'
-                    bl = '┗'
-                    br = '┛'
-                    il = '┣'
-                    ir = '┫'
-                    it = '┳'
-                    ib = '┻'
-                    hor = '━'
-                    ver = '┃'
-                    ii = '╋'
+                    tl = "┏"
+                    tr = "┓"
+                    bl = "┗"
+                    br = "┛"
+                    il = "┣"
+                    ir = "┫"
+                    it = "┳"
+                    ib = "┻"
+                    hor = "━"
+                    ver = "┃"
+                    ii = "╋"
 
             self.update_terminal_width()
             terminal_width = self.terminal_width
             if WIN:
                 terminal_width -= 1
-            table = [[Cell.create(cell, cell_processors.get(rowno))
-                      for rowno, cell in enumerate(row)] for row in table]
+            table = [
+                [
+                    Cell.create(cell, cell_processors.get(rowno))
+                    for rowno, cell in enumerate(row)
+                ]
+                for row in table
+            ]
 
             def cell_len(cell):
                 try:
-                    return max(len(line) for line in cell.get_lines(max_length=terminal_width))
+                    return max(
+                        len(line) for line in cell.get_lines(max_length=terminal_width)
+                    )
                 except ValueError:
                     return 0
 
@@ -929,7 +993,9 @@ class Console(object):
             cell_min_lengths = []
             for row_no in xrange(len(table[0])):
                 cell_lengths.append(max(cell_len(col[row_no]) for col in table))
-                cell_min_lengths.append(max(col[row_no].get_min_length() for col in table))
+                cell_min_lengths.append(
+                    max(col[row_no].get_min_length() for col in table)
+                )
 
             num_cols = len(cell_lengths)
             table_padding = (num_cols * pad * 2) + (num_cols - 1) + grid * 2
@@ -937,7 +1003,11 @@ class Console(object):
             if table_width > self.terminal_width:
 
                 # make each column its minimum until the table fits, starting with the widest column
-                for i, (cell_length, min_length) in sorted(enumerate(zip(cell_lengths, cell_min_lengths)), key=lambda c: c[1][1], reverse=True):
+                for i, (cell_length, min_length) in sorted(
+                    enumerate(zip(cell_lengths, cell_min_lengths)),
+                    key=lambda c: c[1][1],
+                    reverse=True,
+                ):
                     over_size = table_width - terminal_width
                     cell_lengths[i] -= min(over_size, (cell_length - min_length))
                     table_width = sum(cell_lengths) + table_padding
@@ -963,33 +1033,43 @@ class Console(object):
             if grid:
                 if divider_attribs is None:
                     divider_attribs = {"dim": True}
-                top_divider = (tl + '%s' + tr) % it.join(hor * (l + pad * 2) for l in cell_lengths)
-                mid_divider = (il + '%s' + ir) % ii.join(hor * (l + pad * 2) for l in cell_lengths)
-                bot_divider = (bl + '%s' + br) % ib.join(hor * (l + pad * 2) for l in cell_lengths)
+                top_divider = (tl + "%s" + tr) % it.join(
+                    hor * (l + pad * 2) for l in cell_lengths
+                )
+                mid_divider = (il + "%s" + ir) % ii.join(
+                    hor * (l + pad * 2) for l in cell_lengths
+                )
+                bot_divider = (bl + "%s" + br) % ib.join(
+                    hor * (l + pad * 2) for l in cell_lengths
+                )
             else:
                 divider_attribs = {}
-                divider = ''
-                top_divider = ''
-                mid_divider = ''
-                bot_divider = ''
+                divider = ""
+                top_divider = ""
+                mid_divider = ""
+                bot_divider = ""
 
             if grid:
                 self(top_divider, **divider_attribs).nl()
 
-            padding = pad * ' '
-            separator = ver if grid else ' '
+            padding = pad * " "
+            separator = ver if grid else " "
             for row_no, row in enumerate(table):
                 if row_no == len(table) - 1:
                     divider = bot_divider
                 else:
                     divider = mid_divider
-                expanded_cells = [cell.expand(cell_length, continuation=continuation)
-                                  for cell_length, cell in zip(cell_lengths, row)]
+                expanded_cells = [
+                    cell.expand(cell_length, continuation=continuation)
+                    for cell_length, cell in zip(cell_lengths, row)
+                ]
                 max_height = max(len(cell) for cell in expanded_cells)
 
                 for cell_line_no in xrange(max_height):
-                    expanded_row = [ecell[cell_line_no] if cell_line_no < len(ecell) else Cell('')
-                                    for ecell in expanded_cells]
+                    expanded_row = [
+                        ecell[cell_line_no] if cell_line_no < len(ecell) else Cell("")
+                        for ecell in expanded_cells
+                    ]
                     if grid:
                         r = [(ver, divider_attribs)]
                     else:
@@ -997,12 +1077,18 @@ class Console(object):
                     append = r.append
 
                     last_i = len(expanded_row) - 1
-                    for i, (cell, cell_length) in enumerate(zip(expanded_row, cell_lengths)):
+                    for i, (cell, cell_length) in enumerate(
+                        zip(expanded_row, cell_lengths)
+                    ):
                         text, attribs = cell
                         if grid:
-                            cell_text = (padding + text.ljust(cell_length) + padding)
+                            cell_text = padding + text.ljust(cell_length) + padding
                         else:
-                            cell_text = (padding * (i > 0) + text.ljust(cell_length) + padding * (i < last_i))
+                            cell_text = (
+                                padding * (i > 0)
+                                + text.ljust(cell_length)
+                                + padding * (i < last_i)
+                            )
                         cell_text = cell.processor(cell_text)
                         append((cell_text, attribs))
                         if grid or i < last_i:
@@ -1030,10 +1116,10 @@ class Console(object):
             else:
 
                 ext = splitext(path)[-1].lower()
-                if ext in ('.htm', '.html', '.text'):
+                if ext in (".htm", ".html", ".text"):
                     self(TemplateHighlighter.highlight(contents))
                     return self
-                elif ext in ('.xml',):
+                elif ext in (".xml",):
                     self(XMLHighlighter.highlight(contents))
                     return self
 
@@ -1041,6 +1127,7 @@ class Console(object):
                 from pygments.formatters import TerminalFormatter
                 from pygments.lexers import get_lexer_for_filename, guess_lexer
                 from pygments.util import ClassNotFound
+
                 try:
                     lexer = guess_lexer(contents)
                 except ClassNotFound:
@@ -1056,9 +1143,17 @@ class Console(object):
                     self(hcode)
             return self
 
-    def snippet(self, xml, line_range=None, line_numbers=True, highlight_line=None, highlight_columns=None, highlighter=None):
+    def snippet(
+        self,
+        xml,
+        line_range=None,
+        line_numbers=True,
+        highlight_line=None,
+        highlight_columns=None,
+        highlighter=None,
+    ):
         if isinstance(xml, binary_type):
-            xml = xml.decode('utf-8', 'replace')
+            xml = xml.decode("utf-8", "replace")
         with self._lock:
             self.update_terminal_width()
             if line_range is None:
@@ -1067,7 +1162,7 @@ class Console(object):
             else:
                 start, end = line_range
 
-            #xml = xml.replace('\r', '\n')
+            # xml = xml.replace('\r', '\n')
             xml = AttrText(xml)
 
             if highlighter is None:
@@ -1083,10 +1178,12 @@ class Console(object):
                 start = 1
             if end > len(lines):
                 end = len(lines) + 1
-            lines = lines[start - 1:end - 1]
+            lines = lines[start - 1 : end - 1]
 
             try:
-                max_number_length = max(len(text_type(n + 1)) for n in range(start, end)) + 1
+                max_number_length = (
+                    max(len(text_type(n + 1)) for n in range(start, end)) + 1
+                )
             except:
                 max_number_length = 0
             if max_number_length < 6:
@@ -1103,7 +1200,9 @@ class Console(object):
                                 indicator = "*"
                         else:
                             indicator = "*"
-                        number = (indicator + text_type(line_no)).rjust(max_number_length, ' ') + ' '
+                        number = (indicator + text_type(line_no)).rjust(
+                            max_number_length, " "
+                        ) + " "
 
                         if highlight_columns:
                             col_start, col_end = highlight_columns
@@ -1111,7 +1210,7 @@ class Console(object):
 
                         self(number, fg="blue", bold=True)(line).nl()
                     else:
-                        number = text_type(line_no).rjust(max_number_length) + ' '
+                        number = text_type(line_no).rjust(max_number_length) + " "
                         self(number, fg="blue", dim=False)(line).nl()
             else:
                 for line in lines:
@@ -1121,7 +1220,7 @@ class Console(object):
     def obj(self, context, obj, **kwargs):
         """Writes information regarding an object to the console"""
         with self._lock:
-            if hasattr(obj, '__moyaconsole__'):
+            if hasattr(obj, "__moyaconsole__"):
                 try:
                     obj.__moyaconsole__(self)
                 except Exception:
@@ -1137,7 +1236,9 @@ class Console(object):
                     table.append([k, context.to_expr(v, max_size=1000)])
                 self.table(table, header_row=["key", "value"])
             elif isinstance(obj, (list, tuple)):
-                table = [(i, context.to_expr(v, max_size=1000)) for i, v in enumerate(obj)]
+                table = [
+                    (i, context.to_expr(v, max_size=1000)) for i, v in enumerate(obj)
+                ]
                 self.table(table, header_row=["index", "value"])
             elif isinstance(obj, bool):
                 if obj:
@@ -1164,15 +1265,27 @@ def test_table(console):
     red = dict(fg="red")
 
     table = [
-             [("foo", dict(reverse=True, bold=True, dim=True)), ("100", red), "Some text"],
-             [("long text!", dict(reverse=True, bold=True, dim=True)), long_text, "Some text"],
-             [("bar", bold), ("120", red), ("Some more text\nline 2\nline 3", {'bg':'green'})],
-             [("foo", bold), ("100", red), "Some text"],
-             [("bar", bold), ("120", red), "Some more text"],
-             [("A longer cell...\nwith multiple lines", bold), (120344, red), "Some more text"],
-             [("foo", bold), ("100", red), "Some text"],
-             [("bar", bold), ("120", red), "Some more text"],
-            ]
+        [("foo", dict(reverse=True, bold=True, dim=True)), ("100", red), "Some text"],
+        [
+            ("long text!", dict(reverse=True, bold=True, dim=True)),
+            long_text,
+            "Some text",
+        ],
+        [
+            ("bar", bold),
+            ("120", red),
+            ("Some more text\nline 2\nline 3", {"bg": "green"}),
+        ],
+        [("foo", bold), ("100", red), "Some text"],
+        [("bar", bold), ("120", red), "Some more text"],
+        [
+            ("A longer cell...\nwith multiple lines", bold),
+            (120344, red),
+            "Some more text",
+        ],
+        [("foo", bold), ("100", red), "Some text"],
+        [("bar", bold), ("120", red), "Some more text"],
+    ]
     console.table(table, grid=True)
     console.nl()
 
@@ -1183,7 +1296,8 @@ if __name__ == "__main__":
     test_table(console)
 
     import sys
-    #sys.exit()
+
+    # sys.exit()
 
     xml = """<moya xmlns="http://moyaproject.com">
     <mountpoint name="main">
@@ -1207,15 +1321,16 @@ if __name__ == "__main__":
 <!-- Commented <b>out</b> -->
 """
     console = Console()
-    #console.xml_trace(xml, (4, 11), highlight_line=8)
-    console.snippet(xml, (4, 11), highlight_line=7, highlight_columns=(12,100))
+    # console.xml_trace(xml, (4, 11), highlight_line=8)
+    console.snippet(xml, (4, 11), highlight_line=7, highlight_columns=(12, 100))
 
 if 0:
     console = Console()
-    console('Hello ', dim=True)("World!", bold=True).nl()
+    console("Hello ", dim=True)("World!", bold=True).nl()
     console("Green!", bg="green", fg="white").nl()
 
-    xml = """<moya xmlns="http://moyaproject.com">
+    xml = (
+        """<moya xmlns="http://moyaproject.com">
 
 <mountpoint name="testmount" libname="root">
     <url name="article" url="/{year}/{month}/{day}/{slug}/" methods="GET" target="viewpost">
@@ -1252,7 +1367,9 @@ if 0:
 </macro>
 -->
 
-</moya>"""*10
+</moya>"""
+        * 10
+    )
 
     console.xmlsnippet(xml, 6)
 
@@ -1267,20 +1384,32 @@ if 0:
     long_text = """If you are writing an application of any size, it will most likely require a number of files to run - files which could be stored in a variety of possible locations. Furthermore, you will probably want to be able to change the location of those files when debugging and testing. You may even want to store those files somewhere other than the user's hard drive."""
 
     table = [
-             [("foo", dict(reverse=True, bold=True, dim=True)), ("100", red), "Some text"],
-             [("long text!", dict(reverse=True, bold=True, dim=True)), long_text, "Some text"],
-             [("bar", bold), ("120", red), ("Some more text\nline 2\nline 3", {'bg':'green'})],
-             [("foo", bold), ("100", red), "Some text"],
-             [("bar", bold), ("120", red), "Some more text"],
-             [("A longer cell...\nwith multiple lines", bold), (120344, red), "Some more text"],
-             [("foo", bold), ("100", red), "Some text"],
-             [("bar", bold), ("120", red), "Some more text"],
-            ]
+        [("foo", dict(reverse=True, bold=True, dim=True)), ("100", red), "Some text"],
+        [
+            ("long text!", dict(reverse=True, bold=True, dim=True)),
+            long_text,
+            "Some text",
+        ],
+        [
+            ("bar", bold),
+            ("120", red),
+            ("Some more text\nline 2\nline 3", {"bg": "green"}),
+        ],
+        [("foo", bold), ("100", red), "Some text"],
+        [("bar", bold), ("120", red), "Some more text"],
+        [
+            ("A longer cell...\nwith multiple lines", bold),
+            (120344, red),
+            "Some more text",
+        ],
+        [("foo", bold), ("100", red), "Some text"],
+        [("bar", bold), ("120", red), "Some more text"],
+    ]
     console.table(table, grid=True)
     console.nl()
     console.table(table, grid=True, header=True)
     console.nl()
     console.table(table, grid=False, pad=0)
 
-    #for line in Cell("""If you are writing an application of any size, it will most likely require a number of files to run - files which could be stored in a variety of possible locations. Furthermore, you will probably want to be able to change the location of those files when debugging and testing. You may even want to store those files somewhere other than the user's hard drive.""").get_lines():
+    # for line in Cell("""If you are writing an application of any size, it will most likely require a number of files to run - files which could be stored in a variety of possible locations. Furthermore, you will probably want to be able to change the location of those files when debugging and testing. You may even want to store those files somewhere other than the user's hard drive.""").get_lines():
     #        print line

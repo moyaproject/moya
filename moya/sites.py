@@ -15,8 +15,8 @@ from collections import namedtuple
 import logging
 from operator import attrgetter
 
-log = logging.getLogger('moya.runtime')
-startup_log = logging.getLogger('moya.startup')
+log = logging.getLogger("moya.runtime")
+startup_log = logging.getLogger("moya.startup")
 
 
 SiteMatch = namedtuple("SiteMatch", ["site", "site_data", "custom_data"])
@@ -25,16 +25,18 @@ SiteMatch = namedtuple("SiteMatch", ["site", "site_data", "custom_data"])
 @implements_to_string
 class LocaleProxy(AttributeExposer):
 
-    __moya_exposed_attributes__ = ["language",
-                                   "territory",
-                                   "language_name",
-                                   "display_name",
-                                   "territory_name",
-                                   "territories",
-                                   "languages",
-                                   "months"]
+    __moya_exposed_attributes__ = [
+        "language",
+        "territory",
+        "language_name",
+        "display_name",
+        "territory_name",
+        "territories",
+        "languages",
+        "months",
+    ]
 
-    def __init__(self, locale_name='en_US.UTF-8'):
+    def __init__(self, locale_name="en_US.UTF-8"):
         self._locale_name = locale_name
         self._locale = Locale.parse(locale_name)
 
@@ -95,35 +97,42 @@ class LocaleProxy(AttributeExposer):
 @implements_to_string
 class SiteInstance(AttributeExposer):
 
-    __moya_exposed_attributes__ = ['base_content',
-                                   'timezone',
-                                   'user_timezone',
-                                   'append_slash',
-                                   'head_as_get',
-                                   'language',
-                                   'locale',
-                                   'datetime_format',
-                                   'time_format',
-                                   'date_format',
-                                   'timespan_format',
-                                   'translations',
-                                   'host',
-                                   'theme'
-                                   ]
+    __moya_exposed_attributes__ = [
+        "base_content",
+        "timezone",
+        "user_timezone",
+        "append_slash",
+        "head_as_get",
+        "language",
+        "locale",
+        "datetime_format",
+        "time_format",
+        "date_format",
+        "timespan_format",
+        "translations",
+        "host",
+        "theme",
+    ]
 
-    def __init__(self, site, site_data, custom_data, _as_bool=lambda t: t.strip().lower() in ('yes', 'true')):
+    def __init__(
+        self,
+        site,
+        site_data,
+        custom_data,
+        _as_bool=lambda t: t.strip().lower() in ("yes", "true"),
+    ):
         self._site = site
         self._data = SettingsContainer.from_dict(custom_data)
 
         get = site_data.get
-        self.base_content = get('base_content')
-        self.timezone = get('timezone')
-        self.user_timezone = _as_bool(get('user_timezone', 'no'))
-        self.append_slash = _as_bool(get('append_slash', 'no'))
-        self.head_as_get = _as_bool(get('head_as_get', 'yes'))
-        self.language = get('language')
-        _locale = get('locale', 'en')
-        if _locale == 'auto':
+        self.base_content = get("base_content")
+        self.timezone = get("timezone")
+        self.user_timezone = _as_bool(get("user_timezone", "no"))
+        self.append_slash = _as_bool(get("append_slash", "no"))
+        self.head_as_get = _as_bool(get("head_as_get", "yes"))
+        self.language = get("language")
+        _locale = get("locale", "en")
+        if _locale == "auto":
             _locale, _ = locale.getdefaultlocale()
             # TODO: May not be correct on Windows
             # http://stackoverflow.com/questions/3425294/how-to-detect-the-os-default-language-in-python
@@ -131,54 +140,56 @@ class SiteInstance(AttributeExposer):
             self.locale = LocaleProxy(_locale)
         except:
             log.error("unable to get locale '%s', defaulting to 'en'", _locale)
-            self.locale = LocaleProxy('en')
-        self.datetime_format = get('datetime_format')
-        self.time_format = get('time_format')
-        self.date_format = get('date_format')
-        self.timespan_format = get('timespan_format')
+            self.locale = LocaleProxy("en")
+        self.datetime_format = get("datetime_format")
+        self.time_format = get("time_format")
+        self.date_format = get("date_format")
+        self.timespan_format = get("timespan_format")
         self.translations = gettext.NullTranslations()
-        self.host = get('host')
-        self.theme = get('theme')
+        self.host = get("host")
+        self.theme = get("theme")
 
     def __str__(self):
-        return '''<site "{}">'''.format(self._site.domain)
+        return """<site "{}">""".format(self._site.domain)
 
     def __repr__(self):
         return "Site('{}')".format(self._site.domain)
 
     def __moyarepr__(self, context):
-        return '''<site '{}'>'''.format(self._site.domain)
+        return """<site '{}'>""".format(self._site.domain)
 
     def __moyaconsole__(self, console):
         console.text(text_type(self), fg="green", bold=True)
-        table = sorted([(k, getattr(self, k)) for k in self.__moya_exposed_attributes__])
-        console.table(table, header_row=['key', 'value'])
+        table = sorted(
+            [(k, getattr(self, k)) for k in self.__moya_exposed_attributes__]
+        )
+        console.table(table, header_row=["key", "value"])
 
 
 @implements_to_string
 class Site(object):
     """Site data associated with a domain"""
 
-    _re_domain = re.compile(r'(\*)|(\{.*?\})|(.*?)')
-    _re_named_match = re.compile(r'{.*?}').match
+    _re_domain = re.compile(r"(\*)|(\{.*?\})|(.*?)")
+    _re_named_match = re.compile(r"{.*?}").match
 
-    def __init__(self,
-                 domain,
-                 insert_order=0,
-                 site_data=None,
-                 custom_data=None):
+    def __init__(self, domain, insert_order=0, site_data=None, custom_data=None):
         self.domain = domain
         if site_data is None:
             site_data = {}
         if custom_data is None:
             custom_data = None
 
-        if 'priority' in site_data:
-            _priority = site_data['priority']
+        if "priority" in site_data:
+            _priority = site_data["priority"]
             try:
                 priority = int(_priority)
             except ValueError:
-                startup_log.error("priority in site section should should be an integer (not '{}')".format(_priority))
+                startup_log.error(
+                    "priority in site section should should be an integer (not '{}')".format(
+                        _priority
+                    )
+                )
         else:
             priority = 0
         self.order = (priority, insert_order)
@@ -199,33 +210,35 @@ class Site(object):
             if token:
                 if self._re_named_match(token):
                     name = token[1:-1]
-                    if name.startswith('*'):
+                    if name.startswith("*"):
                         name = name[1:]
                         if name:
-                            tokens.append('(?P<{}>.*?)'.format(re.escape(name)))
+                            tokens.append("(?P<{}>.*?)".format(re.escape(name)))
                         else:
-                            tokens.append('(?:.*?)'.format(re.escape(name)))
+                            tokens.append("(?:.*?)".format(re.escape(name)))
                     else:
                         if name:
-                            tokens.append('(?P<{}>[\w-]*?)'.format(re.escape(name)))
+                            tokens.append("(?P<{}>[\w-]*?)".format(re.escape(name)))
                         else:
-                            tokens.append('(?:[\w-]*?)'.format(re.escape(name)))
+                            tokens.append("(?:[\w-]*?)".format(re.escape(name)))
                 else:
-                    if token == '*':
-                        tokens.append('.*?')
+                    if token == "*":
+                        tokens.append(".*?")
                     else:
                         tokens.append(re.escape(token))
-        re_domain = '^{}$'.format(''.join(tokens))
+        re_domain = "^{}$".format("".join(tokens))
         self._match = re.compile(re_domain).match
 
     def __str__(self):
-        return '''<site "{}">'''.format(self.domain)
+        return """<site "{}">""".format(self.domain)
 
     def __repr__(self):
         return "Site('{}', {!r})".format(self.domain, self.site_data)
 
     def __moyarepr__(self, context):
-        return '''<site '{}', {}>'''.format(self.domain, context.to_expr(self.site_data))
+        return """<site '{}', {}>""".format(
+            self.domain, context.to_expr(self.site_data)
+        )
 
     def match(self, domain):
         match = self._match(domain)
@@ -242,18 +255,20 @@ class Site(object):
 class Sites(object):
     """A container that maps site wild-cards on to a dictionary"""
 
-    _site_keys = [("base_content", 'site#content.base'),
-                  ("timezone", 'UTC'),
-                  ("user_timezone", 'yes'),
-                  ("append_slash", 'no'),
-                  ("locale", 'en_us.UTF-8'),
-                  ("language", 'en-US'),
-                  ("datetime_format", 'medium'),
-                  ("date_format", 'medium'),
-                  ("time_format", 'medium'),
-                  ("timespan_format", 'medium'),
-                  ("host", "${.request.host_url}"),
-                  ("theme", "default")]
+    _site_keys = [
+        ("base_content", "site#content.base"),
+        ("timezone", "UTC"),
+        ("user_timezone", "yes"),
+        ("append_slash", "no"),
+        ("locale", "en_us.UTF-8"),
+        ("language", "en-US"),
+        ("datetime_format", "medium"),
+        ("date_format", "medium"),
+        ("time_format", "medium"),
+        ("timespan_format", "medium"),
+        ("host", "${.request.host_url}"),
+        ("theme", "default"),
+    ]
 
     def __init__(self):
         self._defaults = {}
@@ -275,28 +290,30 @@ class Sites(object):
         site_data = self._defaults.copy()
         custom_data = {}
         for k, v in iteritems(section):
-            prefix, hyphen, key = k.partition('-')
-            if hyphen and prefix in ('data', ''):
+            prefix, hyphen, key = k.partition("-")
+            if hyphen and prefix in ("data", ""):
                 custom_data[key] = v
             else:
                 site_data[k] = v
 
-        for domain in domains.split(','):
+        for domain in domains.split(","):
             domain = domain.strip()
-            site = Site(domain, self._order, site_data=site_data, custom_data=custom_data)
+            site = Site(
+                domain, self._order, site_data=site_data, custom_data=custom_data
+            )
             self._order += 1
             self._sites.append(site)
 
     def add(self, domains, **data):
         if isinstance(domains, text_type):
-            domains = domains.split(',')
+            domains = domains.split(",")
         for domain in domains:
             domain = domain.strip()
             site = Site(domain, self._order, custom_data=data)
             self._order += 1
             self._sites.append(site)
 
-    def _match(self, domain, _order_key=attrgetter('order')):
+    def _match(self, domain, _order_key=attrgetter("order")):
         self._sites.sort(key=_order_key, reverse=True)
         for site in self._sites:
             site_data, custom_data = site.match(domain)
@@ -329,30 +346,30 @@ if __name__ == "__main__":
 
     sites = Sites()
     sites.add("www.moyaproject.com", name="www")
-    sites.add('moyaproject.com', name="nodomain")
-    sites.add('{name}.moyaroject.com', subdomain=True)
-    sites.add('127.*', local=True)
+    sites.add("moyaproject.com", name="nodomain")
+    sites.add("{name}.moyaroject.com", subdomain=True)
+    sites.add("127.*", local=True)
 
-    print(1, sites.match('www.moyaroject.com'))
-    print(2, sites.match('moyaroject.com'))
-    print(3, sites.match('blog.moyaroject.com'))
-    print(4, sites.match('127.0.0.1'))
-    print(5, sites.match('google.com'))
+    print(1, sites.match("www.moyaroject.com"))
+    print(2, sites.match("moyaroject.com"))
+    print(3, sites.match("blog.moyaroject.com"))
+    print(4, sites.match("127.0.0.1"))
+    print(5, sites.match("google.com"))
 
-    print('moyaroject.com' in sites)
-    print('google.com' in sites)
+    print("moyaroject.com" in sites)
+    print("google.com" in sites)
 
     print(sites)
 
-    print(Site('{*subdomain}.{domain}.{tld}').match('sub.sub-domain.moyaroject.com'))
+    print(Site("{*subdomain}.{domain}.{tld}").match("sub.sub-domain.moyaroject.com"))
 
     sites = Sites()
-    sites.add('www.moyaroject.com,blog.moyaroject.com')
+    sites.add("www.moyaroject.com,blog.moyaroject.com")
 
     sites = Sites()
-    sites.add('*')
-    print(sites.match('alternative.localhost'))
+    sites.add("*")
+    print(sites.match("alternative.localhost"))
 
     sites = Sites()
-    sites.add('{*domain}', name="test")
-    print(sites.match('www.moyaproject.com'))
+    sites.add("{*domain}", name="test")
+    print(sites.match("www.moyaproject.com"))

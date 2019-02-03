@@ -11,19 +11,25 @@ class ContextError(Exception):
 class ContextKeyError(KeyError):
     hide_py_traceback = True
     error_type = "Context Error"
-    diagnosis = "Check the index you wish to set exists and supports modifying its values."
+    diagnosis = (
+        "Check the index you wish to set exists and supports modifying its values."
+    )
 
     def __init__(self, context, index, message=None):
         if message is not None:
             self.index = text_type(index)
             self.message = message
         else:
-            frame = ", ".join("'{}'".format(scope.index or ".") for scope in context.current_frame)
+            frame = ", ".join(
+                "'{}'".format(scope.index or ".") for scope in context.current_frame
+            )
             index = text_type(index)
-            if text_type(index).startswith('.'):
+            if text_type(index).startswith("."):
                 self.message = "'{}' not found in context".format(index)
             else:
-                self.message = "index '{}' not found in context frame {}".format(index, frame)
+                self.message = "index '{}' not found in context frame {}".format(
+                    index, frame
+                )
 
             self.index = index
 
@@ -39,7 +45,7 @@ class SubstitutionError(ContextError):
         self.end = end
         self.original = original
         if original is not None:
-            self.msg = getattr(original, 'msg', text_type(original))
+            self.msg = getattr(original, "msg", text_type(original))
         else:
             self.msg = None
 
@@ -49,10 +55,10 @@ class SubstitutionError(ContextError):
 
     def __str__(self):
         if self.msg:
-            return 'substitution failed for ${{{}}} ({})'.format(self.exp, self.msg)
+            return "substitution failed for ${{{}}} ({})".format(self.exp, self.msg)
         else:
-            return 'substitution failed for ${{{}}}'.format(self.exp)
+            return "substitution failed for ${{{}}}".format(self.exp)
 
     def __moyaconsole__(self, console):
-        if hasattr(self.original, '__moyaconsole__'):
+        if hasattr(self.original, "__moyaconsole__"):
             self.original.__moyaconsole__(console)

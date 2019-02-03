@@ -39,30 +39,34 @@ from moya.compat import text_type, implements_to_string, zip_longest, cmp
 import re
 
 
-_re_version = re.compile(r'^([\d\.]+)(?:\-([0-9A-Za-z-\.]+))?$')
-_re_version_spec = re.compile(r'^([\w\.\-]+)((?:(?:==|>=|<=|>|<|\!=)[\d\.0-9A-Za-z-]*)*)$')
-_re_version_compare = re.compile(r'(==|>=|<=|>|<|\!=)([\d\.0-9A-Za-z-]*)')
+_re_version = re.compile(r"^([\d\.]+)(?:\-([0-9A-Za-z-\.]+))?$")
+_re_version_spec = re.compile(
+    r"^([\w\.\-]+)((?:(?:==|>=|<=|>|<|\!=)[\d\.0-9A-Za-z-]*)*)$"
+)
+_re_version_compare = re.compile(r"(==|>=|<=|>|<|\!=)([\d\.0-9A-Za-z-]*)")
 
 
 class VersionFormatError(ValueError):
     def __init__(self, v, msg=None):
         if msg is None:
-            msg = "version format should be MAJOR.MINOR.PATCH or MAJOR.MINOR.PATCH-RELEASE (not '{}')".format(v)
+            msg = "version format should be MAJOR.MINOR.PATCH or MAJOR.MINOR.PATCH-RELEASE (not '{}')".format(
+                v
+            )
         return super(VersionFormatError, self).__init__(msg)
 
 
 class VersionSpecFormatError(ValueError):
     def __init__(self, v):
-        return super(VersionSpecFormatError, self).__init__("version specification '{}' is badly formatted".format(v))
+        return super(VersionSpecFormatError, self).__init__(
+            "version specification '{}' is badly formatted".format(v)
+        )
 
 
 @implements_to_string
 class VersionSpec(AttributeExposer):
     """A string that specifies valid versions"""
 
-    __moya_exposed_attributes__ = ['name',
-                                   'normalized',
-                                   'comparisons']
+    __moya_exposed_attributes__ = ["name", "normalized", "comparisons"]
 
     def __init__(self, spec):
         version_match = _re_version_spec.match(spec)
@@ -70,7 +74,9 @@ class VersionSpec(AttributeExposer):
             raise VersionSpecFormatError(spec)
         name, comparisons = version_match.groups()
         self.name = name
-        self.comparisons = [(c, Version(v)) for c, v in _re_version_compare.findall(comparisons)]
+        self.comparisons = [
+            (c, Version(v)) for c, v in _re_version_compare.findall(comparisons)
+        ]
 
     def __repr__(self):
         return 'VersionSpec("{}")'.format(self)
@@ -89,7 +95,9 @@ class VersionSpec(AttributeExposer):
 
     @property
     def normalized(self):
-        return "{}{}".format(self.name, ''.join(c + text_type(v) for c, v in self.comparisons))
+        return "{}{}".format(
+            self.name, "".join(c + text_type(v) for c, v in self.comparisons)
+        )
 
     def compare(self, version):
         """Compare with a version, return True if the version matches the specification"""
@@ -123,15 +131,17 @@ class VersionSpec(AttributeExposer):
 class Version(AttributeExposer):
     """A single version number with overloaded comparisons"""
 
-    __moya_exposed_attributes__ = ['release',
-                                   'number',
-                                   'text',
-                                   'major',
-                                   'minor',
-                                   'patch',
-                                   'release',
-                                   'tuple',
-                                   'base']
+    __moya_exposed_attributes__ = [
+        "release",
+        "number",
+        "text",
+        "major",
+        "minor",
+        "patch",
+        "release",
+        "tuple",
+        "base",
+    ]
 
     @classmethod
     def _cmp_seq(cls, v1, v2):
@@ -158,15 +168,17 @@ class Version(AttributeExposer):
             version_text, release = version_match.groups()
 
             if release:
-                self.release = [int(r) if r.isdigit() else r for r in release.split('.')]
+                self.release = [
+                    int(r) if r.isdigit() else r for r in release.split(".")
+                ]
             else:
                 self.release = []
             try:
-                number_tokens = version_text.split('.')
+                number_tokens = version_text.split(".")
                 if len(number_tokens) > 3:
                     raise VersionFormatError(v)
                 if len(number_tokens) < 3:
-                    number_tokens += ['0'] * (3 - len(number_tokens))
+                    number_tokens += ["0"] * (3 - len(number_tokens))
                 self.number = [int(component) for component in number_tokens]
             except ValueError:
                 raise VersionFormatError(v)
@@ -195,7 +207,7 @@ class Version(AttributeExposer):
     def text(self):
         text = ".".join(text_type(n) for n in self.number)
         if self.release:
-            text += "-{}".format('.'.join(text_type(t) for t in self.release))
+            text += "-{}".format(".".join(text_type(t) for t in self.release))
         return text
 
     def _cmp(self, other):
@@ -206,7 +218,7 @@ class Version(AttributeExposer):
         if other.release and not self.release:
             return -1
         if self.release and not other.release:
-            return + 1
+            return +1
         if other.release or self.release:
             return self._cmp_seq(other.release, self.release)
         return 0
@@ -256,17 +268,21 @@ class Version(AttributeExposer):
     @property
     def base(self):
         if self.release:
-            return "{}.{}-{}".format(self.major, self.minor, '.'.join(text_type(r) for r in self.release))
+            return "{}.{}-{}".format(
+                self.major, self.minor, ".".join(text_type(r) for r in self.release)
+            )
         else:
             return "{}.{}".format(self.major, self.minor)
 
-    _comparisons = {'': lambda v1, v2: True,
-                    '==': __eq__,
-                    '!=': __ne__,
-                    '>': __gt__,
-                    '>=': __ge__,
-                    '<': __lt__,
-                    '<=': __le__}
+    _comparisons = {
+        "": lambda v1, v2: True,
+        "==": __eq__,
+        "!=": __ne__,
+        ">": __gt__,
+        ">=": __ge__,
+        "<": __lt__,
+        "<=": __le__,
+    }
 
     def compare(self, comparison, version):
         v = Version(version)
@@ -282,13 +298,29 @@ if __name__ == "__main__":
     v = VersionSpec("moya.auth>=0.1.5<1.0!=0.1.9")
     print(v)
 
-    print(v.compare('0.1.9'))
-    print(v.compare('0.2.0'))
-    print(v.compare('0.9.9'))
-    print(v.compare('1.0'))
+    print(v.compare("0.1.9"))
+    print(v.compare("0.2.0"))
+    print(v.compare("0.9.9"))
+    print(v.compare("1.0"))
 
     print(Version("1.2-beta"))
-    versions = ["0", "1", "0.1", "0.2", "0.2.0-dev", "0.1.1", "0.2.0-dev.1", "0.2.0-dev.2", "0.2.0-2", "0.1.6", "1.0", "0.1.9", "0.5", "0.9.23", "1.1.0"]
+    versions = [
+        "0",
+        "1",
+        "0.1",
+        "0.2",
+        "0.2.0-dev",
+        "0.1.1",
+        "0.2.0-dev.1",
+        "0.2.0-dev.2",
+        "0.2.0-2",
+        "0.1.6",
+        "1.0",
+        "0.1.9",
+        "0.5",
+        "0.9.23",
+        "1.1.0",
+    ]
     print("sorted", Version.sorted(versions))
     print(v.filter(versions))
     print(v.get_highest(versions))

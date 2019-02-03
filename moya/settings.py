@@ -15,7 +15,7 @@ import os
 
 
 def read_settings(fs, path):
-    with fs.safeopen(path, 'rb') as settings_file:
+    with fs.safeopen(path, "rb") as settings_file:
         cfg = iniparse.parse(settings_file)
     return cfg
 
@@ -30,11 +30,10 @@ class SettingsKeyError(KeyError):
 
 
 class SettingsContainer(OrderedDict):
-
     @classmethod
     def apply_master(self, master, settings):
         for section_name, section in master.items():
-            if section_name == 'service':
+            if section_name == "service":
                 continue
             if section_name in settings:
                 settings[section_name].update(section)
@@ -51,22 +50,32 @@ class SettingsContainer(OrderedDict):
                     path = p
                     break
             else:
-                raise errors.SettingsError('''settings file not found (looked for {} in {})'''.format(textual_list(path, join_word='and'), fs))
+                raise errors.SettingsError(
+                    """settings file not found (looked for {} in {})""".format(
+                        textual_list(path, join_word="and"), fs
+                    )
+                )
 
         settings_stack = []
         while 1:
             path = relpath(normpath(path))
             if path in visited:
-                raise errors.SettingsError('''recursive extends detected, "{}" has already been extended'''.format(path))
-            with fs.open(path, 'rt') as settings_file:
-                s = iniparse.parse(settings_file,
-                                   SettingsContainer(),
-                                   section_class=SettingsSectionContainer)
+                raise errors.SettingsError(
+                    """recursive extends detected, "{}" has already been extended""".format(
+                        path
+                    )
+                )
+            with fs.open(path, "rt") as settings_file:
+                s = iniparse.parse(
+                    settings_file,
+                    SettingsContainer(),
+                    section_class=SettingsSectionContainer,
+                )
             visited.append(path)
             settings_stack.append(s)
-            if "extends" in s['']:
-                #path = s['']['extends']
-                path = join(dirname(path), s['']['extends'])
+            if "extends" in s[""]:
+                # path = s['']['extends']
+                path = join(dirname(path), s[""]["extends"])
             else:
                 break
         settings_stack = settings_stack[::-1]
@@ -90,15 +99,21 @@ class SettingsContainer(OrderedDict):
         while 1:
             path = os.path.abspath(os.path.normpath(path))
             if path in visited:
-                raise errors.SettingsError('''recursive extends detected, "{}" has already been extended'''.format(path))
-            with io.open(path, 'rt') as settings_file:
-                s = iniparse.parse(settings_file,
-                                   SettingsContainer(),
-                                   section_class=SettingsSectionContainer)
+                raise errors.SettingsError(
+                    """recursive extends detected, "{}" has already been extended""".format(
+                        path
+                    )
+                )
+            with io.open(path, "rt") as settings_file:
+                s = iniparse.parse(
+                    settings_file,
+                    SettingsContainer(),
+                    section_class=SettingsSectionContainer,
+                )
             visited.append(path)
             settings_stack.append(s)
-            if "extends" in s['']:
-                path = s['']['extends']
+            if "extends" in s[""]:
+                path = s[""]["extends"]
             else:
                 break
         settings_stack = settings_stack[::-1]
@@ -115,9 +130,9 @@ class SettingsContainer(OrderedDict):
     @classmethod
     def read_from_file(self, settings_file):
         """Reads settings, but doesn't do any extends processing"""
-        settings = iniparse.parse(settings_file,
-                                  SettingsContainer(),
-                                  section_class=SettingsSectionContainer)
+        settings = iniparse.parse(
+            settings_file, SettingsContainer(), section_class=SettingsSectionContainer
+        )
         return settings
 
     @classmethod
@@ -145,13 +160,17 @@ class SettingsContainer(OrderedDict):
     def get(self, section_name, key, default=Ellipsis):
         if section_name not in self:
             if default is Ellipsis:
-                raise SettingsKeyError("required section [%s] not found in settings" % section_name)
+                raise SettingsKeyError(
+                    "required section [%s] not found in settings" % section_name
+                )
             else:
                 return default
         section = self[section_name]
         if key not in section:
             if default is Ellipsis:
-                raise SettingsKeyError("key '%s' not found in section [%s]" % (key, section_name))
+                raise SettingsKeyError(
+                    "key '%s' not found in section [%s]" % (key, section_name)
+                )
             else:
                 return default
         return section[key]
@@ -176,19 +195,23 @@ class SettingsContainer(OrderedDict):
         try:
             value = int(value_text)
         except:
-            raise SettingsKeyError("key [{}]/{} should be empty or an integer value (not '{}')".format(section_name, key, value_text))
+            raise SettingsKeyError(
+                "key [{}]/{} should be empty or an integer value (not '{}')".format(
+                    section_name, key, value_text
+                )
+            )
         else:
             return value
 
     def __moyaconsole__(self, console):
         from console import Cell
+
         table = [(Cell("key", bold=True), Cell("value", bold=True))]
         table += sorted(self.items())
         console.table(table)
 
 
 class SettingsSectionContainer(OrderedDict):
-
     def get_int(self, key, default=None):
         if key not in self:
             return default
@@ -205,6 +228,7 @@ class SettingsSectionContainer(OrderedDict):
 
     def __moyaconsole__(self, console):
         from console import Cell
+
         table = [(Cell("key", bold=True), Cell("value", bold=True))]
         table += sorted(self.items())
         console.table(table)
@@ -223,7 +247,7 @@ class EmptySettings(object):
             return False
         if key == "int":
             return 0
-        return ''
+        return ""
 
     def __repr__(self):
         return "<emptysettings>"
@@ -244,7 +268,7 @@ class EmptySettings(object):
         return False
 
     def __unicode__(self):
-        return ''
+        return ""
 
     def __iter__(self):
         return iter([])
@@ -254,6 +278,7 @@ class EmptySettings(object):
 
     def __moyaconsole__(self, console):
         from console import Cell
+
         table = [(Cell("key", bold=True), Cell("value", bold=True))]
         console.table(table)
 
@@ -265,11 +290,11 @@ class SettingContainer(text_type):
             super(SettingContainer, self).__init__(setting_text)
         else:
             super().__init__()
-        #self.raw = setting_text
+        # self.raw = setting_text
         self.setting_text = setting_text.strip()
         self.lines = [line.strip() for line in setting_text.splitlines()] or []
-        self.first = self.lines[0] if self.lines else ''
-        self.bool = self.setting_text.lower() in ('yes', 'true')
+        self.first = self.lines[0] if self.lines else ""
+        self.bool = self.setting_text.lower() in ("yes", "true")
         try:
             self.int = int(self.setting_text)
         except ValueError:
@@ -301,6 +326,7 @@ class SettingContainer(text_type):
         return self.first != other
 
     if not PY2:
+
         def __hash__(self):
             return super().__hash__()
 
@@ -308,8 +334,8 @@ class SettingContainer(text_type):
 if __name__ == "__main__":
 
     settings = SettingsContainer()
-    print(settings['nothere'])
+    print(settings["nothere"])
 
     s = SettingContainer("foo\nbar")
     print(s == "foo")
-    print(s['list'])
+    print(s["list"])

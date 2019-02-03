@@ -32,7 +32,9 @@ def mandel(xsize=80, ysize=20, max_iteration=50):
             row += chars[iteration % 10]
         print(row)
 
+
 if __name__ == "__main__":
     from moya.tools import timer
+
     with timer("Calculate mandelbrot set in raw python"):
         mandel()

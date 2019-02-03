@@ -59,9 +59,9 @@ from operator import attrgetter
 
 
 logging.raiseExceptions = False
-log = logging.getLogger('moya.runtime')
-startup_log = logging.getLogger('moya.startup')
-signal_log = logging.getLogger('moya.signal')
+log = logging.getLogger("moya.runtime")
+startup_log = logging.getLogger("moya.startup")
+signal_log = logging.getLogger("moya.signal")
 
 
 FoundElement = namedtuple("Element", ["app", "element"])
@@ -71,9 +71,7 @@ TagData = namedtuple("TagData", ["app", "data"])
 _libs_path = libs.__file__
 if isinstance(_libs_path, bytes):
     _libs_path = _libs_path.decode(sys.getfilesystemencoding())
-MOYA_LIBS_PATH = '://' + os.path.dirname(
-    os.path.abspath(_libs_path)
-)
+MOYA_LIBS_PATH = "://" + os.path.dirname(os.path.abspath(_libs_path))
 
 
 class Signals(object):
@@ -89,10 +87,10 @@ class Signals(object):
     @classmethod
     def _compare_signal(cls, signal_name, compare_signal_name):
         """Compare signal names, potentially with a wildcard"""
-        tokens = signal_name.split('.')
-        compare_tokens = compare_signal_name.split('.')
+        tokens = signal_name.split(".")
+        compare_tokens = compare_signal_name.split(".")
         for compare, token in zip_longest(compare_tokens, tokens, fillvalue=None):
-            if token == '*':
+            if token == "*":
                 return True
             if compare != token:
                 return False
@@ -116,9 +114,8 @@ class Signals(object):
 
 
 class CallableElement(ContextElementBase):
-
     class Meta:
-        tag_name = 'ExternalCall'
+        tag_name = "ExternalCall"
         is_call = True
         element_class = "logic"
 
@@ -153,7 +150,9 @@ class CallableElement(ContextElementBase):
         return True
 
     def logic(self, context):
-        call = self.push_call(context, {'args': self.args} if self.args else {}, app=self.app)
+        call = self.push_call(
+            context, {"args": self.args} if self.args else {}, app=self.app
+        )
         call.update(self.kwargs)
         if self.frame is None:
             try:
@@ -170,8 +169,8 @@ class CallableElement(ContextElementBase):
                     call = self.pop_call(context)
 
         if self._return_value is None:
-            self._return_value = call.get('_return')
-        if hasattr(self._return_value, 'get_return_value'):
+            self._return_value = call.get("_return")
+        if hasattr(self._return_value, "get_return_value"):
             self._return_value = self._return_value.get_return_value()
 
     def __call__(self, context, *args, **kwargs):
@@ -197,6 +196,7 @@ class CallableElement(ContextElementBase):
 
 class SectionWrapper(object):
     """Wraps a settings section so that it produces a specific error for missing keys"""
+
     def __init__(self, section_name, section):
         self.section_name = section_name
         self.section = section
@@ -205,8 +205,9 @@ class SectionWrapper(object):
         try:
             return self.section[key]
         except KeyError:
-            error_text = "Required key [{section_name}]/{key} not found in settings".format(section_name=self.section_name,
-                                                                                            key=key)
+            error_text = "Required key [{section_name}]/{key} not found in settings".format(
+                section_name=self.section_name, key=key
+            )
             raise errors.StartupFailedError(error_text)
 
     def __getattr__(self, key):
@@ -215,9 +216,18 @@ class SectionWrapper(object):
 
 class Archive(object):
 
-    _re_element_ref_match = re.compile(r'^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$', re.UNICODE).match
+    _re_element_ref_match = re.compile(
+        r"^(.+\..+)#(.*)$|^(.+)#(.*)$|^#(.+)$", re.UNICODE
+    ).match
 
-    def __init__(self, project_fs=None, breakpoint=False, strict=False, test_build=False, develop=False):
+    def __init__(
+        self,
+        project_fs=None,
+        breakpoint=False,
+        strict=False,
+        test_build=False,
+        develop=False,
+    ):
         self.project_fs = project_fs
         self.strict = strict
         self.test_build = test_build
@@ -232,8 +242,9 @@ class Archive(object):
         self.settings = SettingsContainer()
         self.templates_fs = MultiFS()
         self.data_fs = MultiFS()
-        self.filesystems = FSContainer({'templates': self.templates_fs,
-                                        'data': self.data_fs})
+        self.filesystems = FSContainer(
+            {"templates": self.templates_fs, "data": self.data_fs}
+        )
         self.filters = FilterContainer(self)
         self.template_engines = {}
         self.database_engines = {}
@@ -283,7 +294,7 @@ class Archive(object):
     def moyarc(self):
         if self._moyarc is None:
             try:
-                with io.open(os.path.expanduser("~/.moyarc"), 'rt') as f:
+                with io.open(os.path.expanduser("~/.moyarc"), "rt") as f:
                     self._moyarc = settings.SettingsContainer.read_from_file(f)
             except IOError:
                 self._moyarc = settings.SettingsContainer()
@@ -295,10 +306,10 @@ class Archive(object):
             start = time()
             self._lib_database = self.scan_libs(self.lib_paths, self.project_fs)
             log.debug(
-                '%s scanned %i libs %0.1fms',
+                "%s scanned %i libs %0.1fms",
                 self,
                 len(self._lib_database),
-                (time() - start) * 1000.0
+                (time() - start) * 1000.0,
             )
         return self._lib_database
 
@@ -310,7 +321,7 @@ class Archive(object):
                 continue
             if _version_spec.comparisons and not _version_spec.compare(version):
                 continue
-            if '://' in path:
+            if "://" in path:
                 base_fs = open_fs(path)
             else:
                 base_fs = self.project_fs.opendir(path)
@@ -319,14 +330,14 @@ class Archive(object):
 
     def get_relative_path(self, path):
         """Get a relative path from the project base"""
-        base = self.project_fs.getsyspath('/', allow_none=True)
+        base = self.project_fs.getsyspath("/", allow_none=True)
         if base is None:
             return path
         return relativefrom(base, path)
 
     def open_fs(self, fs_url, create=False):
         if isinstance(fs_url, text_type):
-            if '://' in fs_url:
+            if "://" in fs_url:
                 fs = open_fs(fs_url, create=create)
             else:
                 if create:
@@ -347,9 +358,13 @@ class Archive(object):
         return console_file
 
     def create_console(self):
-        console = Console(out=self.get_console_file(),
-                          nocolors=not (self.log_color and self.moyarc.get_bool('console', 'color', True)),
-                          width=self.log_width or None)
+        console = Console(
+            out=self.get_console_file(),
+            nocolors=not (
+                self.log_color and self.moyarc.get_bool("console", "color", True)
+            ),
+            width=self.log_width or None,
+        )
         return console
 
     @classmethod
@@ -358,33 +373,27 @@ class Archive(object):
         libs = []
         for path in lib_paths:
             try:
-                if '://' in path:
+                if "://" in path:
                     libs_fs = open_fs(path)
                 else:
                     libs_fs = base_fs.opendir(path)
             except FSError as error:
-                startup_log.warning(
-                    "unable to read from '%s' (%s)",
-                    path,
-                    error
-                )
+                startup_log.warning("unable to read from '%s' (%s)", path, error)
                 continue
-            for resource in libs_fs.filterdir('/', exclude_files=['*']):
+            for resource in libs_fs.filterdir("/", exclude_files=["*"]):
                 with libs_fs.opendir(resource.name) as lib_fs:
                     try:
-                        with lib_fs.open('lib.ini', 'rb') as ini_file:
+                        with lib_fs.open("lib.ini", "rb") as ini_file:
                             lib_settings = SettingsContainer.read_from_file(ini_file)
                     except ResourceNotFound:
                         continue
-                    name = lib_settings.get('lib', 'name', None)
+                    name = lib_settings.get("lib", "name", None)
                     if name is None:
                         continue
-                    version = lib_settings.get('lib', 'version', None)
+                    version = lib_settings.get("lib", "version", None)
                     if version is None:
                         continue
-                    libs.append(
-                        (name, version, path, resource.name)
-                    )
+                    libs.append((name, version, path, resource.name))
         return libs
 
     def build_libs(self, ignore_errors=False):
@@ -397,15 +406,11 @@ class Archive(object):
             return
 
         start = time()
-        self.build([doc for lib in libs
-                    for doc in lib.documents],
-                   log_time=False)
+        self.build([doc for lib in libs for doc in lib.documents], log_time=False)
         for lib in libs:
             lib.finalize(ignore_errors=ignore_errors)
 
-        startup_log.debug("%s built libraries %0.1fms",
-                          self,
-                          (time() - start) * 1000.0)
+        startup_log.debug("%s built libraries %0.1fms", self, (time() - start) * 1000.0)
 
     def build(self, documents, context=None, log_time=True, fs=None):
         """Build all documents in the library"""
@@ -434,13 +439,13 @@ class Archive(object):
 
         context_root = context.root
 
-        get_doc_id = attrgetter('doc_id')
+        get_doc_id = attrgetter("doc_id")
 
         while build_queue:
             parent_element, nodes = build_queue[0]
             if nodes:
                 node = nodes.pop()
-                context_root['_lib_long_name'] = node.lib_long_name
+                context_root["_lib_long_name"] = node.lib_long_name
                 element = node.build(self, context)
                 if element:
                     unbuildable_clear()
@@ -465,33 +470,42 @@ class Archive(object):
                         parent_element.finalize(context)
                     except Exception as e:
                         raise
-                        failed_doc = FailedDocument(path=node.structure.document.location,
-                                                    code=node.structure.xml,
-                                                    line=node.source_line,
-                                                    col=None,
-                                                    msg=text_type(e))
+                        failed_doc = FailedDocument(
+                            path=node.structure.document.location,
+                            code=node.structure.xml,
+                            line=node.source_line,
+                            col=None,
+                            msg=text_type(e),
+                        )
                         self.failed_documents.append(failed_doc)
 
                 build_queue.popleft()
 
         if unbuilt:
             for node in unbuilt:
-                nearest = nearest_word(node.tag_name,
-                                       self.registry.get_elements_in_xmlns(node.xmlns))
-                msg = "unknown tag {} in {}".format(node.tag_display_name, node.structure)
+                nearest = nearest_word(
+                    node.tag_name, self.registry.get_elements_in_xmlns(node.xmlns)
+                )
+                msg = "unknown tag {} in {}".format(
+                    node.tag_display_name, node.structure
+                )
                 diagnosis = None
                 if nearest:
                     diagnosis = "did you mean <{}>?".format(nearest)
                 else:
                     find_xmlns = self.registry.find_xmlns(node.tag_name)
                     if find_xmlns:
-                        diagnosis = "did you mean <{}> in XMLNS '{}'?".format(node.tag_name, find_xmlns)
-                failed_doc = FailedDocument(path=node.structure.document.location,
-                                            code=node.structure.xml,
-                                            line=node.source_line,
-                                            col=None,
-                                            msg=msg,
-                                            diagnosis=diagnosis)
+                        diagnosis = "did you mean <{}> in XMLNS '{}'?".format(
+                            node.tag_name, find_xmlns
+                        )
+                failed_doc = FailedDocument(
+                    path=node.structure.document.location,
+                    code=node.structure.xml,
+                    line=node.source_line,
+                    col=None,
+                    msg=msg,
+                    diagnosis=diagnosis,
+                )
                 self.failed_documents.append(failed_doc)
             return False
 
@@ -500,18 +514,16 @@ class Archive(object):
             for doc in documents:
                 failed += self.check_attributes(doc)
             if failed:
-                startup_log.debug('%s %s strict check(s) failed', self, failed)
+                startup_log.debug("%s %s strict check(s) failed", self, failed)
             else:
-                startup_log.debug('%s strict checks passed', self)
+                startup_log.debug("%s strict checks passed", self)
 
         for doc in documents:
             doc.document_finalize(context)
 
         if log_time:
-            doc_text = ', '.join(text_type(doc) for doc in documents)
-            startup_log.debug("%s built %0.1fms",
-                              doc_text,
-                              (time() - start) * 1000.0)
+            doc_text = ", ".join(text_type(doc) for doc in documents)
+            startup_log.debug("%s built %0.1fms", doc_text, (time() - start) * 1000.0)
 
         return True
 
@@ -524,34 +536,49 @@ class Archive(object):
                     error = attribute.type.check(attr_text)
                     if error:
                         failed += 1
-                        failed_doc = FailedDocument(path=doc.location,
-                                                    code=element._code,
-                                                    line=element.source_line or 0,
-                                                    col=None,
-                                                    msg="error in parameter '{}'; {}".format(k, error),
-                                                    diagnosis="This check is performed when [project]/strict is enabled, or with 'moya runserver --strict' switch")
+                        failed_doc = FailedDocument(
+                            path=doc.location,
+                            code=element._code,
+                            line=element.source_line or 0,
+                            col=None,
+                            msg="error in parameter '{}'; {}".format(k, error),
+                            diagnosis="This check is performed when [project]/strict is enabled, or with 'moya runserver --strict' switch",
+                        )
                         self.failed_documents.append(failed_doc)
         return failed
 
     def populate_context(self, context):
         from .context.expressiontime import ExpressionDateTime
+
         root = context.root
-        root['libs'] = self.libs
-        root['apps'] = self.apps
-        root['filters'] = self.filters
-        root['debug'] = self.debug
-        root['develop'] = self.develop
-        root['fs'] = self.get_context_filesystems()
-        root['now'] = ExpressionDateTime.utcnow()
+        root["libs"] = self.libs
+        root["apps"] = self.apps
+        root["filters"] = self.filters
+        root["debug"] = self.debug
+        root["develop"] = self.develop
+        root["fs"] = self.get_context_filesystems()
+        root["now"] = ExpressionDateTime.utcnow()
         from . import __version__
-        root['moya'] = {'version': __version__}
-        root['enum'] = self.enum
-        root['media_url'] = self.media_url
-        root['secret'] = self.secret
-        context.set_dynamic('.app', lambda context: getattr(context.get('.call', None), 'app'))
+
+        root["moya"] = {"version": __version__}
+        root["enum"] = self.enum
+        root["media_url"] = self.media_url
+        root["secret"] = self.secret
+        context.set_dynamic(
+            ".app", lambda context: getattr(context.get(".call", None), "app")
+        )
 
     @classmethod
-    def get_callable_from_document(cls, path, element_ref, breakpoint=False, fs='./', default_context=False, archive=None, lib=None):
+    def get_callable_from_document(
+        cls,
+        path,
+        element_ref,
+        breakpoint=False,
+        fs="./",
+        default_context=False,
+        archive=None,
+        lib=None,
+    ):
         """Shortcut that imports a single document and returns a callable"""
         if archive is None:
             archive = cls()
@@ -569,8 +596,9 @@ class Archive(object):
 
             def do_call(*args, **kwargs):
                 c = Context()
-                c['console'] = Console()
+                c["console"] = Console()
                 return call(c, *args, **kwargs)
+
             do_call.archive = archive
             return do_call
 
@@ -585,7 +613,9 @@ class Archive(object):
             if match is None:
                 result = None, None, s
             else:
-                libname, lib_elementname, appname, app_elementname, docname = match.groups()
+                libname, lib_elementname, appname, app_elementname, docname = (
+                    match.groups()
+                )
                 result = appname, libname, app_elementname or lib_elementname or docname
             cache[s] = result
             return result
@@ -608,7 +638,15 @@ class Archive(object):
         lib = self.load_library(import_fs, **kwargs)
         return lib
 
-    def load_library(self, import_fs, priority=None, template_priority=None, data_priority=None, long_name=None, rebuild=False):
+    def load_library(
+        self,
+        import_fs,
+        priority=None,
+        template_priority=None,
+        data_priority=None,
+        long_name=None,
+        rebuild=False,
+    ):
         """Load a new library in to the archive"""
         lib = self.create_library(import_fs, long_name=long_name, rebuild=rebuild)
         if priority is not None:
@@ -616,15 +654,19 @@ class Archive(object):
         lib.data_priority = data_priority
 
         if lib.templates_info:
-            fs_url = lib.templates_info['location']
+            fs_url = lib.templates_info["location"]
             if template_priority is None:
                 try:
-                    template_priority = int(lib.templates_info.get('priority', '0'))
+                    template_priority = int(lib.templates_info.get("priority", "0"))
                 except ValueError:
-                    startup_log.error("{} invalid value for [templates]/priority, assuming 0".format(lib))
+                    startup_log.error(
+                        "{} invalid value for [templates]/priority, assuming 0".format(
+                            lib
+                        )
+                    )
                     template_priority = 0
             lib.template_priority = template_priority
-            if '://' in fs_url:
+            if "://" in fs_url:
                 fs = open_fs(fs_url)
             else:
                 fs = import_fs.opendir(fs_url)
@@ -638,9 +680,13 @@ class Archive(object):
             return self.libs[long_name]
         return self.create_library(import_fs)
 
-    def create_library(self, import_fs=None, long_name=None, namespace=None, rebuild=False):
+    def create_library(
+        self, import_fs=None, long_name=None, namespace=None, rebuild=False
+    ):
         """Create a new library, and import documents"""
-        lib = Library(self, import_fs, long_name=long_name, namespace=namespace, rebuild=rebuild)
+        lib = Library(
+            self, import_fs, long_name=long_name, namespace=namespace, rebuild=rebuild
+        )
         self.libs[lib.long_name] = lib
         return lib
 
@@ -658,7 +704,11 @@ class Archive(object):
 
     def create_app(self, name, lib_name):
         if name in self.apps:
-            raise errors.ArchiveError("Application name '{}' was previously installed with {}".format(name, self.apps[name].lib))
+            raise errors.ArchiveError(
+                "Application name '{}' was previously installed with {}".format(
+                    name, self.apps[name].lib
+                )
+            )
         app = Application(self, name, lib_name)
         self.apps[name] = app
         app.settings.update(self.app_settings[name])
@@ -680,7 +730,7 @@ class Archive(object):
             lib_name = lib.long_name
         else:
             lib_name = text_type(lib)
-        if '.' not in lib_name:
+        if "." not in lib_name:
             return lib_name
         apps = self.apps_by_lib[lib_name]
         if len(apps) != 1:
@@ -697,7 +747,7 @@ class Archive(object):
             lib_name = lib.long_name
         else:
             lib_name = text_type(lib)
-        if '.' not in lib_name:
+        if "." not in lib_name:
             return lib_name
         apps = self.apps_by_lib[lib_name]
         if len(apps) != 1:
@@ -714,10 +764,14 @@ class Archive(object):
         if isinstance(name, Application):
             return name
         if not name:
-            raise errors.UnknownAppError("Value {} is not a valid app or lib name".format(to_expression(None, name)))
+            raise errors.UnknownAppError(
+                "Value {} is not a valid app or lib name".format(
+                    to_expression(None, name)
+                )
+            )
         name = text_type(name)
         try:
-            if '.' in name:
+            if "." in name:
                 apps = self.apps_by_lib[name]
                 if not apps:
                     raise KeyError("No app called '{}'".format(name))
@@ -753,17 +807,19 @@ class Archive(object):
         if isinstance(name, Application):
             return name
         if not name:
-            raise errors.UnknownAppError("Value {} is not a valid app or lib name".format(context.expr(name)))
+            raise errors.UnknownAppError(
+                "Value {} is not a valid app or lib name".format(context.expr(name))
+            )
         try:
-            if '.' in name:
+            if "." in name:
                 apps = self.apps_by_lib[name]
                 if not apps:
                     raise KeyError("No app called '{}'".format(name))
                 if len(apps) != 1:
-                    _app = context['.app']
+                    _app = context[".app"]
                     if _app and _app.name in apps:
                         return _app
-                    for c in reversed(context['._callstack']):
+                    for c in reversed(context["._callstack"]):
                         if c.app.name in apps:
                             return c.app
                     raise errors.AmbiguousAppError(name, apps)
@@ -776,7 +832,7 @@ class Archive(object):
     def get_lib(self, name):
         if isinstance(name, Library):
             return name.long_name
-        if '.' in name:
+        if "." in name:
             return self.libs[name].long_name
         return self.find_app(name).lib.long_name
 
@@ -788,9 +844,11 @@ class Archive(object):
         """Get data from a data tag"""
         tag_type = (namespace, tag_name)
 
-        return [e.get_all_data_parameters(context)
-                for e in self.data_tags.get(tag_type, [])
-                if e.check(context)]
+        return [
+            e.get_all_data_parameters(context)
+            for e in self.data_tags.get(tag_type, [])
+            if e.check(context)
+        ]
 
     def get_data_item(self, context, namespace, tag_name, filter_map, lib=None):
         """Get data from a data tag"""
@@ -800,8 +858,9 @@ class Archive(object):
                 if e.lib != lib:
                     continue
             data = e.get_all_data_parameters(context)
-            if all(filter_map[k] == data.get(k, Ellipsis)
-                   for k, v in filter_map.items()):
+            if all(
+                filter_map[k] == data.get(k, Ellipsis) for k, v in filter_map.items()
+            ):
                 return data
 
     def get_data_from_element(self, context, element):
@@ -810,9 +869,11 @@ class Archive(object):
     def get_data_elements(self, context, namespace, tag_name):
         """Get data from a data tag"""
         tag_type = (namespace, tag_name)
-        return [DataElement(e, context)
-                for e in self.data_tags.get(tag_type, [])
-                if e.check(context)]
+        return [
+            DataElement(e, context)
+            for e in self.data_tags.get(tag_type, [])
+            if e.check(context)
+        ]
 
     def get_app_data_elements(self, context, namespace, tag_name):
         data = []
@@ -832,10 +893,16 @@ class Archive(object):
         try:
             add_fs = self.open_fs(fs, create=create)
         except FSError as e:
-            raise errors.StartupFailedError("unable to open filesystem '{name}' ({e})".format(name=name, e=text_type(e)))
+            raise errors.StartupFailedError(
+                "unable to open filesystem '{name}' ({e})".format(
+                    name=name, e=text_type(e)
+                )
+            )
         self.filesystems[name] = add_fs
-        #startup_log.debug("%s fs added as '%s'", add_fs, name)
-        startup_log.debug("<%s '%s'> filesystem added", type(add_fs).__name__.lower(), name)
+        # startup_log.debug("%s fs added as '%s'", add_fs, name)
+        startup_log.debug(
+            "<%s '%s'> filesystem added", type(add_fs).__name__.lower(), name
+        )
         return fs
 
     def get_filesystem(self, name):
@@ -848,17 +915,18 @@ class Archive(object):
         try:
             return self.filesystems[name]
         except KeyError:
-            raise element.throw("fs.no-filesystem",
-                                "no filesystem called '{0}'".format(name),
-                                diagnosis="You can view installed filesystems from the command line with **moya fs**")
+            raise element.throw(
+                "fs.no-filesystem",
+                "no filesystem called '{0}'".format(name),
+                diagnosis="You can view installed filesystems from the command line with **moya fs**",
+            )
 
     def get_reader(self, name="data"):
         fs = self.get_filesystem(name)
         return DataReader(fs)
 
     def get_context_filesystems(self):
-        return FSContainer((k, FSWrapper(fs))
-                           for k, fs in iteritems(self.filesystems))
+        return FSContainer((k, FSWrapper(fs)) for k, fs in iteritems(self.filesystems))
 
     def get_translations(self, app_or_lib, languages):
         return self.find_app(app_or_lib).lib.translations.get(languages)
@@ -866,17 +934,14 @@ class Archive(object):
     def init_template_engine(self, system, settings):
         if system in self.template_engines:
             return
-        engine = TemplateEngine.create(system,
-                                       self,
-                                       self.templates_fs,
-                                       settings)
+        engine = TemplateEngine.create(system, self, self.templates_fs, settings)
         self.template_engines[system] = engine
-        startup_log.debug('%s template engine initialized', engine)
+        startup_log.debug("%s template engine initialized", engine)
 
     def init_cache(self, name, settings):
         cache = Cache.create(name, settings)
         self.caches[name] = cache
-        startup_log.debug('%s cache added', cache)
+        startup_log.debug("%s cache added", cache)
 
     def has_cache(self, name):
         """Check if a cache is present and enabled"""
@@ -888,108 +953,125 @@ class Archive(object):
     def get_cache(self, name):
         if name in self.caches:
             return self.caches[name]
-        cache = self.caches[name] = Cache.create('runtime', SettingsSectionContainer({'type': 'dict'}))
+        cache = self.caches[name] = Cache.create(
+            "runtime", SettingsSectionContainer({"type": "dict"})
+        )
         return cache
 
     def get_mailserver(self, name=None):
-        name = name or self.default_mail_server or 'default'
+        name = name or self.default_mail_server or "default"
         try:
-            return self.mail_servers[name or 'default']
+            return self.mail_servers[name or "default"]
         except KeyError:
-            raise errors.MoyaException("email.no-server", "no email server called '{0}'".format(name))
+            raise errors.MoyaException(
+                "email.no-server", "no email server called '{0}'".format(name)
+            )
 
     def init_templates(self, name, location, priority):
         templates_fs = self.filesystems.get("templates")
         fs = self.open_fs(location)
         templates_fs.add_fs(name, fs, priority=priority)
-        #startup_log.debug("added templates filesystem, priority %s", priority)
+        # startup_log.debug("added templates filesystem, priority %s", priority)
 
     def get_template_engine(self, engine="moya"):
         return self.template_engines[engine]
 
     def get_default_template_engine(self, app):
-        engine = app.lib.templates_info.get('default_engine', 'moya')
+        engine = app.lib.templates_info.get("default_engine", "moya")
         return engine
 
     def init_settings(self, cfg=None):
         cfg = cfg or self.cfg
-        self.secret = cfg.get('project', 'secret', '')
-        self.preflight = cfg.get_bool('project', 'preflight', False)
-        self.debug = cfg.get_bool('project', 'debug')
-        self.strict = self.strict or cfg.get_bool('project', 'strict')
-        self.develop = self.develop or cfg.get_bool('project', 'develop')
-        self.log_signals = cfg.get_bool('project', 'log_signals')
-        self.debug_echo = cfg.get_bool('project', 'debug_echo')
-        self.debug_memory = cfg.get_bool('project', 'debug_memory')
-        self.lib_paths = cfg.get_list('project', 'paths', './local\n./external')
+        self.secret = cfg.get("project", "secret", "")
+        self.preflight = cfg.get_bool("project", "preflight", False)
+        self.debug = cfg.get_bool("project", "debug")
+        self.strict = self.strict or cfg.get_bool("project", "strict")
+        self.develop = self.develop or cfg.get_bool("project", "develop")
+        self.log_signals = cfg.get_bool("project", "log_signals")
+        self.debug_echo = cfg.get_bool("project", "debug_echo")
+        self.debug_memory = cfg.get_bool("project", "debug_memory")
+        self.lib_paths = cfg.get_list("project", "paths", "./local\n./external")
 
         self.lib_paths = self.lib_paths[:] + [MOYA_LIBS_PATH]
 
-        if 'console' in cfg:
-            self.log_logger = cfg.get('console', 'logger', None)
-            self.log_color = cfg.get_bool('console', 'color', True)
-            self.log_width = cfg.get_int('console', 'width', None)
+        if "console" in cfg:
+            self.log_logger = cfg.get("console", "logger", None)
+            self.log_color = cfg.get_bool("console", "color", True)
+            self.log_width = cfg.get_int("console", "width", None)
             self.console = self.create_console()
 
-        self.sites.set_defaults(cfg['site'])
+        self.sites.set_defaults(cfg["site"])
 
-        if 'templates' not in self.caches:
-            self.caches['templates'] = Cache.create('templates', SettingsSectionContainer({'type': 'dict'}))
-        if 'runtime' not in self.caches:
-            self.caches['runtime'] = Cache.create('runtime', SettingsSectionContainer({'type': 'dict'}))
+        if "templates" not in self.caches:
+            self.caches["templates"] = Cache.create(
+                "templates", SettingsSectionContainer({"type": "dict"})
+            )
+        if "runtime" not in self.caches:
+            self.caches["runtime"] = Cache.create(
+                "runtime", SettingsSectionContainer({"type": "dict"})
+            )
 
-        require_name = ['app', 'smtp', 'db']
-        self.auto_reload = cfg.get_bool('autoreload', 'enabled')
+        require_name = ["app", "smtp", "db"]
+        self.auto_reload = cfg.get_bool("autoreload", "enabled")
 
         if self.strict:
-            startup_log.debug('strict mode is enabled')
+            startup_log.debug("strict mode is enabled")
         if self.develop:
-            startup_log.debug('develop mode is enabled')
+            startup_log.debug("develop mode is enabled")
 
         for section_name, section in iteritems(cfg):
             section = SectionWrapper(section_name, section)
-            if ':' in section_name:
-                what, name = section_name.split(':', 1)
+            if ":" in section_name:
+                what, name = section_name.split(":", 1)
             else:
                 what = section_name
                 name = None
 
             if what in require_name and not name:
-                raise errors.StartupFailedError('name required in section, [{section}:?]'.format(section=what))
+                raise errors.StartupFailedError(
+                    "name required in section, [{section}:?]".format(section=what)
+                )
 
-            if what in ('project', 'debug', 'autoreload', 'console', 'customize', ''):
+            if what in ("project", "debug", "autoreload", "console", "customize", ""):
                 continue
 
             if what == "settings":
                 if name is None:
-                    self.settings.update((k, SettingContainer(v))
-                                         for k, v in iteritems(section))
+                    self.settings.update(
+                        (k, SettingContainer(v)) for k, v in iteritems(section)
+                    )
                 else:
-                    self.app_settings[name].update((k, SettingContainer(v))
-                                                   for k, v in iteritems(section))
-            elif what == 'application':
+                    self.app_settings[name].update(
+                        (k, SettingContainer(v)) for k, v in iteritems(section)
+                    )
+            elif what == "application":
                 self.app_system_settings[name].update(section)
 
             elif what == "lib":
                 if self.has_library(name):
                     lib = self.get_library(name)
-                    lib.settings.update((k, SettingContainer(v))
-                                        for k, v in iteritems(section))
+                    lib.settings.update(
+                        (k, SettingContainer(v)) for k, v in iteritems(section)
+                    )
 
             elif what == "fs":
                 location = section.get("location")
                 if not location:
-                    raise errors.StartupFailedError("a value for 'location' is required in [{}]".format(section_name))
+                    raise errors.StartupFailedError(
+                        "a value for 'location' is required in [{}]".format(
+                            section_name
+                        )
+                    )
 
-                create = section.get_bool('create', False)
+                create = section.get_bool("create", False)
                 self.add_filesystem(name, location, create=create)
 
             elif what == "data":
                 location = section.get("location")
                 data_fs = self.open_fs(location)
-                self.data_fs.add_fs('archive',
-                                    data_fs,
-                                    priority=section.get_int('priority', 0))
+                self.data_fs.add_fs(
+                    "archive", data_fs, priority=section.get_int("priority", 0)
+                )
 
             elif what == "cache":
                 self.init_cache(name, section)
@@ -1004,42 +1086,45 @@ class Archive(object):
 
             elif what == "db":
                 from .db import add_engine
+
                 add_engine(self, name, section)
 
-            elif what == 'media':
-                priority = section.get_int('priority', 1)
+            elif what == "media":
+                priority = section.get_int("priority", 1)
                 location = section["location"]
                 static_media_fs = self.open_fs(location)
                 media_fs = MultiFS()
                 media_fs.add_fs("static", static_media_fs, priority=priority)
-                self.add_filesystem('media', media_fs)
+                self.add_filesystem("media", media_fs)
 
-                self.media_urls = section.get_list('url')
-                self.media_app = section.get('app', 'media')
+                self.media_urls = section.get_list("url")
+                self.media_app = section.get("app", "media")
 
             elif what == "smtp":
                 host = section["host"]
-                port = section.get_int('port', 25)
-                timeout = section.get_int('timeout', None)
-                username = section.get('username', None)
+                port = section.get_int("port", 25)
+                timeout = section.get_int("timeout", None)
+                username = section.get("username", None)
                 password = section.get("password", None)
-                default = section.get_bool('default', False)
-                sender = section.get('sender', None)
-                server = MailServer(host,
-                                    name=name,
-                                    port=port,
-                                    default=default,
-                                    timeout=timeout,
-                                    username=username,
-                                    password=password,
-                                    sender=sender)
+                default = section.get_bool("default", False)
+                sender = section.get("sender", None)
+                server = MailServer(
+                    host,
+                    name=name,
+                    port=port,
+                    default=default,
+                    timeout=timeout,
+                    username=username,
+                    password=password,
+                    sender=sender,
+                )
                 self.mail_servers[name] = server
                 if self.default_mail_server is None or default:
                     self.default_mail_server = name
                 if default:
-                    startup_log.debug('%r (default) created', server)
+                    startup_log.debug("%r (default) created", server)
                 else:
-                    startup_log.debug('%r created', server)
+                    startup_log.debug("%r created", server)
 
             elif what == "site":
                 if name:
@@ -1048,31 +1133,39 @@ class Archive(object):
             elif what == "themes":
                 location = section["location"]
                 theme_fs = self.open_fs(location)
-                self.add_filesystem('themes', theme_fs)
-                #startup_log.debug("added theme filesystem '%s'", location)
+                self.add_filesystem("themes", theme_fs)
+                # startup_log.debug("added theme filesystem '%s'", location)
 
             else:
                 startup_log.warn("unknown settings section, [%s]", section_name)
 
-        self.init_template_engine('moya', {})
+        self.init_template_engine("moya", {})
 
     def init_media(self):
-        if 'media' not in self.filesystems:
+        if "media" not in self.filesystems:
             return
         if not self.media_urls:
             if not self.media_app:
-                raise errors.StartupFailedError("no 'url' or 'app' specified in [media] section")
+                raise errors.StartupFailedError(
+                    "no 'url' or 'app' specified in [media] section"
+                )
             if self.media_app not in self.apps:
-                startup_log.warning('app set in [media]/app has not been installed ({})'.format(self.media_app))
+                startup_log.warning(
+                    "app set in [media]/app has not been installed ({})".format(
+                        self.media_app
+                    )
+                )
                 return
             try:
                 self.media_urls = [self.apps[self.media_app].mounts[0][1]]
             except:
-                raise errors.StartupFailedError('unable to detect media url! (specify in [media]/url)')
+                raise errors.StartupFailedError(
+                    "unable to detect media url! (specify in [media]/url)"
+                )
         for i, _url in enumerate(self.media_urls):
-            startup_log.debug('media url #%s is %s', i, _url)
+            startup_log.debug("media url #%s is %s", i, _url)
 
-        media_fs = self.filesystems['media']
+        media_fs = self.filesystems["media"]
         media_mount_fs = MountFS()
         for app in itervalues(self.apps):
             for media_name, media_sub_fs in iteritems(app.lib.media):
@@ -1091,24 +1184,24 @@ class Archive(object):
     def init_data(self):
         data_fs = self.data_fs
         for lib in itervalues(self.libs):
-            data_priority = lib.data_info.get('priority', 0)
+            data_priority = lib.data_info.get("priority", 0)
             if lib.data_priority is not None:
                 data_priority = lib.data_priority
             if lib.data_fs is not None:
                 data_fs.add_fs(lib.long_name, lib.data_fs, priority=data_priority)
 
-    def get_media_url(self, context, app, media, path='', url_index=None):
+    def get_media_url(self, context, app, media, path="", url_index=None):
         """Get a URL to media in a given app"""
         if url_index is None:
-            url_index = context.inc('._media_url_index')
+            url_index = context.inc("._media_url_index")
         if not self.media_urls:
             return None
         url_no = url_index % len(self.media_urls)
         if app is None:
-            return url_join(self.media_urls[url_no] or '', path)
-        return url_join(self.media_urls[url_no] or '',
-                        app.get_media_directory(media),
-                        path)
+            return url_join(self.media_urls[url_no] or "", path)
+        return url_join(
+            self.media_urls[url_no] or "", app.get_media_directory(media), path
+        )
 
     @property
     def is_media_enabled(self):
@@ -1142,13 +1235,13 @@ class Archive(object):
         return FoundElement(element_app, element)
 
     def get_app_element(self, element_ref):
-        element_app = self.find_app(element_ref.split('#', 1)[0])
+        element_app = self.find_app(element_ref.split("#", 1)[0])
         app, element = self.get_element(element_ref, app=element_app)
         return app or element_app, element
 
     def resolve_template_path(self, path, app_name, base_path="/"):
         """Get a template path in the appropriate directory for an app"""
-        if path.startswith('/'):
+        if path.startswith("/"):
             return path
         if isinstance(app_name, Application):
             app = app_name
@@ -1180,7 +1273,7 @@ class Archive(object):
     def add_enum(self, libid, enum):
         """Add an enumeration"""
         self.enum[libid] = enum
-        libname = libid.partition('#')[0]
+        libname = libid.partition("#")[0]
         if enum.name:
             self.enum_by_lib.setdefault(libname, {})[enum.name] = enum
 
@@ -1196,16 +1289,13 @@ class Archive(object):
         """Fire a signal"""
         if data is None:
             data = {}
-        signal_obj = {
-            "name": signal_name,
-            "app": app,
-            "sender": sender,
-            "data": data
-        }
+        signal_obj = {"name": signal_name, "app": app, "sender": sender, "data": data}
         if self.log_signals:
             _params = context.to_expr(data)
             if sender:
-                signal_log.debug('firing "%s" from "%s" %s', signal_name, sender, _params)
+                signal_log.debug(
+                    'firing "%s" from "%s" %s', signal_name, sender, _params
+                )
             else:
                 signal_log.debug('firing "%s" %s', signal_name, _params)
 
@@ -1223,8 +1313,8 @@ class Archive(object):
                     except:
                         pass
                     try:
-                        if context['.debug']:
-                            context['.console'].obj(context, e)
+                        if context[".debug"]:
+                            context[".console"].obj(context, e)
                     except:
                         pass
 
@@ -1258,7 +1348,8 @@ if __name__ == "__main__":
     lib.import_documents("example")
 
     from moya.context import Context
+
     c = Context()
 
-    mountpoint = archive.get_element('example#cmsmount')
+    mountpoint = archive.get_element("example#cmsmount")
     mountpoint.route("/article/2011/7/5/birthday/", c)

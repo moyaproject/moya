@@ -8,7 +8,6 @@ from moya.compat import text_type
 
 
 class ElementContainer(object):
-
     def __init__(self, archive):
         self.archive = archive
 
@@ -47,13 +46,13 @@ class QualifyElementref(DataSetter):
     ref = Attribute("An element reference", type="expression", required="yes")
 
     class Meta:
-        one_of = [('app', 'lib')]
+        one_of = [("app", "lib")]
 
     class Help:
         synopsis = "create an element reference with an app/lib name"
 
     def get_value(self, context):
-        app, lib, ref = self.get_parameters(context, 'app', 'lib', 'ref')
+        app, lib, ref = self.get_parameters(context, "app", "lib", "ref")
         if app is not None:
             app = self.archive.get_app(app)
         if lib is not None:
@@ -62,7 +61,9 @@ class QualifyElementref(DataSetter):
         try:
             element = self.archive.get_element(ref, app=app, lib=lib or None)
         except Exception as e:
-            self.throw('qualify-elementref.not-found',
-                       'unable to look up element ({})'.format(e))
+            self.throw(
+                "qualify-elementref.not-found",
+                "unable to look up element ({})".format(e),
+            )
         element_ref = "{}#{}".format(element.app.name, element.element.libname)
         return element_ref

@@ -8,7 +8,7 @@ from time import time as get_time
 import logging
 
 
-log = logging.getLogger('moya.runtime')
+log = logging.getLogger("moya.runtime")
 
 
 CacheEntry = namedtuple("CacheEntry", "value,expire_time")
@@ -16,14 +16,15 @@ CacheEntry = namedtuple("CacheEntry", "value,expire_time")
 
 class MemoryCache(Cache):
     """Caches in a memcached server"""
+
     cache_backend_name = "memory"
 
-    def __init__(self, name, namespace, compress=True, compress_min=1024, size=1024*1024):
+    def __init__(
+        self, name, namespace, compress=True, compress_min=1024, size=1024 * 1024
+    ):
         super(MemoryCache, self).__init__(
-            name,
-            namespace,
-            compress=compress,
-            thread_safe=False)
+            name, namespace, compress=compress, thread_safe=False
+        )
         self.max_size = size
         self.entries = OrderedDict()
         self.size = 0
@@ -32,10 +33,10 @@ class MemoryCache(Cache):
     def initialize(cls, name, settings):
         return cls(
             name,
-            settings.get('namespace', ''),
-            compress=settings.get_bool('compress', True),
+            settings.get("namespace", ""),
+            compress=settings.get_bool("compress", True),
             compress_min=settings.get_int("compress_min", 16 * 1024),
-            size=settings.get_int('size', 1024) * 1024,
+            size=settings.get_int("size", 1024) * 1024,
         )
 
     def evict_entry(self, key):
@@ -46,8 +47,8 @@ class MemoryCache(Cache):
 
     def reclaim(self, num_bytes):
         """Reclaim at least `num_bytes`"""
-        log.debug('%r size=%s bytes', self, self.size)
-        log.debug('%r reclaiming %s bytes', self, num_bytes)
+        log.debug("%r size=%s bytes", self, self.size)
+        log.debug("%r reclaiming %s bytes", self, num_bytes)
         reclaimed = 0
         while self.entries and reclaimed < num_bytes:
             key, entry = self.entries.popitem(last=False)
@@ -65,7 +66,7 @@ class MemoryCache(Cache):
 
         # Remove entry from cache
         value_bytes = entry.value
-        value_size =len(value_bytes)
+        value_size = len(value_bytes)
         self.size -= value_size
 
         # If it has expired return the default
@@ -97,8 +98,8 @@ class MemoryCache(Cache):
 
 
 if __name__ == "__main__":
-    cache = MemoryCache('test', '')
-    cache.set('foo', 'bar')
-    print(cache.get('foo'))
+    cache = MemoryCache("test", "")
+    cache.set("foo", "bar")
+    print(cache.get("foo"))
 
-    print(cache.encode_value(b'value'))
+    print(cache.encode_value(b"value"))

@@ -21,7 +21,9 @@ class PyFilter(object):
 
 def filter(filtername):
     """Decorator for a filter."""
+
     def deco(f):
         exposed_filters[filtername] = PyFilter(f)
         return f
+
     return deco

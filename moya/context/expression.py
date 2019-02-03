@@ -14,24 +14,26 @@ from __future__ import absolute_import
 from fs.path import basename
 from fs import wildcard
 
-from pyparsing import (Word,
-                       WordEnd,
-                       Empty,
-                       nums,
-                       Combine,
-                       oneOf,
-                       opAssoc,
-                       operatorPrecedence,
-                       QuotedString,
-                       Literal,
-                       ParserElement,
-                       ParseException,
-                       Forward,
-                       Group,
-                       Suppress,
-                       Regex,
-                       delimitedList,
-                       Optional)
+from pyparsing import (
+    Word,
+    WordEnd,
+    Empty,
+    nums,
+    Combine,
+    oneOf,
+    opAssoc,
+    operatorPrecedence,
+    QuotedString,
+    Literal,
+    ParserElement,
+    ParseException,
+    Forward,
+    Group,
+    Suppress,
+    Regex,
+    delimitedList,
+    Optional,
+)
 
 from .. import __version__
 from ..context import dataindex
@@ -55,7 +57,7 @@ from operator import truth
 import threading
 
 
-log = logging.getLogger('moya.runtime')
+log = logging.getLogger("moya.runtime")
 
 ParserElement.enablePackrat(None)
 
@@ -69,7 +71,7 @@ class ExpressionError(Exception):
     def __init__(self, exp, msg=None, col=None, original=None):
         super(ExpressionError, self).__init__()
         self.exp = exp
-        self.msg = msg or ''
+        self.msg = msg or ""
         self.original = original
         self.col = col
 
@@ -83,10 +85,10 @@ class ExpressionError(Exception):
             return "%s '%s'" % (self.msg, self.exp)
 
     def __moyaconsole__(self, console):
-        indent = ''
+        indent = ""
         console(indent + self.exp, bold=True, fg="magenta").nl()
         if self.col:
-            console(indent)(' ' * (self.col - 1) + '^', bold=True, fg="red").nl()
+            console(indent)(" " * (self.col - 1) + "^", bold=True, fg="red").nl()
 
 
 class ExpressionCompileError(ExpressionError):
@@ -95,7 +97,6 @@ class ExpressionCompileError(ExpressionError):
 
 @implements_to_string
 class ExpressionEvalError(ExpressionError):
-
     def __str__(self):
         if self.original:
             return "%s '%s': %s" % (self.msg, self.exp, text_type(self.original))
@@ -105,7 +106,9 @@ class ExpressionEvalError(ExpressionError):
 
 class Evaluator(object):
     """Base class mainly to make expressions pickleable"""
-    __slots__ = ['col', 'tokens']
+
+    __slots__ = ["col", "tokens"]
+
     def __init__(self, s, loc, tokens):
         self.col = loc
         self.tokens = tokens.asList()
@@ -129,12 +132,9 @@ class Evaluator(object):
 
 class EvalConstant(Evaluator):
     """Evaluates a constant"""
-    __slots__ = ['key', 'value', 'eval']
-    constants = {"None": None,
-                 "True": True,
-                 "False": False,
-                 "yes": True,
-                 "no": False}
+
+    __slots__ = ["key", "value", "eval"]
+    constants = {"None": None, "True": True, "False": False, "yes": True, "no": False}
 
     def build(self, tokens):
         self.key = tokens[0]
@@ -144,18 +144,21 @@ class EvalConstant(Evaluator):
 
 class EvalVariable(Evaluator):
     """Class to evaluate a parsed variable"""
-    __slots__ = ['eval', 'key', '_index']
+
+    __slots__ = ["eval", "key", "_index"]
+
     def build(self, tokens):
         self.key = tokens[0]
         self._index = index = dataindex.parse(self.key)
         if index.from_root or len(index) > 1:
-            self.eval = methodcaller('__getitem__', self._index)
+            self.eval = methodcaller("__getitem__", self._index)
         else:
-            self.eval = methodcaller('get_simple', self.key)
+            self.eval = methodcaller("get_simple", self.key)
 
 
 class EvalLiteralIndex(Evaluator):
-    __slots__ = ['scope', 'indices']
+    __slots__ = ["scope", "indices"]
+
     def build(self, tokens):
         self.scope = tokens[0][0].eval
         self.indices = [dataindex.parse(t[1:]) for t in tokens[0][1:]]
@@ -171,7 +174,9 @@ class EvalLiteralIndex(Evaluator):
 @implements_to_string
 class EvalRegExp(Evaluator):
     """Class to evaluate a parsed variable"""
-    __slots__ = ['regexp', '_re', 'match']
+
+    __slots__ = ["regexp", "_re", "match"]
+
     def build(self, tokens):
         self.regexp = tokens[0]
         self._re = re.compile(tokens[0])
@@ -190,7 +195,9 @@ class EvalRegExp(Evaluator):
 @implements_to_string
 class EvalTimespan(Evaluator):
     """Evaluate a timespan spec"""
-    __slots__ = ['ts']
+
+    __slots__ = ["ts"]
+
     def build(self, tokens):
         self.ts = TimeSpan(tokens[0])
 
@@ -203,16 +210,19 @@ class EvalTimespan(Evaluator):
 
 class EvalCurrentScope(Evaluator):
     """Class to eval the current scope"""
+
     __slots__ = []
 
     def eval(self, context):
         return context.obj
-        #return context.capture_scope()
+        # return context.capture_scope()
 
 
 class EvalExplicitVariable(Evaluator):
     """Class to evaluate a parsed constant or explicit variable (beginning with $)"""
-    __slots__ = ['index']
+
+    __slots__ = ["index"]
+
     def build(self, tokens):
         self.index = parseindex(tokens[1])
 
@@ -222,7 +232,9 @@ class EvalExplicitVariable(Evaluator):
 
 class EvalInteger(Evaluator):
     """Class to evaluate an integer value"""
-    __slots__ = ['value', 'eval']
+
+    __slots__ = ["value", "eval"]
+
     def build(self, tokens):
         value = self.value = int(tokens[0])
         self.eval = lambda context: value
@@ -230,7 +242,9 @@ class EvalInteger(Evaluator):
 
 class EvalReal(Evaluator):
     """Class to evaluate a real number value"""
-    __slots__ = ['value', 'eval']
+
+    __slots__ = ["value", "eval"]
+
     def build(self, tokens):
         value = self.value = float(tokens[0])
         self.eval = lambda context: value
@@ -238,7 +252,9 @@ class EvalReal(Evaluator):
 
 class EvalTripleString(Evaluator):
     """Class to evaluate a triple quoted string"""
-    __slots__ = ['value', 'eval']
+
+    __slots__ = ["value", "eval"]
+
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][3:-3])
         self.eval = lambda context: value
@@ -246,7 +262,9 @@ class EvalTripleString(Evaluator):
 
 class EvalString(Evaluator):
     """Class to evaluate a string"""
-    __slots__ = ['value', 'eval']
+
+    __slots__ = ["value", "eval"]
+
     def build(self, tokens, _decode=decode_string):
         value = self.value = _decode(tokens[0][1:-1])
         self.eval = lambda context: value
@@ -254,7 +272,9 @@ class EvalString(Evaluator):
 
 class EvalSignOp(Evaluator):
     """Class to evaluate expressions with a leading + or - sign"""
-    __slots__ = ['eval_func', '_eval', 'eval_func']
+
+    __slots__ = ["eval_func", "_eval", "eval_func"]
+
     def build(self, tokens):
         sign, value = tokens[0]
         if sign == "+":
@@ -269,7 +289,9 @@ class EvalSignOp(Evaluator):
 
 class EvalNotOp(Evaluator):
     """Class to evaluate expressions with logical NOT"""
-    __slots__ = ['_eval', 'eval']
+
+    __slots__ = ["_eval", "eval"]
+
     def build(self, tokens):
         sign, value = tokens[0]
         _eval = self._eval = value.eval
@@ -278,7 +300,9 @@ class EvalNotOp(Evaluator):
 
 class EvalList(Evaluator):
     """Class to evaluate a parsed variable"""
-    __slots__ = ['list_tokens']
+
+    __slots__ = ["list_tokens"]
+
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -288,7 +312,9 @@ class EvalList(Evaluator):
 
 class EvalSimpleList(Evaluator):
     """Class to evaluate a parsed variable"""
-    __slots__ = ['list_tokens']
+
+    __slots__ = ["list_tokens"]
+
     def build(self, tokens):
         self.list_tokens = [t.eval for t in tokens]
 
@@ -307,7 +333,7 @@ class EvalEmptyList(Evaluator):
 
 
 class EvalDict(Evaluator):
-    __slots__ = ['_item_eval']
+    __slots__ = ["_item_eval"]
 
     def build(self, tokens):
         self._item_eval = [(k.eval, v.eval) for k, v in tokens[0]]
@@ -317,7 +343,8 @@ class EvalDict(Evaluator):
 
 
 class ExpFunction(object):
-    __slots__ = ['context', 'text', '_eval', '_context']
+    __slots__ = ["context", "text", "_eval", "_context"]
+
     def __init__(self, context, text, eval):
         self.context = context
         self.text = text
@@ -333,17 +360,17 @@ class ExpFunction(object):
 
 
 class EvalFunction(Evaluator):
-    __slots__ = ['_eval']
+    __slots__ = ["_eval"]
 
     def build(self, tokens):
         self._eval = tokens[0][0].eval
 
     def eval(self, context):
-        return ExpFunction(context, '', self._eval)
+        return ExpFunction(context, "", self._eval)
 
 
 class EvalKeyPairDict(Evaluator):
-    __slots__ = ['_item_eval']
+    __slots__ = ["_item_eval"]
 
     def build(self, tokens):
         self._item_eval = [(k, v.eval) for k, v in tokens]
@@ -354,6 +381,7 @@ class EvalKeyPairDict(Evaluator):
 
 class EvalEmptyDict(Evaluator):
     __slots__ = []
+
     def build(self, tokens):
         pass
 
@@ -363,7 +391,8 @@ class EvalEmptyDict(Evaluator):
 
 class EvalModifierOp(Evaluator):
     """Class to evaluate expressions with a leading filter function"""
-    __slots__ = ['value', '_eval', 'eval', 'filter_func']
+
+    __slots__ = ["value", "_eval", "eval", "filter_func"]
     modifiers = ExpressionModifiers()
 
     def build(self, tokens):
@@ -383,7 +412,8 @@ class EvalModifierOp(Evaluator):
 
 
 class EvalFilterOp(Evaluator):
-    __slots__ = ['value', '_eval', 'operator_eval']
+    __slots__ = ["value", "_eval", "operator_eval"]
+
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -391,51 +421,65 @@ class EvalFilterOp(Evaluator):
 
     def eval(self, context):
         prod = self._eval(context)
-        app = context.get('.app', None)
+        app = context.get(".app", None)
         for op, _eval in self.operator_eval:
             filter_obj = _eval(context)
 
-            if isinstance(filter_obj, text_type) and '.filters' in context:
-                filter_obj = context['.filters'].lookup(app, filter_obj)
+            if isinstance(filter_obj, text_type) and ".filters" in context:
+                filter_obj = context[".filters"].lookup(app, filter_obj)
 
-            if hasattr(filter_obj, '__moyafilter__'):
+            if hasattr(filter_obj, "__moyafilter__"):
                 prod = filter_obj.__moyafilter__(context, app, prod, {})
             else:
                 if callable(filter_obj):
                     prod = filter_obj(prod)
                 else:
-                    raise ValueError('{} may not be used as a filter'.format(to_expression(context, filter_obj)))
+                    raise ValueError(
+                        "{} may not be used as a filter".format(
+                            to_expression(context, filter_obj)
+                        )
+                    )
         return prod
 
 
 class EvalSliceOp(Evaluator):
-    __slots__ = ['value_eval', 'slice_eval']
+    __slots__ = ["value_eval", "slice_eval"]
+
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
-        self.slice_eval = [t.eval if t is not None else (lambda c: None) for t in tokens[0][1]]
+        self.slice_eval = [
+            t.eval if t is not None else (lambda c: None) for t in tokens[0][1]
+        ]
         if len(self.slice_eval) == 2:
             self.slice_eval.append(lambda context: None)
         if len(self.slice_eval) > 3:
-            raise ValueError('Slice syntax takes at most 3 values, i.e. value[start:stop:step]')
+            raise ValueError(
+                "Slice syntax takes at most 3 values, i.e. value[start:stop:step]"
+            )
 
     def eval(self, context):
         obj = self.value_eval(context)
         slice_indices = [_eval(context) for _eval in self.slice_eval]
-        start, stop, step = (None if _s == '' else _s for _s in slice_indices)
+        start, stop, step = (None if _s == "" else _s for _s in slice_indices)
         try:
-            if hasattr(obj, 'slice'):
+            if hasattr(obj, "slice"):
                 return obj.slice(start, stop, step)
             else:
                 return obj[start:stop:step]
         except TypeError:
-            _vars = (context.to_expr(start) if start is not None else '',
-                     context.to_expr(stop) if stop is not None else '',
-                     context.to_expr(step) if step is not None else '')
-            raise ValueError('unable to perform slice operation [{}:{}:{}]'.format(*_vars))
+            _vars = (
+                context.to_expr(start) if start is not None else "",
+                context.to_expr(stop) if stop is not None else "",
+                context.to_expr(step) if step is not None else "",
+            )
+            raise ValueError(
+                "unable to perform slice operation [{}:{}:{}]".format(*_vars)
+            )
 
 
 class EvalBraceOp(Evaluator):
-    __slots__ = ['value_eval', 'index_eval']
+    __slots__ = ["value_eval", "index_eval"]
+
     def build(self, tokens):
         self.value_eval = tokens[0][0].eval
         self.index_eval = [(t[0], t[1].eval) for t in tokens[0][1:]]
@@ -444,31 +488,37 @@ class EvalBraceOp(Evaluator):
         obj = self.value_eval(context)
         for brace, eval in self.index_eval:
             index = eval(context)
-            if brace == '[':
-                if getattr(index, 'moya_missing', False):
-                    raise ValueError("unable to look up missing index {!r}".format(index))
-                if hasattr(obj, '__moyacontext__'):
+            if brace == "[":
+                if getattr(index, "moya_missing", False):
+                    raise ValueError(
+                        "unable to look up missing index {!r}".format(index)
+                    )
+                if hasattr(obj, "__moyacontext__"):
                     obj = obj.__moyacontext__(context)
-                if hasattr(index, '__moyacall__'):
+                if hasattr(index, "__moyacall__"):
                     for value in obj:
                         if index.__moyacall__(value):
                             return value
                     return Missing(text_type(index))
                 try:
-                    if hasattr(obj, '__getitem__'):
+                    if hasattr(obj, "__getitem__"):
                         obj = obj[index]
                     else:
                         obj = getattr(obj, index)
                 except Exception:
                     obj = Missing(text_type(index))
             else:
-                if isinstance(obj, text_type) and '.filters' in context:
-                    obj = context['.filters'].lookup(context.get('.app', None), obj)
+                if isinstance(obj, text_type) and ".filters" in context:
+                    obj = context[".filters"].lookup(context.get(".app", None), obj)
 
-                if hasattr(obj, '__moyacall__'):
+                if hasattr(obj, "__moyacall__"):
                     obj = obj.__moyacall__(index)
                 else:
-                    raise ValueError("{} does not accept parameters".format(to_expression(context, obj)))
+                    raise ValueError(
+                        "{} does not accept parameters".format(
+                            to_expression(context, obj)
+                        )
+                    )
         return obj
 
 
@@ -480,32 +530,37 @@ def pairs(tokenlist):
 class EvalMultOp(Evaluator):
     "Class to evaluate multiplication and division expressions"
 
-    __slots__ = ['value', '_eval', 'operator_eval', 'eval']
+    __slots__ = ["value", "_eval", "operator_eval", "eval"]
 
-    ops = {"*": operator.mul,
-           "/": operator.truediv,
-           "//": operator.floordiv,
-           "%": operator.mod,
-           'bitand': operator.and_,
-           'bitor': operator.or_,
-           'bitxor': operator.xor
-           }
+    ops = {
+        "*": operator.mul,
+        "/": operator.truediv,
+        "//": operator.floordiv,
+        "%": operator.mod,
+        "bitand": operator.and_,
+        "bitor": operator.or_,
+        "bitxor": operator.xor,
+    }
 
     def build(self, tokens):
         self.value = tokens[0]
         _eval = self._eval = self.value[0].eval
         ops = self.ops
-        operator_eval = self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
+        operator_eval = self.operator_eval = [
+            (ops[op], val.eval) for op, val in pairs(self.value[1:])
+        ]
 
         if len(self.operator_eval) == 1:
             op_func, rhs_eval = self.operator_eval[0]
             self.eval = lambda context: op_func(_eval(context), rhs_eval(context))
         else:
+
             def eval(context):
                 prod = _eval(context)
                 for op_func, rhs_eval in operator_eval:
                     prod = op_func(prod, rhs_eval(context))
                 return prod
+
             self.eval = eval
 
     # def eval(self, context):
@@ -517,26 +572,29 @@ class EvalMultOp(Evaluator):
 
 class EvalAddOp(Evaluator):
     "Class to evaluate addition and subtraction expressions"
-    __slots__ = ['operator_eval', 'value', '_eval', 'eval']
+    __slots__ = ["operator_eval", "value", "_eval", "eval"]
 
-    ops = {'+': operator.add,
-           '-': operator.sub}
+    ops = {"+": operator.add, "-": operator.sub}
 
     def build(self, tokens):
         self.value = tokens[0]
         _eval = self._eval = self.value[0].eval
         ops = self.ops
-        operator_eval = self.operator_eval = [(ops[op], val.eval) for op, val in pairs(self.value[1:])]
+        operator_eval = self.operator_eval = [
+            (ops[op], val.eval) for op, val in pairs(self.value[1:])
+        ]
 
         if len(self.operator_eval) == 1:
             op_func, rhs_eval = self.operator_eval[0]
             self.eval = lambda context: op_func(_eval(context), rhs_eval(context))
         else:
+
             def eval(context):
                 prod = _eval(context)
                 for op_func, rhs_eval in operator_eval:
                     prod = op_func(prod, rhs_eval(context))
                 return prod
+
             self.eval = eval
 
     # def eval(self, context):
@@ -547,7 +605,8 @@ class EvalAddOp(Evaluator):
 
 
 class EvalRangeOp(Evaluator):
-    __slots__ = ['_evals']
+    __slots__ = ["_evals"]
+
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
 
@@ -557,7 +616,7 @@ class EvalRangeOp(Evaluator):
 
 
 class EvalExclusiveRangeOp(Evaluator):
-    __slots__ = ['_evals']
+    __slots__ = ["_evals"]
 
     def build(self, tokens):
         self._evals = [t.eval for t in tokens[0][0::2]]
@@ -568,7 +627,7 @@ class EvalExclusiveRangeOp(Evaluator):
 
 
 class EvalTernaryOp(Evaluator):
-    __slots__ = ['evals']
+    __slots__ = ["evals"]
 
     def build(self, tokens):
         self.evals = [t.eval for t in tokens[0][::2]]
@@ -613,7 +672,7 @@ def _str_in(value, seq):
 
 class EvalComparisonOp(Evaluator):
     "Class to evaluate comparison expressions"
-    __slots__ = ['value', '_eval', 'operator_eval']
+    __slots__ = ["value", "_eval", "operator_eval"]
 
     opMap = {
         "<": operator.lt,
@@ -636,13 +695,15 @@ class EvalComparisonOp(Evaluator):
         "instr": _str_in,
         "not instr": lambda a, b: not _str_in(a, b),
         "matches": _match_re,
-        "fnmatches": wildcard_match
+        "fnmatches": wildcard_match,
     }
 
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
-        self.operator_eval = [(self.opMap[op], val.eval) for op, val in pairs(self.value[1:])]
+        self.operator_eval = [
+            (self.opMap[op], val.eval) for op, val in pairs(self.value[1:])
+        ]
 
     def eval(self, context):
         val1 = self._eval(context)
@@ -655,7 +716,8 @@ class EvalComparisonOp(Evaluator):
 
 
 class EvalFormatOp(Evaluator):
-    __slots__ = ['value', '_eval', 'evals']
+    __slots__ = ["value", "_eval", "evals"]
+
     def build(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -666,14 +728,14 @@ class EvalFormatOp(Evaluator):
         for _eval in self.evals:
             fmt = _eval(context)
             if not isinstance(fmt, string_types):
-                raise ValueError('format should be a string, not {!r}'.format(fmt))
+                raise ValueError("format should be a string, not {!r}".format(fmt))
             return format(val1, fmt)
 
         return val1
 
 
 class EvalLogicOpOR(Evaluator):
-    __slots__ = ['value', '_eval', 'operator_eval']
+    __slots__ = ["value", "_eval", "operator_eval"]
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -693,7 +755,7 @@ class EvalLogicOpOR(Evaluator):
 
 
 class EvalLogicOpAND(Evaluator):
-    __slots__ = ['value', '_eval', 'operator_eval']
+    __slots__ = ["value", "_eval", "operator_eval"]
 
     def build(self, tokens):
         self.value = tokens[0]
@@ -711,33 +773,36 @@ class EvalLogicOpAND(Evaluator):
                 return val1
         return val1
 
-word_characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789'
+
+word_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789"
 expr = Forward()
 
 # define the parser
 integer = Word(nums)
 real = Combine(Word(nums) + "." + Word(nums))
 
-constant = oneOf('True False None yes no') + WordEnd(word_characters)
+constant = oneOf("True False None yes no") + WordEnd(word_characters)
 
 # TODO: expand on variable regex
-simple_variable = Regex(r'([a-zA-Z0-9_]+)')
-variable = Regex(r'([a-zA-Z0-9\._]+)')
-explicit_variable = '$' + Regex(r'([a-zA-Z0-9\._]+)')
-current_scope = Literal('$$')
+simple_variable = Regex(r"([a-zA-Z0-9_]+)")
+variable = Regex(r"([a-zA-Z0-9\._]+)")
+explicit_variable = "$" + Regex(r"([a-zA-Z0-9\._]+)")
+current_scope = Literal("$$")
 
-triple_string = (QuotedString("'''", escChar=None, unquoteResults=False) |
-                 QuotedString('"""', escChar=None, unquoteResults=False))
+triple_string = QuotedString("'''", escChar=None, unquoteResults=False) | QuotedString(
+    '"""', escChar=None, unquoteResults=False
+)
 
-string = (QuotedString('"', escChar='\\', unquoteResults=False) |
-          QuotedString("'", escChar="\\", unquoteResults=False))
+string = QuotedString('"', escChar="\\", unquoteResults=False) | QuotedString(
+    "'", escChar="\\", unquoteResults=False
+)
 
-regexp = QuotedString('/', escChar=None)
-timespan = Combine(Word(nums) + oneOf('ms s m h d'))
+regexp = QuotedString("/", escChar=None)
+timespan = Combine(Word(nums) + oneOf("ms s m h d"))
 
 current_scope_operand = current_scope
 variable_operand = variable
-#simple_variable_operand = simple_variable
+# simple_variable_operand = simple_variable
 explicit_variable_operand = explicit_variable
 integer_operand = integer
 real_operand = real
@@ -745,16 +810,16 @@ number_operand = real | integer
 triple_string_operand = triple_string
 string_operand = string
 
-groupop = Literal(',')
-signop = oneOf('+ -')
-multop = oneOf('* / // % bitand bitor')
-filterop = oneOf('|')
-plusop = oneOf('+ -')
-notop = Literal('not') + WordEnd(word_characters)
+groupop = Literal(",")
+signop = oneOf("+ -")
+multop = oneOf("* / // % bitand bitor")
+filterop = oneOf("|")
+plusop = oneOf("+ -")
+notop = Literal("not") + WordEnd(word_characters)
 
-rangeop = Literal('..')
-exclusiverangeop = Literal('...')
-ternaryop = ('?', ':')
+rangeop = Literal("..")
+exclusiverangeop = Literal("...")
+ternaryop = ("?", ":")
 
 current_scope_operand.setParseAction(EvalCurrentScope)
 variable_operand.setParseAction(EvalVariable)
@@ -767,103 +832,104 @@ constant.setParseAction(EvalConstant)
 regexp.setParseAction(EvalRegExp)
 timespan.setParseAction(EvalTimespan)
 
-modifier = Regex(r'([a-zA-Z][a-zA-Z0-9_]*)\:')
+modifier = Regex(r"([a-zA-Z][a-zA-Z0-9_]*)\:")
 
 simple_list_operand = Group(delimitedList(expr))
 simple_list_operand.setParseAction(EvalSimpleList)
 
-list_operand = (Suppress('[') + delimitedList(expr) + Suppress(']'))
+list_operand = Suppress("[") + delimitedList(expr) + Suppress("]")
 list_operand.setParseAction(EvalList)
 
-empty_list_operand = Literal('[]')
+empty_list_operand = Literal("[]")
 empty_list_operand.setParseAction(EvalEmptyList)
 
-dict_item = Group(expr + Suppress(Literal(':')) + expr)
-dict_operand = Group(Suppress('{') + delimitedList(dict_item) + Suppress('}'))
+dict_item = Group(expr + Suppress(Literal(":")) + expr)
+dict_operand = Group(Suppress("{") + delimitedList(dict_item) + Suppress("}"))
 dict_operand.setParseAction(EvalDict)
 
-empty_dict_operand = Literal('{}')
+empty_dict_operand = Literal("{}")
 empty_dict_operand.setParseAction(EvalEmptyDict)
 
-function_operand = Group(Suppress('`') + expr + Suppress('`'))
+function_operand = Group(Suppress("`") + expr + Suppress("`"))
 function_operand.setParseAction(EvalFunction)
 
-key_pair = Group(Regex(r'([a-zA-Z0-9_]+)') + Suppress(Literal('=') + WordEnd('=!+-*/')) + expr)
+key_pair = Group(
+    Regex(r"([a-zA-Z0-9_]+)") + Suppress(Literal("=") + WordEnd("=!+-*/")) + expr
+)
 key_pair_dict_operand = delimitedList(key_pair)
 key_pair_dict_operand.setParseAction(EvalKeyPairDict)
 
-callop = Group(('(') + expr + Suppress(')'))
-index = Group(('[') + expr + Suppress(']'))
+callop = Group(("(") + expr + Suppress(")"))
+index = Group(("[") + expr + Suppress("]"))
 
-_slice = Group(Suppress('[') + delimitedList(Optional(expr, default=None), ':') + Suppress(']'))
+_slice = Group(
+    Suppress("[") + delimitedList(Optional(expr, default=None), ":") + Suppress("]")
+)
 
 braceop = callop | index
 sliceop = _slice
 
-literalindex = Regex(r'\.([a-zA-Z0-9\._]+)')
+literalindex = Regex(r"\.([a-zA-Z0-9\._]+)")
 
 operand = (
-   timespan |
-   real_operand |
-   integer_operand |
-   triple_string_operand |
-   string_operand |
-   regexp |
-   constant |
-   function_operand |
-   key_pair_dict_operand |
-   current_scope_operand |
-   explicit_variable_operand |
-   variable_operand |
-   empty_list_operand |
-   empty_dict_operand |
-   list_operand |
-   dict_operand
+    timespan
+    | real_operand
+    | integer_operand
+    | triple_string_operand
+    | string_operand
+    | regexp
+    | constant
+    | function_operand
+    | key_pair_dict_operand
+    | current_scope_operand
+    | explicit_variable_operand
+    | variable_operand
+    | empty_list_operand
+    | empty_dict_operand
+    | list_operand
+    | dict_operand
 )
 
-comparisonop = (oneOf("< <= > >= != == ~= ^= $=") |
-                (Literal('not in') + WordEnd()) |
-                (Literal('not instr') + WordEnd()) |
-                (Literal('is not') + WordEnd()) |
-                (oneOf("is in instr lt lte gt gte matches fnmatches") + WordEnd()))
+comparisonop = (
+    oneOf("< <= > >= != == ~= ^= $=")
+    | (Literal("not in") + WordEnd())
+    | (Literal("not instr") + WordEnd())
+    | (Literal("is not") + WordEnd())
+    | (oneOf("is in instr lt lte gt gte matches fnmatches") + WordEnd())
+)
 
-logicopOR = Literal('or') + WordEnd()
-logicopAND = Literal('and') + WordEnd()
-formatop = Literal('::')
+logicopOR = Literal("or") + WordEnd()
+logicopAND = Literal("and") + WordEnd()
+formatop = Literal("::")
 
-expr << operatorPrecedence(operand, [
+expr << operatorPrecedence(
+    operand,
+    [
+        (signop, 1, opAssoc.RIGHT, EvalSignOp),
+        (exclusiverangeop, 2, opAssoc.LEFT, EvalExclusiveRangeOp),
+        (rangeop, 2, opAssoc.LEFT, EvalRangeOp),
+        (braceop, 1, opAssoc.LEFT, EvalBraceOp),
+        (sliceop, 1, opAssoc.LEFT, EvalSliceOp),
+        (literalindex, 1, opAssoc.LEFT, EvalLiteralIndex),
+        (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
+        (formatop, 2, opAssoc.LEFT, EvalFormatOp),
+        (multop, 2, opAssoc.LEFT, EvalMultOp),
+        (plusop, 2, opAssoc.LEFT, EvalAddOp),
+        (filterop, 2, opAssoc.LEFT, EvalFilterOp),
+        (comparisonop, 2, opAssoc.LEFT, EvalComparisonOp),
+        (notop, 1, opAssoc.RIGHT, EvalNotOp),
+        (logicopAND, 2, opAssoc.LEFT, EvalLogicOpAND),
+        (logicopOR, 2, opAssoc.LEFT, EvalLogicOpOR),
+        (ternaryop, 3, opAssoc.LEFT, EvalTernaryOp),
+    ],
+)
 
-    (signop, 1, opAssoc.RIGHT, EvalSignOp),
-    (exclusiverangeop, 2, opAssoc.LEFT, EvalExclusiveRangeOp),
-    (rangeop, 2, opAssoc.LEFT, EvalRangeOp),
-
-    (braceop, 1, opAssoc.LEFT, EvalBraceOp),
-    (sliceop, 1, opAssoc.LEFT, EvalSliceOp),
-    (literalindex, 1, opAssoc.LEFT, EvalLiteralIndex),
-
-    (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
-
-    (formatop, 2, opAssoc.LEFT, EvalFormatOp),
-
-    (multop, 2, opAssoc.LEFT, EvalMultOp),
-    (plusop, 2, opAssoc.LEFT, EvalAddOp),
-
-    (filterop, 2, opAssoc.LEFT, EvalFilterOp),
-
-    (comparisonop, 2, opAssoc.LEFT, EvalComparisonOp),
-    (notop, 1, opAssoc.RIGHT, EvalNotOp),
-
-    (logicopAND, 2, opAssoc.LEFT, EvalLogicOpAND),
-    (logicopOR, 2, opAssoc.LEFT, EvalLogicOpOR),
-
-    (ternaryop, 3, opAssoc.LEFT, EvalTernaryOp),
-])
-
-#expr.validate()
+# expr.validate()
 
 
 class DummyLock(object):
     """Replacement for real lock that does nothing"""
+
     def __enter__(self):
         pass
 
@@ -872,7 +938,8 @@ class DummyLock(object):
 
 
 class Function(object):
-    __slots__ = ['expression', 'scope']
+    __slots__ = ["expression", "scope"]
+
     def __init__(self, expression, scope=None):
         self.expression = expression
         if scope is None:
@@ -897,18 +964,21 @@ class Function(object):
             with context.data_frame(params):
                 with context.data_scope(self.scope):
                     return self.expression.eval(context)
+
         return call
 
     def get_scope_callable(self, context):
         def callscope(scope):
             with context.data_scope(scope):
                 return self.expression.eval(context)
+
         return callscope
 
 
 @implements_to_string
 class Expression(object):
     """Evaluate an arithmetic expression of context values"""
+
     exp_cache = {}
     new_expressions = set()
     _lock = threading.RLock()
@@ -931,20 +1001,25 @@ class Expression(object):
     def eval(self, context):
         try:
             obj = self._eval(context)
-            return obj.__moyacontext__(context) if hasattr(obj, '__moyacontext__') else obj
+            return (
+                obj.__moyacontext__(context) if hasattr(obj, "__moyacontext__") else obj
+            )
         except (ExpressionError, MoyaException, LogicError):
             raise
         except ArithmeticError as e:
             if isinstance(e, ZeroDivisionError):
-                throw('math.division-error',
-                      "Can't divide by zero in '{}'".format(self.exp),
-                      diagnosis="Check your math")
+                throw(
+                    "math.division-error",
+                    "Can't divide by zero in '{}'".format(self.exp),
+                    diagnosis="Check your math",
+                )
             else:
-                throw('math.arithmetic-error', text_type(e))
+                throw("math.arithmetic-error", text_type(e))
         except Exception as e:
-            if context['.develop']:
+            if context[".develop"]:
                 print("In expression.eval {!r}".format(self))
                 import traceback
+
                 traceback.print_exc(e)
             raise ExpressionEvalError(self.exp, original=e)
 
@@ -996,9 +1071,16 @@ class Expression(object):
                 compiled_exp = cls.exp_cache[exp]
             except KeyError:
                 try:
-                    compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
+                    compiled_exp = cls.exp_cache[exp] = expr.parseString(
+                        exp, parseAll=True
+                    ).asList()
                 except ParseException as e:
-                    raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
+                    raise ExpressionCompileError(
+                        exp,
+                        'unable to parse expression "{}"'.format(exp),
+                        col=e.col,
+                        original=e,
+                    )
             return compiled_exp[0].eval(context)
 
     @classmethod
@@ -1008,10 +1090,17 @@ class Expression(object):
                 return cls.exp_cache[exp]
             except KeyError:
                 try:
-                    compiled_exp = cls.exp_cache[exp] = expr.parseString(exp, parseAll=True).asList()
+                    compiled_exp = cls.exp_cache[exp] = expr.parseString(
+                        exp, parseAll=True
+                    ).asList()
                     return compiled_exp
                 except ParseException as e:
-                    raise ExpressionCompileError(exp, 'unable to parse expression "{}"'.format(exp), col=e.col, original=e)
+                    raise ExpressionCompileError(
+                        exp,
+                        'unable to parse expression "{}"'.format(exp),
+                        col=e.col,
+                        original=e,
+                    )
 
     @classmethod
     def get_new_expressions(cls):
@@ -1031,15 +1120,15 @@ class Expression(object):
             try:
                 compiled_exp, start, end = next(scan)
             except StopIteration:
-                return '', exp
+                return "", exp
             else:
                 if start != 0:
-                    return '', exp
+                    return "", exp
                 expression = exp[start:end]
                 cls.exp_cache[expression] = compiled_exp.asList()
                 return expression, exp[end:]
 
-    _re_substitute_context = re.compile(r'\$\{(.*?)\}')
+    _re_substitute_context = re.compile(r"\$\{(.*?)\}")
 
     @classmethod
     def extract(cls, text):
@@ -1060,11 +1149,12 @@ class DefaultExpression(object):
     but returns a pre-determined value.
 
     """
+
     def __init__(self, return_value=None):
         self.return_value = return_value
 
     def __repr__(self):
-        return 'DefaultExpression(%r)' % self.return_value
+        return "DefaultExpression(%r)" % self.return_value
 
     def eval(self, context):
         return self.return_value
@@ -1072,27 +1162,31 @@ class DefaultExpression(object):
 
 class TrueExpression(DefaultExpression):
     """A default expression that returns True"""
+
     def eval(self, context):
         return True
 
 
 class FalseExpression(DefaultExpression):
     """A default expression that returns False"""
+
     def eval(self, context):
         return False
 
 
 def main():
     from context import Context
+
     c = Context()
-    c['foo'] = 5
-    c['word'] = "apple"
+    c["foo"] = 5
+    c["word"] = "apple"
     c["number"] = "100"
-    c['bar'] = dict(a=2, b=3)
+    c["bar"] = dict(a=2, b=3)
 
     def call(v):
-        return v.split(',')
-    c['filter'] = call
+        return v.split(",")
+
+    c["filter"] = call
 
     e = Expression('upper:("Hello " + "World")', c)
     print(e())
@@ -1106,7 +1200,7 @@ def main():
     e = Expression('"500" matches /\\d+/', c)
     print(e())
 
-    e = Expression('not(1>1)', c)
+    e = Expression("not(1>1)", c)
     print(e())
 
     e = Expression('not ("500" matches /\\d+/)', c)
@@ -1115,21 +1209,24 @@ def main():
     e = Expression('bar["a"]', c)
     print(e())
 
-    #c.push_frame('word')
+    # c.push_frame('word')
+
+
 #    from time import time
 #    start = time()
 #    e = c.compile("None")
 #    print e()
-    #for _ in xrange(10000):
-    #    e()
+# for _ in xrange(10000):
+#    e()
 
-if __name__=='__main__':
-    #main()
+if __name__ == "__main__":
+    # main()
 
     from moya.context import Context
-    c = Context({'name': "Will"})
-    c['.develop'] = True
-    print(c.eval('{upper:name}'))
+
+    c = Context({"name": "Will"})
+    c[".develop"] = True
+    print(c.eval("{upper:name}"))
 
     print(c.eval('{upper:name}(name="will")'))
 

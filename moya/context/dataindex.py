@@ -11,7 +11,7 @@ from operator import truth
 class ParseResult(object):
     """An immutable list like object that stores the results of a parsed index"""
 
-    __slots__ = ['tokens', 'from_root', 'index']
+    __slots__ = ["tokens", "from_root", "index"]
 
     def __init__(self, tokens, from_root):
         self.tokens = tokens
@@ -21,7 +21,7 @@ class ParseResult(object):
     def __str__(self):
         if self.index is None:
             if self.from_root:
-                self.index = '.' + build(self.tokens)
+                self.index = "." + build(self.tokens)
             else:
                 self.index = build(self.tokens)
         return self.index
@@ -68,10 +68,10 @@ def parse(s, parse_cache={}):
     cached_result = parse_cache.get(s, None)
     if cached_result is not None:
         return cached_result
-    from_root = s.startswith('.')
+    from_root = s.startswith(".")
     iter_chars = iter(s)
-    tokens = []     # Token accumulator
-    token = []      # Current token
+    tokens = []  # Token accumulator
+    token = []  # Current token
     append_token = tokens.append
     append_char = token.append
 
@@ -79,12 +79,12 @@ def parse(s, parse_cache={}):
         c = next(iter_chars, None)
         if c is None:
             return None, None
-        if c == '\\':
+        if c == "\\":
             c = next(iter_chars, None)
             if c is None:
                 return None, None
             return True, c
-        if c == '.':
+        if c == ".":
             return True, None
         else:
             return False, c
@@ -98,7 +98,7 @@ def parse(s, parse_cache={}):
     def asint(s):
         return int(s) if s.isdigit() else s
 
-    join = ''.join
+    join = "".join
 
     while 1:
         literal, c = pop()
@@ -141,35 +141,38 @@ def build(indices, absolute=False):
 
     def escape(s):
         if isinstance(s, string_types):
-            if ' ' in s or '.' in s:
+            if " " in s or "." in s:
                 s = '"%s"' % s.replace('"', '\\"')
             return s
         else:
             return text_type(s)
+
     if absolute:
-        return '.' + '.'.join(escape(s) for s in indices)
+        return "." + ".".join(escape(s) for s in indices)
     else:
-        return '.'.join(escape(s) for s in indices)
+        return ".".join(escape(s) for s in indices)
 
 
 def is_from_root(indices):
     """Test a string index is from the root"""
     # Mainly here for self documentation purposes
-    if hasattr(indices, 'from_root'):
+    if hasattr(indices, "from_root"):
         return indices.from_root
-    return indices.startswith('.')
+    return indices.startswith(".")
 
 
 def normalise(s):
     """Normalizes a data index"""
     return build(parse(s))
+
+
 normalize = normalise  # For Americans
 
 
 def iter_index(index):
     index_accumulator = []
     push = index_accumulator.append
-    join = '.'.join
+    join = ".".join
     for name in parse(index):
         push(name)
         yield name, join(text_type(s) for s in index_accumulator)
@@ -182,14 +185,14 @@ def join(*indices):
     append = joined.append
     for index in indices:
         if isinstance(index, string_types):
-            if index.startswith('.'):
+            if index.startswith("."):
                 absolute = True
                 del joined[:]
                 append(parse(index[1:]))
             else:
                 append(parse(index))
         else:
-            if getattr(index, 'from_root', False):
+            if getattr(index, "from_root", False):
                 absolute = True
                 del joined[:]
             append(index)
@@ -197,12 +200,14 @@ def join(*indices):
     for index in joined:
         new_indices.extend(index)
     return build(new_indices, absolute)
+
+
 indexjoin = join
 
 
 def makeindex(*subindices):
     """Make an index from sub indexes"""
-    return '.'.join(text_type(i) for i in subindices)
+    return ".".join(text_type(i) for i in subindices)
 
 
 def join_parsed(*indices):
@@ -211,14 +216,14 @@ def join_parsed(*indices):
     append = joined.append
     for index in indices:
         if isinstance(index, string_types):
-            if index.startswith('.'):
+            if index.startswith("."):
                 absolute = True
                 del joined[:]
                 append(parse(index[1:]))
             else:
                 append(parse(index))
         else:
-            if getattr(index, 'from_root', False):
+            if getattr(index, "from_root", False):
                 absolute = True
                 del joined[:]
             append(index)
@@ -232,7 +237,7 @@ def make_absolute(index):
     """Make an index absolute (preceded by a '.')"""
     if not isinstance(index, string_types):
         index = build(index)
-    return '.' + text_type(index).lstrip('.')
+    return "." + text_type(index).lstrip(".")
 
 
 if __name__ == "__main__":
@@ -241,6 +246,6 @@ if __name__ == "__main__":
     print(parse(test))
     print(normalize(test))
     print(parse(normalize(test)))
-    print(join('call', 'param1', ('a', 'b', 'c')))
+    print(join("call", "param1", ("a", "b", "c")))
 
-    print(join(["callstack", 1], 'foo'))
+    print(join(["callstack", 1], "foo"))

@@ -2,18 +2,22 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from ..context.tools import to_expression
-from ..compat import (number_types,
-                      implements_to_string,
-                      xrange,
-                      implements_bool,
-                      string_types,
-                      unichr)
+from ..compat import (
+    number_types,
+    implements_to_string,
+    xrange,
+    implements_bool,
+    string_types,
+    unichr,
+)
 
-__all__ = ["ExpressionRange",
-           "ExclusiveIntegerRange",
-           "InclusiveIntegerRange",
-           "ExclusiveCharacterRange",
-           "InclusiveCharacterRange"]
+__all__ = [
+    "ExpressionRange",
+    "ExclusiveIntegerRange",
+    "InclusiveIntegerRange",
+    "ExclusiveCharacterRange",
+    "InclusiveCharacterRange",
+]
 
 
 @implements_bool
@@ -24,10 +28,12 @@ class ExpressionRange(object):
     @classmethod
     def create(cls, context, start, end, inclusive=True):
         if not isinstance(start, number_types + string_types):
-            if hasattr(start, '__moyarange__'):
+            if hasattr(start, "__moyarange__"):
                 moyarange = start.__moyarange__(context, end, inclusive=inclusive)
             else:
-                raise ValueError("Can't create range from {!r} to {!r}".format(start, end))
+                raise ValueError(
+                    "Can't create range from {!r} to {!r}".format(start, end)
+                )
             return moyarange
         if isinstance(start, number_types):
             if inclusive:
@@ -39,8 +45,11 @@ class ExpressionRange(object):
                 return InclusiveCharacterRange(context, start, end)
             else:
                 return ExclusiveCharacterRange(context, start, end)
-        raise ValueError("Can't create range from {} to {}".format(to_expression(context, start),
-                                                                   to_expression(context, end)))
+        raise ValueError(
+            "Can't create range from {} to {}".format(
+                to_expression(context, start), to_expression(context, end)
+            )
+        )
 
     def __init__(self, context, start, end):
         self.start = start
@@ -48,8 +57,11 @@ class ExpressionRange(object):
         try:
             self._build(start, end)
         except TypeError:
-            raise ValueError("Can't create range between {} and {}".format(to_expression(context, start),
-                                                                           to_expression(context, end)))
+            raise ValueError(
+                "Can't create range between {} and {}".format(
+                    to_expression(context, start), to_expression(context, end)
+                )
+            )
 
     def __str__(self):
         return "<range {} to {} inclusive>".format(self.start, self.end)
@@ -62,11 +74,13 @@ class ExpressionRange(object):
 
     def __moyarepr__(self, context):
         if self.inclusive:
-            return "({})..({})".format(to_expression(context, self.start),
-                                       to_expression(context, self.end))
+            return "({})..({})".format(
+                to_expression(context, self.start), to_expression(context, self.end)
+            )
         else:
-            return "({})...({})".format(to_expression(context, self.start),
-                                        to_expression(context, self.end))
+            return "({})...({})".format(
+                to_expression(context, self.start), to_expression(context, self.end)
+            )
 
     def keys(self):
         return range(0, len(self))

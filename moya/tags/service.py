@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+
 """
 Elements used in exposing external services to Moya code
 
@@ -14,9 +15,10 @@ import weakref
 
 class ServiceCallElement(ContextElementBase):
     """A psuedo element that proxies a Python callable"""
+
     xmlns = "http://moyaproject.com/db"
     _element_class = "logic"
-    #_call = True
+    # _call = True
 
     class Meta:
         is_call = True
@@ -30,10 +32,10 @@ class ServiceCallElement(ContextElementBase):
         self._tag_name = "ServiceCall"
         self._children = ()
         self._attributes = {}
-        self._code = ''  # TODO
+        self._code = ""  # TODO
         self._libid = None
         self.source_line = 0
-        self._element_type = ('http://moyaproject.com', '')
+        self._element_type = ("http://moyaproject.com", "")
 
         self._location = text_type(service_callable.__code__)
 
@@ -49,28 +51,36 @@ class ServiceCallElement(ContextElementBase):
     def logic(self, context):
         try:
             call = context[".call"]
-            args = call.pop('args', ())
+            args = call.pop("args", ())
 
-            if context.get('._winpdb_debug', False):
-                password = context.get('._winpdb_password', 'password')
-                del context['._winpdb_debug']
-                del context['._winpdb_password']
+            if context.get("._winpdb_debug", False):
+                password = context.get("._winpdb_password", "password")
+                del context["._winpdb_debug"]
+                del context["._winpdb_password"]
                 try:
                     import rpdb2
                 except ImportError:
-                    context['.console'].text("rpdb2 is required to debug with WinPDB", fg="red", bold=True)
+                    context[".console"].text(
+                        "rpdb2 is required to debug with WinPDB", fg="red", bold=True
+                    )
                 else:
-                    context['.console'].text("Reading to launch winpdb... Click File -> Attach and enter password '{}'".format(password), fg="green", bold=True)
+                    context[".console"].text(
+                        "Reading to launch winpdb... Click File -> Attach and enter password '{}'".format(
+                            password
+                        ),
+                        fg="green",
+                        bold=True,
+                    )
                     raw_input("Hit <RETURN> to continue ")
                     subprocess.Popen(["winpdb"])
                     rpdb2.start_embedded_debugger(password)
 
-            if getattr(self.service, 'call_with_context', False):
+            if getattr(self.service, "call_with_context", False):
                 ret = self.service(context, *args, **call)
             else:
                 ret = self.service(*args, **call)
             context["_return"] = ReturnContainer(ret)
         except Exception as e:
             raise
-            #from traceback import print_exc
-            #print_exc(e)
+            # from traceback import print_exc
+            # print_exc(e)

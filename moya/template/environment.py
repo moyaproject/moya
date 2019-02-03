@@ -26,7 +26,7 @@ class Environment(object):
         self.template_fs = template_fs
         if archive is not None:
             self._archive = weakref.ref(archive)
-            self.cache = cache or archive.get_cache('templates')
+            self.cache = cache or archive.get_cache("templates")
         else:
             self._archive = lambda: None
             if cache is None:
@@ -37,7 +37,7 @@ class Environment(object):
 
     @classmethod
     def make_default(self):
-        return Environment(open_fs('mem://'))
+        return Environment(open_fs("mem://"))
 
     @property
     def archive(self):
@@ -75,7 +75,7 @@ class Environment(object):
         except Exception as error:
             raise BadTemplateError(
                 template_path,
-                diagnosis="failed to read text ({})".format(text_type(error))
+                diagnosis="failed to read text ({})".format(text_type(error)),
             )
 
         try:

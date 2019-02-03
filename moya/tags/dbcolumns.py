@@ -8,19 +8,21 @@ from ..compat import text_type
 from ..context.expressiontime import ExpressionDateTime, ExpressionDate
 from ..generickey import GenericKey
 
-from sqlalchemy import (Column,
-                        Boolean,
-                        ForeignKey,
-                        BigInteger,
-                        Integer,
-                        Numeric,
-                        SmallInteger,
-                        String,
-                        Float,
-                        UnicodeText,
-                        DateTime,
-                        Date,
-                        Sequence)
+from sqlalchemy import (
+    Column,
+    Boolean,
+    ForeignKey,
+    BigInteger,
+    Integer,
+    Numeric,
+    SmallInteger,
+    String,
+    Float,
+    UnicodeText,
+    DateTime,
+    Date,
+    Sequence,
+)
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.mutable import Mutable
 
@@ -39,6 +41,7 @@ class JSONDict(dict):
 
 class MoyaCustomDateTime(TypeDecorator):
     """Massage to Moya datetime"""
+
     impl = DateTime
 
     def process_result_value(self, value, dialect):
@@ -49,6 +52,7 @@ class MoyaCustomDateTime(TypeDecorator):
 
 class MoyaCustomDate(TypeDecorator):
     """Massage to Moya date"""
+
     impl = Date
 
     def process_result_value(self, value, dialect):
@@ -88,7 +92,6 @@ class GenericKeyObject(TypeDecorator):
 
 
 class StringMap(Mutable, dict):
-
     @classmethod
     def coerce(cls, key, value):
         "Convert plain dictionaries to MutableDict."
@@ -119,7 +122,7 @@ class StringMap(Mutable, dict):
         self.changed()
 
 
-#MutableType.associate_with(PickleType)
+# MutableType.associate_with(PickleType)
 
 
 # class MoyaPickleType(PickleType, Mutable):
@@ -143,27 +146,31 @@ class StringMap(Mutable, dict):
 
 class no_default(object):
     """Sentinal object to signify that no default is required for a column"""
+
     def __repr__(self):
         return "<no default>"
 
 
 class MoyaDBColumn(object):
     """Contains information used to create an sqlalchemy column, and its associated abstraction"""
+
     allow_extend = True
 
-    def __init__(self,
-                 type,
-                 name,
-                 default=no_default,
-                 null=True,
-                 blank=True,
-                 primary=False,
-                 index=False,
-                 unique=False,
-                 label=None,
-                 help=None,
-                 formfield=None,
-                 markup=None):
+    def __init__(
+        self,
+        type,
+        name,
+        default=no_default,
+        null=True,
+        blank=True,
+        primary=False,
+        index=False,
+        unique=False,
+        label=None,
+        help=None,
+        formfield=None,
+        markup=None,
+    ):
         self.type = type
         self.name = name
         self.null = null
@@ -191,15 +198,15 @@ class MoyaDBColumn(object):
         return self.get_dbname()
 
     def get_sa_columns(self, model):
-        kwargs = dict(primary_key=self.primary,
-                      nullable=self.null,
-                      index=self.index,
-                      unique=self.unique)
+        kwargs = dict(
+            primary_key=self.primary,
+            nullable=self.null,
+            index=self.index,
+            unique=self.unique,
+        )
         if self.default is not no_default:
             kwargs["default"] = self.default
-        yield Column(self.name,
-                     self.get_sa_type(),
-                     **kwargs)
+        yield Column(self.name, self.get_sa_type(), **kwargs)
 
     def get_properties(self, db, table_class):
         return []
@@ -216,6 +223,7 @@ class MoyaDBColumn(object):
 
 class PKColumn(MoyaDBColumn):
     """Primary key column"""
+
     dbtype = Integer
     allow_extend = False
 
@@ -223,43 +231,39 @@ class PKColumn(MoyaDBColumn):
         return int(value)
 
     def get_sa_columns(self, model):
-        #sequence_name = "{}_{}_id_seq".format(model.name, self.name)
+        # sequence_name = "{}_{}_id_seq".format(model.name, self.name)
         sequence_name = "{}_id_seq".format(self.name)
-        kwargs = dict(primary_key=self.primary,
-                      nullable=self.null)
+        kwargs = dict(primary_key=self.primary, nullable=self.null)
         if self.default is not no_default:
             kwargs["default"] = self.default
-        yield Column(self.name,
-                     self.get_sa_type(),
-                     Sequence(sequence_name),
-                     **kwargs)
+        yield Column(self.name, self.get_sa_type(), Sequence(sequence_name), **kwargs)
 
 
 class ForeignKeyColumn(MoyaDBColumn):
-
-    def __init__(self,
-                 type,
-                 name,
-                 ref_model,
-                 ref_model_app,
-                 label=None,
-                 help=None,
-                 default=no_default,
-                 null=True,
-                 blank=True,
-                 primary=False,
-                 index=False,
-                 unique=False,
-                 ondelete="SET NULL",
-                 cascade=None,
-                 back_cascade=None,
-                 orderby=None,
-                 options=None,
-                 backref=None,
-                 uselist=True,
-                 picker=None,
-                 backref_collection=None,
-                 ):
+    def __init__(
+        self,
+        type,
+        name,
+        ref_model,
+        ref_model_app,
+        label=None,
+        help=None,
+        default=no_default,
+        null=True,
+        blank=True,
+        primary=False,
+        index=False,
+        unique=False,
+        ondelete="SET NULL",
+        cascade=None,
+        back_cascade=None,
+        orderby=None,
+        options=None,
+        backref=None,
+        uselist=True,
+        picker=None,
+        backref_collection=None,
+    ):
         self.type = type
         self.label = label
         self.help = help
@@ -286,53 +290,64 @@ class ForeignKeyColumn(MoyaDBColumn):
         self.backref_collection = backref_collection
 
     def get_dbname(self):
-        return self.name + '_id'
+        return self.name + "_id"
 
     def get_sa_columns(self, model):
-        kwargs = dict(primary_key=self.primary,
-                      nullable=self.null,
-                      index=self.index,
-                      unique=self.unique)
+        kwargs = dict(
+            primary_key=self.primary,
+            nullable=self.null,
+            index=self.index,
+            unique=self.unique,
+        )
         if self.default is not no_default:
             kwargs["default"] = self.default
         name = "%s_id" % self.name
-        yield Column(name,
-                     Integer,
-                     ForeignKey("%s.id" % self.ref_table_name, ondelete=self.ondelete),
-                     **kwargs)
+        yield Column(
+            name,
+            Integer,
+            ForeignKey("%s.id" % self.ref_table_name, ondelete=self.ondelete),
+            **kwargs
+        )
 
     def get_properties(self, model, table_class):
         "Address.id==Customer.billing_address_id"
-        #join = "%s.id==%s.%s_id" % (self.ref_model.name, model.name, self.name)
+        # join = "%s.id==%s.%s_id" % (self.ref_model.name, model.name, self.name)
         def get_join(ref_model_table_class):
             ref_model_table_class = ref_model_table_class()
-            join = getattr(table_class, '%s_id' % self.name) == ref_model_table_class.id
-            #join = table_class.id == getattr(ref_model_table_class, '%s_id' % self.ref_model.name.lower())
+            join = getattr(table_class, "%s_id" % self.name) == ref_model_table_class.id
+            # join = table_class.id == getattr(ref_model_table_class, '%s_id' % self.ref_model.name.lower())
             return join
 
         def lazy_relationship(app, model):
             if self.backref:
-                _backref = backref(self.backref,
-                                   uselist=self.uselist,
-                                   #lazy="subquery",
-                                   cascade=self.back_cascade,
-                                   collection_class=self.backref_collection)
+                _backref = backref(
+                    self.backref,
+                    uselist=self.uselist,
+                    # lazy="subquery",
+                    cascade=self.back_cascade,
+                    collection_class=self.backref_collection,
+                )
             else:
                 _backref = None
-            ref_model_table_class = lambda: self.ref_model.element.get_table_class(self.ref_model.app)
-            return relationship(ref_model_table_class(),
-                                primaryjoin=lambda: get_join(ref_model_table_class),
-                                remote_side=lambda: ref_model_table_class().id,
-                                backref=_backref,
-                                cascade=self.cascade,
-                                post_update=self.null,
-                                #lazy="subquery"
-                                )
+            ref_model_table_class = lambda: self.ref_model.element.get_table_class(
+                self.ref_model.app
+            )
+            return relationship(
+                ref_model_table_class(),
+                primaryjoin=lambda: get_join(ref_model_table_class),
+                remote_side=lambda: ref_model_table_class().id,
+                backref=_backref,
+                cascade=self.cascade,
+                post_update=self.null,
+                # lazy="subquery"
+            )
 
         yield self.name, lazy_relationship
 
     def get_join(self, node):
-        ref_model_table_class = self.ref_model.element.get_table_class(self.ref_model.app)
+        ref_model_table_class = self.ref_model.element.get_table_class(
+            self.ref_model.app
+        )
         tc = aliased(ref_model_table_class)
         return tc, (tc, getattr(node, self.name))
 
@@ -374,10 +389,12 @@ class DecimalColumn(MoyaDBColumn):
         return Decimal(value)
 
     def get_sa_type(self):
-        return self.dbtype(precision=self.precision,
-                           scale=self.scale,
-                           decimal_return_scale=self.scale,
-                           asdecimal=True)
+        return self.dbtype(
+            precision=self.precision,
+            scale=self.scale,
+            decimal_return_scale=self.scale,
+            asdecimal=True,
+        )
 
 
 class BigIntegerColumn(IntegerColumn):
@@ -400,7 +417,18 @@ class StringColumn(MoyaDBColumn):
 
 
 class UploadColumn(MoyaDBColumn):
-    def __init__(self, type, name, length=None, choices=None, getfs=None, getpath=None, geturl=None, *args, **kwargs):
+    def __init__(
+        self,
+        type,
+        name,
+        length=None,
+        choices=None,
+        getfs=None,
+        getpath=None,
+        geturl=None,
+        *args,
+        **kwargs
+    ):
         self.length = length
         self.choices = choices
         self.getfs = getfs
@@ -414,9 +442,9 @@ class UploadColumn(MoyaDBColumn):
 
 
 class TimezoneType(TypeDecorator):
-    '''Prefixes Unicode values with "PREFIX:" on the way in and
+    """Prefixes Unicode values with "PREFIX:" on the way in and
     strips it off on the way out.
-    '''
+    """
 
     impl = String
 
@@ -436,7 +464,6 @@ class TimezoneType(TypeDecorator):
 
 
 class TimezoneColumn(StringColumn):
-
     def get_sa_type(self):
         return TimezoneType(length=self.length, convert_unicode=True)
 
@@ -473,7 +500,7 @@ class DateColumn(MoyaDBColumn):
 
 
 class StringMapColumn(MoyaDBColumn):
-    #dbtype = PickleType
+    # dbtype = PickleType
 
     def get_sa_type(self):
         return StringMap.as_mutable(JSONEncodedDict)

@@ -8,11 +8,13 @@ from operator import attrgetter
 
 
 import logging
-log = logging.getLogger('moya.runtime')
+
+log = logging.getLogger("moya.runtime")
 
 
 class Task(object):
     """A task scheduled for a given time"""
+
     def __init__(self, name, callable, run_time=None, repeat=None):
         self.name = name
         self.callable = callable
@@ -90,7 +92,7 @@ class Scheduler(Thread):
             return
         t = datetime.utcnow()
         ready_tasks = None
-        self.tasks.sort(key=attrgetter('run_time'))
+        self.tasks.sort(key=attrgetter("run_time"))
         for i, task in enumerate(self.tasks):
             if not task.ready(t):
                 ready_tasks = self.tasks[:i]
@@ -121,10 +123,13 @@ class Scheduler(Thread):
 
 if __name__ == "__main__":
     import time
+
     def hello():
         print("Hello")
+
     def world():
         print("world")
+
     scheduler = Scheduler()
     print(scheduler.add_repeat_task("hello", hello, repeat=5))
     print(scheduler.add_repeat_task("world", world, repeat=3))

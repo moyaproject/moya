@@ -13,4 +13,4 @@ def attr_bool(s):
     """
     if s is None or isinstance(s, bool):
         return s
-    return s.strip().lower() in ('yes', 'true')
+    return s.strip().lower() in ("yes", "true")

@@ -22,7 +22,7 @@ from .compat import text_type, string_types, binary_type
 from fs.path import abspath
 from fs.errors import NoSysPath
 
-_re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
+_re_xml_namespace = re.compile(r"^(?:\{(.*?)\})*(.*)$", re.UNICODE)
 
 
 element_fromstring = etree.fromstring
@@ -40,12 +40,12 @@ def extract_namespace(tag_name, _cache={}):
 
 class Parser(object):
 
-    _default_cache = DictCache('parser', '')
+    _default_cache = DictCache("parser", "")
 
     def __init__(self, archive, fs, path, library=None):
         self.built = False
         try:
-            self.cache = archive.get_cache('parser')
+            self.cache = archive.get_cache("parser")
         except Exception as e:
             self.cache = self._default_cache
         self.archive = archive
@@ -66,18 +66,21 @@ class Parser(object):
     def xml(self):
         if self._xml is None:
             xml = self.fs.getbytes(self.path)
-            xml = xml.replace(b'\t', b'    ')
+            xml = xml.replace(b"\t", b"    ")
             self._xml = xml
         return self._xml
 
-    def parse(self, _extract_namespace=extract_namespace, _DocumentTextNode=DocumentTextNode, _DocumentNode=DocumentNode, _binary_type=binary_type):
+    def parse(
+        self,
+        _extract_namespace=extract_namespace,
+        _DocumentTextNode=DocumentTextNode,
+        _DocumentNode=DocumentNode,
+        _binary_type=binary_type,
+    ):
         location = self.location
-        document = Document(self.archive,
-                            lib=self.library,
-                            path=self.path)
+        document = Document(self.archive, lib=self.library, path=self.path)
         document.location = location
         default_namespace = namespaces.default
-
 
         # The parser cache is disable because it only speeds up startup by around 6%
         # Not quite ready to give up the idea and delete this code just yet - WM 11/11/2015
@@ -96,26 +99,26 @@ class Parser(object):
             log.warning("file '{}' is empty".format(self.location))
             return None
 
-        structure = document.structure = DocumentStructure(document,
-                                                           self.library,
-                                                           xml)
+        structure = document.structure = DocumentStructure(document, self.library, xml)
 
         parser = etree.XMLParser()
 
         try:
             root = etree.parse(io.BytesIO(self.xml), parser).getroot()
         except Exception as e:
-            error = getattr(e, 'msg', None) or text_type(e)
-            raise errors.ParseError("XML failed to parse ({})".format(error),
-                                    path=location,
-                                    position=getattr(e, 'position', (1, 1)),
-                                    code=xml)
+            error = getattr(e, "msg", None) or text_type(e)
+            raise errors.ParseError(
+                "XML failed to parse ({})".format(error),
+                path=location,
+                position=getattr(e, "position", (1, 1)),
+                code=xml,
+            )
 
         stack = [(root, None)]
 
         def make_unicode(s):
             if isinstance(s, _binary_type):
-                return s.decode('utf-8')
+                return s.decode("utf-8")
             return s
 
         add_namespace = self.archive.known_namespaces.add
@@ -129,7 +132,7 @@ class Parser(object):
             add_namespace(xmlns)
 
             translate_text = False
-            if tag_name.startswith('_'):
+            if tag_name.startswith("_"):
                 tag_name = tag_name[1:]
                 translate_text = True
 
@@ -137,33 +140,35 @@ class Parser(object):
             translatable_attrs = set()
             for k, v in node.items():
                 attr_ns, attr_name = _extract_namespace(make_unicode(k))
-                if attr_name.startswith('_'):
+                if attr_name.startswith("_"):
                     attr_name = attr_name[1:]
                     translatable_attrs.add(attr_name)
                 attrs[attr_ns or default_namespace][attr_name] = make_unicode(v)
 
             source_line = getattr(node, "sourceline", None)
-            doc_node = _DocumentNode(xmlns,
-                                     tag_name,
-                                     parent_doc_id,
-                                     attrs,
-                                     translatable_attrs,
-                                     make_unicode(node.text),
-                                     source_line,
-                                     translate_text=translate_text)
+            doc_node = _DocumentNode(
+                xmlns,
+                tag_name,
+                parent_doc_id,
+                attrs,
+                translatable_attrs,
+                make_unicode(node.text),
+                source_line,
+                translate_text=translate_text,
+            )
 
             structure.add_node(doc_node)
 
             if node.tail:
-                text_node = _DocumentTextNode(parent_doc_id,
-                                              source_line,
-                                              make_unicode(node.tail))
+                text_node = _DocumentTextNode(
+                    parent_doc_id, source_line, make_unicode(node.tail)
+                )
                 structure.add_node(text_node)
 
             if node.text:
-                doc_text_node = _DocumentTextNode(doc_node.doc_id,
-                                                  doc_node.source_line,
-                                                  make_unicode(node.text))
+                doc_text_node = _DocumentTextNode(
+                    doc_node.doc_id, doc_node.source_line, make_unicode(node.text)
+                )
                 structure.add_node(doc_text_node)
 
             stack.extend((child, doc_node.doc_id) for child in reversed(node))

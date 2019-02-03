@@ -9,24 +9,28 @@ from ..context.color import Color as ExpressionColor
 from ..context.tools import to_expression
 from ..elements.elementproxy import ElementProxy
 from ..http import StatusCode
-from ..compat import (implements_to_string,
-                      int_types,
-                      text_type,
-                      string_types,
-                      with_metaclass)
+from ..compat import (
+    implements_to_string,
+    int_types,
+    text_type,
+    string_types,
+    with_metaclass,
+)
 
 import re
 
-__all__ = ["Constant",
-           "Text",
-           "Number",
-           "Integer",
-           "Index",
-           "ExpressionAttribute",
-           "ApplicationAttribute",
-           "Reference",
-           "TimeSpanAttribute",
-           "CommaList"]
+__all__ = [
+    "Constant",
+    "Text",
+    "Number",
+    "Integer",
+    "Index",
+    "ExpressionAttribute",
+    "ApplicationAttribute",
+    "Reference",
+    "TimeSpanAttribute",
+    "CommaList",
+]
 
 
 valid_types = []
@@ -34,12 +38,13 @@ valid_types = []
 
 class AttributeTypeMeta(type):
     """Keeps a registry of all AttributeType classes"""
+
     registry = {}
 
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
         if name != "AttributeType":
-            name = getattr(new_class, 'name', name.lower())
+            name = getattr(new_class, "name", name.lower())
             AttributeTypeMeta.registry[name] = new_class
             valid_types.append(name)
         return new_class
@@ -62,7 +67,8 @@ def lookup(name):
 @implements_to_string
 class AttributeTypeBase(object):
     """Base class for attribute types"""
-    __slots__ = ['attribute_name', 'element', 'text', 'const']
+
+    __slots__ = ["attribute_name", "element", "text", "const"]
     translate = False
 
     def __init__(self, element, attribute_name, text):
@@ -72,7 +78,7 @@ class AttributeTypeBase(object):
         if not isinstance(text, string_types):
             self.const = True
         else:
-            self.const = '${' not in text
+            self.const = "${" not in text
         super(AttributeTypeBase, self).__init__()
 
     def __call__(self, context):
@@ -86,7 +92,7 @@ class AttributeTypeBase(object):
 
     @property
     def value(self):
-        if not hasattr(self, '_value'):
+        if not hasattr(self, "_value"):
             self._value = self.process(self.text)
         return self._value
 
@@ -106,7 +112,11 @@ class AttributeTypeBase(object):
         return self.text
 
     def invalid(self, text):
-        raise BadValueError("In attribute '{}': '{}' is not a valid {}".format(self.attribute_name, text, self.get_type_display()))
+        raise BadValueError(
+            "In attribute '{}': '{}' is not a valid {}".format(
+                self.attribute_name, text, self.get_type_display()
+            )
+        )
 
 
 class AttributeType(with_metaclass(AttributeTypeMeta, AttributeTypeBase)):
@@ -115,7 +125,7 @@ class AttributeType(with_metaclass(AttributeTypeMeta, AttributeTypeBase)):
 
 class Constant(AttributeType):
     type_display = "constant"
-    __slots__ = ['element', 'attribute_name', 'value']
+    __slots__ = ["element", "attribute_name", "value"]
 
     def __init__(self, element, attribute_name, value):
         self.element = element
@@ -146,7 +156,7 @@ class Bytes(AttributeType):
 
     def process(self, text):
         try:
-            text = self.text.encode('utf-8')
+            text = self.text.encode("utf-8")
         except:
             raise BadValueError("must be encodeable as UTF-8")
         return text
@@ -172,7 +182,7 @@ class Number(AttributeType):
 
     @classmethod
     def check(cls, value):
-        if '${' not in value:
+        if "${" not in value:
             try:
                 float(value)
             except:
@@ -196,7 +206,7 @@ class Integer(AttributeType):
 
     @classmethod
     def check(cls, value):
-        if '${' not in value:
+        if "${" not in value:
             try:
                 int(float(value))
             except:
@@ -212,7 +222,7 @@ class Color(AttributeType):
 
     @classmethod
     def check(cls, value):
-        if '${' not in value:
+        if "${" not in value:
             try:
                 ExpressionColor.parse(value)
             except Exception as e:
@@ -229,7 +239,7 @@ class Index(AttributeType):
 
 class Reference(AttributeType):
     type_display = "reference"
-    __slots__ = ['reference']
+    __slots__ = ["reference"]
 
     def __init__(self, element, attribute_name, text):
         super(Reference, self).__init__(element, attribute_name, text)
@@ -245,7 +255,9 @@ class Element(AttributeType):
 
     def __call__(self, context):
         element_ref = context.sub(self.text)
-        app, element = self.element.archive.get_element(element_ref, app=context.get(".app"))
+        app, element = self.element.archive.get_element(
+            element_ref, app=context.get(".app")
+        )
         return ElementProxy(context, app, element)
 
 
@@ -260,7 +272,7 @@ class ElementRef(AttributeType):
 class ExpressionAttribute(AttributeType):
     type_display = "expression"
     name = "expression"
-    __slots__ = ['element', 'attribute_name', 'exp']
+    __slots__ = ["element", "attribute_name", "exp"]
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -287,7 +299,7 @@ class ExpressionAttribute(AttributeType):
 class FunctionAttribute(AttributeType):
     type_display = "function"
     name = "function"
-    __slots__ = ['element', 'attribute_name', 'exp']
+    __slots__ = ["element", "attribute_name", "exp"]
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -310,7 +322,7 @@ class FunctionAttribute(AttributeType):
 class ApplicationAttribute(AttributeType):
     type_display = "application reference"
     name = "application"
-    __slots__ = ['element', 'attribute_name', 'text']
+    __slots__ = ["element", "attribute_name", "text"]
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -319,7 +331,7 @@ class ApplicationAttribute(AttributeType):
 
     def __call__(self, context):
         app_name = context.sub(self.text)
-        if app_name == '':
+        if app_name == "":
             raise BadValueError("app name must not be an empty string")
         if not app_name:
             return None
@@ -333,7 +345,7 @@ class ApplicationAttribute(AttributeType):
 class DBExpressionAttribute(AttributeType):
     type_display = "database expression"
     name = "dbexpression"
-    __slots__ = ['element', 'attribute_name', 'text']
+    __slots__ = ["element", "attribute_name", "text"]
 
     def __init__(self, element, attribute_name, text):
         self.element = element
@@ -346,7 +358,7 @@ class DBExpressionAttribute(AttributeType):
 
     @classmethod
     def check(self, value):
-        if '${' not in value:
+        if "${" not in value:
             try:
                 DBExpression(value).compile()
             except Exception as e:
@@ -358,14 +370,14 @@ class DBExpressionAttribute(AttributeType):
 class Boolean(ExpressionAttribute):
     type_display = "boolean"
     name = "boolean"
-    __slots__ = ['attribute_name', 'text', 'exp']
+    __slots__ = ["attribute_name", "text", "exp"]
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
         self.text = text
-        if text in ('yes', 'True'):
+        if text in ("yes", "True"):
             self.exp = TrueExpression()
-        elif text in ('no', 'False'):
+        elif text in ("no", "False"):
             self.exp = FalseExpression()
         else:
             self.exp = Expression(text)
@@ -391,7 +403,7 @@ class Boolean(ExpressionAttribute):
 class DictExpression(ExpressionAttribute):
     type_display = "dict expression"
     name = "dict"
-    __slots__ = ['element', 'exp']
+    __slots__ = ["element", "exp"]
 
     def __init__(self, element, attribute_name, text):
         self.attribute_name = attribute_name
@@ -399,7 +411,7 @@ class DictExpression(ExpressionAttribute):
 
     def __call__(self, context):
         d = self.exp.eval(context)
-        if not (hasattr(d, 'items') and hasattr(d, '__getitem__')):
+        if not (hasattr(d, "items") and hasattr(d, "__getitem__")):
             raise BadValueError("must be a dictionary or similar type")
         return d
 
@@ -423,7 +435,7 @@ class TimeSpanAttribute(AttributeType):
 
     @classmethod
     def check(self, value):
-        if '${' not in value:
+        if "${" not in value:
             try:
                 TimeSpan(value)
             except Exception as e:
@@ -438,8 +450,8 @@ class CommaList(AttributeType):
     __slots__ = []
 
     def process(self, text):
-        if ',' in text:
-            return [t.strip() for t in text.split(',')]
+        if "," in text:
+            return [t.strip() for t in text.split(",")]
         else:
             return [text]
 
@@ -458,8 +470,8 @@ class Templates(AttributeType):
     def __call__(self, context):
         sub = context.sub
         text = self.text
-        if ',' in text:
-            return [sub(t.strip()) for t in text.split(',')]
+        if "," in text:
+            return [sub(t.strip()) for t in text.split(",")]
         else:
             return [text.strip()]
 
@@ -496,7 +508,7 @@ class Version(AttributeType):
 class RegEx(AttributeType):
     type_display = "regular expression"
     name = "regex"
-    __slots__ = ['_regex']
+    __slots__ = ["_regex"]
 
     def __call__(self, contet):
         try:
@@ -536,12 +548,14 @@ class HTTPStatus(AttributeType):
     def display(cls, value):
         return text_type(StatusCode(value)).upper()
 
+
 if __name__ == "__main__":
 
     from moya.context import Context
+
     c = Context()
-    c['foo'] = [1, 2, 3, 4, 5]
-    c['fruit'] = ['apples', 'orange', 'pears']
+    c["foo"] = [1, 2, 3, 4, 5]
+    c["fruit"] = ["apples", "orange", "pears"]
 
     t = Number("${foo.2}.14")
     print(t.__call__)

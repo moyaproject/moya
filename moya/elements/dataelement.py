@@ -12,7 +12,7 @@ class DataElement(object):
         self.children = [DataElement(child, context) for child in element.children()]
 
     def __str__(self):
-        return "<data {}>" .format(self.libid)
+        return "<data {}>".format(self.libid)
 
     def __repr__(self):
-        return "<data {}>" .format(self.libid)
+        return "<data {}>".format(self.libid)

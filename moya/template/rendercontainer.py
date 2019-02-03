@@ -20,7 +20,7 @@ class RenderContainer(dict):
 
     def moya_render(self, archive, context, target, options):
         meta = self._meta
-        template = meta['template']
+        template = meta["template"]
         engine = archive.get_template_engine("moya")
         rendered = engine.render(template, self, base_context=context, app=self._app)
         if target == "html":

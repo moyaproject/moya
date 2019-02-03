@@ -40,36 +40,50 @@ class FilterContainer(object):
         if app is not None:
             if name in app.filters:
                 return [app.filters[name]]
-        if ' ' in name:
+        if " " in name:
             tokens = name.split()
-            if len(tokens) != 3 or tokens[1] != 'from':
-                raise ValueError('filter strings should be in the format "<NAME> from <APP or LIB>"')
+            if len(tokens) != 3 or tokens[1] != "from":
+                raise ValueError(
+                    'filter strings should be in the format "<NAME> from <APP or LIB>"'
+                )
             name, _, app_name = tokens
             apps = [self.archive.find_app(app_name)]
         else:
             apps = self.archive.apps.values()
 
-        filters = [filter_app.filters[name] for filter_app in apps if name in filter_app.filters]
+        filters = [
+            filter_app.filters[name]
+            for filter_app in apps
+            if name in filter_app.filters
+        ]
         return filters
 
     def lookup(self, app, name):
         if app is not None:
             if name in app.filters:
                 return app.filters[name]
-        if ' ' in name:
+        if " " in name:
             tokens = name.split()
-            if len(tokens) != 3 or tokens[1] != 'from':
-                raise ValueError('filter strings should be in the format "<NAME> from <APP or LIB>"')
+            if len(tokens) != 3 or tokens[1] != "from":
+                raise ValueError(
+                    'filter strings should be in the format "<NAME> from <APP or LIB>"'
+                )
             name, _, app_name = tokens
             apps = [self.archive.find_app(app_name)]
         else:
             apps = self.archive.apps.values()
 
-        filters = [filter_app.filters[name] for filter_app in apps if name in filter_app.filters]
+        filters = [
+            filter_app.filters[name]
+            for filter_app in apps
+            if name in filter_app.filters
+        ]
         if not filters:
             raise FilterKeyError("no filter called '{}'".format(name))
         if len(filters) != 1:
-            raise ValueError('filter is ambiguous, specify "{} from <APP or LIB>"'.format(name))
+            raise ValueError(
+                'filter is ambiguous, specify "{} from <APP or LIB>"'.format(name)
+            )
         return filters[0]
 
     def __getitem__(self, name):
@@ -81,18 +95,30 @@ class FilterContainer(object):
         return f
 
     def __contains__(self, name):
-        if ' ' in name:
-            name = name.split(' ', 1)[0]
+        if " " in name:
+            name = name.split(" ", 1)[0]
         return any(name in app.filters for app in itervalues(self.archive.apps))
 
     def __iter__(self):
         return iter(self.keys())
 
     def __len__(self):
-        return len(set(chain.from_iterable(app.filters.keys() for app in itervalues(self.archive.apps))))
+        return len(
+            set(
+                chain.from_iterable(
+                    app.filters.keys() for app in itervalues(self.archive.apps)
+                )
+            )
+        )
 
     def keys(self):
-        return sorted(set(chain.from_iterable(app.filters.keys() for app in itervalues(self.archive.apps))))
+        return sorted(
+            set(
+                chain.from_iterable(
+                    app.filters.keys() for app in itervalues(self.archive.apps)
+                )
+            )
+        )
 
     def values(self):
         return [self._lookup(None, name) for name in self.keys()]

@@ -8,7 +8,6 @@ from .compat import text_type
 
 
 class StatusCode(Enum):
-
     def __repr__(self):
         return "<httpstatus %s (%s)>" % (int(self), text_type(self))
 
@@ -81,7 +80,9 @@ class RespondWith(object):
         return get_status_description(self.status)
 
     def __repr__(self):
-        return '<respondwith {} "{}">'.format(self.status, get_status_description(self.status))
+        return '<respondwith {} "{}">'.format(
+            self.status, get_status_description(self.status)
+        )
 
 
 class RespondNotFound(RespondWith):
@@ -100,12 +101,13 @@ def get_status_description(status):
     status = StatusCode(status)
     if not status.is_valid():
         return "unknown"
-    desc = text_type(status).replace('_', ' ').title()
+    desc = text_type(status).replace("_", " ").title()
     return desc
+
 
 _error_msgs = {
     StatusCode.not_found: "Not Found",
-    StatusCode.internal_error: "Internal Error"
+    StatusCode.internal_error: "Internal Error",
 }
 
 
@@ -159,12 +161,14 @@ def standard_response(status, path, error, trace, debug=False):
     else:
         html = _standard_html
 
-    return html.format(version=__version__,
-                       status=int(status),
-                       path=escape(path),
-                       msg=escape(msg),
-                       error=escape(text_type(error or '')),
-                       trace=escape(text_type(trace or '')))
+    return html.format(
+        version=__version__,
+        status=int(status),
+        path=escape(path),
+        msg=escape(msg),
+        error=escape(text_type(error or "")),
+        trace=escape(text_type(trace or "")),
+    )
 
 
 if __name__ == "__main__":

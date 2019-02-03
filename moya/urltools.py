@@ -18,6 +18,10 @@ def urlencode(query, _quote_plus=quote_plus, _iter_qs=_iter_qs_map):
     # Works slightly differently to Pythons urlencode
     # This function accepts lists and values, to generate multiple keys. e.g {'foo': ['bar', 'baz']} -> "foo=bar&foo=baz"
     # It will also remove the = if the value is empty, e.g. {'foo': ''} -> "foo"
-    qs = "&".join("{}={}".format(_quote_plus(k), _quote_plus(v)) if text_type(v) else _quote_plus(k)
-                  for k, v in _iter_qs(query))
+    qs = "&".join(
+        "{}={}".format(_quote_plus(k), _quote_plus(v))
+        if text_type(v)
+        else _quote_plus(k)
+        for k, v in _iter_qs(query)
+    )
     return qs

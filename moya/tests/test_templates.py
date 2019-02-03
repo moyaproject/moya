@@ -35,7 +35,7 @@ class TestTemplates(unittest.TestCase):
         tests = [
             (dict(fruit="apple"), "My favorite fruit is apple"),
             (dict(fruit="pear"), "My favorite fruit is pear"),
-            (dict(), "My favorite fruit is ")
+            (dict(), "My favorite fruit is "),
         ]
         for test_data, result in tests:
             html = self._render("simplesub.html", **test_data)
@@ -44,6 +44,7 @@ class TestTemplates(unittest.TestCase):
     def test_safe_substitute(self):
         """Test safe strings"""
         from moya.render import HTML
+
         html = self._render("simplesub.html", fruit="<em>oranges</em>")
         self.assertEqual(html, "My favorite fruit is &lt;em&gt;oranges&lt;/em&gt;")
 
@@ -55,7 +56,7 @@ class TestTemplates(unittest.TestCase):
         tests = [
             (dict(fruit="apple"), "I like apples"),
             (dict(fruit="pear"), "Pears are good"),
-            (dict(), "I don't like fruit")
+            (dict(), "I don't like fruit"),
         ]
         for test_data, result in tests:
             html = self._render("if.html", **test_data)
@@ -140,7 +141,7 @@ class TestTemplates(unittest.TestCase):
         result_html = "<ul><li>1</li><li>2</li><li>3</li></ul>"
         self.assertEqual(html, result_html)
         # Sleep so the key expires
-        time.sleep(.1)
+        time.sleep(0.1)
         # Check it once more
         html = self._render("cache.html")
         result_html = "<ul><li>1</li><li>2</li><li>3</li></ul>"

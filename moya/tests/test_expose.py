@@ -18,12 +18,14 @@ class TestExpose(unittest.TestCase):
 
     def setUp(self):
         _path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(_path, 'testproject')
-        self.application = WSGIApplication(path,
-                                           'settings.ini',
-                                           strict=True,
-                                           validate_db=False,
-                                           disable_autoreload=True)
+        path = os.path.join(_path, "testproject")
+        self.application = WSGIApplication(
+            path,
+            "settings.ini",
+            strict=True,
+            validate_db=False,
+            disable_autoreload=True,
+        )
         console = Console()
         self.archive = self.application.archive
         db.sync_all(self.archive, console)
@@ -32,21 +34,23 @@ class TestExpose(unittest.TestCase):
         self.archive.populate_context(context)
         self.application.populate_context(context)
         set_dynamic(context)
-        context['.console'] = console
+        context[".console"] = console
 
     def tearDown(self):
         del self.archive
         del self.application
 
     def test_macros(self):
-        app = self.archive.apps['site']
+        app = self.archive.apps["site"]
 
         self.assertEqual(6, self.archive("macro.expose.double", self.context, app, n=3))
-        self.assertEqual(21, self.archive("macro.expose.tripple", self.context, app, n=7))
+        self.assertEqual(
+            21, self.archive("macro.expose.tripple", self.context, app, n=7)
+        )
 
     def test_filters(self):
-        app = self.archive.apps['site']
-        self.context['.app'] = app
+        app = self.archive.apps["site"]
+        self.context[".app"] = app
         with pilot.manage(self.context):
             self.assertEqual(1000, self.context.eval("10|'cube'"))
             self.assertEqual(1000, self.context.eval("10|'cube from site'"))

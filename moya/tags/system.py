@@ -3,24 +3,24 @@ from __future__ import print_function
 
 from threading import Thread
 import logging
+
 try:
     import subprocess32 as subprocess
 except ImportError:
     import subprocess
 
-log = logging.getLogger('moya.runtime')
+log = logging.getLogger("moya.runtime")
 
 from ..context import Context
 from ..context.missing import is_missing
 from ..compat import iteritems, text_type
 from ..elements.elementbase import Attribute
 from ..tags.context import DataSetter, LogicElement
-from ..import db
+from .. import db
 from ..__init__ import pilot
 
 
 class MoyaThread(Thread):
-
     def __init__(self, element, app, name, context, data, join_timeout=None):
         super(MoyaThread, self).__init__(name=name)
         self.element = element
@@ -39,19 +39,18 @@ class MoyaThread(Thread):
         archive = self.element.archive
         with pilot.manage(self.context):
             try:
-                self._result = archive.call_params(self.element.libid,
-                                                   self.context,
-                                                   self.app,
-                                                   self.data)
+                self._result = archive.call_params(
+                    self.element.libid, self.context, self.app, self.data
+                )
             except Exception as e:
-                self.context['.console'].obj(self.context, e)
+                self.context[".console"].obj(self.context, e)
                 self._error = e
-                dbsessions = self.context['._dbsessions']
+                dbsessions = self.context["._dbsessions"]
                 if dbsessions:
                     db.rollback_sessions(self.context)
 
             else:
-                dbsessions = self.context['._dbsessions']
+                dbsessions = self.context["._dbsessions"]
                 if dbsessions:
                     db.commit_sessions(self.context)
 
@@ -63,16 +62,20 @@ class MoyaThread(Thread):
         self.join(self.join_timeout)
         if self.join_timeout:
             if self.is_alive():
-                self.element.throw('thread.timeout',
-                                   'the thread failed to complete within timeout',
-                                   thread=self)
+                self.element.throw(
+                    "thread.timeout",
+                    "the thread failed to complete within timeout",
+                    thread=self,
+                )
 
         if self._error:
-            self.element.throw('thread.fail',
-                               'exception occurred in thread',
-                               diagnosis="{!r} raised exception '{}'".format(self, self._error),
-                               original=self._error,
-                               thread=self)
+            self.element.throw(
+                "thread.fail",
+                "exception occurred in thread",
+                diagnosis="{!r} raised exception '{}'".format(self, self._error),
+                original=self._error,
+                thread=self,
+            )
         return self._result
 
 
@@ -106,15 +109,21 @@ class ThreadElement(DataSetter):
 
     name = Attribute("Name of thread", required=False, default=None)
     scope = Attribute("Use the current scope?", type="boolean", default=False)
-    timeout = Attribute("Maximum time to wait for thread to complete", type="timespan", default=None)
-    join = Attribute("Join threads before end of request?", type="boolean", default=False)
+    timeout = Attribute(
+        "Maximum time to wait for thread to complete", type="timespan", default=None
+    )
+    join = Attribute(
+        "Join threads before end of request?", type="boolean", default=False
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
 
-        thread_context = Context({k: v for k, v in iteritems(context.root) if not k.startswith('_')})
-        if '._dbsessions' in context:
-            thread_context['._dbsessions'] = db.get_session_map(self.archive)
+        thread_context = Context(
+            {k: v for k, v in iteritems(context.root) if not k.startswith("_")}
+        )
+        if "._dbsessions" in context:
+            thread_context["._dbsessions"] = db.get_session_map(self.archive)
 
         data = {}
         if params.scope:
@@ -122,21 +131,25 @@ class ThreadElement(DataSetter):
         data.update(self.get_let_map(context))
 
         for k, v in iteritems(data):
-            if hasattr(v, '_moyadb'):
-                self.throw("thread.not-thread-safe",
-                           "thread parameter {} ('{}') may not be passed to a thread".format(context.to_expr(v), k),
-                           diagnosis="Database objects are not [i]thread safe[/i], try retrieving the object again inside the thread.")
+            if hasattr(v, "_moyadb"):
+                self.throw(
+                    "thread.not-thread-safe",
+                    "thread parameter {} ('{}') may not be passed to a thread".format(
+                        context.to_expr(v), k
+                    ),
+                    diagnosis="Database objects are not [i]thread safe[/i], try retrieving the object again inside the thread.",
+                )
 
         moya_thread = MoyaThread(
             self,
-            context.get('.app', None),
+            context.get(".app", None),
             params.name or self.docname,
             thread_context,
             data=data,
-            join_timeout=params.timeout
+            join_timeout=params.timeout,
         )
         if params.join:
-            context.set_new_call('._threads', list).append(moya_thread)
+            context.set_new_call("._threads", list).append(moya_thread)
         moya_thread.start()
         self.set_context(context, params.dst, moya_thread)
 
@@ -153,9 +166,9 @@ class WaitOnThreads(LogicElement):
         synopsis = "wait threads to complete"
 
     def logic(self, context):
-        for thread in context.get('._threads', []):
+        for thread in context.get("._threads", []):
             thread.wait()
-        context.safe_delete('._threads')
+        context.safe_delete("._threads")
 
 
 class SystemCall(DataSetter):
@@ -184,30 +197,37 @@ class SystemCall(DataSetter):
         """
 
     class Meta:
-        one_of = [('shell', 'args')]
+        one_of = [("shell", "args")]
 
-    args = Attribute('call arguments', type="expression", required=False)
-    shell = Attribute('shell command', required=False)
+    args = Attribute("call arguments", type="expression", required=False)
+    shell = Attribute("shell command", required=False)
 
-    console = Attribute("write output to the console?", type="boolean", default=False, required=False)
+    console = Attribute(
+        "write output to the console?", type="boolean", default=False, required=False
+    )
     log = Attribute("write output to this log", default=None, required=False)
-    output = Attribute("Destination for output", type="reference", default=None, required=False)
+    output = Attribute(
+        "Destination for output", type="reference", default=None, required=False
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
-        console = context['.console']
+        console = context[".console"]
 
         shell = False
-        if self.has_parameter('args'):
+        if self.has_parameter("args"):
             for arg in params.args:
                 if is_missing(arg):
-                    self.throw('bad-value.args',
-                               'args parameter must not contain missing values (args contains {})'.format(context.to_expr(arg)))
+                    self.throw(
+                        "bad-value.args",
+                        "args parameter must not contain missing values (args contains {})".format(
+                            context.to_expr(arg)
+                        ),
+                    )
             try:
                 command = [text_type(arg) for arg in params.args]
             except:
-                self.throw('bad-value.args',
-                           "args parameter should be a list")
+                self.throw("bad-value.args", "args parameter should be a list")
         else:
             command = params.shell
             shell = True
@@ -217,10 +237,9 @@ class SystemCall(DataSetter):
                 write(line)
 
         try:
-            output = subprocess.check_output(command,
-                                             shell=shell,
-                                             stderr=subprocess.STDOUT,
-                                             universal_newlines=True)
+            output = subprocess.check_output(
+                command, shell=shell, stderr=subprocess.STDOUT, universal_newlines=True
+            )
         except subprocess.CalledProcessError as e:
             return_code = e.returncode
             output = e.output
@@ -228,14 +247,18 @@ class SystemCall(DataSetter):
                 console(output)
             if params.log:
                 write_log(output, logging.getLogger(params.log).error)
-            self.throw('system-call.process-error',
-                       'system call returned non-zero code ({})'.format(return_code),
-                       code=return_code,
-                       output=output)
+            self.throw(
+                "system-call.process-error",
+                "system call returned non-zero code ({})".format(return_code),
+                code=return_code,
+                output=output,
+            )
         except OSError as e:
-            self.throw('system-call.os-error',
-                       'system call failed ({})'.format(e),
-                       errono=e.errno)
+            self.throw(
+                "system-call.os-error",
+                "system call failed ({})".format(e),
+                errono=e.errno,
+            )
 
         if params.console and console:
             console(output)

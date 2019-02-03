@@ -10,23 +10,26 @@ from .compat import text_type, string_types
 
 from smtplib import SMTP, SMTPException
 from socket import error as socket_error
-#from email.mime.image import MIMEImage
+
+# from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 import logging
-log = logging.getLogger('moya.email')
+
+log = logging.getLogger("moya.email")
 
 
 class Email(object):
     """A single email message"""
+
     def __init__(self, data=None):
         self.headers = {}
         self.data = data or {}
         self.text = None
         self.html = None
         self.subject = None
-        setattr(self, 'from', None)
+        setattr(self, "from", None)
         self.to = []
         self.cc = []
         self.bcc = []
@@ -36,21 +39,21 @@ class Email(object):
 
     @property
     def to_text(self):
-        return ','.join(self.to)
+        return ",".join(self.to)
 
     @property
     def cc_text(self):
-        return ','.join(self.cc)
+        return ",".join(self.cc)
 
     @property
     def bcc_text(self):
-        return ','.join(self.bcc)
+        return ",".join(self.bcc)
 
     def _append_emails(self, dst, emails):
         if emails is None:
             return
         if isinstance(emails, string_types):
-            emails = [e.strip() for e in emails.split(',')]
+            emails = [e.strip() for e in emails.split(",")]
         dst.extend(emails)
 
     def add_to(self, emails):
@@ -64,7 +67,12 @@ class Email(object):
 
     def __moyaconsole__(self, console):
         table = []
-        table.append([(Cell("Subject:", bold=True)), self.subject or Cell('No subject', fg="red")])
+        table.append(
+            [
+                (Cell("Subject:", bold=True)),
+                self.subject or Cell("No subject", fg="red"),
+            ]
+        )
         if self.to_text:
             table.append([(Cell("To:", bold=True)), self.to_text])
         if self.cc_text:
@@ -77,53 +85,56 @@ class Email(object):
         if _from:
             table.append([(Cell("From:", bold=True)), _from])
         if self.text:
-            table.append(['text', summarize_text(self.text, max_length=3000)])
+            table.append(["text", summarize_text(self.text, max_length=3000)])
         if self.html:
-            table.append(['html', summarize_text(self.html, max_length=3000)])
+            table.append(["html", summarize_text(self.html, max_length=3000)])
         console.table(table, header=False, dividers=False)
 
     def set_from(self, value):
-        setattr(self, 'from', value)
+        setattr(self, "from", value)
 
     def get_from(self):
-        return getattr(self, 'from')
+        return getattr(self, "from")
 
     def to_msg(self):
         if self.text is not None and self.html is not None:
-            msg = MIMEMultipart('alternative')
+            msg = MIMEMultipart("alternative")
         else:
             msg = MIMEMultipart()
         for k, v in self.headers.items():
             msg[k] = v
         if self.subject is not None:
-            msg['Subject'] = self.subject
+            msg["Subject"] = self.subject
         if self.to:
-            msg['To'] = ', '.join(self.to)
+            msg["To"] = ", ".join(self.to)
         if self.cc:
-            msg['Cc'] = ', '.join(self.cc)
+            msg["Cc"] = ", ".join(self.cc)
         if self.bcc:
-            msg['Bcc'] = ', '.join(self.bcc)
+            msg["Bcc"] = ", ".join(self.bcc)
         if self.replyto is not None:
-            msg['Reply-To'] = self.replyto
+            msg["Reply-To"] = self.replyto
         if self.text is not None:
-            msg.attach(MIMEText(self.text, 'plain', 'utf-8'))
+            msg.attach(MIMEText(self.text, "plain", "utf-8"))
         if self.html is not None:
-            msg.attach(MIMEText(self.html, 'html', 'utf-8'))
+            msg.attach(MIMEText(self.html, "html", "utf-8"))
         return msg.as_string()
 
 
 class MailServer(object):
     """Stores SMTP server info and handles sending"""
-    def __init__(self,
-                 host,
-                 name=None,
-                 default=False,
-                 port=None,
-                 local_hostname=None,
-                 timeout=None,
-                 username=None,
-                 password=None,
-                 sender=None):
+
+    def __init__(
+        self,
+        host,
+        name=None,
+        default=False,
+        port=None,
+        local_hostname=None,
+        timeout=None,
+        username=None,
+        password=None,
+        sender=None,
+    ):
         self.name = name
         self.default = default
         self.host = host
@@ -172,8 +183,10 @@ class MailServer(object):
             failures = 0
             for email, msg in emails:
                 try:
-                    sender = text_type(getattr(email, 'from') or self.sender or 'admin@localhost')
-                    smtp.sendmail(sender, ', '.join(email.to), msg)
+                    sender = text_type(
+                        getattr(email, "from") or self.sender or "admin@localhost"
+                    )
+                    smtp.sendmail(sender, ", ".join(email.to), msg)
                 except SMTPException:
                     if not fail_silently:
                         raise

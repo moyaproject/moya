@@ -17,7 +17,7 @@ if PY2:
     xrange = xrange
     unichr = unichr
     int_types = (int, long)
-    py2bytes = lambda s: s.encode('utf-8')
+    py2bytes = lambda s: s.encode("utf-8")
     raw_input = raw_input
 else:
     text_type = str
@@ -43,14 +43,16 @@ if PY2:
     from urlparse import urlparse, parse_qs, urlunparse
     from urllib import urlencode, quote, unquote, quote_plus
     from itertools import izip_longest as zip_longest
-    #import cookie
+
+    # import cookie
     from urllib import urlopen
     import SocketServer as socketserver
 else:
     from urllib.parse import urlparse, parse_qs, urlunparse
     from urllib.parse import urlencode, quote, unquote, quote_plus
     from itertools import zip_longest
-    #from http import cookies as cookie
+
+    # from http import cookies as cookie
     from urllib.request import urlopen
     import socketserver
 
@@ -69,28 +71,38 @@ else:
         from imp import reload
 
 if PY2:
+
     def implements_to_string(cls):
         cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
+        cls.__str__ = lambda x: x.__unicode__().encode("utf-8")
         return cls
+
+
 else:
     implements_to_string = lambda x: x
 
 
 if PY2:
+
     def implements_iterator(cls):
         cls.next = cls.__next__
         del cls.__next__
         return cls
+
+
 else:
     implements_iterator = lambda x: x
 
 if PY2:
+
     def implements_bool(cls):
         cls.__nonzero__ = cls.__bool__
         del cls.__bool__
         return cls
+
+
 else:
+
     def implements_bool(cls):
         return cls
 
@@ -109,6 +121,7 @@ else:
 if PY2:
     cmp = cmp
 else:
+
     def cmp(a, b):
         if a < b:
             return -1
@@ -117,11 +130,12 @@ else:
         else:
             return +1
 
+
 class string(object):
-    lowercase = 'abcdefghijklmnopqrstuvwxyz'
-    uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    digits = '0123456789'
-    punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+    lowercase = "abcdefghijklmnopqrstuvwxyz"
+    uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    digits = "0123456789"
+    punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 
 
 def with_metaclass(meta, *bases):
@@ -133,4 +147,5 @@ def with_metaclass(meta, *bases):
             if this_bases is None:
                 return type.__new__(cls, name, (), d)
             return meta(name, bases, d)
-    return Metaclass('temporary_class', None, {})
+
+    return Metaclass("temporary_class", None, {})

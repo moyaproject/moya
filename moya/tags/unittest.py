@@ -13,7 +13,8 @@ import sys
 import io
 
 import logging
-log = logging.getLogger('moya.tests')
+
+log = logging.getLogger("moya.tests")
 
 
 class Suite(LogicElement):
@@ -23,8 +24,12 @@ class Suite(LogicElement):
         synopsis = "define a suite of test cases"
 
     xmlns = namespaces.test
-    description = Attribute("Short description of test suite", map_to="_description", required=True)
-    slow = Attribute("Are these tests slow to run?", type="boolean", default=False, map_to="_slow")
+    description = Attribute(
+        "Short description of test suite", map_to="_description", required=True
+    )
+    slow = Attribute(
+        "Are these tests slow to run?", type="boolean", default=False, map_to="_slow"
+    )
     group = Attribute("Test group", default=None, map_to="_group")
 
     def finalize(self, context):
@@ -33,7 +38,9 @@ class Suite(LogicElement):
         self.group = self._group(context)
 
 
-def make_mock_request(method, url, environ=None, query=None, default_environ=True, update_environ=None):
+def make_mock_request(
+    method, url, environ=None, query=None, default_environ=True, update_environ=None
+):
     """Mock a request object for testing"""
     parsed_url = urlparse(url)
 
@@ -42,7 +49,7 @@ def make_mock_request(method, url, environ=None, query=None, default_environ=Tru
         request_query.update(query)
     qs = urlencode(request_query)
 
-    body_file = io.BytesIO(b'')
+    body_file = io.BytesIO(b"")
 
     if default_environ:
         request_environ = {
@@ -54,7 +61,6 @@ def make_mock_request(method, url, environ=None, query=None, default_environ=Tru
             b"SERVER_NAME": b"",
             b"SERVER_PORT": b"",
             b"SERVER_PROTOCOL": b"HTTP/1.1",
-
             b"wsgi.version": (1, 0),
             b"wsgi.url_scheme": parsed_url.scheme,
             b"wsgi.input": body_file,
@@ -74,9 +80,9 @@ def make_mock_request(method, url, environ=None, query=None, default_environ=Tru
     encoded_environ = {}
     for k, v in request_environ.items():
         if isinstance(k, text_type):
-            k = k.encode('utf-8', 'replace')
+            k = k.encode("utf-8", "replace")
         if isinstance(v, text_type):
-            v = v.encode('utf-8', 'replace')
+            v = v.encode("utf-8", "replace")
         encoded_environ[k] = v
 
     request = MoyaRequest(encoded_environ)
@@ -92,46 +98,53 @@ class Request(DataSetter):
     xmlns = namespaces.test
     url = Attribute("URL for request", default="/")
     query = Attribute("Query data", type="expression", default=None)
-    method = Attribute("Request method", choices=["GET", "POST", "HEAD", "PUT"], default="GET")
+    method = Attribute(
+        "Request method", choices=["GET", "POST", "HEAD", "PUT"], default="GET"
+    )
     environ = Attribute("WSGI environment", type="expression", default=None)
-    default_environ = Attribute("build a default WSGI environ?", type="boolean", default=True)
+    default_environ = Attribute(
+        "build a default WSGI environ?", type="boolean", default=True
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
         let_map = self.get_let_map(context)
 
-        request = make_mock_request(params.method,
-                                    params.url,
-                                    environ=params.environ,
-                                    query=params.query,
-                                    default_environ=params.default_environ,
-                                    update_environ=let_map)
+        request = make_mock_request(
+            params.method,
+            params.url,
+            environ=params.environ,
+            query=params.query,
+            default_environ=params.default_environ,
+            update_environ=let_map,
+        )
 
-        self.set_context(context,
-                         params.dst,
-                         request)
+        self.set_context(context, params.dst, request)
 
 
 class LoadProject(DataSetter):
     """Load a moya project"""
+
     xmlns = namespaces.test
 
     class Help:
         synopsis = "load a project for testing"
 
-    location = Attribute('Project location (relative to library)', default="./testproject")
-    settings = Attribute('Settings path within project', default="settings.ini")
-    server = Attribute('Server name', default="main")
-    dst = Attribute('Destination', type="reference", default=".project")
+    location = Attribute(
+        "Project location (relative to library)", default="./testproject"
+    )
+    settings = Attribute("Settings path within project", default="settings.ini")
+    server = Attribute("Server name", default="main")
+    dst = Attribute("Destination", type="reference", default=".project")
 
     def logic(self, context):
         from .. import wsgi
+
         params = self.get_parameters(context)
         project_fs = self.lib.load_fs.opendir(params.location)
-        application = wsgi.WSGIApplication(project_fs,
-                                           params.settings,
-                                           params.server,
-                                           disable_autoreload=True)
+        application = wsgi.WSGIApplication(
+            project_fs, params.settings, params.server, disable_autoreload=True
+        )
         self.set_context(context, params.dst, application)
 
 
@@ -141,9 +154,9 @@ class GetResponse(DataSetter):
     class Help:
         synopsis = "get a test response"
 
-    project = Attribute('Request object', type="reference", default=".project")
-    request = Attribute('request object', type="reference", default="request")
-    dst = Attribute('Destination', type="reference", default="response")
+    project = Attribute("Request object", type="reference", default=".project")
+    request = Attribute("request object", type="reference", default="request")
+    dst = Attribute("Destination", type="reference", default="response")
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -156,6 +169,7 @@ class GetResponse(DataSetter):
 
 class SetUp(LogicElement):
     """Logic to set up unit tests. Must be inside a <suite>"""
+
     xmlns = namespaces.test
 
     class Help:
@@ -164,6 +178,7 @@ class SetUp(LogicElement):
 
 class TearDown(LogicElement):
     """Logic to tear down a unit test suite. Must be inside a <suite>"""
+
     xmlns = namespaces.test
 
     class Help:
@@ -186,6 +201,7 @@ class Case(LogicElement):
 
 class Fail(LogicElement):
     """Note a failed test"""
+
     xmlns = namespaces.test
 
     class Help:
@@ -198,14 +214,15 @@ class Fail(LogicElement):
         except:
             # ultra-cautious so as not break unit tests
             pass
-        context['._test_results'].add_fail(self, text)
-        if context.get('._test_runner.break', False):
+        context["._test_results"].add_fail(self, text)
+        if context.get("._test_runner.break", False):
             raise logic.DebugBreak(self, exit=True)
-        raise logic.EndLogic('fail')
+        raise logic.EndLogic("fail")
 
 
 class Require(LogicElement):
     """Check code throws an exception"""
+
     xmlns = namespaces.test
 
     class Help:
@@ -219,8 +236,10 @@ class Require(LogicElement):
     def on_exception(self, context, moya_exception):
         exception = self.exception(context)
         if not match_exception(moya_exception.type, exception):
-            context['._test_results'].add_fail(self, "exception '{}' not thrown".format(exception))
+            context["._test_results"].add_fail(
+                self, "exception '{}' not thrown".format(exception)
+            )
 
     def logic(self, context):
         yield logic.DeferNodeContents(self)
-        raise logic.EndLogic('fail')
+        raise logic.EndLogic("fail")

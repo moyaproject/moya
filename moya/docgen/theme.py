@@ -11,10 +11,10 @@ class Page(object):
         return "Page(%r, %r)" % (self.doc_class, self.settings)
 
     def get(self, context, settings_name):
-        return context.sub(self.settings.get(settings_name, ''))
+        return context.sub(self.settings.get(settings_name, ""))
 
     def get_path(self, context):
-        return context.sub(self.settings.get('path', ''))
+        return context.sub(self.settings.get("path", ""))
 
 
 class Theme(object):
@@ -32,15 +32,15 @@ class Theme(object):
         return section.get(key, default)
 
     def read(self):
-        with self.fs.open('theme.ini', 'rb') as settings_file:
+        with self.fs.open("theme.ini", "rb") as settings_file:
             cfg = iniparse.parse(settings_file)
         self.cfg = cfg
 
-        self.theme_settings = cfg.get('theme', {})
+        self.theme_settings = cfg.get("theme", {})
 
         for section, settings in cfg.items():
-            what, _, name = section.partition(':')
-            if what == 'page':
+            what, _, name = section.partition(":")
+            if what == "page":
                 page = Page(name, settings)
                 self.pages.append(page)
 
@@ -51,6 +51,6 @@ class Theme(object):
                 yield page
 
     def get_relative_path(self, path):
-        ini_path = dirname(self.fs.getsyspath('theme.ini'))
+        ini_path = dirname(self.fs.getsyspath("theme.ini"))
         path = pathjoin(ini_path, path)
         return path

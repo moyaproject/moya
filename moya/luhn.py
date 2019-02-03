@@ -14,8 +14,10 @@ from .compat import text_type
 
 def checksum(card_number):
     """Calculate the luhn checksum"""
+
     def digits_of(n):
         return [int(d) for d in text_type(n)]
+
     digits = digits_of(card_number)
     odd_digits = digits[-1::-2]
     even_digits = digits[-2::-2]
@@ -27,7 +29,7 @@ def checksum(card_number):
 
 def validate(card_number):
     """Validate a card number"""
-    card_number = ''.join(c for c in text_type(card_number) if c.isdigit())
+    card_number = "".join(c for c in text_type(card_number) if c.isdigit())
     return checksum(card_number) == 0
 
 

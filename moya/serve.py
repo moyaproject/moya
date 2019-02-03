@@ -17,7 +17,7 @@ from . import logic
 from . import __version__
 
 
-SERVER_NAME = "Moya/{}.{}".format(*__version__.split('.')[:2])
+SERVER_NAME = "Moya/{}.{}".format(*__version__.split(".")[:2])
 
 
 def file_chunker(file, size=65536):
@@ -47,7 +47,7 @@ def serve_file(req, fs, path, filename=None, copy=False):
     # Get file info
     try:
         info = fs.getdetails(path)
-        serve_file = fs.open(path, 'rb')
+        serve_file = fs.open(path, "rb")
     except FSError:
         # Files system open failed for some reason
         if serve_file is not None:
@@ -55,7 +55,7 @@ def serve_file(req, fs, path, filename=None, copy=False):
         raise logic.EndLogic(http.RespondNotFound())
     else:
         if copy:
-            new_serve_file = tempfile.TemporaryFile(prefix='moyaserve')
+            new_serve_file = tempfile.TemporaryFile(prefix="moyaserve")
             copy_file_data(serve_file, new_serve_file)
             new_serve_file.seek(0)
             serve_file = new_serve_file
@@ -80,8 +80,8 @@ def serve_file(req, fs, path, filename=None, copy=False):
             res.status = 304
             serve_file.close()
         else:
-            if 'wsgi.file_wrapper' in req.environ:
-                res.app_iter = req.environ['wsgi.file_wrapper'](serve_file)
+            if "wsgi.file_wrapper" in req.environ:
+                res.app_iter = req.environ["wsgi.file_wrapper"](serve_file)
             else:
                 res.app_iter = file_chunker(serve_file)
         # Set content length

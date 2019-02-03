@@ -7,11 +7,10 @@ import logging
 
 from webob import Request
 
-log = logging.getLogger('moya.asgi')
+log = logging.getLogger("moya.asgi")
 
 
 class ChannelLayer(object):
-
     def __init__(self, expiry=60, group_expiry=86400):
         self.expiry = expiry
         self.group_expiry = group_expiry
@@ -23,7 +22,7 @@ class ChannelLayer(object):
 
     def send(self, channel, message):
         log.info("send %s -> %s", channel, message)
-        if channel == 'http.request':
+        if channel == "http.request":
             Request()
 
     def receive_many(self, channels, block=False):

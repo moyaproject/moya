@@ -16,9 +16,7 @@ class ContextEnumValue(object):
         self.group = group
 
     def __repr__(self):
-        return "<enumvalue {}.{} ({})>".format(self.enum.name,
-                                               self.name,
-                                               self.id)
+        return "<enumvalue {}.{} ({})>".format(self.enum.name, self.name, self.id)
 
     def __hash__(self):
         return hash((self.id, self.name))
@@ -33,9 +31,11 @@ class ContextEnumValue(object):
         return self.id
 
     def __moyaconsole__(self, console):
-        console("<enumvalue '{}.{}' ({}))>".format(self.enum.name,
-                                                   self.name,
-                                                   self.id), bold=True, fg="magenta").nl()
+        console(
+            "<enumvalue '{}.{}' ({}))>".format(self.enum.name, self.name, self.id),
+            bold=True,
+            fg="magenta",
+        ).nl()
 
     def __eq__(self, other):
         # Other enum values only compare if they are the same type
@@ -51,7 +51,6 @@ class ContextEnumValue(object):
 
 
 class ContextEnum(object):
-
     def __init__(self, name, start=1):
         self.name = name
         self._values = []
@@ -66,7 +65,7 @@ class ContextEnum(object):
         console.text(repr(self), fg="green", bold=True)
         table = []
         for value in sorted(self._values, key=int):
-            table.append([value.name, value.id, value.description or ''])
+            table.append([value.name, value.id, value.description or ""])
         console.table(table, header_row=("name", "id", "description"))
 
     def __eq__(self, other):
@@ -119,7 +118,9 @@ class ContextEnum(object):
         return [(e.id, e.description or e.name) for e in self]
 
     def keys(self):
-        return [int(value) for value in self._values] + [text_type(value) for value in self._values]
+        return [int(value) for value in self._values] + [
+            text_type(value) for value in self._values
+        ]
 
     def values(self):
         return [self[key] for key in self.keys()]
@@ -136,10 +137,11 @@ if __name__ == "__main__":
     enum.add_value("isembard", description="Isembard Took")
 
     from moya.console import Console
+
     console = Console()
     console.obj(context, enum)
 
-    e = enum['sam']
+    e = enum["sam"]
     console.obj(context, e)
     print(e)
     print(int(e))
@@ -147,8 +149,8 @@ if __name__ == "__main__":
     print(enum.values())
     print(list(enum))
     print(e == 2)
-    print(e == 'sam')
-    print(e == 'bilbo')
+    print(e == "sam")
+    print(e == "bilbo")
     print(e == 3)
 
     print(list(enum))

@@ -44,10 +44,9 @@ class RenderTemplate(DataSetter):
         params = self.get_parameters(context)
         app = self.get_app(context)
         template = app.resolve_template(params.template)
-        value = RenderContainer.create(app,
-                                       template=template)
+        value = RenderContainer.create(app, template=template)
         if params.withscope:
-            value.update(context['.call'])
+            value.update(context[".call"])
         value.update(self.get_let_map(context))
         with context.data_scope(value):
             yield DeferNodeContents(self)
@@ -70,7 +69,7 @@ class ServeTemplate(RenderTemplate):
     def on_value(self, context, value):
         content_type = self.content_type(context)
         html = render_object(value, self.archive, context, self.format(context))
-        response = MoyaResponse(charset=py2bytes('utf8'), status=self.status(context))
+        response = MoyaResponse(charset=py2bytes("utf8"), status=self.status(context))
         if content_type:
             response.content_type = py2bytes(content_type)
         response.text = html
@@ -99,19 +98,22 @@ class RenderTemplateFS(DataSetter):
         try:
             template_source = template_fs.gettext(params.path)
         except FSError as e:
-            self.throw('render-template-fs.read-fail',
-                       "failed to read '{}' from '{}'".format(params.path, template_fs),
-                       error=text_type(e))
+            self.throw(
+                "render-template-fs.read-fail",
+                "failed to read '{}' from '{}'".format(params.path, template_fs),
+                error=text_type(e),
+            )
 
-        template = Template(template_source, template_fs.desc(params.path), raw_path=params.path)
+        template = Template(
+            template_source, template_fs.desc(params.path), raw_path=params.path
+        )
         template.parse(self)
 
         scope = {}
         if params.withscope:
-            scope.update(context['.call'])
+            scope.update(context[".call"])
 
-
-        params = {'app': context['.app']}
+        params = {"app": context[".app"]}
         params.update(self.get_let_map(context))
 
         engine = self.archive.get_template_engine("moya")
@@ -136,7 +138,7 @@ class ServeTemplateFS(RenderTemplateFS):
 
     def on_value(self, context, html):
         content_type = self.content_type(context)
-        response = MoyaResponse(charset=py2bytes('utf8'), status=self.status(context))
+        response = MoyaResponse(charset=py2bytes("utf8"), status=self.status(context))
         if content_type:
             response.content_type = py2bytes(content_type)
         response.text = html

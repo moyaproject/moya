@@ -4,8 +4,9 @@ import json
 
 class _MoyaEncoder(json.JSONEncoder):
     """A customer encoder for Moya objects"""
+
     def default(self, obj):
-        if hasattr(obj, '__moyajson__'):
+        if hasattr(obj, "__moyajson__"):
             return obj.__moyajson__()
         return super(_MoyaEncoder, self).default(obj)
 

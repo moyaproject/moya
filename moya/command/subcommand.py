@@ -6,7 +6,8 @@ from ..compat import with_metaclass
 from ..loggingconf import init_logging_fs
 
 import logging
-log = logging.getLogger('moya.startup')
+
+log = logging.getLogger("moya.startup")
 
 
 class SubCommandMeta(type):
@@ -20,8 +21,8 @@ class SubCommandMeta(type):
 
 
 class SubCommandType(object):
-    help = ''
-    description = ''
+    help = ""
+    description = ""
 
     def __init__(self, command):
         self.command = command

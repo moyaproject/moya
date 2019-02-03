@@ -29,15 +29,14 @@ class VersionFormatError(ValueError):
 
 # Known versions of Python (should be kept up to date)
 # Starting from 2.6, since that is the earliest version that Moya requires
-known_versions = [(2, 6),
-                  (2, 7),
-                  (3, 1),
-                  (3, 2),
-                  (3, 3),
-                  (3, 4)]
+known_versions = [(2, 6), (2, 7), (3, 1), (3, 2), (3, 3), (3, 4)]
 
 
-def check(version_spec, py_version=None, _re_version=re.compile(r'^(py)$|^py(\d)$|^py(\d)\.(\d)$|^py(\d)\.(\d)\+$')):
+def check(
+    version_spec,
+    py_version=None,
+    _re_version=re.compile(r"^(py)$|^py(\d)$|^py(\d)\.(\d)$|^py(\d)\.(\d)\+$"),
+):
     """Check a Python version specifier
 
     `py_version` should be a tuple of (<major version>, <minor version>),
@@ -50,20 +49,36 @@ def check(version_spec, py_version=None, _re_version=re.compile(r'^(py)$|^py(\d)
         minor = version_info.minor
     else:
         major, minor = py_version
-    tokens = [token.strip() for token in version_spec.split(',') if token]
+    tokens = [token.strip() for token in version_spec.split(",") if token]
     for version in tokens:
         match = _re_version.match(version)
         if not match:
-            raise VersionFormatError("{} is not a valid Py version spec".format(version))
-        (all_py,
-         absolute_major_version,
-         major_version, minor_version,
-         major_version_plus, minor_version_plus) = match.groups()
-        if (all_py or
-           (absolute_major_version and int(absolute_major_version) == major) or
-           (major_version and int(major_version) == major and int(minor_version) == minor) or
-           (major_version_plus and int(major_version_plus) == major and minor >= int(minor_version_plus))):
-                return True
+            raise VersionFormatError(
+                "{} is not a valid Py version spec".format(version)
+            )
+        (
+            all_py,
+            absolute_major_version,
+            major_version,
+            minor_version,
+            major_version_plus,
+            minor_version_plus,
+        ) = match.groups()
+        if (
+            all_py
+            or (absolute_major_version and int(absolute_major_version) == major)
+            or (
+                major_version
+                and int(major_version) == major
+                and int(minor_version) == minor
+            )
+            or (
+                major_version_plus
+                and int(major_version_plus) == major
+                and minor >= int(minor_version_plus)
+            )
+        ):
+            return True
     return False
 
 
@@ -71,8 +86,7 @@ def list_compatible(version_spec, versions=None):
     """Returns a list of versions compatible with the version spec"""
     if versions is None:
         versions = known_versions
-    return [version for version in versions
-            if check(version_spec, version)]
+    return [version for version in versions if check(version_spec, version)]
 
 
 if __name__ == "__main__":
@@ -88,8 +102,8 @@ if __name__ == "__main__":
     print(check("py2.5+,py2.6", (2, 7)))
     print(check("py2.7,py3.2+", (3, 3)))
 
-    print(list_compatible('py'))
-    print(list_compatible('py2'))
-    print(list_compatible('py2.7+,py3'))
-    print(list_compatible('py3.2+'))
-    print(list_compatible('py2.7,py3.2+'))
+    print(list_compatible("py"))
+    print(list_compatible("py2"))
+    print(list_compatible("py2.7+,py3"))
+    print(list_compatible("py3.2+"))
+    print(list_compatible("py2.7,py3.2+"))

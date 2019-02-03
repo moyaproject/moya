@@ -10,10 +10,11 @@ from .. import namespaces
 
 
 def make_html_tag(_tag_name):
-
     class DynamicHTMLTag(LogicElement, DynamicElementMixin):
         xmlns = namespaces.html
-        template = Template("<${tag_name}${tag_attribs}>{% children %}</${tag_name}>", __file__)
+        template = Template(
+            "<${tag_name}${tag_attribs}>{% children %}</${tag_name}>", __file__
+        )
 
         class Meta:
             text_nodes = "text"
@@ -24,15 +25,20 @@ def make_html_tag(_tag_name):
 
         def logic(self, context):
             sub = context.sub
-            tag_attribs = " " + " ".join('{}="{}"'.format(escape(k), escape(sub(v)))
-                                         for k, v in self._attrs.items()
-                                         if k != 'if')
-            td = {"tag_attribs": HTML(tag_attribs.rstrip()),
-                  "tag_name": HTML(_tag_name)}
-            content = context['.content']
+            tag_attribs = " " + " ".join(
+                '{}="{}"'.format(escape(k), escape(sub(v)))
+                for k, v in self._attrs.items()
+                if k != "if"
+            )
+            td = {
+                "tag_attribs": HTML(tag_attribs.rstrip()),
+                "tag_name": HTML(_tag_name),
+            }
+            content = context[".content"]
             content.add_template(self._tag_name, self.template, td)
             with content.node():
                 yield logic.DeferNodeContents(self)
+
     return DynamicHTMLTag
 
 

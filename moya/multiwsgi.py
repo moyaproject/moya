@@ -26,7 +26,8 @@ from collections import OrderedDict
 
 
 import logging
-log = logging.getLogger('moya.srv')
+
+log = logging.getLogger("moya.srv")
 
 
 DEFAULT_HOME_DIR = "/etc/moya"
@@ -56,10 +57,10 @@ class Server(object):
     def load(self):
         settings = SettingsContainer.read_os(self.settings_path)
 
-        self.name = settings.get('service', 'name')
-        self.domains = settings.get_list('service', 'domains')
-        self.location = settings.get('service', 'location')
-        self.ini = settings.get_list('service', 'ini') or ['production.ini']
+        self.name = settings.get("service", "name")
+        self.domains = settings.get_list("service", "domains")
+        self.location = settings.get("service", "location")
+        self.ini = settings.get_list("service", "ini") or ["production.ini"]
 
         self.master_settings = settings
 
@@ -67,20 +68,22 @@ class Server(object):
         return "<project '{}'>".format(self.name)
 
     def build(self):
-        log.debug('building %r', self)
+        log.debug("building %r", self)
         try:
-            pilot.service['name'] = self.name
+            pilot.service["name"] = self.name
             try:
-                application = WSGIApplication(self.location,
-                                              self.ini,
-                                              disable_autoreload=True,
-                                              logging=None,
-                                              master_settings=self.master_settings)
+                application = WSGIApplication(
+                    self.location,
+                    self.ini,
+                    disable_autoreload=True,
+                    logging=None,
+                    master_settings=self.master_settings,
+                )
                 self.application = application
             finally:
-                del pilot.service['name']
+                del pilot.service["name"]
         except:
-            log.exception('error building %r', self)
+            log.exception("error building %r", self)
             raise
 
 
@@ -93,15 +96,13 @@ def memory_tracker(f):
             return f(self, *args, **kwargs)
         finally:
             if self.debug_memory:
-                log.info('New objects:')
-                objgraph.show_growth(file=LoggerFile('moya.srv'))
+                log.info("New objects:")
+                objgraph.show_growth(file=LoggerFile("moya.srv"))
 
     return deco
 
 
-
 class MultiWSGIApplication(object):
-
     def __init__(self):
         self.servers = OrderedDict()
         self.sites = Sites()
@@ -112,7 +113,7 @@ class MultiWSGIApplication(object):
         server = Server(settings_path)
         self.servers[server.name] = server
         self.sites.add(server.domains, name=server.name)
-        log.debug('registered %r', server)
+        log.debug("registered %r", server)
 
     def build_all(self):
         for server in itervalues(self.servers):
@@ -151,22 +152,22 @@ class MultiWSGIApplication(object):
     @memory_tracker
     def __call__(self, environ, start_response):
         try:
-            domain = environ['SERVER_NAME']
+            domain = environ["SERVER_NAME"]
             with self._lock:
                 site_match = self.sites.match(domain)
                 if site_match is None:
                     return self.not_found()
-                server_name = site_match['name']
+                server_name = site_match["name"]
                 if self.reload_required(server_name):
                     self.reload(server_name)
                 server = self.servers[server_name]
-            pilot.service['name'] = server_name
+            pilot.service["name"] = server_name
             try:
                 return server.application(environ, start_response)
             finally:
-                del pilot.service['name']
+                del pilot.service["name"]
         except:
-            log.exception('error in multiwsgi MultiWSGIApplication.__call__')
+            log.exception("error in multiwsgi MultiWSGIApplication.__call__")
             raise
 
 
@@ -174,46 +175,52 @@ class Service(MultiWSGIApplication):
     """WSGI application to load projects from /etc/moya"""
 
     def error(self, msg, code=-1):
-        sys.stderr.write(msg + '\n')
+        sys.stderr.write(msg + "\n")
         sys.exit(code)
 
     def __init__(self, home_dir=None):
         super(Service, self).__init__()
         self.changes = {}
 
-        self.home_dir = home_dir = os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
-        settings_path = os.path.join(home_dir, 'moya.conf')
+        self.home_dir = home_dir = (
+            os.environ.get("MOYA_SERVICE_HOME", None) or DEFAULT_HOME_DIR
+        )
+        settings_path = os.path.join(home_dir, "moya.conf")
 
         try:
-            with io.open(settings_path, 'rt') as f:
+            with io.open(settings_path, "rt") as f:
                 self.settings = SettingsContainer.read_from_file(f)
         except IOError:
-            self.error('unable to read {}'.format(settings_path))
+            self.error("unable to read {}".format(settings_path))
             return -1
 
-        logging_setting = self.settings.get('projects', 'logging', 'logging.ini')
+        logging_setting = self.settings.get("projects", "logging", "logging.ini")
         logging_path = os.path.join(self.home_dir, logging_setting)
 
         try:
             init_logging(logging_path)
         except Exception as e:
             log.error("unable to initialize logging from '%s'", logging_path)
-            sys.stderr.write("unable to initialize logging from '{}' ({})\n".format(logging_path, e))
+            sys.stderr.write(
+                "unable to initialize logging from '{}' ({})\n".format(logging_path, e)
+            )
             return -1
 
-        log.debug('read conf from %s', settings_path)
-        log.debug('read logging from %s', logging_path)
+        log.debug("read conf from %s", settings_path)
+        log.debug("read logging from %s", logging_path)
 
-        temp_dir_root = self.settings.get('service', 'temp_dir', tempfile.gettempdir())
-        self.debug_memory = objgraph and self.settings.get_bool('service', 'debug_memory', False)
-        self.temp_dir = os.path.join(temp_dir_root, 'moyasrv')
+        temp_dir_root = self.settings.get("service", "temp_dir", tempfile.gettempdir())
+        self.debug_memory = objgraph and self.settings.get_bool(
+            "service", "debug_memory", False
+        )
+        self.temp_dir = os.path.join(temp_dir_root, "moyasrv")
         try:
             os.makedirs(self.temp_dir)
         except OSError:
             pass
 
         for path in self._get_projects(self.settings, self.home_dir):
-            log.debug('reading project settings %s', path)
+            log.debug("reading project settings %s", path)
             try:
                 self.add_project(path)
             except:
@@ -223,7 +230,7 @@ class Service(MultiWSGIApplication):
             path = os.path.join(self.temp_dir, "{}.changes".format(server_name))
             try:
                 if not os.path.exists(path):
-                    with open(path, 'wb'):
+                    with open(path, "wb"):
                         pass
             except IOError as e:
                 sys.stderr.write("{}\n".format(text_type(e)))
@@ -235,11 +242,11 @@ class Service(MultiWSGIApplication):
     @classmethod
     def get_project_settings(cls, project_name):
         """Get the settings for a single project"""
-        home_dir = os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
-        settings_path = os.path.join(home_dir, 'moya.conf')
+        home_dir = os.environ.get("MOYA_SERVICE_HOME", None) or DEFAULT_HOME_DIR
+        settings_path = os.path.join(home_dir, "moya.conf")
 
         try:
-            with io.open(settings_path, 'rt') as f:
+            with io.open(settings_path, "rt") as f:
                 service_settings = SettingsContainer.read_from_file(f)
         except IOError:
             log.error("unable to read moya service settings from '{}'", settings_path)
@@ -250,7 +257,7 @@ class Service(MultiWSGIApplication):
                 settings = SettingsContainer.read_os(path)
             except Exception as e:
                 log.error("error reading '%s' (%s)", path, e)
-            if settings.get('service', 'name', None) == project_name:
+            if settings.get("service", "name", None) == project_name:
                 return settings
         return None
 
@@ -267,7 +274,7 @@ class Service(MultiWSGIApplication):
 
     @classmethod
     def _get_projects(self, settings, home_dir):
-        project_paths = settings.get_list('projects', 'read')
+        project_paths = settings.get_list("projects", "read")
         paths = []
         cwd = os.getcwd()
         try:

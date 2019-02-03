@@ -26,9 +26,9 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
     assert isinstance(exclude_wildcards, list), "wildcards must be a list"
 
     def match_wildcards(path):
-        split_path = path.lstrip('/').split('/')
+        split_path = path.lstrip("/").split("/")
         for i in range(len(split_path)):
-            p = '/'.join(split_path[i:])
+            p = "/".join(split_path[i:])
             if any(fnmatch.fnmatchcase(p, w) for w in exclude_wildcards):
                 return False
         return True
@@ -56,7 +56,7 @@ def _make_package_fs(package_fs, output_fs, exclude_wildcards, auth_token=None):
             if auth_token is None:
                 auth_hash = ""
             else:
-                m.update(auth_token.encode('utf-8'))
+                m.update(auth_token.encode("utf-8"))
                 auth_hash = m.hexdigest()
 
             output_fs.setbytes(path, data)
@@ -69,14 +69,16 @@ def export_manifest(manifest, output_fs, filename="manifest.csv"):
     """Write a manifest file."""
     lines = ['"path","md5","auth md5"']
     for path, file_hash, auth_hash in manifest:
-        lines.append('"{}",{},{}'.format(path.replace('"', '\\"'), file_hash, auth_hash))
+        lines.append(
+            '"{}",{},{}'.format(path.replace('"', '\\"'), file_hash, auth_hash)
+        )
     manifest_data = "\n".join(lines)
     output_fs.settext(filename, manifest_data, encoding="utf-8")
 
 
 def read_manifest(manifest_fs, manifest_filename):
     """Read a manifest file."""
-    with manifest_fs.open(manifest_filename, 'rb') as manifest_file:
+    with manifest_fs.open(manifest_filename, "rb") as manifest_file:
         csv_reader = csv.reader(manifest_file, delimiter=b",", quotechar=b'"')
         manifest = list(csv_reader)[1:]
     return manifest
@@ -110,14 +112,13 @@ def make_package(package_fs, output_fs, output_path, exclude_wildcards, auth_tok
     """Make a Moya package."""
     manifest_filename = "manifest.csv"
     with TempFS() as temp_fs:
-        manifest = _make_package_fs(package_fs,
-                                    temp_fs,
-                                    exclude_wildcards,
-                                    auth_token=auth_token)
+        manifest = _make_package_fs(
+            package_fs, temp_fs, exclude_wildcards, auth_token=auth_token
+        )
 
-        with output_fs.open(output_path, 'wb') as dest_file:
-            with ZipFS(dest_file, 'w') as zip_fs:
-                fs.copy.copy_dir(temp_fs, '/', zip_fs, '/')
+        with output_fs.open(output_path, "wb") as dest_file:
+            with ZipFS(dest_file, "w") as zip_fs:
+                fs.copy.copy_dir(temp_fs, "/", zip_fs, "/")
                 export_manifest(manifest, zip_fs, filename=manifest_filename)
 
         # with output_fs.open(output_path, 'rb') as zip_file:

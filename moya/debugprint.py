@@ -17,5 +17,6 @@ class DebugPrint(object):
         else:
             self.f.write(prefix + text)
 
+
 if not isinstance(sys.stdout, DebugPrint):
     sys.stdout = DebugPrint(sys.stdout)

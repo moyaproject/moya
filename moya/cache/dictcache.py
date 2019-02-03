@@ -9,13 +9,13 @@ from time import time as get_time
 
 class DictCache(Cache):
     """A local memory based cache"""
+
     cache_backend_name = "dict"
 
     def __init__(self, name, namespace, compress=False, compress_min=1024):
-        super(DictCache, self).__init__(name,
-                                        namespace,
-                                        compress=compress,
-                                        compress_min=compress_min)
+        super(DictCache, self).__init__(
+            name, namespace, compress=compress, compress_min=compress_min
+        )
         self.values = {}
 
     def encode_value(self, value):
@@ -65,10 +65,11 @@ class DictCache(Cache):
 
 if __name__ == "__main__":
     from time import sleep
-    d = DictCache('test', 'testing')
-    d.set('key', 'myvalue', time=1)
-    print(d.get('key', None))
-    sleep(.6)
-    print(d.get('key', None))
-    sleep(.6)
-    print(d.get('key', None))
+
+    d = DictCache("test", "testing")
+    d.set("key", "myvalue", time=1)
+    print(d.get("key", None))
+    sleep(0.6)
+    print(d.get("key", None))
+    sleep(0.6)
+    print(d.get("key", None))

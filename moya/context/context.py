@@ -33,6 +33,7 @@ class DynamicContextItem(object):
     @property
     def obj(self):
         from moya import pilot
+
         return self.__moyacontext__(pilot.context)
 
     def __str__(self):
@@ -64,6 +65,7 @@ class CounterContextItem(object):
 @implements_to_string
 class LazyContextItem(object):
     """A proxy for a lazily evaluated object"""
+
     def __init__(self, callable, *args, **kwargs):
         self.callable = callable
         self.args = args
@@ -95,6 +97,7 @@ class LazyContextItem(object):
 @implements_to_string
 class AsyncContextItem(Thread):
     """A proxy for an asynchronously evaluated object"""
+
     def __init__(self, callable, *args, **kwargs):
         self.callable = callable
         self.args = args
@@ -131,6 +134,7 @@ class AsyncContextItem(Thread):
 @implements_to_string
 class _ThreadLocalItem(object):
     """A proxy for a thread local object"""
+
     def __init__(self, callable, *args, **kwargs):
         self.callable = callable
         self.args = args
@@ -138,10 +142,10 @@ class _ThreadLocalItem(object):
         self.local = local()
 
     def __moyacontext__(self, context):
-        obj = getattr(self.local, 'obj', None)
+        obj = getattr(self.local, "obj", None)
         if not obj:
             obj = self.callable(*self.args, **self.kwargs)
-            setattr(self.local, 'obj', obj)
+            setattr(self.local, "obj", obj)
         return obj
 
     @property
@@ -160,7 +164,9 @@ class _ThreadLocalItem(object):
 
 class LinkItem(object):
     """Links on index to another, like a symbolic link"""
-    __slots__ = ['proxy_index']
+
+    __slots__ = ["proxy_index"]
+
     def __init__(self, proxy_index):
         self.proxy_index = dataindex.parse(proxy_index)
 
@@ -173,6 +179,7 @@ class LinkItem(object):
 
 class LastIndexItem(object):
     """Returns the last item of a sequence"""
+
     def __init__(self, sequence_index, name):
         self.sequence_index = dataindex.parse(sequence_index)
         self.name = name
@@ -185,7 +192,8 @@ class LastIndexItem(object):
 
 @implements_to_string
 class Scope(object):
-    __slots__ = ['stack', 'index', 'obj']
+    __slots__ = ["stack", "index", "obj"]
+
     def __init__(self, stack, index, obj=None):
         self.stack = stack
         if obj is None:
@@ -247,7 +255,7 @@ class Frame(object):
 class Stack(object):
     def __init__(self, context, root_obj):
         self._context = weakref.ref(context)
-        self.frames = [Frame(self, '.', root_obj)]
+        self.frames = [Frame(self, ".", root_obj)]
         self._push = self.frames.append
         self._pop = self.frames.pop
         self._current_frame = self.frames[-1]
@@ -343,12 +351,12 @@ class _DataScopeContext(object):
         self.data = data
 
     def __enter__(self):
-        scope_index = self.context.push_thread_local_stack('datascope', self.data)
+        scope_index = self.context.push_thread_local_stack("datascope", self.data)
         self.context.push_scope(scope_index)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.context.pop_scope()
-        self.context.pop_stack('datascope')
+        self.context.pop_stack("datascope")
 
 
 class _DataFrameContext(object):
@@ -357,16 +365,17 @@ class _DataFrameContext(object):
         self.data = data
 
     def __enter__(self):
-        scope_index = self.context.push_thread_local_stack('dataframe', self.data)
+        scope_index = self.context.push_thread_local_stack("dataframe", self.data)
         self.context.push_frame(scope_index)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.context.pop_frame()
-        self.context.pop_stack('dataframe')
+        self.context.pop_stack("dataframe")
 
 
 class _StackContext(object):
     """This is a context manager for client stacks on the context"""
+
     def __init__(self, context, stack_name, value, stack_callable=list):
         self.context = context
         self.stack_name = stack_name
@@ -374,9 +383,9 @@ class _StackContext(object):
         self.stack_callable = stack_callable
 
     def __enter__(self):
-        index = self.context.push_stack(self.stack_name,
-                                        self.value,
-                                        stack_callable=self.stack_callable)
+        index = self.context.push_stack(
+            self.stack_name, self.value, stack_callable=self.stack_callable
+        )
         self.context.push_frame(index)
         return index
 
@@ -393,21 +402,22 @@ class _RootStackContext(object):
         self.stack_callable = stack_callable
 
     def __enter__(self):
-        stack = self.context.set_new_call('._{}_stack'.format(self.stack_name), list)
+        stack = self.context.set_new_call("._{}_stack".format(self.stack_name), list)
         stack.append(self.value)
-        self.context['.' + self.stack_name] = self.value
+        self.context["." + self.stack_name] = self.value
 
     def __exit__(self, exc_type, exc_value, exc_tb):
-        stack = self.context['._{}_stack'.format(self.stack_name)]
+        stack = self.context["._{}_stack".format(self.stack_name)]
         stack.pop()
         try:
-            self.context['.' + self.stack_name] = stack[-1]
+            self.context["." + self.stack_name] = stack[-1]
         except IndexError:
-            del self.context['.' + self.stack_name]
+            del self.context["." + self.stack_name]
 
 
 class DummyLock(object):
     """Replacement for real lock that does nothing"""
+
     def __enter__(self):
         pass
 
@@ -439,7 +449,8 @@ class _DummyLocal(object):
 @implements_to_string
 class Context(object):
     """A meta data structure for indexing nested Python objects"""
-    _re_substitute_context = re.compile(r'\$\{(.*?)\}')
+
+    _re_substitute_context = re.compile(r"\$\{(.*?)\}")
     _sub = _re_substitute_context.sub
 
     def __init__(self, root=None, thread_safe=False, re_sub=None, name=None):
@@ -462,18 +473,21 @@ class Context(object):
             return
         for method_name in dir(self):
             method = getattr(self, method_name)
-            if getattr(method, '_synchronize', False):
+            if getattr(method, "_synchronize", False):
+
                 def make_sync(context, method):
                     def _sync(*args, **kwargs):
                         with context.lock:
                             return method(*args, **kwargs)
+
                     return _sync
+
                 setattr(self, method_name, make_sync(self, method))
         self.thread_safe = True
 
     @classmethod
     def escape(cls, v):
-        return v.replace('.', '\\.')
+        return v.replace(".", "\\.")
 
     def __repr__(self):
         if self.name:
@@ -500,7 +514,7 @@ class Context(object):
         obj = {}
         for scope in reversed(self.current_frame.scopes):
             scope_obj = scope.obj
-            if hasattr(scope_obj, '__getitem__') and hasattr(scope_obj, 'items'):
+            if hasattr(scope_obj, "__getitem__") and hasattr(scope_obj, "items"):
                 for k, v in scope_obj.items():
                     if k not in obj:
                         obj[k] = v
@@ -511,8 +525,7 @@ class Context(object):
     @synchronize
     def clone(self):
         """Creates a context with a shallow copy of the data"""
-        return Context(self.root.copy(),
-                       thread_safe=self.thread_safe)
+        return Context(self.root.copy(), thread_safe=self.thread_safe)
 
     @synchronize
     def reset(self):
@@ -529,10 +542,7 @@ class Context(object):
                 raise
             except Exception as e:
                 start, end = match.span(1)
-                raise SubstitutionError(match.group(1),
-                                        start,
-                                        end,
-                                        original=e)
+                raise SubstitutionError(match.group(1), start, end, original=e)
 
         return self._sub(sub, s)
 
@@ -541,8 +551,9 @@ class Context(object):
     @classmethod
     def extract_expressions(cls, s):
         """Extract all expressions in substitution syntax"""
-        expressions = set(match.group(1)
-                          for match in cls._re_substitute_context.finditer(s))
+        expressions = set(
+            match.group(1) for match in cls._re_substitute_context.finditer(s)
+        )
         return expressions
 
     def push_frame(self, index):
@@ -619,8 +630,11 @@ class Context(object):
             raise ContextKeyError(self, index, message="Can't set root!")
         try:
             for name in indices.tokens[:-1]:
-                obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(name)
-                __moyacontext__ = getattr(obj, '__moyacontext__', None)
+                obj = (
+                    getattr(obj, "__getitem__", None)
+                    or getattr(obj, "__getattribute__")
+                )(name)
+                __moyacontext__ = getattr(obj, "__moyacontext__", None)
                 if __moyacontext__:
                     obj = __moyacontext__(self)
         except (KeyError, IndexError, AttributeError):
@@ -644,7 +658,9 @@ class Context(object):
         """Set a value"""
         obj, final = self._set_lookup(index)
         try:
-            (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+            (getattr(obj, "__setitem__", None) or getattr(obj, "__setattr__"))(
+                final, value
+            )
         except Exception:
             raise ContextKeyError(self, index)
 
@@ -653,7 +669,9 @@ class Context(object):
         """Set a single index"""
         obj = self._stack.obj
         try:
-            (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(index, value)
+            (getattr(obj, "__setitem__", None) or getattr(obj, "__setattr__"))(
+                index, value
+            )
         except Exception:
             raise ContextKeyError(self, index)
 
@@ -664,7 +682,9 @@ class Context(object):
         for index, value in seq:
             obj, final = _lookup(index)
             try:
-                (getattr(obj, '__setitem__', None) or getattr(obj, '__setattr__'))(final, value)
+                (getattr(obj, "__setitem__", None) or getattr(obj, "__setattr__"))(
+                    final, value
+                )
             except Exception:
                 raise ContextKeyError(self, index)
 
@@ -742,19 +762,25 @@ class Context(object):
         try:
             for obj in objs:
                 try:
-                    obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(first)
+                    obj = (
+                        getattr(obj, "__getitem__", None)
+                        or getattr(obj, "__getattribute__")
+                    )(first)
                 except (TypeError, KeyError, IndexError, AttributeError):
                     continue
                 if not rest:
                     return True
-                if hasattr(obj, '__moyacontext__'):
+                if hasattr(obj, "__moyacontext__"):
                     obj = obj.__moyacontext__(self)
                 last = rest.pop()
                 for name in rest:
-                    obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(name)
-                    if hasattr(obj, '__moyacontext__'):
+                    obj = (
+                        getattr(obj, "__getitem__", None)
+                        or getattr(obj, "__getattribute__")
+                    )(name)
+                    if hasattr(obj, "__moyacontext__"):
                         obj = obj.__moyacontext__(self)
-                if hasattr(obj, '__getitem__'):
+                if hasattr(obj, "__getitem__"):
                     return last in obj
                 else:
                     return hasattr(obj, last)
@@ -771,7 +797,7 @@ class Context(object):
             objs = [scope.obj for scope in self._stack._current_frame]
         if not indices:
             obj = objs[0]
-            if hasattr(obj, '__moyacontext__'):
+            if hasattr(obj, "__moyacontext__"):
                 obj = obj.__moyacontext__(self)
             return obj
 
@@ -779,14 +805,20 @@ class Context(object):
         try:
             for obj in objs:
                 try:
-                    obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(first)
+                    obj = (
+                        getattr(obj, "__getitem__", None)
+                        or getattr(obj, "__getattribute__")
+                    )(first)
                 except (TypeError, KeyError, IndexError, AttributeError):
                     continue
-                if hasattr(obj, '__moyacontext__'):
+                if hasattr(obj, "__moyacontext__"):
                     obj = obj.__moyacontext__(self)
                 for name in rest:
-                    obj = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(name)
-                    if hasattr(obj, '__moyacontext__'):
+                    obj = (
+                        getattr(obj, "__getitem__", None)
+                        or getattr(obj, "__getattribute__")
+                    )(name)
+                    if hasattr(obj, "__moyacontext__"):
                         obj = obj.__moyacontext__(self)
                 return obj
         except (TypeError, KeyError, IndexError, AttributeError):
@@ -806,10 +838,13 @@ class Context(object):
         objs = [scope.obj for scope in self._stack._current_frame]
         for obj in objs:
             try:
-                val = (getattr(obj, '__getitem__', None) or getattr(obj, '__getattribute__'))(index)
+                val = (
+                    getattr(obj, "__getitem__", None)
+                    or getattr(obj, "__getattribute__")
+                )(index)
             except (TypeError, KeyError, IndexError, AttributeError):
                 continue
-            if hasattr(val, '__moyacontext__'):
+            if hasattr(val, "__moyacontext__"):
                 return val.__moyacontext__(self)
             return val
         return Missing(index)
@@ -865,7 +900,7 @@ class Context(object):
     @synchronize
     def delete(self, index):
         obj, final = self._set_lookup(index)
-        if hasattr(obj, '__getitem__'):
+        if hasattr(obj, "__getitem__"):
             del obj[final]
         else:
             delattr(obj, final)
@@ -875,7 +910,7 @@ class Context(object):
         """Deletes a value if it exists, or does nothing"""
         for index in indices:
             obj, final = self._set_lookup(index)
-            if hasattr(obj, '__getitem__'):
+            if hasattr(obj, "__getitem__"):
                 if final in obj:
                     del obj[final]
             else:
@@ -895,32 +930,32 @@ class Context(object):
         return expression.eval(self)
 
     @synchronize
-    def keys(self, index=''):
+    def keys(self, index=""):
         obj = self.get(index)
-        if hasattr(obj, '__getitem__'):
-            if hasattr(obj, 'keys'):
+        if hasattr(obj, "__getitem__"):
+            if hasattr(obj, "keys"):
                 return list(obj.keys())
             else:
                 return [i for i, _v in enumerate(obj)]
         else:
-            return [k for k in dir(obj) if not k.startswith('_')]
+            return [k for k in dir(obj) if not k.startswith("_")]
 
     @synchronize
-    def values(self, index=''):
+    def values(self, index=""):
         obj, indices = self._get_obj(index)
         keys = self.keys(indices)
         return [self.get(join(indices, [k]), None) for k in keys]
 
     @synchronize
-    def items(self, index=''):
+    def items(self, index=""):
         obj = self.get(index)
-        if hasattr(obj, '__getitem__'):
-            if hasattr(obj, 'items'):
+        if hasattr(obj, "__getitem__"):
+            if hasattr(obj, "items"):
                 return list(obj.items())
             else:
                 return list(enumerate(obj))
         else:
-            return [(k, getattr(obj, k)) for k in dir(obj) if not k.startswith('_')]
+            return [(k, getattr(obj, k)) for k in dir(obj) if not k.startswith("_")]
 
     @synchronize
     def all_keys(self, max_depth=5):
@@ -935,7 +970,8 @@ class Context(object):
             if not isinstance(obj, (bool, slice) + number_types + string_types):
                 for k, v in self.items(indices):
                     recurse(join(indices, [k]), depth + 1)
-        recurse('')
+
+        recurse("")
         return keys
 
     def stack(self, stack_name, value, stack_callable=list):
@@ -947,20 +983,20 @@ class Context(object):
     @synchronize
     def push_stack(self, stack_name, value, stack_callable=list):
         """Create a stack in the root of the context"""
-        stack_index = '_{}_stack'.format(stack_name)
+        stack_index = "_{}_stack".format(stack_name)
         if stack_index not in self.root:
             stack = self.root[stack_index] = stack_callable()
         else:
             stack = self.root[stack_index]
         stack.append(value)
-        self.set(stack_name, LastIndexItem(stack_index, '.' + stack_name))
+        self.set(stack_name, LastIndexItem(stack_index, "." + stack_name))
         value_index = ".{}.{}".format(stack_index, len(stack) - 1)
         return value_index
 
     @synchronize
     def pop_stack(self, stack_name):
         """Pop a value from an existing stack"""
-        stack_index = '._{}_stack'.format(stack_name)
+        stack_index = "._{}_stack".format(stack_name)
         stack = self[stack_index]
         value = stack.pop()
         if not stack:
@@ -968,7 +1004,7 @@ class Context(object):
         return value
 
     def get_stack_top(self, stack_name, default=None):
-        stack = self.get('._{}_stack'.format(stack_name), None)
+        stack = self.get("._{}_stack".format(stack_name), None)
         if not stack:
             return default
         return stack[-1]
@@ -976,7 +1012,7 @@ class Context(object):
     @synchronize
     def push_thread_local_stack(self, stack_name, value, stack_callable=list):
         """Push a value on to a thread local stack"""
-        stack_index = '._{}_stack'.format(stack_name)
+        stack_index = "._{}_stack".format(stack_name)
         stack = self.set_new_thread_local(stack_index, stack_callable)
         stack.append(value)
         value_index = "{}.{}".format(stack_index, len(stack) - 1)
@@ -989,20 +1025,21 @@ class Context(object):
     __getitem__ = get
     __delitem__ = delete
 
+
 if __name__ == "__main__":
 
     c = Context()
 
-    c['foo'] = dict(bar={}, baz={})
-    c['foo.bar.fruits'] = ['apples', 'oranges', 'pears']
-    c['foo.baz.td'] = dict(posts=[1, 2, 3, 4])
-    c['whooo'] = "wah"
+    c["foo"] = dict(bar={}, baz={})
+    c["foo.bar.fruits"] = ["apples", "oranges", "pears"]
+    c["foo.baz.td"] = dict(posts=[1, 2, 3, 4])
+    c["whooo"] = "wah"
 
-    with c.scope('foo'):
-        with c.scope('bar'):
-            print(c['fruits'])
-            print(c['td'])
-            print(c['.whooo'])
+    with c.scope("foo"):
+        with c.scope("bar"):
+            print(c["fruits"])
+            print(c["td"])
+            print(c[".whooo"])
 
 
 #        c = Context()

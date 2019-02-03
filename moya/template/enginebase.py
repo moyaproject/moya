@@ -11,13 +11,12 @@ class TemplateEngineMeta(type):
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
         if name != "TemplateEngine":
-            name = getattr(new_class, 'name', name.lower().strip('_'))
+            name = getattr(new_class, "name", name.lower().strip("_"))
             cls.template_engines[name] = new_class
         return new_class
 
 
 class TemplateEngineType(object):
-
     def __init__(self, archive, fs, settings):
         super(TemplateEngineType, self).__init__()
         self._archive = weakref.ref(archive) if archive else (lambda: None)

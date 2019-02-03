@@ -14,7 +14,8 @@ from .console import AttrText
 
 class Progress(object):
     """Renders a progress bar to the console"""
-    def __init__(self, console, msg, num_steps=100, width=12, indent='', vanish=False):
+
+    def __init__(self, console, msg, num_steps=100, width=12, indent="", vanish=False):
         self.console = console
         self.msg = msg
         self.num_steps = num_steps
@@ -49,14 +50,14 @@ class Progress(object):
             self.msg = msg
         self.render()
 
-    def render(self, line_end='\r', color="magenta"):
+    def render(self, line_end="\r", color="magenta"):
         """Render a passable progress bar."""
         if not self.console.is_terminal():
             return
 
-        start_char = '╺'
-        mid_char = '━'
-        end_char = '╸'
+        start_char = "╺"
+        mid_char = "━"
+        end_char = "╸"
 
         bar = start_char + ((self.width - 2) * mid_char) + end_char
 
@@ -67,15 +68,11 @@ class Progress(object):
 
         bar_progress = AttrText(
             "\r{} {} {}{} {}".format(
-                self.indent,
-                progress,
-                completed,
-                remaining,
-                self.msg
-            ).ljust(self.console.terminal_width + 1)[:self.console.terminal_width + 1]
+                self.indent, progress, completed, remaining, self.msg
+            ).ljust(self.console.terminal_width + 1)[: self.console.terminal_width + 1]
         )
-        bar_progress.add_span(7, end=7+len(completed), fg="magenta")
-        bar_progress.add_span(7+len(completed), end=7+len(bar), fg="white")
+        bar_progress.add_span(7, end=7 + len(completed), fg="magenta")
+        bar_progress.add_span(7 + len(completed), end=7 + len(bar), fg="white")
         self.console(bar_progress)(line_end).flush()
 
     def done(self, msg=None):
@@ -84,12 +81,12 @@ class Progress(object):
         if self.vanish:
             self.render()
             sleep(0.1)
-            self.console(len(self.msg) * ' ')('\r')
+            self.console(len(self.msg) * " ")("\r")
         else:
             if not self.console.is_terminal():
                 self.console.text(self.msg)
             else:
-                self.render(line_end='\n')
+                self.render(line_end="\n")
 
 
 class ProgressContext(object):
@@ -119,5 +116,5 @@ if __name__ == "__main__":
 
     with ProgressContext(p):
         for step in xrange(100):
-            sleep(.03)
-            p.step(msg = "Extracting... " + "*" * randint(5, 30) + '|')
+            sleep(0.03)
+            p.step(msg="Extracting... " + "*" * randint(5, 30) + "|")

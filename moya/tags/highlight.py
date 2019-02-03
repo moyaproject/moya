@@ -10,10 +10,14 @@ class Highlight(LogicElement):
     class Help:
         synopsis = "syntax highlight code"
 
-    dst = Attribute("Destination to store exception object", type="reference", required=True)
+    dst = Attribute(
+        "Destination to store exception object", type="reference", required=True
+    )
     code = Attribute("Code to highlight", type="reference", required=True)
     format = Attribute("Format of code", required=True, default="xml")
-    highlight = Attribute("Line numbers to highlight", type="expression", required=False, default=None)
+    highlight = Attribute(
+        "Line numbers to highlight", type="expression", required=False, default=None
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)

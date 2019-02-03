@@ -11,7 +11,7 @@ def extract_lines(code, line, padding=2):
     lines = code.splitlines()
     start = max(0, line - padding - 1)
     end = min(len(lines), line + padding - 1)
-    showlines = lines[start:end + 1]
+    showlines = lines[start : end + 1]
     linenos = [n + 1 for n in range(start, end + 1)]
     return zip(linenos, showlines)
 
@@ -25,7 +25,7 @@ def extract(code, line, padding=3):
 
 def number(code, linestart=1, highlight_line=-1, number_wrap=None):
     if number_wrap is None:
-        number_wrap = lambda n:n
+        number_wrap = lambda n: n
     lines = code.splitlines()
     max_line = max(6, max(len(str(len(l))) for l in lines))
     out_lines = []
@@ -42,7 +42,7 @@ def column_to_spaces(line, col):
     """Returns the number of space required to reach a point in a string"""
     spaces = 0
     for colno, char in enumerate(line):
-        spaces += 4 if col == '\t' else 1
+        spaces += 4 if col == "\t" else 1
         if colno + 1 == col:
             return spaces
     return spaces
@@ -63,13 +63,13 @@ def render_error(code, show_lineno, padding=3, col=None, colors=False, col_text=
         render_lines.append(fmt % (str(lineno).ljust(maxlineno), line))
         if col is not None and lineno == show_lineno:
             point_at = column_to_spaces(line, col)
-            pad = ' ' * (maxlineno + 1)
+            pad = " " * (maxlineno + 1)
             if point_at > len(col_text) + 1:
                 render_lines.append(pad + (col_text + " ^").rjust(point_at + 1))
             else:
-                render_lines.append(pad + '^'.rjust(point_at + 1) + " " + col_text)
+                render_lines.append(pad + "^".rjust(point_at + 1) + " " + col_text)
 
-    return '\n'.join(line.replace('\t', ' ' * 4) for line in render_lines)
+    return "\n".join(line.replace("\t", " " * 4) for line in render_lines)
 
 
 if __name__ == "__main__":

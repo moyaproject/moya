@@ -9,14 +9,16 @@ from ._version import VERSION as __version__
 
 
 __author__ = "Will McGugan <admin@moyaproject.com>"
-__all__ = ['pilot', 'expose']
+__all__ = ["pilot", "expose"]
 
 
 pilot = Pilot()
 
 if PY2:
 
-    decimal.Decimal.__moyarepr__ = lambda self, context: "d:'{}'".format(text_type(self))
+    decimal.Decimal.__moyarepr__ = lambda self, context: "d:'{}'".format(
+        text_type(self)
+    )
     _decimal_str = decimal.Decimal.__str__
     decimal.Decimal.__str__ = lambda self: "{:f}".format(self.normalize())
     decimal.Decimal.__unicode__ = decimal.Decimal.__str__
@@ -26,7 +28,6 @@ else:
     _decimal_normalize = decimal.Decimal.normalize
 
     class MoyaDecimal(decimal.Decimal):
-
         def __moyarepr__(self, context):
             return "d:'{}'".format(_decimal_normalize(self))
 

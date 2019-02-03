@@ -24,27 +24,30 @@ MOYA_TEMPLATE_XML = """\
 
 class New(SubCommand):
     """Create a boilerplate moya file"""
+
     help = "create a new boilerplate moya file"
 
     def add_arguments(self, parser):
-        parser.add_argument(dest='filename', metavar="PATH",
-                            help="path / filename for new file")
-        parser.add_argument('-f', '-force', dest="force", action="store_true",
-                            help="fore overwriting")
+        parser.add_argument(
+            dest="filename", metavar="PATH", help="path / filename for new file"
+        )
+        parser.add_argument(
+            "-f", "-force", dest="force", action="store_true", help="fore overwriting"
+        )
 
     def run(self):
         args = self.args
 
         if not args.force and os.path.exists(args.filename):
-            self.console.error('destination exists, use --force to overwrite')
+            self.console.error("destination exists, use --force to overwrite")
             return -1
 
         td = {}
         file_data = MOYA_TEMPLATE_XML.format(td)
 
         try:
-            with open(args.filename, 'wt') as f:
+            with open(args.filename, "wt") as f:
                 f.write(file_data)
         except Exception as e:
-            self.console.error('unable to write file ({})'.format(e))
+            self.console.error("unable to write file ({})".format(e))
             return -1

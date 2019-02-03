@@ -25,6 +25,7 @@ class _MultiProxy(object):
 
     def __moyaconsole__(self, console):
         from .console import Cell
+
         table = [(Cell("Name", bold=True), Cell("Value", bold=True))]
         table += sorted((k, self.getall(k)) for k in set(self.iterkeys()))
         console.table(table)
@@ -56,7 +57,7 @@ class _MultiProxy(object):
 
 class UploadFileProxy(AttributeExposer):
 
-    __moya_exposed_attributes__ = ['filename', 'size']
+    __moya_exposed_attributes__ = ["filename", "size"]
 
     def __init__(self, field_storage):
         self.field_storage = field_storage
@@ -75,7 +76,7 @@ class UploadFileProxy(AttributeExposer):
 
     @property
     def size(self):
-        if hasattr(self.file, 'fileno'):
+        if hasattr(self.file, "fileno"):
             size = os.fstat(self.file.fileno()).st_size
         else:
             pos = self.tell()
@@ -91,64 +92,64 @@ class UploadFileProxy(AttributeExposer):
 class MoyaRequest(Request, AttributeExposer):
 
     __moya_exposed_attributes__ = [
-        'FILES',
-        'GET',
-        'POST',
-        'accept',
-        'accept_charset',
-        'accept_encoding',
-        'accept_language',
-        'application_url',
-        'authorization',
-        'body',
-        'body_file',
-        'cache_control',
-        'charset',
-        'client_addr',
-        'content_length',
-        'content_type',
-        'cookies',
-        'date',
-        'environ',
-        'host',
-        'host_port',
-        'host_url',
-        'http_version',
-        'if_match',
-        'if_modified_since',
-        'if_none_match',
-        'if_range',
-        'if_unmodified_since',
-        'is_body_readable',
-        'is_body_seekable',
-        'is_xhr',
-        'json',
-        'json_body',
-        'max_forwards',
-        'method',
-        'multi',
-        'params',
-        'path',
-        'path_qs',
-        'path_url',
-        'pragma',
-        'query_string',
-        'range',
-        'referer',
-        'referrer',
-        'remote_addr',
-        'remote_user',
-        'request_body_tempfile_limit',
-        'scheme',
-        'server_name',
-        'server_port',
-        'path_info',
-        'url',
-        'url_encoding',
-        'urlargs',
-        'urlvars',
-        'uscript_name',
-        'user_agent'
+        "FILES",
+        "GET",
+        "POST",
+        "accept",
+        "accept_charset",
+        "accept_encoding",
+        "accept_language",
+        "application_url",
+        "authorization",
+        "body",
+        "body_file",
+        "cache_control",
+        "charset",
+        "client_addr",
+        "content_length",
+        "content_type",
+        "cookies",
+        "date",
+        "environ",
+        "host",
+        "host_port",
+        "host_url",
+        "http_version",
+        "if_match",
+        "if_modified_since",
+        "if_none_match",
+        "if_range",
+        "if_unmodified_since",
+        "is_body_readable",
+        "is_body_seekable",
+        "is_xhr",
+        "json",
+        "json_body",
+        "max_forwards",
+        "method",
+        "multi",
+        "params",
+        "path",
+        "path_qs",
+        "path_url",
+        "pragma",
+        "query_string",
+        "range",
+        "referer",
+        "referrer",
+        "remote_addr",
+        "remote_user",
+        "request_body_tempfile_limit",
+        "scheme",
+        "server_name",
+        "server_port",
+        "path_info",
+        "url",
+        "url_encoding",
+        "urlargs",
+        "urlvars",
+        "uscript_name",
+        "user_agent",
     ]
 
     def __init__(self, *args, **kwargs):
@@ -158,22 +159,28 @@ class MoyaRequest(Request, AttributeExposer):
 
     def __repr__(self):
         try:
-            return "<moyarequest '{method} {path_info}'>".format(method=self.method,
-                                                                 path_info=self.path_info)
+            return "<moyarequest '{method} {path_info}'>".format(
+                method=self.method, path_info=self.path_info
+            )
         except:
             return "<moyarequest>"
 
     @property
     def multi(self):
         if self._multi is None:
-            self._multi = {k: _MultiProxy(getattr(self, k), k) for k in ('GET', 'POST', 'params')}
+            self._multi = {
+                k: _MultiProxy(getattr(self, k), k) for k in ("GET", "POST", "params")
+            }
         return self._multi
 
     @property
     def FILES(self):
         if self._files is None:
-            self._files = {name: UploadFileProxy(field_storage) for name, field_storage in self.POST.items()
-                           if isinstance(field_storage, FieldStorage)}
+            self._files = {
+                name: UploadFileProxy(field_storage)
+                for name, field_storage in self.POST.items()
+                if isinstance(field_storage, FieldStorage)
+            }
         return self._files
 
     @property
@@ -191,7 +198,11 @@ class MoyaRequest(Request, AttributeExposer):
             return None
 
     def __moyaconsole__(self, console):
-        console("%s %s %s" % (self.method, self.path_info, self.http_version), bold=True, fg="blue").nl()
+        console(
+            "%s %s %s" % (self.method, self.path_info, self.http_version),
+            bold=True,
+            fg="blue",
+        ).nl()
         table = [(Cell("HTTP Header", bold=True), Cell("Value", bold=True))]
         table += sorted(self.headers.items())
         console.table(table)

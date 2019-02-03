@@ -5,7 +5,12 @@ from __future__ import absolute_import
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
-from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError, StatementError
+from sqlalchemy.exc import (
+    DatabaseError,
+    IntegrityError,
+    OperationalError,
+    StatementError,
+)
 
 from . import namespaces
 from .elements.utils import attr_bool
@@ -17,12 +22,12 @@ import weakref
 import logging
 
 
-startup_log = logging.getLogger('moya.startup')
-db_log = logging.getLogger('moya.db')
+startup_log = logging.getLogger("moya.startup")
+db_log = logging.getLogger("moya.db")
 
 
 def dbobject(obj):
-    return getattr(obj, '__moyadbobject__', lambda: obj)()
+    return getattr(obj, "__moyadbobject__", lambda: obj)()
 
 
 @implements_to_string
@@ -32,7 +37,7 @@ class DBEngine(object):
         self.engine_name = engine_name
         self.engine = engine
         self.default = default
-        #self.Session = sessionmaker(bind=engine)  # expire_on_commit
+        # self.Session = sessionmaker(bind=engine)  # expire_on_commit
         self.session_factory = sessionmaker(bind=engine)
         self.metadata = MetaData()
         self.table_names = set()
@@ -41,7 +46,7 @@ class DBEngine(object):
         return DBSession(self.session_factory, self.engine)
 
     def __str__(self):
-        return '<dbengine %s>' % self.engine_name
+        return "<dbengine %s>" % self.engine_name
 
     def __repr__(self):
         return '<dbengine "%s">' % self.name
@@ -49,21 +54,22 @@ class DBEngine(object):
 
 def _get_db_error(e):
     """Extract information from sqlalchemy error"""
-    message = getattr(e, 'message', text_type(e))
-    info = {'sql': e.statement, 'params': e.params}
-    if hasattr(e, 'orig'):
+    message = getattr(e, "message", text_type(e))
+    info = {"sql": e.statement, "params": e.params}
+    if hasattr(e, "orig"):
         try:
             code, message = e.orig.args
         except:
             pass
         else:
-            info['code'] = code
+            info["code"] = code
             message = message
     return message, info
 
 
 def wrap_db_errors(f):
     """Turn DB errors in to moya errors"""
+
     def deco(self, *args, **kwargs):
         try:
             ret = f(self, *args, **kwargs)
@@ -78,11 +84,17 @@ def wrap_db_errors(f):
             raise logic.MoyaException("db.error", message, info=info)
         except StatementError as e:
             message, info = _get_db_error(e)
-            raise logic.MoyaException("db.statement-error", message, info=info, diagnosis="This error can occur if the models haven't been created in the database.\n\nDo you need to run **moya db sync**?")
+            raise logic.MoyaException(
+                "db.statement-error",
+                message,
+                info=info,
+                diagnosis="This error can occur if the models haven't been created in the database.\n\nDo you need to run **moya db sync**?",
+            )
         except Exception as e:
             raise
         else:
             return ret
+
     return deco
 
 
@@ -95,9 +107,9 @@ class _SessionContextManager(object):
         self._session.enter_transaction()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self._session.exit_transaction(element=self._element,
-                                       exc_type=exc_type,
-                                       exc_val=exc_val)
+        self._session.exit_transaction(
+            element=self._element, exc_type=exc_type, exc_val=exc_val
+        )
 
 
 class DBSession(object):
@@ -134,8 +146,8 @@ class DBSession(object):
 
     def __repr__(self):
         if self.session is not None:
-            return '<dbsession %s>' % self.engine
-        return '<dbsession>'
+            return "<dbsession %s>" % self.engine
+        return "<dbsession>"
 
     def enter_transaction(self):
         self._transaction_level += 1
@@ -159,18 +171,17 @@ class DBSession(object):
 
 
 def add_engine(archive, name, section):
-    engine_name = section['engine']
-    echo = attr_bool(section.get('echo', 'n'))
-    default = attr_bool(section.get('default', 'n'))
+    engine_name = section["engine"]
+    echo = attr_bool(section.get("echo", "n"))
+    default = attr_bool(section.get("default", "n"))
 
     connect_args = {}
-    if engine_name.startswith('sqlite:'):
-        connect_args['check_same_thread'] = False
+    if engine_name.startswith("sqlite:"):
+        connect_args["check_same_thread"] = False
 
-    sqla_engine = create_engine(engine_name,
-                                echo=echo,
-                                pool_recycle=3600,
-                                connect_args=connect_args)
+    sqla_engine = create_engine(
+        engine_name, echo=echo, pool_recycle=3600, connect_args=connect_args
+    )
 
     # if engine_name.startswith('sqlite:'):
     #     @event.listens_for(sqla_engine, "connect")
@@ -189,26 +200,28 @@ def add_engine(archive, name, section):
     if default or not archive.database_engines:
         archive.default_db_engine = name
     archive.database_engines[name] = engine
-    startup_log.debug('%r created', engine)
+    startup_log.debug("%r created", engine)
 
 
 def get_session_map(archive):
     """Get a dictionary that maps db names on to session objects"""
-    session_map = {db: engine.get_session() for db, engine in archive.database_engines.items()}
+    session_map = {
+        db: engine.get_session() for db, engine in archive.database_engines.items()
+    }
     if archive.default_db_engine is not None:
-        session_map['_default'] = session_map[archive.default_db_engine]
+        session_map["_default"] = session_map[archive.default_db_engine]
     return session_map
 
 
 def commit_sessions(context, close=True):
     count = 0
-    for dbsession in context['._dbsessions'].values():
+    for dbsession in context["._dbsessions"].values():
         if dbsession.session:
             try:
                 # db_log.debug('committing %s', dbsession)
                 dbsession.session.commit()
             except:
-                db_log.exception('error committing session')
+                db_log.exception("error committing session")
                 raise
             else:
                 count += 1
@@ -216,38 +229,37 @@ def commit_sessions(context, close=True):
                 try:
                     dbsession.close()
                 except:
-                    db_log.exception('error closing session')
+                    db_log.exception("error closing session")
     return count
 
 
 def rollback_sessions(context, close=True):
     count = 0
-    for dbsession in context['._dbsessions'].values():
+    for dbsession in context["._dbsessions"].values():
         if dbsession.session:
             try:
                 # db_log.debug('rolling back %s', dbsession)
                 dbsession.session.rollback()
             except:
-                db_log.exception('error rolling back session')
+                db_log.exception("error rolling back session")
             else:
                 count += 1
             if close:
                 try:
                     dbsession.close()
                 except:
-                    db_log.exception('error closing session')
+                    db_log.exception("error closing session")
     return count
 
 
 def close_sessions(context):
     """Close db sessions."""
-    for dbsession in context['._dbsessions'].values():
+    for dbsession in context["._dbsessions"].values():
         if dbsession.session:
             try:
                 dbsession.close()
             except:
-                db_log.exception('error closing session')
-
+                db_log.exception("error closing session")
 
 
 def sync_all(archive, console, summary=True):
@@ -267,14 +279,14 @@ def sync_all(archive, console, summary=True):
 
     synced = []
     try:
-        with console.progress('syncing', num_steps=len(apps), width=24) as progress:
-            progress.update(None, 'building models...')
+        with console.progress("syncing", num_steps=len(apps), width=24) as progress:
+            progress.update(None, "building models...")
             for app in apps:
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):
                     model._build_model(app)
 
             for app in apps:
-                progress.update(None, 'syncing {!r}'.format(app))
+                progress.update(None, "syncing {!r}".format(app))
                 count = 0
                 for model in app.lib.get_elements_by_type((namespaces.db, "model")):
 
@@ -288,12 +300,17 @@ def sync_all(archive, console, summary=True):
                 progress.step()
                 synced.append((app, count))
 
-            progress.update(None, 'db sync complete')
+            progress.update(None, "db sync complete")
     finally:
         if summary:
             table = []
             for app, count in synced:
-                table.append((Cell(text_type(app), fg="magenta", bold=True), Cell("{}".format(count) if count else "", bold=True)))
+                table.append(
+                    (
+                        Cell(text_type(app), fg="magenta", bold=True),
+                        Cell("{}".format(count) if count else "", bold=True),
+                    )
+                )
             console.table(table, header_row=["app", "synced"], dividers=True, grid=True)
 
     return 0
@@ -306,6 +323,7 @@ def validate_all(archive, console=None):
         return 0
 
     from .tags.db import DBModel
+
     fails = DBModel.validate_all(archive)
 
     if console is None:
@@ -313,14 +331,16 @@ def validate_all(archive, console=None):
 
     for model, app, element, error in fails:
         if element:
-            console.document_error(text_type(error),
-                                   element._location,
-                                   element._code,
-                                   element.source_line,
-                                   None)
+            console.document_error(
+                text_type(error),
+                element._location,
+                element._code,
+                element.source_line,
+                None,
+            )
         else:
             console.error(text_type(error))
-        if hasattr(error, 'diagnosis'):
+        if hasattr(error, "diagnosis"):
             console.table([(error.diagnosis,)])
 
     return len(fails)

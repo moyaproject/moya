@@ -17,32 +17,20 @@ from .compat import quote
 
 from pyparsing import Literal, QuotedString, Word, OneOrMore, printables, ParseException
 import pyparsing
+
 pyparsing.ParserElement.enablePackrat()
 
 
 class URLHighlight(ConsoleHighlighter):
-    styles = {
-        None: "bold blue",
-        "asterix": "bold yellow",
-        "param": "bold magenta"
-    }
+    styles = {None: "bold blue", "asterix": "bold yellow", "param": "bold magenta"}
 
-    highlights = [
-        r'(?P<param>\{.*?\})',
-        r'(?P<asterix>\*)',
-    ]
+    highlights = [r"(?P<param>\{.*?\})", r"(?P<asterix>\*)"]
 
 
 class TargetHighlight(ConsoleHighlighter):
-    styles = {
-        "lib": "bold blue",
-        "name": "bold green",
-        "hash": "white"
-    }
+    styles = {"lib": "bold blue", "name": "bold green", "hash": "white"}
 
-    highlights = [
-        r'(?P<lib>.*?)(?P<hash>#)(?P<name>.*?)[,\s$]',
-    ]
+    highlights = [r"(?P<lib>.*?)(?P<hash>#)(?P<name>.*?)[,\s$]"]
 
 
 class RouteError(ValueError):
@@ -63,12 +51,17 @@ class NamedURLNotFound(RouteError):
 
 def _router_grammer():
     """Make the url route grammer"""
-    wildcard = Literal('*')
-    path_separator = Literal('/').setParseAction(lambda t: ('sep', t))
-    extract = QuotedString(quoteChar='{', endQuoteChar='}').setParseAction(lambda t: ('extract', t))
-    static = Word(''.join(c for c in printables if c not in '?{}/')).setParseAction(lambda t: ('static', t))
+    wildcard = Literal("*")
+    path_separator = Literal("/").setParseAction(lambda t: ("sep", t))
+    extract = QuotedString(quoteChar="{", endQuoteChar="}").setParseAction(
+        lambda t: ("extract", t)
+    )
+    static = Word("".join(c for c in printables if c not in "?{}/")).setParseAction(
+        lambda t: ("static", t)
+    )
     route_parse = OneOrMore(extract | static | path_separator | wildcard)
     return route_parse
+
 
 RouteMatch = namedtuple("RouteMatch", ["data", "target", "name"])
 
@@ -76,7 +69,6 @@ RouteMatch = namedtuple("RouteMatch", ["data", "target", "name"])
 @implements_to_string
 @implements_bool
 class URLProxy(object):
-
     def __init__(self, mapper, path=None):
         self.mapper = mapper
         if path is None:
@@ -85,10 +77,12 @@ class URLProxy(object):
         self.bound = None
 
     @classmethod
-    def url_join(self, url_parts, from_root=False, _consecutive_slashes_sub=re.compile(r'/+').sub):
-        url = _consecutive_slashes_sub('/', ''.join(url_parts))
-        if from_root and not url.startswith('/'):
-            return '/' + url
+    def url_join(
+        self, url_parts, from_root=False, _consecutive_slashes_sub=re.compile(r"/+").sub
+    ):
+        url = _consecutive_slashes_sub("/", "".join(url_parts))
+        if from_root and not url.startswith("/"):
+            return "/" + url
         return url
 
     def bind(self, data):
@@ -218,7 +212,9 @@ class URLProxy(object):
             return
 
         table = []
-        console("URL mapper on ", fg="blue", bold=True)(text_type(self.base_route), bold=True, fg="cyan").nl()
+        console("URL mapper on ", fg="blue", bold=True)(
+            text_type(self.base_route), bold=True, fg="cyan"
+        ).nl()
         for mapper in _mapper.routes:
             name = mapper.name
             if isinstance(mapper.target, (list, tuple)):
@@ -228,38 +224,51 @@ class URLProxy(object):
             else:
                 mount = mapper.route
                 target_type = "mountpoint"
-                str_target = ''
-            table.append([name or '', target_type, self.url_join([self.base_url, mount]), str_target])
-        console.table(table,
-                      header_row=["name", "type", "route", "target"],
-                      cell_processors={2: URLHighlight.highlight, 3: TargetHighlight.highlight})
+                str_target = ""
+            table.append(
+                [
+                    name or "",
+                    target_type,
+                    self.url_join([self.base_url, mount]),
+                    str_target,
+                ]
+            )
+        console.table(
+            table,
+            header_row=["name", "type", "route", "target"],
+            cell_processors={2: URLHighlight.highlight, 3: TargetHighlight.highlight},
+        )
 
     def __moyarenderable__(self, context):
-        request = context['.request']
+        request = context[".request"]
         renderable = []
 
         def recurse_urlmapper(mapper, url_parts=None, app=None):
             if url_parts is None:
-                url_parts = ['/']
+                url_parts = ["/"]
             for mapper in mapper.routes:
                 if not mapper.match_method(request.method, None):
                     continue
-                methods = ', '.join(mapper.methods or ['*'])
+                methods = ", ".join(mapper.methods or ["*"])
 
                 if isinstance(mapper.target, (list, tuple)):
                     mount = mapper.route
                     url = self.url_join(url_parts + [mount])
                     url = highlight("route", url, line_numbers=False)
 
-                    targets = [(target, highlight("target", target, line_numbers=False))
-                               for target in mapper.target]
+                    targets = [
+                        (target, highlight("target", target, line_numbers=False))
+                        for target in mapper.target
+                    ]
 
                     renderable.append([url, methods, app, targets])
                 else:
                     url = self.url_join(url_parts + [mapper.route])
                     _, params = mapper.partial_parse(url)
-                    app = params.get('app', app) if params else None
-                    recurse_urlmapper(mapper.target, url_parts + [mapper.route], app=app)
+                    app = params.get("app", app) if params else None
+                    recurse_urlmapper(
+                        mapper.target, url_parts + [mapper.route], app=app
+                    )
 
         recurse_urlmapper(self.mapper)
         return renderable
@@ -287,6 +296,7 @@ class _NamedURLs(object):
                 else:
                     if route.name is not None:
                         named_routes[route.name].append(path + (route,))
+
         recurse_mapper(self.mapper, ())
 
         return named_routes
@@ -318,27 +328,36 @@ class _NamedURLs(object):
             return url
 
         if params:
-            params_display = ",".join("{}='{}'".format(k, v) for k, v in iteritems(params))
-            raise NamedURLNotFound("No matching URL with name '{}' and parameters {}".format(name, params_display))
+            params_display = ",".join(
+                "{}='{}'".format(k, v) for k, v in iteritems(params)
+            )
+            raise NamedURLNotFound(
+                "No matching URL with name '{}' and parameters {}".format(
+                    name, params_display
+                )
+            )
         else:
-            raise NamedURLNotFound("No matching URL with name '{}' and no parameters".format(name))
+            raise NamedURLNotFound(
+                "No matching URL with name '{}' and no parameters".format(name)
+            )
 
-    def _reverse_url_path(self, path, params, _consecutive_slashes_sub=re.compile(r'/+').sub):
+    def _reverse_url_path(
+        self, path, params, _consecutive_slashes_sub=re.compile(r"/+").sub
+    ):
         url_components = []
         path_matched = set()
         for route in path:
             matched, url = route.generate(params)
             path_matched.update(matched)
             url_components.append(url)
-        url = _consecutive_slashes_sub('/', ''.join(url_components))
-        if not url.startswith('/'):
-            url = '/' + url
+        url = _consecutive_slashes_sub("/", "".join(url_components))
+        if not url.startswith("/"):
+            url = "/" + url
         return len(params) - len(path_matched), url
 
 
 class URLMapper(object):
-
-    def __init__(self, name=''):
+    def __init__(self, name=""):
         self.name = name
         self._routes = []
         self._route_cache = LRUCache(1000)
@@ -375,7 +394,7 @@ class URLMapper(object):
         self._insert_order += 1
         return order
 
-    def finalize(self, _get_order=attrgetter('order')):
+    def finalize(self, _get_order=attrgetter("order")):
         """Finalize the url mapper (does sorting)"""
         if not self._finalized:
             self._finalized = True
@@ -389,18 +408,30 @@ class URLMapper(object):
             self._named_urls = _NamedURLs(self)
         return self._named_urls
 
-    def map(self, url, target, methods=None, handlers=None, defaults=None, name=None, priority=0, final=False):
+    def map(
+        self,
+        url,
+        target,
+        methods=None,
+        handlers=None,
+        defaults=None,
+        name=None,
+        priority=0,
+        final=False,
+    ):
         """Map a url on to a target object."""
-        route = Route(self,
-                      url,
-                      partial=False,
-                      defaults=defaults or {},
-                      methods=methods,
-                      handlers=handlers,
-                      target=target,
-                      name=name,
-                      order=self._get_order(priority),
-                      final=final)
+        route = Route(
+            self,
+            url,
+            partial=False,
+            defaults=defaults or {},
+            methods=methods,
+            handlers=handlers,
+            target=target,
+            name=name,
+            order=self._get_order(priority),
+            final=final,
+        )
         try:
             route.re_route
         except ParseException as e:
@@ -414,18 +445,20 @@ class URLMapper(object):
     def mount(self, url, mapper, defaults=None, name=None, priority=0):
         """Mount a sub-mapper on a url."""
         if url:
-            if not url.startswith('/'):
-                url = '/' + url
-            if not url.endswith('/'):
-                url += '/'
-        route = Route(self,
-                      url,
-                      partial=True,
-                      defaults=defaults or {},
-                      target=mapper,
-                      methods=None,
-                      name=name,
-                      order=self._get_order(priority))
+            if not url.startswith("/"):
+                url = "/" + url
+            if not url.endswith("/"):
+                url += "/"
+        route = Route(
+            self,
+            url,
+            partial=True,
+            defaults=defaults or {},
+            target=mapper,
+            methods=None,
+            name=name,
+            order=self._get_order(priority),
+        )
         if name is not None:
             self._named_routes[name].append(route)
         self._routes.append(route)
@@ -462,19 +495,25 @@ class URLMapper(object):
                         remaining_url, url_data = route.partial_parse(url)
                         if remaining_url is None:
                             continue
-                        if not remaining_url.startswith('/'):
-                            remaining_url = '/' + remaining_url
+                        if not remaining_url.startswith("/"):
+                            remaining_url = "/" + remaining_url
                         sub_url_router = route.target
-                        for route_match in sub_url_router.iter_routes(remaining_url,
-                                                                      method=method,
-                                                                      handler=handler):
+                        for route_match in sub_url_router.iter_routes(
+                            remaining_url, method=method, handler=handler
+                        ):
                             sub_url_data = url_data.copy()
                             sub_url_data.update(route_match.data)
-                            add_route_match(RouteMatch(sub_url_data, route_match.target, route_match.name))
+                            add_route_match(
+                                RouteMatch(
+                                    sub_url_data, route_match.target, route_match.name
+                                )
+                            )
                     else:
                         route_data = route.parse(url)
                         if route_data is not None:
-                            add_route_match(RouteMatch(route_data, route.target, route.name))
+                            add_route_match(
+                                RouteMatch(route_data, route.target, route.name)
+                            )
                             if route.final:
                                 break
 
@@ -491,7 +530,7 @@ class URLMapper(object):
 
     def render(self, level=0):
         for route in self.routes:
-            print('    ' * level + repr(route))
+            print("    " * level + repr(route))
             if isinstance(route.target, URLMapper):
                 route.target.render(level + 1)
 
@@ -502,29 +541,30 @@ class Route(object):
 
     _route_parse = _router_grammer()
 
-    _patterns = {'': (r"[^/]+?", lambda s: s),
-                 '*': (r".*?", lambda s: s),
-                 'alpha': (r"[a-zA-Z0-9]+?", lambda s: s),
-                 'slug': (r"[\w_-]+?", lambda s: s),
+    _patterns = {
+        "": (r"[^/]+?", lambda s: s),
+        "*": (r".*?", lambda s: s),
+        "alpha": (r"[a-zA-Z0-9]+?", lambda s: s),
+        "slug": (r"[\w_-]+?", lambda s: s),
+        "integer": (r"\-?\d+?", int),
+        "float": (r"\-?\d+\.\d+", float),
+        "posinteger": (r"\d+?", int),
+        "posfloat": (r"\d+\.\d+", float),
+    }
 
-                 "integer": (r"\-?\d+?", int),
-                 "float": (r"\-?\d+\.\d+", float),
-
-                 "posinteger": (r"\d+?", int),
-                 "posfloat": (r"\d+\.\d+", float)
-                 }
-
-    def __init__(self,
-                 mapper,
-                 route,
-                 partial=False,
-                 defaults={},
-                 methods=None,
-                 handlers=None,
-                 target=None,
-                 name=None,
-                 order=(0, 0),
-                 final=False):
+    def __init__(
+        self,
+        mapper,
+        route,
+        partial=False,
+        defaults={},
+        methods=None,
+        handlers=None,
+        target=None,
+        name=None,
+        order=(0, 0),
+        final=False,
+    ):
         self.mapper = mapper
         self._route = route
         self.route = route
@@ -548,58 +588,71 @@ class Route(object):
     @property
     def tokens(self):
         if self._tokens is None:
-            self._tokens = ([(tt, t[0])
-                            for (tt, t) in self._route_parse.parseString(self._route, True)]
-                            if self._route else [])
+            self._tokens = (
+                [
+                    (tt, t[0])
+                    for (tt, t) in self._route_parse.parseString(self._route, True)
+                ]
+                if self._route
+                else []
+            )
         return self._tokens
 
     @classmethod
     def _split_pattern_name(cls, token):
-        if ':' in token:
-            return token.split(':', 1)
-        return '', token
+        if ":" in token:
+            return token.split(":", 1)
+        return "", token
 
     @property
     def re_route(self):
         with self._lock:
             if not self._re_route:
-                segments = ['^']
+                segments = ["^"]
                 append_segment = segments.append
                 escape = re.escape
                 static = True
-                default_pattern = self._patterns.get('')
+                default_pattern = self._patterns.get("")
                 for token_type, token in self.tokens:
-                    if token_type == 'extract':
+                    if token_type == "extract":
                         static = False
-                        if token.startswith('*'):
+                        if token.startswith("*"):
                             pattern_name, name = self._split_pattern_name(token[1:])
-                            pattern, component_callable = self._patterns.get(pattern_name or '*', default_pattern)
+                            pattern, component_callable = self._patterns.get(
+                                pattern_name or "*", default_pattern
+                            )
                             if name:
                                 if name in self.component_names:
-                                    raise DuplicatedParameter("URL parameter '{}' was duplicated".format(name))
-                                append_segment('(?P<%s>%s)' % (name, pattern))
+                                    raise DuplicatedParameter(
+                                        "URL parameter '{}' was duplicated".format(name)
+                                    )
+                                append_segment("(?P<%s>%s)" % (name, pattern))
                             else:
-                                append_segment('(.*)')
+                                append_segment("(.*)")
                             self.component_names.append(name)
                         else:
                             pattern_name, name = self._split_pattern_name(token)
-                            pattern, component_callable = self._patterns.get(pattern_name, default_pattern)
-                            append_segment('(?P<%s>%s)' % (name, pattern))
+                            pattern, component_callable = self._patterns.get(
+                                pattern_name, default_pattern
+                            )
+                            append_segment("(?P<%s>%s)" % (name, pattern))
                             if name in self.component_names:
-                                raise DuplicatedParameter("URL parameter '{}' was duplicated".format(name))
+                                raise DuplicatedParameter(
+                                    "URL parameter '{}' was duplicated".format(name)
+                                )
                             self.component_names.append(name)
                         self.component_callables[name] = component_callable
                     else:
-                        if token == '*':
-                            append_segment('.*?')
+                        if token == "*":
+                            append_segment(".*?")
                         else:
                             append_segment(escape(token))
 
                 if not self.partial:
-                    append_segment('$')
+                    append_segment("$")
 
                 self.static = static
-                self.re_route_text = ''.join(segments)
+                self.re_route_text = "".join(segments)
                 self._re_route = None
                 self._re_route = re.compile(self.re_route_text)
 
@@ -613,7 +666,7 @@ class Route(object):
         if self.handlers:
             m = ",".join(text_type(h) for h in self.handlers)
         else:
-            m = ','.join(self.methods or ['*'])
+            m = ",".join(self.methods or ["*"])
 
         return "<route '%s' %s %s: %s>" % (self.name, m, self.route, target)
 
@@ -622,7 +675,7 @@ class Route(object):
             target = ", ".join(self.target)
         else:
             target = str(self.target)
-        m = ','.join(self.methods or ['*'])
+        m = ",".join(self.methods or ["*"])
         return "<route '%s' %s %s:%s>" % (self.name, m, self.route, target)
 
     def update_defaults(self, defaults):
@@ -638,9 +691,7 @@ class Route(object):
             if self.partial:
                 return True
             return False
-        return (self.methods is None or
-                '*' in self.methods or
-                method in self.methods)
+        return self.methods is None or "*" in self.methods or method in self.methods
 
     def parse(self, url):
         """Parse a URL and return a dictionary containing parameters"""
@@ -652,8 +703,7 @@ class Route(object):
             m.update(match.groupdict())
             try:
                 m = {
-                    k: get_component_callable(k, null_callable)(v)
-                    for k, v in m.items()
+                    k: get_component_callable(k, null_callable)(v) for k, v in m.items()
                 }
             except ValueError:
                 return None
@@ -670,7 +720,7 @@ class Route(object):
             return None, None
         params = params or {}
         partial_url = self.generate(params)[1]
-        remaining_url = url[len(partial_url):]
+        remaining_url = url[len(partial_url) :]
         return remaining_url, params
 
     def generate(self, component_map, remove=False):
@@ -692,32 +742,34 @@ class Route(object):
         for token_type, token in self.tokens:
             if token_type == "extract":
                 try:
-                    name = token.lstrip('*')
-                    if ':' in name:
-                        _, name = name.split(':', 1)
+                    name = token.lstrip("*")
+                    if ":" in name:
+                        _, name = name.split(":", 1)
                     append(url_params[name])
                 except KeyError:
-                    raise MissingURLParameter("Can't generate URL without a value for '{}'".format(name))
+                    raise MissingURLParameter(
+                        "Can't generate URL without a value for '{}'".format(name)
+                    )
             else:
                 append(token)
-        return matched, ''.join(quote(text_type(s)) for s in segments)
+        return matched, "".join(quote(text_type(s)) for s in segments)
 
 
 if __name__ == "__main__":
-    mapper = URLMapper('server')
+    mapper = URLMapper("server")
 
-    uploads_mapper = URLMapper('uploads')
-    media_mapper = URLMapper('media')
+    uploads_mapper = URLMapper("uploads")
+    media_mapper = URLMapper("media")
 
-    static_mapper = URLMapper('static')
-    static_mapper.map('/{*path}/', '#server', name="serve")
+    static_mapper = URLMapper("static")
+    static_mapper.map("/{*path}/", "#server", name="serve")
 
-    uploads_mapper.mount('/uploads/', static_mapper, name="uploads")
-    media_mapper.mount('/static/', static_mapper, name="static")
+    uploads_mapper.mount("/uploads/", static_mapper, name="uploads")
+    media_mapper.mount("/static/", static_mapper, name="static")
 
     uploads_mapper.render()
     media_mapper.render()
 
-    print(uploads_mapper.get_url('serve', {'path': "css/content.css"}))
-    #import rpdb2; rpdb2.start_embedded_debugger('password')
-    print(media_mapper.get_url('serve', {'path': "css/content.css"}))
+    print(uploads_mapper.get_url("serve", {"path": "css/content.css"}))
+    # import rpdb2; rpdb2.start_embedded_debugger('password')
+    print(media_mapper.get_url("serve", {"path": "css/content.css"}))

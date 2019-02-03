@@ -27,9 +27,11 @@ def compile_fs_template(fs, template_text, data=None, path=None):
     if data is None:
         data = {}
     template = Template(template_text)
-    template.re_special = re.compile(r'\{\{\%((?:\".*?\"|\'.*?\'|.|\s)*?)\%\}\}|(\{\{\#)|(\#\}\})')
-    context = Context(re_sub=r'\$\{\{(.*?)\}\}')
-    #with context.frame("data"):
+    template.re_special = re.compile(
+        r"\{\{\%((?:\".*?\"|\'.*?\'|.|\s)*?)\%\}\}|(\{\{\#)|(\#\}\})"
+    )
+    context = Context(re_sub=r"\$\{\{(.*?)\}\}")
+    # with context.frame("data"):
     fs_template = template.render(data, context=context)
 
     out_type = None
@@ -39,30 +41,33 @@ def compile_fs_template(fs, template_text, data=None, path=None):
     def write_file(filename, file_type):
         if filename:
             if file_type.lower() == "text":
-                with fs.open(filename, 'wt') as f:
-                    f.write('\n'.join(file_lines) + '\n')
+                with fs.open(filename, "wt") as f:
+                    f.write("\n".join(file_lines) + "\n")
             elif file_type.lower() == "wraptext":
                 import textwrap
-                with fs.open(filename, 'wt') as f:
+
+                with fs.open(filename, "wt") as f:
                     for line in file_lines:
-                        f.write('\n'.join(textwrap.wrap(line, 79)) + '\n')
+                        f.write("\n".join(textwrap.wrap(line, 79)) + "\n")
             elif file_type.lower() == "bin":
-                with fs.open(filename, 'wb') as f:
+                with fs.open(filename, "wb") as f:
                     for line in file_lines:
-                        chunk = b''.join(chr(int(a + b, 16)) for a, b in zip(line[::2], line[1::2]))
+                        chunk = b"".join(
+                            chr(int(a + b, 16)) for a, b in zip(line[::2], line[1::2])
+                        )
                         f.write(chunk)
 
             del file_lines[:]
 
     for line in fs_template.splitlines():
         line = line.rstrip()
-        if line.startswith('@'):
+        if line.startswith("@"):
             write_file(out_filename, out_type)
             out_filename = None
-            out_type, path_spec = line[1:].split(' ', 1)
+            out_type, path_spec = line[1:].split(" ", 1)
             if path:
                 path_spec = join(path, relpath(path_spec))
-            if path_spec.endswith('/'):
+            if path_spec.endswith("/"):
                 fs.makedirs(path_spec, recreate=True)
                 out_filename = None
             else:
@@ -102,7 +107,7 @@ Bob
     from fs.osfs import OSFS
     from fs.memoryfs import MemoryFS
 
-    fs = OSFS('__test__', create=True)
+    fs = OSFS("__test__", create=True)
     fs = MemoryFS()
     td = dict(message="Hello, World!", readme=True)
     compile_fs_template(fs, template, td)

@@ -4,9 +4,7 @@ import logging
 import sys
 import os.path
 from os.path import join as pathjoin
-from wsgiref.simple_server import (WSGIServer,
-                                   WSGIRequestHandler,
-                                   make_server)
+from wsgiref.simple_server import WSGIServer, WSGIRequestHandler, make_server
 
 from fs.opener import open_fs
 
@@ -20,7 +18,7 @@ if PY2:
 else:
     from _thread import interrupt_main
 
-log = logging.getLogger('moya.runtime')
+log = logging.getLogger("moya.runtime")
 
 
 class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
@@ -36,63 +34,94 @@ class RequestHandler(WSGIRequestHandler):
 
 class Serve(SubCommand):
     """Serve static files with moya.static"""
+
     help = "serve static files"
 
     def add_arguments(self, parser):
-        parser.add_argument(dest="fs", metavar="PATH",
-                            help="Path to serve")
-        parser.add_argument('--host', dest='host', default='127.0.0.1',
-                            help="server host")
-        parser.add_argument('-p', '--port', default='8000',
-                            help="server port")
-        parser.add_argument('-t', '--templates', dest="serve_templates", action="store_true",
-                            help="render and serve .html files as moya templates")
-        parser.add_argument('--develop', dest="develop", action="store_true",
-                            help="enable develop mode (to track down Python errors)")
-        parser.add_argument('-a', '--show-access', action="store_true",
-                            help="show access (permission) information")
-        parser.add_argument('-d', '--show-dot', action="store_true",
-                            help="do not hide dot files (beginning with a period)")
-        parser.add_argument('-s', '--show-debug', action="store_true",
-                            help="show additional debug information in directory list")
-        parser.add_argument('-l', '--show-links', action="store_true",
-                            help="show symlink target")
+        parser.add_argument(dest="fs", metavar="PATH", help="Path to serve")
+        parser.add_argument(
+            "--host", dest="host", default="127.0.0.1", help="server host"
+        )
+        parser.add_argument("-p", "--port", default="8000", help="server port")
+        parser.add_argument(
+            "-t",
+            "--templates",
+            dest="serve_templates",
+            action="store_true",
+            help="render and serve .html files as moya templates",
+        )
+        parser.add_argument(
+            "--develop",
+            dest="develop",
+            action="store_true",
+            help="enable develop mode (to track down Python errors)",
+        )
+        parser.add_argument(
+            "-a",
+            "--show-access",
+            action="store_true",
+            help="show access (permission) information",
+        )
+        parser.add_argument(
+            "-d",
+            "--show-dot",
+            action="store_true",
+            help="do not hide dot files (beginning with a period)",
+        )
+        parser.add_argument(
+            "-s",
+            "--show-debug",
+            action="store_true",
+            help="show additional debug information in directory list",
+        )
+        parser.add_argument(
+            "-l", "--show-links", action="store_true", help="show symlink target"
+        )
 
     @classmethod
-    def run_server(self, host, port, fs,
-                   serve_templates=False,
-                   develop=False,
-                   show_access=False,
-                   show_links=False,
-                   show_dot=True,
-                   debug=False):
+    def run_server(
+        self,
+        host,
+        port,
+        fs,
+        serve_templates=False,
+        develop=False,
+        show_access=False,
+        show_links=False,
+        show_dot=True,
+        debug=False,
+    ):
 
         from ...command.sub import project_serve
+
         location = os.path.dirname(project_serve.__file__)
 
-        init_logging(pathjoin(location, 'logging.ini'))
+        init_logging(pathjoin(location, "logging.ini"))
 
         if serve_templates:
-            ini = 'templatesettings.ini'
+            ini = "templatesettings.ini"
         else:
-            ini = 'settings.ini'
+            ini = "settings.ini"
 
         application = WSGIApplication(
-            location, ini, 'main', disable_autoreload=True, develop=develop)
-        application.archive.filesystems['static'] = fs
+            location, ini, "main", disable_autoreload=True, develop=develop
+        )
+        application.archive.filesystems["static"] = fs
         application.archive.debug = debug
-        static_app = application.archive.apps['static']
-        static_app.settings['show_permissions'] = show_access
-        static_app.settings['show_links'] = show_links
+        static_app = application.archive.apps["static"]
+        static_app.settings["show_permissions"] = show_access
+        static_app.settings["show_links"] = show_links
 
         if show_dot:
-            static_app.settings['hide'] = ''
+            static_app.settings["hide"] = ""
 
-        server = make_server(host,
-                             int(port),
-                             application,
-                             server_class=ThreadedWSGIServer,
-                             handler_class=RequestHandler)
+        server = make_server(
+            host,
+            int(port),
+            application,
+            server_class=ThreadedWSGIServer,
+            handler_class=RequestHandler,
+        )
         log.info("{} opened".format(fs))
         log.info("server started on http://{}:{}".format(host, port))
 
@@ -100,6 +129,7 @@ class Serve(SubCommand):
             _type, value, tb = sys.exc_info()
             if isinstance(value, KeyboardInterrupt):
                 interrupt_main()
+
         server.handle_error = handle_error
 
         try:

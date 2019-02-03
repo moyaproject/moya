@@ -25,19 +25,20 @@ class ViewMeta(type):
         view_class = type.__new__(cls, name, base, attrs)
         if name != "View":
             if not view_class.libname and not view_class.name:
-                raise errors.StartupFailedError("{!r} requires a 'name' or 'libname' attribute".format(view_class))
+                raise errors.StartupFailedError(
+                    "{!r} requires a 'name' or 'libname' attribute".format(view_class)
+                )
             libname = view_class.libname or "view.{}".format(view_class.name)
             exposed_elements[libname] = _ViewCallable(view_class)
         return view_class
 
 
 class ViewType(object):
-
     def __init__(self):
         pass
 
     def __call__(self, context):
-        request = context['.request']
+        request = context[".request"]
         verb = request.method.lower()
         method = getattr(self, verb, None)
         result = method(request)

@@ -24,7 +24,7 @@ from moya.response import MoyaResponse as Response
 from collections import namedtuple
 
 
-log = logging.getLogger('moya.jsonrpc')
+log = logging.getLogger("moya.jsonrpc")
 
 
 class ErrorCode(object):
@@ -36,23 +36,24 @@ class ErrorCode(object):
     invalid_params = -32602
     internal_error = -32603
 
-    to_str = {-32700: "Parse error",
-              -32600: "Invalid Request",
-              -32601: "Method not found",
-              -32602: "Invalid params",
-              -32603: "Internal error"}
+    to_str = {
+        -32700: "Parse error",
+        -32600: "Invalid Request",
+        -32601: "Method not found",
+        -32602: "Invalid params",
+        -32603: "Internal error",
+    }
 
 
-RPCErrorReturnBase = namedtuple('RPCErrorReturn', ["code", "message", "data"])
+RPCErrorReturnBase = namedtuple("RPCErrorReturn", ["code", "message", "data"])
 
 
 class RPCErrorReturn(RPCErrorReturnBase):
     def __moyarepr__(self, context):
         if self.message:
-            return '''<rpcerror #{}> "{}"'''.format(self.code,
-                                                    self.message)
+            return '''<rpcerror #{}> "{}"'''.format(self.code, self.message)
         else:
-            return '''<rpcerror #{}>'''.format(self.code)
+            return """<rpcerror #{}>""".format(self.code)
 
 
 class ParamError(Exception):
@@ -66,9 +67,9 @@ class MissingParam(ParamError):
 class InvalidParam(ParamError):
     def __init__(self, param, value):
         value_type = _get_type_name(value)
-        msg = "parameter '{}' should be type {}, not type {}".format(param.name,
-                                                                     param.type,
-                                                                     value_type)
+        msg = "parameter '{}' should be type {}, not type {}".format(
+            param.name, param.type, value_type
+        )
         super(InvalidParam, self).__init__(msg)
 
 
@@ -85,13 +86,13 @@ class Param(object):
     valid_param_types = ["string", "number", "bool", "list", "object", "anything"]
 
     def __init__(self, name, type, default=None, null=False, required=False, doc=None):
-        #assert type in self.valid_param_types
+        # assert type in self.valid_param_types
         self.name = name
         self.type = type
         self.default = default
         self.null = null
         self.required = required
-        self.doc = doc or ''
+        self.doc = doc or ""
         super(Param, self).__init__()
 
     def __repr__(self):
@@ -105,14 +106,14 @@ class Param(object):
         except KeyError:
             if self.required:
                 raise MissingParam("'{}' is a required parameter".format(self.name))
-            #return self.make_default(context)
+            # return self.make_default(context)
             return self.default
         if self.null and value is None:
             return value
-        return getattr(self, 'check_' + self.type)(value)
+        return getattr(self, "check_" + self.type)(value)
 
     def check(self, value):
-        return getattr(self, 'check_' + self.type)(value)
+        return getattr(self, "check_" + self.type)(value)
 
     # def make_default(self, context):
     #     try:
@@ -152,14 +153,25 @@ class Param(object):
 
 class Method(object):
     """A single exposed method"""
-    def __init__(self, name, group=None, element=None, macro=None, params=None, doc=None, description=None, **kwargs):
+
+    def __init__(
+        self,
+        name,
+        group=None,
+        element=None,
+        macro=None,
+        params=None,
+        doc=None,
+        description=None,
+        **kwargs
+    ):
         self._name = name
         self.group = group
         self.element = element
         self.macro = macro
-        self.params = sorted(params.values(), key=attrgetter('name'))
-        self.doc = doc or ''
-        self.description = description or ''
+        self.params = sorted(params.values(), key=attrgetter("name"))
+        self.doc = doc or ""
+        self.description = description or ""
 
     @property
     def name(self):
@@ -173,7 +185,7 @@ class Method(object):
         return self._name
 
     def __repr__(self):
-        return "<method \"{}\" {}>".format(self.name, self.element.libid)
+        return '<method "{}" {}>'.format(self.name, self.element.libid)
 
     def process_params(self, context, req_params):
         processed_params = {}
@@ -200,8 +212,7 @@ class SuccessResponse(RPCResponse):
         super(SuccessResponse, self).__init__()
 
     def __moyajson__(self):
-        response = {"jsonrpc": "2.0",
-                    "result": self.result}
+        response = {"jsonrpc": "2.0", "result": self.result}
         if self.id is not None:
             response["id"] = self.id
         return response
@@ -219,22 +230,18 @@ class ErrorResponse(RPCResponse):
         super(ErrorResponse, self).__init__()
 
     def __repr__(self):
-        return "ErrorResponse({!r}, {!r}, {!r}, {!r})".format(self.code,
-                                                              self.message,
-                                                              self.data,
-                                                              self.id)
+        return "ErrorResponse({!r}, {!r}, {!r}, {!r})".format(
+            self.code, self.message, self.data, self.id
+        )
 
     def __moyarepr__(self, context):
         return '<rpcerror #{}> "{}"'.format(self.code, self.message)
 
     def __moyajson__(self):
-        error = {"code": self.code,
-                 "message": self.message}
+        error = {"code": self.code, "message": self.message}
         if self.data is not None:
             error["data"] = self.data
-        response = {"jsonrpc": "2.0",
-                    "id": self.id,
-                    "error": error}
+        response = {"jsonrpc": "2.0", "id": self.id, "error": error}
         return response
 
 
@@ -249,10 +256,8 @@ class InvalidResponse(RPCResponse):
         return "InvalidResponse({!r})".format(self.message)
 
     def __moyajson__(self):
-        error = {"code": self.code,
-                 "message": self.message}
-        response = {"jsonrpc": "2.0",
-                    "error": error}
+        error = {"code": self.code, "message": self.message}
+        response = {"jsonrpc": "2.0", "error": error}
         return response
 
 
@@ -278,10 +283,16 @@ def _get_type_name(obj):
 
 class Interface(LogicElement):
     """Creates a JSON RPC interface."""
-    xmlns = namespaces.jsonrpc
-    preserve_attributes = ['_methods']
 
-    errors = Attribute("Optional <enum> of error codes", type="elementref", required=False, default=None)
+    xmlns = namespaces.jsonrpc
+    preserve_attributes = ["_methods"]
+
+    errors = Attribute(
+        "Optional <enum> of error codes",
+        type="elementref",
+        required=False,
+        default=None,
+    )
 
     class Meta:
         trap_exceptions = True
@@ -316,68 +327,82 @@ class Interface(LogicElement):
             requests = req
 
         if not isinstance(requests, list):
-            yield ErrorResponse(ErrorCode.invalid_request,
-                                "Invalid request - list or object expected",
-                                id=None)
+            yield ErrorResponse(
+                ErrorCode.invalid_request,
+                "Invalid request - list or object expected",
+                id=None,
+            )
             return
 
         if not requests:
-            yield ErrorResponse(ErrorCode.invalid_request,
-                                "Invalid request",
-                                id=None)
+            yield ErrorResponse(ErrorCode.invalid_request, "Invalid request", id=None)
             return
 
-        jsonrpc = context['.jsonrpc']
+        jsonrpc = context[".jsonrpc"]
         for req in requests:
-            jsonrpc['request'] = req
+            jsonrpc["request"] = req
             if not isinstance(req, dict):
-                yield ErrorResponse(ErrorCode.invalid_request,
-                                    "Invalid request - object expected",
-                                    id=None)
+                yield ErrorResponse(
+                    ErrorCode.invalid_request,
+                    "Invalid request - object expected",
+                    id=None,
+                )
                 continue
-            notification = 'id' not in req
+            notification = "id" not in req
             if notification:
                 req_id = None
             else:
-                req_id = req['id']
+                req_id = req["id"]
 
-            if 'jsonrpc' not in req:
-                yield error_response(ErrorCode.invalid_request,
-                                     "Invalid request - value for 'jsonrpc' expected",
-                                     id=req_id)
+            if "jsonrpc" not in req:
+                yield error_response(
+                    ErrorCode.invalid_request,
+                    "Invalid request - value for 'jsonrpc' expected",
+                    id=req_id,
+                )
                 continue
 
-            jsonrpc_version = req['jsonrpc']
-            if jsonrpc_version != '2.0':
-                yield error_response(ErrorCode.invalid_request,
-                                     "Invalid request - this server supports only JSON-RPC specification 2.0 (see http://www.jsonrpc.org/specification)",
-                                     id=req_id)
+            jsonrpc_version = req["jsonrpc"]
+            if jsonrpc_version != "2.0":
+                yield error_response(
+                    ErrorCode.invalid_request,
+                    "Invalid request - this server supports only JSON-RPC specification 2.0 (see http://www.jsonrpc.org/specification)",
+                    id=req_id,
+                )
                 continue
 
-            params = req.get('params', {})
+            params = req.get("params", {})
             if not isinstance(params, dict):
-                yield error_response(ErrorCode.invalid_params,
-                                     "Invalid params - this server only supports parameters by-name",
-                                     id=req_id)
+                yield error_response(
+                    ErrorCode.invalid_params,
+                    "Invalid params - this server only supports parameters by-name",
+                    id=req_id,
+                )
                 continue
 
             try:
-                method_name = req['method']
+                method_name = req["method"]
             except KeyError:
-                yield error_response(ErrorCode.invalid_request,
-                                     "Invalid request - value for 'method' expected",
-                                     id=req_id)
+                yield error_response(
+                    ErrorCode.invalid_request,
+                    "Invalid request - value for 'method' expected",
+                    id=req_id,
+                )
                 continue
 
             if not isinstance(method_name, string_types):
-                yield error_response(ErrorCode.invalid_request,
-                                     "Invalid request - 'method' should be a string")
+                yield error_response(
+                    ErrorCode.invalid_request,
+                    "Invalid request - 'method' should be a string",
+                )
                 continue
 
             if method_name not in self._methods:
-                yield error_response(ErrorCode.method_not_found,
-                                     "Method not found - no method called '{}'".format(method_name),
-                                     id=req_id)
+                yield error_response(
+                    ErrorCode.method_not_found,
+                    "Method not found - no method called '{}'".format(method_name),
+                    id=req_id,
+                )
                 continue
 
             method = self._methods[method_name]
@@ -389,28 +414,28 @@ class Interface(LogicElement):
 
     def run(self, context):
         """Generate a response for either a GET or a POST"""
-        request = context['.request']
-        app = context.get('.app', None)
+        request = context[".request"]
+        app = context.get(".app", None)
         interface_id = "<interface {}#{}>".format(app.name, self.libname)
 
         if request.method == "GET":
-            render_container = RenderContainer.create(app,
-                                                      template="moya.jsonrpc/interface.html")
-            render_container['interface'] = self
-            context['_return'] = render_container
+            render_container = RenderContainer.create(
+                app, template="moya.jsonrpc/interface.html"
+            )
+            render_container["interface"] = self
+            context["_return"] = render_container
             return
         if request.method != "POST":
             return
-        context['.jsonrpc'] = {"request": {}}
+        context[".jsonrpc"] = {"request": {}}
 
         try:
-            req = json.loads(request.body.decode('utf-8'))
+            req = json.loads(request.body.decode("utf-8"))
         except Exception as e:
             log.debug("%s badly formatted JSONRPC request: %s", interface_id, e)
-            response = self.make_error(None,
-                                       False,
-                                       code=ErrorCode.parse_error,
-                                       message=text_type(e))
+            response = self.make_error(
+                None, False, code=ErrorCode.parse_error, message=text_type(e)
+            )
             raise logic.EndLogic(response)
 
         batch = isinstance(req, list)
@@ -427,60 +452,76 @@ class Interface(LogicElement):
                 # Request good, do call
                 method, params, req_id, notification = response
 
-                log.debug("%s %s '%s' with %s",
-                          interface_id,
-                          'notify' if notification else 'call',
-                          method.name,
-                          lazystr(to_expression, context, params, 80))
+                log.debug(
+                    "%s %s '%s' with %s",
+                    interface_id,
+                    "notify" if notification else "call",
+                    method.name,
+                    lazystr(to_expression, context, params, 80),
+                )
 
                 try:
                     params = response.method.process_params(context, params)
                 except ParamError as e:
-                    response = ErrorResponse(ErrorCode.invalid_params,
-                                             text_type(e),
-                                             id=req_id)
+                    response = ErrorResponse(
+                        ErrorCode.invalid_params, text_type(e), id=req_id
+                    )
                     self.log_result(context, response)
                     responses.append(response)
                     continue
 
                 def do_call(element, app, params):
                     try:
-                        return_value = self.archive.call(element.libid, context, app, **params)
+                        return_value = self.archive.call(
+                            element.libid, context, app, **params
+                        )
                     except Exception as e:
-                        if isinstance(getattr(e, 'original', None), MoyaException):
+                        if isinstance(getattr(e, "original", None), MoyaException):
                             moya_exc = e.original
                             if moya_exc.type == "jsonrpc.error":
-                                return RPCErrorReturn(moya_exc.info['code'],
-                                                      moya_exc.info['message'],
-                                                      moya_exc.info['data'])
-                        error_message = "exception '{}' in rpc call to {}".format(e, method)
-                        if hasattr(e, 'moya_trace'):
+                                return RPCErrorReturn(
+                                    moya_exc.info["code"],
+                                    moya_exc.info["message"],
+                                    moya_exc.info["data"],
+                                )
+                        error_message = "exception '{}' in rpc call to {}".format(
+                            e, method
+                        )
+                        if hasattr(e, "moya_trace"):
                             log.error(error_message)
-                            if context['.debug'] and context['.console']:
-                                context['.console'].obj(context, e)
+                            if context[".debug"] and context[".console"]:
+                                context[".console"].obj(context, e)
                             else:
-                                error_message = "{}\n{}".format(error_message, e.moya_trace)
+                                error_message = "{}\n{}".format(
+                                    error_message, e.moya_trace
+                                )
                                 log.error(error_message)
                         else:
-                            context['.console'].obj(context, e)
+                            context[".console"].obj(context, e)
                             log.exception(error_message)
-                        response = ErrorResponse(ErrorCode.internal_error,
-                                                 'internal error -- this error has been logged',
-                                                 id=req_id)
+                        response = ErrorResponse(
+                            ErrorCode.internal_error,
+                            "internal error -- this error has been logged",
+                            id=req_id,
+                        )
                         return response
                     else:
                         return return_value
 
                 return_value = do_call(method.element, app, params)
 
-                if method.macro is not None and not isinstance(return_value, (RPCResponse, RPCErrorReturn)):
+                if method.macro is not None and not isinstance(
+                    return_value, (RPCResponse, RPCErrorReturn)
+                ):
                     try:
                         macro_app, macro_element = self.get_element(method.macro, app)
                     except Exception as e:
                         log.error("%s no macro called '%s'", interface_id, method.macro)
-                        return_value = ErrorResponse(ErrorCode.internal_error,
-                                                     "internal error -- this error has been logged",
-                                                     id=req_id)
+                        return_value = ErrorResponse(
+                            ErrorCode.internal_error,
+                            "internal error -- this error has been logged",
+                            id=req_id,
+                        )
                     else:
                         return_value = do_call(macro_element, app, params)
 
@@ -502,7 +543,11 @@ class Interface(LogicElement):
                             if not message:
                                 message = self.errors[code].description
                         except Exception as e:
-                            log.error("invalid error code '{}' -- defaulting to 'internal_error'".format(code))
+                            log.error(
+                                "invalid error code '{}' -- defaulting to 'internal_error'".format(
+                                    code
+                                )
+                            )
                             code = ErrorCode.internal_error
                             message = ErrorCode.to_str[code]
 
@@ -515,9 +560,11 @@ class Interface(LogicElement):
                         moyajson.dumps(return_value)
                     except Exception as e:
                         log.error(text_type(e))
-                        response = ErrorResponse(ErrorCode.internal_error,
-                                                 'internal error -- server was unable to serialize the response',
-                                                 id=req_id)
+                        response = ErrorResponse(
+                            ErrorCode.internal_error,
+                            "internal error -- server was unable to serialize the response",
+                            id=req_id,
+                        )
                         self.log_result(context, response)
                     else:
                         response = SuccessResponse(return_value, req_id)
@@ -526,7 +573,11 @@ class Interface(LogicElement):
                 responses.append(response)
 
         if not responses:
-            raise logic.EndLogic(Response(content_type=b'application/json' if PY2 else 'application/json'))
+            raise logic.EndLogic(
+                Response(
+                    content_type=b"application/json" if PY2 else "application/json"
+                )
+            )
 
         try:
             if batch:
@@ -535,43 +586,64 @@ class Interface(LogicElement):
                 response_json = moyajson.dumps(responses[0], indent=4)
         except Exception as e:
             log.exception("error serializing response")
-            error_response = ErrorResponse(ErrorCode.internal_error,
-                                           "server was unable to generate a response -- this error has been logged",
-                                           id=None)
+            error_response = ErrorResponse(
+                ErrorCode.internal_error,
+                "server was unable to generate a response -- this error has been logged",
+                id=None,
+            )
             response_json = moyajson.dumps(error_response)
 
-        response = Response(content_type=b'application/json' if PY2 else 'application/json',
-                            body=response_json)
+        response = Response(
+            content_type=b"application/json" if PY2 else "application/json",
+            body=response_json,
+        )
 
         raise logic.EndLogic(response)
         yield  # Because this method should be a generator
 
-    def register_method(self, name, element, macro=None, group=None, params=None, doc=None, description=None, **kwargs):
+    def register_method(
+        self,
+        name,
+        element,
+        macro=None,
+        group=None,
+        params=None,
+        doc=None,
+        description=None,
+        **kwargs
+    ):
         """Register an exposed method"""
-        method = Method(name,
-                        element=element,
-                        group=group,
-                        macro=macro,
-                        params=params,
-                        doc=doc,
-                        description=description,
-                        **kwargs)
+        method = Method(
+            name,
+            element=element,
+            group=group,
+            macro=macro,
+            params=params,
+            doc=doc,
+            description=description,
+            **kwargs
+        )
         self._methods[method.name] = method
 
     @property
     def methods(self):
         """Get a list of exposed methods"""
-        return [self._methods[name]
-                for name in sorted(self._methods.keys())]
+        return [self._methods[name] for name in sorted(self._methods.keys())]
 
     @property
     def methods_by_group(self):
         """Get a list of methods arranged by group"""
-        methods = sorted(self._methods.values(), key=lambda m: (m.group, m.base_name.lower()) or '')
-        return [(group, list(_methods))
-                for group, _methods in itertools.groupby(methods, key=lambda m: m.group)]
+        methods = sorted(
+            self._methods.values(), key=lambda m: (m.group, m.base_name.lower()) or ""
+        )
+        return [
+            (group, list(_methods))
+            for group, _methods in itertools.groupby(methods, key=lambda m: m.group)
+        ]
 
-    def make_error(self, call_id, notification, code=ErrorCode.internal_error, message=None):
+    def make_error(
+        self, call_id, notification, code=ErrorCode.internal_error, message=None
+    ):
         """Make a JSON-RPC error response"""
         if notification:
             return Response()
@@ -579,38 +651,46 @@ class Interface(LogicElement):
             message = ErrorCode.to_str.get(code, None)
             if message is None:
                 message = "unknown error"
-        error = {"code": code,
-                 "message": message}
-        response = {"jsonrpc": "2.0",
-                    "error": error,
-                    "id": call_id}
+        error = {"code": code, "message": message}
+        response = {"jsonrpc": "2.0", "error": error, "id": call_id}
         response_json = json.dumps(response, indent=4)
-        return Response(content_type=b'application/json' if PY2 else 'application/json',
-                        body=response_json)
+        return Response(
+            content_type=b"application/json" if PY2 else "application/json",
+            body=response_json,
+        )
 
 
 class Error(LogicElement):
     """Return an rpc error response."""
+
     xmlns = namespaces.jsonrpc
 
     class Help:
         synopsis = "return an rpc error"
 
     code = Attribute("Error code", default="0", map_to="error_code")
-    data = Attribute("Optional data regarding the error", type="expression", default=None, required=False)
+    data = Attribute(
+        "Optional data regarding the error",
+        type="expression",
+        default=None,
+        required=False,
+    )
 
     def logic(self, context):
-        code, data = self.get_parameters(context, 'error_code', 'data')
+        code, data = self.get_parameters(context, "error_code", "data")
         error_message = context.sub(self.text.strip())
-        self.throw('jsonrpc.error',
-                   'JSON RPC error',
-                   code=code,
-                   message=error_message,
-                   data=data)
+        self.throw(
+            "jsonrpc.error",
+            "JSON RPC error",
+            code=code,
+            message=error_message,
+            data=data,
+        )
 
 
 class SignatureTag(ElementBase):
     """Contains RPC signature"""
+
     xmlns = namespaces.jsonrpc
     _element_class = "data"
 
@@ -621,10 +701,11 @@ class SignatureTag(ElementBase):
 
 class ParameterTag(ElementBase):
     """Defines a parameter in an RPC call."""
+
     xmlns = namespaces.jsonrpc
     _element_class = "data"
 
-    _param_types = ['number', "string", "bool", "list", "object", "anything"]
+    _param_types = ["number", "string", "bool", "list", "object", "anything"]
 
     class Help:
         synopsis = "define an rpc parameter"
@@ -639,16 +720,26 @@ class ParameterTag(ElementBase):
         logic_skip = True
 
     name = Attribute("Name of the parameter", required=True)
-    type = Attribute("Parameter type (number, string, bool, list, object, anything)", required=False, default="anything")
-    null = Attribute("Also permit a null value? (None in Moya)", required=False, default=False)
+    type = Attribute(
+        "Parameter type (number, string, bool, list, object, anything)",
+        required=False,
+        default="anything",
+    )
+    null = Attribute(
+        "Also permit a null value? (None in Moya)", required=False, default=False
+    )
     default = Attribute("Default value", type="expression", required=False)
     required = Attribute("Required?", type="boolean", required=False, default=True)
 
     def finalize(self, context):
         type = self.type(context)
         if type not in self._param_types:
-            raise errors.ElementError("attribute '{}' must be {} (not '{}') ".format('type', textual_list(self._param_types), type),
-                                      element=self)
+            raise errors.ElementError(
+                "attribute '{}' must be {} (not '{}') ".format(
+                    "type", textual_list(self._param_types), type
+                ),
+                element=self,
+            )
 
 
 class MethodTag(LogicElement):
@@ -659,6 +750,7 @@ class MethodTag(LogicElement):
 
 
     """
+
     xmlns = namespaces.jsonrpc
 
     class Meta:
@@ -679,39 +771,40 @@ class MethodTag(LogicElement):
     interface = Attribute("Interface", type="elementref", required=False, default=None)
     name = Attribute("Name of exposed method", required=True)
     group = Attribute("Method group", required=False, default=None)
-    description = Attribute("Brief description of method", required=False, default='')
-    call = Attribute("Macro to call for functionality", type="elementref", required=False, default=None)
+    description = Attribute("Brief description of method", required=False, default="")
+    call = Attribute(
+        "Macro to call for functionality",
+        type="elementref",
+        required=False,
+        default=None,
+    )
 
     def run(self, context):
         yield logic.DeferNodeContents(self)
 
     def lib_finalize(self, context):
-        (interface,
-         call_macro,
-         name,
-         group,
-         description) = self.get_parameters(context,
-                                            'interface',
-                                            'call',
-                                            'name',
-                                            'group',
-                                            'description')
+        (interface, call_macro, name, group, description) = self.get_parameters(
+            context, "interface", "call", "name", "group", "description"
+        )
 
         if interface is None:
             try:
                 interface = self.get_ancestor((namespaces.jsonrpc, "interface"))
             except:
-                raise errors.ElementError("this tag must be inside an <interface>, or specify the 'interface' attribute",
-                                          element=self)
+                raise errors.ElementError(
+                    "this tag must be inside an <interface>, or specify the 'interface' attribute",
+                    element=self,
+                )
         else:
             try:
                 interface = self.get_element(interface).element
             except:
-                raise errors.ElementError("element '{}' isn't an <interface>".format(interface),
-                                          element=self)
+                raise errors.ElementError(
+                    "element '{}' isn't an <interface>".format(interface), element=self
+                )
 
         params = {}
-        for sig_tag in self.children((namespaces.jsonrpc, 'signature')):
+        for sig_tag in self.children((namespaces.jsonrpc, "signature")):
             param_tags = sig_tag.children((namespaces.jsonrpc, "parameter"))
             break
         else:
@@ -719,27 +812,22 @@ class MethodTag(LogicElement):
 
         for param_tag in param_tags:
             try:
-                (param_name,
-                 _type,
-                 default,
-                 null,
-                 required) = param_tag.get_parameters(context,
-                                                      'name',
-                                                      'type',
-                                                      'default',
-                                                      'null',
-                                                      'required')
+                (param_name, _type, default, null, required) = param_tag.get_parameters(
+                    context, "name", "type", "default", "null", "required"
+                )
             except Exception as e:
                 raise errors.ElementError(text_type(e), element=param_tag)
-            if param_tag.has_parameter('default'):
+            if param_tag.has_parameter("default"):
                 required = False
             doc = context.sub(param_tag.text.strip())
-            _param = params[param_name] = Param(param_name,
-                                                _type,
-                                                default=default,
-                                                required=required,
-                                                null=null,
-                                                doc=doc)
+            _param = params[param_name] = Param(
+                param_name,
+                _type,
+                default=default,
+                required=required,
+                null=null,
+                doc=doc,
+            )
             # if not required:
             #     try:
             #         _param.make_default(context)
@@ -747,20 +835,22 @@ class MethodTag(LogicElement):
             #         raise errors.ElementError("default '{}' is invalid for type '{}'".format(default, _type),
             #                                   element=param_tag)
 
-        doc = self.get_child('doc')
+        doc = self.get_child("doc")
         if doc is not None:
             doc_text = context.sub(doc.text)
             doc_text = textwrap.dedent(doc_text)
         else:
             doc_text = None
 
-        interface.register_method(name,
-                                  self,
-                                  macro=call_macro,
-                                  group=group,
-                                  params=params,
-                                  description=description,
-                                  doc=doc_text)
+        interface.register_method(
+            name,
+            self,
+            macro=call_macro,
+            group=group,
+            params=params,
+            description=description,
+            doc=doc_text,
+        )
 
     def invoke(self, context):
         pass

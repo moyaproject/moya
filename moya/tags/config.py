@@ -21,14 +21,20 @@ from time import time
 import pytz
 
 import logging
-log = logging.getLogger('moya.runtime')
-startup_log = logging.getLogger('moya.startup')
-runtime_log = logging.getLogger('moya.runtime')
+
+log = logging.getLogger("moya.runtime")
+startup_log = logging.getLogger("moya.startup")
+runtime_log = logging.getLogger("moya.runtime")
 
 
 class Moya(ElementBase):
     """This is the root element for Moya files."""
-    version = Attribute("""version number of this Moya file (currently ignored, if supplied use "1.0")""", type="version", required=False,)
+
+    version = Attribute(
+        """version number of this Moya file (currently ignored, if supplied use "1.0")""",
+        type="version",
+        required=False,
+    )
 
     class Help:
         synopsis = """begin a Moya file"""
@@ -41,7 +47,6 @@ class Moya(ElementBase):
 
 
 class ConfigElement(ElementBase):
-
     class Help:
         undocumented = True
 
@@ -114,32 +119,42 @@ class Import(LogicElement):
         synopsis = """import a library"""
 
     class Meta:
-        oneof = ['location', 'py', 'lib']
+        oneof = ["location", "py", "lib"]
 
     name = Attribute("Name of the library")
     lib = Attribute("Library to import e.g. acme.blog==0.1.0")
     location = Attribute("A path to a Moya library")
     py = Attribute("Python import, e.g. widgets.moya.widgetapp")
-    priority = Attribute("Priority for elements", type="integer", required=False, default=None)
-    templatepriority = Attribute("Priority for templates", type="integer", required=False, default=None)
-    datapriority = Attribute("Priority for library data", type="integer", required=False, default=None)
+    priority = Attribute(
+        "Priority for elements", type="integer", required=False, default=None
+    )
+    templatepriority = Attribute(
+        "Priority for templates", type="integer", required=False, default=None
+    )
+    datapriority = Attribute(
+        "Priority for library data", type="integer", required=False, default=None
+    )
 
     def logic(self, context):
         start = time()
-        (name,
-         _location,
-         lib,
-         py,
-         priority,
-         template_priority,
-         data_priority) = self.get_parameters(context,
-                                              'name',
-                                              'location',
-                                              'lib',
-                                              'py',
-                                              'priority',
-                                              'templatepriority',
-                                              'datapriority')
+        (
+            name,
+            _location,
+            lib,
+            py,
+            priority,
+            template_priority,
+            data_priority,
+        ) = self.get_parameters(
+            context,
+            "name",
+            "location",
+            "lib",
+            "py",
+            "priority",
+            "templatepriority",
+            "datapriority",
+        )
         if template_priority is None:
             template_priority = priority
         archive = self.document.archive
@@ -151,9 +166,8 @@ class Import(LogicElement):
                 self.throw(
                     "import.fail",
                     "lib '{}' not found; searched {}".format(
-                        lib,
-                        tools.textual_list(archive.lib_paths, join_word='and')
-                    )
+                        lib, tools.textual_list(archive.lib_paths, join_word="and")
+                    ),
                 )
         elif _location is not None:
             location = _location
@@ -163,58 +177,78 @@ class Import(LogicElement):
             try:
                 __import__(py)
             except ImportError as e:
-                raise errors.ElementError("unable to import Python module '{}'".format(py),
-                                          element=self,
-                                          diagnosis=text_type(e))
+                raise errors.ElementError(
+                    "unable to import Python module '{}'".format(py),
+                    element=self,
+                    diagnosis=text_type(e),
+                )
             module = sys.modules[py]
             location = dirname(abspath(module.__file__))
             absolute = True
 
         try:
             if import_fs is None:
-                if '::/' in location:
+                if "::/" in location:
                     import_fs = open_fs(location)
                 else:
                     if absolute:
                         import_fs = open_fs(location)
                     else:
-                        project_fs = context['fs']
+                        project_fs = context["fs"]
                         try:
-                            if project_fs.hassyspath('/'):
-                                project_path = project_fs.getsyspath('/')
+                            if project_fs.hassyspath("/"):
+                                project_path = project_fs.getsyspath("/")
                                 import_path = join(project_path, location)
                                 try:
                                     import_fs = open_fs(import_path)
                                 except ResourceNotFound:
-                                    self.throw("import.fail",
-                                               "location '{}' was not found".format(import_path),
-                                               diagnosis="Check the location is exists and is a directory.")
+                                    self.throw(
+                                        "import.fail",
+                                        "location '{}' was not found".format(
+                                            import_path
+                                        ),
+                                        diagnosis="Check the location is exists and is a directory.",
+                                    )
                             else:
-                                import_fs = context['fs'].opendir(location)
+                                import_fs = context["fs"].opendir(location)
                         except (IllegalBackReference, FSError) as e:
-                            self.throw("import.fail",
-                                       "unable to import location '{}' from {}".format(location, project_fs),
-                                       diagnosis=text_type(e))
-            lib = archive.load_library(import_fs,
-                                       priority=priority,
-                                       template_priority=template_priority,
-                                       data_priority=data_priority,
-                                       long_name=name,
-                                       rebuild=context.root.get('_rebuild', False))
+                            self.throw(
+                                "import.fail",
+                                "unable to import location '{}' from {}".format(
+                                    location, project_fs
+                                ),
+                                diagnosis=text_type(e),
+                            )
+            lib = archive.load_library(
+                import_fs,
+                priority=priority,
+                template_priority=template_priority,
+                data_priority=data_priority,
+                long_name=name,
+                rebuild=context.root.get("_rebuild", False),
+            )
             if lib.failed_documents:
                 if _location is not None:
                     msg = "Failed to load library '{}' from location '{}'"
-                    raise errors.StartupFailedError(msg.format(name or lib.long_name, _location))
+                    raise errors.StartupFailedError(
+                        msg.format(name or lib.long_name, _location)
+                    )
                 elif py:
                     msg = "Failed to load library '{}' from Python module '{}'"
-                    raise errors.StartupFailedError(msg.format(name or lib.long_name, py))
+                    raise errors.StartupFailedError(
+                        msg.format(name or lib.long_name, py)
+                    )
                 else:
-                    raise errors.StartupFailedError("Failed to load library '{}'".format(name or lib.long_name))
+                    raise errors.StartupFailedError(
+                        "Failed to load library '{}'".format(name or lib.long_name)
+                    )
             startup_log.debug("%s imported %.1fms", lib, (time() - start) * 1000.0)
             if lib.priority:
                 startup_log.debug("%s priority is %s", lib, lib.priority)
             if lib.template_priority:
-                startup_log.debug("%s template priority is %s", lib, lib.template_priority)
+                startup_log.debug(
+                    "%s template priority is %s", lib, lib.template_priority
+                )
         except Exception as e:
             if not self.archive.test_build:
                 raise
@@ -233,11 +267,17 @@ class Install(LogicElement):
         """
 
     lib = Attribute("Library long name (e.g. moya.auth)", required=True)
-    name = Attribute("Name of the application (must not contain a dot), e.g. \"auth\"", required=True)
-    mount = Attribute("URL component to mount, e.g. \"auth\"")
-    mountpoint = Attribute("Name of the <mountpoint> tag", required=False, default="main")
-    urlpriority = Attribute("Priority for URLs in mountpoint", type="integer", required=False, default=0)
-    server = Attribute('Server object', type="expression", required=False, default=None)
+    name = Attribute(
+        'Name of the application (must not contain a dot), e.g. "auth"', required=True
+    )
+    mount = Attribute('URL component to mount, e.g. "auth"')
+    mountpoint = Attribute(
+        "Name of the <mountpoint> tag", required=False, default="main"
+    )
+    urlpriority = Attribute(
+        "Priority for URLs in mountpoint", type="integer", required=False, default=0
+    )
+    server = Attribute("Server object", type="expression", required=False, default=None)
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -254,29 +294,45 @@ class Install(LogicElement):
             except errors.ArchiveError as e:
                 raise errors.ElementError(text_type(e))
             if app.lib.failed_documents:
-                raise errors.StartupFailedError("Unable to import lib '%s'" % params.lib)
+                raise errors.StartupFailedError(
+                    "Unable to import lib '%s'" % params.lib
+                )
 
             if params.mount:
-                server = params.server or self.get_ancestor('server')
+                server = params.server or self.get_ancestor("server")
                 try:
-                    mountpoint = app.lib.get_element_by_type_and_attribute("mountpoint", "name", params.mountpoint)
+                    mountpoint = app.lib.get_element_by_type_and_attribute(
+                        "mountpoint", "name", params.mountpoint
+                    )
                 except errors.ElementNotFoundError:
                     return
-                    raise errors.StartupFailedError("No mountpoint called '{0}' in {1}".format(params.mountpoint, app.lib))
+                    raise errors.StartupFailedError(
+                        "No mountpoint called '{0}' in {1}".format(
+                            params.mountpoint, app.lib
+                        )
+                    )
                 app.mounts.append((params.mountpoint, params.mount))
-                server.urlmapper.mount(params.mount,
-                                       mountpoint.urlmapper,
-                                       defaults={'app': app.name},
-                                       name=params.name,
-                                       priority=params.urlpriority)
+                server.urlmapper.mount(
+                    params.mount,
+                    mountpoint.urlmapper,
+                    defaults={"app": app.name},
+                    name=params.name,
+                    priority=params.urlpriority,
+                )
 
                 for stage, urlmapper in iteritems(server.middleware):
-                    urlmapper.mount(params.mount,
-                                    mountpoint.middleware[stage],
-                                    defaults={'app': app.name},
-                                    name=params.name,
-                                    priority=params.urlpriority)
-                startup_log.debug("%s installed, mounted on %s", app, tools.normalize_url_path(params.mount))
+                    urlmapper.mount(
+                        params.mount,
+                        mountpoint.middleware[stage],
+                        defaults={"app": app.name},
+                        name=params.name,
+                        priority=params.urlpriority,
+                    )
+                startup_log.debug(
+                    "%s installed, mounted on %s",
+                    app,
+                    tools.normalize_url_path(params.mount),
+                )
             else:
                 startup_log.debug("%s installed", app)
         except:
@@ -308,21 +364,18 @@ class Log(LogicElement):
         "warn": 30,
         "warning": 30,
         "error": 40,
-        "fatal": 50
+        "fatal": 50,
     }
     _default_level = "info"
 
-    level = Attribute('''Logging level''',
-                      required=False,
-                      default=None,
-                      choices=_levels.keys())
-    logger = Attribute("Logger to write to",
-                       default=None,
-                       required=False)
+    level = Attribute(
+        """Logging level""", required=False, default=None, choices=_levels.keys()
+    )
+    logger = Attribute("Logger to write to", default=None, required=False)
 
     def logic(self, context):
         text = textwrap.dedent(context.sub(self.text))
-        _level, _logger = self.get_parameters(context, 'level', 'logger')
+        _level, _logger = self.get_parameters(context, "level", "logger")
         _level = _level or self._default_level
         if _level.isdigit():
             level = int(_level)
@@ -331,11 +384,11 @@ class Log(LogicElement):
         if _logger:
             log = logging.getLogger(_logger)
         else:
-            app_name = context.get('.app.name', None)
+            app_name = context.get(".app.name", None)
             if app_name is None:
                 log = runtime_log
             else:
-                log = logging.getLogger('moya.app.{}'.format(app_name))
+                log = logging.getLogger("moya.app.{}".format(app_name))
         for line in text.splitlines():
             if line:
                 log.log(level, line)
@@ -343,6 +396,7 @@ class Log(LogicElement):
 
 class LogDebug(Log):
     """See [tag]log[/tag]"""
+
     _default_level = "debug"
 
     class Help:
@@ -351,6 +405,7 @@ class LogDebug(Log):
 
 class LogInfo(Log):
     """See [tag]log[/tag]"""
+
     _default_level = "info"
 
     class Help:
@@ -359,6 +414,7 @@ class LogInfo(Log):
 
 class LogWarn(Log):
     """See [tag]log[/tag]"""
+
     _default_level = "warn"
 
     class Help:
@@ -367,6 +423,7 @@ class LogWarn(Log):
 
 class LogError(Log):
     """See [tag]log[/tag]"""
+
     _default_level = "error"
 
     class Help:
@@ -375,6 +432,7 @@ class LogError(Log):
 
 class LogFatal(Log):
     """See [tag]log[/tag]"""
+
     _default_level = "fatal"
 
     class Help:
@@ -403,8 +461,8 @@ class Choices(ElementBase):
     def finalize(self, context):
         self.choices = choices = []
         append = choices.append
-        for choice in self.get_children('choice'):
-            value, label = choice.get_parameters(context, 'value', 'label')
+        for choice in self.get_children("choice"):
+            value, label = choice.get_parameters(context, "value", "label")
             if not label:
                 label = context.sub(choice.text)
             append((value, label))
@@ -428,13 +486,13 @@ class GetChoices(DataSetter):
     Get choice data from a [tag]choices[/tag] tag
 
     """
+
     choices = Attribute("Choices element", type="elementref", required="yes")
     _from = Attribute("Application", type="application", required=False, default=None)
 
-
     def get_value(self, context):
-        app, choices = self.get_parameters(context, 'from', 'choices')
-        app = app or context['.app']
+        app, choices = self.get_parameters(context, "from", "choices")
+        app = app or context[".app"]
         _app, choices_el = app.get_element(choices)
         return choices_el.choices
 
@@ -446,8 +504,11 @@ class Enum(ElementBase):
     You can retrieve an enumeration object with the [tag]get-enum[/tag] tag.
 
     """
-    name = Attribute('Identifier for enum', required=False, default=None)
-    start = Attribute("Starting ID if not specified in <value>", type="integer", default=1)
+
+    name = Attribute("Identifier for enum", required=False, default=None)
+    start = Attribute(
+        "Starting ID if not specified in <value>", type="integer", default=1
+    )
 
     class Help:
         synopsis = """map numbers on to identifiers"""
@@ -466,7 +527,7 @@ class Enum(ElementBase):
 
         enum = ContextEnum(name, start=start)
         self.archive.add_enum(self.libid, enum)
-        #startup_log.debug("%s created", enum)
+        # startup_log.debug("%s created", enum)
 
 
 class Value(ElementBase):
@@ -477,11 +538,11 @@ class Value(ElementBase):
 
     id = Attribute("Enumeration ID", type="integer", default=None)
     name = Attribute("Value name", required=True)
-    description = Attribute("Description of enumeration value", default='')
-    group = Attribute("Group name", default='')
+    description = Attribute("Description of enumeration value", default="")
+    group = Attribute("Group name", default="")
 
     def finalize(self, context):
-        enum_parent = self.get_ancestor('enum')
+        enum_parent = self.get_ancestor("enum")
         params = self.get_parameters(context)
         description = params.description
         if not description:
@@ -489,10 +550,9 @@ class Value(ElementBase):
         enum = self.archive.get_enum(enum_parent.libid)
         if description:
             description = description.strip()
-        enum.add_value(params.name,
-                       enum_id=params.id,
-                       description=description,
-                       group=params.group)
+        enum.add_value(
+            params.name, enum_id=params.id, description=description, group=params.group
+        )
 
 
 class GetEnum(DataSetter):
@@ -507,7 +567,9 @@ class GetEnum(DataSetter):
         """
 
     enum = Attribute("enumeration ref", type="elementref")
-    _from = Attribute("from application", type="application", default=None, evaldefault=True)
+    _from = Attribute(
+        "from application", type="application", default=None, evaldefault=True
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
@@ -516,8 +578,8 @@ class GetEnum(DataSetter):
         enum = self.archive.get_enum(el.libid)
         self.set_context(context, params.dst, enum)
 
-        #enum = self.get_element(self.enum(context))
-        #self.set_context(context, dst, enum)
+        # enum = self.get_element(self.enum(context))
+        # self.set_context(context, dst, enum)
 
 
 class GetTimezones(DataSetter):
@@ -569,11 +631,20 @@ class Handle(LogicElement):
 
         """
 
-    signal = Attribute("Signal name to handle. Multiple names may be specified to handle more than one signal.""", type="commalist", required=True)
-    sender = Attribute("Only handle the signal(s) if sent from this element(s).", type="commalist", default=None)
+    signal = Attribute(
+        "Signal name to handle. Multiple names may be specified to handle more than one signal."
+        "",
+        type="commalist",
+        required=True,
+    )
+    sender = Attribute(
+        "Only handle the signal(s) if sent from this element(s).",
+        type="commalist",
+        default=None,
+    )
 
     def lib_finalize(self, context):
-        sender, signals = self.get_parameters(context, 'sender', 'signal')
+        sender, signals = self.get_parameters(context, "sender", "signal")
         senders = []
         if sender:
             for _sender in sender:
@@ -595,8 +666,17 @@ class Fire(LogicElement):
     Moya will catch and log any exceptions raised by the signal handler(s).
 
     """
-    signal = Attribute("Signal name, should be in a dotted notation. Names with no dots are reserved by Moya.", required=True)
-    sender = Attribute("Optional element associated with the signal.", required=False, type="elementref", default=None)
+
+    signal = Attribute(
+        "Signal name, should be in a dotted notation. Names with no dots are reserved by Moya.",
+        required=True,
+    )
+    sender = Attribute(
+        "Optional element associated with the signal.",
+        required=False,
+        type="elementref",
+        default=None,
+    )
     _from = Attribute("Application", type="application", required=False, default=None)
 
     class Help:
@@ -607,15 +687,11 @@ class Fire(LogicElement):
 
     class Meta:
         trap_exceptions = True
-        #is_call = True
+        # is_call = True
 
     def logic(self, context):
         app = self.get_app(context)
         signal = self.signal(context)
         sender = self.sender(context)
         data = self.get_let_map(context)
-        self.archive.fire(context,
-                          signal,
-                          app=app,
-                          sender=sender,
-                          data=data)
+        self.archive.fire(context, signal, app=app, sender=sender, data=data)

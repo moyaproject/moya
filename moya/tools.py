@@ -14,13 +14,23 @@ import os
 import sys
 import hashlib
 
-from .compat import zip_longest, iteritems, xrange, text_type, PY3, implements_to_string, number_types
+from .compat import (
+    zip_longest,
+    iteritems,
+    xrange,
+    text_type,
+    PY3,
+    implements_to_string,
+    number_types,
+)
 
 
-_re_xml_namespace = re.compile(r'^\{(.*?)\}(.*)$', re.UNICODE)
+_re_xml_namespace = re.compile(r"^\{(.*?)\}(.*)$", re.UNICODE)
 
 
-def extract_namespace(tag_name, default='http://moyaproject.com', _namespace_match=_re_xml_namespace.match):
+def extract_namespace(
+    tag_name, default="http://moyaproject.com", _namespace_match=_re_xml_namespace.match
+):
     """Extracts namespace and tag name in Clark's notation"""
     match = _namespace_match(tag_name)
     if match is None:
@@ -38,10 +48,10 @@ def asint(value, default=None):
 
 def match_exception(exception, catch_type):
     """Match an exception with a catch type wildcard"""
-    for c, e in zip_longest(catch_type.split('.'),
-                            exception.split('.'),
-                            fillvalue=None):
-        if c == '*':
+    for c, e in zip_longest(
+        catch_type.split("."), exception.split("."), fillvalue=None
+    ):
+        if c == "*":
             return True
         if c != e:
             return False
@@ -50,16 +60,16 @@ def match_exception(exception, catch_type):
 
 def md5_hexdigest(text):
     m = hashlib.md5()
-    m.update(text.encode('utf-8'))
+    m.update(text.encode("utf-8"))
     if PY3:
         return m.hexdigest()
     else:
-        return m.hexdigest().decode('utf-8')
+        return m.hexdigest().decode("utf-8")
 
 
 def check_missing(map):
     for k, v in iteritems(map):
-        if getattr(v, 'moya_missing', False):
+        if getattr(v, "moya_missing", False):
             raise ValueError("value '{}' must not be missing (it is {!r})".format(k, v))
 
 
@@ -69,26 +79,30 @@ def timer(msg="elapsed", ms=False, write_file=None, output=sys.stdout.write):
     now = datetime.now()
     start = time()
     yield
-    taken = (time() - start)
+    taken = time() - start
     if ms:
         output("%s: %.2fms\n" % (msg, taken * 1000))
     else:
         output("%s: %.2fs\n" % (msg, taken))
     if write_file is not None:
         import socket
+
         hostname = socket.gethostname()
-        with open(write_file, 'a+') as f:
+        with open(write_file, "a+") as f:
             f.write('%s,%.2f,"%s","%s"\n' % (now.ctime(), taken, msg, hostname))
 
 
 class TimeDeltaParser(object):
     """Convert a text description of a time span in to milliseconds"""
-    _re_td = re.compile(r'(\d+?)(ms|s|m|h|d)?$')
-    _to_ms = dict(ms=1,                   # milliseconds
-                  s=1000,                 # seconds
-                  m=1000 * 60,            # minutes
-                  h=1000 * 60 * 60,       # hours
-                  d=1000 * 60 * 60 * 24)  # days
+
+    _re_td = re.compile(r"(\d+?)(ms|s|m|h|d)?$")
+    _to_ms = dict(
+        ms=1,  # milliseconds
+        s=1000,  # seconds
+        m=1000 * 60,  # minutes
+        h=1000 * 60 * 60,  # hours
+        d=1000 * 60 * 60 * 24,
+    )  # days
 
     @classmethod
     def parse(cls, s):
@@ -100,8 +114,9 @@ class TimeDeltaParser(object):
         if match is None:
             raise ValueError("'{}' is not a valid timespan".format(s))
         t, unit = match.groups()
-        t = int(t) * cls._to_ms.get(unit or 'ms')
+        t = int(t) * cls._to_ms.get(unit or "ms")
         return t
+
 
 parse_timedelta = TimeDeltaParser.parse
 
@@ -114,8 +129,8 @@ def get_moya_dir(path=None):
     if path is None:
         path = os.getcwd()
     path = abspath(path)
-    while not isfile(join(path, 'moya')):
-        if basename(path) in ('', '/'):
+    while not isfile(join(path, "moya")):
+        if basename(path) in ("", "/"):
             raise ValueError("Moya project directory not found")
         path = dirname(path)
     return path
@@ -125,8 +140,8 @@ def is_moya_dir(path=None):
     """Check if a path is a moya project"""
     if path is None:
         path = os.curdir
-    path = abspath(path.replace('\\', '/'))
-    return isfile(join(path, 'moya'))
+    path = abspath(path.replace("\\", "/"))
+    return isfile(join(path, "moya"))
 
 
 def file_chunker(f, size=2 * 16 * 1024):
@@ -144,7 +159,9 @@ def file_chunker(f, size=2 * 16 * 1024):
 def make_id():
     """Make a unique id."""
     _ID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    return "{:0X}{}".format(int(time() * 1000.0), ''.join(choice(_ID_CHARS) for _ in xrange(6)))
+    return "{:0X}{}".format(
+        int(time() * 1000.0), "".join(choice(_ID_CHARS) for _ in xrange(6))
+    )
 
 
 def datetime_to_epoch(d):
@@ -155,13 +172,13 @@ def datetime_to_epoch(d):
 
 def split_commas(s):
     """Split a string on commas and return a list of tokens"""
-    return [token.strip() for token in s.split(',') if token]
+    return [token.strip() for token in s.split(",") if token]
 
 
-def summarize_text(text, max_length=100, marker='[...]'):
+def summarize_text(text, max_length=100, marker="[...]"):
     """Truncate text and add a marker, if the length is above `max_langth`"""
     if not text:
-        return ''
+        return ""
     if len(text) < max_length:
         return text
     return text[:max_length] + marker
@@ -170,7 +187,7 @@ def summarize_text(text, max_length=100, marker='[...]'):
 def get_return(value):
     if value is None:
         return {}
-    if hasattr(value, 'get_return_value'):
+    if hasattr(value, "get_return_value"):
         return value.get_return_value()
     return value
 
@@ -183,7 +200,7 @@ def as_dict(value):
 
 def as_text(value):
     """Convert to string, treating None as empty string."""
-    return '' if value is None else text_type(value)
+    return "" if value is None else text_type(value)
 
 
 def quote(text):
@@ -197,7 +214,7 @@ def squote(text):
     return "'{}'".format(text)
 
 
-def textual_list(items, join_word='or', empty="(nothing)"):
+def textual_list(items, join_word="or", empty="(nothing)"):
     """Lists items in humanized list form.
 
     e.g.
@@ -217,28 +234,28 @@ def textual_list(items, join_word='or', empty="(nothing)"):
 
 
 def moya_update(map, values):
-    (getattr(map, '__moyaupdate__', None) or getattr(map, 'update'))(values)
+    (getattr(map, "__moyaupdate__", None) or getattr(map, "update"))(values)
 
 
 def url_join(*urls):
     """Combine url segments"""
-    return reduce(lambda p1, p2: '{}/{}'.format(p1.rstrip('/'), p2.lstrip('/')), urls)
+    return reduce(lambda p1, p2: "{}/{}".format(p1.rstrip("/"), p2.lstrip("/")), urls)
 
 
 def remove_padding(text):
     """remove any blank (all whitespace) lines at the beginning and end of text"""
     if text.isspace() or not text:
-        return ''
+        return ""
     lines = text.splitlines()
     padding_start = 0
     padding_end = 0
     iter_lines = iter(lines)
-    while (next(iter_lines) or ' ').isspace():
+    while (next(iter_lines) or " ").isspace():
         padding_start += 1
     iter_lines = iter(reversed(lines))
-    while (next(iter_lines) or ' ').isspace():
+    while (next(iter_lines) or " ").isspace():
         padding_end -= 1
-    return '\n'.join(lines[padding_start or None:padding_end or None])
+    return "\n".join(lines[padding_start or None : padding_end or None])
 
 
 def unique(v):
@@ -259,10 +276,10 @@ def format_element_type(element_type):
     return "{" + ns + "}" + et
 
 
-def decode_utf8_bytes(text, errors='ignore'):
+def decode_utf8_bytes(text, errors="ignore"):
     """Decode bytes as utf-8, returns unicode unaltered."""
     if isinstance(text, bytes):
-        return text.decode('utf-8', errors=errors)
+        return text.decode("utf-8", errors=errors)
     return text
 
 
@@ -273,6 +290,7 @@ def decode_utf8_bytes(text, errors='ignore'):
 
 class MultiReplace(object):
     """Replace multiple tokens at once"""
+
     # Note, this typically slower than chained calles to .replace
     def __init__(self, replace_map):
         self.get_replace = replace_map.__getitem__
@@ -286,6 +304,7 @@ class MultiReplace(object):
 
 class DummyLock(object):
     """Replacement for real lock that does nothing"""
+
     def __enter__(self):
         pass
 
@@ -302,14 +321,19 @@ def make_cache_key(key_data):
         if isinstance(component, text_type):
             append(component)
         elif isinstance(component, list):
-            append('-'.join(make_cache_key(k) for k in component))
+            append("-".join(make_cache_key(k) for k in component))
         elif isinstance(component, set):
-            append('-'.join(make_cache_key(k) for k in sorted(component)))
+            append("-".join(make_cache_key(k) for k in sorted(component)))
         elif isinstance(component, dict):
-            append('-'.join("{}_{}".format(k, make_cache_key([v])) for k, v in sorted(component.items())))
+            append(
+                "-".join(
+                    "{}_{}".format(k, make_cache_key([v]))
+                    for k, v in sorted(component.items())
+                )
+            )
         else:
             append(text_type(component))
-    return '.'.join(key)
+    return ".".join(key)
 
 
 # http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Python
@@ -341,28 +365,32 @@ def nearest_word(word, words, min_distance=3):
 
 def show_tb(f):
     """Decorator that print tracebacks from functions that may otherwise end up hiding them"""
+
     def deco(*args, **kwargs):
         try:
             return f(*args, **kwargs)
         except Exception as e:
             import traceback
+
             traceback.print_exc(e)
             raise
+
     return deco
 
 
 def normalize_url_path(p):
     """Makes sure a URL path starts and ends with a forward slash"""
-    if not p.startswith('/'):
-        p = '/' + p
-    if not p.endswith('/'):
-        p = p + '/'
+    if not p.startswith("/"):
+        p = "/" + p
+    if not p.endswith("/"):
+        p = p + "/"
     return p
 
 
 @implements_to_string
 class lazystr(object):
     """convert to a string lazily, for use in logging"""
+
     def __init__(self, _callable, *args, **kwargs):
         self._callable = _callable
         self._args = args
@@ -379,4 +407,3 @@ class lazystr(object):
 
     def __getattr__(self, k):
         return getattr(text_type(self), k)
-

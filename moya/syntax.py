@@ -14,42 +14,51 @@ from textwrap import dedent
 
 def _escape_html(text):
     """Escape text for inclusion in html"""
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(' ', '&nbsp;')
+    return (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace(" ", "&nbsp;")
+    )
 
 
 def tabs_to_spaces(line, tab_size=4):
     """Converts tabs to a fixed numbers of spaces at the beginning of a string"""
     spaces = 0
     for c in line:
-        if c not in ' \t':
+        if c not in " \t":
             break
-        if c == '\t':
+        if c == "\t":
             spaces += tab_size - (spaces % tab_size)
         else:
             spaces += 1
-    return ' ' * spaces + line.lstrip()
+    return " " * spaces + line.lstrip()
 
 
-def highlight(format,
-              code,
-              start_line=1,
-              end_line=None,
-              line_numbers=True,
-              highlight_lines=None,
-              highlight_range=None,
-              highlight_range_style="error"):
+def highlight(
+    format,
+    code,
+    start_line=1,
+    end_line=None,
+    line_numbers=True,
+    highlight_lines=None,
+    highlight_range=None,
+    highlight_range_style="error",
+):
     if isinstance(code, bytes):
-        code = code.decode('utf-8', 'replace')
+        code = code.decode("utf-8", "replace")
 
     HL = HighlighterMeta.highlighters.get(format, Highlighter)
     h = HL()
-    html = h.highlight(code,
-                       start_line,
-                       end_line,
-                       line_numbers=line_numbers,
-                       highlight_lines=highlight_lines,
-                       highlight_range=highlight_range,
-                       highlight_range_style=highlight_range_style)
+    html = h.highlight(
+        code,
+        start_line,
+        end_line,
+        line_numbers=line_numbers,
+        highlight_lines=highlight_lines,
+        highlight_range=highlight_range,
+        highlight_range_style=highlight_range_style,
+    )
     return html
 
 
@@ -58,7 +67,7 @@ class HighlighterMeta(type):
 
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
-        format = getattr(new_class, 'format', None)
+        format = getattr(new_class, "format", None)
         if format:
             cls.highlighters[format] = new_class
         flags = re.UNICODE | re.MULTILINE | re.DOTALL
@@ -68,23 +77,26 @@ class HighlighterMeta(type):
 
 class HighlighterType(object):
     """Somewhat naive syntax highlighter"""
+
     line_anchors = True
 
     styles = []
     _compiled_styles = None
 
-    _re_linebreaks = re.compile(r'$', flags=re.UNICODE | re.MULTILINE | re.DOTALL)
+    _re_linebreaks = re.compile(r"$", flags=re.UNICODE | re.MULTILINE | re.DOTALL)
 
     _highlight_range_padding = 50
 
-    def highlight(self,
-                  code,
-                  start_line=None,
-                  end_line=None,
-                  line_numbers=True,
-                  highlight_lines=None,
-                  highlight_range=None,
-                  highlight_range_style="error"):
+    def highlight(
+        self,
+        code,
+        start_line=None,
+        end_line=None,
+        line_numbers=True,
+        highlight_lines=None,
+        highlight_range=None,
+        highlight_range_style="error",
+    ):
         if start_line is None:
             start_line = 1
 
@@ -94,8 +106,10 @@ class HighlighterType(object):
         lines = code.splitlines()
         if end_line is None:
             end_line = len(lines)
-        lines = ([''] * offset_line) + lines[offset_line:end_line + self._highlight_range_padding + 1]
-        code = '\n'.join(tabs_to_spaces(l.rstrip()) for l in lines)
+        lines = ([""] * offset_line) + lines[
+            offset_line : end_line + self._highlight_range_padding + 1
+        ]
+        code = "\n".join(tabs_to_spaces(l.rstrip()) for l in lines)
 
         points = []
         line_starts = [-1]
@@ -112,7 +126,8 @@ class HighlighterType(object):
         def sub_linebreaks(match):
             start = match.start(0)
             line_starts.append(start)
-            add_point((start, True, ''))
+            add_point((start, True, ""))
+
         self._re_linebreaks.sub(sub_linebreaks, code)
 
         if highlight_range:
@@ -162,41 +177,44 @@ class HighlighterType(object):
 
             if not style:
                 if style_set:
-                    hiline.append('</span>')
+                    hiline.append("</span>")
                 lines_out.append(hiline[:])
                 del hiline[:]
                 if new_style_set:
-                    hiline_append('<span class="%s">' % ' '.join(new_style_set))
+                    hiline_append('<span class="%s">' % " ".join(new_style_set))
                 style_set = new_style_set
                 continue
 
             if new_style_set != style_set:
-                hiline_append('</span>')
+                hiline_append("</span>")
                 if new_style_set:
-                    hiline_append('<span class="%s">' % ' '.join(new_style_set))
+                    hiline_append('<span class="%s">' % " ".join(new_style_set))
 
             style_set = new_style_set
 
         if hiline:
             lines_out.append(hiline[:])
-            lines_out.append('</span>')
+            lines_out.append("</span>")
 
         if end_line is None:
-            lines_out = lines_out[start_line - 1:]
+            lines_out = lines_out[start_line - 1 :]
         else:
-            lines_out = lines_out[start_line - 1:end_line]
+            lines_out = lines_out[start_line - 1 : end_line]
 
         def make_line(l):
-            text = ''.join(l)
+            text = "".join(l)
             if text.strip():
-                return text.replace('\n', '')
+                return text.replace("\n", "")
             else:
-                return '\n'
+                return "\n"
+
         html_lines = [make_line(line) for line in lines_out]
 
         if line_numbers:
-            html_lines = ['<span class="lineno">{0}</span>{1}'.format(line_no, line)
-                          for line_no, line in enumerate(html_lines, (start_line or 0))]
+            html_lines = [
+                '<span class="lineno">{0}</span>{1}'.format(line_no, line)
+                for line_no, line in enumerate(html_lines, (start_line or 0))
+            ]
 
         if highlight_lines is None:
             highlight_lines = ()
@@ -205,10 +223,16 @@ class HighlighterType(object):
         else:
             linet = '<div class="line{0} line-{1}">{2}</div>'
 
-        html_lines = [(linet.format(' highlight' if line_no in highlight_lines else '', line_no, line))
-                      for line_no, line in enumerate(html_lines, (start_line or 0))]
+        html_lines = [
+            (
+                linet.format(
+                    " highlight" if line_no in highlight_lines else "", line_no, line
+                )
+            )
+            for line_no, line in enumerate(html_lines, (start_line or 0))
+        ]
 
-        return "".join(html_lines).replace('\n', '<br>')
+        return "".join(html_lines).replace("\n", "<br>")
 
 
 class Highlighter(with_metaclass(HighlighterMeta, HighlighterType)):
@@ -223,11 +247,11 @@ class XMLHighlighter(Highlighter):
     format = "xml"
 
     styles = [
-        r'(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>[\w\-]*)(?P<tagcontent>.*?)(?P<endtagname>/[\w\-:]*?)?>)',
-        r'\s\S*?=(?P<attrib>\".*?\")',
-        r'(?P<braced>\{.*?\})',
-        r'(?P<sub>\$\{.*?\})',
-        r'(?P<cdata>\<\!\[CDATA\[.*?\]\]\>)'
+        r"(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>[\w\-]*)(?P<tagcontent>.*?)(?P<endtagname>/[\w\-:]*?)?>)",
+        r"\s\S*?=(?P<attrib>\".*?\")",
+        r"(?P<braced>\{.*?\})",
+        r"(?P<sub>\$\{.*?\})",
+        r"(?P<cdata>\<\!\[CDATA\[.*?\]\]\>)",
     ]
 
 
@@ -235,27 +259,23 @@ class PythonHighlighter(Highlighter):
     format = "python"
 
     styles = [
-        r'\b(?P<keyword>yield|is|print|raise|pass|and|or|not|return|def|class|import|from|as|for|in|try|except|with|finally|if|else|elif|while)\b',
-        r'\b(?P<constant>None|True|False)\b',
-        r'\b(?P<builtin>open|file|str|repr|bytes|unicode|int)\b',
-        r'\b\((?P<call>.*?)\)',
-
-        r'\b((?:def|class)\s+(?P<def>\w+))',
-
-
-        #('string', r'(".*?(?<!\\)")'),
-        #('string', r'(""".*?""")'),
-        #('string', r"('.*?(?<!\\)')"),
-        #('string', r"('''.*?''')"),
-        r'(?P<self>self)',
-        r'\b(?P<number>\d+)',
-        r'(?P<operator>\W+)',
-        r'\b(?P<operator>or|and|in)\b',
-        r'(?P<brace>\(|\)|\[|\]|\{|\})',
-        r'@(?P<decorator>[\w\.]*)',
-
-        r'(?P<comment>#.*?)$|(?P<string>(?:""".*?""")|(?:"(?:\\.|.)*?")' + r"|(?:'''.*?''')|(?:'(?:\\.|.)*?'))",
-
+        r"\b(?P<keyword>yield|is|print|raise|pass|and|or|not|return|def|class|import|from|as|for|in|try|except|with|finally|if|else|elif|while)\b",
+        r"\b(?P<constant>None|True|False)\b",
+        r"\b(?P<builtin>open|file|str|repr|bytes|unicode|int)\b",
+        r"\b\((?P<call>.*?)\)",
+        r"\b((?:def|class)\s+(?P<def>\w+))",
+        # ('string', r'(".*?(?<!\\)")'),
+        # ('string', r'(""".*?""")'),
+        # ('string', r"('.*?(?<!\\)')"),
+        # ('string', r"('''.*?''')"),
+        r"(?P<self>self)",
+        r"\b(?P<number>\d+)",
+        r"(?P<operator>\W+)",
+        r"\b(?P<operator>or|and|in)\b",
+        r"(?P<brace>\(|\)|\[|\]|\{|\})",
+        r"@(?P<decorator>[\w\.]*)",
+        r'(?P<comment>#.*?)$|(?P<string>(?:""".*?""")|(?:"(?:\\.|.)*?")'
+        + r"|(?:'''.*?''')|(?:'(?:\\.|.)*?'))",
     ]
 
 
@@ -263,8 +283,8 @@ class HTMLHighlighter(Highlighter):
     format = "html"
 
     styles = [
-        r'(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>\w*)(?P<tagcontent>.*?)(?P<endtagname>/\w*?)?>)',
-        r'\s\S*?=(?P<attrib>\".*?\")',
+        r"(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>\w*)(?P<tagcontent>.*?)(?P<endtagname>/\w*?)?>)",
+        r"\s\S*?=(?P<attrib>\".*?\")",
     ]
 
 
@@ -272,58 +292,52 @@ class MoyatemplateHighlighter(Highlighter):
     format = "moyatemplate"
 
     styles = [
-        r'(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>\w*)(?P<tagcontent>.*?)(?P<endtagname>/\w*?)?>)',
-        r'\s\S*?=(?P<attrib>\".*?\")',
-
-        r'(?P<sub>\$\{.*?\})',
-        r'(?P<templatetag>{%.*?%})'
+        r"(?P<comment><!--.*?-->)|(?P<tag><(?P<xmlns>\w*?:)?(?P<tagname>\w*)(?P<tagcontent>.*?)(?P<endtagname>/\w*?)?>)",
+        r"\s\S*?=(?P<attrib>\".*?\")",
+        r"(?P<sub>\$\{.*?\})",
+        r"(?P<templatetag>{%.*?%})",
     ]
 
 
 class RouteHighlighter(Highlighter):
     format = "route"
-    styles = [
-        r'(?P<special>\{.*?\})'
-    ]
+    styles = [r"(?P<special>\{.*?\})"]
 
 
 class TargetHighlighter(Highlighter):
     line_anchors = False
     format = "target"
-    styles = [
-        r'(?P<libname>[\w\.\-]+?)(?P<hash>\#)(?P<elementname>[\w\.\-]+)',
-    ]
+    styles = [r"(?P<libname>[\w\.\-]+?)(?P<hash>\#)(?P<elementname>[\w\.\-]+)"]
 
 
 class INIHighlighter(Highlighter):
     line_anchors = False
     format = "ini"
     styles = [
-        r'^(?P<key>.*?)=(?P<value>.*?)$',
-        r'^(\s+)(?P<value>.*?)$',
-        r'^(?P<section>\[.*?\])$',
-        r'^(?P<section>\[(?P<sectiontype>.*?)\:(?P<sectionname>.*?)\])$',
-        r'^(?P<comment>#.*?)$'
+        r"^(?P<key>.*?)=(?P<value>.*?)$",
+        r"^(\s+)(?P<value>.*?)$",
+        r"^(?P<section>\[.*?\])$",
+        r"^(?P<section>\[(?P<sectiontype>.*?)\:(?P<sectionname>.*?)\])$",
+        r"^(?P<comment>#.*?)$",
     ]
 
 
 class JSHighligher(Highlighter):
     format = "js"
     styles = [
-        r'(?P<keyword>this|function|var|new|alert)',
-        r'\b(?P<constant>null|true|false)\b',
-        r'\b(?P<number>\d+)',
-        r'(?P<operator>\W+)',
-        r'\b(?P<operator>\|\||\&\&|\+|\-|\*|\/)\b',
-        r'(?P<brace>\(|\)|\[|\]|\{|\})',
+        r"(?P<keyword>this|function|var|new|alert)",
+        r"\b(?P<constant>null|true|false)\b",
+        r"\b(?P<number>\d+)",
+        r"(?P<operator>\W+)",
+        r"\b(?P<operator>\|\||\&\&|\+|\-|\*|\/)\b",
+        r"(?P<brace>\(|\)|\[|\]|\{|\})",
         r'(?P<string>".*?")',
-        r'(?P<string>\'.*?\')',
-        r'(?P<comment>\/\*.*?\*\/)'
+        r"(?P<string>\'.*?\')",
+        r"(?P<comment>\/\*.*?\*\/)",
     ]
 
 
 class Formatter(object):
-
     def __init__(self, lineno=True):
         self.lineno = lineno
 
@@ -334,17 +348,21 @@ class HTMLFormatter(Formatter):
 
 class SyntaxFilter(MoyaFilterBase):
     def __moyafilter__(self, context, app, value, params):
-        lang = params.pop('lang', None)
-        value = dedent(remove_padding(text_type(value.strip('\n'))))
+        lang = params.pop("lang", None)
+        value = dedent(remove_padding(text_type(value.strip("\n"))))
         code = highlight(lang, value, line_numbers=False)
-        return HTML('<pre class="moya-console format-{lang}"">{code}</pre>'.format(lang=lang, code=code))
+        return HTML(
+            '<pre class="moya-console format-{lang}"">{code}</pre>'.format(
+                lang=lang, code=code
+            )
+        )
 
 
 if __name__ == "__main__":
     code = open("console.py", "rb").read()
-    code = code.decode('utf-8')
+    code = code.decode("utf-8")
     html = highlight("python", code)
     with timer("highlight", ms=True):
         html = highlight("python", code)
-    with open("syntaxtest.html", 'wt') as f:
-        f.write(html.encode('utf-8'))
+    with open("syntaxtest.html", "wt") as f:
+        f.write(html.encode("utf-8"))

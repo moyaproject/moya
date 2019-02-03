@@ -5,7 +5,7 @@ from threading import local
 from .console import Console
 from .compat import implements_to_string
 from .interface import ObjectExposer
-from .import settings
+from . import settings
 from .moyaexceptions import MoyaException
 
 import os
@@ -75,7 +75,7 @@ _ascii_pilot = """\
 +''++####@@@@@@@@#####@####+##'+@@#'':;#+##+',` ,+,'+:.`````.+'+,.`,:;:.``..;###+#++':::;'+####@@@@@#"""
 
 
-_PilotStackEntry = namedtuple('_PilotStackEntry', ['request', 'context', 'data'])
+_PilotStackEntry = namedtuple("_PilotStackEntry", ["request", "context", "data"])
 
 
 @implements_to_string
@@ -83,15 +83,17 @@ class Pilot(ObjectExposer):
     """Request manager singleton"""
 
     _local = local()
-#    console = Console()  # Console is thread safe
+    #    console = Console()  # Console is thread safe
 
     def __init__(self):
         try:
-            with io.open(os.path.expanduser("~/.moyarc"), 'rt') as f:
+            with io.open(os.path.expanduser("~/.moyarc"), "rt") as f:
                 self.moyarc = settings.SettingsContainer.read_from_file(f)
         except IOError:
             self.moyarc = settings.SettingsContainer()
-        self.console = Console(nocolors=not self.moyarc.get_bool('console', 'color', True))
+        self.console = Console(
+            nocolors=not self.moyarc.get_bool("console", "color", True)
+        )
         super(Pilot, self).__init__()
 
     def manage_request(self, request, context):

@@ -2,7 +2,13 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 
-from ..compat import implements_to_string, text_type, string_types, number_types, implements_bool
+from ..compat import (
+    implements_to_string,
+    text_type,
+    string_types,
+    number_types,
+    implements_bool,
+)
 
 from ..interface import AttributeExposer
 from .. import interface
@@ -15,11 +21,13 @@ from calendar import monthrange, timegm
 from math import floor
 import re
 import iso8601
-from babel.dates import (format_datetime,
-                         format_date,
-                         format_time,
-                         format_timedelta,
-                         parse_pattern)
+from babel.dates import (
+    format_datetime,
+    format_date,
+    format_time,
+    format_timedelta,
+    parse_pattern,
+)
 
 import calendar
 from pytz import UTC, timezone
@@ -27,7 +35,7 @@ from pytz import UTC, timezone
 
 utcfromtimestamp = datetime.utcfromtimestamp
 utclocalize = UTC.localize
-GMT = timezone('GMT')
+GMT = timezone("GMT")
 
 
 def datetime_to_epoch(d):
@@ -41,7 +49,6 @@ def epoch_to_datetime(t):
 
 
 class DatetimeExclusiveRange(ExpressionRange):
-
     def _build(self, start, end):
         self.start = start
         self.end = end
@@ -61,7 +68,7 @@ class DatetimeExclusiveRange(ExpressionRange):
                 d -= self.step
 
     def __moyacall__(self, params):
-        step = params.get('step', None)
+        step = params.get("step", None)
         if step is not None:
             self.step = timedelta(milliseconds=step)
         return self
@@ -74,7 +81,6 @@ class DatetimeExclusiveRange(ExpressionRange):
 
 
 class DatetimeInclusiveRange(DatetimeExclusiveRange):
-
     def __iter__(self):
         if self._forward:
             d = self.start
@@ -89,15 +95,14 @@ class DatetimeInclusiveRange(DatetimeExclusiveRange):
 
 
 class ExpressionDate(date, interface.Proxy):
-
     @classmethod
     def from_sequence(self, seq):
         try:
             year, month, day = (int(s) for s in seq)
         except ValueError:
-            raise ValueError('[year, month, day] should be integers')
+            raise ValueError("[year, month, day] should be integers")
         except:
-            raise ValueError('[year, month, day] required')
+            raise ValueError("[year, month, day] required")
         return ExpressionDate(year, month, day).moya_proxy
 
     @classmethod
@@ -117,16 +122,21 @@ class ExpressionDate(date, interface.Proxy):
             return None
 
     def __moyadbobject__(self):
-        return date(self.year,
-                    self.month,
-                    self.day)
+        return date(self.year, self.month, self.day)
 
     @implements_to_string
     class ProxyInterface(AttributeExposer):
-        __moya_exposed_attributes__ = ["year", "month", "day",
-                                       "next_month", "previous_month",
-                                       "isoformat", "next_day", "previous_day",
-                                       "leap"]
+        __moya_exposed_attributes__ = [
+            "year",
+            "month",
+            "day",
+            "next_month",
+            "previous_month",
+            "isoformat",
+            "next_day",
+            "previous_day",
+            "leap",
+        ]
 
         def __init__(self, obj):
             self.date = obj
@@ -153,7 +163,7 @@ class ExpressionDate(date, interface.Proxy):
             return "date:'{}'".format(self.isoformat)
 
         def __moyalocalize__(self, context, locale):
-            fmt = context.get('.sys.site.date_format', 'medium')
+            fmt = context.get(".sys.site.date_format", "medium")
             return format_date(self.date, format=fmt, locale=text_type(locale))
 
         def __moyarange__(self, context, end, inclusive=False):
@@ -166,9 +176,11 @@ class ExpressionDate(date, interface.Proxy):
             console(self.isoformat).nl()
 
         def __mod__(self, fmt):
-            return format_date(self.date,
-                               format=fmt,
-                               locale=text_type(pilot.context.get('.locale', 'en_US')))
+            return format_date(
+                self.date,
+                format=fmt,
+                locale=text_type(pilot.context.get(".locale", "en_US")),
+            )
 
         @property
         def year(self):
@@ -199,7 +211,7 @@ class ExpressionDate(date, interface.Proxy):
             """The first date in the following month"""
             d = self.date
             if d.month == 12:
-                return ExpressionDate(d.year + 1, 1,)
+                return ExpressionDate(d.year + 1, 1)
             else:
                 return ExpressionDate(d.year, d.month + 1, 1)
 
@@ -261,11 +273,13 @@ class ExpressionDate(date, interface.Proxy):
 
 class ExpressionTime(time, interface.Proxy):
 
-    _re_time = re.compile(r'^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$')
+    _re_time = re.compile(r"^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$")
 
     @classmethod
     def from_time(self, t):
-        return ExpressionTime(t.hour, t.minute, t.second, t.microsecond, t.tzinfo).moya_proxy
+        return ExpressionTime(
+            t.hour, t.minute, t.second, t.microsecond, t.tzinfo
+        ).moya_proxy
 
     @classmethod
     def from_isoformat(cls, t):
@@ -278,8 +292,8 @@ class ExpressionTime(time, interface.Proxy):
             hour, minute, second = cls._re_time.match(t).groups()
             microsecond = 0
 
-            if '.' in second:
-                second, fraction = second.split('.', 1)
+            if "." in second:
+                second, fraction = second.split(".", 1)
                 fraction = float(fraction)
                 if fraction:
                     microsecond = int((1.0 / fraction) * 1000000)
@@ -291,9 +305,14 @@ class ExpressionTime(time, interface.Proxy):
     @implements_to_string
     class ProxyInterface(AttributeExposer):
 
-        __moya_exposed_attributes__ = ["hour", "minute", "second", "microsecond",
-                                       "tzinfo",
-                                       "isoformat"]
+        __moya_exposed_attributes__ = [
+            "hour",
+            "minute",
+            "second",
+            "microsecond",
+            "tzinfo",
+            "isoformat",
+        ]
 
         def __init__(self, obj):
             self.time = obj
@@ -320,7 +339,7 @@ class ExpressionTime(time, interface.Proxy):
             return "time:'{}'".format(self.isoformat)
 
         def __moyalocalize__(self, context, locale):
-            fmt = context.get('.sys.site.time_format', 'medium')
+            fmt = context.get(".sys.site.time_format", "medium")
             return format_time(self.time, fmt, locale=text_type(locale))
 
         def __moyaconsole__(self, console):
@@ -333,9 +352,11 @@ class ExpressionTime(time, interface.Proxy):
 
         def __mod__(self, fmt):
             try:
-                return format_time(self.time,
-                                   fmt,
-                                   locale=text_type(pilot.context.get('.locale', 'en_US')))
+                return format_time(
+                    self.time,
+                    fmt,
+                    locale=text_type(pilot.context.get(".locale", "en_US")),
+                )
             except:
                 raise ValueError("'{}' is not a valid time format string".format(fmt))
 
@@ -363,7 +384,6 @@ class ExpressionTime(time, interface.Proxy):
 
 
 class ExpressionDateTime(datetime, interface.Proxy):
-
     @classmethod
     def moya_utcnow(self):
         return self.ProxyInterface.utcnow()
@@ -384,7 +404,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             dt = iso8601.parse_date(s)
             return cls.from_datetime(dt)
         except:
-            #raise
+            # raise
             return None
 
     @classmethod
@@ -405,7 +425,7 @@ class ExpressionDateTime(datetime, interface.Proxy):
             dt = datetime.strptime(t, pattern)
             return cls.from_datetime(dt)
         except:
-            #raise
+            # raise
             return None
 
     def __moyarepr__(self, context):
@@ -413,32 +433,57 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
     def __moyadbobject__(self):
         dt = self.moya_proxy.utc.naive
-        dt = datetime(dt.year,
-                      dt.month,
-                      dt.day,
-                      dt.hour,
-                      dt.minute,
-                      dt.second,
-                      dt.microsecond,
-                      dt.tzinfo)
+        dt = datetime(
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.microsecond,
+            dt.tzinfo,
+        )
         return dt
 
     @implements_to_string
     class ProxyInterface(AttributeExposer):
 
-        __moya_exposed_attributes__ = ["year", "month", "day", "minute", "hour", "second", "microsecond", "tzinfo",
-                                       "date", "time",
-                                       "year_start", "month_start", "day_start",
-                                       "next_day", "next_year", "next_month",
-                                       "previous_day", "previous_month", "previous_year",
-                                       'leap',
-                                       "days_in_month", "epoch",
-                                       "isoformat", "local", 'utc', 'naive',
-                                       "html5_datetime", "html5_date", "html5_time",
-                                       'rfc2822', 'http_date']
+        __moya_exposed_attributes__ = [
+            "year",
+            "month",
+            "day",
+            "minute",
+            "hour",
+            "second",
+            "microsecond",
+            "tzinfo",
+            "date",
+            "time",
+            "year_start",
+            "month_start",
+            "day_start",
+            "next_day",
+            "next_year",
+            "next_month",
+            "previous_day",
+            "previous_month",
+            "previous_year",
+            "leap",
+            "days_in_month",
+            "epoch",
+            "isoformat",
+            "local",
+            "utc",
+            "naive",
+            "html5_datetime",
+            "html5_date",
+            "html5_time",
+            "rfc2822",
+            "http_date",
+        ]
 
         _re_date = re.compile(r"^(\d\d\d\d)-(\d\d)-(\d\d)$")
-        _re_time = re.compile(r'^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$')
+        _re_time = re.compile(r"^(\d\d)\:(\d\d)(?:\:(\d{1,2}\.?\d+?))?$")
 
         def __init__(self, obj):
             self._dt = obj
@@ -474,19 +519,21 @@ class ExpressionDateTime(datetime, interface.Proxy):
             return format(self._dt, fmt)
 
         def __moyalocalize__(self, context, locale):
-            fmt = context.get('.sys.site.datetime_format', 'medium')
+            fmt = context.get(".sys.site.datetime_format", "medium")
             return format_datetime(self.local._dt, format=fmt, locale=text_type(locale))
 
         def __moyadbobject__(self):
             dt = self.utc.naive
-            dt = datetime(dt.year,
-                          dt.month,
-                          dt.day,
-                          dt.hour,
-                          dt.minute,
-                          dt.second,
-                          dt.microsecond,
-                          dt.tzinfo)
+            dt = datetime(
+                dt.year,
+                dt.month,
+                dt.day,
+                dt.hour,
+                dt.minute,
+                dt.second,
+                dt.microsecond,
+                dt.tzinfo,
+            )
             return dt
 
         def __getattr__(self, key):
@@ -512,8 +559,8 @@ class ExpressionDateTime(datetime, interface.Proxy):
             if isinstance(s, ExpressionDateTime):
                 return s
             s = text_type(s)
-            if 'T' in s:
-                date_s, time_s = s.split('T', 1)
+            if "T" in s:
+                date_s, time_s = s.split("T", 1)
             else:
                 date_s = s
                 time_s = "00:00"
@@ -526,13 +573,15 @@ class ExpressionDateTime(datetime, interface.Proxy):
             second = float(second or 0.0)
             microsecond = int(floor(second * 1000000) % 1000000)
 
-            return ExpressionDateTime(int(year),
-                                      int(month),
-                                      int(day),
-                                      int(hour),
-                                      int(minute),
-                                      int(second),
-                                      int(microsecond))
+            return ExpressionDateTime(
+                int(year),
+                int(month),
+                int(day),
+                int(hour),
+                int(minute),
+                int(second),
+                int(microsecond),
+            )
 
         @property
         def date(self):
@@ -542,7 +591,9 @@ class ExpressionDateTime(datetime, interface.Proxy):
         @property
         def time(self):
             dt = self._dt
-            return ExpressionTime(dt.hour, dt.minute, dt.second, dt.microsecond, dt.tzinfo)
+            return ExpressionTime(
+                dt.hour, dt.minute, dt.second, dt.microsecond, dt.tzinfo
+            )
 
         @property
         def year_start(self):
@@ -617,23 +668,19 @@ class ExpressionDateTime(datetime, interface.Proxy):
 
         @property
         def html5_datetime(self):
-            return "{}T{}".format(self.html5_date,
-                                  self.html5_time)
+            return "{}T{}".format(self.html5_date, self.html5_time)
 
         @property
         def html5_date(self):
             dt = self._dt
             fmt = "{:04}-{:02}-{:02}"
-            return fmt.format(dt.year,
-                              dt.month,
-                              dt.day)
+            return fmt.format(dt.year, dt.month, dt.day)
 
         @property
         def html5_time(self):
             dt = self._dt
             fmt = "{:02}:{:02}"
-            return fmt.format(dt.hour,
-                              dt.minute)
+            return fmt.format(dt.hour, dt.minute)
 
         @property
         def isoformat(self):
@@ -643,13 +690,14 @@ class ExpressionDateTime(datetime, interface.Proxy):
         @property
         def rfc2822(self):
             from email import utils
+
             return utils.formatdate(self.epoch)
 
         @property
         def http_date(self):
             dt = self._dt
             gmt_time = GMT.localize(dt)
-            return gmt_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+            return gmt_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
         @property
         def utc(self):
@@ -661,26 +709,22 @@ class ExpressionDateTime(datetime, interface.Proxy):
         @property
         def naive(self):
             dt = self._dt
-            return self.make(dt.year,
-                             dt.month,
-                             dt.day,
-                             dt.hour,
-                             dt.minute,
-                             dt.second,
-                             dt.microsecond)
+            return self.make(
+                dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.microsecond
+            )
 
         @property
         def local(self):
-            tz = pilot.context.get('.tz', None)
+            tz = pilot.context.get(".tz", None)
             if tz is None:
                 return None
             return self.from_datetime(tz(self._dt))
 
         def __mod__(self, fmt):
             self = self._dt
-            return format_datetime(self,
-                                   fmt,
-                                   locale=text_type(pilot.context.get('.locale', 'en_US')))
+            return format_datetime(
+                self, fmt, locale=text_type(pilot.context.get(".locale", "en_US"))
+            )
 
         def __sub__(self, other):
             dt = self._dt
@@ -740,8 +784,7 @@ def to_seconds(value):
 class TimeSpan(object):
     def __init__(self, ms=0):
         if isinstance(ms, string_types):
-            self._ms = float(sum(parse_timedelta(token)
-                             for token in ms.split()))
+            self._ms = float(sum(parse_timedelta(token) for token in ms.split()))
         else:
             self._ms = float(ms)
 
@@ -774,16 +817,18 @@ class TimeSpan(object):
     def simplify(self):
         """Units in lowest common denominator"""
         ms = self._ms
-        for unit, divisible in [('d', 1000 * 60 * 60 * 24),
-                                ('h', 1000 * 60 * 60),
-                                ('m', 1000 * 60),
-                                ('s', 1000),
-                                ('ms', 1)]:
+        for unit, divisible in [
+            ("d", 1000 * 60 * 60 * 24),
+            ("h", 1000 * 60 * 60),
+            ("m", 1000 * 60),
+            ("s", 1000),
+            ("ms", 1),
+        ]:
             if not (ms % divisible):
                 return "{}{}".format(ms // divisible, unit)
 
     def __moyalocalize__(self, context, locale):
-        fmt = context.get('.sys.site.timespan_format', 'medium')
+        fmt = context.get(".sys.site.timespan_format", "medium")
         td = timedelta(milliseconds=self._ms)
         return format_timedelta(td, format=fmt, locale=text_type(locale))
 
@@ -792,18 +837,20 @@ class TimeSpan(object):
         """Nice textual representation of a time span"""
         ms = self._ms
         text = []
-        for name, plural, divisable in [("day", "days", 1000 * 60 * 60 * 24),
-                                        ("hour", "hours", 1000 * 60 * 60),
-                                        ("minute", "minutes", 1000 * 60),
-                                        ("second", "seconds", 1000),
-                                        ("millisecond", "milliseconds", 1)]:
+        for name, plural, divisable in [
+            ("day", "days", 1000 * 60 * 60 * 24),
+            ("hour", "hours", 1000 * 60 * 60),
+            ("minute", "minutes", 1000 * 60),
+            ("second", "seconds", 1000),
+            ("millisecond", "milliseconds", 1),
+        ]:
             unit = ms // divisable
             if unit:
                 if unit == 1:
                     text.append("%i %s" % (unit, name))
                 else:
                     text.append("%i %s" % (unit, plural))
-            ms -= (unit * divisable)
+            ms -= unit * divisable
         if not text:
             return "0 seconds"
         else:
@@ -840,14 +887,18 @@ class TimeSpan(object):
 
     def __add__(self, other):
         if isinstance(other, datetime):
-            return ExpressionDateTime.from_datetime(other + timedelta(milliseconds=self._ms))
+            return ExpressionDateTime.from_datetime(
+                other + timedelta(milliseconds=self._ms)
+            )
         elif isinstance(other, date):
             return ExpressionDate.from_date(other + timedelta(milliseconds=self._ms))
         return TimeSpan(self._ms + self.to_ms(other))
 
     def __sub__(self, other):
         if isinstance(other, datetime):
-            return ExpressionDateTime.from_datetime(other - timedelta(milliseconds=self._ms))
+            return ExpressionDateTime.from_datetime(
+                other - timedelta(milliseconds=self._ms)
+            )
         return TimeSpan(self._ms - self.to_ms(other))
 
     def __mul__(self, other):
@@ -861,7 +912,9 @@ class TimeSpan(object):
 
     def __radd__(self, other):
         if isinstance(other, datetime):
-            return ExpressionDateTime.from_datetime(other + timedelta(milliseconds=self._ms))
+            return ExpressionDateTime.from_datetime(
+                other + timedelta(milliseconds=self._ms)
+            )
         elif isinstance(other, date):
             return ExpressionDate.from_date(other + timedelta(milliseconds=self._ms))
         else:
@@ -869,7 +922,9 @@ class TimeSpan(object):
 
     def __rsub__(self, other):
         if isinstance(other, datetime):
-            return ExpressionDateTime.from_datetime(other - timedelta(milliseconds=self._ms))
+            return ExpressionDateTime.from_datetime(
+                other - timedelta(milliseconds=self._ms)
+            )
         elif isinstance(other, date):
             return ExpressionDate.from_date(other - timedelta(milliseconds=self._ms))
         else:
@@ -904,7 +959,7 @@ if __name__ == "__main__":
     n = ExpressionDateTime.now()
     print(n.isoformat)
 
-    d = n.isoformat.replace('T', ' ')
+    d = n.isoformat.replace("T", " ")
     print(ExpressionDateTime.from_isoformat(d).isoformat)
 
     # print n

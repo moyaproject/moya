@@ -69,15 +69,21 @@ class ElementRegistry(object):
         xmlns = xmlns or namespaces.run
         if name in self._registry[xmlns]:
             element_class = self._registry[xmlns][name]
-            definition = getattr(element_class, '_location', None)
+            definition = getattr(element_class, "_location", None)
             if definition is None:
                 definition = inspect.getfile(element_class)
             if xmlns:
-                raise errors.ElementError('<{}> already registered in "{}" for xmlns "{}"'.format(name, definition, xmlns),
-                                          element=getattr(element, 'element', element))
+                raise errors.ElementError(
+                    '<{}> already registered in "{}" for xmlns "{}"'.format(
+                        name, definition, xmlns
+                    ),
+                    element=getattr(element, "element", element),
+                )
             else:
-                raise errors.ElementError('<{}/> already registered in "{}"'.format(name, definition),
-                                          element=element)
+                raise errors.ElementError(
+                    '<{}/> already registered in "{}"'.format(name, definition),
+                    element=element,
+                )
 
         self._registry[xmlns][name] = element
 
@@ -97,8 +103,11 @@ class ElementRegistry(object):
         """Get all elements defined by a given library"""
         lib_elements = []
         for namespace in itervalues(self._registry):
-            lib_elements.extend(element for element in itervalues(namespace)
-                                if element._lib_long_name == long_name)
+            lib_elements.extend(
+                element
+                for element in itervalues(namespace)
+                if element._lib_long_name == long_name
+            )
         return lib_elements
 
     def get_element_type(self, xmlns, name):
@@ -127,5 +136,8 @@ class ElementRegistry(object):
         """Get a tag from it's name (in Clarke's notation)"""
         return self.get_element_type(*extract_namespace(tag))
 
-default_registry = ElementRegistry.default_registry = ElementRegistry(update_from_default=False)
+
+default_registry = ElementRegistry.default_registry = ElementRegistry(
+    update_from_default=False
+)
 ElementRegistry.push_registry(ElementRegistry.default_registry)

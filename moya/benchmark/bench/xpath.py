@@ -17,16 +17,20 @@ from __future__ import print_function
 
 try:
     from os import times
+
     def time_func():
         tup = times()
-        #just user time
-        return tup[0] # + tup[1]
+        # just user time
+        return tup[0]  # + tup[1]
+
+
 except ImportError:
     from time import time as time_func
 
 from genshi.core import START, END
 from genshi.path import Path
 from genshi.input import XML
+
 
 def benchmark(f, acurate_time=1):
     """Checks how much time does function f work. It runs it as
@@ -43,14 +47,16 @@ def benchmark(f, acurate_time=1):
         runs *= 2
     return dt / runs
 
+
 def spell(t):
     """Returns spelled representation of time"""
-    units = [(0.000001, 'microsecond', 'microseconds'),
-             (0.001, 'milisecond', 'miliseconds'),
-             (1, 'second', 'seconds'),
-             (60, 'minute', 'minutes'),
-             (60*60, 'hour', 'hours'),
-            ]
+    units = [
+        (0.000001, "microsecond", "microseconds"),
+        (0.001, "milisecond", "miliseconds"),
+        (1, "second", "seconds"),
+        (60, "minute", "minutes"),
+        (60 * 60, "hour", "hours"),
+    ]
     i = 0
     at = abs(t)
     while i + 1 < len(units) and at >= units[i + 1][0]:
@@ -60,7 +66,8 @@ def spell(t):
         name = units[i][2]
     else:
         name = units[i][1]
-    return "%f %s"%(t, name)
+    return "%f %s" % (t, name)
+
 
 def test_paths_in_streams(exprs, streams, test_strategies=False):
     for expr in exprs:
@@ -69,9 +76,11 @@ def test_paths_in_streams(exprs, streams, test_strategies=False):
             print('\tRunning on "%s" example:' % sname)
 
             path = Path(expr)
+
             def f():
                 for e in path.select(stream):
                     pass
+
             t = spell(benchmark(f))
             print("\t\tselect:\t\t%s" % t)
 
@@ -79,31 +88,38 @@ def test_paths_in_streams(exprs, streams, test_strategies=False):
                 path = Path(expr)
                 for e in path.select(stream):
                     pass
+
             t = spell(benchmark(f))
             print("\t\tinit + select:\t%s" % t)
 
             if test_strategies and len(path.paths) == 1:
-                from genshi.path import GenericStrategy, SingleStepStrategy, \
-                                        SimplePathStrategy
+                from genshi.path import (
+                    GenericStrategy,
+                    SingleStepStrategy,
+                    SimplePathStrategy,
+                )
                 from genshi.tests.path import FakePath
-                strategies = (GenericStrategy, SingleStepStrategy,
-                              SimplePathStrategy)
+
+                strategies = (GenericStrategy, SingleStepStrategy, SimplePathStrategy)
                 for strategy in strategies:
                     if not strategy.supports(path.paths[0]):
                         continue
-                    print("\t\t%s Strategy"%strategy.__name__)
+                    print("\t\t%s Strategy" % strategy.__name__)
                     fp = FakePath(strategy(path.paths[0]))
+
                     def f():
                         for e in fp.select(stream):
                             pass
+
                     t = spell(benchmark(f))
-                    print("\t\t\tselect:\t\t%s"%t)
+                    print("\t\t\tselect:\t\t%s" % t)
 
 
 def test_documents(test_strategies=False):
     streams = []
 
-    s = XML("""\
+    s = XML(
+        """\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" xmlns:py="http://genshi.edgewall.org/" py:strip="" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -113,10 +129,12 @@ def test_documents(test_strategies=False):
         <h1>Hello</h1>
     </body>
 </html>
-""")
+"""
+    )
     streams.append((s, "small document"))
 
-    s = XML("""\
+    s = XML(
+        """\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" xmlns:py="http://genshi.edgewall.org/" py:strip="" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -148,24 +166,27 @@ def test_documents(test_strategies=False):
         </div>
     </body>
 </html>
-""")
+"""
+    )
     streams.append((s, "big document"))
 
     paths = [
-        '.',
-        '*|text()',
-        'html',
+        ".",
+        "*|text()",
+        "html",
         'html[@lang="en"]',
-        'html/body/h1/text()',
-        'html/body/div/a/@href',
+        "html/body/h1/text()",
+        "html/body/div/a/@href",
         'html/body/div[@id="splash"]/a[@class="b4"]/strong/text()',
-        'descendant-or-self::text()',
-        'descendant-or-self::h1/text()',
+        "descendant-or-self::text()",
+        "descendant-or-self::h1/text()",
     ]
     test_paths_in_streams(paths, streams, test_strategies)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from sys import argv
+
     if "--strategies" in argv:
         test_strategies = True
     else:

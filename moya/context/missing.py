@@ -6,13 +6,14 @@ from ..compat import text_type, implements_to_string, implements_bool
 
 def is_missing(obj):
     """Check if an object is missing"""
-    return getattr(obj, 'moya_missing', False)
+    return getattr(obj, "moya_missing", False)
 
 
 @implements_bool
 @implements_to_string
 class Missing(object):
     """A value indicating a missing value in the context"""
+
     moya_missing = True
 
     def __init__(self, key):
@@ -22,13 +23,13 @@ class Missing(object):
     def check(cls, obj):
         """Check if an object is missing"""
         # An object is 'missing' if it has an attribute 'moya_missing' set to True
-        return getattr(obj, 'moya_missing', False)
+        return getattr(obj, "moya_missing", False)
 
     def __moyajson__(self):
         return None
 
     def __str__(self):
-        return ''
+        return ""
 
     def __int__(self):
         return 0
@@ -40,7 +41,9 @@ class Missing(object):
         return "<missing '%s'>" % self.key
 
     def __moyaconsole__(self, console):
-        console.text("<missing '{}'>".format(self.key), italic=True, bold=True, fg="yellow")
+        console.text(
+            "<missing '{}'>".format(self.key), italic=True, bold=True, fg="yellow"
+        )
 
     def __bool__(self):
         return False
@@ -61,11 +64,10 @@ class Missing(object):
         return 0
 
     def __moyadbobject__(self):
-        raise ValueError('unable to store {!r} in db')
+        raise ValueError("unable to store {!r} in db")
 
 
 class MoyaAttributeError(Missing):
-
     def __init__(self, e):
         self._e = e
 
@@ -80,7 +82,7 @@ class MoyaAttributeError(Missing):
 
 
 if __name__ == "__main__":
-    m = Missing('foo.bar')
+    m = Missing("foo.bar")
     print(repr(m))
     print(text_type(m))
     print(len(m))

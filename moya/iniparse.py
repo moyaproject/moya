@@ -8,15 +8,16 @@ from .containers import OrderedDict
 import os
 import re
 
-re_section = re.compile(r'\[(.*?)\]', re.UNICODE)
+re_section = re.compile(r"\[(.*?)\]", re.UNICODE)
 
 
-def sub_env(text, _re_env=re.compile(r'\$(\w+)', re.MULTILINE)):
+def sub_env(text, _re_env=re.compile(r"\$(\w+)", re.MULTILINE)):
     """Substition renvironment, in $ENV_VARIABLE syntax"""
     get_environ = os.environ.get
 
     def repl(match):
         return get_environ(match.group(1), match.group(0))
+
     return _re_env.sub(repl, text)
 
 
@@ -27,20 +28,20 @@ def parse(inifile, sections=None, section_class=OrderedDict, _sub_env=sub_env):
     else:
         ini = inifile
     if not isinstance(ini, text_type):
-        ini = ini.decode('utf-8')
+        ini = ini.decode("utf-8")
     inilines = ini.splitlines()
 
     if sections is None:
         sections = section_class()
-    current_section = ''
+    current_section = ""
     current_section_data = section_class()
     current_key = None
-    current_value = ''
+    current_value = ""
 
     section_match = re_section.match
 
     for line in inilines:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         if not line.strip():
             current_key = None
@@ -50,19 +51,19 @@ def parse(inifile, sections=None, section_class=OrderedDict, _sub_env=sub_env):
             sections[current_section] = current_section_data
             current_section_data = section_class()
             current_section = match.group(1)
-        elif line[0] in ' \t':
+        elif line[0] in " \t":
             if current_key is not None:
-                current_value += '\n' + line.strip()
+                current_value += "\n" + line.strip()
                 current_section_data[current_key] = current_value
-        elif '=' in line:
-            key, value = line.split('=', 1)
+        elif "=" in line:
+            key, value = line.split("=", 1)
             key = key.rstrip()
             value = _sub_env(value.lstrip()).lstrip()
             current_key = key
             current_value = value
             current_section_data[key] = value
         else:
-            current_section_data[line.strip()] = ''
+            current_section_data[line.strip()] = ""
 
     sections[current_section] = current_section_data
     return sections
@@ -80,18 +81,18 @@ def write(settings, comments=None):
         if name:
             lines.append("[{}]".format(name))
         for k, v in iteritems(section):
-            v = "\n    ".join(v.split('\n'))
+            v = "\n    ".join(v.split("\n"))
             lines.append("{k} = {v}".format(k=k, v=v))
-        lines.append('')
+        lines.append("")
 
-    if '' in settings:
-        write_section('', settings[''])
+    if "" in settings:
+        write_section("", settings[""])
 
     for name, section in iteritems(settings):
         if name:
             write_section(name, section)
 
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

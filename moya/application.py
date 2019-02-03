@@ -33,20 +33,22 @@ class Application(object):
     @property
     def templates_directory(self):
         if self._templates_directory is None:
-            self._templates_directory = forcedir(abspath(self.system_settings['templates_directory']))
+            self._templates_directory = forcedir(
+                abspath(self.system_settings["templates_directory"])
+            )
         return self._templates_directory
 
     @property
     def data_directory(self):
-        return abspath(self.system_settings['data_directory'])
+        return abspath(self.system_settings["data_directory"])
 
     @property
     def default_template(self):
-        return self.system_settings.get('default_template', "/base.html")
+        return self.system_settings.get("default_template", "/base.html")
 
     @property
     def log(self):
-        log = logging.getLogger('moya.app.{}'.format(self.name))
+        log = logging.getLogger("moya.app.{}".format(self.name))
         return log
 
     def __moya_application__(self):
@@ -73,6 +75,7 @@ class Application(object):
         else:
             if check:
                 from .template.errors import MissingTemplateError
+
                 raise MissingTemplateError(path)
         return path
 
@@ -84,21 +87,21 @@ class Application(object):
             app = archive.find_app(app_lib_id)
         else:
             app = self
-        return archive.get_element('#' + name, app=app)
+        return archive.get_element("#" + name, app=app)
 
     def qualify_ref(self, ref):
         """qualify an element reference with this app name"""
-        if '#' in ref:
-            return "{}#{}".format(self.name, ref.split('#', 1)[-1])
+        if "#" in ref:
+            return "{}#{}".format(self.name, ref.split("#", 1)[-1])
         return ref
 
     def get_media_directory(self, media):
-        return self.media.get(media, '')
+        return self.media.get(media, "")
 
     def _bind_filters(self, filters):
         bound_filters = {}
         for name, _filter in iteritems(filters):
-            if hasattr(_filter, '__moyabind__'):
+            if hasattr(_filter, "__moyabind__"):
                 _filter = _filter.__moyabind__(self)
             bound_filters[name] = _filter
         return bound_filters
@@ -106,7 +109,8 @@ class Application(object):
     def throw(self, exc_type, msg, diagnosis=None, **info):
         """Throw a Moya exception"""
         from .logic import MoyaException
+
         raise MoyaException(exc_type, msg, diagnosis=diagnosis, info=info)
 
     def __repr__(self):
-        return '<application %s:%s>' % (self.lib.long_name, self.name)
+        return "<application %s:%s>" % (self.lib.long_name, self.name)

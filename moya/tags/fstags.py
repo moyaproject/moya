@@ -15,11 +15,12 @@ from fs import wildcard
 import hashlib
 import logging
 
-log = logging.getLogger('moya.fs')
+log = logging.getLogger("moya.fs")
 
 
 class SetContents(LogicElement):
     """Set the contents of a file"""
+
     xmlns = namespaces.fs
 
     class Help:
@@ -28,30 +29,35 @@ class SetContents(LogicElement):
     fsobj = Attribute("Filesystem object", required=False, default=None)
     fs = Attribute("Filesystem name", required=False, default=None)
     path = Attribute("Destination path", required=True)
-    contents = Attribute("File contents", type="expression", required=True, missing=False)
+    contents = Attribute(
+        "File contents", type="expression", required=True, missing=False
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
         params.contents
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             dst_fs = params.fsobj
         else:
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
         try:
             dst_fs.makedirs(dirname(params.path), recreate=True)
-            if hasattr(params.contents, 'read'):
+            if hasattr(params.contents, "read"):
                 dst_fs.setfile(params.path, params.contents)
             elif isinstance(params.contents, bytes):
                 dst_fs.setfile(params.path, params.contents)
             elif isinstance(params.contents, text_type):
                 dst_fs.settext(params.path, params.contents)
         except Exception as e:
-            self.throw("fs.set-contents.fail", "unable to set file contents ({})".format(e))
+            self.throw(
+                "fs.set-contents.fail", "unable to set file contents ({})".format(e)
+            )
         log.debug("setcontents '%s'", params.path)
 
 
 class RemoveFile(LogicElement):
     """Delete a file from a filesystem"""
+
     xmlns = namespaces.fs
 
     class Help:
@@ -60,11 +66,13 @@ class RemoveFile(LogicElement):
     fsobj = Attribute("Filesystem object", required=False, default=None)
     fs = Attribute("Filesystem name", required=False, default=None)
     path = Attribute("Destination path", required=True)
-    ifexists = Attribute("Only remove if the file exists?", type="boolean", required=False)
+    ifexists = Attribute(
+        "Only remove if the file exists?", type="boolean", required=False
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             dst_fs = params.fsobj
         else:
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
@@ -73,8 +81,10 @@ class RemoveFile(LogicElement):
         try:
             dst_fs.remove(params.path)
         except Exception as e:
-            self.throw("fs.remove-file.fail",
-                       "unable to remove '{}' ({})".format(params.path, e))
+            self.throw(
+                "fs.remove-file.fail",
+                "unable to remove '{}' ({})".format(params.path, e),
+            )
         log.debug("removed '%s'", params.path)
 
 
@@ -88,6 +98,7 @@ class GetSyspath(DataSetter):
     syspath[/c] exception.
 
     """
+
     xmlns = namespaces.fs
 
     class Help:
@@ -103,7 +114,7 @@ class GetSyspath(DataSetter):
     def logic(self, context):
         params = self.get_parameters(context)
 
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             dst_fs = params.fsobj
         else:
             dst_fs = self.archive.lookup_filesystem(self, params.fs)
@@ -111,13 +122,16 @@ class GetSyspath(DataSetter):
         try:
             syspath = dst_fs.getsyspath(params.path)
         except:
-            self.throw('fs.get-syspath.no-syspath',
-                       "{!r} can not generate a syspath for '{}'".format(dst_fs, params.path))
+            self.throw(
+                "fs.get-syspath.no-syspath",
+                "{!r} can not generate a syspath for '{}'".format(dst_fs, params.path),
+            )
         self.set_context(context, self.dst(context), syspath)
 
 
 class GetMD5(DataSetter):
     """Get the MD5 of a file"""
+
     xmlns = namespaces.fs
 
     class Help:
@@ -129,21 +143,23 @@ class GetMD5(DataSetter):
 
     def get_value(self, context):
         params = self.get_parameters(context)
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             fs = params.fsobj
         else:
             fs = self.archive.lookup_filesystem(self, params.fs)
 
         m = hashlib.md5()
         try:
-            with fs.open(params.path, 'rb') as f:
+            with fs.open(params.path, "rb") as f:
                 while 1:
                     chunk = f.read(16384)
                     if not chunk:
                         break
                     m.update(chunk)
         except FSError:
-            self.throw("fs.get-md5.fail", "unable to read file '{}'".format(params.path))
+            self.throw(
+                "fs.get-md5.fail", "unable to read file '{}'".format(params.path)
+            )
         else:
             return m.hexdigest()
 
@@ -160,7 +176,7 @@ class GetInfo(DataSetter):
 
     def get_value(self, context):
         params = self.get_parameters(context)
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             fs = params.fsobj
         else:
             fs = self.archive.lookup_filesystem(self, params.fs)
@@ -168,7 +184,10 @@ class GetInfo(DataSetter):
         try:
             info = fs.getinfo(params.path)
         except FSError:
-            self.throw('fs.get-info.fail', "unable to get info for path '{}'".format(params.path))
+            self.throw(
+                "fs.get-info.fail",
+                "unable to get info for path '{}'".format(params.path),
+            )
         else:
             return info
 
@@ -186,7 +205,7 @@ class GetSize(DataSetter):
     def get_value(self, context):
         params = self.get_parameters(context)
         path = text_type(params.path)
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             fs = params.fsobj
         else:
             fs = self.archive.lookup_filesystem(self, params.fs)
@@ -194,13 +213,15 @@ class GetSize(DataSetter):
         try:
             info = fs.getsize(path)
         except FSError:
-            self.throw('fs.get-size.fail', "unable to get info for path '{}'".format(params.path))
+            self.throw(
+                "fs.get-size.fail",
+                "unable to get info for path '{}'".format(params.path),
+            )
         else:
             return info
 
 
 class MoyaWalker(fs.walk.Walker):
-
     def __init__(self, exclude_dirs):
         self.exclude_dirs = exclude_dirs
 
@@ -210,6 +231,7 @@ class MoyaWalker(fs.walk.Walker):
 
 class WalkFiles(DataSetter):
     """Recursively get a list of files in a filesystem."""
+
     xmlns = namespaces.fs
 
     class Help:
@@ -218,29 +240,36 @@ class WalkFiles(DataSetter):
     fsobj = Attribute("Filesystem object", required=False, default=None)
     path = Attribute("Path to walk", required=False, default="/")
     fs = Attribute("Filesystem name", required=False, default=None)
-    files = Attribute('One or more wildcards to filter results by, e.g "*.py, *.js"', type="commalist", default='*')
-    excludedirs = Attribute('Directory wildcards to exclude form walk, e.g. "*.git, *.svn"', type="commalist", default=None)
-    search = Attribute("Search method ('breadth' or 'depth')" , default="breadth", choices=["breadth", "depth"])
+    files = Attribute(
+        'One or more wildcards to filter results by, e.g "*.py, *.js"',
+        type="commalist",
+        default="*",
+    )
+    excludedirs = Attribute(
+        'Directory wildcards to exclude form walk, e.g. "*.git, *.svn"',
+        type="commalist",
+        default=None,
+    )
+    search = Attribute(
+        "Search method ('breadth' or 'depth')",
+        default="breadth",
+        choices=["breadth", "depth"],
+    )
     dst = Attribute("Destination", required=True, type="reference")
 
     def logic(self, context):
         params = self.get_parameters(context)
-        if self.has_parameter('fsobj'):
+        if self.has_parameter("fsobj"):
             walk_fs = params.fsobj
         else:
             walk_fs = self.archive.get_filesystem(params.fs)
         if params.excludedirs:
-            walker = MoyaWalker(
-                wildcard.get_matcher(params.excludedirs, True)
-            )
+            walker = MoyaWalker(wildcard.get_matcher(params.excludedirs, True))
         else:
             walker = fs.walk.Walker()
         paths = list(
             walker.files(
-                walk_fs,
-                params.path,
-                search=params.search,
-                filter=params.files or None
+                walk_fs, params.path, search=params.search, filter=params.files or None
             )
         )
         self.set_context(context, params.dst, paths)

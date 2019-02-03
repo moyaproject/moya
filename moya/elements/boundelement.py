@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 class BoundElement(object):
 
-    __slots__ = ('app', 'element')
+    __slots__ = ("app", "element")
 
     def __init__(self, app, element):
         self.app = app
@@ -18,12 +18,12 @@ class BoundElement(object):
         return "<{1} in app {0}>".format(self.app, self.element)
 
     def __iter__(self):
-        return iter(('app', 'element'))
+        return iter(("app", "element"))
 
     def __getitem__(self, key):
-        if key == 'app':
+        if key == "app":
             return self.app
-        elif key == 'element':
+        elif key == "element":
             return self.element
         raise KeyError(key)
 
@@ -31,7 +31,7 @@ class BoundElement(object):
         return self.app, self.element
 
     def keys(self):
-        return ('app', 'element')
+        return ("app", "element")
 
     def iterkeys(self):
         return iter(self.keys())
@@ -43,7 +43,7 @@ class BoundElement(object):
         return iter(self.values())
 
     def items(self):
-        return [('app', self.app), ('element', self.element)]
+        return [("app", self.app), ("element", self.element)]
 
     def iteritems(self):
         return self.items()

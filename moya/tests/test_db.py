@@ -16,7 +16,6 @@ from moya import pilot
 
 
 class TestDB(unittest.TestCase):
-
     def setUp(self):
 
         try:
@@ -24,7 +23,7 @@ class TestDB(unittest.TestCase):
         except OSError:
             pass
 
-        build_result = build_server(join(curdir, 'dbtest/'), "settings.ini")
+        build_result = build_server(join(curdir, "dbtest/"), "settings.ini")
         archive = build_result.archive
         base_context = build_result.context
 
@@ -34,11 +33,11 @@ class TestDB(unittest.TestCase):
 
         context = base_context.clone()
         root = context.root
-        root['_dbsessions'] = db.get_session_map(archive)
+        root["_dbsessions"] = db.get_session_map(archive)
         archive.call("dbtest#setup", context, None, id=1)
         db.commit_sessions(context)
 
-        #build_result = build_server(join(curdir, 'dbtest/'), "settings.ini")
+        # build_result = build_server(join(curdir, 'dbtest/'), "settings.ini")
         self.archive = build_result.archive
         self.base_context = build_result.context
 
@@ -46,7 +45,7 @@ class TestDB(unittest.TestCase):
         archive.populate_context(self.context)
 
         root = self.context.root
-        root['_dbsessions'] = db.get_session_map(self.archive)
+        root["_dbsessions"] = db.get_session_map(self.archive)
 
     def tearDown(self):
         try:
@@ -75,7 +74,7 @@ class TestDB(unittest.TestCase):
             call("dbtest#owner_test", context, None)
             owner = call("dbtest#get_owner", context, None, name="owner")
             print(owner)
-            self.assertEqual(owner.name, 'owner')
+            self.assertEqual(owner.name, "owner")
 
             child1 = call("dbtest#get_child", context, None, name="child1")
             child2 = call("dbtest#get_child", context, None, name="child2")
@@ -116,16 +115,16 @@ class TestDB(unittest.TestCase):
         context = self.context
         call = self.archive.call
         with pilot.manage(context):
-            call('dbtest#make_post', context, None)
+            call("dbtest#make_post", context, None)
 
-            post = call('dbtest#get_post', context, None, name="post")
-            assert post.name == 'post', "post should be called 'post'"
-            assert post.images[0].name == 'images1', 'expected images1'
+            post = call("dbtest#get_post", context, None, name="post")
+            assert post.name == "post", "post should be called 'post'"
+            assert post.images[0].name == "images1", "expected images1"
 
-            images = call('dbtest#get_images', context, None, name="images1")
-            assert images.name == 'images1', "images should be named 'images1'"
+            images = call("dbtest#get_images", context, None, name="images1")
+            assert images.name == "images1", "images should be named 'images1'"
 
-            call('dbtest#delete_post', context, None, name="post")
+            call("dbtest#delete_post", context, None, name="post")
 
-            images = call('dbtest#get_images', context, None, name="images1")
+            images = call("dbtest#get_images", context, None, name="images1")
             assert not images, "images should have been deleted"

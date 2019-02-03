@@ -13,38 +13,53 @@ class _Markup(RenderBase):
     class Help:
         synopsis = "insert markup in to content"
 
-    type = Attribute("Markup type", required=False, default="bbcode", choices=get_installed_markups())
+    type = Attribute(
+        "Markup type", required=False, default="bbcode", choices=get_installed_markups()
+    )
     source = Attribute("Markup source", required=False, default=None, type="expression")
 
     def logic(self, context):
         type = self.type(context)
         if not Markup.supports(type):
-            self.throw('markup.unsupported', "markup type '{}' is not supported".format(type))
+            self.throw(
+                "markup.unsupported", "markup type '{}' is not supported".format(type)
+            )
         options = self.get_let_map(context)
-        source_text = self.source(context) if self.has_parameter('source') else self.text
+        source_text = (
+            self.source(context) if self.has_parameter("source") else self.text
+        )
         text = self.source(context) or Markup.sub(type, context, source_text, options)
         markup = Markup(text, type, options)
-        context['.content'].add_renderable(self._tag_name, markup)
+        context[".content"].add_renderable(self._tag_name, markup)
 
 
 class MarkupTag(RenderBase):
 
     source = Attribute("Markup source", required=False, default=None, type="expression")
-    dedent = Attribute("De-dent source (remove common leading whitespace)?", type="boolean", default=True)
+    dedent = Attribute(
+        "De-dent source (remove common leading whitespace)?",
+        type="boolean",
+        default=True,
+    )
 
     class Help:
         undocumented = True
 
     def logic(self, context):
         if not Markup.supports(self.markup):
-            self.throw('markup.unsupported', "markup type '{}' is not supported".format(self.markup))
+            self.throw(
+                "markup.unsupported",
+                "markup type '{}' is not supported".format(self.markup),
+            )
         options = self.get_let_map(context)
-        source_text = self.source(context) if self.has_parameter('source') else self.text
-        if not self.has_parameter('source') and self.dedent(context):
+        source_text = (
+            self.source(context) if self.has_parameter("source") else self.text
+        )
+        if not self.has_parameter("source") and self.dedent(context):
             source_text = dedent(source_text)
         sub_text = Markup.sub(self.markup, context, source_text, options)
         markup = Markup(sub_text, self.markup, options)
-        context['.content'].add_renderable(self._tag_name, markup)
+        context[".content"].add_renderable(self._tag_name, markup)
 
 
 class ProcessMarkup(DataSetter):
@@ -60,12 +75,18 @@ class ProcessMarkup(DataSetter):
     def logic(self, context):
         type = self.type(context)
         if not Markup.supports(type):
-            self.throw('markup.unsupported', "markup type '{}' is not supported".format(type))
+            self.throw(
+                "markup.unsupported", "markup type '{}' is not supported".format(type)
+            )
         options = self.get_let_map(context)
-        source_text = self.src(context) if self.has_parameter('src') else self.text
+        source_text = self.src(context) if self.has_parameter("src") else self.text
         if not isinstance(source_text, text_type):
-            self.throw('bad-value.unsupported-type',
-                       "the 'src' parameter should be a a string (not {})".format(context.to_expr(source_text)))
+            self.throw(
+                "bad-value.unsupported-type",
+                "the 'src' parameter should be a a string (not {})".format(
+                    context.to_expr(source_text)
+                ),
+            )
 
         text = self.src(context) or Markup.sub(type, context, source_text, options)
         markup = Markup(text, type, options)
@@ -75,6 +96,7 @@ class ProcessMarkup(DataSetter):
 
 class BBCode(MarkupTag):
     """Add bbcode to content"""
+
     markup = "bbcode"
 
     class Help:
@@ -87,6 +109,7 @@ class BB(BBCode):
 
 class Markdown(MarkupTag):
     """Add markdown to content"""
+
     markup = "markdown"
 
     class Help:
@@ -119,6 +142,7 @@ class GetMarkupChoices(DataSetter):
 
 class MarkupInsert(LogicElement):
     """A callable invoked from Moya markup"""
+
     _moya_markup_insert = True
 
     registry = {}

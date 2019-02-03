@@ -16,7 +16,8 @@ from lxml.cssselect import CSSSelector
 from lxml.html import tostring, fromstring, fragment_fromstring
 
 import logging
-log = logging.getLogger('moya.runtime')
+
+log = logging.getLogger("moya.runtime")
 
 
 def get_installed_markups():
@@ -26,9 +27,11 @@ def get_installed_markups():
 
 def get_markup_choices():
     """Get a choices list for installed markups"""
-    choices = [(markup.name, markup.title)
-               for markup in MarkupBaseMeta.markup_registry.values()
-               if markup.choice and markup.title is not None]
+    choices = [
+        (markup.name, markup.title)
+        for markup in MarkupBaseMeta.markup_registry.values()
+        if markup.choice and markup.title is not None
+    ]
     choices.sort(key=lambda m: m[1].lower(), reverse=True)
     return choices
 
@@ -39,7 +42,7 @@ class MarkupBaseMeta(type):
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
         if name != "MarkupBase":
-            name = getattr(new_class, 'name', name.lower().strip('_'))
+            name = getattr(new_class, "name", name.lower().strip("_"))
             cls.markup_registry[name] = new_class
         return new_class
 
@@ -67,10 +70,12 @@ class MarkupBaseType(object):
         return markup_class(name, markup_options)
 
     def process(self, archive, context, text, target, options):
-        target = text_type(target or 'text')
+        target = text_type(target or "text")
         process_method = "process_" + target
         if hasattr(self, process_method):
-            return getattr(self, process_method)(archive, context, text, target, options)
+            return getattr(self, process_method)(
+                archive, context, text, target, options
+            )
         else:
             raise MarkupError("don't know how to render target '{}'".format(target))
 
@@ -96,10 +101,10 @@ class TextMarkup(MarkupBase):
     title = "Text (plain, escaped)"
 
     def process_html(self, archive, context, text, target, options):
-        if options.get('linkify', False):
+        if options.get("linkify", False):
             return HTML(html.linkify(text))
         else:
-            return HTML(html.escape(text).replace('\n', '<br>'))
+            return HTML(html.escape(text).replace("\n", "<br>"))
 
 
 class HTMLMarkup(MarkupBase):
@@ -126,7 +131,7 @@ class SummaryMarkup(MarkupBase):
     name = "summary"
 
     def process_html(self, archive, context, text, target, options):
-        return HTML(html.summarize(text, max_size=options.get('length', 100)))
+        return HTML(html.summarize(text, max_size=options.get("length", 100)))
 
 
 class MarkdownMarkup(MarkupBase):
@@ -148,28 +153,33 @@ class MoyaMarkup(MarkupBase):
     title = "Raw HTML + moya psuedo tags"
     choice = False
 
-    _selector = CSSSelector('moya')
+    _selector = CSSSelector("moya")
 
     def create(self, options):
         from .template import Template
-        self.template = Template('<b>moya</b>{% render sections._widget %}')
+
+        self.template = Template("<b>moya</b>{% render sections._widget %}")
 
     def process_html(self, archive, context, text, target, options):
-        #soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
+        # soup = fragment_fromstring(b'<article>' + text.encode('utf-8', 'replace') + b'</article>', create_parent=True)
         soup = fragment_fromstring(text, create_parent=True)
         escape = html.escape
-        console = context['.console']
+        console = context[".console"]
 
         def write_error(insert_ref, el, msg, exc=None):
             log.error("insert '%s' failed; %s", insert_ref, msg)
 
-            if context['.debug']:
+            if context[".debug"]:
                 if exc is not None:
                     c = Console(text=True, width=120)
                     c.obj(context, exc)
-                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(c.get_text()))
+                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(
+                        escape(c.get_text())
+                    )
                 else:
-                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(escape(msg))
+                    _html = '<pre class="moya-insert-error"><code>{}</code></pre>'.format(
+                        escape(msg)
+                    )
                 new_el = fromstring(_html)
                 el.getparent().replace(el, new_el)
             else:
@@ -180,44 +190,54 @@ class MoyaMarkup(MarkupBase):
         for el in self._selector(soup):
 
             try:
-                insert_ref = el.attrib['insert']
+                insert_ref = el.attrib["insert"]
             except IndexError:
                 write_error(el, "no 'insert' attribute in <moya> markup tag")
 
             app = None
             attribs = dict(el.attrib.items())
-            app_name = attribs.pop('app', None) or context.get('.app.name', None)
+            app_name = attribs.pop("app", None) or context.get(".app.name", None)
             if app_name is None:
                 write_error(insert_ref, el, "'app' attribute is required on <moya> tag")
                 continue
 
             # Get data params
-            params = {
-                k.rsplit('-', 1)[-1]: v
-                for k, v in attribs.items()
-            }
+            params = {k.rsplit("-", 1)[-1]: v for k, v in attribs.items()}
 
             params.update(options)
 
-            app = app or context.get('.app', None)
+            app = app or context.get(".app", None)
 
-            if '#' in insert_ref:
+            if "#" in insert_ref:
                 try:
                     _app, insert_el = archive.get_element(insert_ref, app=app)
                 except ElementNotFoundError as e:
-                    write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
+                    write_error(
+                        insert_ref,
+                        el,
+                        "markup insert element '{}' was not found".format(insert_ref),
+                        exc=e,
+                    )
                     continue
             else:
                 from .tags.markup import MarkupInsert
+
                 try:
                     insert_el = MarkupInsert.registry[insert_ref]
                 except KeyError:
-                    write_error(insert_ref, el, "markup insert element '{}' was not found".format(insert_ref), exc=e)
+                    write_error(
+                        insert_ref,
+                        el,
+                        "markup insert element '{}' was not found".format(insert_ref),
+                        exc=e,
+                    )
                     continue
                 _app = app
 
-            if not getattr(insert_el, '_moya_markup_insert', False):
-                msg = '{} is not safe for markup insertion'.format(html.escape(insert_el))
+            if not getattr(insert_el, "_moya_markup_insert", False):
+                msg = "{} is not safe for markup insertion".format(
+                    html.escape(insert_el)
+                )
                 write_error(insert_ref, el, msg)
                 continue
 
@@ -226,7 +246,12 @@ class MoyaMarkup(MarkupBase):
             try:
                 replace_markup = insert_callable(context, **params)
             except LogicError as e:
-                write_error(insert_ref, el, "markup insert failed due to logic error, see logs", exc=e)
+                write_error(
+                    insert_ref,
+                    el,
+                    "markup insert failed due to logic error, see logs",
+                    exc=e,
+                )
                 continue
             except Exception as e:
                 write_error(insert_ref, el, "markup insert failed, see logs", exc=e)
@@ -236,7 +261,7 @@ class MoyaMarkup(MarkupBase):
             new_el.tail = el.tail
             el.getparent().replace(el, new_el)
 
-        return HTML("".join(tostring(e).decode('utf-8') for e in soup))
+        return HTML("".join(tostring(e).decode("utf-8") for e in soup))
 
 
 @implements_to_string
@@ -279,7 +304,11 @@ class Markup(object):
         return self.markup_processor.process(self.source, "text", None)
 
     def moya_render(self, archive, context, target, options):
-        return self.markup_processor.process(archive, context, self.source, target, options)
+        return self.markup_processor.process(
+            archive, context, self.source, target, options
+        )
 
     def process(self, archive, context, target="html", **options):
-        return self.markup_processor.process(archive, context, self.source, target, options)
+        return self.markup_processor.process(
+            archive, context, self.source, target, options
+        )

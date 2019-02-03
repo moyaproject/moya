@@ -22,6 +22,7 @@ class LRUCache(OrderedDict):
     discarded to make room for the new item.
 
     """
+
     def __init__(self, cache_size=None):
         self.cache_size = cache_size
         self.lock = Lock()
@@ -66,11 +67,11 @@ class QueryData(OrderedDict):
                 if k in self:
                     del self[k]
             else:
-                if isinstance(v, (list, set, tuple, dict)) or hasattr(v, 'items'):
+                if isinstance(v, (list, set, tuple, dict)) or hasattr(v, "items"):
                     self[k] = list(v)
                 else:
                     if v is None:
-                        v = ''
+                        v = ""
                     elif not isinstance(v, text_type):
                         v = text_type(v)
                     self[k] = [v]
@@ -98,10 +99,10 @@ class QueryData(OrderedDict):
 
 
 if __name__ == "__main__":
-    qd = QueryData.from_qs('foo=bar&a=1&b=2&hobbit=frodo&hobbit=sam')
+    qd = QueryData.from_qs("foo=bar&a=1&b=2&hobbit=frodo&hobbit=sam")
 
     print(qd.items())
 
-    qd.update({'foo': None})
+    qd.update({"foo": None})
 
     print(qd.items())

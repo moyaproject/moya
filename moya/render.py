@@ -35,17 +35,20 @@ class RenderList(list):
 
 def is_renderable(obj):
     """Check if an object complies to the render protocol"""
-    return hasattr(obj, 'moya_render')
+    return hasattr(obj, "moya_render")
 
 
 def is_safe(obj):
-    return getattr(obj, 'html_safe', False)
+    return getattr(obj, "html_safe", False)
 
 
 def render_object(obj, archive, context, target, options=None):
     """Render an object"""
-    if hasattr(obj, 'moya_render'):
-        if hasattr(obj, 'moya_render_targets') and target not in obj.moya_render_targets:
+    if hasattr(obj, "moya_render"):
+        if (
+            hasattr(obj, "moya_render_targets")
+            and target not in obj.moya_render_targets
+        ):
             rendered = text_type(obj)
         else:
             rendered = obj.moya_render(archive, context, target, options or {})
@@ -55,18 +58,24 @@ def render_object(obj, archive, context, target, options=None):
         rendered = HTML("<br>\n".join(escape(text_type(obj)).splitlines()))
     else:
         if obj is None:
-            rendered = ''
+            rendered = ""
         else:
             rendered = obj
-    if target in ('', 'html') and not getattr(rendered, 'html_safe', False):
+    if target in ("", "html") and not getattr(rendered, "html_safe", False):
         rendered = escape(rendered)
     return rendered
 
 
 def render_objects(objects, archive, context, target, options=None, join="\n"):
     """Renders a sequence of objects and concatenates them together with carriage returns"""
-    return HTML(join.join([render_object(obj, archive, context, target, options=options)
-                for obj in objects]))
+    return HTML(
+        join.join(
+            [
+                render_object(obj, archive, context, target, options=options)
+                for obj in objects
+            ]
+        )
+    )
 
 
 if __name__ == "__main__":

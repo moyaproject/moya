@@ -11,13 +11,12 @@ from moya.archive import Archive
 
 
 class TestCalls(unittest.TestCase):
-
     def setUp(self):
         self.called = False
         path = os.path.abspath(os.path.dirname(__file__))
         self.fs = open_fs(path)
         self.context = Context()
-        self.context['console'] = Console()
+        self.context["console"] = Console()
         self.archive = Archive()
         import_fs = self.fs.opendir("archivetest")
         self.archive.load_library(import_fs)
@@ -25,17 +24,17 @@ class TestCalls(unittest.TestCase):
 
     def test_moya_call_no_lazy(self):
         """Test moya call without lazy attribute"""
-        self.archive('moya.tests#test_moya_call_no_lazy', self.context, None)
-        self.assert_(self.context.root['called'])
-        self.assertEqual(self.context['.result'], 123)
+        self.archive("moya.tests#test_moya_call_no_lazy", self.context, None)
+        self.assert_(self.context.root["called"])
+        self.assertEqual(self.context[".result"], 123)
 
     def test_moya_call_lazy(self):
         """Test lazy moya calls"""
-        self.archive('moya.tests#test_moya_call_lazy', self.context, None)
-        self.assert_('called' not in self.context.root)
-        self.assertEqual(self.context['result'], 123)
-        self.assert_('called' in self.context.root)
-        self.assert_(self.context.root['called'])
+        self.archive("moya.tests#test_moya_call_lazy", self.context, None)
+        self.assert_("called" not in self.context.root)
+        self.assertEqual(self.context["result"], 123)
+        self.assert_("called" in self.context.root)
+        self.assert_(self.context.root["called"])
 
     # def test_call_no_lazy(self):
     #     """Test callable call without lazy attribute"""

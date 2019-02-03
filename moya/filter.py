@@ -5,7 +5,6 @@ from .compat import text_type
 
 
 class MoyaFilterBase(object):
-
     def __init__(self, value_name="value", allow_missing=False):
         self._value_name = value_name
         self.allow_missing = allow_missing
@@ -19,7 +18,11 @@ class MoyaFilterBase(object):
 
     def __moyafilter__(self, context, app, value, params):
         if not self.allow_missing and is_missing(value):
-            raise ValueError("{} doesn't accept a missing value (left hand side is {!r})".format(self, value))
+            raise ValueError(
+                "{} doesn't accept a missing value (left hand side is {!r})".format(
+                    self, value
+                )
+            )
 
         params[self.get_value_name()] = value
         filter_call = self.lib.archive.get_callable(self.element_ref, app=app)
@@ -44,14 +47,16 @@ class BoundFilter(MoyaFilterBase):
         return "{!r} (app is '{}')".format(self._filter, self._app.name)
 
     def __moyafilter__(self, context, app, value, params):
-        params['_caller_app'] = app
+        params["_caller_app"] = app
         if self.validator is not None:
             self.validator.check(context, params, self)
         return self._filter.__moyafilter__(context, self._app, value, params)
 
 
 class MoyaFilter(MoyaFilterBase):
-    def __init__(self, lib, filter_element, value_name, allow_missing=False, validator=None):
+    def __init__(
+        self, lib, filter_element, value_name, allow_missing=False, validator=None
+    ):
         self.lib = lib
         self.element_ref = filter_element
         self.validator = validator
@@ -64,7 +69,9 @@ class MoyaFilter(MoyaFilterBase):
 class MoyaFilterExpression(MoyaFilterBase):
     def __init__(self, exp, value_name, allow_missing=False):
         self.exp = exp
-        super(MoyaFilterExpression, self).__init__(value_name, allow_missing=allow_missing)
+        super(MoyaFilterExpression, self).__init__(
+            value_name, allow_missing=allow_missing
+        )
 
     def __repr__(self):
         return "<filter '{}'>".format(text_type(self.exp))
@@ -88,6 +95,6 @@ class MoyaFilterParams(object):
         return repr(self.filter)
 
     def __moyafilter__(self, context, app, value, params):
-        #if self.filter.validator is not None:
+        # if self.filter.validator is not None:
         #    self.filter.validator.check(context, params)
         return self.filter.__moyafilter__(context, app, value, self.params)

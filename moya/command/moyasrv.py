@@ -12,7 +12,7 @@ from moya.compat import text_type
 from moya.settings import SettingsContainer
 from moya.console import Console
 
-DEFAULT_HOME_DIR = '/etc/moya/'
+DEFAULT_HOME_DIR = "/etc/moya/"
 
 
 DEFAULT_CONF = """
@@ -87,53 +87,74 @@ class MoyaSrv(object):
     """Moya Service"""
 
     def get_argparse(self):
-        parser = argparse.ArgumentParser(prog="moya-srv",
-                                         description=self.__doc__)
+        parser = argparse.ArgumentParser(prog="moya-srv", description=self.__doc__)
 
-        parser.add_argument('-d', '--debug', dest="debug", action="store_true",
-                            help="enable debug information (show tracebacks)")
-        parser.add_argument('--home', dest="home", metavar="PATH", default=None,
-                            help="moya service directory")
+        parser.add_argument(
+            "-d",
+            "--debug",
+            dest="debug",
+            action="store_true",
+            help="enable debug information (show tracebacks)",
+        )
+        parser.add_argument(
+            "--home",
+            dest="home",
+            metavar="PATH",
+            default=None,
+            help="moya service directory",
+        )
 
-        subparsers = parser.add_subparsers(title="available sub-commands",
-                                           dest="subcommand",
-                                           help="sub-command help")
+        subparsers = parser.add_subparsers(
+            title="available sub-commands", dest="subcommand", help="sub-command help"
+        )
 
-        list_parser = subparsers.add_parser('list',
-                                            help="list projects",
-                                            description="list enabled projects")
+        list_parser = subparsers.add_parser(
+            "list", help="list projects", description="list enabled projects"
+        )
         list_parser
 
-        where_parser = subparsers.add_parser('where',
-                                             help='find project directory',
-                                             description="output the location of the project")
+        where_parser = subparsers.add_parser(
+            "where",
+            help="find project directory",
+            description="output the location of the project",
+        )
 
-        where_parser.add_argument(dest="name", metavar="PROJECT",
-                                  help="name of a project")
+        where_parser.add_argument(
+            dest="name", metavar="PROJECT", help="name of a project"
+        )
 
-        restart_parser = subparsers.add_parser('restart',
-                                               help='restart a project server',
-                                               description="restart a server")
+        restart_parser = subparsers.add_parser(
+            "restart", help="restart a project server", description="restart a server"
+        )
 
-        restart_parser.add_argument(dest="name", metavar="PROJECT",
-                                    help="name of a project")
+        restart_parser.add_argument(
+            dest="name", metavar="PROJECT", help="name of a project"
+        )
 
-        install_parser = subparsers.add_parser('install',
-                                               help='install moya service',
-                                               description="install moya service")
+        install_parser = subparsers.add_parser(
+            "install", help="install moya service", description="install moya service"
+        )
 
-        install_parser.add_argument('--home', dest="home", metavar="PATH",
-                                    default=DEFAULT_HOME_DIR,
-                                    help="where to install service conf",)
-        install_parser.add_argument('--force', dest="force", action="store_true",
-                                    help="overwrite files that exist")
+        install_parser.add_argument(
+            "--home",
+            dest="home",
+            metavar="PATH",
+            default=DEFAULT_HOME_DIR,
+            help="where to install service conf",
+        )
+        install_parser.add_argument(
+            "--force",
+            dest="force",
+            action="store_true",
+            help="overwrite files that exist",
+        )
 
         install_parser
 
         return parser
 
     def error(self, msg, code=-1):
-        sys.stderr.write(msg + '\n')
+        sys.stderr.write(msg + "\n")
         sys.exit(code)
 
     def run(self):
@@ -141,17 +162,21 @@ class MoyaSrv(object):
         self.args = args = parser.parse_args(sys.argv[1:])
         self.console = Console()
 
-        if args.subcommand not in ['install']:
-            self.home_dir = args.home or os.environ.get('MOYA_SERVICE_HOME', None) or DEFAULT_HOME_DIR
-            settings_path = os.path.join(self.home_dir, 'moya.conf')
+        if args.subcommand not in ["install"]:
+            self.home_dir = (
+                args.home
+                or os.environ.get("MOYA_SERVICE_HOME", None)
+                or DEFAULT_HOME_DIR
+            )
+            settings_path = os.path.join(self.home_dir, "moya.conf")
             try:
-                with io.open(settings_path, 'rt') as f:
+                with io.open(settings_path, "rt") as f:
                     self.settings = SettingsContainer.read_from_file(f)
             except IOError:
-                self.error('unable to read {}'.format(settings_path))
+                self.error("unable to read {}".format(settings_path))
                 return -1
 
-        method_name = "run_" + args.subcommand.replace('-', '_')
+        method_name = "run_" + args.subcommand.replace("-", "_")
         try:
             return getattr(self, method_name)() or 0
         except CommandError as e:
@@ -162,7 +187,7 @@ class MoyaSrv(object):
             self.error(text_type(e))
 
     def _get_projects(self):
-        project_paths = self.settings.get_list('projects', 'read')
+        project_paths = self.settings.get_list("projects", "read")
         paths = []
         cwd = os.getcwd()
         try:
@@ -177,7 +202,7 @@ class MoyaSrv(object):
     def project_exists(self, name):
         for path in self._get_projects():
             settings = self.read_project(path)
-            if settings.get('service', 'name', None) == name:
+            if settings.get("service", "name", None) == name:
                 return True
         return False
 
@@ -189,20 +214,20 @@ class MoyaSrv(object):
         table = []
         for path in self._get_projects():
             settings = self.read_project(path)
-            location = settings.get('service', 'location', '?')
-            name = settings.get('service', 'name', '?')
-            domains = "\n".join(settings.get_list('service', 'domains', ""))
+            location = settings.get("service", "location", "?")
+            name = settings.get("service", "name", "?")
+            domains = "\n".join(settings.get_list("service", "domains", ""))
             table.append([name, domains, path, location])
         table.sort(key=lambda row: row[0].lower())
-        self.console.table(table, header_row=['name', 'domain(s)', 'conf', 'location'])
+        self.console.table(table, header_row=["name", "domain(s)", "conf", "location"])
 
     def run_where(self):
         name = self.args.name
         location = None
         for path in self._get_projects():
             settings = self.read_project(path)
-            if settings.get('service', 'name', None) == name:
-                location = settings.get('service', 'location', None)
+            if settings.get("service", "name", None) == name:
+                location = settings.get("service", "location", None)
         if location is None:
             self.error("no project '{}'".format(name))
             return -1
@@ -213,14 +238,16 @@ class MoyaSrv(object):
         name = self.args.name
         if not self.project_exists(name):
             self.error("no project '{}'".format(name))
-        temp_dir = os.path.join(self.settings.get('service', 'temp_dir', tempfile.gettempdir()), 'moyasrv')
+        temp_dir = os.path.join(
+            self.settings.get("service", "temp_dir", tempfile.gettempdir()), "moyasrv"
+        )
         try:
             os.makedirs(temp_dir)
         except OSError:
             pass
         change_path = os.path.join(temp_dir, "{}.changes".format(name))
         try:
-            with open(change_path, 'a'):
+            with open(change_path, "a"):
                 os.utime(change_path, None)
         except IOError as e:
             sys.stderr.write("{}\n".format(text_type(e)))
@@ -244,52 +271,64 @@ class MoyaSrv(object):
                 create_dir(dirpath)
             except OSError as e:
                 if e.errno == 13:
-                    sys.stderr.write('permission denied (do you need sudo)?\n')
+                    sys.stderr.write("permission denied (do you need sudo)?\n")
                     return -1
                 raise
 
         def write_file(_path, contents):
             path = os.path.join(home_dir, _path)
             if not self.args.force and os.path.exists(path):
-                sys.stdout.write("not overwriting '{}' (use --force to overwrite)\n".format(path))
+                sys.stdout.write(
+                    "not overwriting '{}' (use --force to overwrite)\n".format(path)
+                )
                 return
 
-            with open(path, 'wt') as f:
+            with open(path, "wt") as f:
                 f.write(contents)
             sys.stdout.write("wrote '{}'\n".format(path))
 
-        for path, contents in [('moya.conf', DEFAULT_CONF),
-                               ('logging.ini', DEFAULT_LOGGING),
-                               ('bashtools', BASH_TOOLS)]:
+        for path, contents in [
+            ("moya.conf", DEFAULT_CONF),
+            ("logging.ini", DEFAULT_LOGGING),
+            ("bashtools", BASH_TOOLS),
+        ]:
             try:
                 write_file(path, contents)
             except IOError as e:
                 if e.errno == 13:
-                    sys.stdout.write("permission denied writing '{}' (do you need sudo)?\n".format(path))
+                    sys.stdout.write(
+                        "permission denied writing '{}' (do you need sudo)?\n".format(
+                            path
+                        )
+                    )
                     return -1
                 else:
                     raise
 
         TOOLS_PATH = "~/.bashrc"
-        bashtools_path = os.path.join(home_dir, 'bashtools')
+        bashtools_path = os.path.join(home_dir, "bashtools")
         try:
-            cmd = b'\n# Added by moya-srv install\nsource {}\n'.format(bashtools_path)
+            cmd = b"\n# Added by moya-srv install\nsource {}\n".format(bashtools_path)
             bashrc_path = os.path.expanduser(TOOLS_PATH)
             if os.path.exists(bashrc_path):
-                with open(bashrc_path, 'rb') as f:
+                with open(bashrc_path, "rb") as f:
                     bashrc = f.read()
             else:
-                bashrc = b''
+                bashrc = b""
             if cmd not in bashrc:
-                with open(bashrc_path, 'ab') as f:
+                with open(bashrc_path, "ab") as f:
                     f.write(cmd)
         except Exception as e:
-            sys.stdout.write('unable to add moya service bash tools ({})\n'.format(e))
+            sys.stdout.write("unable to add moya service bash tools ({})\n".format(e))
         else:
-            sys.stdout.write('Added Moya service bash tools to {}\n'.format(TOOLS_PATH))
-            sys.stdout.write("Tools will be available when you next log in (or run 'source {})\n".format(bashtools_path))
+            sys.stdout.write("Added Moya service bash tools to {}\n".format(TOOLS_PATH))
+            sys.stdout.write(
+                "Tools will be available when you next log in (or run 'source {})\n".format(
+                    bashtools_path
+                )
+            )
 
-        sys.stdout.write('Moya service was installed in {}\n'.format(home_dir))
+        sys.stdout.write("Moya service was installed in {}\n".format(home_dir))
 
 
 def main():

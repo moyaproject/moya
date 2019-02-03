@@ -5,10 +5,7 @@ from __future__ import absolute_import
 from .errors import ElementNotFoundError, ElementError
 from .context.expression import Expression
 from . import namespaces
-from .compat import (text_type,
-                     implements_to_string,
-                     iteritems,
-                     pickle)
+from .compat import text_type, implements_to_string, iteritems, pickle
 
 from fs.path import dirname, join
 
@@ -16,7 +13,7 @@ import re
 import weakref
 from collections import defaultdict
 
-_re_xml_namespace = re.compile(r'^(?:\{(.*?)\})*(.*)$', re.UNICODE)
+_re_xml_namespace = re.compile(r"^(?:\{(.*?)\})*(.*)$", re.UNICODE)
 
 
 def _extract_namespace(tag_name):
@@ -27,16 +24,16 @@ def _extract_namespace(tag_name):
 def _childless_tag(tag_name, attr_map):
     attrs = _get_attrs(attr_map)
     if attrs:
-        a = ' '.join('%s="%s"' % (k, v) for k, v in sorted(attrs.items())).strip()
-        return '<%s>' % ' '.join((tag_name, a))
-    return '<%s>' % tag_name
+        a = " ".join('%s="%s"' % (k, v) for k, v in sorted(attrs.items())).strip()
+        return "<%s>" % " ".join((tag_name, a))
+    return "<%s>" % tag_name
 
 
 def _get_attrs(attr_map):
     attrs = {}
     for ns, attr_map in attr_map.items():
         if ns == namespaces.default:
-            ns = ''
+            ns = ""
         for k, v in iteritems(attr_map):
             if ns:
                 attr_name = "{{{}}}{}".format(ns, k)
@@ -73,17 +70,14 @@ class DocumentStructure(object):
         return self.nodes[1]
 
     def dumps(self):
-        serialized = {
-            "xml": self.xml,
-            "nodes": self.nodes
-        }
+        serialized = {"xml": self.xml, "nodes": self.nodes}
         return pickle.dumps(serialized, pickle.HIGHEST_PROTOCOL)
 
     @classmethod
     def load(cls, doc_dump, document, library):
         serialized = pickle.loads(doc_dump)
         structure = DocumentStructure(document, library, serialized["xml"])
-        nodes = serialized['nodes']
+        nodes = serialized["nodes"]
         for node in nodes.itervalues():
             node.structure = structure
         structure.nodes = nodes
@@ -116,20 +110,23 @@ class DocumentStructure(object):
                 print("{}{}".format(tab, node))
                 for child in node.children:
                     write_node(child, level + 1)
+
         write_node(self.nodes[1])
 
 
 @implements_to_string
 class DocumentNode(object):
-    def __init__(self,
-                 xmlns,
-                 tag_name,
-                 parent_doc_id,
-                 attrs,
-                 translatable_attrs,
-                 text,
-                 source_line,
-                 translate_text=False):
+    def __init__(
+        self,
+        xmlns,
+        tag_name,
+        parent_doc_id,
+        attrs,
+        translatable_attrs,
+        text,
+        source_line,
+        translate_text=False,
+    ):
         self.text_node = False
         self.xmlns = xmlns
         self.tag_name = tag_name
@@ -155,7 +152,7 @@ class DocumentNode(object):
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        state.pop('structure')
+        state.pop("structure")
         return state
 
     @property
@@ -167,8 +164,8 @@ class DocumentNode(object):
         """Build an element from structure data"""
         # Returns element, or False if element could not be yet, or None if no element is required
         attrs = self.attrs.get(namespaces.default, {})
-        docname = attrs.get('docname', None)
-        libname = attrs.get('libname', None)
+        docname = attrs.get("docname", None)
+        libname = attrs.get("libname", None)
         structure = self.structure
         document = structure.document
         tag_name = self.tag_name
@@ -180,8 +177,8 @@ class DocumentNode(object):
             libname = structure.library.allocate_libname(docid)
 
         replace_lib = False
-        if libname is not None and '#' in libname:
-            lib_, _, libname = libname.partition('#')
+        if libname is not None and "#" in libname:
+            lib_, _, libname = libname.partition("#")
             lib = archive.get_or_create_library(lib_)
             replace_lib = True
         else:
@@ -197,16 +194,18 @@ class DocumentNode(object):
             parent_docid = self.parent.element.docid
         else:
             parent_docid = None
-        element = element_type(structure.document,
-                               self.xmlns,
-                               tag_name,
-                               parent_docid,
-                               docid,
-                               source_line=self.source_line)
+        element = element_type(
+            structure.document,
+            self.xmlns,
+            tag_name,
+            parent_docid,
+            docid,
+            source_line=self.source_line,
+        )
         element.libname = libname
         element.docname = docname
         element._code = structure.xml
-        element._build(context, self.text or '', attrs, self.translatable_attrs)
+        element._build(context, self.text or "", attrs, self.translatable_attrs)
         element._document = weakref.ref(document)
 
         element._let_exp = None  # Cache for let expressions
@@ -216,7 +215,9 @@ class DocumentNode(object):
         element._translate_text = element._meta.translate or self.translate_text
 
         if element.parent:
-            self.text_nodes = element._meta.text_nodes or element.parent._meta.text_nodes
+            self.text_nodes = (
+                element._meta.text_nodes or element.parent._meta.text_nodes
+            )
 
         if docname is not None:
             document.register_named_element(docname, element)
@@ -226,9 +227,9 @@ class DocumentNode(object):
             if replace_lib:
                 lib.add_replacement_node(element)
             else:
-                lib.register_named_element(libname,
-                                           element,
-                                           priority=structure.library.priority)
+                lib.register_named_element(
+                    libname, element, priority=structure.library.priority
+                )
 
         return element
 
@@ -245,10 +246,7 @@ class DocumentNode(object):
 
 
 class DocumentTextNode(DocumentNode):
-    def __init__(self,
-                 parent_doc_id,
-                 source_line,
-                 text):
+    def __init__(self, parent_doc_id, source_line, text):
         self.text_node = True
         self.parent_doc_id = parent_doc_id
         self.source_line = source_line
@@ -276,7 +274,6 @@ class DocumentTextNode(DocumentNode):
 
 
 class Document(object):
-
     def __init__(self, archive, lib=None, path=None):
         self._archive = weakref.ref(archive)
         self.elements = {}
@@ -297,7 +294,7 @@ class Document(object):
 
     def __repr__(self):
         if self.lib:
-            return "<document %s:\"%s\">" % (self.lib.long_name, self.path)
+            return '<document %s:"%s">' % (self.lib.long_name, self.path)
         else:
             return '<document "%s">' % self.path
 
@@ -307,12 +304,12 @@ class Document(object):
     def dumps(self, expressions=None):
         if expressions is None:
             expressions = []
-        doc = {"expressions": expressions,
-               "root": self.root_element.dumps()}
+        doc = {"expressions": expressions, "root": self.root_element.dumps()}
         return doc
 
     def loads(self, data):
         from .elements.elementbase import ElementBase
+
         Expression.insert_expressions(data["expressions"])
         self.root_element = ElementBase.loads(data["root"], self)
         return self
@@ -325,41 +322,46 @@ class Document(object):
             print("{}{}".format(" " * (level * 4), node))
             for child in node._children:
                 recurse(child, level + 1)
+
         if self.root_element:
             recurse(self.root_element)
 
     def get_element(self, element_ref, app=None, lib=None):
         try:
-            if '#' not in element_ref:
+            if "#" not in element_ref:
                 return app, self.named_elements[element_ref]
         except KeyError:
             raise ElementNotFoundError(element_ref, app=app, lib=lib)
         return self.archive.get_element(element_ref, app=app, lib=lib)
 
     def get_app_element(self, element_ref, app=None):
-        if '#' in element_ref:
+        if "#" in element_ref:
             app_id, lib_id, name = self.archive.parse_element_ref(element_ref)
             if lib_id is not None:
                 try:
                     app = self.archive.find_app(lib_id)
                 except Exception as e:
-                    raise ElementNotFoundError(element_ref, app=app, reason=text_type(e))
+                    raise ElementNotFoundError(
+                        element_ref, app=app, reason=text_type(e)
+                    )
                 element_ref = "{}#{}".format(app.name, name)
         return self.get_element(element_ref, app=app)
 
     def detect_app_element(self, context, element_ref, app=None):
-        if '#' in element_ref:
+        if "#" in element_ref:
             app_id, lib_id, name = self.archive.parse_element_ref(element_ref)
             if lib_id is not None:
                 try:
                     app = self.archive.detect_app(context, lib_id)
                 except Exception as e:
-                    raise ElementNotFoundError(element_ref, app=app, reason=text_type(e))
+                    raise ElementNotFoundError(
+                        element_ref, app=app, reason=text_type(e)
+                    )
                 element_ref = "{}#{}".format(app.name, name)
         return self.get_element(element_ref, app=app)
 
     def qualify_element_ref(self, element_ref, app=None, lib=None):
-        if element_ref.find('#', 1) != -1:
+        if element_ref.find("#", 1) != -1:
             return element_ref
         app, element = self.get_element(element_ref, app=app, lib=lib)
         if element is None:
@@ -376,6 +378,7 @@ class Document(object):
 
     def get_root(self):
         return self.root_element
+
     root = property(get_root)
 
     def register_element(self, element):
@@ -387,8 +390,10 @@ class Document(object):
 
     def register_named_element(self, docname, element):
         if docname in self.named_elements:
-            raise ElementError("docname '{}' is already present in this document".format(docname),
-                               element=element)
+            raise ElementError(
+                "docname '{}' is already present in this document".format(docname),
+                element=element,
+            )
         self.named_elements[docname] = element
 
     def get_named_element(self, docname):
@@ -408,7 +413,7 @@ class Document(object):
     def finalize(self, context):
         if self.finalized:
             return
-        ignore_errors = bool(context['._ignore_finalize_errors'])
+        ignore_errors = bool(context["._ignore_finalize_errors"])
 
         def do_finalize(element):
             for child in element:
@@ -418,6 +423,7 @@ class Document(object):
             except:
                 if not ignore_errors:
                     raise
+
         if self.root:
             do_finalize(self.root)
         self.finalize = True
@@ -425,7 +431,7 @@ class Document(object):
     def document_finalize(self, context):
         if self.document_finalized:
             return
-        ignore_errors = bool(context['._ignore_finalize_errors'])
+        ignore_errors = bool(context["._ignore_finalize_errors"])
 
         def do_finalize(element):
             for child in element:
@@ -435,6 +441,7 @@ class Document(object):
             except:
                 if not ignore_errors:
                     raise
+
         if self.root:
             do_finalize(self.root)
         self.document_finalized = True
@@ -442,7 +449,7 @@ class Document(object):
     def lib_finalize(self, context):
         if self.lib_finalized:
             return
-        ignore_errors = bool(context['._ignore_finalize_errors'])
+        ignore_errors = bool(context["._ignore_finalize_errors"])
 
         def do_finalize(element):
             for child in element._children:
@@ -452,6 +459,7 @@ class Document(object):
             except:
                 if not ignore_errors:
                     raise
+
         if self.root_element:
             do_finalize(self.root_element)
         self.lib_finalized = True

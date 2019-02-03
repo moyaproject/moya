@@ -30,11 +30,15 @@ class Table(LogicElement):
         """
 
     xmlns = namespaces.tables
-    template = Attribute("Template", type="template", required=False, default="table.html")
+    template = Attribute(
+        "Template", type="template", required=False, default="table.html"
+    )
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     style = Attribute("Option CSS style", required=False)
     _id = Attribute("Table ID", required=False, default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
     caption = Attribute("Table caption", type="text", required=False, default=None)
 
     class Meta:
@@ -42,19 +46,21 @@ class Table(LogicElement):
 
     def logic(self, context):
         params = self.get_parameters(context)
-        content = context['.content']
+        content = context[".content"]
         table = {
-            "class": params['class'],
+            "class": params["class"],
             "id": params.id,
             "caption": params.caption,
             "_cols": [],
         }
         app = self.get_app(context)
-        css_path = self.archive.get_media_url(context, app, 'media', 'css/tables.css')
+        css_path = self.archive.get_media_url(context, app, "media", "css/tables.css")
         content.include_css(css_path)
         with context.data_scope():
-            context['_moyatable'] = table
-            with content.template_node("table", app.resolve_template(params.template), {'table': table}):
+            context["_moyatable"] = table
+            with content.template_node(
+                "table", app.resolve_template(params.template), {"table": table}
+            ):
                 yield logic.DeferNodeContents(self)
 
 
@@ -70,13 +76,19 @@ class Columns(LogicElement):
     xmlns = namespaces.tables
     template = Attribute("Template", required=False, default="columns.html")
     headers = Attribute("Headers", required=False, type="commalist", default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
 
     def logic(self, context):
         app = self.get_app(context)
         params = self.get_parameters(context)
-        content = context['.content']
-        with content.template_node('columns', app.resolve_template(params.template), {"headers": params.headers}):
+        content = context[".content"]
+        with content.template_node(
+            "columns",
+            app.resolve_template(params.template),
+            {"headers": params.headers},
+        ):
             yield logic.DeferNodeContents(self)
 
 
@@ -92,9 +104,16 @@ class Header(LogicElement):
     xmlns = namespaces.tables
     template = Attribute("Template", required=False, default="header.html")
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
     hide = Attribute("Hide this column?", type="boolean", required=False, default=False)
-    align = Attribute("Alignment of column", required=False, choices=['left', 'center', 'right'], default="left")
+    align = Attribute(
+        "Alignment of column",
+        required=False,
+        choices=["left", "center", "right"],
+        default="left",
+    )
 
     class Meta:
         text_nodes = "text"
@@ -102,12 +121,13 @@ class Header(LogicElement):
     def logic(self, context):
         app = self.get_app(context)
         params = self.get_parameters(context)
-        content = context['.content']
-        td = {'class': params['class'],
-              'align': params.align}
-        context['_moyatable._cols'].append({'hide': params.hide, 'align': params.align})
+        content = context[".content"]
+        td = {"class": params["class"], "align": params.align}
+        context["_moyatable._cols"].append({"hide": params.hide, "align": params.align})
         if not params.hide:
-            with content.template_node('column', app.resolve_template(params.template), td):
+            with content.template_node(
+                "column", app.resolve_template(params.template), td
+            ):
                 yield logic.DeferNodeContents(self)
 
 
@@ -124,9 +144,16 @@ class SortHeader(LogicElement):
     template = Attribute("Template", required=False, default="sortheader.html")
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     name = Attribute("Name to be set in query string", required=True)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
     hide = Attribute("Hide this column?", type="boolean", required=False, default=False)
-    align = Attribute("Alignment of column", required=False, choices=['left', 'center', 'right'], default="left")
+    align = Attribute(
+        "Alignment of column",
+        required=False,
+        choices=["left", "center", "right"],
+        default="left",
+    )
 
     class Meta:
         text_nodes = "text"
@@ -134,13 +161,13 @@ class SortHeader(LogicElement):
     def logic(self, context):
         app = self.get_app(context)
         params = self.get_parameters(context)
-        content = context['.content']
-        td = {'class': params['class'],
-              'align': params.align,
-              'name': params.name}
-        context['_moyatable._cols'].append({'hide': params.hide, 'align': params.align})
+        content = context[".content"]
+        td = {"class": params["class"], "align": params.align, "name": params.name}
+        context["_moyatable._cols"].append({"hide": params.hide, "align": params.align})
         if not params.hide:
-            with content.template_node('column', app.resolve_template(params.template), td):
+            with content.template_node(
+                "column", app.resolve_template(params.template), td
+            ):
                 yield logic.DeferNodeContents(self)
 
 
@@ -158,7 +185,9 @@ class Row(LogicElement):
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
     style = Attribute("Option CSS style", required=False)
     _id = Attribute("Table ID", required=False, default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
 
     class Meta:
         text_nodes = "text"
@@ -166,10 +195,10 @@ class Row(LogicElement):
     def logic(self, context):
         app = self.get_app(context)
         params = self.get_parameters(context)
-        content = context['.content']
+        content = context[".content"]
         td = {"class": params["class"]}
 
-        with content.template_node('row', app.resolve_template(params.template), td):
+        with content.template_node("row", app.resolve_template(params.template), td):
             yield logic.DeferNodeContents(self)
 
 
@@ -194,45 +223,65 @@ class Rows(LogicElement):
     src = Attribute("Sequence of row data", required=False, type="expression")
     dst = Attribute("Destination", required=False, type="reference")
     _id = Attribute("Table ID", required=False, default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
 
     def logic(self, context):
         params = self.get_parameters(context)
-        content = context['.content']
+        content = context[".content"]
         app = self.get_app(context)
 
-        default_col = {'align': 'left'}
+        default_col = {"align": "left"}
 
-        cols = context['_moyatable._cols'] or []
-        if self.has_parameter('src'):
-            objects, dst = self.get_parameters(context, 'src', 'dst')
+        cols = context["_moyatable._cols"] or []
+        if self.has_parameter("src"):
+            objects, dst = self.get_parameters(context, "src", "dst")
 
             try:
                 iter_objects = iter(objects)
             except:
-                self.throw('bad-value.src',
-                           "row objects attribute {} is not a sequence".format(context.to_expr(objects)),
-                           diagnosis="Check the value of the 'objects' attribute is a valid sequence.")
+                self.throw(
+                    "bad-value.src",
+                    "row objects attribute {} is not a sequence".format(
+                        context.to_expr(objects)
+                    ),
+                    diagnosis="Check the value of the 'objects' attribute is a valid sequence.",
+                )
 
-            with content.template_node('rows', app.resolve_template(params.template)):
+            with content.template_node("rows", app.resolve_template(params.template)):
                 for obj in iter_objects:
                     _cols = itertools.chain(cols, itertools.repeat(default_col))
                     if dst:
                         context[dst] = obj
-                    td = {'id': self.id(context),
-                          'class': self.row_class(context),
-                          'style': self.style(context)}
-                    with content.template_node("row", app.resolve_template(params.row_template), td):
-                        for _col, child in zip(_cols, self.get_children(element_type=('http://moyaproject.com/tables', 'cell'))):
-                            if not _col.get('hide', False):
+                    td = {
+                        "id": self.id(context),
+                        "class": self.row_class(context),
+                        "style": self.style(context),
+                    }
+                    with content.template_node(
+                        "row", app.resolve_template(params.row_template), td
+                    ):
+                        for _col, child in zip(
+                            _cols,
+                            self.get_children(
+                                element_type=("http://moyaproject.com/tables", "cell")
+                            ),
+                        ):
+                            if not _col.get("hide", False):
                                 with context.data_scope(_col):
                                     yield logic.DeferNode(child)
 
         else:
-            with content.template_node('rows', app.resolve_template(params.template)):
+            with content.template_node("rows", app.resolve_template(params.template)):
                 _cols = itertools.chain(cols, itertools.repeat(default_col))
-                for _col, child in zip(_cols, self.get_children(element_type=('http://moyaproject.com/tables', 'cell'))):
-                    if not _col.get('hide', False):
+                for _col, child in zip(
+                    _cols,
+                    self.get_children(
+                        element_type=("http://moyaproject.com/tables", "cell")
+                    ),
+                ):
+                    if not _col.get("hide", False):
                         with context.data_scope(_col):
                             yield logic.DeferNode(child)
 
@@ -249,7 +298,9 @@ class Cell(LogicElement):
     xmlns = namespaces.tables
     template = Attribute("Template", required=False, default="cell.html")
     _class = Attribute("Extra class", required=False, map_to="class", default=None)
-    _from = Attribute("Application", type="application", required=False, default='moya.tables')
+    _from = Attribute(
+        "Application", type="application", required=False, default="moya.tables"
+    )
     hide = Attribute("Hide this cell?", type="boolean", required=False, default=False)
 
     class Meta:
@@ -258,10 +309,10 @@ class Cell(LogicElement):
     def logic(self, context):
         app = self.get_app(context)
         params = self.get_parameters(context)
-        content = context['.content']
-        td = {'class': params['class'], 'align': context['align']}
+        content = context[".content"]
+        td = {"class": params["class"], "align": context["align"]}
 
-        with content.template_node('cell', app.resolve_template(params.template), td):
+        with content.template_node("cell", app.resolve_template(params.template), td):
             if not params.hide:
                 yield logic.DeferNodeContents(self)
 

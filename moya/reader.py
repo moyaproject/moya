@@ -30,21 +30,23 @@ class DataReader(object):
 
     def read(self, path, app=None, mime_type=None):
         """Read a file"""
-        if not path.startswith('/'):
+        if not path.startswith("/"):
             if app is None:
-                raise RelativePathError("Can't use relative data paths with an application")
+                raise RelativePathError(
+                    "Can't use relative data paths with an application"
+                )
             path = join(app.data_directory, path)
 
         filename = basename(path)
         if mime_type is None:
             mime_type, encoding = mimetypes.guess_type(filename)
 
-        _type, sub_type = mime_type.split('/', 1)
+        _type, sub_type = mime_type.split("/", 1)
         try:
             if mime_type == "text/plain":
                 data = self.fs.gettext(path)
             elif mime_type == "application/json":
-                with self.fs.open(path, 'rt', encoding="utf-8") as f:
+                with self.fs.open(path, "rt", encoding="utf-8") as f:
                     data = json.load(f)
             elif mime_type == "application/octet-stream":
                 data = self.fs.getbytes(path)
@@ -52,25 +54,31 @@ class DataReader(object):
                 data = self.fs.gettext(path)
 
             else:
-                raise UnknownFormat("Moya doesn't know how to read file '{}' (in {!r})".format(path, self.fs))
+                raise UnknownFormat(
+                    "Moya doesn't know how to read file '{}' (in {!r})".format(
+                        path, self.fs
+                    )
+                )
         except FSError as e:
             from .logic import MoyaException
-            info = {
-                "path": path,
-                "mime_type": mime_type
-            }
-            raise MoyaException("data.read-fail",
-                                "unable to read data from {path} ({e})".format(path=path, e=e),
-                                diagnosis="check the data exists with **moya fs data --tree /**",
-                                info=info)
+
+            info = {"path": path, "mime_type": mime_type}
+            raise MoyaException(
+                "data.read-fail",
+                "unable to read data from {path} ({e})".format(path=path, e=e),
+                diagnosis="check the data exists with **moya fs data --tree /**",
+                info=info,
+            )
 
         return data
 
     def exists(self, path, app):
         """Check if a file exists"""
-        if not path.startswith('/'):
+        if not path.startswith("/"):
             if app is None:
-                raise RelativePathError("Can't use relative data paths with an application")
+                raise RelativePathError(
+                    "Can't use relative data paths with an application"
+                )
             path = join(app.data_directory, path)
         try:
             return self.fs.isfile(path)
@@ -81,4 +89,4 @@ class DataReader(object):
 if __name__ == "__main__":
 
     reader = DataReader(None)
-    reader.read('test.bin')
+    reader.read("test.bin")

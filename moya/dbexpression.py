@@ -7,23 +7,25 @@ from .compat import implements_to_string, text_type
 from .context.missing import is_missing
 from .interface import unproxy
 
-from pyparsing import (Word,
-                       WordEnd,
-                       nums,
-                       alphas,
-                       Combine,
-                       oneOf,
-                       opAssoc,
-                       operatorPrecedence,
-                       QuotedString,
-                       Literal,
-                       ParserElement,
-                       ParseException,
-                       Forward,
-                       Group,
-                       Suppress,
-                       Optional,
-                       Regex)
+from pyparsing import (
+    Word,
+    WordEnd,
+    nums,
+    alphas,
+    Combine,
+    oneOf,
+    opAssoc,
+    operatorPrecedence,
+    QuotedString,
+    Literal,
+    ParserElement,
+    ParseException,
+    Forward,
+    Group,
+    Suppress,
+    Optional,
+    Regex,
+)
 
 from sqlalchemy import and_, or_, func, not_
 
@@ -33,7 +35,7 @@ import threading
 
 
 def dbobject(obj):
-    return getattr(obj, '__moyadbobject__', lambda: obj)()
+    return getattr(obj, "__moyadbobject__", lambda: obj)()
 
 
 @implements_to_string
@@ -43,17 +45,17 @@ class DBExpressionError(Exception):
 
     def __init__(self, exp, msg=None, col=None):
         self.exp = exp
-        self.msg = msg or ''
+        self.msg = msg or ""
         self.col = col
 
     def __str__(self):
         return self.msg
 
     def __moyaconsole__(self, console):
-        indent = ''
+        indent = ""
         console(indent + self.exp, bold=True, fg="magenta").nl()
         if self.col:
-            console(indent)(' ' * (self.col - 1) + '^', bold=True, fg="red").nl()
+            console(indent)(" " * (self.col - 1) + "^", bold=True, fg="red").nl()
 
 
 class DBEvalError(Exception):
@@ -88,7 +90,6 @@ class ExpressionContext(object):
 
 
 class ExpressionModifiers(object):
-
     def abs(self, context, v):
         return func.abs(v)
 
@@ -128,11 +129,12 @@ class EvalModifierOp(object):
 class EvalMultOp(object):
     "Class to evaluate multiplication and division expressions"
 
-    ops = {"*": operator.imul,
-           "/": operator.itruediv,
-           "//": operator.ifloordiv,
-           "%": operator.imod
-           }
+    ops = {
+        "*": operator.imul,
+        "/": operator.itruediv,
+        "//": operator.ifloordiv,
+        "%": operator.imod,
+    }
 
     def __init__(self, tokens):
         self.value = tokens[0]
@@ -150,8 +152,7 @@ class EvalMultOp(object):
 class EvalAddOp(object):
     "Class to evaluate addition and subtraction expressions"
 
-    ops = {'+': operator.add,
-           '-': operator.sub}
+    ops = {"+": operator.add, "-": operator.sub}
 
     def __init__(self, tokens):
         self.value = tokens[0]
@@ -168,11 +169,8 @@ class EvalAddOp(object):
 
 class EvalConstant(object):
     """Evaluates a constant"""
-    constants = {"None": None,
-                 "True": True,
-                 "False": False,
-                 "yes": True,
-                 "no": False}
+
+    constants = {"None": None, "True": True, "False": False, "yes": True, "no": False}
 
     def __init__(self, tokens):
         self.key = tokens[0]
@@ -184,6 +182,7 @@ class EvalConstant(object):
 
 class EvalInteger(object):
     "Class to evaluate an integer value"
+
     def __init__(self, tokens):
         self.value = int(tokens[0])
 
@@ -193,6 +192,7 @@ class EvalInteger(object):
 
 class EvalReal(object):
     "Class to evaluate a real number value"
+
     def __init__(self, tokens):
         self.value = float(tokens[0])
 
@@ -202,6 +202,7 @@ class EvalReal(object):
 
 class EvalString(object):
     "Class to evaluate a string"
+
     def __init__(self, tokens):
         self.value = tokens[0]
 
@@ -210,17 +211,18 @@ class EvalString(object):
 
 
 def qs(value):
-    if hasattr(value, '__moyadbobject__'):
+    if hasattr(value, "__moyadbobject__"):
         value = value.__moyadbobject__()
-    if hasattr(value, '_get_query_set'):
+    if hasattr(value, "_get_query_set"):
         value = value._get_query_set()
     if isinstance(value, list):
-        return [getattr(v, 'id', v) for v in value]
+        return [getattr(v, "id", v) for v in value]
     return value
 
 
 class EvalVariable(object):
     "Class to evaluate a parsed variable"
+
     def __init__(self, tokens):
         key = tokens[0]
         self.index = dataindex.parse(key)
@@ -228,14 +230,18 @@ class EvalVariable(object):
     def eval(self, archive, context, app, exp_context):
         value = context[self.index]
         if is_missing(value):
-            raise DBEvalError("Database expression value '{}' is missing from the context".format(self.index))
+            raise DBEvalError(
+                "Database expression value '{}' is missing from the context".format(
+                    self.index
+                )
+            )
         return dbobject(unproxy(value))
 
 
 class EvalModelReference(object):
     """Gets a model reference"""
 
-    _ref_model_ref = re.compile('^(.*?#.*?)(?:\.(.*?))?$')
+    _ref_model_ref = re.compile("^(.*?#.*?)(?:\.(.*?))?$")
 
     def __init__(self, tokens):
         self.index = tokens[0]
@@ -243,7 +249,7 @@ class EvalModelReference(object):
     def eval(self, archive, context, app, exp_context):
         model_ref, index = self._ref_model_ref.match(self.index).groups()
 
-        app = app or context.get('.app', None)
+        app = app or context.get(".app", None)
         if app is None:
             raise DBEvalError("unable to get app from '{}'".format(self.index))
 
@@ -264,7 +270,9 @@ class EvalModelReference(object):
             raise DBEvalError(str(e))
 
         try:
-            model_reference_result = table_class._get_index(archive, context, app, exp_context, index)
+            model_reference_result = table_class._get_index(
+                archive, context, app, exp_context, index
+            )
         except (KeyError, AttributeError):
             raise DBEvalError('no column or object called "{}"'.format(self.index))
         else:
@@ -283,10 +291,10 @@ class EvalComparisonOp(object):
         """escape LIKE comparisons"""
         if not isinstance(like, text_type):
             return like
-        return ''.join("\\" + c if _should_escape(c) else c for c in like)
+        return "".join("\\" + c if _should_escape(c) else c for c in like)
 
     def in_(context, a, b):
-        if hasattr(b, '__moyadbsubselect__'):
+        if hasattr(b, "__moyadbsubselect__"):
             sub_b = b.__moyadbsubselect__(context)
             if sub_b is not None:
                 b = sub_b
@@ -294,10 +302,12 @@ class EvalComparisonOp(object):
         try:
             return a.in_(qs(b))
         except:
-            raise DBEvalError("db expression 'in' operator works on columns only (did you mean .id)?")
+            raise DBEvalError(
+                "db expression 'in' operator works on columns only (did you mean .id)?"
+            )
 
     def notin_(context, a, b):
-        if hasattr(b, '__moyadbsubselect__'):
+        if hasattr(b, "__moyadbsubselect__"):
             sub_b = b.__moyadbsubselect__(context)
             if sub_b is not None:
                 b = sub_b
@@ -305,29 +315,47 @@ class EvalComparisonOp(object):
         try:
             return a.notin_(qs(b))
         except:
-            raise DBEvalError("db expression 'not in' operator works on columns only (did you mean .id)?")
+            raise DBEvalError(
+                "db expression 'not in' operator works on columns only (did you mean .id)?"
+            )
 
     def contains_(context, a, b):
         try:
             return qs(a).contains(qs(b))
         except:
-            raise DBEvalError("value {} is an invalid operand for the 'contains' operator".format(to_expression(context, b)))
+            raise DBEvalError(
+                "value {} is an invalid operand for the 'contains' operator".format(
+                    to_expression(context, b)
+                )
+            )
 
     def icontains_(context, a, b):
         if not isinstance(b, text_type):
-            raise DBEvalError("icontains right hand side should be a string, not {}".format(context.to_expr(b)))
+            raise DBEvalError(
+                "icontains right hand side should be a string, not {}".format(
+                    context.to_expr(b)
+                )
+            )
 
         b = "%{}%".format(EvalComparisonOp.escape_like(b))
         try:
             return qs(a).like(b)
         except:
-            raise DBEvalError("{} may not be used with 'icontains' operator".format(context.to_expr(a)))
+            raise DBEvalError(
+                "{} may not be used with 'icontains' operator".format(
+                    context.to_expr(a)
+                )
+            )
 
     def ieq(context, a, b):
         if not isinstance(b, text_type):
-            raise DBEvalError("case insensitive equality operator (~=) right hand side should be a string, not {}".format(context.to_expr(b)))
+            raise DBEvalError(
+                "case insensitive equality operator (~=) right hand side should be a string, not {}".format(
+                    context.to_expr(b)
+                )
+            )
 
-        return qs(a).ilike(EvalComparisonOp.escape_like(b), escape='\\')
+        return qs(a).ilike(EvalComparisonOp.escape_like(b), escape="\\")
 
     opMap = {
         "<": lambda c, a, b: qs(a) < qs(b),
@@ -340,10 +368,9 @@ class EvalComparisonOp(object):
         "gte": lambda c, a, b: qs(a) >= qs(b),
         "!=": lambda c, a, b: qs(a) != qs(b),
         "==": lambda c, a, b: qs(a) == qs(b),
-        'like': lambda c, a, b: qs(a).like(qs(b)),
-        'ilike': lambda c, a, b: qs(a).ilike(qs(b)),
-
-        #"~=": lambda c, a, b: qs(a).ilike(qs(EvalComparisonOp.escape_like(b)), escape='\\'),
+        "like": lambda c, a, b: qs(a).like(qs(b)),
+        "ilike": lambda c, a, b: qs(a).ilike(qs(b)),
+        # "~=": lambda c, a, b: qs(a).ilike(qs(EvalComparisonOp.escape_like(b)), escape='\\'),
         "~=": ieq,
         "^=": lambda c, a, b: qs(a).startswith(qs(b)),
         "$=": lambda c, a, b: qs(a).endswith(qs(b)),
@@ -351,13 +378,15 @@ class EvalComparisonOp(object):
         "not in": notin_,
         "contains": contains_,
         "icontains": icontains_,
-        #"icontains": lambda c, a, b: qs(a).like('%' + EvalComparisonOp.escape_like(b) + '%', escape='\\')
+        # "icontains": lambda c, a, b: qs(a).like('%' + EvalComparisonOp.escape_like(b) + '%', escape='\\')
     }
 
     def __init__(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
-        self.operator_eval = [(self.opMap[op], val.eval) for op, val in pairs(self.value[1:])]
+        self.operator_eval = [
+            (self.opMap[op], val.eval) for op, val in pairs(self.value[1:])
+        ]
 
     def eval(self, archive, context, app, exp_context):
         val1 = self._eval(archive, context, app, exp_context)
@@ -368,7 +397,6 @@ class EvalComparisonOp(object):
 
 
 class EvalLogicOpAND(object):
-
     def __init__(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -383,7 +411,6 @@ class EvalLogicOpAND(object):
 
 
 class EvalLogicOpOR(object):
-
     def __init__(self, tokens):
         self.value = tokens[0]
         self._eval = self.value[0].eval
@@ -413,36 +440,36 @@ class EvalNotOp(object):
         self._eval = tokens[0][1].eval
 
     def eval(self, archive, context, app, exp_context):
-        return not_(
-            self._eval(archive, context, app, exp_context)
-        )
+        return not_(self._eval(archive, context, app, exp_context))
 
 
 integer = Word(nums)
-real = Combine(Word(nums) + '.' + Word(nums))
+real = Combine(Word(nums) + "." + Word(nums))
 
-constant = (Literal('True') |
-            Literal('False') |
-            Literal('None') |
-            Literal('yes') |
-            Literal('no')) + WordEnd()
+constant = (
+    Literal("True")
+    | Literal("False")
+    | Literal("None")
+    | Literal("yes")
+    | Literal("no")
+) + WordEnd()
 
-model_reference = Regex(r'([\w\.]*#[\w\.]+)')
-variable = Regex(r'([a-zA-Z0-9\._]+)')
+model_reference = Regex(r"([\w\.]*#[\w\.]+)")
+variable = Regex(r"([a-zA-Z0-9\._]+)")
 
-string = QuotedString('"', escChar="\\") | QuotedString('\'', escChar="\\")
+string = QuotedString('"', escChar="\\") | QuotedString("'", escChar="\\")
 operand = model_reference | real | integer | constant | string | variable
 
-plusop = oneOf('+ -')
-multop = oneOf('* / // %')
+plusop = oneOf("+ -")
+multop = oneOf("* / // %")
 
-groupop = Literal(',')
+groupop = Literal(",")
 
 expr = Forward()
 
-notop = Literal('not') + WordEnd()
+notop = Literal("not") + WordEnd()
 
-modifier = Combine(Word(alphas + nums) + ':')
+modifier = Combine(Word(alphas + nums) + ":")
 
 integer.setParseAction(EvalInteger)
 real.setParseAction(EvalReal)
@@ -451,26 +478,29 @@ constant.setParseAction(EvalConstant)
 variable.setParseAction(EvalVariable)
 model_reference.setParseAction(EvalModelReference)
 
-comparisonop = (oneOf("< <= > >= != == ~= ^= $=") |
-                (Literal('not in') + WordEnd()) |
-                (oneOf("in lt lte gt gte matches contains icontains like ilike") + WordEnd()))
+comparisonop = (
+    oneOf("< <= > >= != == ~= ^= $=")
+    | (Literal("not in") + WordEnd())
+    | (oneOf("in lt lte gt gte matches contains icontains like ilike") + WordEnd())
+)
 
 
-logicopOR = Literal('or') + WordEnd()
-logicopAND = Literal('and') + WordEnd()
+logicopOR = Literal("or") + WordEnd()
+logicopAND = Literal("and") + WordEnd()
 
-expr << operatorPrecedence(operand, [
-    (notop, 1, opAssoc.RIGHT, EvalNotOp),
-    (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
-    (multop, 2, opAssoc.LEFT, EvalMultOp),
-    (plusop, 2, opAssoc.LEFT, EvalAddOp),
-    (comparisonop, 2, opAssoc.LEFT, EvalComparisonOp),
-
-    (logicopAND, 2, opAssoc.LEFT, EvalLogicOpAND),
-    (logicopOR, 2, opAssoc.LEFT, EvalLogicOpOR),
-
-    (groupop, 2, opAssoc.LEFT, EvalGroupOp),
-])
+expr << operatorPrecedence(
+    operand,
+    [
+        (notop, 1, opAssoc.RIGHT, EvalNotOp),
+        (modifier, 1, opAssoc.RIGHT, EvalModifierOp),
+        (multop, 2, opAssoc.LEFT, EvalMultOp),
+        (plusop, 2, opAssoc.LEFT, EvalAddOp),
+        (comparisonop, 2, opAssoc.LEFT, EvalComparisonOp),
+        (logicopAND, 2, opAssoc.LEFT, EvalLogicOpAND),
+        (logicopOR, 2, opAssoc.LEFT, EvalLogicOpOR),
+        (groupop, 2, opAssoc.LEFT, EvalGroupOp),
+    ],
+)
 
 
 @implements_to_string
@@ -482,7 +512,7 @@ class DBExpression(object):
         self.exp = exp
 
     def __repr__(self):
-        return "<DBExpression \"%s\">" % self.exp
+        return '<DBExpression "%s">' % self.exp
 
     def __str__(self):
         return self.exp
@@ -536,7 +566,9 @@ if __name__ == "__main__":
 
     print(exp.compile())
 
-    exp = DBExpression("comments#Comment.namespace == app.name and comments#Comment.object in comment_keys")
+    exp = DBExpression(
+        "comments#Comment.namespace == app.name and comments#Comment.object in comment_keys"
+    )
 
     print(exp.compile())
 

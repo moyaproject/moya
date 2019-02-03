@@ -37,16 +37,18 @@ class ReadData(DataSetter):
     path = Attribute("Path to data file in data filesystem", required=False)
     _from = Attribute("Application", type="application", required=False, default=None)
 
-    mimetype = Attribute("Mime Type of file (omit to guess based on extension)", required=False, default=None)
+    mimetype = Attribute(
+        "Mime Type of file (omit to guess based on extension)",
+        required=False,
+        default=None,
+    )
     dst = Attribute("Destination", type="reference", default=None)
 
     def logic(self, context):
         app = self.get_app(context)
-        fs_name, path, mimetype, dst = self.get_parameters(context,
-                                                           'fs',
-                                                           'path',
-                                                           'mimetype',
-                                                           'dst')
+        fs_name, path, mimetype, dst = self.get_parameters(
+            context, "fs", "path", "mimetype", "dst"
+        )
         reader = self.archive.get_reader(fs_name)
 
         try:

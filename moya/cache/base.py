@@ -5,7 +5,14 @@ from .. import errors
 from ..tools import DummyLock
 from ..context.expressiontime import TimeSpan
 from ..containers import LRUCache
-from ..compat import pickle, text_type, binary_type, with_metaclass, implements_to_string, PY3
+from ..compat import (
+    pickle,
+    text_type,
+    binary_type,
+    with_metaclass,
+    implements_to_string,
+    PY3,
+)
 
 from threading import Lock
 from time import time
@@ -13,7 +20,8 @@ import zlib
 import hashlib
 
 import logging
-log = logging.getLogger('moya.cache')
+
+log = logging.getLogger("moya.cache")
 
 
 class CacheMeta(type):
@@ -22,7 +30,7 @@ class CacheMeta(type):
     def __new__(cls, name, base, attrs):
         new_class = type.__new__(cls, name, base, attrs)
         if name != "CacheBase":
-            name = getattr(new_class, 'cache_backend_name', name.lower().strip('_'))
+            name = getattr(new_class, "cache_backend_name", name.lower().strip("_"))
             cls.cache_backends[name] = new_class
         return new_class
 
@@ -44,9 +52,11 @@ class CacheType(object):
     enabled = True
     max_key_length = 250
 
-    def __init__(self, name, namespace, thread_safe=False, compress=False, compress_min=1024):
+    def __init__(
+        self, name, namespace, thread_safe=False, compress=False, compress_min=1024
+    ):
         self.name = name
-        self.ns = namespace or ''
+        self.ns = namespace or ""
         self.compress = compress
         self.compress_min = compress_min
         if thread_safe:
@@ -60,18 +70,22 @@ class CacheType(object):
 
     @classmethod
     def create(cls, name, settings):
-        disabled = not settings.get_bool('enabled', True)
+        disabled = not settings.get_bool("enabled", True)
         if disabled:
             cache_type = "disabled"
         else:
-            cache_type = settings.get('type', 'dict')
+            cache_type = settings.get("type", "dict")
 
         try:
             cache_cls = CacheMeta.cache_backends[cache_type]
         except KeyError:
-            types = ', '.join("'{}'".format(k) for k in sorted(CacheMeta.cache_backends.keys()))
-            raise errors.StartupFailedError("Cache type must be one of {} (not '{}')".format(types, cache_type))
-        debug = settings.get_bool('debug', False)
+            types = ", ".join(
+                "'{}'".format(k) for k in sorted(CacheMeta.cache_backends.keys())
+            )
+            raise errors.StartupFailedError(
+                "Cache type must be one of {} (not '{}')".format(types, cache_type)
+            )
+        debug = settings.get_bool("debug", False)
         cache = cache_cls.initialize(name, settings)
         if debug:
             cache = DebugCacheWrapper(cache)
@@ -79,10 +93,12 @@ class CacheType(object):
 
     @classmethod
     def initialize(cls, name, settings):
-        return cls(name,
-                   settings.get('namespace', ''),
-                   compress=settings.get_bool("compress", True),
-                   compress_min=settings.get_int("compress_min", 1024))
+        return cls(
+            name,
+            settings.get("namespace", ""),
+            compress=settings.get_bool("compress", True),
+            compress_min=settings.get_int("compress_min", 1024),
+        )
 
     def shorten_key(self, key, max_length=None):
         assert isinstance(key, binary_type), "key must be bytes"
@@ -93,8 +109,8 @@ class CacheType(object):
             _hash.update(key)
             _hash = _hash.hexdigest()
             if PY3:
-                _hash = _hash.encode('utf-8')
-            key = key[:max_length - len(_hash)] + _hash
+                _hash = _hash.encode("utf-8")
+            key = key[: max_length - len(_hash)] + _hash
         return key
 
     def get_key(self, key):
@@ -111,21 +127,21 @@ class CacheType(object):
     def _get_key(self, key):
         """Gets a key (binary string) that contains the namespace"""
         key = "{%s}%s" % (self.ns, key)
-        key = self.shorten_key(key.encode('utf-8'))
+        key = self.shorten_key(key.encode("utf-8"))
         return key
 
     def encode_value(self, value):
         """Encodes a value in to a binary string"""
         dump = pickle.dumps(value, pickle.HIGHEST_PROTOCOL)
         if self.compress and len(dump) >= self.compress_min:
-            return zlib.compress(dump) + b'ZZ'
-        return dump + b'XX' if dump.endswith(b'XX') else dump
+            return zlib.compress(dump) + b"ZZ"
+        return dump + b"XX" if dump.endswith(b"XX") else dump
 
     def decode_value(self, value):
         """Decodes a value encoded by `encode_value`"""
-        if value.endswith(b'ZZ'):
+        if value.endswith(b"ZZ"):
             value = zlib.decompress(value[:-2])
-        elif value.endswith(b'XX'):
+        elif value.endswith(b"XX"):
             value = value[:-2]
         return pickle.loads(value)
 
@@ -211,21 +227,23 @@ class DebugCacheWrapper(object):
         debug_value = value
         try:
             if isinstance(debug_value, binary_type):
-                debug_value = debug_value.replace('\n', r'\n')
+                debug_value = debug_value.replace("\n", r"\n")
                 if len(debug_value) > size:
-                    debug_value = debug_value[:size] + '[...]'
+                    debug_value = debug_value[:size] + "[...]"
                 debug_value = repr(debug_value)
             else:
                 debug_value = text_type(value)
-                debug_value = debug_value.replace('\n', r'\n')
+                debug_value = debug_value.replace("\n", r"\n")
                 if len(debug_value) > size:
-                    debug_value = debug_value[:size] + '[...]'
+                    debug_value = debug_value[:size] + "[...]"
         except:
             debug_value = "<unprintable value>"
         return debug_value
 
     def set(self, k, value, time=0):
-        log_msg = "{} SET '{}' = {}".format(self.cache, self._get_debug_value(k, 100), self._get_debug_value(value))
+        log_msg = "{} SET '{}' = {}".format(
+            self.cache, self._get_debug_value(k, 100), self._get_debug_value(value)
+        )
         if time:
             log_msg += " ({})".format(TimeSpan(time).text)
         log.debug(log_msg)
@@ -239,7 +257,7 @@ class DebugCacheWrapper(object):
             self.cache,
             self._get_debug_value(k, 100),
             self._get_debug_value(value),
-            taken
+            taken,
         )
         log.debug(log_msg)
         return value
@@ -251,7 +269,9 @@ class DebugCacheWrapper(object):
 
     def contains(self, k):
         contains = self.cache.contains(k)
-        log_msg = "{} CONTAINS {} ({})".format(self.cache, self._get_debug_value(k, 100), contains)
+        log_msg = "{} CONTAINS {} ({})".format(
+            self.cache, self._get_debug_value(k, 100), contains
+        )
         log.debug(log_msg)
         return contains
 
