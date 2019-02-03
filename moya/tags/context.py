@@ -405,11 +405,15 @@ class SetItem(LogicElement):
     index = Attribute("index to set", type="expression", required=True)
     value = Attribute("value to set", type="expression", required=True)
 
-    # TODO: handle errors
     def logic(self, context):
         src, index, value = self.get_parameters(context, 'src', 'index', 'value')
-        src[index] = value
-
+        try:
+            src[index] = value
+        except Exception as error:
+            self.throw(
+                'set-item.fail',
+                'unable to set item; {}'.format(error)
+            )
 
 class Let(DataSetter):
     """Sets multiple variable from expressions."""

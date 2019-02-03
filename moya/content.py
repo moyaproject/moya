@@ -41,7 +41,7 @@ class IncludePathCSS(IncludePath):
     _format = """<link href="{path}" rel="stylesheet" type="text/css">"""
 
     def __init__(self, path, **options):
-        super(IncludePathCSS, self).__init__('css', path, **options)
+        super(IncludePathCSS, self).__init__("css", path, **options)
         self._html = HTML(self._format.format(path=escape(path)))
 
     def __repr__(self):
@@ -52,24 +52,22 @@ class IncludePathJS(IncludePath):
 
     _format = """<script src="{path}"{flags}></script>"""
 
-    def __init__(self, path, async=False, defer=False, **options):
-        super(IncludePathJS, self).__init__('js', path, **options)
-        self.async = async
+    def __init__(self, path, _async=False, defer=False, **options):
+        super(IncludePathJS, self).__init__("js", path, **options)
+        self._async = _async
         self.defer = defer
-        flags = ''
-        if async:
-            flags = ' async'
+        flags = ""
+        if _async:
+            flags = " async"
         elif defer:
-            flags = ' defer'
+            flags = " defer"
         self._html = HTML(self._format.format(path=escape(path), flags=flags))
-
 
     def __repr__(self):
         return '<includejs "{}">'.format(self.path)
 
 
 class NodeContextManager(object):
-
     def __init__(self, content):
         self.content = content
 
@@ -96,20 +94,21 @@ class SectionContextManager(object):
 @contextmanager
 def push_content(context, content):
     """Context manager to push/pop content on to the content stack"""
-    contentstack = context.set_new_call('.contentstack', list)
+    contentstack = context.set_new_call(".contentstack", list)
     contentstack.append(content)
-    context['.content'] = content
+    context[".content"] = content
     try:
         yield
     finally:
         contentstack.pop()
-    context['.content'] = contentstack[-1] if contentstack else None
+    context[".content"] = contentstack[-1] if contentstack else None
 
 
 class Content(interface.AttributeExposer):
     """Hierarchical html content"""
+
     moya_render_targets = ["html"]
-    __moya_exposed_attributes__ = ['td', 'sections', 'id']
+    __moya_exposed_attributes__ = ["td", "sections", "id"]
 
     def __init__(self, app, template, td=None):
         self.app = app
@@ -123,7 +122,7 @@ class Content(interface.AttributeExposer):
         self._include = defaultdict(RenderList)
         self._section_elements = defaultdict(list)
         self.sections = OrderedDict()
-        #self.section_stack = [self.new_section("body", "base.html")]
+        # self.section_stack = [self.new_section("body", "base.html")]
         self.section_stack = []
         self.http_status = None
         super(Content, self).__init__()
@@ -132,7 +131,7 @@ class Content(interface.AttributeExposer):
         if self.template:
             return '<content "{}">'.format(self.template)
         else:
-            return '<content>'.format(self.template)
+            return "<content>".format(self.template)
 
     @property
     def id(self):
@@ -148,7 +147,7 @@ class Content(interface.AttributeExposer):
             include_list.append(path)
 
     def include_css(self, path):
-        self.include('css', IncludePathCSS(path))
+        self.include("css", IncludePathCSS(path))
 
     def push_section(self, section):
         self.section_stack.append(section)
@@ -161,8 +160,10 @@ class Content(interface.AttributeExposer):
         try:
             return self.section_stack[-1]
         except IndexError:
-            raise ContentError("can't add content outside of a section",
-                               diagnosis="Enclose content tags within a **&lt;section&gt;** tag")
+            raise ContentError(
+                "can't add content outside of a section",
+                diagnosis="Enclose content tags within a **&lt;section&gt;** tag",
+            )
 
     @property
     def in_section(self):
@@ -210,15 +211,15 @@ class Content(interface.AttributeExposer):
         """Merge this content"""
         # Insert a content object, such as a form, and update sections / includes
 
-        #self.app = content.app
-        #self.merge_td(content.td)
+        # self.app = content.app
+        # self.merge_td(content.td)
         for k, v in iteritems(content._include):
             include_list = self._include[k]
             for item in v:
                 if item not in include_list:
                     include_list.append(item)
         for section_name, section in iteritems(content.sections):
-            self.get_section(section_name).merge(section, 'append')
+            self.get_section(section_name).merge(section, "append")
 
     def merge_content(self, content):
         """Merge this content with another content object"""
@@ -235,7 +236,9 @@ class Content(interface.AttributeExposer):
         """Create a new section and make it current"""
         section = self.sections.get(name, None)
         if section is None:
-            section = self.sections[name] = Section(template, td, name=name, merge_method=merge)
+            section = self.sections[name] = Section(
+                template, td, name=name, merge_method=merge
+            )
         else:
             section.template = section.template or template
             section.merge_method = merge
@@ -254,7 +257,7 @@ class Content(interface.AttributeExposer):
 
     def add_renderable(self, name, renderable):
         self.current_section.add_renderable(name, renderable)
-        if hasattr(renderable, 'on_content_insert'):
+        if hasattr(renderable, "on_content_insert"):
             renderable.on_content_insert(self)
 
     def add_text(self, name, text):
@@ -264,7 +267,7 @@ class Content(interface.AttributeExposer):
         self.current_section.add_markup(name, markup)
 
     def moya_render(self, archive, context, target, options):
-        engine = archive.get_template_engine('moya')
+        engine = archive.get_template_engine("moya")
         td = self.td.copy()
         td.update(sections=self.sections, include=self._include)
 
@@ -272,10 +275,7 @@ class Content(interface.AttributeExposer):
             template = self.app.resolve_template(self.template)
         else:
             template = self.template
-        rendered = engine.render(template,
-                                 td,
-                                 base_context=context,
-                                 app=self.app)
+        rendered = engine.render(template, td, base_context=context, app=self.app)
 
         return HTML(rendered)
 
@@ -291,6 +291,7 @@ class Content(interface.AttributeExposer):
 @implements_to_string
 class Node(object):
     """A renderable node in the render tree"""
+
     def __init__(self, name):
         self.name = name
         self.section = None
@@ -317,14 +318,15 @@ class Node(object):
             self._groups[group].append(node)
 
     def moya_render(self, archive, context, target, options):
-        return ''
+        return ""
 
 
 @implements_to_string
 class RootNode(Node):
     """A root dummy node"""
+
     def __init__(self):
-        super(RootNode, self).__init__('root')
+        super(RootNode, self).__init__("root")
 
     def __str__(self):
         return "<root>"
@@ -333,15 +335,15 @@ class RootNode(Node):
 @implements_to_string
 class TemplateNode(Node):
     """Render a template"""
+
     def __init__(self, name, template, td=None, app=None):
         self.template = template
         self.td = td.copy() if td is not None else {}
         self.app = app
         self._rendered = None
         super(TemplateNode, self).__init__(name)
-        self.td.update({'children': self.children,
-                        'groups': self._groups})
-        self.td['self'] = self
+        self.td.update({"children": self.children, "groups": self._groups})
+        self.td["self"] = self
 
     def __str__(self):
         if is_renderable(self.template):
@@ -352,7 +354,7 @@ class TemplateNode(Node):
     __repr__ = __str__
 
     def __getitem__(self, key):
-        if key == 'app':
+        if key == "app":
             return self.td.get(key, self.app)
         return self.td[key]
 
@@ -389,12 +391,12 @@ class TemplateNode(Node):
         engine = archive.get_template_engine("moya")
         td = self.td
 
-        if 'with' in options:
+        if "with" in options:
             td = td.copy()
-            td.update(options['with'])
+            td.update(options["with"])
 
         if self.template is None:
-            return ''
+            return ""
 
         if is_renderable(self.template):
             return render_object(self.template, archive, context, target, options)
@@ -402,7 +404,9 @@ class TemplateNode(Node):
         if isinstance(self.template, string_types):
             html = engine.render(self.template, td, base_context=context, app=self.app)
         else:
-            html = engine.render_template(self.template, td, base_context=context, app=self.app)
+            html = engine.render_template(
+                self.template, td, base_context=context, app=self.app
+            )
         html = HTML(html)
         self._rendered = html
         return html
@@ -411,6 +415,7 @@ class TemplateNode(Node):
 @implements_to_string
 class TextNode(Node):
     """Plain text renderable"""
+
     def __init__(self, name, text):
         self.html = HTML(escape(text))
         super(TextNode, self).__init__(name)
@@ -425,6 +430,7 @@ class TextNode(Node):
 @implements_to_string
 class MarkupNode(Node):
     """Plain text renderable"""
+
     def __init__(self, name, text):
         self.html = HTML(text)
         super(MarkupNode, self).__init__(name)
@@ -481,7 +487,7 @@ class Section(object):
         return self.id
 
     def add_node(self, node, group=None):
-        if getattr(node, 'id', None) is None:
+        if getattr(node, "id", None) is None:
             node.id = "{name}{id}".format(name=self.name, id=self.new_id())
         self.current_node.add_child(node, group=group)
         node.section = self
@@ -534,27 +540,29 @@ class Section(object):
             if isinstance(node, Node):
                 for child in node.children:
                     recurse(child, level + 1)
+
         recurse(self.root, level)
 
     def __moyaconsole__(self, console):
         def summarize(obj):
             text = text_type(obj).strip()
-            if len(text) > 100 and not text.startswith('<'):
-                text = text[:100] + '[...]'
+            if len(text) > 100 and not text.startswith("<"):
+                text = text[:100] + "[...]"
             return text
 
         def recurse(node, level=1):
             indent = "  " * level
             console.text("%s%s" % (indent, summarize(node)))
-            if hasattr(node, 'children'):
+            if hasattr(node, "children"):
                 for child in node.children:
                     recurse(child, level + 1)
+
         recurse(self.root, 1)
 
     def moya_render(self, archive, context, target, options):
         html = []
         nodes = self.root.children
-        if options.get('unique', False):
+        if options.get("unique", False):
             nodes = unique(nodes)
 
         for node in nodes:
@@ -564,11 +572,11 @@ class Section(object):
             finally:
                 self.render_stack.pop()
             html.append(node_html)
-        return HTML(''.join(html))
+        return HTML("".join(html))
 
     def generate_children_renderables(self):
         node = self.render_stack[-1]
-        for node in getattr(node, 'children', ()):
+        for node in getattr(node, "children", ()):
             self.render_stack.append(node)
             try:
                 yield node
@@ -577,7 +585,7 @@ class Section(object):
 
     def __iter__(self):
         render_node = self.render_stack[-1]
-        for node in getattr(render_node, 'children', ()):
+        for node in getattr(render_node, "children", ()):
             self.render_stack.append(node)
             try:
                 yield node
@@ -586,7 +594,7 @@ class Section(object):
 
     def __len__(self):
         node = self.render_stack[-1]
-        return len(getattr(node, 'children', ()))
+        return len(getattr(node, "children", ()))
 
     @property
     def template_self(self):

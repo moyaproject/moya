@@ -60,6 +60,9 @@ class Missing(object):
     def __len__(self):
         return 0
 
+    def __moyadbobject__(self):
+        raise ValueError('unable to store {!r} in db')
+
 
 class MoyaAttributeError(Missing):
 

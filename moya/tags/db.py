@@ -323,7 +323,7 @@ class TableClassBase(object):
         try:
             setattr(self, key, dbobject(value))
         except:
-            raise ValueError("invalid data type for attribute '{}'".format(key))
+            raise ValueError("invalid value {!r} for database attribute '{}'".format(value, key))
         return self
 
     def keys(self):
